@@ -42,10 +42,10 @@ platform :ios, '10.0'
 inhibit_all_warnings!
 # 用于指定你的 Pod 项目应使用静态库而不是动态库。
 # 这个选项主要用于解决某些与动态库相关的兼容性和性能问题。
-use_frameworks! :linkage => :static
+#use_frameworks! :linkage => :static
 
 # 全局 modular headers（和 use_frameworks! 不能同时使用）
-# use_modular_headers!
+use_modular_headers!
 
 # 几乎每个App都会用到的
 def swiftAppCommon
@@ -128,6 +128,8 @@ def cocoPodsConfig
       # 具体来说，它是在 post_install 钩子中执行的，这意味着它会在所有 Pods 安装完成之后、写入 Xcode 项目之前被调用。
       target.build_configurations.each do |config|
         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+        config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+        config.build_settings['CODE_SIGNING_REQUIRED'] = 'NO'
         # ✅ 只有 Apple Silicon 模拟器下才排除 arm64
         if is_apple_silicon
           config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
@@ -149,6 +151,6 @@ end
 target 'JobsSwiftBaseConfigDemo' do
   # Pods for JobsSwiftBaseConfigDemo
   debugPods # 调试框架
-#  swiftAppCommon # 几乎每个App都会用到的
+  swiftAppCommon # 几乎每个App都会用到的
   cocoPodsConfig # 基础的公共配置
 end
