@@ -7,59 +7,70 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1653E3615328B28BBE198DEF /* Pods_JobsSwiftBaseConfigDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65D3DA7A6C9C9134055A443D /* Pods_JobsSwiftBaseConfigDemo.framework */; };
-		3621846C9B0F2D12254CF8E8 /* Pods_JobsSwiftBaseConfigDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AFB5A22AE42998287E46EB8 /* Pods_JobsSwiftBaseConfigDemoTests.framework */; };
-		78B0DCA91709F80B9D0C76A9 /* Pods_JobsSwiftBaseConfigDemoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A4BD9220F6795CFF945F6A3 /* Pods_JobsSwiftBaseConfigDemoUITests.framework */; };
+		56D62B2D94AA7D0424E4B6CF /* Pods_JobsSwiftBaseConfigDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CA5176DE185F40A31A7214F /* Pods_JobsSwiftBaseConfigDemoTests.framework */; };
+		AD76BD91746D5F918B3E8B90 /* Pods_JobsSwiftBaseConfigDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC662EF16FAFF84B6675A7A6 /* Pods_JobsSwiftBaseConfigDemo.framework */; };
+		F6A888D89F9116CC275900FD /* Pods_JobsSwiftBaseConfigDemoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9C36D283E6302CD53213AD5 /* Pods_JobsSwiftBaseConfigDemoUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		C531939A2DEFEB0400755EAD /* PBXContainerItemProxy */ = {
+		C520FB7D2DEFF5240063C87D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = C53193842DEFEB0200755EAD /* Project object */;
+			containerPortal = C520FB5E2DEFF5230063C87D /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = C531938B2DEFEB0200755EAD;
+			remoteGlobalIDString = C520FB652DEFF5230063C87D;
 			remoteInfo = JobsSwiftBaseConfigDemo;
 		};
-		C53193A42DEFEB0400755EAD /* PBXContainerItemProxy */ = {
+		C520FB872DEFF5240063C87D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = C53193842DEFEB0200755EAD /* Project object */;
+			containerPortal = C520FB5E2DEFF5230063C87D /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = C531938B2DEFEB0200755EAD;
+			remoteGlobalIDString = C520FB652DEFF5230063C87D;
 			remoteInfo = JobsSwiftBaseConfigDemo;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		65D3DA7A6C9C9134055A443D /* Pods_JobsSwiftBaseConfigDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JobsSwiftBaseConfigDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6A4BD9220F6795CFF945F6A3 /* Pods_JobsSwiftBaseConfigDemoUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JobsSwiftBaseConfigDemoUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		712A16ECF15DFBB0E5A296FD /* Pods-JobsSwiftBaseConfigDemoUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemoUITests.debug.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemoUITests/Pods-JobsSwiftBaseConfigDemoUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		7A9A18BB5D6C78E3866BB61D /* Pods-JobsSwiftBaseConfigDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemoTests.release.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemoTests/Pods-JobsSwiftBaseConfigDemoTests.release.xcconfig"; sourceTree = "<group>"; };
-		8AFB5A22AE42998287E46EB8 /* Pods_JobsSwiftBaseConfigDemoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JobsSwiftBaseConfigDemoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A35235AA7D80DAC188F36FA1 /* Pods-JobsSwiftBaseConfigDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemo.debug.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemo/Pods-JobsSwiftBaseConfigDemo.debug.xcconfig"; sourceTree = "<group>"; };
-		A632452218944F3FF353C200 /* Pods-JobsSwiftBaseConfigDemoUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemoUITests.release.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemoUITests/Pods-JobsSwiftBaseConfigDemoUITests.release.xcconfig"; sourceTree = "<group>"; };
-		B29B683BC3AB12F44FA28C9D /* Pods-JobsSwiftBaseConfigDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemo.release.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemo/Pods-JobsSwiftBaseConfigDemo.release.xcconfig"; sourceTree = "<group>"; };
-		C531938C2DEFEB0200755EAD /* JobsSwiftBaseConfigDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JobsSwiftBaseConfigDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C53193992DEFEB0400755EAD /* JobsSwiftBaseConfigDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JobsSwiftBaseConfigDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		C53193A32DEFEB0400755EAD /* JobsSwiftBaseConfigDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JobsSwiftBaseConfigDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E0EDD02522BF81DC5C21400A /* Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemoTests/Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
+		3A38B8C0ABA40B7091ABB836 /* Pods-JobsSwiftBaseConfigDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemo.debug.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemo/Pods-JobsSwiftBaseConfigDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		4081983A83923445D7BA3171 /* Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemoTests/Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
+		4C01D2465FCA2CAAB00DE018 /* Pods-JobsSwiftBaseConfigDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemo.release.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemo/Pods-JobsSwiftBaseConfigDemo.release.xcconfig"; sourceTree = "<group>"; };
+		6A00327B6863A2B874030507 /* Pods-JobsSwiftBaseConfigDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemoTests.release.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemoTests/Pods-JobsSwiftBaseConfigDemoTests.release.xcconfig"; sourceTree = "<group>"; };
+		9CA5176DE185F40A31A7214F /* Pods_JobsSwiftBaseConfigDemoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JobsSwiftBaseConfigDemoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AAEE1532B4F03E112BF8DA41 /* Pods-JobsSwiftBaseConfigDemoUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemoUITests.release.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemoUITests/Pods-JobsSwiftBaseConfigDemoUITests.release.xcconfig"; sourceTree = "<group>"; };
+		BC662EF16FAFF84B6675A7A6 /* Pods_JobsSwiftBaseConfigDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JobsSwiftBaseConfigDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C520FB662DEFF5230063C87D /* JobsSwiftBaseConfigDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JobsSwiftBaseConfigDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C520FB7C2DEFF5240063C87D /* JobsSwiftBaseConfigDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JobsSwiftBaseConfigDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C520FB862DEFF5240063C87D /* JobsSwiftBaseConfigDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JobsSwiftBaseConfigDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D90153FC87FE38413B484949 /* Pods-JobsSwiftBaseConfigDemoUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemoUITests.debug.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemoUITests/Pods-JobsSwiftBaseConfigDemoUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		D9C36D283E6302CD53213AD5 /* Pods_JobsSwiftBaseConfigDemoUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JobsSwiftBaseConfigDemoUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C520FB8E2DEFF5240063C87D /* Exceptions for "JobsSwiftBaseConfigDemo" folder in "JobsSwiftBaseConfigDemo" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = C520FB652DEFF5230063C87D /* JobsSwiftBaseConfigDemo */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		C531938E2DEFEB0200755EAD /* JobsSwiftBaseConfigDemo */ = {
+		C520FB682DEFF5230063C87D /* JobsSwiftBaseConfigDemo */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				C520FB8E2DEFF5240063C87D /* Exceptions for "JobsSwiftBaseConfigDemo" folder in "JobsSwiftBaseConfigDemo" target */,
 			);
 			path = JobsSwiftBaseConfigDemo;
 			sourceTree = "<group>";
 		};
-		C531939C2DEFEB0400755EAD /* JobsSwiftBaseConfigDemoTests */ = {
+		C520FB7F2DEFF5240063C87D /* JobsSwiftBaseConfigDemoTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 			);
 			path = JobsSwiftBaseConfigDemoTests;
 			sourceTree = "<group>";
 		};
-		C53193A62DEFEB0400755EAD /* JobsSwiftBaseConfigDemoUITests */ = {
+		C520FB892DEFF5240063C87D /* JobsSwiftBaseConfigDemoUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 			);
@@ -69,208 +80,207 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		C53193892DEFEB0200755EAD /* Frameworks */ = {
+		C520FB632DEFF5230063C87D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1653E3615328B28BBE198DEF /* Pods_JobsSwiftBaseConfigDemo.framework in Frameworks */,
+				AD76BD91746D5F918B3E8B90 /* Pods_JobsSwiftBaseConfigDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C53193962DEFEB0400755EAD /* Frameworks */ = {
+		C520FB792DEFF5240063C87D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3621846C9B0F2D12254CF8E8 /* Pods_JobsSwiftBaseConfigDemoTests.framework in Frameworks */,
+				56D62B2D94AA7D0424E4B6CF /* Pods_JobsSwiftBaseConfigDemoTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C53193A02DEFEB0400755EAD /* Frameworks */ = {
+		C520FB832DEFF5240063C87D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				78B0DCA91709F80B9D0C76A9 /* Pods_JobsSwiftBaseConfigDemoUITests.framework in Frameworks */,
+				F6A888D89F9116CC275900FD /* Pods_JobsSwiftBaseConfigDemoUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3130E9002819AFBE1AEC02F4 /* Frameworks */ = {
+		97F4B4C05508802BFF3F913C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				65D3DA7A6C9C9134055A443D /* Pods_JobsSwiftBaseConfigDemo.framework */,
-				8AFB5A22AE42998287E46EB8 /* Pods_JobsSwiftBaseConfigDemoTests.framework */,
-				6A4BD9220F6795CFF945F6A3 /* Pods_JobsSwiftBaseConfigDemoUITests.framework */,
+				BC662EF16FAFF84B6675A7A6 /* Pods_JobsSwiftBaseConfigDemo.framework */,
+				9CA5176DE185F40A31A7214F /* Pods_JobsSwiftBaseConfigDemoTests.framework */,
+				D9C36D283E6302CD53213AD5 /* Pods_JobsSwiftBaseConfigDemoUITests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		5F6453EBB6F985D550F1A709 /* Pods */ = {
+		C520FB5D2DEFF5230063C87D = {
 			isa = PBXGroup;
 			children = (
-				A35235AA7D80DAC188F36FA1 /* Pods-JobsSwiftBaseConfigDemo.debug.xcconfig */,
-				B29B683BC3AB12F44FA28C9D /* Pods-JobsSwiftBaseConfigDemo.release.xcconfig */,
-				E0EDD02522BF81DC5C21400A /* Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig */,
-				7A9A18BB5D6C78E3866BB61D /* Pods-JobsSwiftBaseConfigDemoTests.release.xcconfig */,
-				712A16ECF15DFBB0E5A296FD /* Pods-JobsSwiftBaseConfigDemoUITests.debug.xcconfig */,
-				A632452218944F3FF353C200 /* Pods-JobsSwiftBaseConfigDemoUITests.release.xcconfig */,
+				C520FB682DEFF5230063C87D /* JobsSwiftBaseConfigDemo */,
+				C520FB7F2DEFF5240063C87D /* JobsSwiftBaseConfigDemoTests */,
+				C520FB892DEFF5240063C87D /* JobsSwiftBaseConfigDemoUITests */,
+				C520FB672DEFF5230063C87D /* Products */,
+				FE09EBBB9DAFC35F1B93632D /* Pods */,
+				97F4B4C05508802BFF3F913C /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		C520FB672DEFF5230063C87D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C520FB662DEFF5230063C87D /* JobsSwiftBaseConfigDemo.app */,
+				C520FB7C2DEFF5240063C87D /* JobsSwiftBaseConfigDemoTests.xctest */,
+				C520FB862DEFF5240063C87D /* JobsSwiftBaseConfigDemoUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FE09EBBB9DAFC35F1B93632D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3A38B8C0ABA40B7091ABB836 /* Pods-JobsSwiftBaseConfigDemo.debug.xcconfig */,
+				4C01D2465FCA2CAAB00DE018 /* Pods-JobsSwiftBaseConfigDemo.release.xcconfig */,
+				4081983A83923445D7BA3171 /* Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig */,
+				6A00327B6863A2B874030507 /* Pods-JobsSwiftBaseConfigDemoTests.release.xcconfig */,
+				D90153FC87FE38413B484949 /* Pods-JobsSwiftBaseConfigDemoUITests.debug.xcconfig */,
+				AAEE1532B4F03E112BF8DA41 /* Pods-JobsSwiftBaseConfigDemoUITests.release.xcconfig */,
 			);
 			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		C53193832DEFEB0200755EAD = {
-			isa = PBXGroup;
-			children = (
-				C531938E2DEFEB0200755EAD /* JobsSwiftBaseConfigDemo */,
-				C531939C2DEFEB0400755EAD /* JobsSwiftBaseConfigDemoTests */,
-				C53193A62DEFEB0400755EAD /* JobsSwiftBaseConfigDemoUITests */,
-				C531938D2DEFEB0200755EAD /* Products */,
-				5F6453EBB6F985D550F1A709 /* Pods */,
-				3130E9002819AFBE1AEC02F4 /* Frameworks */,
-			);
-			sourceTree = "<group>";
-		};
-		C531938D2DEFEB0200755EAD /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				C531938C2DEFEB0200755EAD /* JobsSwiftBaseConfigDemo.app */,
-				C53193992DEFEB0400755EAD /* JobsSwiftBaseConfigDemoTests.xctest */,
-				C53193A32DEFEB0400755EAD /* JobsSwiftBaseConfigDemoUITests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		C531938B2DEFEB0200755EAD /* JobsSwiftBaseConfigDemo */ = {
+		C520FB652DEFF5230063C87D /* JobsSwiftBaseConfigDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C53193AD2DEFEB0400755EAD /* Build configuration list for PBXNativeTarget "JobsSwiftBaseConfigDemo" */;
+			buildConfigurationList = C520FB8F2DEFF5240063C87D /* Build configuration list for PBXNativeTarget "JobsSwiftBaseConfigDemo" */;
 			buildPhases = (
-				A656E86482717E7BE2118108 /* [CP] Check Pods Manifest.lock */,
-				C53193882DEFEB0200755EAD /* Sources */,
-				C53193892DEFEB0200755EAD /* Frameworks */,
-				C531938A2DEFEB0200755EAD /* Resources */,
-				1D54BBD6BE397B451B388F41 /* [CP] Copy Pods Resources */,
+				5FF6BECBD3E2762780531160 /* [CP] Check Pods Manifest.lock */,
+				C520FB622DEFF5230063C87D /* Sources */,
+				C520FB632DEFF5230063C87D /* Frameworks */,
+				C520FB642DEFF5230063C87D /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				C531938E2DEFEB0200755EAD /* JobsSwiftBaseConfigDemo */,
+				C520FB682DEFF5230063C87D /* JobsSwiftBaseConfigDemo */,
 			);
 			name = JobsSwiftBaseConfigDemo;
 			productName = JobsSwiftBaseConfigDemo;
-			productReference = C531938C2DEFEB0200755EAD /* JobsSwiftBaseConfigDemo.app */;
+			productReference = C520FB662DEFF5230063C87D /* JobsSwiftBaseConfigDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
-		C53193982DEFEB0400755EAD /* JobsSwiftBaseConfigDemoTests */ = {
+		C520FB7B2DEFF5240063C87D /* JobsSwiftBaseConfigDemoTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C53193B02DEFEB0400755EAD /* Build configuration list for PBXNativeTarget "JobsSwiftBaseConfigDemoTests" */;
+			buildConfigurationList = C520FB942DEFF5240063C87D /* Build configuration list for PBXNativeTarget "JobsSwiftBaseConfigDemoTests" */;
 			buildPhases = (
-				AE87ABE75A947FF6C79716BC /* [CP] Check Pods Manifest.lock */,
-				C53193952DEFEB0400755EAD /* Sources */,
-				C53193962DEFEB0400755EAD /* Frameworks */,
-				C53193972DEFEB0400755EAD /* Resources */,
+				F4CC3E9B19F53FDE21FC177C /* [CP] Check Pods Manifest.lock */,
+				C520FB782DEFF5240063C87D /* Sources */,
+				C520FB792DEFF5240063C87D /* Frameworks */,
+				C520FB7A2DEFF5240063C87D /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				C531939B2DEFEB0400755EAD /* PBXTargetDependency */,
+				C520FB7E2DEFF5240063C87D /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				C531939C2DEFEB0400755EAD /* JobsSwiftBaseConfigDemoTests */,
+				C520FB7F2DEFF5240063C87D /* JobsSwiftBaseConfigDemoTests */,
 			);
 			name = JobsSwiftBaseConfigDemoTests;
 			productName = JobsSwiftBaseConfigDemoTests;
-			productReference = C53193992DEFEB0400755EAD /* JobsSwiftBaseConfigDemoTests.xctest */;
+			productReference = C520FB7C2DEFF5240063C87D /* JobsSwiftBaseConfigDemoTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		C53193A22DEFEB0400755EAD /* JobsSwiftBaseConfigDemoUITests */ = {
+		C520FB852DEFF5240063C87D /* JobsSwiftBaseConfigDemoUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C53193B32DEFEB0400755EAD /* Build configuration list for PBXNativeTarget "JobsSwiftBaseConfigDemoUITests" */;
+			buildConfigurationList = C520FB972DEFF5240063C87D /* Build configuration list for PBXNativeTarget "JobsSwiftBaseConfigDemoUITests" */;
 			buildPhases = (
-				5A59141F99CBA7407C56A6EB /* [CP] Check Pods Manifest.lock */,
-				C531939F2DEFEB0400755EAD /* Sources */,
-				C53193A02DEFEB0400755EAD /* Frameworks */,
-				C53193A12DEFEB0400755EAD /* Resources */,
+				F2C92B3B073281C306DF8D4B /* [CP] Check Pods Manifest.lock */,
+				C520FB822DEFF5240063C87D /* Sources */,
+				C520FB832DEFF5240063C87D /* Frameworks */,
+				C520FB842DEFF5240063C87D /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				C53193A52DEFEB0400755EAD /* PBXTargetDependency */,
+				C520FB882DEFF5240063C87D /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				C53193A62DEFEB0400755EAD /* JobsSwiftBaseConfigDemoUITests */,
+				C520FB892DEFF5240063C87D /* JobsSwiftBaseConfigDemoUITests */,
 			);
 			name = JobsSwiftBaseConfigDemoUITests;
 			productName = JobsSwiftBaseConfigDemoUITests;
-			productReference = C53193A32DEFEB0400755EAD /* JobsSwiftBaseConfigDemoUITests.xctest */;
+			productReference = C520FB862DEFF5240063C87D /* JobsSwiftBaseConfigDemoUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		C53193842DEFEB0200755EAD /* Project object */ = {
+		C520FB5E2DEFF5230063C87D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1640;
 				TargetAttributes = {
-					C531938B2DEFEB0200755EAD = {
+					C520FB652DEFF5230063C87D = {
 						CreatedOnToolsVersion = 16.4;
 					};
-					C53193982DEFEB0400755EAD = {
+					C520FB7B2DEFF5240063C87D = {
 						CreatedOnToolsVersion = 16.4;
-						TestTargetID = C531938B2DEFEB0200755EAD;
+						TestTargetID = C520FB652DEFF5230063C87D;
 					};
-					C53193A22DEFEB0400755EAD = {
+					C520FB852DEFF5240063C87D = {
 						CreatedOnToolsVersion = 16.4;
-						TestTargetID = C531938B2DEFEB0200755EAD;
+						TestTargetID = C520FB652DEFF5230063C87D;
 					};
 				};
 			};
-			buildConfigurationList = C53193872DEFEB0200755EAD /* Build configuration list for PBXProject "JobsSwiftBaseConfigDemo" */;
+			buildConfigurationList = C520FB612DEFF5230063C87D /* Build configuration list for PBXProject "JobsSwiftBaseConfigDemo" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = C53193832DEFEB0200755EAD;
+			mainGroup = C520FB5D2DEFF5230063C87D;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = C531938D2DEFEB0200755EAD /* Products */;
+			productRefGroup = C520FB672DEFF5230063C87D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C531938B2DEFEB0200755EAD /* JobsSwiftBaseConfigDemo */,
-				C53193982DEFEB0400755EAD /* JobsSwiftBaseConfigDemoTests */,
-				C53193A22DEFEB0400755EAD /* JobsSwiftBaseConfigDemoUITests */,
+				C520FB652DEFF5230063C87D /* JobsSwiftBaseConfigDemo */,
+				C520FB7B2DEFF5240063C87D /* JobsSwiftBaseConfigDemoTests */,
+				C520FB852DEFF5240063C87D /* JobsSwiftBaseConfigDemoUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		C531938A2DEFEB0200755EAD /* Resources */ = {
+		C520FB642DEFF5230063C87D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C53193972DEFEB0400755EAD /* Resources */ = {
+		C520FB7A2DEFF5240063C87D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C53193A12DEFEB0400755EAD /* Resources */ = {
+		C520FB842DEFF5240063C87D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -280,44 +290,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1D54BBD6BE397B451B388F41 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-JobsSwiftBaseConfigDemo/Pods-JobsSwiftBaseConfigDemo-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5A59141F99CBA7407C56A6EB /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-JobsSwiftBaseConfigDemoUITests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A656E86482717E7BE2118108 /* [CP] Check Pods Manifest.lock */ = {
+		5FF6BECBD3E2762780531160 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -339,7 +312,29 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		AE87ABE75A947FF6C79716BC /* [CP] Check Pods Manifest.lock */ = {
+		F2C92B3B073281C306DF8D4B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-JobsSwiftBaseConfigDemoUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F4CC3E9B19F53FDE21FC177C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -364,21 +359,21 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		C53193882DEFEB0200755EAD /* Sources */ = {
+		C520FB622DEFF5230063C87D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C53193952DEFEB0400755EAD /* Sources */ = {
+		C520FB782DEFF5240063C87D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C531939F2DEFEB0400755EAD /* Sources */ = {
+		C520FB822DEFF5240063C87D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -388,20 +383,78 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		C531939B2DEFEB0400755EAD /* PBXTargetDependency */ = {
+		C520FB7E2DEFF5240063C87D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = C531938B2DEFEB0200755EAD /* JobsSwiftBaseConfigDemo */;
-			targetProxy = C531939A2DEFEB0400755EAD /* PBXContainerItemProxy */;
+			target = C520FB652DEFF5230063C87D /* JobsSwiftBaseConfigDemo */;
+			targetProxy = C520FB7D2DEFF5240063C87D /* PBXContainerItemProxy */;
 		};
-		C53193A52DEFEB0400755EAD /* PBXTargetDependency */ = {
+		C520FB882DEFF5240063C87D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = C531938B2DEFEB0200755EAD /* JobsSwiftBaseConfigDemo */;
-			targetProxy = C53193A42DEFEB0400755EAD /* PBXContainerItemProxy */;
+			target = C520FB652DEFF5230063C87D /* JobsSwiftBaseConfigDemo */;
+			targetProxy = C520FB872DEFF5240063C87D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		C53193AB2DEFEB0400755EAD /* Debug */ = {
+		C520FB902DEFF5240063C87D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3A38B8C0ABA40B7091ABB836 /* Pods-JobsSwiftBaseConfigDemo.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K92UCMVH8G;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = JobsSwiftBaseConfigDemo/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jobs.baseConfig.JobsSwiftBaseConfigDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C520FB912DEFF5240063C87D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4C01D2465FCA2CAAB00DE018 /* Pods-JobsSwiftBaseConfigDemo.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K92UCMVH8G;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = JobsSwiftBaseConfigDemo/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jobs.baseConfig.JobsSwiftBaseConfigDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C520FB922DEFF5240063C87D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -465,7 +518,7 @@
 			};
 			name = Debug;
 		};
-		C53193AC2DEFEB0400755EAD /* Release */ = {
+		C520FB932DEFF5240063C87D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -522,67 +575,9 @@
 			};
 			name = Release;
 		};
-		C53193AE2DEFEB0400755EAD /* Debug */ = {
+		C520FB952DEFF5240063C87D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A35235AA7D80DAC188F36FA1 /* Pods-JobsSwiftBaseConfigDemo.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = K92UCMVH8G;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jobs.baseConfig.JobsSwiftBaseConfigDemo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		C53193AF2DEFEB0400755EAD /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = B29B683BC3AB12F44FA28C9D /* Pods-JobsSwiftBaseConfigDemo.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = K92UCMVH8G;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jobs.baseConfig.JobsSwiftBaseConfigDemo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		C53193B12DEFEB0400755EAD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E0EDD02522BF81DC5C21400A /* Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig */;
+			baseConfigurationReference = 4081983A83923445D7BA3171 /* Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -600,9 +595,9 @@
 			};
 			name = Debug;
 		};
-		C53193B22DEFEB0400755EAD /* Release */ = {
+		C520FB962DEFF5240063C87D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7A9A18BB5D6C78E3866BB61D /* Pods-JobsSwiftBaseConfigDemoTests.release.xcconfig */;
+			baseConfigurationReference = 6A00327B6863A2B874030507 /* Pods-JobsSwiftBaseConfigDemoTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -620,9 +615,9 @@
 			};
 			name = Release;
 		};
-		C53193B42DEFEB0400755EAD /* Debug */ = {
+		C520FB982DEFF5240063C87D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 712A16ECF15DFBB0E5A296FD /* Pods-JobsSwiftBaseConfigDemoUITests.debug.xcconfig */;
+			baseConfigurationReference = D90153FC87FE38413B484949 /* Pods-JobsSwiftBaseConfigDemoUITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -638,9 +633,9 @@
 			};
 			name = Debug;
 		};
-		C53193B52DEFEB0400755EAD /* Release */ = {
+		C520FB992DEFF5240063C87D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A632452218944F3FF353C200 /* Pods-JobsSwiftBaseConfigDemoUITests.release.xcconfig */;
+			baseConfigurationReference = AAEE1532B4F03E112BF8DA41 /* Pods-JobsSwiftBaseConfigDemoUITests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -659,43 +654,43 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C53193872DEFEB0200755EAD /* Build configuration list for PBXProject "JobsSwiftBaseConfigDemo" */ = {
+		C520FB612DEFF5230063C87D /* Build configuration list for PBXProject "JobsSwiftBaseConfigDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C53193AB2DEFEB0400755EAD /* Debug */,
-				C53193AC2DEFEB0400755EAD /* Release */,
+				C520FB922DEFF5240063C87D /* Debug */,
+				C520FB932DEFF5240063C87D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C53193AD2DEFEB0400755EAD /* Build configuration list for PBXNativeTarget "JobsSwiftBaseConfigDemo" */ = {
+		C520FB8F2DEFF5240063C87D /* Build configuration list for PBXNativeTarget "JobsSwiftBaseConfigDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C53193AE2DEFEB0400755EAD /* Debug */,
-				C53193AF2DEFEB0400755EAD /* Release */,
+				C520FB902DEFF5240063C87D /* Debug */,
+				C520FB912DEFF5240063C87D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C53193B02DEFEB0400755EAD /* Build configuration list for PBXNativeTarget "JobsSwiftBaseConfigDemoTests" */ = {
+		C520FB942DEFF5240063C87D /* Build configuration list for PBXNativeTarget "JobsSwiftBaseConfigDemoTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C53193B12DEFEB0400755EAD /* Debug */,
-				C53193B22DEFEB0400755EAD /* Release */,
+				C520FB952DEFF5240063C87D /* Debug */,
+				C520FB962DEFF5240063C87D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C53193B32DEFEB0400755EAD /* Build configuration list for PBXNativeTarget "JobsSwiftBaseConfigDemoUITests" */ = {
+		C520FB972DEFF5240063C87D /* Build configuration list for PBXNativeTarget "JobsSwiftBaseConfigDemoUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C53193B42DEFEB0400755EAD /* Debug */,
-				C53193B52DEFEB0400755EAD /* Release */,
+				C520FB982DEFF5240063C87D /* Debug */,
+				C520FB992DEFF5240063C87D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = C53193842DEFEB0200755EAD /* Project object */;
+	rootObject = C520FB5E2DEFF5230063C87D /* Project object */;
 }
