@@ -16,15 +16,33 @@ class VC2: UIViewController {
     let refreshControl = UIRefreshControl()
     var isLoadingMore = false
     let emptyView = EmptyView()
+    
+    func printSomething() {
+            print("Hello from MyObject")
+    }
+
+    func startTask() {
+        let task = weakify(self, VC2.printSomething)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            task() // ✅ 没有?也可以了
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         title = "Collection 展示"
-
+        
+        doAsync(after: 2.0) { strongSelf in
+            strongSelf.view.backgroundColor = .blue
+        }
+        
         setupCollectionView()
         setupEmptyView()
         loadInitialData()
+        
+        
+        
     }
 
     private func setupCollectionView() {

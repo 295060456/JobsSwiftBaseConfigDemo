@@ -7,10 +7,16 @@
 
 import UIKit
 import SnapKit
-
-class ViewController: UIViewController {
-
-    private let tableView = UITableView()
+//import JobsObj
+//如果你真的想要 import JobsObj，你要这样做：
+//你就得 把 JobsObj.swift 单独做成 module，方法如下：
+//创建一个新 Framework Target（例如叫 JobsObj）；
+//把 JobsObj.swift 拖进去；
+//在主 App Target 中 import JobsObj；
+//在主 Target 的 General > Frameworks, Libraries, and Embedded Content 中添加该 framework；
+//编译。
+class ViewController: UIViewController{
+    fileprivate let tableView = UITableView()/// 默认internal。fileprivate本文件可访问
     private var data: [(title: String, subtitle: String)] = []
     private var isLoadingMore = false
 
@@ -22,6 +28,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        
+        let obj = NSObject()
+        obj.name = "Jobs"
+        obj.greet() // 输出: 👋 Hello, my name is Jobs
 
         setupTableView()
         setupEmptyView()
@@ -37,6 +47,12 @@ class ViewController: UIViewController {
             make.edges.equalToSuperview()
         }
 
+        /// 封装成点语法的形式
+        tableView
+            .registerCell(CustomCell.self)
+            .setDelegate(self)
+            .setDataSource(self)
+        
         tableView.register(CustomCell.self, forCellReuseIdentifier: "CustomCell")
         tableView.delegate = self
 
@@ -111,8 +127,9 @@ class ViewController: UIViewController {
         tableView.isHidden = data.isEmpty
     }
 }
-
 // MARK: - UIScrollViewDelegate 上拉加载更多
+// Swift 不允许在 extension 的作用域里写“执行语句”。
+// 只能写方法、计算属性、嵌套类型，不能写直接执行的代码（表达式/语句）
 extension ViewController: UITableViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
@@ -123,10 +140,20 @@ extension ViewController: UITableViewDelegate {
             loadMoreData()
         }
     }
-
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let vc = VC2()
         navigationController?.pushViewController(vc, animated: true)
+    }
+}
+// MARK: - UITableViewDataSource
+extension ViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        20
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "UITableViewCell", for: indexPath)
+        cell.textLabel?.text = "第 \(indexPath.row + 1) 行"
+        return cell
     }
 }
