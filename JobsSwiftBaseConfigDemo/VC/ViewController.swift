@@ -50,8 +50,8 @@ class ViewController: UIViewController{
         /// 封装成点语法的形式
         tableView
             .registerCell(CustomCell.self)
-            .setDelegate(self)
-            .setDataSource(self)
+            .byDelegate(self)
+            .byDataSource(self)
         
         tableView.register(CustomCell.self, forCellReuseIdentifier: "CustomCell")
         tableView.delegate = self

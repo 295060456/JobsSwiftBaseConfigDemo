@@ -27,7 +27,9 @@ extension UIPageViewController {
     }
 
     @discardableResult
-    func byTransitionStyle(_ style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) -> Self {
-        return UIPageViewController(transitionStyle: style, navigationOrientation: navigationOrientation, options: options)
+    func byTransitionStyle(_ style: UIPageViewController.TransitionStyle,
+                           navigationOrientation: UIPageViewController.NavigationOrientation,
+                           options: [UIPageViewController.OptionsKey : Any]? = nil) -> Self {
+        return UIPageViewController(transitionStyle: style, navigationOrientation: navigationOrientation, options: options) as! Self
     }
 }
