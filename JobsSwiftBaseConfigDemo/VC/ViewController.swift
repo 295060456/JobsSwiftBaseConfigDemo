@@ -15,65 +15,43 @@ import SnapKit
 //在主 App Target 中 import JobsObj；
 //在主 Target 的 General > Frameworks, Libraries, and Embedded Content 中添加该 framework；
 //编译。
-class ViewController: UIViewController{
-    fileprivate let tableView = UITableView()/// 默认internal。fileprivate本文件可访问
-    private var data: [(title: String, subtitle: String)] = []
-    private var isLoadingMore = false
-
-    private let refreshControl = UIRefreshControl()
-    private let emptyView = EmptyView()
-
-    private var dataSource: UITableViewDiffableDataSource<Int, String>!
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .white
-        
-        let obj = NSObject()
-        obj.name = "Jobs"
-        obj.greet() // 输出: 👋 Hello, my name is Jobs
-
-        setupTableView()
-        setupEmptyView()
-        setupDataSource()
-
-        loadInitialData()
-    }
-
-    private func setupTableView() {
-        view.addSubview(tableView)
-
-        tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-
-        /// 封装成点语法的形式
-        tableView
+class ViewController: UIViewController {
+    
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
             .registerCell(CustomCell.self)
             .byDelegate(self)
             .byDataSource(self)
+            .byRefreshControl(refreshControl)
+
+            
         
-        tableView.register(CustomCell.self, forCellReuseIdentifier: "CustomCell")
-        tableView.delegate = self
+        view.addSubview(tableView)
+        tableView.snp.makeConstraints { $0.edges.equalToSuperview() }
+        return tableView
+    }()
+    
+    private var data: [(title: String, subtitle: String)] = []
+    private var isLoadingMore = false
 
-        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
-        tableView.refreshControl = refreshControl
-    }
+    private lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        control.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        return control
+    }()
 
-    private func setupEmptyView() {
-        view.addSubview(emptyView)
-        emptyView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        emptyView.isHidden = true
-        emptyView.onTapRetry = { [weak self] in
+    private lazy var emptyView: EmptyView = {
+        let view = EmptyView()
+        view.isHidden = true
+        view.onTapRetry = { [weak self] in
             self?.loadInitialData()
         }
-    }
+        return view
+    }()
 
-    private func setupDataSource() {
-        dataSource = UITableViewDiffableDataSource<Int, String>(tableView: tableView) {
-            (tableView, indexPath, item) -> UITableViewCell? in
+    private lazy var dataSource: UITableViewDiffableDataSource<Int, String> = {
+        UITableViewDiffableDataSource<Int, String>(tableView: tableView) { [weak self] tableView, indexPath, item in
+            guard let self = self else { return nil }
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as? CustomCell else {
                 return UITableViewCell()
             }
@@ -81,6 +59,25 @@ class ViewController: UIViewController{
             cell.config(title: value.title, subtitle: value.subtitle)
             return cell
         }
+    }()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+
+        let obj = NSObject()
+        obj.name = "Jobs"
+        obj.greet() // 输出: 👋 Hello, my name is Jobs
+
+        setupUI()
+        loadInitialData()
+    }
+
+    private func setupUI() {
+
+
+        view.addSubview(emptyView)
+        emptyView.snp.makeConstraints { $0.edges.equalToSuperview() }
     }
 
     private func applySnapshot(animated: Bool = true) {
@@ -127,6 +124,7 @@ class ViewController: UIViewController{
         tableView.isHidden = data.isEmpty
     }
 }
+
 // MARK: - UIScrollViewDelegate 上拉加载更多
 // Swift 不允许在 extension 的作用域里写“执行语句”。
 // 只能写方法、计算属性、嵌套类型，不能写直接执行的代码（表达式/语句）
