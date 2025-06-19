@@ -71,7 +71,6 @@ def debugPods
 # pod 'FBRetainCycleDetector' # https://github.com/facebook/FBRetainCycleDetector
   #pod 'LookinServer', :configurations => ['Debug'] # https://lookin.work/
 end
-
 # 基础的公共配置
 def cocoPodsConfig
   # ❤️新工程需要修改这里❤️
