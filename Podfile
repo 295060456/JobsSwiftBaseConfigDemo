@@ -51,6 +51,7 @@ use_modular_headers!
 def swiftAppCommon
   pod 'IQKeyboardManager' # https://github.com/hackiftekhar/IQKeyboardManager Codeless drop-in universal library allows to prevent issues of keyboard sliding up and cover UITextField/UITextView. Neither need to write any code nor any setup required and much more.
   pod 'Alamofire' # https://github.com/Alamofire/Alamofire
+  pod 'Moya', :modular_headers => true # https://github.com/Moya/Moya
   pod 'SDWebImage' # https://github.com/SDWebImage/SDWebImage
   pod 'GKNavigationBarSwift' # https://github.com/QuintGao/GKNavigationBarSwift
   pod 'ReactiveSwift' # https://github.com/ReactiveCocoa/ReactiveSwift
