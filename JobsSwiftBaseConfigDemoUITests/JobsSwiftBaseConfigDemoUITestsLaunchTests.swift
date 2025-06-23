@@ -2,7 +2,7 @@
 //  JobsSwiftBaseConfigDemoUITestsLaunchTests.swift
 //  JobsSwiftBaseConfigDemoUITests
 //
-//  Created by Jobs on 2025/6/4.
+//  Created by Jobs on 2025/6/23.
 //
 
 import XCTest
@@ -17,7 +17,6 @@ final class JobsSwiftBaseConfigDemoUITestsLaunchTests: XCTestCase {
         continueAfterFailure = false
     }
 
-    @MainActor
     func testLaunch() throws {
         let app = XCUIApplication()
         app.launch()
