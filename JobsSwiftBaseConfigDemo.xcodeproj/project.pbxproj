@@ -58,7 +58,6 @@
 		C564FC962E0959640079B5C1 /* Inlines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC742E0959620079B5C1 /* Inlines.swift */; };
 		C564FC972E0959640079B5C1 /* UIActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC752E0959620079B5C1 /* UIActivityIndicatorView.swift */; };
 		C564FC982E0959640079B5C1 /* NSObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC762E0959620079B5C1 /* NSObject.swift */; };
-		C564FC992E0959640079B5C1 /* NSProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC772E0959620079B5C1 /* NSProtocol.swift */; };
 		C564FC9A2E0959640079B5C1 /* UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC782E0959620079B5C1 /* UITextView.swift */; };
 		C564FC9B2E0959640079B5C1 /* UIStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC792E0959620079B5C1 /* UIStackView.swift */; };
 		C564FC9C2E0959640079B5C1 /* UIPopoverPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC7A2E0959630079B5C1 /* UIPopoverPresentationController.swift */; };
@@ -332,6 +331,7 @@
 		C564FC342E0959050079B5C1 /* JobsProtocol */ = {
 			isa = PBXGroup;
 			children = (
+				C564FC772E0959620079B5C1 /* NSProtocol.swift */,
 				C564FC352E09590B0079B5C1 /* JobsProtocol.swift */,
 			);
 			path = JobsProtocol;
@@ -426,7 +426,6 @@
 			children = (
 				C564FC742E0959620079B5C1 /* Inlines.swift */,
 				C564FC762E0959620079B5C1 /* NSObject.swift */,
-				C564FC772E0959620079B5C1 /* NSProtocol.swift */,
 				C564FC752E0959620079B5C1 /* UIActivityIndicatorView.swift */,
 				C564FC6A2E0959610079B5C1 /* UIAlertController.swift */,
 				C564FC6B2E0959610079B5C1 /* UIBarButtonItem.swift */,
@@ -734,7 +733,6 @@
 				C564FCB12E0959990079B5C1 /* CollectionCell.swift in Sources */,
 				C564FC362E09590B0079B5C1 /* JobsProtocol.swift in Sources */,
 				C564FC622E0959510079B5C1 /* JobsDefineAllEnumHeader.swift in Sources */,
-				C564FC992E0959640079B5C1 /* NSProtocol.swift in Sources */,
 				C564FC972E0959640079B5C1 /* UIActivityIndicatorView.swift in Sources */,
 				C564FCA22E0959640079B5C1 /* UITableView.swift in Sources */,
 				C564FC8E2E0959640079B5C1 /* UITabBarController.swift in Sources */,
@@ -839,7 +837,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -902,7 +900,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -929,6 +927,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = JobsSwiftBaseConfigDemo/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -963,6 +962,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = JobsSwiftBaseConfigDemo/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

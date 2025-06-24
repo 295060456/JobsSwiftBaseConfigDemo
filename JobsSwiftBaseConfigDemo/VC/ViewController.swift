@@ -23,9 +23,6 @@ class ViewController: UIViewController {
             .byDelegate(self)
             .byDataSource(self)
             .byRefreshControl(refreshControl)
-
-            
-        
         view.addSubview(tableView)
         tableView.snp.makeConstraints { $0.edges.equalToSuperview() }
         return tableView
