@@ -60,6 +60,7 @@ def swiftAppCommon
   pod 'JXSegmentedView' # https://github.com/pujiaxin33/JXSegmentedView
   pod "HTMLReader" # https://github.com/nolanw/HTMLReader 处理 HTML 语法
   pod 'SDWebImage' # https://github.com/SDWebImage/SDWebImage
+  pod 'KakaJSON' # https://github.com/kakaopensource/KakaJSON
 end
 # 调试框架
 def debugPods

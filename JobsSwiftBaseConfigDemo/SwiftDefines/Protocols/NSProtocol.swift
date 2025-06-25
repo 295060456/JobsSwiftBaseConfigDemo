@@ -30,7 +30,7 @@ protocol RACProtocol {
     /// 传递多个值（Swift 通常用 Tuple 或 Struct）
     var dataTuple: (Any?, Any?)? { get set }
     /// 信号和订阅的映射关系
-    var signalDisposableMap: [Disposable: Signal<Void, Never>] { get set }
+    var signalDisposableMap: [ObjectIdentifier: Signal<Void, Never>] { get set }
     /// 定时器任务：带参数
     var doSthByIDBlock: ((Any?) -> Void)? { get set }
     /// 定时器任务：无参数
@@ -38,20 +38,20 @@ protocol RACProtocol {
 }
 
 protocol BaseProtocol: RACProtocol {
-    // MARK: 锁
+    /// 锁
     var lock: NSLock? { get set }
     var recursiveLock: NSRecursiveLock? { get set }
     var os_lock: os_unfair_lock { get }
     var mutex: pthread_mutex_t { get }
-    // MARK: 状态
+    /// 状态
     var isLock: Bool { get set }
     var isRead: Bool { get set }
     var becomeFirstResponder: Bool { get set }
     var appLanguage: AppLanguage { get set }
     var lastContentOffset: CGPoint { get set }
-    // MARK: 计时器
+    /// 计时器
     var time: CGFloat { get set }
-    var invocation: NSInvocation? { get set }
+    var timerHandler: (() -> Void)? { get set }/// 用于替代 NSInvocation：封装某个待执行行为
     var timer: Timer? { get set }
     var userInfo: Any? { get set }
     var semaphore: DispatchSemaphore { get set }
@@ -72,7 +72,7 @@ protocol BaseProtocol: RACProtocol {
     var timerStyle: TimerStyle { get set }
     var timerCurrentStatus: NSTimerCurrentStatus { get }
     var timerProcessType: TimerProcessType { get set }
-    // MARK: JS
+    /// JS
     var userContentCtrl: WKUserContentController? { get set }
     var scriptMsg: WKScriptMessage? { get set }
     var handlerName: String? { get set }

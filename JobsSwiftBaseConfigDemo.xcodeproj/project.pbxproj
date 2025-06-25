@@ -10,6 +10,9 @@
 		333F3B0D52218CCFCD6491FF /* libPods-JobsSwiftBaseConfigDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F6A4ABE2CD02182172C83D8 /* libPods-JobsSwiftBaseConfigDemo.a */; };
 		5D7AB85E77939149E8B16EE4 /* libPods-JobsSwiftBaseConfigDemoTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD9240CBDFACEF0E84778A1 /* libPods-JobsSwiftBaseConfigDemoTests.a */; };
 		B4BD654523F64CF5AD7D1911 /* libPods-JobsSwiftBaseConfigDemoUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BFA60F33A2E2DAF2C73F60E7 /* libPods-JobsSwiftBaseConfigDemoUITests.a */; };
+		C5489B5C2E0AB19F00B05447 /* NSProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC772E0959620079B5C1 /* NSProtocol.swift */; };
+		C5489B5D2E0AB2D300B05447 /* JobsBlockDef.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC302E0958FF0079B5C1 /* JobsBlockDef.swift */; };
+		C5489B5E2E0AB30700B05447 /* JobsBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC312E0959000079B5C1 /* JobsBlock.swift */; };
 		C564FBE62E09580B0079B5C1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C564FBE42E09580B0079B5C1 /* Main.storyboard */; };
 		C564FBE92E09580B0079B5C1 /* JobsSwiftBaseConfigDemo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C564FBE72E09580B0079B5C1 /* JobsSwiftBaseConfigDemo.xcdatamodeld */; };
 		C564FBEB2E09580D0079B5C1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C564FBEA2E09580D0079B5C1 /* Assets.xcassets */; };
@@ -38,7 +41,7 @@
 		C564FC5D2E09592B0079B5C1 /* libarclite_macosx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C564FC4C2E09592A0079B5C1 /* libarclite_macosx.a */; };
 		C564FC5E2E09592B0079B5C1 /* libarclite_iphoneos.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C564FC4D2E09592A0079B5C1 /* libarclite_iphoneos.a */; };
 		C564FC5F2E09592B0079B5C1 /* libarclite_appletvos.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C564FC4E2E09592A0079B5C1 /* libarclite_appletvos.a */; };
-		C564FC622E0959510079B5C1 /* JobsDefineAllEnumHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC612E0959510079B5C1 /* JobsDefineAllEnumHeader.swift */; };
+		C564FC622E0959510079B5C1 /* Enum_struct_defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC612E0959510079B5C1 /* Enum_struct_defines.swift */; };
 		C564FC862E0959640079B5C1 /* WKWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC642E0959600079B5C1 /* WKWebView.swift */; };
 		C564FC872E0959640079B5C1 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC652E0959600079B5C1 /* UIButton.swift */; };
 		C564FC882E0959640079B5C1 /* UISlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC662E0959600079B5C1 /* UISlider.swift */; };
@@ -139,7 +142,7 @@
 		C564FC4C2E09592A0079B5C1 /* libarclite_macosx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libarclite_macosx.a; sourceTree = "<group>"; };
 		C564FC4D2E09592A0079B5C1 /* libarclite_iphoneos.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libarclite_iphoneos.a; sourceTree = "<group>"; };
 		C564FC4E2E09592A0079B5C1 /* libarclite_appletvos.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libarclite_appletvos.a; sourceTree = "<group>"; };
-		C564FC612E0959510079B5C1 /* JobsDefineAllEnumHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JobsDefineAllEnumHeader.swift; sourceTree = "<group>"; };
+		C564FC612E0959510079B5C1 /* Enum_struct_defines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enum_struct_defines.swift; sourceTree = "<group>"; };
 		C564FC642E0959600079B5C1 /* WKWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WKWebView.swift; sourceTree = "<group>"; };
 		C564FC652E0959600079B5C1 /* UIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		C564FC662E0959600079B5C1 /* UISlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UISlider.swift; sourceTree = "<group>"; };
@@ -271,13 +274,11 @@
 		C564FBDD2E09580B0079B5C1 /* JobsSwiftBaseConfigDemo */ = {
 			isa = PBXGroup;
 			children = (
-				C564FCAD2E0959920079B5C1 /* Views */,
-				C564FCA82E0959690079B5C1 /* VC */,
-				C564FC632E0959570079B5C1 /* UIKit */,
-				C564FC602E0959490079B5C1 /* SwiftBaseConfig */,
+				C564FEEC2E0AAC900079B5C1 /* SwiftDefines */,
+				C564FEEB2E0AAC5A0079B5C1 /* 主业务流程 */,
+				C564FEEA2E0AAC2B0079B5C1 /* UIKit.extension */,
+				C564FEE92E0AABE80079B5C1 /* UIBaseModel */,
 				C564FC372E0959120079B5C1 /* Others */,
-				C564FC342E0959050079B5C1 /* JobsProtocol */,
-				C564FC2F2E0958F40079B5C1 /* JobsBlock */,
 				C564FC282E0958C40079B5C1 /* AppDelegate & SceneDelegate */,
 				C564FC272E0958BD0079B5C1 /* 3rd */,
 				C564FBEF2E09580D0079B5C1 /* Info.plist */,
@@ -328,13 +329,13 @@
 			path = JobsBlock;
 			sourceTree = "<group>";
 		};
-		C564FC342E0959050079B5C1 /* JobsProtocol */ = {
+		C564FC342E0959050079B5C1 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
 				C564FC772E0959620079B5C1 /* NSProtocol.swift */,
 				C564FC352E09590B0079B5C1 /* JobsProtocol.swift */,
 			);
-			path = JobsProtocol;
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		C564FC372E0959120079B5C1 /* Others */ = {
@@ -413,15 +414,34 @@
 			path = Libarclite;
 			sourceTree = "<group>";
 		};
-		C564FC602E0959490079B5C1 /* SwiftBaseConfig */ = {
+		C564FCA82E0959690079B5C1 /* VC */ = {
 			isa = PBXGroup;
 			children = (
-				C564FC612E0959510079B5C1 /* JobsDefineAllEnumHeader.swift */,
+				C564FCA92E09597C0079B5C1 /* VC2.swift */,
+				C564FCAA2E09597C0079B5C1 /* ViewController.swift */,
 			);
-			path = SwiftBaseConfig;
+			path = VC;
 			sourceTree = "<group>";
 		};
-		C564FC632E0959570079B5C1 /* UIKit */ = {
+		C564FCAD2E0959920079B5C1 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C564FCAE2E0959990079B5C1 /* CollectionCell.swift */,
+				C564FCB02E0959990079B5C1 /* CustomCell.swift */,
+				C564FCAF2E0959990079B5C1 /* EmptyView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C564FEE92E0AABE80079B5C1 /* UIBaseModel */ = {
+			isa = PBXGroup;
+			children = (
+				C564FC852E0959640079B5C1 /* UIKitModel.swift */,
+			);
+			path = UIBaseModel;
+			sourceTree = "<group>";
+		};
+		C564FEEA2E0AAC2B0079B5C1 /* UIKit.extension */ = {
 			isa = PBXGroup;
 			children = (
 				C564FC742E0959620079B5C1 /* Inlines.swift */,
@@ -433,7 +453,6 @@
 				C564FC672E0959600079B5C1 /* UICollectionView.swift */,
 				C564FC7B2E0959630079B5C1 /* UIDatePicker.swift */,
 				C564FC692E0959610079B5C1 /* UIImageView.swift */,
-				C564FC852E0959640079B5C1 /* UIKitModel.swift */,
 				C564FC6E2E0959610079B5C1 /* UILabel.swift */,
 				C564FC842E0959640079B5C1 /* UINavigationBar.swift */,
 				C564FC7C2E0959630079B5C1 /* UINavigationController.swift */,
@@ -458,26 +477,26 @@
 				C564FC7E2E0959630079B5C1 /* UIViewController.swift */,
 				C564FC642E0959600079B5C1 /* WKWebView.swift */,
 			);
-			path = UIKit;
+			path = UIKit.extension;
 			sourceTree = "<group>";
 		};
-		C564FCA82E0959690079B5C1 /* VC */ = {
+		C564FEEB2E0AAC5A0079B5C1 /* 主业务流程 */ = {
 			isa = PBXGroup;
 			children = (
-				C564FCA92E09597C0079B5C1 /* VC2.swift */,
-				C564FCAA2E09597C0079B5C1 /* ViewController.swift */,
+				C564FCAD2E0959920079B5C1 /* Views */,
+				C564FCA82E0959690079B5C1 /* VC */,
 			);
-			path = VC;
+			path = "主业务流程";
 			sourceTree = "<group>";
 		};
-		C564FCAD2E0959920079B5C1 /* Views */ = {
+		C564FEEC2E0AAC900079B5C1 /* SwiftDefines */ = {
 			isa = PBXGroup;
 			children = (
-				C564FCAE2E0959990079B5C1 /* CollectionCell.swift */,
-				C564FCB02E0959990079B5C1 /* CustomCell.swift */,
-				C564FCAF2E0959990079B5C1 /* EmptyView.swift */,
+				C564FC612E0959510079B5C1 /* Enum_struct_defines.swift */,
+				C564FC342E0959050079B5C1 /* Protocols */,
+				C564FC2F2E0958F40079B5C1 /* JobsBlock */,
 			);
-			path = Views;
+			path = SwiftDefines;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -713,8 +732,10 @@
 				C564FC9D2E0959640079B5C1 /* UIDatePicker.swift in Sources */,
 				C564FCA42E0959640079B5C1 /* UITextField.swift in Sources */,
 				C564FC9C2E0959640079B5C1 /* UIPopoverPresentationController.swift in Sources */,
+				C5489B5E2E0AB30700B05447 /* JobsBlock.swift in Sources */,
 				C564FCA32E0959640079B5C1 /* UIStepper.swift in Sources */,
 				C564FC862E0959640079B5C1 /* WKWebView.swift in Sources */,
+				C5489B5D2E0AB2D300B05447 /* JobsBlockDef.swift in Sources */,
 				C564FC8A2E0959640079B5C1 /* UISegmentedControl.swift in Sources */,
 				C564FC892E0959640079B5C1 /* UICollectionView.swift in Sources */,
 				C564FCB32E0959990079B5C1 /* CustomCell.swift in Sources */,
@@ -724,6 +745,7 @@
 				C564FC882E0959640079B5C1 /* UISlider.swift in Sources */,
 				C564FC912E0959640079B5C1 /* UIScrollView.swift in Sources */,
 				C564FC8F2E0959640079B5C1 /* UIProgressView.swift in Sources */,
+				C5489B5C2E0AB19F00B05447 /* NSProtocol.swift in Sources */,
 				C564FC9F2E0959640079B5C1 /* UISearchBar.swift in Sources */,
 				C564FC932E0959640079B5C1 /* UIToolbar.swift in Sources */,
 				C564FCA12E0959640079B5C1 /* UIPageControl.swift in Sources */,
@@ -732,7 +754,7 @@
 				C564FC982E0959640079B5C1 /* NSObject.swift in Sources */,
 				C564FCB12E0959990079B5C1 /* CollectionCell.swift in Sources */,
 				C564FC362E09590B0079B5C1 /* JobsProtocol.swift in Sources */,
-				C564FC622E0959510079B5C1 /* JobsDefineAllEnumHeader.swift in Sources */,
+				C564FC622E0959510079B5C1 /* Enum_struct_defines.swift in Sources */,
 				C564FC972E0959640079B5C1 /* UIActivityIndicatorView.swift in Sources */,
 				C564FCA22E0959640079B5C1 /* UITableView.swift in Sources */,
 				C564FC8E2E0959640079B5C1 /* UITabBarController.swift in Sources */,
