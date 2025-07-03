@@ -4,7 +4,8 @@
 //
 //  Created by Jobs on 2025/6/18.
 //
-
+import UIKit
+import WebKit
 // MARK: - 基础通用参数类型定义（1~10参数）
 public typealias Jobs2Arguments = (_ data: Any?, _ data2: Any?) -> Void
 public typealias Jobs3Arguments = (_ data: Any?, _ data2: Any?, _ data3: Any?) -> Void

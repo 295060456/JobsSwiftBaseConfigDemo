@@ -77,7 +77,7 @@ protocol BaseProtocol: RACProtocol {
     var scriptMsg: WKScriptMessage? { get set }
     var handlerName: String? { get set }
     var evaluateJavaScript: String? { get set }
-    var completionHandlerBlock: jobsJSCompletionHandlerBlock? { get set }
+//    var completionHandlerBlock: jobsJSCompletionHandlerBlock? { get set }
     // MARK: Data
     var urls: [URL]? { get set }
     var url: URL? { get set }
@@ -102,19 +102,19 @@ protocol BaseProtocol: RACProtocol {
     var data_weak: AnyObject? { get set }
     var requestParams_weak: AnyObject? { get set }
     // Tab Bar
-    func changeTabBarItemTitleBy() -> jobsByIndexPathBlock
+//    func changeTabBarItemTitleBy() -> jobsByIndexPathBlock
     // MARK: 通知
     func monitorNotification(_ notificationName: String, withSelector selector: Selector)
-    func monitorNotification(_ notificationName: String, withBlock actionBlock: @escaping JobsReturnIDByTwoIDBlock)
+//    func monitorNotification(_ notificationName: String, withBlock actionBlock: @escaping JobsReturnIDByTwoIDBlock)
     static func target(_ target: Any, languageSwitchNotificationWithSelector selector: Selector)
     func monitorAppLanguage()
-    func appLanguageAtAppLanguageBy() -> jobsByNSIntegerBlock
-    func jobsLanguageSwitchNotification() -> jobsByNotificationBlock
+//    func appLanguageAtAppLanguageBy() -> jobsByNSIntegerBlock
+//    func jobsLanguageSwitchNotification() -> jobsByNotificationBlock
     // MARK: 单例
     static func destroySingleton()
     static func sharedManager() -> Self
-    static func SharedInstance() -> JobsReturnIDByVoidBlock
-    static func DestroySingleton() -> jobsByVoidBlock
+//    static func SharedInstance() -> JobsReturnIDByVoidBlock
+//    static func DestroySingleton() -> jobsByVoidBlock
 }
 @available(iOS 11.0, *)
 protocol GestureProtocol: BaseProtocol {
@@ -151,14 +151,14 @@ protocol GestureProtocol: BaseProtocol {
     var rotationGR: UIRotationGestureRecognizer? { get set }
     var screenEdgePanGR: UIScreenEdgePanGestureRecognizer? { get set }
     // MARK: - Gesture Selector/IMP 包装器（类似映射结构）
-    var longPressGR_SelImp: JobsSEL_IMP? { get set }
-    var tapGR_SelImp: JobsSEL_IMP? { get set }
-    var doubleTapGR_SelImp: JobsSEL_IMP? { get set }
-    var swipeGR_SelImp: JobsSEL_IMP? { get set }
-    var panGR_SelImp: JobsSEL_IMP? { get set }
-    var pinchGR_SelImp: JobsSEL_IMP? { get set }
-    var rotationGR_SelImp: JobsSEL_IMP? { get set }
-    var screenEdgePanGR_SelImp: JobsSEL_IMP? { get set }
+//    var longPressGR_SelImp: JobsSEL_IMP? { get set }
+//    var tapGR_SelImp: JobsSEL_IMP? { get set }
+//    var doubleTapGR_SelImp: JobsSEL_IMP? { get set }
+//    var swipeGR_SelImp: JobsSEL_IMP? { get set }
+//    var panGR_SelImp: JobsSEL_IMP? { get set }
+//    var pinchGR_SelImp: JobsSEL_IMP? { get set }
+//    var rotationGR_SelImp: JobsSEL_IMP? { get set }
+//    var screenEdgePanGR_SelImp: JobsSEL_IMP? { get set }
     // MARK: - 生命周期
     func dealloc()
 }

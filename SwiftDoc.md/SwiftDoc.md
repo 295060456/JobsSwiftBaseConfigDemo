@@ -351,10 +351,9 @@ print(result)  // 输出: 5
 ````
 ## 为什么在*Swift*里面新建一个*view*要用*struct*，而不用*class* <a href="#资料来源" style="font-size:17px; color:green;"><b>🔼</b></a>
 
-```swift
-在 SwiftUI 中，视图（View）被建议使用结构体（struct）而不是类（class）。
-这是因为 SwiftUI 采用了声明式的编程范式，而结构体更符合声明式编程的特性。
-```
+> 在 SwiftUI 中，视图（View）被建议使用结构体（struct）而不是类（class）。
+> 这是因为 SwiftUI 采用了声明式的编程范式，而结构体更符合声明式编程的特性。
+
 *下面是一些原因：*
 
 * 不可变性：结构体是值类型，而类是引用类型。值类型在传递和复制时会产生副本，这有助于保持不可变性；
@@ -486,8 +485,7 @@ print(result)  // 输出: 5
       print("立即运行，无需 @escaping")
   }
   ```
-
-
+  
   ```objective-c
   /// 逃逸闭包
   @property (nonatomic, copy) void (^savedBlock)(void);
@@ -1303,7 +1301,21 @@ struct MyStruct {
   属性包装器提供了一种可以自定义属性访问和修改的方式。
 */
 ```
+## ***Swift.泛型约束*** <a href="#资料来源" style="font-size:17px; color:green;"><b>🔼</b></a>
+
+> 在 Swift 中，**泛型约束（Generic Constraints）**允许你对泛型类型的使用施加限制，以确保类型满足某些协议或条件。这样可以在保留灵活性的同时增强类型安全性。
+
+| 写法形式              | 说明                      |
+| --------------------- | ------------------------- |
+| `T: SomeProtocol`     | 要求 T 遵守某协议         |
+| `T: SuperClass`       | 要求 T 是某个类或其子类   |
+| `T: A & B`            | T 同时满足多个协议        |
+| `where T: Equatable`  | 在 `where` 子句中添加约束 |
+| `T.Element: Hashable` | 用于泛型集合内元素的约束  |
+
 ## ***Swift.@标记*** <a href="#资料来源" style="font-size:17px; color:green;"><b>🔼</b></a>
+
+> Swift 中的标注是一种声明级“增强”，非侵入式地赋予额外能力，不破坏原有语义。
 
 ### <font color="red">***`@frozen`***</font>
 
@@ -1352,10 +1364,10 @@ let result = internalFunction() // 错误，internalFunction 对模块外不可�
 ```
 ### <font color="red">***`@discardableResult`***</font>
 
-*discard：*
-*【v.】扔掉，弃置；打出（无用的牌），垫（牌）*
-*【n.】被抛弃物；（纸牌游戏中）垫出的牌*
-*用于标记函数或方法，表示其返回值可以被忽略而不会触发编译器警告。**仅仅是抑制警告***
+> *discard：*
+> *【v.】扔掉，弃置；打出（无用的牌），垫（牌）*
+> *【n.】被抛弃物；（纸牌游戏中）垫出的牌*
+> *用于标记函数或方法，表示其返回值可以被忽略而不会触发编译器警告。**仅仅是抑制警告***
 
 ```swift
 @discardableResult

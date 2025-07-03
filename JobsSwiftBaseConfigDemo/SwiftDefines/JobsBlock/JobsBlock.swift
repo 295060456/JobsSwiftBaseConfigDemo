@@ -7,161 +7,168 @@
 import UIKit
 
 // 占位声明（必须至少空实现）
-class JobsTextView {}
-class ZFAVPlayerManager {}
-class ZFDouYinControlView {}
-class ZFCustomControlView {}
-class CustomZFPlayerControlView {}
-class JobsRightBtnsView {}
-class JobsBitsMonitorSuspendLab {}
-class BaseView {}
-class JobsTabBarVC {}
-class JobsCustomTabBarVC {}
-class JobsCustomTabBarConfig {}
-class MGSwipeButtonModel {}
-class JobsRichTextConfig {}
-class SDWebImageModel {}
-class URLManagerModel {}
-class UIViewModel {}
-class BaseTableView {}
-class JobsSearchBar {}
-class JobsAppDoorModel {}
-class UNNotificationRequestModel {}
-class JobsAlertModel {}
-class UITextModel {}
-class JobsMagicTextField {}
-class RACModel {}
-class JobsGestureModel {}
-class JobsIMChatInfoModel {}
-class NSTimerManager {}
-class ButtonTimerConfigModel {}
-class JobsAppDoorInputViewBaseStyleModel {}
-class JobsAppDoorInputViewBaseStyle {}
-class JobsCorModel {}
-class JobsMenuView {}
-class JobsViewNavigator {}
-class BaseNavigationBar {}
-class MasonryModel {}
-class LZTabBar {}
-class LZTabBarItem {}
-class UITextFieldModel {}
-class JobsFileModel {}
-class BaseUploadFileRequest {}
-class UIButtonModel {}
-class JobsImageModel {}
-class PointLabBaseView {}
-class JobsTabBar {}
-class FileFolderHandleModel {}
-class JobsNavBarConfig {}
-class JobsNavBar {}
-class JobsTextField {}
-class CJTextField {}
-class ZYTextField {}
-class JobsStepView {}
-class BaseLabel {}
-class BaseTextView {}
-class JobsToggleBaseView {}
-class JobsHotLabelBySingleLine {}
-class FileNameModel {}
-class JobsUserModel {}
-class UserDefaultModel {}
-class JobsTabBarItemConfig {}
-class GKCustomNavigationBar {}
-class HXPhotoPickerModel {}
-class JobsParagraphStyleModel {}
-class JobsLocationModel {}
-class GTCaptcha4Model {}
-class FMDoorModel {}
-class FMNameModel {}
-class FMWithDrawModel {}
-class JobsTimeModel {}
-class VideoModel_Core {}
-class NotificationModel {}
-class NSNotificationKeyboardModel {}
-class JobsExcelConfigureViewModel {}
-class PopListBaseView {}
-class JobsExcelView {}
-class JobsExcelContentView {}
-class JobsExcelTopHeadView {}
-class JobsExcelLeftListView {}
-class JobsUserHeaderDataViewTBVCell {}
-class JobsKeyValueModel {}
-class SPAlertControllerConfig {}
-class JobsToggleNavView {}
-class JobsCustomTabBar {}
-class JobsResponseModel {}
-class IpifyModel {}
-class IPApiModel {}
-class IpinfoModel {}
-class RequestTool {}
-class BaseModel {}
-class BRStringPickerViewModel {}
-class JobsDecorationModel {}
-class GKPhotoBrowser {}
-class GKPhoto {}
-class SZTextView {}
-class XZMRefreshNormalHeader {}
-class YTKNetworkConfig {}
-class YTKRequest {}
-class YTKChainRequest {}
-class YTKBatchRequest {}
-class YTKBaseRequest {}
-class JhtBannerScrollView {}
-class JhtBannerCardView {}
-class GDFadeView {}
-class CFGradientLabel {}
-class WGradientProgressModel {}
-class FSCalendar {}
-class HXPhotoView {}
-class HXPhotoManager {}
-class HTMLDocument {}
-class HXPhotoConfiguration {}
-class BRPickerStyle {}
-class BRDatePickerView {}
-class BRAddressPickerView {}
-class BRStringPickerView {}
-class AFSecurityPolicy {}
-class IQKeyboardManager {}
-class JobsTransitionAnimator {}
-class JobsNavigationTransitionMgr {}
-class WMZBannerView {}
-class WMZBannerParam {}
-class MJRefreshConfigModel {}
-class MJRefreshNormalHeader {}
-class MJRefreshStateHeader {}
-class MJRefreshHeader {}
-class MJRefreshGifHeader {}
-class MJRefreshFooter {}
-class MJRefreshAutoGifFooter {}
-class MJRefreshBackNormalFooter {}
-class MJRefreshAutoNormalFooter {}
-class MJRefreshAutoStateFooter {}
-class MJRefreshAutoFooter {}
-class MJRefreshBackGifFooter {}
-class MJRefreshBackStateFooter {}
-class MJRefreshBackFooter {}
-class LOTAnimationMJRefreshHeader {}
-class SRWebSocket {}
-class RACDisposable {}
-class RACSignal {}
-class JXCategoryTitleView {}
-class JXCategoryImageView {}
-class JXCategoryDotView {}
-class JXCategoryNumberView {}
-class JXCategoryIndicatorBackgroundView {}
-class JXCategoryIndicatorLineView {}
-class JXCategoryListContainerView {}
-class JXCategoryIndicatorView {}
-class JXCategoryBaseView {}
-
-
-class LZTabBarConfig {}
+public class JobsTextView {}
+public class ZFAVPlayerManager {}
+public class ZFDouYinControlView {}
+public class ZFCustomControlView {}
+public class CustomZFPlayerControlView {}
+public class JobsRightBtnsView {}
+public class JobsBitsMonitorSuspendLab {}
+public class BaseView {}
+public class JobsTabBarVC {}
+public class JobsCustomTabBarVC {}
+public class JobsCustomTabBarConfig {}
+public class MGSwipeButtonModel {}
+public class JobsRichTextConfig {}
+public class SDWebImageModel {}
+public class URLManagerModel {}
+public class UIViewModel {}
+public class BaseTableView {}
+public class JobsSearchBar {}
+public class JobsAppDoorModel {}
+public class UNNotificationRequestModel {}
+public class JobsAlertModel {}
+public class UITextModel {}
+public class JobsMagicTextField {}
+public class RACModel {}
+public class JobsGestureModel {}
+public class JobsIMChatInfoModel {}
+public class NSTimerManager {}
+public class ButtonTimerConfigModel {}
+public class JobsAppDoorInputViewBaseStyleModel {}
+public class JobsAppDoorInputViewBaseStyle {}
+public class JobsCorModel {}
+public class JobsMenuView {}
+public class JobsViewNavigator {}
+public class BaseNavigationBar {}
+public class MasonryModel {}
+public class LZTabBar {}
+public class LZTabBarItem {}
+public class UITextFieldModel {}
+public class JobsFileModel {}
+public class BaseUploadFileRequest {}
+public class UIButtonModel {}
+public class JobsImageModel {}
+public class PointLabBaseView {}
+public class JobsTabBar {}
+public class FileFolderHandleModel {}
+public class JobsNavBarConfig {}
+public class JobsNavBar {}
+public class JobsTextField {}
+public class CJTextField {}
+public class ZYTextField {}
+public class JobsStepView {}
+public class BaseLabel {}
+public class BaseTextView {}
+public class JobsToggleBaseView {}
+public class JobsHotLabelBySingleLine {}
+public class FileNameModel {}
+public class JobsUserModel {}
+public class UserDefaultModel {}
+public class JobsTabBarItemConfig {}
+public class GKCustomNavigationBar {}
+public class HXPhotoPickerModel {}
+public class JobsParagraphStyleModel {}
+public class JobsLocationModel {}
+public class GTCaptcha4Model {}
+public class FMDoorModel {}
+public class FMNameModel {}
+public class FMWithDrawModel {}
+public class JobsTimeModel {}
+public class VideoModel_Core {}
+public class NotificationModel {}
+public class NSNotificationKeyboardModel {}
+public class JobsExcelConfigureViewModel {}
+public class PopListBaseView {}
+public class JobsExcelView {}
+public class JobsExcelContentView {}
+public class JobsExcelTopHeadView {}
+public class JobsExcelLeftListView {}
+public class JobsUserHeaderDataViewTBVCell {}
+public class JobsKeyValueModel {}
+public class SPAlertControllerConfig {}
+public class JobsToggleNavView {}
+public class JobsCustomTabBar {}
+public class JobsResponseModel {}
+public class IpifyModel {}
+public class IPApiModel {}
+public class IpinfoModel {}
+public class RequestTool {}
+public class BaseModel {}
+public class BRStringPickerViewModel {}
+public class JobsDecorationModel {}
+public class GKPhotoBrowser {}
+public class GKPhoto {}
+public class SZTextView {}
+public class XZMRefreshNormalHeader {}
+public class YTKNetworkConfig {}
+public class YTKRequest {}
+public class YTKChainRequest {}
+public class YTKBatchRequest {}
+public class YTKBaseRequest {}
+public class JhtBannerScrollView {}
+public class JhtBannerCardView {}
+public class GDFadeView {}
+public class CFGradientLabel {}
+public class WGradientProgressModel {}
+public class FSCalendar {}
+public class HXPhotoView {}
+public class HXPhotoManager {}
+public class HTMLDocument {}
+public class HXPhotoConfiguration {}
+public class BRPickerStyle {}
+public class BRDatePickerView {}
+public class BRAddressPickerView {}
+public class BRStringPickerView {}
+public class AFSecurityPolicy {}
+public class IQKeyboardManager {}
+public class JobsTransitionAnimator {}
+public class JobsNavigationTransitionMgr {}
+public class WMZBannerView {}
+public class WMZBannerParam {}
+public class MJRefreshConfigModel {}
+public class MJRefreshNormalHeader {}
+public class MJRefreshStateHeader {}
+public class MJRefreshHeader {}
+public class MJRefreshGifHeader {}
+public class MJRefreshFooter {}
+public class MJRefreshAutoGifFooter {}
+public class MJRefreshBackNormalFooter {}
+public class MJRefreshAutoNormalFooter {}
+public class MJRefreshAutoStateFooter {}
+public class MJRefreshAutoFooter {}
+public class MJRefreshBackGifFooter {}
+public class MJRefreshBackStateFooter {}
+public class MJRefreshBackFooter {}
+public class LOTAnimationMJRefreshHeader {}
+public class SRWebSocket {}
+public class RACDisposable {}
+public class RACSignal {}
+public class JXCategoryTitleView {}
+public class JXCategoryImageView {}
+public class JXCategoryDotView {}
+public class JXCategoryNumberView {}
+public class JXCategoryIndicatorBackgroundView {}
+public class JXCategoryIndicatorLineView {}
+public class JXCategoryListContainerView {}
+public class JXCategoryIndicatorView {}
+public class JXCategoryBaseView {}
+public class MGSwipeTableCell {}
+public class MASConstraintMaker {}
+public class ZFIJKPlayerManager {}
+public class LZTabBarConfig {}
+public class ConstraintMaker {}
+public class GoodsClassModel {}
+public class FMBannerAdsModel {}
+public class JobsBtnStyleCVCell {}
 
 protocol JXCategoryIndicatorProtocol {}
 protocol JXCategoryViewDelegate {}
 protocol JXCategoryViewListContainer {}
 protocol UIViewModelOthersProtocol {}
+protocol MGSwipeTableCellDelegate {}
 
+enum JXCategoryDotRelativePosition {}
 
 //基础类型别名转换（示例）
 typealias JobsReturnComponentTypeByVoidBlock = () -> ComponentType
@@ -173,7 +180,6 @@ typealias JobsReturnIDByAppLanguageBlock = (_ data: AppLanguage) -> Any?
 typealias JobsReturnIDByComponentTypeAndUIViewBlock = (_ componentType: ComponentType, _ view: UIView?) -> Any?
 typealias JobsByJobsTextViewBlock = (_ textView: JobsTextView?) -> Void
 //各类自定义 Block 类型（保留类型、命名和参数结构）
-typealias JobsByZFAVPlayerManagerBlock = (_ manager: ZFAVPlayerManager?) -> Void
 typealias JobsByZFDouYinControlViewBlock = (_ controlView: ZFDouYinControlView?) -> Void
 typealias JobsByZFCustomControlViewBlock = (_ controlView: ZFCustomControlView?) -> Void
 typealias JobsByCustomZFPlayerControlViewBlock = (_ controlView: CustomZFPlayerControlView?) -> Void
@@ -538,47 +544,47 @@ typealias JobsReturnCategoryDotViewByNumbersBlock = (_ numbers: [NSNumber]?) -> 
 
 typealias JobsReturnCategoryNumberViewByNumbersBlock = (_ numbers: [NSNumber]?) -> JXCategoryNumberView?
 typealias JobsReturnCategoryNumberViewByCGPointBlock = (_ point: CGPoint) -> JXCategoryNumberView?
-typealias JobsReturnCategoryNumberViewByReturnStringByIntegerBlocks = (_ block: JobsReturnStringByIntegerBlock?) -> JXCategoryNumberView?
+//typealias JobsReturnCategoryNumberViewByReturnStringByIntegerBlocks = (_ block: JobsReturnStringByIntegerBlock?) -> JXCategoryNumberView?
 //复合型 Block
-typealias JobsByErrBlocks = (_ block: jobsByErrorBlock?) -> Void
-typealias JobsByRetIDByIDBlocks = (_ block: JobsReturnIDByIDBlock?) -> Void
-typealias JobsDelegateBlocks = (_ string: String?, _ block: jobsByVoidBlock?) -> Void
-
-typealias JobsReturnIDByVoidBlocks = (_ block: jobsByVoidBlock?) -> Any?
-typealias JobsReturnIDByVoidIDBlocks = (_ block: jobsByIDBlock?) -> Any?
-typealias JobsReturnIDByRetIDVoidBlocks = (_ block: JobsReturnIDByVoidBlock?) -> Any?
-typealias JobsReturnIDByRetIDByIDBlocks = (_ block: JobsReturnIDByIDBlock?) -> Any?
-typealias JobsRetIDByIDBlockByViewModelOthersProtocolID = (_ data: UIViewModelOthersProtocol?) -> JobsReturnIDByIDBlock?
-
-//嵌套 View/Button/ViewController/Masonry Block
-typealias JobsReturnViewByVoidBlocks = (_ block: jobsByVoidBlock?) -> UIView?
-typealias JobsReturnViewByIDBlocks = (_ block: jobsByIDBlock?) -> UIView?
-typealias JobsReturnViewByRetIDBlocks = (_ block: JobsReturnIDByVoidBlock?) -> UIView?
-typealias JobsReturnViewByRetIDByIDBlocks = (_ block: JobsReturnIDByIDBlock?) -> UIView?
-typealias JobsReturnViewByMasonryConstraintsBlocks = (_ block: jobsByMASConstraintMakerBlock?) -> UIView?
-typealias JobsReturnViewByViewAndMasonryConstraintsBlocks = (_ subview: UIView, _ block: jobsByMASConstraintMakerBlock?) -> UIView?
-
-typealias JobsReturnButtonByButtonModel2Blocks = (_ block: jobsByButtonModelBlock?) -> UIButton?
-typealias JobsReturnButtonByTimerManagerBlocks = (_ block: jobsByTimerManagerBlock?) -> UIButton?
-typealias JobsReturnButtonByClickBlocks = (_ block: jobsByBtnBlock?) -> UIButton?
-typealias JobsReturnButtonByIDBlocks = (_ block: jobsByIDBlock?) -> UIButton?
-
-typealias JobsReturnCollectionViewByBlock1 = (_ block: jobsByIDBlock?) -> UICollectionView?
-
-typealias JobsReturnNavBarByVoidBtnBlocks = (_ block: jobsByBtnBlock?) -> JobsNavBar?
-
-typealias JobsReturnVCByVoidBlocks = (_ block: jobsByVoidBlock?) -> UIViewController?
-typealias JobsReturnVCByIDBlocks = (_ block: jobsByIDBlock?) -> UIViewController?
-typealias JobsReturnVCByRetIDByVoidBlocks = (_ block: JobsReturnIDByVoidBlock?) -> UIViewController?
-typealias JobsReturnVCByRetIDByIDBlocks = (_ block: JobsReturnIDByIDBlock?) -> UIViewController?
-typealias JobsReturnVCByMasonryConstraintsBlocks = (_ block: jobsByMASConstraintMakerBlock?) -> UIViewController?
-
-//RAC / Masonry / MJRefresh Config Block
-typealias JobsReturnRACDisposableByReturnIDByIDBlocks = (_ block: JobsReturnIDByIDBlock?) -> RACDisposable
-
-typealias JobsReturnArrByMasonryBlocks = (_ block: jobsByMASConstraintMakerBlock) -> [Any]?
-typealias JobsByMasonryBlock = (_ block: jobsByMASConstraintMakerBlock) -> Void
-typealias JobsReturnMASConstraintMakerByBOOLBlock = (_ data: Bool) -> jobsByMASConstraintMakerBlock
-
-typealias JobsReturnMJRefreshConfigModelByReturnIDByIDBlocks = (_ block: JobsReturnIDByIDBlock?) -> MJRefreshConfigModel?
+//typealias JobsByErrBlocks = (_ block: jobsByErrorBlock?) -> Void
+//typealias JobsByRetIDByIDBlocks = (_ block: JobsReturnIDByIDBlock?) -> Void
+//typealias JobsDelegateBlocks = (_ string: String?, _ block: jobsByVoidBlock?) -> Void
+//
+//typealias JobsReturnIDByVoidBlocks = (_ block: jobsByVoidBlock?) -> Any?
+//typealias JobsReturnIDByVoidIDBlocks = (_ block: jobsByIDBlock?) -> Any?
+//typealias JobsReturnIDByRetIDVoidBlocks = (_ block: JobsReturnIDByVoidBlock?) -> Any?
+//typealias JobsReturnIDByRetIDByIDBlocks = (_ block: JobsReturnIDByIDBlock?) -> Any?
+//typealias JobsRetIDByIDBlockByViewModelOthersProtocolID = (_ data: UIViewModelOthersProtocol?) -> JobsReturnIDByIDBlock?
+//
+////嵌套 View/Button/ViewController/Masonry Block
+//typealias JobsReturnViewByVoidBlocks = (_ block: jobsByVoidBlock?) -> UIView?
+//typealias JobsReturnViewByIDBlocks = (_ block: jobsByIDBlock?) -> UIView?
+//typealias JobsReturnViewByRetIDBlocks = (_ block: JobsReturnIDByVoidBlock?) -> UIView?
+//typealias JobsReturnViewByRetIDByIDBlocks = (_ block: JobsReturnIDByIDBlock?) -> UIView?
+//typealias JobsReturnViewByMasonryConstraintsBlocks = (_ block: jobsByMASConstraintMakerBlock?) -> UIView?
+//typealias JobsReturnViewByViewAndMasonryConstraintsBlocks = (_ subview: UIView, _ block: jobsByMASConstraintMakerBlock?) -> UIView?
+//
+//typealias JobsReturnButtonByButtonModel2Blocks = (_ block: jobsByButtonModelBlock?) -> UIButton?
+//typealias JobsReturnButtonByTimerManagerBlocks = (_ block: jobsByTimerManagerBlock?) -> UIButton?
+//typealias JobsReturnButtonByClickBlocks = (_ block: jobsByBtnBlock?) -> UIButton?
+//typealias JobsReturnButtonByIDBlocks = (_ block: jobsByIDBlock?) -> UIButton?
+//
+//typealias JobsReturnCollectionViewByBlock1 = (_ block: jobsByIDBlock?) -> UICollectionView?
+//
+//typealias JobsReturnNavBarByVoidBtnBlocks = (_ block: jobsByBtnBlock?) -> JobsNavBar?
+//
+//typealias JobsReturnVCByVoidBlocks = (_ block: jobsByVoidBlock?) -> UIViewController?
+//typealias JobsReturnVCByIDBlocks = (_ block: jobsByIDBlock?) -> UIViewController?
+//typealias JobsReturnVCByRetIDByVoidBlocks = (_ block: JobsReturnIDByVoidBlock?) -> UIViewController?
+//typealias JobsReturnVCByRetIDByIDBlocks = (_ block: JobsReturnIDByIDBlock?) -> UIViewController?
+//typealias JobsReturnVCByMasonryConstraintsBlocks = (_ block: jobsByMASConstraintMakerBlock?) -> UIViewController?
+//
+////RAC / Masonry / MJRefresh Config Block
+//typealias JobsReturnRACDisposableByReturnIDByIDBlocks = (_ block: JobsReturnIDByIDBlock?) -> RACDisposable
+//
+//typealias JobsReturnArrByMasonryBlocks = (_ block: jobsByMASConstraintMakerBlock) -> [Any]?
+//typealias JobsByMasonryBlock = (_ block: jobsByMASConstraintMakerBlock) -> Void
+//typealias JobsReturnMASConstraintMakerByBOOLBlock = (_ data: Bool) -> jobsByMASConstraintMakerBlock
+//
+//typealias JobsReturnMJRefreshConfigModelByReturnIDByIDBlocks = (_ block: JobsReturnIDByIDBlock?) -> MJRefreshConfigModel?
 
