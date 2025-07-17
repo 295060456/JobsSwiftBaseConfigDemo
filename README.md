@@ -1,10 +1,43 @@
-# **JobsSwiftBaseConfigDemo**
+# <font color=red>iOS.Swift靶场🧪项目</font><基础配置的说明>
+
+
+<p align="left">
+  <a><img src="https://img.shields.io/badge/Swift-red" alt="Swift"/></a>
+  <a><img src="https://img.shields.io/badge/Xcode-15.4-blue" alt="Xcode"/></a>
+  <a><img src="https://img.shields.io/badge/iOS-17.5+-critical" alt="iOS"/></a>
+  <a><img src="https://img.shields.io/badge/pod-1.15.2-brightgreen" alt="CocoaPods"/></a>
+  <a><img src="https://img.shields.io/github/actions/workflow/status/295060456/JobsSwiftBaseConfigDemo/ci.yml?branch=main" alt="Build Status"/></a>
+  <a href="https://github.com/295060456/JobsSwiftBaseConfigDemo"><img src="https://img.shields.io/github/license/295060456/JobsSwiftBaseConfigDemo?style=flat&color=success" alt="License"/></a>
+  <a><img src="https://img.shields.io/github/languages/top/295060456/JobsSwiftBaseConfigDemo?color=blueviolet" alt="Top Language"/></a>
+  <a href="https://github.com/295060456/JobsSwiftBaseConfigDemo/stargazers"><img src="https://img.shields.io/github/stars/295060456/JobsSwiftBaseConfigDemo?style=flat-square&color=yellow" alt="Stars"/></a>
+  <a href="https://github.com/295060456/JobsSwiftBaseConfigDemo/network"><img src="https://img.shields.io/github/forks/295060456/JobsSwiftBaseConfigDemo?style=flat-square&color=blue" alt="Forks"/></a>
+  <a><img src="https://img.shields.io/github/issues/295060456/JobsSwiftBaseConfigDemo?color=important" alt="Issues"/></a>
+  <a><img src="https://img.shields.io/github/last-commit/295060456/JobsSwiftBaseConfigDemo?color=ff69b4" alt="Last Commit"/></a>
+  <a><img src="https://img.shields.io/github/languages/code-size/295060456/JobsSwiftBaseConfigDemo" alt="Code Size"/></a>
+</p>
 
 [toc]
 
+当前总行数：
 
+## 🔥<font id=前言>前言</font>
 
-## 一、第三方管理
+* **工欲善其事必先利其器**
+* **站在巨人的肩膀上，才能看得更远**
+* **面向信仰编程**
+
+## 一、🎯目的 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a>
+
+* 所有的项目根据这个根来进行统一配置和调用
+* 将它作为所有项目的基类，做到全局的统一
+* 千万要保证这个工程的编译通过，以后项目直接进行引用
+* 作为某些代码实践的靶场，是非常有必要的
+* 作为代码笔记，记录一些常用的代码，方便查阅
+* 作为学习的资料，可以快速了解到一些常用的知识
+* 作为项目的参考，可以快速的了解到项目的架构，代码规范，以及一些设计模式
+* <font color=blue>**示例Demo可能因为相关Api的升级没有覆盖处理会出现闪退。修复即可**</font>
+
+## 二、第三方管理
 
 * Mac OS 15 以后，苹果采取了更加严格的权限写入机制。新swift项目如果要利用`Cocoapod`来集成第三方，就比如在xcode里面做如下设置，否则编译失败：`TARGETS`->`Build Settings`->`ENABLE_USER_SCRIPT_SANDBOXING`-><font color=red>`NO`</font>
 
