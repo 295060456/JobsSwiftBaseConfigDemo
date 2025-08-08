@@ -115,7 +115,8 @@
 
 * <font color=red>**S**</font>wift <font color=red>**P**</font>ackage <font color=red>**M**</font>anager
 
-  ![image-20250616173604040](./assets/image-20250616173604040.png)
-
-![image-20250616174404275](./assets/image-20250616174404275.png)
+  <div style="text-align: center;">
+    <img src="./assets/image-20250616173604040.png" alt="image-1" style="width:30%; display:inline-block; vertical-align: top;" />
+    <img src="./assets/image-20250616174404275.png" alt="image-2" style="width:65%; display:inline-block; vertical-align: top;" />
+  </div>
 
