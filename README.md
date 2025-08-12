@@ -22,10 +22,11 @@
 
 ## 🔥<font id=前言>前言</font>
 
+> 温馨提示🔔：本文较长，需要⏬下载到本地以后，方能完整阅读。推荐阅读器👉[**Typora**](https://typora.io/)
+
 * **工欲善其事必先利其器**
 * **站在巨人的肩膀上，才能看得更远**
 * **面向信仰编程**
-* 🔔 温馨提示：👉  [<font color=red>**完整展示本文档**</font>](https://github.com/295060456/JobsSwiftBaseConfigDemo/blob/main/README.md)
 
 ## 一、🎯目的和功效 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a>
 
@@ -45,7 +46,7 @@
 
 ## 二、第三方管理
 
-* Mac OS 15 以后，苹果采取了更加严格的权限写入机制。新swift项目如果要利用`Cocoapod`来集成第三方，就比如在xcode里面做如下设置，否则编译失败：`TARGETS`->`Build Settings`->`ENABLE_USER_SCRIPT_SANDBOXING`-><font color=red>`NO`</font>
+* Mac OS 15 以后，苹果采取了更加严格的权限写入机制。新**swift**项目如果要利用[**`Cocoapod`**](https://cocoapods.org/)来集成第三方，就比如在**xcode**里面做如下设置，否则编译失败：`TARGETS`->`Build Settings`->`ENABLE_USER_SCRIPT_SANDBOXING`-><font color=red>`NO`</font>
 
   ![image-20250616173410872](./assets/image-20250616173410872.png)
 
