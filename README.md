@@ -28,7 +28,7 @@
 * **站在巨人的肩膀上，才能看得更远**
 * **面向信仰编程**
 
-## 一、🎯目的和功效 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a>
+## 一、🎯目的和功效 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 品控标准（只能严格的保证编译器正常，而不能完全保证运行时的不出错）
   * 一定要保证这个工程的成功编译通过，方便以后项目直接进行引用，乃至开新版本
@@ -121,3 +121,4 @@
     <img src="./assets/image-20250616174404275.png" alt="image-2" style="width:65%; display:inline-block; vertical-align: top;" />
   </div>
 
+<font id=🔚>🔚</font>
