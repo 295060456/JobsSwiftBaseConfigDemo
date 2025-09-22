@@ -127,9 +127,9 @@
 
 ### 2、适用于[Swift](https://developer.apple.com/swift/) 的第三方框架 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 2.1、[**DeviceKit**](https://github.com/devicekit/DeviceKit)
+#### 2.1、[**DeviceKit**](https://github.com/devicekit/DeviceKit) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 2.2、[**HandyJSON**](https://github.com/alibaba/HandyJSON)
+#### 2.2、[**HandyJSON**](https://github.com/alibaba/HandyJSON) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1、阿里巴巴开发
 >
@@ -189,22 +189,23 @@
     }
     ```
 
-  
-  ### 2.3、[**SnapKit**](https://github.com/SnapKit/SnapKit)
-  
+#### 2.3、[**SnapKit**](https://github.com/SnapKit/SnapKit) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
   * 安装
   
     * Cocoapods
-  
+    
+      > 在 `Podfile` 中添加：
+    
       ```ruby
       pod 'SnapKit'
       ```
-  
+    
     * Swift Package Manager
-  
-      > Xcode → File → Add Packages → 输入：
-  
-      ```
+    
+      > Xcode → File → Add Packages Dependency → 输入：
+    
+      ```url
       https://github.com/SnapKit/SnapKit
       ```
     
@@ -214,112 +215,696 @@
     import SnapKit
     ```
   
-  * 创建视图并添加约束
+  * 调用
     
-    > 先加后用
+    * 创建视图并添加约束
     
+      > 先加后用
+      >
+      > ```swift
+      > let box = UIView()
+      > box.backgroundColor = .red
+      > view.addSubview(box)
+      > 
+      > box.snp.makeConstraints { make in
+      >     make.center.equalToSuperview()    // 居中
+      >     make.width.height.equalTo(100)    // 宽高 = 100
+      > }
+      > ```
+    
+    * 常用约束写法
+    
+      * 相对父视图
+    
+        ```swift
+        make.top.equalToSuperview().offset(20)      // 距离父视图顶部 20
+        make.left.equalToSuperview().offset(15)     // 左边距 15
+        make.right.equalToSuperview().inset(15)     // 右边距 15（inset = -offset）
+        make.bottom.equalToSuperview().offset(-20)  // 底边距 20
+        ```
+    
+      * 相对其它视图
+    
+        ```swift
+        make.top.equalTo(titleLabel.snp.bottom).offset(10)  // 距离 titleLabel 底部 10
+        make.left.equalTo(icon.snp.right).offset(8)         // 距离 icon 右边 8
+        ```
+    
+      * 固定大小
+    
+        ```swift
+        make.width.equalTo(120)
+        make.height.equalTo(50)
+        ```
+    
+      * 宽高比
+    
+        ```swift
+        make.width.equalTo(view.snp.height).multipliedBy(0.5) // 宽 = 高 * 0.5
+        ```
+    
+      * 居中
+    
+        ```swift
+        make.center.equalToSuperview()     // 完全居中
+        make.centerX.equalToSuperview()    // 横向居中
+        make.centerY.equalToSuperview()    // 纵向居中
+        ```
+    
+      * 更新约束（`updateConstraints`）
+
+        > 适合要修改部分约束的情况
+
+        ```swift
+        box.snp.updateConstraints { make in
+            make.width.equalTo(200)   // 原来100 → 更新为200
+        }
+        ```
+
+      * 重新设置约束（`remakeConstraints`）
+
+        > 会先移除旧约束，再重新添加
+
+        ```swift
+        box.snp.remakeConstraints { make in
+            make.center.equalToSuperview()
+            make.size.equalTo(CGSize(width: 50, height: 50))
+        }
+        ```
+      
+      * 高级用法@优先级
+
+        ```swift
+        make.width.lessThanOrEqualTo(300).priority(.high)
+        ```
+
+      * 高级用法@SafeArea
+
+        ```swift
+        make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
+        ```
+
+      * 高级用法@链式多条件
+
+        ```swift
+        make.edges.equalToSuperview().inset(UIEdgeInsets(top: 10, left: 15, bottom: 20, right: 15))
+        ```
+
+#### 2.4、[**Alamofire**](https://github.com/Alamofire/Alamofire) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> **Alamofire** 是 Swift 社区最流行的 **网络请求库**，基于 **URLSession** 封装，简化了 HTTP 请求、响应处理、JSON 解析、文件上传下载等操作。
+>  它的特点是：
+>
+> - 语法简洁，链式调用
+> - 内置 JSON/Plist 参数编码与解析
+> - 支持上传/下载（含进度回调）
+> - 支持认证（Basic Auth、OAuth Bearer Token 等）
+> - 集成了网络请求队列、响应序列化、错误处理等常见功能
+>
+> 在 iOS 开发中，它相当于 Objective-C 时代的 **AFNetworking** 的 Swift 替代。
+
+* 安装
+  
+    * CocoaPods
+    
+      > 在 `Podfile` 中添加：
+    
+      ```ruby
+      pod 'Alamofire'
+      ```
+    
+    * Swift Package Manager
+    
+      > Xcode → File → Add Packages Dependency → 输入：
+    
+      ```url
+      https://github.com/Alamofire/Alamofire.git
+      ```
+    
+* 导入
+  
     ```swift
-    let box = UIView()
-    box.backgroundColor = .red
-    view.addSubview(box)
+  import Alamofire
+  ```
+  
+* 调用
+  
+    * GET 请求
     
-    box.snp.makeConstraints { make in
-        make.center.equalToSuperview()    // 居中
-        make.width.height.equalTo(100)    // 宽高 = 100
+      ```swift
+      import Alamofire
+      
+      AF.request("https://api.example.com/users").response { response in
+          debugPrint(response)
+      }
+      ```
+    
+    * GET + JSON 解析
+    
+      ```swift
+      AF.request("https://api.example.com/users")
+          .responseJSON { response in
+              switch response.result {
+              case .success(let value):
+                  print("返回 JSON: \(value)")
+              case .failure(let error):
+                  print("请求失败: \(error)")
+              }
+          }
+      ```
+    
+    * POST 请求（带参数）
+    
+      ```swift
+      let params: [String: Any] = [
+          "username": "jobs",
+          "password": "123456"
+      ]
+      
+      AF.request("https://api.example.com/login",
+                 method: .post,
+                 parameters: params,
+                 encoding: JSONEncoding.default)
+          .responseJSON { response in
+              print(response)
+          }
+      ```
+    
+    * 文件上传
+    
+      ```swift
+      AF.upload(multipartFormData: { formData in
+          formData.append(Data("jobs".utf8), withName: "username")
+          formData.append(URL(fileURLWithPath: "/path/to/file.png"), withName: "file")
+      }, to: "https://api.example.com/upload")
+      .responseJSON { response in
+          print(response)
+      }
+      ```
+    
+    * 文件下载
+    
+      ```swift
+      let destination: DownloadRequest.Destination = { _, _ in
+          let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+          let fileURL = documentsURL.appendingPathComponent("file.zip")
+      
+          return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+      }
+      
+      AF.download("https://example.com/file.zip", to: destination)
+          .downloadProgress { progress in
+              print("下载进度: \(progress.fractionCompleted)")
+          }
+          .response { response in
+              print("下载完成: \(response.fileURL)")
+          }
+      
+      ```
+    
+    * 全局配置（比如统一 Header、超时设置）
+    
+      ```swift
+      let configuration = URLSessionConfiguration.default
+      configuration.timeoutIntervalForRequest = 30
+      
+      let session = Session(configuration: configuration)
+      
+      session.request("https://api.example.com/data").responseJSON { response in
+          print(response)
+      }
+      ```
+    
+    * 链式调用
+    
+      ```swift
+      AF.request("https://api.example.com/user")
+          .validate(statusCode: 200..<300)
+          .responseDecodable(of: User.self) { response in
+              switch response.result {
+              case .success(let user):
+                  print("用户数据: \(user)")
+              case .failure(let error):
+                  print("错误: \(error)")
+              }
+          }
+
+#### 2.5、[**Moya**](https://github.com/Moya/Moya) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> - **定位**：[**Moya**](https://github.com/Moya/Moya) 是一个 **网络抽象层**（Networking Abstraction Layer）。
+> - **底层**：它基于 [**Alamofire**](https://github.com/Alamofire/Alamofire) 实现请求发送，但对业务开发者屏蔽了繁琐的配置。
+> - **核心思想**：用 **枚举（enum）+ 协议（TargetType）** 来定义接口。
+>
+> 这样做的好处：
+>
+> 1. **接口集中管理**：所有 API 路径、参数、请求方式写在一个地方，清晰可维护。
+> 2. **避免魔法字符串**：不需要在代码里到处拼接 URL、HTTP 方法。
+> 3. **更适合多人协作**：规范化 API 层，降低出错率。
+
+* 安装
+  
+    * CocoaPods
+    
+      > 在 `Podfile` 中添加：
+    
+      ```ruby
+      pod 'Moya'
+      ```
+    
+    * Swift Package Manager
+    
+      > Xcode → File → Add Packages Dependency → 输入：
+    
+      ```url
+      https://github.com/Moya/Moya.git
+      ```
+    
+* 导入
+  
+    ```swift
+  import Moya
+  ```
+
+* 调用
+
+  * 定义 API 枚举
+
+    ```swift
+    enum MyService {
+        case getUser(id: Int)
+        case createUser(name: String, age: Int)
+    }
+    
+    // 遵循 TargetType 协议
+    extension MyService: TargetType {
+        var baseURL: URL { URL(string: "https://api.example.com")! }
+    
+        var path: String {
+            switch self {
+            case .getUser(let id):
+                return "/user/\(id)"
+            case .createUser:
+                return "/user"
+            }
+        }
+    
+        var method: Moya.Method {
+            switch self {
+            case .getUser:
+                return .get
+            case .createUser:
+                return .post
+            }
+        }
+    
+        var task: Task {
+            switch self {
+            case .getUser:
+                return .requestPlain
+            case .createUser(let name, let age):
+                return .requestParameters(parameters: ["name": name, "age": age],
+                                          encoding: JSONEncoding.default)
+            }
+        }
+    
+        var headers: [String: String]? {
+            ["Content-Type": "application/json"]
+        }
     }
     ```
-    
-  * 常用约束写法
-    
-    * 相对父视图
-    
-      ```swift
-      make.top.equalToSuperview().offset(20)      // 距离父视图顶部 20
-      make.left.equalToSuperview().offset(15)     // 左边距 15
-      make.right.equalToSuperview().inset(15)     // 右边距 15（inset = -offset）
-      make.bottom.equalToSuperview().offset(-20)  // 底边距 20
-      ```
-    
-    * 相对其它视图
-    
-      ```swift
-      make.top.equalTo(titleLabel.snp.bottom).offset(10)  // 距离 titleLabel 底部 10
-      make.left.equalTo(icon.snp.right).offset(8)         // 距离 icon 右边 8
-      ```
-    
-    * 固定大小
-    
-      ```swift
-      make.width.equalTo(120)
-      make.height.equalTo(50)
-      ```
-    
-    * 宽高比
-    
-      ```swift
-      make.width.equalTo(view.snp.height).multipliedBy(0.5) // 宽 = 高 * 0.5
-      ```
-    
-    * 居中
-    
-      ```swift
-      make.center.equalToSuperview()     // 完全居中
-      make.centerX.equalToSuperview()    // 横向居中
-      make.centerY.equalToSuperview()    // 纵向居中
-      ```
-    
-  * 更新 / 重新设置约束
-    
-    * 更新（`updateConstraints`）
-    
-      > 适合要修改部分约束的情况
-    
-      ```swift
-      box.snp.updateConstraints { make in
-          make.width.equalTo(200)   // 原来100 → 更新为200
-      }
-      ```
-    
-    * 重新设置（`remakeConstraints`）
-    
-      > 会先移除旧约束，再重新添加
-    
-      ```swift
-      box.snp.remakeConstraints { make in
-          make.center.equalToSuperview()
-          make.size.equalTo(CGSize(width: 50, height: 50))
-      }
-      ```
-    
-  * 高级用法 
-    
-    * 优先级
-    
-      ```swift
-      make.width.lessThanOrEqualTo(300).priority(.high)
-      ```
-    
-    * SafeArea
-    
-      ```swift
-      make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
-      ```
-    
-    * 链式多条件
-    
-      ```swift
-      make.edges.equalToSuperview().inset(UIEdgeInsets(top: 10, left: 15, bottom: 20, right: 15))
-      ```
-  
-  ###  2.4、[**Alamofire**](https://github.com/Alamofire/Alamofire)
-  
-  
-  
-  
 
+  * 创建 Provider
 
+    ```swift
+    let provider = MoyaProvider<MyService>()
+    ```
 
-## 三、代码讲解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+  * 发送请求
+
+    ```swift
+    // GET
+    provider.request(.getUser(id: 1)) { result in
+        switch result {
+        case .success(let response):
+            print("返回: \(response.data)")
+        case .failure(let error):
+            print("错误: \(error)")
+        }
+    }
+    
+    // POST
+    provider.request(.createUser(name: "Jobs", age: 18)) { result in
+        switch result {
+        case .success(let response):
+            print("创建成功: \(response.data)")
+        case .failure(let error):
+            print("失败: \(error)")
+        }
+    }
+    ```
+
+  * 插件机制（可以拦截请求/响应，例如统一打印日志、添加 token）
+
+    ```swift
+    final class NetworkLogger: PluginType {
+        func willSend(_ request: RequestType, target: TargetType) {
+            print("➡️ 请求: \(request.request?.url?.absoluteString ?? "")")
+        }
+    
+        func didReceive(_ result: Result<Response, MoyaError>, target: TargetType) {
+            print("⬅️ 响应: \(result)")
+        }
+    }
+    
+    let provider = MoyaProvider<MyService>(plugins: [NetworkLogger()])
+    ```
+
+  * 响应模型解析
+
+    ```swift
+    provider.request(.getUser(id: 1)) { result in
+        switch result {
+        case .success(let response):
+            do {
+                let user = try JSONDecoder().decode(User.self, from: response.data)
+                print("用户: \(user)")
+            } catch {
+                print("解析失败: \(error)")
+            }
+        case .failure(let error):
+            print("请求错误: \(error)")
+        }
+    }
+    ```
+
+  * **Stub（模拟数据）**：适合写单元测试或本地开发
+
+    ```swift
+    let stubProvider = MoyaProvider<MyService>(stubClosure: MoyaProvider.immediatelyStub)
+    stubProvider.request(.getUser(id: 1)) { result in
+        print(result)
+    }
+    ```
+
+#### 2.6、[**RxSwift**](https://github.com/ReactiveX/RxSwift) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> **最小依赖**：只用 `RxSwift`。
+>
+> **MVVM 开发**：通常 `RxSwift + RxCocoa + RxRelay` 一起用。
+>
+> ✅ **优点**
+>
+> - 统一事件流（UI、网络、通知、定时器等）
+> - 代码声明式，可读性好
+> - 天然适合 MVVM 架构
+>
+> ⚠️ **缺点**
+>
+> - 学习曲线陡峭（操作符多）
+> - 调试不直观（需要习惯事件流思维）
+> - 不注意释放可能导致 **内存泄漏**
+
+* 安装
+  
+    * CocoaPods
+    
+      > 在 `Podfile` 中添加：
+    
+      ```ruby
+      # 核心库
+      pod 'RxSwift', # 核心
+      pod 'RxCocoa', # UI 绑定：UIKit、AppKit 的扩展
+      pod 'RxRelay', # 安全替代 Variable，常用于 ViewModel
+      ```
+    
+    * Swift Package Manager
+    
+      > Xcode → File → Add Packages Dependency → 输入：
+    
+      ```url
+      https://github.com/ReactiveX/RxSwift.git
+      ```
+    
+* 导入
+  
+    ```swift
+  import RxSwift    // 核心 Observable / Observer / Disposable
+  import RxCocoa    // UI 控件绑定（如 textField.rx.text、button.rx.tap）
+  import RxRelay    // BehaviorRelay / PublishRelay
+  ```
+  
+* 调用
+  
+    > **按钮**：`tap.throttle + withLatestFrom(最新输入)`
+  >
+  > **输入**：`debounce + distinctUntilChanged + filter`
+  >
+  > **UI 绑定**：尽量用 `Driver/Signal`（主线程、无 error、共享）
+  >
+  > **监听**：`NotificationCenter.default.rx.notification(name[, object])`
+  >
+  > **解析**：`compactMap` 安全取 `userInfo`
+  >
+  > **性能**：`debounce/throttle/distinctUntilChanged/share(replay:)`
+  >
+  > **释放**：`disposed(by: bag)` 即可，无需 `removeObserver`
+  
+  * 按钮防连点（节流）
+  
+    ```swift
+    loginBtn.rx.tap
+        .throttle(.milliseconds(500), scheduler: MainScheduler.instance) // 500ms 内只认第一次
+        .withLatestFrom(Observable.combineLatest(vm.username, vm.password)) // 点一下带最新输入
+        .subscribe(onNext: { (u, p) in
+            // do login(u, p)
+        })
+        .disposed(by: bag)
+    ```
+  
+  * 输入框实时校验（长度/邮箱等）
+  
+    ```swift
+    let usernameValid = usernameTF.rx.text.orEmpty
+        .map { $0.count >= 3 }
+        .distinctUntilChanged()
+        .share(replay: 1)
+    
+    let passwordValid = passwordTF.rx.text.orEmpty
+        .map { $0.count >= 6 }
+        .distinctUntilChanged()
+        .share(replay: 1)
+    
+    // 邮箱示例（可选）
+    let emailValid = usernameTF.rx.text.orEmpty
+        .map { text in
+            let pattern = #"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$"#
+            return text.range(of: pattern, options: [.regularExpression, .caseInsensitive]) != nil
+        }
+        .share(replay: 1)
+    ```
+  
+  * 启用按钮 + 视觉态
+  
+    ```swift
+    Observable.combineLatest(usernameValid, passwordValid) { $0 && $1 }
+        .bind(to: loginBtn.rx.isEnabled)
+        .disposed(by: bag)
+    
+    Observable.combineLatest(usernameValid, passwordValid) { $0 && $1 }
+        .map { $0 ? 1.0 : 0.5 }
+        .bind(to: loginBtn.rx.alpha)
+        .disposed(by: bag)
+    ```
+  
+  * 搜索输入：去抖 + 去重 + 非空
+  
+    ```swift
+    let searchText = searchTF.rx.text.orEmpty
+        .debounce(.milliseconds(300), scheduler: MainScheduler.instance) // 停止输入300ms再发
+        .distinctUntilChanged()
+        .filter { !$0.isEmpty } // 过滤空串
+        .share(replay: 1)
+    
+    searchText
+        .subscribe(onNext: { query in
+            // fire search(query)
+        })
+        .disposed(by: bag)
+    ```
+  
+  * 限制最大长度（回写 UI）
+  
+    ```swift
+    let limitedPwd = passwordTF.rx.text.orEmpty
+        .map { String($0.prefix(20)) } // 最多 20 位
+        .share(replay: 1)
+    
+    limitedPwd
+        .bind(to: passwordTF.rx.text)
+        .disposed(by: bag)
+    ```
+  
+  * Return 键行为（下一步 / 提交）
+  
+    ```swift
+    // 用户名回车 -> 焦点移到密码
+    usernameTF.rx.controlEvent(.editingDidEndOnExit)
+        .subscribe(onNext: { [weak self] in self?.passwordTF.becomeFirstResponder() })
+        .disposed(by: bag)
+    
+    // 密码回车 -> 触发登录（带最新输入）
+    passwordTF.rx.controlEvent(.editingDidEndOnExit)
+        .withLatestFrom(Observable.combineLatest(vm.username, vm.password))
+        .subscribe(onNext: { (u, p) in
+            // do login(u, p)
+        })
+        .disposed(by: bag)
+    ```
+  
+  * 用 Driver 做 UI 绑定（推荐）
+  
+    ```swift
+    let canLogin = Observable.combineLatest(usernameValid, passwordValid) { $0 && $1 }
+        .asDriver(onErrorJustReturn: false)
+    
+    canLogin
+        .drive(loginBtn.rx.isEnabled)
+        .disposed(by: bag)
+    
+    canLogin
+        .map { $0 ? 1.0 : 0.5 }
+        .drive(loginBtn.rx.alpha)
+        .disposed(by: bag)
+    ```
+  
+  * 实战最小组合（按钮点击 + 最新值 + 节流）
+  
+    ```swift
+    let creds = Observable.combineLatest(usernameTF.rx.text.orEmpty,
+                                         passwordTF.rx.text.orEmpty) { ($0, $1) }
+        .share(replay: 1)
+    
+    loginBtn.rx.tap
+        .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
+        .withLatestFrom(creds)
+        .subscribe(onNext: { (u, p) in
+            // do login(u, p)
+        })
+        .disposed(by: bag)
+    ```
+  
+  * 监听系统通知（NotificationCenter → Rx）
+  
+    ```swift
+    import RxSwift
+    import RxCocoa
+    
+    let bag = DisposeBag()
+    
+    NotificationCenter.default.rx.notification(UIApplication.didBecomeActiveNotification)
+        .subscribe(onNext: { _ in
+            print("app 回到前台")
+        })
+        .disposed(by: bag)
+    ```
+  
+  * 监听 + 取 `userInfo`（安全解包）
+  
+    ```swift
+    extension Notification.Name {
+        static let loginStateChanged = Notification.Name("loginStateChanged")
+    }
+    
+    // 监听
+    NotificationCenter.default.rx.notification(.loginStateChanged)
+        .compactMap { $0.userInfo?["isLogin"] as? Bool }
+        .distinctUntilChanged()
+        .subscribe(onNext: { isLogin in
+            print("登录态：\(isLogin)")
+        })
+        .disposed(by: bag)
+    
+    // 发送
+    NotificationCenter.default.post(name: .loginStateChanged, object: nil, userInfo: ["isLogin": true])
+    ```
+  
+  * 键盘通知：拿高度 & 动画时长（实战常用）
+  
+    ```swift
+    let willChange = NotificationCenter.default.rx.notification(UIResponder.keyboardWillChangeFrameNotification)
+    
+    let keyboardInfo = willChange
+        .compactMap { note -> (height: CGFloat, duration: TimeInterval) in
+            let endFrame = (note.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? .zero
+            let duration = (note.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0.25
+            return (height: endFrame.height, duration: duration)
+        }
+        .share(replay: 1)
+    
+    keyboardInfo
+        .subscribe(onNext: { info in
+            // 调整底部约束 / contentInset
+            // self.bottomConstraint.constant = info.height
+            // UIView.animate(withDuration: info.duration) { self.view.layoutIfNeeded() }
+        })
+        .disposed(by: bag)
+    ```
+  
+  * 搭配 `Driver`（主线程、无 error，用于驱动 UI）
+  
+    ```swift
+    let becameActiveDriver: Driver<Void> =
+        NotificationCenter.default.rx.notification(UIApplication.didBecomeActiveNotification)
+            .map { _ in () }
+            .asDriver(onErrorDriveWith: .empty())
+    
+    becameActiveDriver
+        .drive(onNext: { print("刷新 UI") })
+        .disposed(by: bag)
+    ```
+  
+  * 过滤指定对象的通知（`object:`）
+  
+    ```swift
+    let object = someObject
+    
+    NotificationCenter.default.rx.notification(.someName, object: object)
+        .subscribe(onNext: { _ in print("只响应这个 object 的通知") })
+        .disposed(by: bag)
+    ```
+  
+  * throttle / debounce（通知风暴去抖）
+  
+    ```swift
+    NotificationCenter.default.rx.notification(.NSManagedObjectContextDidSave)
+        .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
+        .subscribe(onNext: { _ in
+            // 合并短时间内的多次变更
+        })
+        .disposed(by: bag)
+    ```
+  
+  * 生命周期通知（常用清单）
+  
+    ```swift
+    NotificationCenter.default.rx.notification(UIApplication.willEnterForegroundNotification)
+    NotificationCenter.default.rx.notification(UIApplication.didEnterBackgroundNotification)
+    NotificationCenter.default.rx.notification(UIApplication.didReceiveMemoryWarningNotification)
+    ```
+  
+  * 通知更适合**跨模块/系统级广播**；模块内通信优先 `Relay/Subject`。
+  
+    > **同模块/同层内**传播事件：用 `PublishRelay` / `BehaviorRelay` 比通知更类型安全、可测试。
+  
+    ```swift
+    let evt = PublishRelay<Void>()
+    evt.accept(())          // 发送
+    evt.asSignal()          // 给 UI 绑定
+    ```
+  
+    
+
+## 三、💻代码讲解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、⛓️链式调用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -336,7 +921,15 @@
      .byNextText(" → More")
   ```
 
-* TODO
+* `UIBUtton`
+
+* `UITableView`
+
+* `UICollectionView`
+
+* `UIImageView`
+
+* 
 
 ### 2、📏全局比例尺 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -422,6 +1015,16 @@
   ```swift
   CGRect(x: 20.w, y: 100.h, width: 200.w, height: 40.h)
   ```
+
+### 3、避免从 XIB/Storyboard 初始化
+
+```swift
+required init?(coder: NSCoder) {
+    fatalError()
+}
+```
+
+
 
 ## 四、<font color=red>**F**</font> <font color=green>**A**</font> <font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -619,6 +1222,30 @@
   }
   ```
 
+- `@unchecked`
+
+  > 它是 **[Swift](https://developer.apple.com/swift/) 的一个属性修饰符**，目前主要和 **协议 `Sendable`** 结合使用
+  >
+  > 本质就是 [**Swift**](https://developer.apple.com/swift/) 提供的一个 **安全逃生口**
+
+  ```swift
+  /// 跳过编译器的并发安全检查，由开发者自己保证。
+  @unchecked Sendable
+  ```
+
+  * 背景：并发安全检查
+
+    > 从 [**Swift**](https://developer.apple.com/swift/) 5.5 引入并发（`async/await`、`Task` 等）开始，苹果为了防止 **数据竞争**，提出了一个协议：
+    >
+    > ```swift
+    > protocol Sendable { }
+    > ```
+    >
+    > 一个类型如果要在 **多线程 / 并发任务** 中安全传递，就必须是 `Sendable`
+    >
+    > - 值类型（`struct`，内部全是 `Sendable` 成员） → 自动符合 `Sendable`。
+    > - 引用类型（`class`） → 默认 **不是 `Sendable`**，因为引用可能被多线程同时访问，造成数据竞争。
+
 - `@resultBuilder`
 
 - `@ViewBuilder`
@@ -630,8 +1257,6 @@
 - `@CommandsBuilder`
 
 - `@LibraryContentBuilder`
-
-
 
 
 ### 2、`joined()`
