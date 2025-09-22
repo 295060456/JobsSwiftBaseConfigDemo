@@ -46,11 +46,11 @@
   * 作为其他项目的参考，可以快速的了解到项目的架构，代码规范，以及一些设计模式
   * 这么一些优秀的成果，其来源不仅仅是来自于作者本身的持续付出与积累。更是这个领域大家庭中各路优秀作者的智慧结晶
 
-## 二、👥第三方管理 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+## 二、👥第三方 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、第三方管理 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* Mac OS 15 以后，苹果采取了更加严格的权限写入机制。新**swift**项目如果要利用[**`Cocoapod`**](https://cocoapods.org/)来集成第三方，就比如在**xcode**里面做如下设置，否则编译失败：`TARGETS`->`Build Settings`->`ENABLE_USER_SCRIPT_SANDBOXING`-><font color=red>`NO`</font>
+* **Mac OS 15** 以后，苹果采取了更加严格的权限写入机制。新**swift**项目如果要利用[**`Cocoapod`**](https://cocoapods.org/)来集成第三方，就比如在**xcode**里面做如下设置，否则编译失败：`TARGETS`->`Build Settings`->`ENABLE_USER_SCRIPT_SANDBOXING`-><font color=red>`NO`</font>
 
   ![image-20250616173410872](./assets/image-20250616173410872.png)
 
@@ -1016,7 +1016,7 @@
   CGRect(x: 20.w, y: 100.h, width: 200.w, height: 40.h)
   ```
 
-### 3、避免从 XIB/Storyboard 初始化
+### 3、避免从 XIB/Storyboard 初始化 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 required init?(coder: NSCoder) {
@@ -1028,7 +1028,7 @@ required init?(coder: NSCoder) {
 
 ## 四、<font color=red>**F**</font> <font color=green>**A**</font> <font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-### 1、注解
+### 1、注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 - `@available(...)` / `@unavailable(...)`
 
@@ -1259,7 +1259,7 @@ required init?(coder: NSCoder) {
 - `@LibraryContentBuilder`
 
 
-### 2、`joined()`
+### 2、`joined()` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 正常拼接
 
