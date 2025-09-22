@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0442717B2E8139CF0084B25C /* ColorAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0442717A2E8139CF0084B25C /* ColorAssets.xcassets */; };
+		044272852E8146130084B25C /* JXScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044272842E8146130084B25C /* JXScale.swift */; };
 		333F3B0D52218CCFCD6491FF /* libPods-JobsSwiftBaseConfigDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F6A4ABE2CD02182172C83D8 /* libPods-JobsSwiftBaseConfigDemo.a */; };
 		5D7AB85E77939149E8B16EE4 /* libPods-JobsSwiftBaseConfigDemoTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD9240CBDFACEF0E84778A1 /* libPods-JobsSwiftBaseConfigDemoTests.a */; };
 		B4BD654523F64CF5AD7D1911 /* libPods-JobsSwiftBaseConfigDemoUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BFA60F33A2E2DAF2C73F60E7 /* libPods-JobsSwiftBaseConfigDemoUITests.a */; };
@@ -99,6 +101,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0442717A2E8139CF0084B25C /* ColorAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ColorAssets.xcassets; sourceTree = "<group>"; };
+		044272842E8146130084B25C /* JXScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXScale.swift; sourceTree = "<group>"; };
 		0BD9240CBDFACEF0E84778A1 /* libPods-JobsSwiftBaseConfigDemoTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JobsSwiftBaseConfigDemoTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DCD019109E9C6CF110B38BA /* Pods-JobsSwiftBaseConfigDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemo.release.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemo/Pods-JobsSwiftBaseConfigDemo.release.xcconfig"; sourceTree = "<group>"; };
 		13BCA416500E621B1826F3BD /* Pods-JobsSwiftBaseConfigDemoUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemoUITests.debug.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemoUITests/Pods-JobsSwiftBaseConfigDemoUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -307,6 +311,7 @@
 			isa = PBXGroup;
 			children = (
 				C564FC2D2E0958E80079B5C1 /* HUDHelper.swift */,
+				044272842E8146130084B25C /* JXScale.swift */,
 			);
 			path = 3rd;
 			sourceTree = "<group>";
@@ -341,6 +346,7 @@
 		C564FC372E0959120079B5C1 /* Others */ = {
 			isa = PBXGroup;
 			children = (
+				0442717A2E8139CF0084B25C /* ColorAssets.xcassets */,
 				C564FBE42E09580B0079B5C1 /* Main.storyboard */,
 				C564FBEC2E09580D0079B5C1 /* LaunchScreen.storyboard */,
 				C564FBE72E09580B0079B5C1 /* JobsSwiftBaseConfigDemo.xcdatamodeld */,
@@ -611,6 +617,7 @@
 				C564FBEE2E09580D0079B5C1 /* LaunchScreen.storyboard in Resources */,
 				C564FBEB2E09580D0079B5C1 /* Assets.xcassets in Resources */,
 				C564FC4F2E09592B0079B5C1 /* libstdc++.md in Resources */,
+				0442717B2E8139CF0084B25C /* ColorAssets.xcassets in Resources */,
 				C564FC572E09592B0079B5C1 /* image-20240430112026271.png in Resources */,
 				C564FBE62E09580B0079B5C1 /* Main.storyboard in Resources */,
 			);
@@ -706,8 +713,12 @@
 			);
 			inputFileListPaths = (
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -724,6 +735,7 @@
 				C564FC8B2E0959640079B5C1 /* UIImageView.swift in Sources */,
 				C564FCA02E0959640079B5C1 /* UIViewController.swift in Sources */,
 				C564FC2B2E0958D50079B5C1 /* AppDelegate.swift in Sources */,
+				044272852E8146130084B25C /* JXScale.swift in Sources */,
 				C564FCB22E0959990079B5C1 /* EmptyView.swift in Sources */,
 				C564FC8D2E0959640079B5C1 /* UIBarButtonItem.swift in Sources */,
 				C564FC2E2E0958E80079B5C1 /* HUDHelper.swift in Sources */,
