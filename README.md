@@ -907,6 +907,10 @@
 
 * 个别地区（比如：柬埔寨），需要将浏览器语言改为英文状态，方可进入[**苹果开发者网站**](https://developer.apple.com/)
 * [**quicktype**](https://app.quicktype.io/)：从 **JSON** / **GraphQL** /其它数据格式 自动生成对应语言的类型定义
+* **ObjC**和[**Swift**](https://developer.apple.com/swift/)混编以后，📦打包的体积会变大
+  * [**Swift**](https://developer.apple.com/swift/) 标准库要随 App 打包：iOS 系统里不内置 [**Swift**](https://developer.apple.com/swift/) 标准库（至少不能依赖它一定存在），只要项目里用了 [**Swift**](https://developer.apple.com/swift/)，就得把 `libswift*.dylib` 一起带上。**体感增量：~2–7 MB/架构（压缩后更小）**，取决于用到的模块数量
+  * 混编本身不会重复打包 **ObjC** 运行时：**ObjC** Runtime 属于系统，纯 **ObjC** 和混编在这方面没差
+  * 链接器选项可能放大：比如 `-ObjC` 可能把静态库里很多不需要的对象一起拉进来，造成膨胀（和是否混编无关，但混编项目更容易“全都要”）
 
 ## 三、💻代码讲解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -1461,7 +1465,9 @@ required init?(coder: NSCoder) {
   * 它不是具体的类型，而是“类型参数”，等到**某个具体类型去遵守协议时再指定**。
   * 可以理解为 **泛型的协议版**。
   
-*  [**Swift**](https://developer.apple.com/swift/)  ↔ **Objective-C** 协议对照
+*  在 [**Swift**](https://developer.apple.com/swift/) 里，**没实现**协议要求（包括属性的 getter/setter）会<font color=red>**编译期报错**</font>，**不会**等到运行期才“野指针崩溃”。只有走 **`@objc` 可选协议** 的老路，且**强行解包/不做判断**，才可能在运行期崩。
+
+*  [**Swift**](https://developer.apple.com/swift/)  ↔ **Objc** 协议对照
 
   | Swift 协议                                                   | 作用                     | Swift 用法                                                | Objective-C 对应                                             |
   | ------------------------------------------------------------ | ------------------------ | --------------------------------------------------------- | ------------------------------------------------------------ |
@@ -1490,13 +1496,13 @@ required init?(coder: NSCoder) {
 
 #### 3.1、`存储属性` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-> 真正存放在内存里的变量/常量。可以是 `var`（可变）或 `let`（不可变）。
+> 真正存放在内存里的变量/常量。可以是 `var`（可变）或 `let`（不可变）
 >
-> <font color=red>只能定义在 **类** 和 **结构体** 里</font>。
+> <font color=red>只能定义在 **类** 和 **结构体** 里</font>
 >
-> `let` 的存储属性只能在初始化时赋值。
+> `let` 的存储属性只能在初始化时赋值
 >
-> 类里的存储属性如果不是可选，就必须在 `init` 前全部初始化。
+> 类里的存储属性如果不是可选，就必须在 `init` 前全部初始化
 
 ```swift
 struct User {
@@ -1529,7 +1535,7 @@ struct Rectangle {
 
 #### 3.3、`类型属性` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-> 属于 **类型本身**，而不是实例。类似于 OC/Java 的 `static` 成员。
+> 属于 **类型本身**，而不是实例。类似于 **ObjC**/Java 的 `static` 成员。
 >
 > 用关键字： `static`（值不可被子类重写） 或 `class` （只能用于类，允许子类重写）。
 
@@ -1558,7 +1564,7 @@ class DataManager {
 }
 ```
 
-#### 3.5、`属性观察器` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 3.5、<font id=属性观察器>`属性观察器`</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 可以给存储属性加 `willSet` / `didSet`。用于监控属性值变化。
 >
@@ -1745,7 +1751,7 @@ MySingleton.shared.doSomething()
   }
   ```
 
-* **OC 风格的 `dispatch_once`**（Swift 1/2 时代用的，现在多余）本质等价于 `static let`
+* ****ObjC** 风格的 `dispatch_once`**（Swift 1/2 时代用的，现在多余）本质等价于 `static let`
 
   ```swift 
   class MySingleton {
@@ -1876,13 +1882,30 @@ p.foo()   // witness table 派发
   print(sentence)   // Hello World Swift
   ```
 
-  
+### 9、[**Swift**](https://developer.apple.com/swift/) 没有直接的<font color=red>**KVO**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* <font color=red>**KVO**</font>的特点
+  * 依赖 **runtime 动态生成子类（isa-swizzling）** 来拦截属性 setter
+  * 能监听几乎任意属性（只要符合<font color=red>**KVO**</font>规则）
+  * 写法繁琐（`addObserver/removeObserver`）
+  * 崩溃风险大（没移除、属性没标<font color=red>**KVO**</font>）
+  * 不透明（调试时很难看出背后发生了啥）
+* [**Swift**](https://developer.apple.com/swift/) 为什么不直接给出<font color=red>**KVO**</font>？
+  * [**Swift**](https://developer.apple.com/swift/)  的核心设计理念是 **类型安全 + 可预测性**
+  * 因此 [**Swift**](https://developer.apple.com/swift/)  并没有把 **ObjC** 那套 runtime hack 级的东西搬过来，而是提供了 **更安全的选择**。
+* 🔑[**Swift**](https://developer.apple.com/swift/)  中替代 <font color=red>**KVO**</font> 的方式
+  *  <a href="#属性观察器" style="font-size:17px; color:green;"><b>属性观察器</b></a>
+  * `ObservableObject` + `@Published`（SwiftUI / Combine）
+  * 桥接**ObjC**后使用<font color=red>**KVO**</font>
+  * 开源库支持：[**Bond**](https://github.com/DeclarativeHub/Bond)、[**RxSwift**](https://github.com/ReactiveX/RxSwift)、[**ReactiveSwift**](https://github.com/ReactiveCocoa/ReactiveSwift)
 
 ## 五、<font color=red>**F**</font><font color=green>**A**</font><font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-### 1、[**Swift**](https://developer.apple.com/swift/) `属性观察器` 🆚 Objective-C `KVO` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 1、[**Swift**](https://developer.apple.com/swift/) 纯类 🆚 `NSObject` 子类 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-| 特性     | Swift 属性观察器             | OC KVO                     |
+### 2、[**Swift**](https://developer.apple.com/swift/) `属性观察器` 🆚 **Objective-C** `KVO` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+| 特性     | Swift 属性观察器             | **ObjC** KVO               |
 | -------- | ---------------------------- | -------------------------- |
 | 监听范围 | 自身属性                     | 其他对象属性               |
 | 实现方式 | 编译器注入                   | Runtime 动态子类           |
@@ -1944,7 +1967,7 @@ p.foo()   // witness table 派发
   }
   ```
 
-### 2、[**Swift**](https://developer.apple.com/swift/) 中 `struct` 和 `class` 的主要区别 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 3、[**Swift**](https://developer.apple.com/swift/) 中 `struct` 和 `class` 的主要区别 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 值类型 vs 引用类型
 
@@ -2041,15 +2064,15 @@ p.foo()   // witness table 派发
 
 * 需要 **继承**
 * 需要 **引用语义**（比如 UI 控件，多处共享状态）
-* 需要和 **Objective-C 桥接**（OC 里只有类）
+* 需要和 **Objective-C 桥接**（**ObjC** 里只有类）
 
-### 3、[**Swift**](https://developer.apple.com/swift/) 可以像OC那样访问内存吗？<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 4、[**Swift**](https://developer.apple.com/swift/) 可以像**ObjC**那样访问内存吗？<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > **可以，但受更多限制**，因为 Swift 默认是安全的
 >
-> 如果确实需要（比如性能优化、与 C/OC 库交互），可以用 **`UnsafePointer` 系列**。
+> 如果确实需要（比如性能优化、与 C/**ObjC** 库交互），可以用 **`UnsafePointer` 系列**。
 
-#### 3.1、[**Swift**](https://developer.apple.com/swift/) 内存访问方式 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 4.1、[**Swift**](https://developer.apple.com/swift/) 内存访问方式 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * Unsafe 指针系列
 
@@ -2093,13 +2116,13 @@ p.foo()   // witness table 派发
 
   ```swift
   let arr: [Int32] = [1, 2, 3]
-  /// OC 方法里需要 int * 参数，Swift 会自动映射成 UnsafePointer<Int32>
+  /// **ObjC** 方法里需要 int * 参数，Swift 会自动映射成 UnsafePointer<Int32>
   arr.withUnsafeBufferPointer { buffer in
       c_function(buffer.baseAddress, Int32(buffer.count))
   }
   ```
 
-### 4、`print` 🆚 `debugPrint` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 5、`print` 🆚 `debugPrint` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > ```swift
 > let array = ["A", "B", "C"]
@@ -2159,8 +2182,58 @@ p.foo()   // witness table 派发
   print(u)       // 👤 用户名: Jobs
   debugPrint(u)  // User(name: Jobs)
   ```
+### 6、[**Swift**](https://developer.apple.com/swift/) 纯类 🆚 **`NSObject`** 子类 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> **不继承 `NSObject`**：用于 **纯 [Swift](https://developer.apple.com/swift/)  逻辑/模型**，轻量、性能好、安全
+>
+> **继承 `NSObject`**：用于 **UI 层 / 和 Objective-C 互操作**，需要 **KVC/KVO/Selector** 或使用 Foundation/UIKit API 时必须用
+
+* [**Swift**](https://developer.apple.com/swift/) 纯类（不继承 `NSObject`）
+
+  > 1️⃣ **值语义只靠 Swift**，不依赖 ObjC Runtime
+  >
+  > 2️⃣ 不能直接用 **KVC / KVO**
+  >
+  > 3️⃣ 不能直接用 **Selector** 调用
+  >
+  > 4️⃣ 不能直接存放在需要 `AnyObject & NSObjectProtocol` 的 API 中（如 `NSDictionary`）
+  >
+  > 5️⃣ `isEqual`, `hash`, `description` 这些都没有 `NSObject` 默认实现，需要自己写
+  >
+  > 6️⃣ 纯 [**Swift**](https://developer.apple.com/swift/)  类型，**性能更好**，不需要动态派发（除非你标记 `dynamic` 或 `@objc`）
+  >
+  > 7️⃣ **数据层/逻辑层** → 用 **纯 Swift 类** 或 `struct`
+
+  ```swift
+  class Person {
+      var name: String
+      init(name: String) { self.name = name }
+  }
+  ```
+
+* 继承自 `NSObject`
+
+  > 1️⃣ 自动获得 **`NSObject` 基础功能**
+  >
+  > 2️⃣ 可以使用 **KVC/KVO**
+  >
+  > 3️⃣ 可以使用 **Selector / perform**
+  >
+  > 4️⃣ 与 **Objective-C API 无缝互通**（`UIKit/AppKit` 里绝大多数 API 要求 `NSObject`）
+  >
+  > 5️⃣ 需要 ARC 管理，有一定性能开销
+  >
+  > 6️⃣ **跟 UIKit/AppKit 打交道的层** → 必须继承 `NSObject`
+
+  ```swift 
+  class Person: NSObject {
+      @objc var name: String
+      init(name: String) { self.name = name }
+  }
+  ```
 
   
+
 
 
 
