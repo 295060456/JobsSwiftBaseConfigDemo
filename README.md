@@ -1632,7 +1632,61 @@ let names = [User(name:"A"), User(name:"B")].map(\.name)
     }
     ```
 
-### 6、`joined()` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 6、[**Swift**](https://developer.apple.com/swift/) 单例的写法 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 6.1、线程安全懒加载单例（推荐写法）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 1️⃣ <font color=red>**`static let` **</font>**懒加载**： [**Swift**](https://developer.apple.com/swift/) 中 `static let` 天生就是线程安全的懒加载。不会提前初始化，也不用额外加锁。
+>
+> 2️⃣ <font color=red>**`final` **</font>**修饰类**：防止被继承，避免子类化破坏单例模式。
+>
+> 3️⃣ <font color=red>**`private` **</font>**私有化 init**：避免 `MySingleton()` 被外部直接调用，保证唯一性。
+
+```swift
+final class MySingleton {
+    // 唯一实例（静态常量，懒加载 + 线程安全）
+    static let shared = MySingleton()
+    
+    // 私有化初始化方法，避免外部 new
+    private init() {
+        print("MySingleton 初始化了")
+    }
+    
+    // 你可以在这里写各种方法或属性
+    func doSomething() {
+        print("做点事情")
+    }
+}
+
+MySingleton.shared.doSomething()
+```
+
+#### 6.2、其他写法（对比） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **延迟存储属性 + `static var`**（不推荐，代码更复杂）
+
+  ```swift 
+  class MySingleton {
+      static var shared: MySingleton = {
+          let instance = MySingleton()
+          return instance
+      }()
+      private init() {}
+  }
+  ```
+
+* **OC 风格的 `dispatch_once`**（Swift 1/2 时代用的，现在多余）本质等价于 `static let`
+
+  ```swift 
+  class MySingleton {
+      static let shared: MySingleton = {
+          return MySingleton()
+      }()
+      private init() {}
+  }
+  ```
+
+### 7、`joined()` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 正常拼接
 
