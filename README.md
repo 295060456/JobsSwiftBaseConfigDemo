@@ -1123,7 +1123,7 @@ required init?(coder: NSCoder) {
 
 - `@objc` / `@objcMembers` / `@nonobjc`
 
-  > 暴露/隐藏给 Objective-C 运行时（Selector、KVC/KVO、IB 需要）
+  > 暴露/隐藏给 **Objective-C** 运行时（Selector、KVC/KVO、IB 需要）
 
   ```swift
   @objcMembers class Foo: NSObject {
@@ -1509,7 +1509,130 @@ class Person {
 }
 ```
 
-### 4、`joined()` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 4、[**Swift**](https://developer.apple.com/swift/) 闭包 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 4.1、**闭包表达式** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* `{ (参数) -> 返回 in 语句 }`
+
+#### 4.2、[**Swift**](https://developer.apple.com/swift/) 里的闭包分类 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+##### 4.2.1、尾随闭包（语法糖） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 纯粹是 **语法糖**，和闭包本质没区别。
+> 用在函数的最后一个参数是闭包时，让代码更简洁。
+
+```swift
+func doSomething(action: () -> Void) { action() }
+
+// 尾随闭包写法
+doSomething {
+    print("尾随闭包执行")
+}
+```
+
+##### 4.2.2、逃逸`@escaping`/非逃逸闭包 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 逃逸闭包用 `@escaping` 标记，会在函数返回后才调用
+>
+> 常见于 **异步回调/存储/跨越生命周期**、任务完成时通知
+>
+> **默认**：参数闭包是**非逃逸**（函数体内调用完就结束）
+>
+> **判断口诀**：闭包被**保存**（属性/数组）或**异步**调用 ⇒ `@escaping`
+
+```swift
+func asyncWork(completion: @escaping (String) -> Void) {
+    DispatchQueue.global().async {
+        completion("done")
+    }
+}
+```
+
+##### 4.2.3、自动闭包`@autoclosure`  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 用 `@autoclosure` 标记，**把一个表达式自动包装成闭包**。
+>
+> 常用于懒执行、断言、日志。
+
+```swift
+func log(_ msg: @autoclosure () -> String) {
+    print(msg())
+}
+
+log("Hello")  // 自动变成 { "Hello" }
+```
+
+#### 4.3、闭包简写 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+// 完整
+let f: (Int, Int) -> Int = { (a: Int, b: Int) -> Int in return a + b }
+
+// 省类型 + 省 return（单表达式自动返回）
+let f1 = { a, b in a + b }
+
+// 参数占位简写
+let f2: (Int, Int) -> Int = { $0 + $1 }
+
+// 运算符函数（此时涉及到运算符/函数的重载）
+// Swift 里的 + 所有定义都是二元函数：(T, T) -> T。
+let f3 = (+)
+
+// KeyPath 转函数（Swift 5.2+）
+struct User { let name: String }
+let names = [User(name:"A"), User(name:"B")].map(\.name)
+```
+
+### 5、[**Swift**](https://developer.apple.com/swift/) 运算符重载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 1️⃣ 运算符重载本质就是函数调用，性能没有特别损耗
+>
+> 2️⃣ 过度滥用会降低可读性
+>
+> 3️⃣ Apple 的 API 指南建议：只有在“语义非常明确”的情况下才定义运算符。复杂操作建议用函数方法而不是运算符。
+
+* **本质**：运算符就是一个函数，只是有特殊符号写法而已
+
+* **运算符重载**：给已有的运算符（如 `+`、`-`、`==`）提供新的实现，或者为自定义类型添加支持
+
+* 自定义运算符
+
+  > [**Swift**](https://developer.apple.com/swift/)  运算符分类：
+  >
+  > - `prefix` 前缀运算符
+  > - `postfix` 后缀运算符
+  > - `infix` 中缀运算符（要定义优先级组）
+
+  ```swift
+  // 声明一个中缀运算符
+  infix operator **: MultiplicationPrecedence
+  
+  // 定义实现
+  func ** (lhs: Int, rhs: Int) -> Int {
+      return Int(pow(Double(lhs), Double(rhs)))
+  }
+  
+  print(2 ** 3) // 8
+  ```
+
+* 示例
+
+  * 重载等于号
+
+    > [**Swift**](https://developer.apple.com/swift/) 更推荐让类型遵守 `Equatable` / `Comparable` 协议，编译器会自动合成 `==` 和 `<`
+
+    ```swift
+    struct User {
+        let id: Int
+    }
+    
+    func == (lhs: User, rhs: User) -> Bool {
+        lhs.id == rhs.id
+    }
+    ```
+
+### 6、`joined()` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 正常拼接
 
@@ -1531,7 +1654,7 @@ class Person {
 
   
 
-## 五、<font color=red>**F**</font> <font color=green>**A**</font> <font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+## 五、<font color=red>**F**</font><font color=green>**A**</font><font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、[**Swift**](https://developer.apple.com/swift/) `属性观察器` 🆚 Objective-C `KVO` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -1597,7 +1720,7 @@ class Person {
   }
   ```
 
-### 2、Swift 中 `struct` 和 `class` 的主要区别 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 2、[**Swift**](https://developer.apple.com/swift/) 中 `struct` 和 `class` 的主要区别 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 值类型 vs 引用类型
 
@@ -1669,7 +1792,7 @@ class Person {
   * `struct` 更偏向 **数据模型（封装数据 + 小逻辑）**
   * `class` 更偏向 **对象、身份、继承、多态**
 
-#### 🔹 <font color=blue>**为什么推荐：多用 `struct`，少用 `class`？**</font>
+#### 🔹 <font color=blue>**为什么Swift推荐：多用 `struct`，少用 `class`？**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **安全性更高（值语义避免共享副作用）**
   * 值类型在传递时复制，避免了对象在多处被修改带来的 bug
@@ -1680,20 +1803,80 @@ class Person {
 
 * **性能更优（很多情况下）**
   * 小的 `struct` 会被编译器优化为栈上分配，访问速度快
-  * 避免了 class 的 heap 分配和 ARC 引用计数开销
+  * 避免了 class 的 堆 分配和 ARC 引用计数开销
 
 * **语义更清晰**
   * `struct` 强调值的不可变性，适合建模“数据”。
   * `class` 强调身份和共享，适合建模“对象”。
 
 * **和 Swift 标准库一致**
-  * Swift 里大量核心类型都是 `struct`：`String`, `Array`, `Dictionary`, `Set`
+  * [**Swift**](https://developer.apple.com/swift/) 里大量核心类型都是 `struct`：`String`, `Array`, `Dictionary`, `Set`
   * Apple 官方风格就是：能用值语义的地方优先用 `struct`
 
-#### 📌 <font color=blue>**什么时候一定要用 `class`?**</font>
+#### 📌 <font color=blue>**什么时候一定要用 `class`?**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 需要 **继承**
 * 需要 **引用语义**（比如 UI 控件，多处共享状态）
 * 需要和 **Objective-C 桥接**（OC 里只有类）
+
+### 3、[**Swift**](https://developer.apple.com/swift/) 可以像OC那样访问内存吗？<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> **可以，但受更多限制**，因为 Swift 默认是安全的
+>
+> 如果确实需要（比如性能优化、与 C/OC 库交互），可以用 **`UnsafePointer` 系列**。
+
+#### 3.1、[**Swift**](https://developer.apple.com/swift/) 内存访问方式 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* Unsafe 指针系列
+
+  > `UnsafePointer<T>`（相当于 `const T *`）
+  >
+  > `UnsafeMutablePointer<T>`（相当于 `T *`）
+  >
+  > `UnsafeRawPointer` / `UnsafeMutableRawPointer`（无类型指针，类似 `void *`）
+  >
+  > `OpaquePointer`（只保存地址，不可直接解引用）
+
+  ```swift
+  var num = 42
+  
+  // 获取指针
+  let ptr = withUnsafePointer(to: &num) { $0 }
+  print(ptr.pointee)  // 42
+  
+  // 修改值
+  withUnsafeMutablePointer(to: &num) { p in
+      p.pointee = 100
+  }
+  print(num)  // 100
+  ```
+
+* 原始内存操作（`malloc`/`free`）
+
+  ```swift
+  let raw = UnsafeMutableRawPointer.allocate(byteCount: 4, alignment: 4)
+  raw.storeBytes(of: 1234, as: Int32.self)
+  
+  let value = raw.load(as: Int32.self)
+  print(value) // 1234
+  
+  raw.deallocate()
+  ```
+
+* 和 **C/Objective-C** 互操作
+
+  > [**Swift**](https://developer.apple.com/swift/)  的 Unsafe 指针和 C 指针可以无缝桥接
+
+  ```swift
+  let arr: [Int32] = [1, 2, 3]
+  /// OC 方法里需要 int * 参数，Swift 会自动映射成 UnsafePointer<Int32>
+  arr.withUnsafeBufferPointer { buffer in
+      c_function(buffer.baseAddress, Int32(buffer.count))
+  }
+  ```
+
+* 
+
+
 
 <a id="🔚" href="#前言" style="font-size:17px; color:green; font-weight:bold;">我是有底线的👉点我回到首页</a>
