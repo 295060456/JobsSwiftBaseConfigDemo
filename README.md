@@ -20,7 +20,7 @@
 
 当前总行数：
 
-## 🔥<font id=前言>前言</font>
+## 🔥 <font id=前言>前言</font>
 
 > 温馨提示🔔：本文较长，需要⏬下载到本地以后，方能完整阅读。推荐阅读器👉[**Typora**](https://typora.io/)
 
@@ -28,7 +28,7 @@
 * **站在巨人的肩膀上，才能看得更远**
 * **面向信仰编程**
 
-## 一、🎯项目白皮书 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+## 一、🎯 项目白皮书 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 程序员是一个高消耗的职业，除了日常基本的业务开发以外，新事物的不断涌现也需要持续性的学习，所以是一件非常消耗精力的事；而且由于长期的高压、高情绪、熬夜，**会打乱人体内正常的内分泌节奏**，大概率也会逐渐的引发各种职业疾病。业内普遍认为程序员的**黄金年龄在25～35周岁**。那么，还是希望，在我们（亦或者是暂时性的）离开这个行业的时候，一定要为自己或者后人，留下点什么，算是这么多年的一个工作总结。此外，能最大化的辅助人，帮助其在极短的时间内去：<u>回忆/上手/学习/实验</u>这个编程语言下的工程项目。所以，此项目就一定是要结合商业需求去务实拓展，解决当前痛点。
 
@@ -46,7 +46,7 @@
   * 作为其他项目的参考，可以快速的了解到项目的架构，代码规范，以及一些设计模式
   * 这么一些优秀的成果，其来源不仅仅是来自于作者本身的持续付出与积累。更是这个领域大家庭中各路优秀作者的智慧结晶
 
-## 二、👥第三方 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+## 二、👥 第三方 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、第三方管理 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -1016,7 +1016,73 @@
   CGRect(x: 20.w, y: 100.h, width: 200.w, height: 40.h)
   ```
 
-### 3、避免从 XIB/Storyboard 初始化 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 3、🖨️ 日志打印工具的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> ✅ 统一格式，自动带上文件名、行号、函数名
+>
+> ✅ 区分 `print` / `debugPrint` 使用场景
+>
+> ✅ 可以加开关（`isDebugEnabled` / `#if DEBUG`）来控制是否输出
+>
+> ✅ 日志等级清晰（info / warning / error / debug）
+
+```swift
+enum LogLevel: String {
+    case info = "ℹ️ INFO"
+    case warning = "⚠️ WARNING"
+    case error = "❌ ERROR"
+    case debug = "🐞 DEBUG"
+}
+
+struct JobsLogger {
+    // 是否开启调试模式
+    static var isDebugEnabled: Bool = true
+
+    /// 普通日志（print）
+    static func log(_ items: Any..., level: LogLevel = .info,
+                    file: String = #file, line: Int = #line, function: String = #function) {
+        #if DEBUG
+        let fileName = (file as NSString).lastPathComponent
+        let message = items.map { "\($0)" }.joined(separator: " ")
+        Swift.print("[\(level.rawValue)] \(fileName):\(line) \(function) → \(message)")
+        #endif
+    }
+
+    /// 调试日志（debugPrint）
+    static func debug(_ items: Any..., file: String = #file, line: Int = #line, function: String = #function) {
+        #if DEBUG
+        guard isDebugEnabled else { return }
+        let fileName = (file as NSString).lastPathComponent
+        Swift.debugPrint("[\(LogLevel.debug.rawValue)] \(fileName):\(line) \(function) →", terminator: " ")
+        for item in items {
+            Swift.debugPrint(item, terminator: " ")
+        }
+        Swift.debugPrint("") // 换行
+        #endif
+    }
+}
+```
+
+> ```swift
+> struct User: CustomStringConvertible, CustomDebugStringConvertible {
+>     let name: String
+>     var description: String { "👤 用户名: \(name)" }
+>     var debugDescription: String { "User(name: \(name))" }
+> }
+> 
+> let u = User(name: "Jobs")
+> 
+> JobsLogger.log("应用启动成功")  
+> // [ℹ️ INFO] AppDelegate.swift:23 application(_:didFinishLaunchingWithOptions:) → 应用启动成功
+> 
+> JobsLogger.log("网络超时", level: .warning)
+> // [⚠️ WARNING] NetworkManager.swift:87 request() → 网络超时
+> 
+> JobsLogger.debug(u)
+> // [🐞 DEBUG] ViewController.swift:45 viewDidLoad() → User(name: Jobs)
+> ```
+
+### 4、避免从 XIB/Storyboard 初始化 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 required init?(coder: NSCoder) {
@@ -1026,7 +1092,7 @@ required init?(coder: NSCoder) {
 
 
 
-## 四、其他 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -1632,7 +1698,7 @@ let names = [User(name:"A"), User(name:"B")].map(\.name)
     }
     ```
 
-### 6、[**Swift**](https://developer.apple.com/swift/) 单例的写法 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 6、[**Swift**](https://developer.apple.com/swift/) <font color=red>**单例**</font>的写法 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 #### 6.1、线程安全懒加载单例（推荐写法）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -1686,7 +1752,107 @@ MySingleton.shared.doSomething()
   }
   ```
 
-### 7、`joined()` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 7、[**Swift**](https://developer.apple.com/swift/)派发（Dispatch）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 🔹 性能对比 (快 → 慢)
+> * **静态派发**（最优化，可能内联）
+> * **虚拟派发**（vtable 查表）
+> * **协议 witness table 派发**
+> * **动态派发**（objc_msgSend）
+>
+> 🔹 开发中常用的修饰符与派发关系
+> * `final` → 强制静态派发（不能被 override）
+> * `private` / `fileprivate` → 静态派发
+> * `dynamic` → 强制动态派发（objc runtime）
+> * `@objc` → 走 objc runtime
+> * 协议方法 → witness table
+> * 值类型 (struct/enum) → 静态派发
+
+
+#### 7.1、静态派发 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 1️⃣ 编译期就确定调用哪个方法。
+>
+> 2️⃣ 运行时不需要查表，最快。
+>
+> 3️⃣ 适用场景：
+>
+> - `struct` / `enum`（值类型的方法）
+> - `final class` 或 `final` 方法
+> - `private` / `fileprivate` 方法
+> - `static` 方法
+
+ ```swift
+ struct Foo {
+     func bar() { print("bar") }
+ }
+ 
+ let foo = Foo()
+ foo.bar()   // 静态派发，编译器直接内联
+ ```
+
+#### 7.2、虚拟派发 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 1️⃣ 经典的 **vtable (虚函数表)** 派发。
+>
+> 2️⃣ 编译器会生成一个方法表，运行时查表决定调用哪个实现。
+>
+> 3️⃣ 适用场景：
+>
+> - class 的实例方法（默认）
+
+```swift
+class A {
+    func foo() { print("A") }
+}
+class B: A {
+    override func foo() { print("B") }
+}
+
+let a: A = B()
+a.foo()   // 虚拟派发，通过 vtable 查找 -> "B"
+```
+
+#### 7.3、动态派发 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 1️⃣ 通过 **Objective-C runtime 的消息发送机制 (`objc_msgSend`)**。
+>
+> 2️⃣ 性能比 vtable 慢，但更灵活。
+>
+> 3️⃣ 适用场景：
+>
+> - `@objc` 方法
+> - `dynamic` 修饰的方法
+
+```swift
+class C: NSObject {
+    @objc dynamic func foo() { print("C") }
+}
+let c = C()
+c.foo()   // objc_msgSend 动态派发
+```
+
+#### 7.4、直接派发 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 1️⃣ 用在 **协议的默认实现**，通过 **witness table (见证表)** 来调用。
+>
+> 2️⃣ 编译时不能确定实现，运行时查表决定。
+
+```swift
+protocol P {
+    func foo()
+}
+
+extension P {
+    func foo() { print("default") }
+}
+
+struct S: P {}
+let p: P = S()
+p.foo()   // witness table 派发
+```
+
+### 8、`joined()` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 正常拼接
 
@@ -1929,7 +2095,68 @@ MySingleton.shared.doSomething()
   }
   ```
 
-* 
+### 4、`print` 🆚 `debugPrint` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> ```swift
+> let array = ["A", "B", "C"]
+> 
+> print(array)       // [A, B, C]     ← 用户友好
+> debugPrint(array)  // ["A", "B", "C"] ← 包含引号，真实表达
+> ```
+>
+> ```swift
+> let str = "Hello\nWorld"
+> print(str)       // Hello
+>                  // World   ← 直接换行
+> debugPrint(str)  // "Hello\nWorld" ← 原始字符转义
+> ```
+
+* `print`（业务日志、用户可见的日志 ）
+
+  * **面向用户的输出**
+  * 输出时调用对象的 **`CustomStringConvertible`** 协议中的 `description`。
+  * 如果对象没实现 `description`，则会用默认的简短描述。
+  * **适合“给人看”的日志**。
+
+  ```swift
+  struct User: CustomStringConvertible {
+      let name: String
+      var description: String {
+          return "👤 用户名: \(name)"
+      }
+  }
+  
+  let u = User(name: "Jobs")
+  
+  print(u)
+  // 输出：👤 用户名: Jobs
+  ```
+
+* `debugPrint`（调试 / 排查问题、需要看到对象细节）
+
+  * **面向开发者/调试的输出**
+  * 输出时调用对象的 **`CustomDebugStringConvertible`** 协议中的 `debugDescription`。
+  * 如果对象没实现 `debugDescription`，会 fallback 到 `description`，再不行就输出类型信息和内存地址。
+  * **适合“调试场景”**，比如要看对象的内部细节，而不是用户友好的描述。
+
+  ```swift
+  struct User: CustomStringConvertible, CustomDebugStringConvertible {
+      let name: String
+      var description: String {
+          return "👤 用户名: \(name)"
+      }
+      var debugDescription: String {
+          return "User(name: \(name))"
+      }
+  }
+  
+  let u = User(name: "Jobs")
+  
+  print(u)       // 👤 用户名: Jobs
+  debugPrint(u)  // User(name: Jobs)
+  ```
+
+  
 
 
 
