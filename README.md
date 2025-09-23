@@ -1891,13 +1891,66 @@ p.foo()   // witness table 派发
   * 崩溃风险大（没移除、属性没标<font color=red>**KVO**</font>）
   * 不透明（调试时很难看出背后发生了啥）
 * [**Swift**](https://developer.apple.com/swift/) 为什么不直接给出<font color=red>**KVO**</font>？
-  * [**Swift**](https://developer.apple.com/swift/)  的核心设计理念是 **类型安全 + 可预测性**
-  * 因此 [**Swift**](https://developer.apple.com/swift/)  并没有把 **ObjC** 那套 runtime hack 级的东西搬过来，而是提供了 **更安全的选择**。
-* 🔑[**Swift**](https://developer.apple.com/swift/)  中替代 <font color=red>**KVO**</font> 的方式
+  * [**Swift**](https://developer.apple.com/swift/) 的核心设计理念是 **类型安全 + 可预测性**
+  * 因此 [**Swift**](https://developer.apple.com/swift/) 并没有把 **ObjC** 那套 runtime hack 级的东西搬过来，而是提供了 **更安全的选择**。
+* 🔑[**Swift**](https://developer.apple.com/swift/) 中替代 <font color=red>**KVO**</font> 的方式
   *  <a href="#属性观察器" style="font-size:17px; color:green;"><b>属性观察器</b></a>
   * `ObservableObject` + `@Published`（SwiftUI / Combine）
   * 桥接**ObjC**后使用<font color=red>**KVO**</font>
   * 开源库支持：[**Bond**](https://github.com/DeclarativeHub/Bond)、[**RxSwift**](https://github.com/ReactiveX/RxSwift)、[**ReactiveSwift**](https://github.com/ReactiveCocoa/ReactiveSwift)
+
+### 10、`try`/`throw`/`catch`/`finally` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* <font color=red>**`throw`**</font>
+
+  > 抛出一个错误（必须是 `Error` 协议类型）
+
+  ```swift
+  enum MyError: Error { case bad }
+  func work() throws {
+      throw MyError.bad
+  }
+  ```
+
+* <font color=red>**`try`**</font>
+
+  * `try` → 正常抛错，必须在 `do-catch` 里
+  * `try?` → 错误转成 `nil`
+  * `try!` → 错误会直接崩溃
+
+* <font color=red>**`catch`**</font>
+
+  ```swift
+  do {
+      try work()
+  } catch MyError.bad {
+      print("捕获到 bad 错误")
+  } catch {
+      print("未知错误: \(error)")
+  }
+  ```
+
+* **`finally`**（[**Swift**](https://developer.apple.com/swift/) 用 <font color=red>**`defer`**</font> 实现）
+
+  > **[Swift](https://developer.apple.com/swift/) 没有 `finally`关键字**
+
+  ```swift
+  // 进入 test → 注册 defer
+  // 执行 do/try，如果抛错跳到 catch
+  // 在作用域退出时，defer 一定会执行（不管有没有抛错）
+  func test() {
+      defer {
+          print("一定会执行（类似 finally）")
+      }
+  
+      do {
+          try work()
+          print("这里可能抛错")
+      } catch {
+          print("捕获错误: \(error)")
+      }
+  }
+  ```
 
 ## 五、<font color=red>**F**</font><font color=green>**A**</font><font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -2233,7 +2286,7 @@ p.foo()   // witness table 派发
   ```
 
 
-### 7、`try/throw/catch` 为什么在`Objc`里面几乎不用，而[**Swift**](https://developer.apple.com/swift/)里面却被大量使用？ <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 7、`try/throw/catch/finally` 为什么在`Objc`里面几乎不用，而[**Swift**](https://developer.apple.com/swift/)里面却被大量使用？ <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 | 特性               | Objective-C                          | Swift                                       |
 | ------------------ | ------------------------------------ | ------------------------------------------- |
@@ -2247,9 +2300,9 @@ p.foo()   // witness table 派发
 
   * Apple 官方文档明确说
 
-    * 👉 **Exceptions 用来表示程序员错误（编程 bug），不推荐用来做错误处理。**
+    * 👉 **Exceptions 用来表示程序员错误（编程 bug），不推荐用来做错误处理**
 
-    * 比如数组越界、访问野指针，都是 fatal bug，应该直接 crash，而不是 recover。
+    * 比如数组越界、访问野指针，都是 fatal bug，应该直接 crash，而不是 recover
 
     * 正常的错误返回，Apple 推广 **NSError** 模式
 
@@ -2259,9 +2312,9 @@ p.foo()   // witness table 派发
 
   * **运行时模型原因**
 
-    * `ObjC` 的异常处理开销大（基于 setjmp/longjmp），性能差。
-    * ARC 下异常还可能导致内存泄漏（对象没来得及 release）。
-    * 所以苹果官方在 ARC 文档里直接写：**不要用 @try/@catch 捕捉一般错误**。
+    * `ObjC` 的异常处理开销大（基于 setjmp/longjmp），性能差
+    * ARC 下异常还可能导致内存泄漏（对象没来得及 release）
+    * 所以苹果官方在 ARC 文档里直接写：**不要用 @try/@catch 捕捉一般错误**
 
 * [**Swift**](https://developer.apple.com/swift/)
 
@@ -2276,7 +2329,7 @@ p.foo()   // witness table 派发
       let content = try readFile("foo.txt")
       ```
 
-  * 性能：[**Swift**](https://developer.apple.com/swift/) 的 `throw` **不走 ObjC 的 setjmp/longjmp**，实现方式更接近 C++ 的零成本异常模型
+  * 性能：[**Swift**](https://developer.apple.com/swift/) 的 `throw` **不走 ObjC 的 setjmp/longjmp**，实现方式更接近 **C++ ** 的零成本异常模型
 
     * 不抛错时几乎没有开销；
     * 只有真的抛出时才走开销路径。
@@ -2289,7 +2342,7 @@ p.foo()   // witness table 派发
   * 可选多种风格
 
     * 你可以用 `try/try? / try!` 根据需要选择安全级别。
-    * 也可以把 `throws` 转换成 `Result<T, Error>`，和 async/await、Combine、[**Swift**](https://developer.apple.com/swift/) Concurrency 配合非常好。
+    * 也可以把 `throws` 转换成 `Result<T, Error>`，和 `async/await`、`Combine`、[**Swift**](https://developer.apple.com/swift/) Concurrency 配合非常好。
 
 
 
