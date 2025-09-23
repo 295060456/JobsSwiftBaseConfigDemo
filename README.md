@@ -1026,7 +1026,7 @@ required init?(coder: NSCoder) {
 
 
 
-## 四、<font color=red>**F**</font> <font color=green>**A**</font> <font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+## 四、其他 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -1258,8 +1258,258 @@ required init?(coder: NSCoder) {
 
 - `@LibraryContentBuilder`
 
+### 2、协议 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-### 2、`joined()` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+* [**Swift**](https://developer.apple.com/swift/) 的系统协议大概分几大类
+
+  * **值语义**：`RawRepresentable`, `CaseIterable`
+
+    * 类型 <-> 原始值 双向映射，常用于枚举和 ID 包装类型
+
+      ```swift
+      protocol RawRepresentable {
+          associatedtype RawValue
+          init?(rawValue: RawValue)
+          var rawValue: RawValue { get }
+      }
+      ```
+
+    * 让枚举自动生成 `allCases`，可以遍历所有 case
+
+      ```swift
+      protocol CaseIterable {
+          associatedtype AllCases: Collection where AllCases.Element == Self
+          static var allCases: AllCases { get }
+      }
+      ```
+
+  * **比较/哈希**：`Equatable`, `Comparable`, `Hashable`
+
+    * 定义判等逻辑，`==` 运算符
+
+      ```swift
+      protocol Equatable {
+          static func == (lhs: Self, rhs: Self) -> Bool
+      }
+      ```
+
+    * 提供 `<` 实现，编译器能推导出 `>`, `<=`, `>=`
+
+      ```swift
+      protocol Comparable : Equatable {
+          static func < (lhs: Self, rhs: Self) -> Bool
+      }
+      ```
+
+    * 可作为 `Set` 元素或 `Dictionary` key，要和 `Equatable` 保持一致性
+
+      ```swift
+      protocol Hashable : Equatable {
+          func hash(into hasher: inout Hasher)
+      }
+      ```
+
+  * **集合**：`Sequence`, `Collection`
+
+    * 可以被 `for-in` 遍历
+
+      ```swift
+      protocol Sequence {
+          associatedtype Iterator: IteratorProtocol
+          func makeIterator() -> Iterator
+      }
+      ```
+
+    * 支持下标、索引
+
+      ```swift
+      /// Array、Dictionary、Set 都符合
+      protocol Collection : Sequence {
+          associatedtype Index : Comparable
+          var startIndex: Index { get }
+          var endIndex: Index { get }
+          subscript(position: Index) -> Element { get }
+          func index(after i: Index) -> Index
+      }
+      ```
+
+  * **表示/调试**：`CustomStringConvertible`
+
+    * 自定义 print() 显示的内容
+
+      ```swift
+      protocol CustomStringConvertible {
+          var description: String { get }
+      }
+      ```
+
+  * **序列化**：`Codable`
+
+    * 自动/手动 JSON / Plist 序列化与反序列化
+
+      ```swift
+      typealias Codable = Decodable & Encodable
+      
+      protocol Encodable {
+          func encode(to encoder: Encoder) throws
+      }
+      protocol Decodable {
+          init(from decoder: Decoder) throws
+      }
+      ```
+
+  * **并发**：`Sendable`
+
+    * 表示类型在并发中安全传递。Swift Concurrency 的一部分
+
+      ```swift
+      protocol Sendable { }
+      ```
+
+  * **Foundation桥接**：`NSCopying`, `NSSecureCoding`
+
+    * 用于对象复制 `copy()`
+
+      ```swift
+      @objc protocol NSCopying {
+          func copy(with zone: NSZone? = nil) -> Any
+      }
+      ```
+
+    * 用于持久化、传输
+
+      ```swift
+      /// 支持安全归档 / 解档 
+      @objc protocol NSSecureCoding : NSCoding {
+          static var supportsSecureCoding: Bool { get }
+      }
+      ```
+
+*  `associatedtype`
+
+  * `associatedtype` 表示 **协议里的占位类型**。
+  * 它不是具体的类型，而是“类型参数”，等到**某个具体类型去遵守协议时再指定**。
+  * 可以理解为 **泛型的协议版**。
+  
+*  [**Swift**](https://developer.apple.com/swift/)  ↔ **Objective-C** 协议对照
+
+  | Swift 协议                                                   | 作用                     | Swift 用法                                                | Objective-C 对应                                             |
+  | ------------------------------------------------------------ | ------------------------ | --------------------------------------------------------- | ------------------------------------------------------------ |
+  | <font color=red>`Equatable`</font>                           | 判等                     | `struct A: Equatable { let id:Int }`                      | 覆写 `-isEqual:`                                             |
+  | <font color=red>`Comparable`</font>                          | 排序比较                 | `struct A: Comparable { static func < (...) -> Bool }`    | 实现 `-compare:`（返回 `NSComparisonResult`），或提供排序 block |
+  | <font color=red>`Hashable`</font>                            | 可做 `Set`/字典键        | `struct A: Hashable { var id:Int }`                       | 覆写 `-isEqual:` + `-hash`                                   |
+  | <font color=red>`Identifiable`</font>                        | 唯一标识（SwiftUI/List） | `struct Row: Identifiable { let id: UUID }`               | 自定义 `-identifier` 方法（无统一协议），或用主键字段        |
+  | `RawRepresentable`                                           | 原始值映射               | `enum T:Int { case a=1 }`（自动符合）                     | `NS_ENUM(NSInteger, T){ T_a=1 }` + 自写“原始值 ↔ 枚举”转换函数 |
+  | `CaseIterable`                                               | 枚举遍历                 | `enum T: CaseIterable { case a,b }`                       | 无等价；手写 `+allValues` 返回数组                           |
+  | <font color=green>`CustomStringConvertible`</font>           | 打印友好文案             | `var description:String { ... }`                          | 覆写 `-description`                                          |
+  | <font color=green>`CustomDebugStringConvertible`</font>      | 调试文案                 | `var debugDescription:String { ... }`                     | 覆写 `-debugDescription`                                     |
+  | <font color=purple >`Error`</font>                           | 可抛出错误               | `enum E: Error { case bad }`                              | 约定 `NSError`（域/码/信息），或自定义 `NSError` 工厂        |
+  | <font color=purple >`LocalizedError`</font>                  | 本地化错误               | `var errorDescription:String?`                            | 用 `NSError` 的 `localizedDescription`                       |
+  | `Codable` (`Encodable`/`Decodable`)                          | JSON/Plist 编解码        | `struct A: Codable { ... }`                               | `NSSecureCoding`（归档）或第三方 JSON（YYModel/MJExtension），或手写 KVC |
+  | <font color=blue>`Sequence`</font>                           | 可 for-in                | `struct S: Sequence { func makeIterator()->I }`           | 遵循 `NSFastEnumeration`（如 `NSArray`）                     |
+  | <font color=blue>`IteratorProtocol`</font>                   | 迭代器                   | `struct I: IteratorProtocol { mutating func next()->T? }` | 自定义枚举器对象，配合 `NSFastEnumeration`                   |
+  | <font color=blue>`Collection`</font>/<br>`BidirectionalCollection`/<br>`RandomAccessCollection` | 可下标/索引集合          | `struct C: Collection { ... }`                            | `NSArray`/`NSDictionary` 系列；自定义需实现 `NSFastEnumeration` + 下标方法 |
+  | `ExpressibleBy*Literal` 系列                                 | 字面量初始化             | `struct A: ExpressibleByStringLiteral { ... }`            | 无等价；提供工厂方法或分类初始化                             |
+  | `Sendable`                                                   | 并发可安全传递           | `struct A: Sendable { ... }`                              | 无等价；靠线程安全约束（不可变/锁/队列）                     |
+  | `NSCopying`                                                  | 拷贝                     | `class A: NSCopying { -copyWithZone: }`                   | 同名协议（Foundation）                                       |
+  | `NSMutableCopying`                                           | 可变拷贝                 | `-mutableCopyWithZone:`                                   | 同名协议（Foundation）                                       |
+  | `NSSecureCoding`                                             | 安全归档                 | `+supportsSecureCoding` / 编解码                          | 同名协议（Foundation）                                       |
+  | `NSObjectProtocol`                                           | 基础行为                 | ——                                                        | 同名协议（Objective-C 基础）                                 |
+
+### 3、属性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 3.1、`存储属性` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 真正存放在内存里的变量/常量。可以是 `var`（可变）或 `let`（不可变）。
+>
+> <font color=red>只能定义在 **类** 和 **结构体** 里</font>。
+>
+> `let` 的存储属性只能在初始化时赋值。
+>
+> 类里的存储属性如果不是可选，就必须在 `init` 前全部初始化。
+
+```swift
+struct User {
+    var name: String      // 可变存储属性
+    let id: Int           // 不可变存储属性
+}
+```
+
+#### 3.2、`计算属性` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 不直接存储值，而是通过 **getter/setter** 计算出来。
+>
+> <font color=red>可以定义在 **类、结构体、枚举**里</font>。
+
+```swift
+struct Rectangle {
+    var width: Double
+    var height: Double
+    
+    var area: Double {        // 只读计算属性
+        width * height
+    }
+    
+    var halfWidth: Double {   // 可读写计算属性
+        get { width / 2 }
+        set { width = newValue * 2 }
+    }
+}
+```
+
+#### 3.3、`类型属性` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 属于 **类型本身**，而不是实例。类似于 OC/Java 的 `static` 成员。
+>
+> 用关键字： `static`（值不可被子类重写） 或 `class` （只能用于类，允许子类重写）。
+
+```swift
+struct Config {
+    static let maxCount = 10   // 类型属性
+}
+
+print(Config.maxCount)   // 直接通过类型访问
+```
+
+#### 3.4、`延迟存储属性` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 用 `lazy` 修饰，<font color=red>**只有第一次访问时才初始化**</font>。
+>
+> 常用于初始化成本较高，或者依赖外部数据的属性。
+
+```swift
+class DataManager {
+    lazy var data = loadData()   // 第一次访问时才执行 loadData()
+    
+    func loadData() -> [String] {
+        print("Loading data...")
+        return ["A", "B", "C"]
+    }
+}
+```
+
+#### 3.5、`属性观察器` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 可以给存储属性加 `willSet` / `didSet`。用于监控属性值变化。
+>
+> <font color=red>**不能直接用在计算属性上**</font>（计算属性可以直接在 `set` 里写逻辑）。
+>
+> `willSet` 默认参数名 `newValue`，`didSet` 默认参数名 `oldValue`。
+
+```swift
+class Person {
+    var age: Int = 0 {
+        willSet {
+            print("即将设置 age = \(newValue)")
+        }
+        didSet {
+            print("已设置 age，从 \(oldValue) 变为 \(age)")
+        }
+    }
+}
+```
+
+### 4、`joined()` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 正常拼接
 
@@ -1281,6 +1531,169 @@ required init?(coder: NSCoder) {
 
   
 
+## 五、<font color=red>**F**</font> <font color=green>**A**</font> <font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
+### 1、[**Swift**](https://developer.apple.com/swift/) `属性观察器` 🆚 Objective-C `KVO` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+| 特性     | Swift 属性观察器             | OC KVO                     |
+| -------- | ---------------------------- | -------------------------- |
+| 监听范围 | 自身属性                     | 其他对象属性               |
+| 实现方式 | 编译器注入                   | Runtime 动态子类           |
+| 简洁度   | 简单（`willSet` / `didSet`） | 繁琐（add/removeObserver） |
+| 使用场景 | 内部逻辑、状态更新           | 跨对象监听、数据绑定       |
+| 可替代性 | 不能完全替代 KVO             | 比观察器更强大，但更复杂   |
+
+* [**Swift**](https://developer.apple.com/swift/) `属性观察器`：`willSet` / `didSet` → **轻量级、自用**的属性变化钩子。
+
+  > **作用范围**：只能用于 **本类属性**。
+  >
+  > **触发时机**：属性被直接赋值时触发。
+  >
+  > **感知能力**：只能感知“我自己的属性变化”。
+  >
+  > **实现机制**：编译器在 setter 后面自动插入逻辑。
+  >
+  > **限制**：不能用在计算属性上（因为计算属性你可以直接在 `set` 写逻辑）。
+
+  ```swift
+  class Person {
+      var age: Int = 0 {
+          willSet {
+              print("即将设置 age = \(newValue)")
+          }
+          didSet {
+              print("age 从 \(oldValue) 改为 \(age)")
+          }
+      }
+  }
+  ```
+
+* **Objective-C** `KVO` ：**通用、跨对象**的观察机制。
+
+  > **作用范围**：可以观察 **其他对象的属性**。
+  >
+  > **触发时机**：不仅直接赋值会触发，KVC（`setValue:forKey:`）、有时 even Core Data 这种底层都能 hook。
+  >
+  > **感知能力**：跨对象，只要对象支持 KVO，就能监听。
+  >
+  > **实现机制**：运行时动态派生子类 + 方法替换（isa-swizzling）。
+  >
+  > **限制**：
+  >
+  > - API 比较繁琐。
+  > - 线程安全和崩溃风险需要自己处理。
+
+  ```objective-c
+  [self.person addObserver:self
+                forKeyPath:@"age"
+                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
+                   context:nil];
+  
+  - (void)observeValueForKeyPath:(NSString *)keyPath
+                        ofObject:(id)object
+                          change:(NSDictionary<NSKeyValueChangeKey,id> *)change
+                         context:(void *)context {
+      NSLog(@"age 变化: %@", change);
+  }
+  ```
+
+### 2、Swift 中 `struct` 和 `class` 的主要区别 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 值类型 vs 引用类型
+
+  > `struct` 是 **值类型**：赋值/传参时会复制一份。
+  >
+  > `class` 是 **引用类型**：赋值/传参时只是引用同一个对象。
+
+  ```
+  struct S { var x = 0 }
+  class C { var x = 0 }
+  
+  var s1 = S()
+  var s2 = s1
+  s2.x = 10
+  print(s1.x)  // 0   （互不影响）
+  
+  var c1 = C()
+  var c2 = c1
+  c2.x = 10
+  print(c1.x)  // 10  （指向同一个对象）
+  
+  ```
+
+* 继承
+
+  > `struct` ❌ 不支持继承
+  >
+  > `class` ✅ 可以继承
+
+* ARC 管理
+
+  > `struct`：因为是值类型，不需要 ARC 管理，生命周期简单。
+  >
+  > `class`：由 ARC 管理，可能有 **循环引用** 问题，需要 `weak` / `unowned`。
+
+* 可变性
+
+  > `struct`：在 `let` 常量下是完全不可变的（包括属性）。
+  >
+  > `class`：在 `let` 常量下对象本身不可变，但属性仍然可改。
+
+  ```
+  struct S {
+      var x = 0
+  }
+  let s = S()
+  // s.x = 10  ❌ 不允许
+  
+  class C {
+      var x = 0
+  }
+  let c = C()
+  c.x = 10  ✅ 可以改属性
+  ```
+
+* 类型特性
+
+  > `struct`：自动有 **逐一成员初始化器（memberwise init）**。
+  >
+  > `class`：没有，需要自己写 `init`
+
+  ```
+  struct User { var name: String; var age: Int }
+  let u = User(name: "Jobs", age: 18)  ✅
+  ```
+
+* 语义
+
+  * `struct` 更偏向 **数据模型（封装数据 + 小逻辑）**
+  * `class` 更偏向 **对象、身份、继承、多态**
+
+#### 🔹 <font color=blue>**为什么推荐：多用 `struct`，少用 `class`？**</font>
+
+* **安全性更高（值语义避免共享副作用）**
+  * 值类型在传递时复制，避免了对象在多处被修改带来的 bug
+  * 更容易推断代码行为
+
+* **没有循环引用问题**
+  * <font color=red>**`struct` 不依赖 ARC，不会因为互相持有导致内存泄漏**</font>
+
+* **性能更优（很多情况下）**
+  * 小的 `struct` 会被编译器优化为栈上分配，访问速度快
+  * 避免了 class 的 heap 分配和 ARC 引用计数开销
+
+* **语义更清晰**
+  * `struct` 强调值的不可变性，适合建模“数据”。
+  * `class` 强调身份和共享，适合建模“对象”。
+
+* **和 Swift 标准库一致**
+  * Swift 里大量核心类型都是 `struct`：`String`, `Array`, `Dictionary`, `Set`
+  * Apple 官方风格就是：能用值语义的地方优先用 `struct`
+
+#### 📌 <font color=blue>**什么时候一定要用 `class`?**</font>
+
+* 需要 **继承**
+* 需要 **引用语义**（比如 UI 控件，多处共享状态）
+* 需要和 **Objective-C 桥接**（OC 里只有类）
 
 <a id="🔚" href="#前言" style="font-size:17px; color:green; font-weight:bold;">我是有底线的👉点我回到首页</a>
