@@ -2232,7 +2232,71 @@ p.foo()   // witness table 派发
   }
   ```
 
-  
+
+### 7、`try/throw/catch` 为什么在`Objc`里面几乎不用，而[**Swift**](https://developer.apple.com/swift/)里面却被大量使用？ <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+| 特性               | Objective-C                          | Swift                                       |
+| ------------------ | ------------------------------------ | ------------------------------------------- |
+| 异常 (`try/catch`) | 有，但性能差，ARC 下危险，官方不推荐 | 有，零成本设计，推荐用于“可预期错误”        |
+| 推荐方式           | `NSError **` 输出参数                | `throws` + `try`，或 `Result<T,Error>`      |
+| 编译器检查         | ❌ 没有                               | ✅ 调用点必须显式 `try`                      |
+| 典型场景           | 系统 API 报错：传 `NSError**`        | 文件 IO / JSON 解析 / 网络请求 等可恢复错误 |
+| 异常语义           | Fatal bug，不建议捕获                | 业务逻辑错误，必须处理                      |
+
+* `Objc`
+
+  * Apple 官方文档明确说
+
+    * 👉 **Exceptions 用来表示程序员错误（编程 bug），不推荐用来做错误处理。**
+
+    * 比如数组越界、访问野指针，都是 fatal bug，应该直接 crash，而不是 recover。
+
+    * 正常的错误返回，Apple 推广 **NSError** 模式
+
+      ```objective-c
+      - (BOOL)writeToFile:(NSString *)path error:(NSError **)error;
+      ```
+
+  * **运行时模型原因**
+
+    * `ObjC` 的异常处理开销大（基于 setjmp/longjmp），性能差。
+    * ARC 下异常还可能导致内存泄漏（对象没来得及 release）。
+    * 所以苹果官方在 ARC 文档里直接写：**不要用 @try/@catch 捕捉一般错误**。
+
+* [**Swift**](https://developer.apple.com/swift/)
+
+  * 安全性 & 显式性
+
+    * [**Swift**](https://developer.apple.com/swift/) 不希望错误通过魔法方式“悄悄发生”，而是要你在调用点显式写 `try`。
+
+    * 这样一眼就能看出这个函数可能失败
+
+      ```swift
+      func readFile(_ path: String) throws -> String
+      let content = try readFile("foo.txt")
+      ```
+
+  * 性能：[**Swift**](https://developer.apple.com/swift/) 的 `throw` **不走 ObjC 的 setjmp/longjmp**，实现方式更接近 C++ 的零成本异常模型
+
+    * 不抛错时几乎没有开销；
+    * 只有真的抛出时才走开销路径。
+
+  * 和类型系统结合
+
+    * [**Swift**](https://developer.apple.com/swift/) 的 `throws` 是函数签名的一部分，编译器会强制你处理。
+    * `Objc` 的 **NSError** 靠文档和约定，没人强制。
+
+  * 可选多种风格
+
+    * 你可以用 `try/try? / try!` 根据需要选择安全级别。
+    * 也可以把 `throws` 转换成 `Result<T, Error>`，和 async/await、Combine、[**Swift**](https://developer.apple.com/swift/) Concurrency 配合非常好。
+
+
+
+
+
+
+
 
 
 
