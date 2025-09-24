@@ -1104,6 +1104,10 @@ required init?(coder: NSCoder) {
 
 ### 1、注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
+> [**Swift**](https://developer.apple.com/swift/) 不支持运行时反射注解
+
+#### 1.1、系统注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
 - `@available(...)` / `@unavailable(...)`
 
   > 控制平台/版本可用性、弃用信息
@@ -1331,6 +1335,40 @@ required init?(coder: NSCoder) {
 - `@CommandsBuilder`
 
 - `@LibraryContentBuilder`
+
+#### 1.2、自定义注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **`propertyWrapper`**
+
+  ```swift 
+  @propertyWrapper
+  struct Trimmed {
+      private var value: String = ""
+      var wrappedValue: String {
+          get { value }
+          set { value = newValue.trimmingCharacters(in: .whitespacesAndNewlines) }
+      }
+  }
+  
+  struct User {
+      @Trimmed var name: String
+  }
+  
+  var u = User()
+  u.name = "   Jobs   "
+  print(u.name)  // "Jobs"
+  ```
+
+* 宏 ([**Swift**](https://developer.apple.com/swift/) 5.9+ / Swift Macros)
+
+  > [**Swift**](https://developer.apple.com/swift/) 5.9 引入了 **宏系统**，可以写类似 `@CodingKeys`、`@AddCompletionHandler` 的 **编译期注解/代码生成**。
+  >  例如 Apple 提供的 `@freestanding(expression)` / `@attached(peer)` 等。
+  >  未来这就是 [**Swift**](https://developer.apple.com/swift/) 版的“注解系统”。
+
+  ```swift
+  @MyMacro
+  struct Foo { ... }
+  ```
 
 ### 2、协议 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -2404,6 +2442,62 @@ class DisplayDriver {
 
 * **纠偏策略**：记录基准 `Date/Instant`，每次计算“应该的下一次”而非<u>**当前时间 + 固定周期**</u>
 
+### 12、` enum codingkeys : String, CodingKey` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 当需要让一个 `struct` 或 `class` 遵守 `Codable`（即 `Encodable & Decodable`）协议时，[**Swift**](https://developer.apple.com/swift/)  默认会做 **属性名 <-> JSON key** 的自动映射。
+>
+> 但是有些情况：
+>
+> - 你的属性名和 **JSON** 字段名 **不一样**
+> - 你想 **忽略某些字段**
+> - 你需要 **手动控制映射**
+>
+> 这时候就需要写一个 **嵌套枚举 `CodingKeys`**，它遵循 `CodingKey` 协议
+
+```json
+{
+  "hi": "Hello",
+  "full_name": "Jobs"
+}
+```
+
+* 如果属性 **不写在 `CodingKeys` 里**，就不会被编解码
+
+  ```swift
+  struct Person: Codable {
+      var greeting: String
+      var name: String
+      var age: Int   // 👈 想忽略
+  
+      enum CodingKeys: String, CodingKey {
+          case greeting, name  // age 不写 → 不会出现在 JSON
+      }
+  }
+  ```
+
+* 进阶：手动实现 `init(from:)`
+
+  ```swift
+  /// CodingKeys 也常配合手写解析
+  struct Person: Codable {
+      var greeting: String
+      var name: String
+  
+      enum CodingKeys: String, CodingKey {
+          case greeting
+          case name
+      }
+  
+      init(from decoder: Decoder) throws {
+          let container = try decoder.container(keyedBy: CodingKeys.self)
+          greeting = try container.decode(String.self, forKey: .greeting)
+          name = try container.decode(String.self, forKey: .name)
+      }
+  }
+  ```
+
+### 13、`Subscript` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
 ## 五、<font color=red>**F**</font><font color=green>**A**</font><font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、[**Swift**](https://developer.apple.com/swift/) 纯类 🆚 `NSObject` 子类 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -2476,11 +2570,11 @@ class DisplayDriver {
 
 * 值类型 vs 引用类型
 
-  > `struct` 是 **值类型**：赋值/传参时会复制一份。
+  > <font color=red>`struct` 是 **值类型**</font>：赋值/传参时会复制一份。
   >
-  > `class` 是 **引用类型**：赋值/传参时只是引用同一个对象。
+  > <font color=red>`class` 是 **引用类型**</font>：赋值/传参时只是引用同一个对象。
 
-  ```
+  ```swift
   struct S { var x = 0 }
   class C { var x = 0 }
   
@@ -2493,9 +2587,8 @@ class DisplayDriver {
   var c2 = c1
   c2.x = 10
   print(c1.x)  // 10  （指向同一个对象）
-  
   ```
-
+  
 * 继承
 
   > `struct` ❌ 不支持继承
@@ -2514,7 +2607,7 @@ class DisplayDriver {
   >
   > `class`：在 `let` 常量下对象本身不可变，但属性仍然可改。
 
-  ```
+  ```swift
   struct S {
       var x = 0
   }
@@ -2534,7 +2627,7 @@ class DisplayDriver {
   >
   > `class`：没有，需要自己写 `init`
 
-  ```
+  ```swift
   struct User { var name: String; var age: Int }
   let u = User(name: "Jobs", age: 18)  ✅
   ```
@@ -2544,7 +2637,7 @@ class DisplayDriver {
   * `struct` 更偏向 **数据模型（封装数据 + 小逻辑）**
   * `class` 更偏向 **对象、身份、继承、多态**
 
-#### 🔹 <font color=blue>**为什么Swift推荐：多用 `struct`，少用 `class`？**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 🔹 <font color=blue>**为什么[Swift](https://developer.apple.com/swift/) 推荐：多用 `struct`，少用 `class`？**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **安全性更高（值语义避免共享副作用）**
   * 值类型在传递时复制，避免了对象在多处被修改带来的 bug
@@ -2561,7 +2654,7 @@ class DisplayDriver {
   * `struct` 强调值的不可变性，适合建模“数据”。
   * `class` 强调身份和共享，适合建模“对象”。
 
-* **和 Swift 标准库一致**
+* **和 [Swift](https://developer.apple.com/swift/)  标准库一致**
   * [**Swift**](https://developer.apple.com/swift/) 里大量核心类型都是 `struct`：`String`, `Array`, `Dictionary`, `Set`
   * Apple 官方风格就是：能用值语义的地方优先用 `struct`
 
@@ -2569,13 +2662,13 @@ class DisplayDriver {
 
 * 需要 **继承**
 * 需要 **引用语义**（比如 UI 控件，多处共享状态）
-* 需要和 **Objective-C 桥接**（**ObjC** 里只有类）
+* 需要和 **ObjC 桥接**（**ObjC** 里只有类）
 
 ### 4、[**Swift**](https://developer.apple.com/swift/) 可以像**ObjC**那样访问内存吗？<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-> **可以，但受更多限制**，因为 Swift 默认是安全的
+> **可以，但受更多限制**，因为 [**Swift**](https://developer.apple.com/swift/)  默认是安全的
 >
-> 如果确实需要（比如性能优化、与 C/**ObjC** 库交互），可以用 **`UnsafePointer` 系列**。
+> 如果确实需要（比如性能优化、与 **C**/**ObjC** 库交互），可以用 **`UnsafePointer` 系列**。
 
 #### 4.1、[**Swift**](https://developer.apple.com/swift/) 内存访问方式 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -2669,7 +2762,7 @@ class DisplayDriver {
   * **面向开发者/调试的输出**
   * 输出时调用对象的 **`CustomDebugStringConvertible`** 协议中的 `debugDescription`。
   * 如果对象没实现 `debugDescription`，会 fallback 到 `description`，再不行就输出类型信息和内存地址。
-  * **适合“调试场景”**，比如要看对象的内部细节，而不是用户友好的描述。
+  * **适合<u>调试场景</u>**，比如要看对象的内部细节，而不是用户友好的描述。
 
   ```swift
   struct User: CustomStringConvertible, CustomDebugStringConvertible {
@@ -2691,7 +2784,7 @@ class DisplayDriver {
 
 > **不继承 `NSObject`**：用于 **纯 [Swift](https://developer.apple.com/swift/)  逻辑/模型**，轻量、性能好、安全
 >
-> **继承 `NSObject`**：用于 **UI 层 / 和 Objective-C 互操作**，需要 **KVC/KVO/Selector** 或使用 Foundation/UIKit API 时必须用
+> **继承 `NSObject`**：用于 **UI 层 / 和 Objc 互操作**，需要 **KVC/KVO/Selector** 或使用 **Foundation/UIKit API** 时必须用
 
 * [**Swift**](https://developer.apple.com/swift/) 纯类（不继承 `NSObject`）
 
@@ -2724,7 +2817,7 @@ class DisplayDriver {
   >
   > 3️⃣ 可以使用 **Selector / perform**
   >
-  > 4️⃣ 与 **Objective-C API 无缝互通**（`UIKit/AppKit` 里绝大多数 API 要求 `NSObject`）
+  > 4️⃣ 与 **Objc API 无缝互通**（`UIKit/AppKit` 里绝大多数 API 要求 `NSObject`）
   >
   > 5️⃣ 需要 ARC 管理，有一定性能开销
   >
