@@ -1566,24 +1566,40 @@ class DataManager {
 
 #### 3.5、<font id=属性观察器>`属性观察器`</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-> 可以给存储属性加 `willSet` / `didSet`。用于监控属性值变化。
+> 1️⃣ 可以给存储属性加 `willSet` / `didSet`。用于监控属性值变化
 >
-> <font color=red>**不能直接用在计算属性上**</font>（计算属性可以直接在 `set` 里写逻辑）。
->
-> `willSet` 默认参数名 `newValue`，`didSet` 默认参数名 `oldValue`。
+> 2️⃣ <font color=red>**不能直接用在计算属性上**</font>（计算属性可以直接在 `set` 里写逻辑）
 
-```swift
-class Person {
-    var age: Int = 0 {
-        willSet {
-            print("即将设置 age = \(newValue)")
-        }
-        didSet {
-            print("已设置 age，从 \(oldValue) 变为 \(age)")
-        }
-    }
-}
-```
+*  默认名
+
+  > 在 [**Swift**](https://developer.apple.com/swift/) 的 **属性观察器** 里，如果不写参数名，系统默认给两个名字
+  >
+  > - `willSet` 里面的新值叫 **`newValue`**
+  > - `didSet` 里面的旧值叫 **`oldValue`**
+
+  ```swift
+  var score: Int = 0 {
+      willSet {   // 这里的 newValue 默认存在
+          print("即将改成 \(newValue)")
+      }
+      didSet {    // 这里的 oldValue 默认存在
+          print("从 \(oldValue) 改成 \(score)")
+      }
+  }
+  ```
+
+* 自定义参数名
+
+  ```swift
+  var score: Int = 0 {
+      willSet(newScore) {
+          print("即将改成 \(newScore)")   // 用 newScore 代替 newValue
+      }
+      didSet(previousScore) {
+          print("从 \(previousScore) 改成 \(score)") // 用 previousScore 代替 oldValue
+      }
+  }
+  ```
 
 ### 4、[**Swift**](https://developer.apple.com/swift/) 闭包 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -1593,19 +1609,89 @@ class Person {
 
 #### 4.2、[**Swift**](https://developer.apple.com/swift/) 里的闭包分类 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-##### 4.2.1、尾随闭包（语法糖） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 4.2.1、🌪️ 尾随闭包（语法糖） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 纯粹是 **语法糖**，和闭包本质没区别。
 > 用在函数的最后一个参数是闭包时，让代码更简洁。
 
-```swift
-func doSomething(action: () -> Void) { action() }
+* 单个闭包参数
 
-// 尾随闭包写法
-doSomething {
-    print("尾随闭包执行")
-}
-```
+  ```swift
+  func doSomething(action: () -> Void) { action() }
+  
+  // 尾随闭包写法
+  doSomething {
+      print("尾随闭包执行")
+  }
+  ```
+
+* 多个参数 + 最后一个是闭包
+
+  ```swift
+  func fetchData(from url: String, completion: (String) -> Void) {
+      print("开始请求：\(url)")
+      completion("服务端返回数据")
+  }
+  
+  // 调用：只有最后一个闭包能用尾随闭包语法
+  fetchData(from: "https://api.xxx.com") { data in
+      print("结果：\(data)")
+  }
+  ```
+
+* 多个参数，闭包不在最后
+
+  ```swift
+  func doSomething(first: () -> Void, second: () -> Void) {
+      first()
+      second()
+  }
+  
+  // 调用
+  doSomething(first: {
+      print("第一个闭包")
+  }, second: {
+      print("第二个闭包")
+  })
+  ```
+
+* 多个闭包参数，最后一个用尾随闭包
+
+  ```swift
+  func animate(duration: Double,
+               animations: () -> Void,
+               completion: () -> Void) {
+      print("动画开始，持续 \(duration)s")
+      animations()
+      completion()
+  }
+  
+  // 调用：最后一个闭包可以尾随
+  animate(duration: 0.3, animations: {
+      print("执行动画内容")
+  }) {
+      print("动画结束")
+  }
+  ```
+
+* 多个尾随闭包（Swift 5.3+ 新语法）
+
+  ```swift
+  func animate(duration: Double,
+               animations: () -> Void,
+               completion: () -> Void) {
+      print("动画开始，持续 \(duration)s")
+      animations()
+      completion()
+  }
+  
+  // 调用：两个闭包都能用尾随闭包写法
+  animate(duration: 0.3) {
+      print("执行动画内容")
+  } completion: {
+      print("动画结束")
+  }
+  ```
 
 ##### 4.2.2、逃逸`@escaping`/非逃逸闭包 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
