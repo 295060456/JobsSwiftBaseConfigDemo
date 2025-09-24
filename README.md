@@ -1336,7 +1336,7 @@ required init?(coder: NSCoder) {
 
 - `@LibraryContentBuilder`
 
-#### 1.2、自定义注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 1.2、🙋 <font color=red>**自定义注解**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **`propertyWrapper`**
 
@@ -1534,13 +1534,13 @@ required init?(coder: NSCoder) {
 
 #### 3.1、`存储属性` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-> 真正存放在内存里的变量/常量。可以是 `var`（可变）或 `let`（不可变）
+> 1️⃣ 真正存放在内存里的变量/常量。可以是 `var`（可变）或 `let`（不可变）
 >
-> <font color=red>只能定义在 **类** 和 **结构体** 里</font>
+> 2️⃣ <font color=red>只能定义在 **类** 和 **结构体** 里</font>
 >
-> `let` 的存储属性只能在初始化时赋值
+> 3️⃣ `let` 的存储属性只能在初始化时赋值
 >
-> 类里的存储属性如果不是可选，就必须在 `init` 前全部初始化
+> 4️⃣ 类里的存储属性如果不是可选，就必须在 `init` 前全部初始化
 
 ```swift
 struct User {
@@ -1551,9 +1551,9 @@ struct User {
 
 #### 3.2、`计算属性` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-> 不直接存储值，而是通过 **getter/setter** 计算出来。
+> 1️⃣ 不直接存储值，而是通过 **getter/setter** 计算出来。
 >
-> <font color=red>可以定义在 **类、结构体、枚举**里</font>。
+> 2️⃣ <font color=red>可以定义在 **类、结构体、枚举**里</font>。
 
 ```swift
 struct Rectangle {
@@ -1573,9 +1573,9 @@ struct Rectangle {
 
 #### 3.3、`类型属性` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-> 属于 **类型本身**，而不是实例。类似于 **ObjC**/Java 的 `static` 成员。
+> 1️⃣ 属于 **类型本身**，而不是实例。类似于 **ObjC**/**Java** 的 `static` 成员。
 >
-> 用关键字： `static`（值不可被子类重写） 或 `class` （只能用于类，允许子类重写）。
+> 2️⃣ 用关键字： <font color=red>**`static`**</font>（值不可被子类重写） 或 <font color=red>**`class`**</font> （只能用于类，允许子类重写）。
 
 ```swift
 struct Config {
@@ -1647,7 +1647,7 @@ class DataManager {
 
 #### 4.2、[**Swift**](https://developer.apple.com/swift/) 里的闭包分类 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-##### 4.2.1、🌪️ 尾随闭包（语法糖） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 4.2.1、🌪️ <font id=尾随闭包>**尾随闭包（语法糖）**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 纯粹是 **语法糖**，和闭包本质没区别。
 > 用在函数的最后一个参数是闭包时，让代码更简洁。
@@ -1712,7 +1712,7 @@ class DataManager {
   }
   ```
 
-* 多个尾随闭包（Swift 5.3+ 新语法）
+* 多个尾随闭包（[**Swift**](https://developer.apple.com/swift/) 5.3+ 新语法）
 
   ```swift
   func animate(duration: Double,
@@ -1731,15 +1731,15 @@ class DataManager {
   }
   ```
 
-##### 4.2.2、逃逸`@escaping`/非逃逸闭包 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 4.2.2、逃逸<font color=red>**`@escaping`**</font>/非逃逸闭包 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-> 逃逸闭包用 `@escaping` 标记，会在函数返回后才调用
+> 1️⃣ 逃逸闭包用 <font color=red>**`@escaping`**</font> 标记，会在函数返回后才调用
 >
-> 常见于 **异步回调/存储/跨越生命周期**、任务完成时通知
+> 2️⃣ 常见于 **异步回调/存储/跨越生命周期**、任务完成时通知
 >
-> **默认**：参数闭包是**非逃逸**（函数体内调用完就结束）
+> 3️⃣ **默认**：参数闭包是**非逃逸**（函数体内调用完就结束）
 >
-> **判断口诀**：闭包被**保存**（属性/数组）或**异步**调用 ⇒ `@escaping`
+> 4️⃣ **判断口诀**：闭包被**保存**（属性/数组）或**异步**调用 ⇒ <font color=red>**`@escaping`**</font>
 
 ```swift
 func asyncWork(completion: @escaping (String) -> Void) {
@@ -1749,11 +1749,11 @@ func asyncWork(completion: @escaping (String) -> Void) {
 }
 ```
 
-##### 4.2.3、自动闭包`@autoclosure`  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 4.2.3、自动闭包<font color=red>**`@autoclosure`**</font>  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-> 用 `@autoclosure` 标记，**把一个表达式自动包装成闭包**。
+> 1️⃣ 用 <font color=red>**`@autoclosure`**</font> 标记，**把一个表达式自动包装成闭包**。
 >
-> 常用于懒执行、断言、日志。
+> 2️⃣ 常用于懒执行、断言、日志。
 
 ```swift
 func log(_ msg: @autoclosure () -> String) {
@@ -1763,26 +1763,28 @@ func log(_ msg: @autoclosure () -> String) {
 log("Hello")  // 自动变成 { "Hello" }
 ```
 
-#### 4.3、闭包简写 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 4.3、闭包的简写 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-```swift
-// 完整
-let f: (Int, Int) -> Int = { (a: Int, b: Int) -> Int in return a + b }
+* [**尾随闭包的调用简写**](#尾随闭包)
 
-// 省类型 + 省 return（单表达式自动返回）
-let f1 = { a, b in a + b }
-
-// 参数占位简写
-let f2: (Int, Int) -> Int = { $0 + $1 }
-
-// 运算符函数（此时涉及到运算符/函数的重载）
-// Swift 里的 + 所有定义都是二元函数：(T, T) -> T。
-let f3 = (+)
-
-// KeyPath 转函数（Swift 5.2+）
-struct User { let name: String }
-let names = [User(name:"A"), User(name:"B")].map(\.name)
-```
+* ```swift
+  // 完整
+  let f: (Int, Int) -> Int = { (a: Int, b: Int) -> Int in return a + b }
+  
+  // 省类型 + 省 return（单表达式自动返回）
+  let f1 = { a, b in a + b }
+  
+  // 参数占位简写
+  let f2: (Int, Int) -> Int = { $0 + $1 }
+  
+  // 运算符函数（此时涉及到运算符/函数的重载）
+  // Swift 里的 + 所有定义都是二元函数：(T, T) -> T。
+  let f3 = (+)
+  
+  // KeyPath 转函数（Swift 5.2+）
+  struct User { let name: String }
+  let names = [User(name:"A"), User(name:"B")].map(\.name)
+  ```
 
 ### 5、[**Swift**](https://developer.apple.com/swift/) 运算符重载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -2023,7 +2025,7 @@ p.foo()   // witness table 派发
   * 桥接**ObjC**后使用<font color=red>**KVO**</font>
   * 开源库支持：[**Bond**](https://github.com/DeclarativeHub/Bond)、[**RxSwift**](https://github.com/ReactiveX/RxSwift)、[**ReactiveSwift**](https://github.com/ReactiveCocoa/ReactiveSwift)
 
-### 10、`try`/`throw`/`catch`/`finally` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 10、`throw`/`do`/`try`/`catch`/`finally` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * <font color=red>**`throw`**</font>
 
@@ -2036,9 +2038,20 @@ p.foo()   // witness table 派发
   }
   ```
 
+* <font color=red>**`do`**</font>
+
+  ```swift
+do {
+      let data = try encoder.encode(self)  // 可能抛错
+      print("成功: \(data)")
+  } catch {
+      print("失败: \(error)")
+  }
+  ```
+
 * <font color=red>**`try`**</font>
 
-  * `try` → 正常抛错，必须在 `do-catch` 里
+  * `try` → 正常抛错，必须在 `do-catch` 或者 `throws` 函数里
   * `try?` → 错误转成 `nil`
   * `try!` → 错误会直接崩溃
 
@@ -2334,7 +2347,7 @@ class DisplayDriver {
   - 后台音频、VoIP、定位、蓝牙等**特定**后台模式、
   - Push/静默推送（APNs + Background Fetch）。**不要**试图用定时器“偷跑”后台——会被系统杀/限。
 
-#### 11.3、RunLoop 模式与线程模型 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 11.3、`RunLoop` 模式与线程模型 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **模式**：
 
@@ -2831,7 +2844,7 @@ class DisplayDriver {
   ```
 
 
-### 7、`try/throw/catch/finally` 为什么在**Objc**里面几乎不用，而[**Swift**](https://developer.apple.com/swift/)里面却被大量使用？<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 7、`throw`/`do`/`try`/`catch`/`finally` 为什么在**Objc**里面几乎不用，而[**Swift**](https://developer.apple.com/swift/)里面却被大量使用？<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 | 特性               | Objective-C                          | Swift                                       |
 | ------------------ | ------------------------------------ | ------------------------------------------- |
