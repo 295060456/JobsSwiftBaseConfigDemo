@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0438A71C2E8400E7008F763B /* JobsCorConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0438A71B2E8400E3008F763B /* JobsCorConst.swift */; };
 		0442717B2E8139CF0084B25C /* ColorAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0442717A2E8139CF0084B25C /* ColorAssets.xcassets */; };
 		044272852E8146130084B25C /* JXScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044272842E8146130084B25C /* JXScale.swift */; };
 		049FD82F2E82729400636950 /* JobsLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049FD82E2E82729000636950 /* JobsLog.swift */; };
@@ -102,6 +103,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0438A71B2E8400E3008F763B /* JobsCorConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsCorConst.swift; sourceTree = "<group>"; };
 		0442717A2E8139CF0084B25C /* ColorAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ColorAssets.xcassets; sourceTree = "<group>"; };
 		044272842E8146130084B25C /* JXScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXScale.swift; sourceTree = "<group>"; };
 		049FD82E2E82729000636950 /* JobsLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsLog.swift; sourceTree = "<group>"; };
@@ -286,7 +288,6 @@
 				C564FEE92E0AABE80079B5C1 /* UIBaseModel */,
 				C564FC372E0959120079B5C1 /* Others */,
 				C564FC282E0958C40079B5C1 /* AppDelegate & SceneDelegate */,
-				C564FC272E0958BD0079B5C1 /* 3rd */,
 				C564FBEF2E09580D0079B5C1 /* Info.plist */,
 			);
 			path = JobsSwiftBaseConfigDemo;
@@ -324,6 +325,7 @@
 			children = (
 				C564FC292E0958D50079B5C1 /* AppDelegate.swift */,
 				C564FC2A2E0958D50079B5C1 /* SceneDelegate.swift */,
+				C564FC272E0958BD0079B5C1 /* 3rd */,
 			);
 			path = "AppDelegate & SceneDelegate";
 			sourceTree = "<group>";
@@ -501,6 +503,7 @@
 		C564FEEC2E0AAC900079B5C1 /* SwiftDefines */ = {
 			isa = PBXGroup;
 			children = (
+				0438A71B2E8400E3008F763B /* JobsCorConst.swift */,
 				C564FC612E0959510079B5C1 /* Enum_struct_defines.swift */,
 				C564FC342E0959050079B5C1 /* Protocols */,
 				C564FC2F2E0958F40079B5C1 /* JobsBlock */,
@@ -716,12 +719,8 @@
 			);
 			inputFileListPaths = (
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -778,6 +777,7 @@
 				C564FC8C2E0959640079B5C1 /* UIAlertController.swift in Sources */,
 				C564FC9B2E0959640079B5C1 /* UIStackView.swift in Sources */,
 				C564FC952E0959640079B5C1 /* UIView.swift in Sources */,
+				0438A71C2E8400E7008F763B /* JobsCorConst.swift in Sources */,
 				C564FC872E0959640079B5C1 /* UIButton.swift in Sources */,
 				C564FBE92E09580B0079B5C1 /* JobsSwiftBaseConfigDemo.xcdatamodeld in Sources */,
 				C564FCA62E0959640079B5C1 /* UINavigationBar.swift in Sources */,
