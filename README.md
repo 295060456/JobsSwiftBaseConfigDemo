@@ -1098,7 +1098,17 @@ required init?(coder: NSCoder) {
 }
 ```
 
+### 5、使用`Color Set` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
+<p align="center">
+  <img src="./assets/image-20250924174836800.png" width="20%"/>
+  <img src="./assets/image-20250924175446796.png" width="60%"/>
+</p>
+```swift
+if #available(iOS 11.0, *) {
+    UIColor(named: "TextColor0")
+}
+```
 
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 

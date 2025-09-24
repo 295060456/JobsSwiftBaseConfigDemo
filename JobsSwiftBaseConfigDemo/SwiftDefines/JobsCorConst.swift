@@ -5,6 +5,8 @@
 //  Created by Mac on 9/24/25.
 //
 
+import UIKit
+
 class JobsCorConst: NSObject {
     static let main_color: UIColor      = UIColor(named: "MainColor")!
     // MARK: - 文本 626C90、A6B0C8
