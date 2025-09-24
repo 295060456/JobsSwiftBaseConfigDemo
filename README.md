@@ -1952,11 +1952,377 @@ p.foo()   // witness table 派发
   }
   ```
 
+### 11、⏰ 定时器 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 1️⃣ UI 层、简单重复 → `Timer`（配合 `.common` 模式 & `tolerance`）
+>
+> 2️⃣ 对精度稳定性更敏感、跑在后台队列 → `DispatchSourceTimer`
+>
+> 3️⃣ 动画或逐帧逻辑 → `CADisplayLink`（或 Core Animation）
+>
+> 4️⃣ SwiftUI/声明式 → Combine 的 `Timer.publish(...).autoconnect()` 或 `Task` 循环
+>
+> 5️⃣ 纯异步任务、易取消 → `Task.sleep` 循环，或（更现代）基于 `Clock`
+
+#### 11.1、定时器分类 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+##### 11.1.1、Foundation.Timer（`NSTimer`）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 1️⃣ **RunLoop 依赖**：`Timer` 只会在其所附的 RunLoop 运行时触发。
+>
+> - 放主线程：默认 OK。
+> - 放子线程：你得自己让该线程有 RunLoop 且在跑（`RunLoop.current.run()` 或有别的事件源）。
+>
+> 2️⃣ **RunLoop 模式**：
+>
+> - `.default`：滚动 UIScrollView 等 UI 追踪时会暂停。
+> - `.common`：把定时器加入 Common Modes，滚动时也会跑。**通常业务推荐 `.common`**。
+>
+> 3️⃣ **强引用循环**：闭包里要用 `[weak self]`；selector 风格中 Timer 会强持有 target。
+>
+> 4️⃣ **销毁/停止**：调用 `invalidate()`；否则重复定时器会一直占着 RunLoop & 内存。
+>
+> 5️⃣ **容忍度 `tolerance`**：让系统合并唤醒，省电；一般设为 `≤ timeInterval * 0.1`。
+>
+> 6️⃣ **精度与漂移**：主线程卡顿/RunLoop 被占用 → 触发会延后；Timer 会按时间推进而非追帧补发。
+>
+> 7️⃣ **后台限制**：App 进后台后，普通 `Timer` 触发会被系统挂起（除非特定后台模式）。不要指望后台长期走时钟，改用推送、`BGTaskScheduler`、VoIP、定位等系统能力。
+
+* 闭包风格（推荐）
+
+  ```swift
+  class Foo {
+      private var timer: Timer?
+  
+      func start() {
+          timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] t in
+              guard let self else { return }
+              // 你的逻辑
+              print("tick: \(Date())")
+          }
+          // 注意 RunLoop 模式（见下方）
+          RunLoop.current.add(timer!, forMode: .common)
+          // 可选：容忍度，省电
+          timer?.tolerance = 0.1
+      }
+  
+      func stop() {
+          timer?.invalidate()
+          timer = nil
+      }
+  }
+  ```
+
+* `selector` 风格（**ObjC** 兼容）
+
+  * 创建/定义 定时器
+
+    ```swift
+    timer = Timer.scheduledTimer(timeInterval: 1.0,
+                                 target: self,
+                                 selector: #selector(tick),
+                                 userInfo: nil,
+                                 repeats: true)
+    ```
+
+  * 手动添加到 RunLoop
+
+    ```swift
+    RunLoop.current.add(timer!, forMode: .common)
+    ```
+
+  * 定时器方法实现
+
+    ```swift
+    @objc private func tick() {
+        // ...
+    }
+    ```
+
+##### 11.1.2、`DispatchSourceTimer`（GCD 计时器） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 1️⃣ **不依赖 RunLoop**，任何队列都能准点触发；更适合“服务型”任务。
+>
+> 2️⃣ **必须 `resume()` 一次**（新建时是 suspended）。
+>
+> 3️⃣ **`leeway` 非常重要**：合适的 leeway 能显著省电。
+>
+> 4️⃣ **线程安全**：回调在你指定的队列上，不要在里头做重 UI；要回主线程就 `DispatchQueue.main.async {}`。
+>
+> 5️⃣ **取消后不可复用**：取消即废，需重建。
+
+```swift
+final class Ticker {
+    private var timer: DispatchSourceTimer?
+
+    func start() {
+        let queue = DispatchQueue(label: "com.example.ticker")
+        let t = DispatchSource.makeTimerSource(queue: queue)
+        t.schedule(deadline: .now() + 1.0,        // 首次延迟
+                   repeating: 1.0,                 // 周期
+                   leeway: .milliseconds(100))     // 容忍度（省电）
+        t.setEventHandler { [weak self] in
+            // 后台队列执行
+            self?.doWork()
+        }
+        t.resume()     // ⚠️ 必须 resume 一次
+        timer = t
+    }
+
+    func stop() {
+        timer?.cancel()  // 终止事件源
+        timer = nil
+    }
+
+    private func doWork() { /* ... */ }
+}
+```
+
+##### 11.1.3、`CADisplayLink`（逐帧定时）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 1️⃣ **用途**：自绘动画、游戏循环、进度条平滑更新。
+> 2️⃣ **不要用它** 做“每 1s 一次”的业务定时，浪费电。
+
+```swift
+class DisplayDriver {
+    private var link: CADisplayLink?
+
+    func start() {
+        link = CADisplayLink(target: self, selector: #selector(step))
+        // 跟随 UI 交互，用 common 模式
+        link?.add(to: .main, forMode: .common)
+        // iOS 15+（可选）更细的帧率范围
+        // link?.preferredFrameRateRange = CAFrameRateRange(minimum: 30, maximum: 120, preferred: 60)
+    }
+
+    func stop() {
+        link?.invalidate()
+        link = nil
+    }
+
+    @objc private func step() {
+        // 每帧调用；受屏幕刷新率影响
+    }
+}
+```
+
+##### 11.1.4、`Combine` 的 `Timer.TimerPublisher`  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **UIKit**
+
+  ```swift
+  import Combine
+  
+  final class VM {
+      private var bag = Set<AnyCancellable>()
+  
+      func start() {
+          Timer.publish(every: 1.0, on: .main, in: .common)
+              .autoconnect()
+              .sink { _ in
+                  // 每秒触发
+              }
+              .store(in: &bag)
+      }
+  
+      func stop() {
+          bag.removeAll()
+      }
+  }
+  ```
+
+* **SwiftUI**
+
+  > **特点**：响应式、易组合、和 SwiftUI 天然契合。
+  > **本质**：仍受 RunLoop/队列与前台状态影响，精度 ≈ `Timer`。
+
+  ```swift
+  struct ContentView: View {
+      @State private var tick = 0
+      private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+  
+      var body: some View {
+          Text("tick: \(tick)")
+              .onReceive(timer) { _ in
+                  tick += 1
+              }
+      }
+  }
+  ```
+
+##### 11.1.5、[**Swift**](https://developer.apple.com/swift/)  并发的<u>软定时器</u>（`Task.sleep` / `Clock`） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> **优点**：无 RunLoop 依赖；天然支持取消；写法直观。
+> **注意**：这不是系统级“定时器事件源”，而是协程里“睡眠 + 循环”的模式。不要在里头做阻塞工作；需要 UI 更新就回主线程。
+
+* 最通用写法（所有系统版本可用）
+
+  ```swift
+  final class Worker {
+      private var task: Task<Void, Never>?
+  
+      func start() {
+          task = Task {
+              while !Task.isCancelled {
+                  // 你的逻辑
+                  try? await Task.sleep(nanoseconds: 1_000_000_000) // 1s
+              }
+          }
+      }
+  
+      func stop() {
+          task?.cancel()
+          task = nil
+      }
+  }
+  ```
+
+* 使用 Clock（较新的、更语义化的 API；如果你的 Swift/OS 支持）
+
+  ```swift
+  import Foundation
+  
+  let clock = ContinuousClock()   // 不受系统时间调整影响的单调时钟
+  
+  task = Task {
+      var next = clock.now
+      while !Task.isCancelled {
+          next += .seconds(1)
+          // do work
+          try? await clock.sleep(until: next)
+      }
+  }
+  ```
+
+#### 11.2、精度、耗电与后台的硬约束 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **精度现实**：移动端不追求纳秒级。主线程卡顿、CPU 负载、系统省电合并都会让你**延后**。
+
+* **省电策略**：
+
+  - 设定 `tolerance`（Timer）或合理 `leeway`（GCD）。
+  - 不要把周期设得过小（<16ms 这类除非做音视频/动画）。
+  - 业务上合并任务（批处理）替代高频唤醒。
+
+* **后台限制（iOS）**：应用进入后台，普通 Timer/GCD 事件大概率被系统挂起。需要真正后台执行，用**系统支持的后台能力**：
+
+  - `BGTaskScheduler`（后台处理/刷新）、
+  - 后台音频、VoIP、定位、蓝牙等**特定**后台模式、
+  - Push/静默推送（APNs + Background Fetch）。**不要**试图用定时器“偷跑”后台——会被系统杀/限。
+
+#### 11.3、RunLoop 模式与线程模型 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **模式**：
+
+  - `.default`：普通事件。
+  - `.tracking`：滚动跟踪等交互阶段。
+  - `.common`：一个“标签集合”，把定时器加入 `.common` ⇒ 在多个模式下都有效（如边滚边触发）。
+  - UI 层通用建议：把定时器加入 `.common`。
+
+* **线程**：
+
+  - `Timer` 绑定创建它的线程的 RunLoop。子线程需要手动跑 RunLoop。
+  - `DispatchSourceTimer` 绑定 `DispatchQueue`，不需要 RunLoop。
+
+#### 11.4、典型场景代码片段 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 倒计时（UI 安全、不卡顿）
+
+  ```swift
+  final class Countdown {
+      private var remain: Int
+      private var timer: DispatchSourceTimer?
+  
+      init(seconds: Int) { self.remain = seconds }
+  
+      func start(tick: @escaping (Int) -> Void, done: @escaping () -> Void) {
+          let q = DispatchQueue(label: "countdown")
+          let t = DispatchSource.makeTimerSource(queue: q)
+          t.schedule(deadline: .now(), repeating: 1, leeway: .milliseconds(50))
+          t.setEventHandler { [weak self] in
+              guard let self else { return }
+              if self.remain <= 0 {
+                  t.cancel()
+                  DispatchQueue.main.async { done() }
+                  return
+              }
+              self.remain -= 1
+              DispatchQueue.main.async { tick(self.remain) }
+          }
+          t.resume()
+          timer = t
+      }
+  
+      func stop() {
+          timer?.cancel()
+          timer = nil
+      }
+  }
+  ```
+
+* 防抖/节流（主线程）
+
+  ```swift
+  /// 防抖（debounce）：只在“停止触发后一段时间”执行
+  final class Debouncer {
+      private var workItem: DispatchWorkItem?
+  
+      func schedule(after delay: TimeInterval, _ block: @escaping () -> Void) {
+          workItem?.cancel()
+          let item = DispatchWorkItem(block: block)
+          workItem = item
+          DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: item)
+      }
+  }
+  ```
+
+  ```swift
+  /// 节流（throttle）：固定窗口内最多执行一次
+  final class Throttler {
+      private var lastFire: DispatchTime = .now()
+      private var scheduled = false
+  
+      func call(interval: TimeInterval, _ block: @escaping () -> Void) {
+          let now = DispatchTime.now()
+          let delta = now.uptimeNanoseconds - lastFire.uptimeNanoseconds
+          if delta >= UInt64(interval * 1_000_000_000) {
+              lastFire = now
+              block()
+          } else if !scheduled {
+              scheduled = true
+              let delay = Double(UInt64(interval * 1_000_000_000) - delta) / 1_000_000_000
+              DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+                  guard let self else { return }
+                  self.lastFire = .now()
+                  self.scheduled = false
+                  block()
+              }
+          }
+      }
+  }
+  ```
+
+#### 11.5、`SwiftUI`@定时器 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **Timer + onReceive**：简单列表/倒计时 UI 用这个够了
+* **`Task` + `sleep`**：在 `task { }` 里写循环，支持取消，逻辑更直
+* **TimelineView**（做时间驱动的视图刷新，如表盘/秒针）比生 Timer 更语义化
+* **不要在 View 里直接持有 GCD timer**；把它放到 **ViewModel**/**ObservableObject** 管理
+
+#### 11.6、时间来源与校正 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **系统时间 🆚 单调时钟**：用户改系统时钟可能影响基于<u>**挂钟时间**</u>的调度
+  - 对抗：使用单调时间（GCD/Clock），或基于相对时间推进
+  
+* **长任务漂移**：如果每轮处理时间接近周期，漂移不可避免；控制回调里工作量，必要时异步化
+
+* **纠偏策略**：记录基准 `Date/Instant`，每次计算“应该的下一次”而非<u>**当前时间 + 固定周期**</u>
+
 ## 五、<font color=red>**F**</font><font color=green>**A**</font><font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、[**Swift**](https://developer.apple.com/swift/) 纯类 🆚 `NSObject` 子类 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-### 2、[**Swift**](https://developer.apple.com/swift/) `属性观察器` 🆚 **Objective-C** `KVO` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 2、[**Swift**](https://developer.apple.com/swift/) `属性观察器` 🆚 **Objc** `KVO` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 | 特性     | Swift 属性观察器             | **ObjC** KVO               |
 | -------- | ---------------------------- | -------------------------- |
@@ -2286,7 +2652,7 @@ p.foo()   // witness table 派发
   ```
 
 
-### 7、`try/throw/catch/finally` 为什么在`Objc`里面几乎不用，而[**Swift**](https://developer.apple.com/swift/)里面却被大量使用？ <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 7、`try/throw/catch/finally` 为什么在**Objc**里面几乎不用，而[**Swift**](https://developer.apple.com/swift/)里面却被大量使用？<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 | 特性               | Objective-C                          | Swift                                       |
 | ------------------ | ------------------------------------ | ------------------------------------------- |
@@ -2296,7 +2662,7 @@ p.foo()   // witness table 派发
 | 典型场景           | 系统 API 报错：传 `NSError**`        | 文件 IO / JSON 解析 / 网络请求 等可恢复错误 |
 | 异常语义           | Fatal bug，不建议捕获                | 业务逻辑错误，必须处理                      |
 
-* `Objc`
+* **Objc**
 
   * Apple 官方文档明确说
 
@@ -2312,7 +2678,7 @@ p.foo()   // witness table 派发
 
   * **运行时模型原因**
 
-    * `ObjC` 的异常处理开销大（基于 setjmp/longjmp），性能差
+    * **Objc** 的异常处理开销大（基于 setjmp/longjmp），性能差
     * ARC 下异常还可能导致内存泄漏（对象没来得及 release）
     * 所以苹果官方在 ARC 文档里直接写：**不要用 @try/@catch 捕捉一般错误**
 
@@ -2337,12 +2703,12 @@ p.foo()   // witness table 派发
   * 和类型系统结合
 
     * [**Swift**](https://developer.apple.com/swift/) 的 `throws` 是函数签名的一部分，编译器会强制你处理。
-    * `Objc` 的 **NSError** 靠文档和约定，没人强制。
+    * **Objc** 的 **`NSError`** 靠文档和约定，没人强制。
 
   * 可选多种风格
 
     * 你可以用 `try/try? / try!` 根据需要选择安全级别。
-    * 也可以把 `throws` 转换成 `Result<T, Error>`，和 `async/await`、`Combine`、[**Swift**](https://developer.apple.com/swift/) Concurrency 配合非常好。
+    * 也可以把 `throws` 转换成 `Result<T, Error>`，和 `async/await`、`Combine`、[**Swift**](https://developer.apple.com/swift/) **Concurrency** 配合非常好。
 
 
 
