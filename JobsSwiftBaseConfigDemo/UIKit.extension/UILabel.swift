@@ -6,80 +6,56 @@
 //
 
 import UIKit
+import Foundation
 import ObjectiveC
 
-// MARK: - 枚举
-
-public enum UILabelShowingType: Int {
-    case oneLineTruncatingTail = 1
-    case oneLineAutoWidthByFont
-    case oneLineAutoFontByWidth
-    case multiLineAutoHeightByFont
-}
-
-public enum TransformLayerDirectionType: UInt {
-    case normalLTR
-    case verticalTTB
-    case upsideDown
-}
-
 // MARK: - UILabel 链式扩展
-
 extension UILabel {
     @discardableResult
     func byText(_ text: String?) -> Self {
         self.text = text
         return self
     }
-
     @discardableResult
     func byTextColor(_ color: UIColor) -> Self {
         self.textColor = color
         return self
     }
-
     @discardableResult
     func byFont(_ font: UIFont) -> Self {
         self.font = font
         return self
     }
-
     @discardableResult
     func byTextAlignment(_ alignment: NSTextAlignment) -> Self {
         self.textAlignment = alignment
         return self
     }
-
     @discardableResult
     func byNumberOfLines(_ lines: Int) -> Self {
         self.numberOfLines = lines
         return self
     }
-
     @discardableResult
     func byLineBreakMode(_ mode: NSLineBreakMode) -> Self {
         self.lineBreakMode = mode
         return self
     }
-
     @discardableResult
     func byBgCor(_ color: UIColor) -> Self {
         self.backgroundColor = color
         return self
     }
-
     @discardableResult
     func byAttributedString(_ attributed: NSAttributedString?) -> Self {
         self.attributedText = attributed
         return self
     }
-
     @discardableResult
     func byNextText(_ str: String?) -> Self {
         self.text = (self.text ?? "") + (str ?? "")
         return self
     }
-
     @discardableResult
     func byNextAttributedText(_ attributed: NSAttributedString?) -> Self {
         if let current = self.attributedText {
@@ -101,59 +77,92 @@ extension UILabel {
         return self
     }
 
-    // 显示样式
+    // MARK: 显示样式（把旧枚举语义映射到具体行为）
     @discardableResult
     func makeLabelByShowingType(_ type: UILabelShowingType) -> Self {
-        self.superview?.layoutIfNeeded()
+        superview?.layoutIfNeeded()
         switch type {
-        case .oneLineTruncatingTail:
-            self.numberOfLines = 1
-            self.lineBreakMode = .byTruncatingTail
-        case .oneLineAutoWidthByFont:
-            self.numberOfLines = 1
+        case .type01:
+            // 一行 + 省略号
+            numberOfLines = 1
+            lineBreakMode = .byTruncatingTail
+
+        case .type02:
+            // 一行 + 裁剪（如需滚动，外层包 UIScrollView 再放 label）
+            numberOfLines = 1
+            lineBreakMode = .byClipping
+            setContentCompressionResistancePriority(.required, for: .horizontal)
+            setContentHuggingPriority(.defaultLow, for: .horizontal)
+
+        case .type03:
+            // 一行，不定宽，定高，定字体 → 让宽度自适应
+            numberOfLines = 1
             setContentCompressionResistancePriority(.required, for: .horizontal)
             setContentHuggingPriority(.required, for: .horizontal)
-        case .oneLineAutoFontByWidth:
-            self.numberOfLines = 1
-            self.adjustsFontSizeToFitWidth = true
-            self.minimumScaleFactor = 0.6
-            self.lineBreakMode = .byClipping
-        case .multiLineAutoHeightByFont:
-            self.numberOfLines = 0
-            self.lineBreakMode = .byWordWrapping
+
+        case .type04:
+            // 一行，定宽定高，通过缩小字体完整显示
+            numberOfLines = 1
+            adjustsFontSizeToFitWidth = true
+            minimumScaleFactor = 0.6
+            lineBreakMode = .byClipping
+
+        case .type05:
+            // 多行，定宽不定高，定字体
+            numberOfLines = 0
+            lineBreakMode = .byWordWrapping
         }
         return self
     }
 
-    // 简化版 transformLayer
+    // MARK: 方向变换（使用 CATextLayer，避免富文本/对齐丢失）
     @discardableResult
     func transformLayer(_ direction: TransformLayerDirectionType) -> Self {
-        self.superview?.layoutIfNeeded()
+        superview?.layoutIfNeeded()
+
+        // 清理旧 layer（避免重复叠加）
+        layer.sublayers?
+            .filter { $0 is CATextLayer && $0.name == "JobsTextLayer" }
+            .forEach { $0.removeFromSuperlayer() }
+
         let textLayer = CATextLayer()
+        textLayer.name = "JobsTextLayer"
         textLayer.contentsScale = UIScreen.main.scale
-        textLayer.alignmentMode = .fromNSTextAlignment(self.textAlignment)
-        if let attributed = self.attributedText {
+        textLayer.alignmentMode = .fromNSTextAlignment(textAlignment)
+        textLayer.truncationMode = (lineBreakMode == .byTruncatingHead) ? .start :
+                                   (lineBreakMode == .byTruncatingMiddle) ? .middle :
+                                   (lineBreakMode == .byTruncatingTail) ? .end : .none
+        textLayer.isWrapped = (numberOfLines == 0)
+
+        if let attributed = attributedText {
             textLayer.string = attributed
         } else {
-            textLayer.string = self.text ?? ""
+            textLayer.string = text ?? ""
+            textLayer.foregroundColor = textColor.cgColor
+            textLayer.font = font
+            textLayer.fontSize = font.pointSize
         }
-        textLayer.frame = self.bounds
+        textLayer.frame = bounds
 
         switch direction {
-        case .normalLTR:
+        case .up:
             break
-        case .verticalTTB:
+        case .left:
             textLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
             textLayer.position = CGPoint(x: bounds.midX, y: bounds.midY)
             textLayer.transform = CATransform3DMakeRotation(-.pi/2, 0, 0, 1)
-        case .upsideDown:
+        case .down:
             textLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
             textLayer.position = CGPoint(x: bounds.midX, y: bounds.midY)
             textLayer.transform = CATransform3DMakeRotation(.pi, 0, 0, 1)
+        case .right:
+            textLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+            textLayer.position = CGPoint(x: bounds.midX, y: bounds.midY)
+            textLayer.transform = CATransform3DMakeRotation(.pi/2, 0, 0, 1)
         }
 
-        self.layer.addSublayer(textLayer)
-        self.textColor = .clear
+        layer.addSublayer(textLayer)
+        textColor = .clear // 只显示 layer 的文字
         return self
     }
 }
@@ -172,16 +181,3 @@ private extension CATextLayerAlignmentMode {
         }
     }
 }
-
-/**
- 
- let label = UILabel()
-     .byFont(.systemFont(ofSize: 16))
-     .byTextColor(.black)
-     .byText("目录".localized())
-     .byTextAlignment(.center)
-     .makeLabelByShowingType(.oneLineTruncatingTail)
-     .bgImage(UIImage(named: "bg_pattern"))
-     .byNextText(" → More")
- 
- */

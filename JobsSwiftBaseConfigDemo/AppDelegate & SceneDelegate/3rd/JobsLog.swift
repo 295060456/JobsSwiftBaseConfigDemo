@@ -5,6 +5,8 @@
 //  Created by Mac on 9/23/25.
 //
 
+import Foundation
+
 //✅ 统一格式，自动带上文件名、行号、函数名
 //✅ 区分 print / debugPrint 使用场景
 //✅ 可以加开关（isDebugEnabled / #if DEBUG）来控制是否输出
