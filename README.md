@@ -1728,7 +1728,7 @@ if #available(iOS 11.0, *) {
 
 > 1️⃣ 真正存放在内存里的变量/常量。可以是 `var`（可变）或 `let`（不可变）
 >
-> 2️⃣ <font color=red>只能定义在 **类** 和 **结构体** 里</font>
+> 2️⃣ <font color=red>只能定义在 **类** 和 **结构体** 里</font>。<font color=blue>不能定义在拓展（**extension**）里</font>
 >
 > 3️⃣ `let` 的存储属性只能在初始化时赋值
 >

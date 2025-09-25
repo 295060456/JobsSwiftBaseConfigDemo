@@ -27,6 +27,12 @@
 		045921082E854FF3008C8D6A /* Float.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045921072E854FF2008C8D6A /* Float.swift */; };
 		0459210A2E854FFB008C8D6A /* Float16.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045921092E854FFA008C8D6A /* Float16.swift */; };
 		0459210C2E855004008C8D6A /* Float80.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0459210B2E855003008C8D6A /* Float80.swift */; };
+		045921122E855769008C8D6A /* JobsPaddedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045921112E855756008C8D6A /* JobsPaddedLabel.swift */; };
+		045921152E8557FE008C8D6A /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045921142E8557FB008C8D6A /* UIFont.swift */; };
+		0459211D2E85588C008C8D6A /* DINCond-Bold Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 045921192E85588C008C8D6A /* DINCond-Bold Regular.otf */; };
+		0459211E2E85588C008C8D6A /* DS-DIGIB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0459211C2E85588C008C8D6A /* DS-DIGIB.ttf */; };
+		0459211F2E85588C008C8D6A /* fonteditor.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0459211B2E85588C008C8D6A /* fonteditor.ttf */; };
+		045921202E85588C008C8D6A /* DIN-Black-2.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0459211A2E85588C008C8D6A /* DIN-Black-2.otf */; };
 		0487AADA2E840CB200B5D307 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0487AAD92E840CB200B5D307 /* UIColorExtensions.swift */; };
 		0487AADC2E840EE300B5D307 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0487AADB2E840EE300B5D307 /* libc++.tbd */; };
 		049FD82F2E82729400636950 /* JobsLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049FD82E2E82729000636950 /* JobsLog.swift */; };
@@ -125,6 +131,12 @@
 		045921072E854FF2008C8D6A /* Float.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Float.swift; sourceTree = "<group>"; };
 		045921092E854FFA008C8D6A /* Float16.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Float16.swift; sourceTree = "<group>"; };
 		0459210B2E855003008C8D6A /* Float80.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Float80.swift; sourceTree = "<group>"; };
+		045921112E855756008C8D6A /* JobsPaddedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsPaddedLabel.swift; sourceTree = "<group>"; };
+		045921142E8557FB008C8D6A /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
+		045921192E85588C008C8D6A /* DINCond-Bold Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DINCond-Bold Regular.otf"; sourceTree = "<group>"; };
+		0459211A2E85588C008C8D6A /* DIN-Black-2.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DIN-Black-2.otf"; sourceTree = "<group>"; };
+		0459211B2E85588C008C8D6A /* fonteditor.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = fonteditor.ttf; sourceTree = "<group>"; };
+		0459211C2E85588C008C8D6A /* DS-DIGIB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DS-DIGIB.ttf"; sourceTree = "<group>"; };
 		0487AAD92E840CB200B5D307 /* UIColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		0487AADB2E840EE300B5D307 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		049FD82E2E82729000636950 /* JobsLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsLog.swift; sourceTree = "<group>"; };
@@ -279,6 +291,51 @@
 			path = "浮点类型";
 			sourceTree = "<group>";
 		};
+		0459210F2E85572C008C8D6A /* Inheritance */ = {
+			isa = PBXGroup;
+			children = (
+				045921102E855750008C8D6A /* UILabel */,
+			);
+			path = Inheritance;
+			sourceTree = "<group>";
+		};
+		045921102E855750008C8D6A /* UILabel */ = {
+			isa = PBXGroup;
+			children = (
+				045921112E855756008C8D6A /* JobsPaddedLabel.swift */,
+			);
+			path = UILabel;
+			sourceTree = "<group>";
+		};
+		045921162E855831008C8D6A /* xcassets */ = {
+			isa = PBXGroup;
+			children = (
+				0442717A2E8139CF0084B25C /* ColorAssets.xcassets */,
+				C564FBEA2E09580D0079B5C1 /* Assets.xcassets */,
+			);
+			path = xcassets;
+			sourceTree = "<group>";
+		};
+		045921172E85584C008C8D6A /* storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				C564FBE42E09580B0079B5C1 /* Main.storyboard */,
+				C564FBEC2E09580D0079B5C1 /* LaunchScreen.storyboard */,
+			);
+			path = storyboard;
+			sourceTree = "<group>";
+		};
+		045921182E855875008C8D6A /* 字体 */ = {
+			isa = PBXGroup;
+			children = (
+				045921192E85588C008C8D6A /* DINCond-Bold Regular.otf */,
+				0459211A2E85588C008C8D6A /* DIN-Black-2.otf */,
+				0459211B2E85588C008C8D6A /* fonteditor.ttf */,
+				0459211C2E85588C008C8D6A /* DS-DIGIB.ttf */,
+			);
+			path = "字体";
+			sourceTree = "<group>";
+		};
 		B8CEBE2669D72254F6970521 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -317,6 +374,7 @@
 		C564FBDD2E09580B0079B5C1 /* JobsSwiftBaseConfigDemo */ = {
 			isa = PBXGroup;
 			children = (
+				0459210F2E85572C008C8D6A /* Inheritance */,
 				045920EF2E854C8E008C8D6A /* Extensions */,
 				045920E22E84EC64008C8D6A /* SwiftTools */,
 				C564FEEC2E0AAC900079B5C1 /* SwiftDefines */,
@@ -387,11 +445,10 @@
 		C564FC372E0959120079B5C1 /* Others */ = {
 			isa = PBXGroup;
 			children = (
-				0442717A2E8139CF0084B25C /* ColorAssets.xcassets */,
-				C564FBE42E09580B0079B5C1 /* Main.storyboard */,
-				C564FBEC2E09580D0079B5C1 /* LaunchScreen.storyboard */,
+				045921182E855875008C8D6A /* 字体 */,
+				045921172E85584C008C8D6A /* storyboard */,
+				045921162E855831008C8D6A /* xcassets */,
 				C564FBE72E09580B0079B5C1 /* JobsSwiftBaseConfigDemo.xcdatamodeld */,
-				C564FBEA2E09580D0079B5C1 /* Assets.xcassets */,
 			);
 			path = Others;
 			sourceTree = "<group>";
@@ -426,6 +483,7 @@
 		C564FEEA2E0AAC2B0079B5C1 /* UIKit.extension */ = {
 			isa = PBXGroup;
 			children = (
+				045921142E8557FB008C8D6A /* UIFont.swift */,
 				045920E92E84FD77008C8D6A /* NSString.swift */,
 				045920E52E84F386008C8D6A /* CALayer.swift */,
 				C564FC742E0959620079B5C1 /* Inlines.swift */,
@@ -604,6 +662,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0459211D2E85588C008C8D6A /* DINCond-Bold Regular.otf in Resources */,
+				0459211E2E85588C008C8D6A /* DS-DIGIB.ttf in Resources */,
+				0459211F2E85588C008C8D6A /* fonteditor.ttf in Resources */,
+				045921202E85588C008C8D6A /* DIN-Black-2.otf in Resources */,
 				C564FBEE2E09580D0079B5C1 /* LaunchScreen.storyboard in Resources */,
 				C564FBEB2E09580D0079B5C1 /* Assets.xcassets in Resources */,
 				0442717B2E8139CF0084B25C /* ColorAssets.xcassets in Resources */,
@@ -722,6 +784,7 @@
 			files = (
 				C564FC8B2E0959640079B5C1 /* UIImageView.swift in Sources */,
 				C564FCA02E0959640079B5C1 /* UIViewController.swift in Sources */,
+				045921152E8557FE008C8D6A /* UIFont.swift in Sources */,
 				C564FC2B2E0958D50079B5C1 /* AppDelegate.swift in Sources */,
 				044272852E8146130084B25C /* JXScale.swift in Sources */,
 				C564FCB22E0959990079B5C1 /* EmptyView.swift in Sources */,
@@ -760,6 +823,7 @@
 				0459210A2E854FFB008C8D6A /* Float16.swift in Sources */,
 				C564FC932E0959640079B5C1 /* UIToolbar.swift in Sources */,
 				C564FCA12E0959640079B5C1 /* UIPageControl.swift in Sources */,
+				045921122E855769008C8D6A /* JobsPaddedLabel.swift in Sources */,
 				0459210C2E855004008C8D6A /* Float80.swift in Sources */,
 				C564FCAC2E09597C0079B5C1 /* ViewController.swift in Sources */,
 				C564FC962E0959640079B5C1 /* Inlines.swift in Sources */,
