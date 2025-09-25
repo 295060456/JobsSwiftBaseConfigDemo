@@ -48,9 +48,19 @@
 
 ## 二、👥 项目配置 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-### 1、第三方管理 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 1、软件支持 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* **Mac OS 15** 以后，苹果采取了更加严格的权限写入机制。新**swift**项目如果要利用[**`Cocoapod`**](https://cocoapods.org/)来集成第三方，就比如在**xcode**里面做如下设置，否则编译失败：`TARGETS`->`Build Settings`->`ENABLE_USER_SCRIPT_SANDBOXING`-><font color=red>`NO`</font>
+* [**过期的模拟器配件**](https://github.com/295060456/Xcode_Sys_lib)
+
+* [**quicktype**](https://app.quicktype.io/)：从 **JSON** / **GraphQL** /其它数据格式 自动生成对应语言的类型定义
+
+* [**snipaste**](https://www.snipaste.com/)：截图工具
+
+* [**Sip**](https://sipapp.io/)：取色器
+
+### 2、第三方管理 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **Mac OS 15** 以后，苹果采取了更加严格的权限写入机制。新[**Swift**](https://developer.apple.com/swift/)项目如果要利用[**`Cocoapods`**](https://cocoapods.org/)来集成第三方，就比如在**xcode**里面做如下设置，否则编译失败：`TARGETS`->`Build Settings`->`ENABLE_USER_SCRIPT_SANDBOXING`-><font color=red>`NO`</font>
 
   ![image-20250616173410872](./assets/image-20250616173410872.png)
 
@@ -124,14 +134,12 @@
     <img src="./assets/image-20250616173604040.png" alt="image-1" style="width:30%; display:inline-block; vertical-align: top;" />
     <img src="./assets/image-20250616174404275.png" alt="image-2" style="width:65%; display:inline-block; vertical-align: top;" />
   </div>
-  
-* [**过期的模拟器配件**](https://github.com/295060456/Xcode_Sys_lib)
 
-### 2、适用于[Swift](https://developer.apple.com/swift/) 的第三方框架 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 3、一些适用于[Swift](https://developer.apple.com/swift/)的第三方框架（持续更新...） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 2.1、[**DeviceKit**](https://github.com/devicekit/DeviceKit) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 3.1、[**DeviceKit**](https://github.com/devicekit/DeviceKit) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 2.2、[**HandyJSON**](https://github.com/alibaba/HandyJSON) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 3.2、[**HandyJSON**](https://github.com/alibaba/HandyJSON) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1、阿里巴巴开发
 >
@@ -191,11 +199,11 @@
     }
     ```
 
-#### 2.3、[**SnapKit**](https://github.com/SnapKit/SnapKit) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 3.3、[**SnapKit**](https://github.com/SnapKit/SnapKit) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
   * 安装
   
-    * Cocoapods
+    * [**Cocoapods**](https://cocoapods.org/)
     
       > 在 `Podfile` 中添加：
     
@@ -203,7 +211,7 @@
       pod 'SnapKit'
       ```
     
-    * Swift Package Manager
+    * [**<font color=red>S</font>wift**](https://developer.apple.com/swift/) <font color=red>**P**</font>ackage <font color=red>**M**</font>anager
     
       > Xcode → File → Add Packages Dependency → 输入：
     
@@ -312,7 +320,7 @@
         make.edges.equalToSuperview().inset(UIEdgeInsets(top: 10, left: 15, bottom: 20, right: 15))
         ```
 
-#### 2.4、[**Alamofire**](https://github.com/Alamofire/Alamofire) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 3.4、[**Alamofire**](https://github.com/Alamofire/Alamofire) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > **Alamofire** 是 Swift 社区最流行的 **网络请求库**，基于 **URLSession** 封装，简化了 HTTP 请求、响应处理、JSON 解析、文件上传下载等操作。
 >  它的特点是：
@@ -327,7 +335,7 @@
 
 * 安装
   
-    * CocoaPods
+    * [**Cocoapods**](https://cocoapods.org/)
     
       > 在 `Podfile` 中添加：
     
@@ -335,7 +343,7 @@
       pod 'Alamofire'
       ```
     
-    * Swift Package Manager
+    * [**<font color=red>S</font>wift**](https://developer.apple.com/swift/) <font color=red>**P**</font>ackage <font color=red>**M**</font>anager
     
       > Xcode → File → Add Packages Dependency → 输入：
     
@@ -451,7 +459,7 @@
               }
           }
 
-#### 2.5、[**Moya**](https://github.com/Moya/Moya) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 3.5、[**Moya**](https://github.com/Moya/Moya) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > - **定位**：[**Moya**](https://github.com/Moya/Moya) 是一个 **网络抽象层**（Networking Abstraction Layer）。
 > - **底层**：它基于 [**Alamofire**](https://github.com/Alamofire/Alamofire) 实现请求发送，但对业务开发者屏蔽了繁琐的配置。
@@ -465,7 +473,7 @@
 
 * 安装
   
-    * CocoaPods
+    * [**Cocoapods**](https://cocoapods.org/)
     
       > 在 `Podfile` 中添加：
     
@@ -473,7 +481,7 @@
       pod 'Moya'
       ```
     
-    * Swift Package Manager
+    * [**<font color=red>S</font>wift**](https://developer.apple.com/swift/) <font color=red>**P**</font>ackage <font color=red>**M**</font>anager
     
       > Xcode → File → Add Packages Dependency → 输入：
     
@@ -608,7 +616,7 @@
     }
     ```
 
-#### 2.6、[**RxSwift**](https://github.com/ReactiveX/RxSwift) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 3.6、[**RxSwift**](https://github.com/ReactiveX/RxSwift) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > **最小依赖**：只用 `RxSwift`。
 >
@@ -628,7 +636,7 @@
 
 * 安装
   
-    * CocoaPods
+    * [**Cocoapods**](https://cocoapods.org/)
     
       > 在 `Podfile` 中添加：
     
@@ -639,7 +647,7 @@
       pod 'RxRelay', # 安全替代 Variable，常用于 ViewModel
       ```
     
-    * Swift Package Manager
+    * [**<font color=red>S</font>wift**](https://developer.apple.com/swift/) <font color=red>**P**</font>ackage <font color=red>**M**</font>anager
     
       > Xcode → File → Add Packages Dependency → 输入：
     
@@ -908,8 +916,62 @@
 ### 3、其他 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 个别地区（比如：柬埔寨），需要将浏览器语言改为英文状态，方可进入[**苹果开发者网站**](https://developer.apple.com/)
-* [**quicktype**](https://app.quicktype.io/)：从 **JSON** / **GraphQL** /其它数据格式 自动生成对应语言的类型定义
+
+* 打开苹果的[<font color=red>**反馈助理**</font>](applefeedback://)
+
+  > ```url
+  > feedbackassistant://
+  > ```
+
+* <font color=red>**C**</font>ommand <font color=red>**L**</font>ine <font color=red>**T**</font>ools <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+  
+  * 安装
+  
+    * （通过终端）下载安装`Command Line Tools`
+  
+      ```
+      xcode-select --install
+      ```
+  
+    * 通过 Xcode 安装
+  
+      * 打开 Xcode
+      * 在菜单栏选择 **Xcode > Settings > Locations**
+      * 在 <font color=red>**C**</font>ommand <font color=red>**L**</font>ine <font color=red>**T**</font>ools 下拉菜单中选择对应的 Xcode 版本
+  
+  * 卸载
+  
+    ```shell
+    sudo rm -rf /Library/Developer/CommandLineTools
+    xcode-select --install
+    ```
+  
+  * 切换
+  
+    ```shell
+    sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+    ```
+  
+  * 验证命令
+  
+    ```shell
+    ➜  ~ xcode-select -p
+    /Applications/Xcode.app/Contents/Developer
+    ```
+  
+  * 查看<font color=red>**C**</font>ommand <font color=red>**L**</font>ine <font color=red>**T**</font>ools版本
+  
+    ```shell
+    ➜  ~ pkgutil --pkg-info=com.apple.pkg.CLTools_Executables
+    package-id: com.apple.pkg.CLTools_Executables
+    version: 26.0.0.0.1.1757719676
+    volume: /
+    location: /
+    install-time: 1758341956
+    ```
+  
 * **ObjC**和[**Swift**](https://developer.apple.com/swift/)混编以后，📦打包的体积会变大
+  
   * [**Swift**](https://developer.apple.com/swift/) 标准库要随 App 打包：iOS 系统里不内置 [**Swift**](https://developer.apple.com/swift/) 标准库（至少不能依赖它一定存在），只要项目里用了 [**Swift**](https://developer.apple.com/swift/)，就得把 `libswift*.dylib` 一起带上。**体感增量：~2–7 MB/架构（压缩后更小）**，取决于用到的模块数量
   * 混编本身不会重复打包 **ObjC** 运行时：**ObjC** Runtime 属于系统，纯 **ObjC** 和混编在这方面没差
   * 链接器选项可能放大：比如 `-ObjC` 可能把静态库里很多不需要的对象一起拉进来，造成膨胀（和是否混编无关，但混编项目更容易“全都要”）
@@ -2779,7 +2841,7 @@ print(value)         // 15
 
 ### 3、[**Swift**](https://developer.apple.com/swift/) 中 `struct` 和 `class` 的主要区别 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* 值类型 vs 引用类型
+* 值类型 🆚 引用类型
 
   > <font color=red>`struct` 是 **值类型**</font>：赋值/传参时会复制一份。
   >
@@ -2919,9 +2981,9 @@ print(value)         // 15
   raw.deallocate()
   ```
 
-* 和 **C/Objective-C** 互操作
+* 和 **C/Objc** 互操作
 
-  > [**Swift**](https://developer.apple.com/swift/)  的 Unsafe 指针和 C 指针可以无缝桥接
+  > [**Swift**](https://developer.apple.com/swift/)  的 Unsafe 指针和 **C** 指针可以无缝桥接
 
   ```swift
   let arr: [Int32] = [1, 2, 3]
@@ -2952,7 +3014,7 @@ print(value)         // 15
   * **面向用户的输出**
   * 输出时调用对象的 **`CustomStringConvertible`** 协议中的 `description`。
   * 如果对象没实现 `description`，则会用默认的简短描述。
-  * **适合“给人看”的日志**。
+  * **适合<u>给人看</u>的日志**。
 
   ```swift
   struct User: CustomStringConvertible {
@@ -3089,7 +3151,7 @@ print(value)         // 15
 
 ### 7、`throw`/`do`/`try`/`catch`/`finally` 为什么在**Objc**里面几乎不用，而[**Swift**](https://developer.apple.com/swift/)里面却被大量使用？<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-| 特性               | Objective-C                          | Swift                                       |
+| 特性               | Objc                                 | Swift                                       |
 | ------------------ | ------------------------------------ | ------------------------------------------- |
 | 异常 (`try/catch`) | 有，但性能差，ARC 下危险，官方不推荐 | 有，零成本设计，推荐用于“可预期错误”        |
 | 推荐方式           | `NSError **` 输出参数                | `throws` + `try`，或 `Result<T,Error>`      |
