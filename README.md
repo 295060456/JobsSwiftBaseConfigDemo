@@ -50,7 +50,7 @@
 
 ### 1、软件支持 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* [**过期的模拟器配件**](https://github.com/295060456/Xcode_Sys_lib)
+* [**过期的模拟器配件**](https://github.com/295060456/Xcode_Sys_lib) 
 
 * [**quicktype**](https://app.quicktype.io/)：从 **JSON** / **GraphQL** /其它数据格式 自动生成对应语言的类型定义
 
@@ -128,7 +128,7 @@
   
   print_green "🎉 修改完成！已将 ENABLE_USER_SCRIPT_SANDBOXING 设置为 NO"
 
-* <font color=red>**S**</font>wift <font color=red>**P**</font>ackage <font color=red>**M**</font>anager
+* <font color=red id=SPM>**S**</font>wift <font color=red>**P**</font>ackage <font color=red>**M**</font>anager
 
   <div style="text-align: center;">
     <img src="./assets/image-20250616173604040.png" alt="image-1" style="width:30%; display:inline-block; vertical-align: top;" />
@@ -211,7 +211,7 @@
       pod 'SnapKit'
       ```
     
-    * [**<font color=red>S</font>wift**](https://developer.apple.com/swift/) <font color=red>**P**</font>ackage <font color=red>**M**</font>anager
+    * [<font color=red>**S**</font>wift <font color=red>**P**</font>ackage <font color=red>**M**</font>anager](#SPM)
     
       > Xcode → File → Add Packages Dependency → 输入：
     
@@ -343,7 +343,7 @@
       pod 'Alamofire'
       ```
     
-    * [**<font color=red>S</font>wift**](https://developer.apple.com/swift/) <font color=red>**P**</font>ackage <font color=red>**M**</font>anager
+    * [<font color=red>**S**</font>wift <font color=red>**P**</font>ackage <font color=red>**M**</font>anager](#SPM)
     
       > Xcode → File → Add Packages Dependency → 输入：
     
@@ -481,7 +481,7 @@
       pod 'Moya'
       ```
     
-    * [**<font color=red>S</font>wift**](https://developer.apple.com/swift/) <font color=red>**P**</font>ackage <font color=red>**M**</font>anager
+    * [<font color=red>**S**</font>wift <font color=red>**P**</font>ackage <font color=red>**M**</font>anager](#SPM)
     
       > Xcode → File → Add Packages Dependency → 输入：
     
@@ -647,7 +647,7 @@
       pod 'RxRelay', # 安全替代 Variable，常用于 ViewModel
       ```
     
-    * [**<font color=red>S</font>wift**](https://developer.apple.com/swift/) <font color=red>**P**</font>ackage <font color=red>**M**</font>anager
+    * [<font color=red>**S**</font>wift <font color=red>**P**</font>ackage <font color=red>**M**</font>anager](#SPM)
     
       > Xcode → File → Add Packages Dependency → 输入：
     
@@ -1322,7 +1322,9 @@ if #available(iOS 11.0, *) {
   
 - <font color=red>**`@frozen`**</font>
 
-  > 冻结 `enum` 的布局，保证 **ABI** 稳定（库作者用）
+  > * 冻结 `enum` 的布局，保证 **ABI** 稳定（库作者用）
+  >   *  [**API 🆚 ABI**](#API🆚ABI)
+  >   * [**ABI不兼容**](#ABI不兼容)
 
   ```swift
   @frozen public enum ColorSpace { case srgb, displayP3 }
@@ -3207,11 +3209,44 @@ print(value)         // 15
     * 你可以用 `try/try? / try!` 根据需要选择安全级别。
     * 也可以把 `throws` 转换成 `Result<T, Error>`，和 `async/await`、`Combine`、[**Swift**](https://developer.apple.com/swift/) **Concurrency** 配合非常好。
 
+### 8、<font id=API🆚ABI>**API 🆚 ABI**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
+* **API** = 代码层的接口（函数名、参数、返回值）
 
+  > <font color=red>**A**</font>pplication <font color=red>**P**</font>rogramming <font color=red>**I**</font>nterface
 
+* **ABI** = 编译之后，二进制层的接口（函数在内存里的布局、调用约定、结构体的内存排布）
 
+  > <font color=red>**A**</font>pplication <font color=red>**B**</font>inary <font color=red>**I**</font>nterface
 
+### 9、<font id=ABI不兼容>什么是ABI不兼容？</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+假设你用 Swift 5 编译了一个动态库：
+
+```swift
+public struct Point {
+    var x: Int
+    var y: Int
+}
+```
+
+在 Swift 5 里，`Point` 的 ABI 规定：
+
+- 内存布局：先 `x`，再 `y`，每个都是 8 字节 → 共 16 字节
+- 调用时，参数怎么压栈，返回值怎么放寄存器
+
+如果 **Swift 6** 突然决定改布局，比如：
+
+```swift
+struct Point {
+    var y: Int
+    var x: Int
+}
+```
+
+那旧版本编译的 App 在运行时就会挂掉，因为它们以为 `Point` 的第一个字段是 `x`，结果新版本却把 `y` 放在了前面。
+
+这就是 **ABI 不兼容**。
 
 
 
