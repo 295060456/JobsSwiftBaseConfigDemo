@@ -12,6 +12,7 @@
 		044272852E8146130084B25C /* JXScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044272842E8146130084B25C /* JXScale.swift */; };
 		045920E42E84EC73008C8D6A /* SwiftTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E32E84EC72008C8D6A /* SwiftTools.swift */; };
 		045920E62E84F389008C8D6A /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E52E84F386008C8D6A /* CALayer.swift */; };
+		045920EA2E84FD82008C8D6A /* NSString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E92E84FD77008C8D6A /* NSString.swift */; };
 		0487AADA2E840CB200B5D307 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0487AAD92E840CB200B5D307 /* UIColorExtensions.swift */; };
 		0487AADC2E840EE300B5D307 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0487AADB2E840EE300B5D307 /* libc++.tbd */; };
 		049FD82F2E82729400636950 /* JobsLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049FD82E2E82729000636950 /* JobsLog.swift */; };
@@ -95,6 +96,7 @@
 		044272842E8146130084B25C /* JXScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXScale.swift; sourceTree = "<group>"; };
 		045920E32E84EC72008C8D6A /* SwiftTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTools.swift; sourceTree = "<group>"; };
 		045920E52E84F386008C8D6A /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
+		045920E92E84FD77008C8D6A /* NSString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSString.swift; sourceTree = "<group>"; };
 		0487AAD92E840CB200B5D307 /* UIColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		0487AADB2E840EE300B5D307 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		049FD82E2E82729000636950 /* JobsLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsLog.swift; sourceTree = "<group>"; };
@@ -350,6 +352,7 @@
 		C564FEEA2E0AAC2B0079B5C1 /* UIKit.extension */ = {
 			isa = PBXGroup;
 			children = (
+				045920E92E84FD77008C8D6A /* NSString.swift */,
 				045920E52E84F386008C8D6A /* CALayer.swift */,
 				C564FC742E0959620079B5C1 /* Inlines.swift */,
 				C564FC762E0959620079B5C1 /* NSObject.swift */,
@@ -681,6 +684,7 @@
 				C564FCB12E0959990079B5C1 /* CollectionCell.swift in Sources */,
 				C564FC362E09590B0079B5C1 /* JobsProtocol.swift in Sources */,
 				045920E42E84EC73008C8D6A /* SwiftTools.swift in Sources */,
+				045920EA2E84FD82008C8D6A /* NSString.swift in Sources */,
 				C564FC622E0959510079B5C1 /* Enum_struct_defines.swift in Sources */,
 				C564FC972E0959640079B5C1 /* UIActivityIndicatorView.swift in Sources */,
 				C564FCA22E0959640079B5C1 /* UITableView.swift in Sources */,

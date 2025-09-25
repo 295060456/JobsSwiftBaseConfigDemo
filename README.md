@@ -1191,6 +1191,31 @@ if #available(iOS 11.0, *) {
   {/*TODO*/}
   ```
 
+### 7、`UILabel` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 给 `UILabel` 里的文字加 **下划线**，并且可以指定下划线的颜色
+
+  > ```swift
+  > UILabel().underline(color:PYConst.main_color)
+  > ```
+
+  ```swift
+  extension UILabel {
+      func underline(color: UIColor) {
+          if let textString = self.text {
+              let attributedString = NSMutableAttributedString(string: textString)
+              attributedString.addAttribute(NSAttributedString.Key.underlineStyle,
+                                            value: NSUnderlineStyle.single.rawValue,
+                                            range: NSRange(location: 0, length: attributedString.length))
+              attributedString.addAttribute(NSAttributedString.Key.underlineColor,
+                                            value: color,
+                                            range: NSRange(location: 0, length: attributedString.length))
+              self.attributedText = attributedString
+          }
+      }
+  }
+  ```
+
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -1199,7 +1224,7 @@ if #available(iOS 11.0, *) {
 
 #### 1.1、系统注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-- `@available(...)` / `@unavailable(...)`
+- <font color=red>**`@available(...)`**</font>/ <font color=red>**`@unavailable(...)`**</font>
 
   > 控制平台/版本可用性、弃用信息
 
@@ -1213,7 +1238,7 @@ if #available(iOS 11.0, *) {
   @unavailable(iOS, message: "Not on iOS")
   func macOnly() {}
 
-- `@main` 指定程序入口
+- <font color=red>**`@main`**</font>指定程序入口 
 
   > 取代旧的 `@UIApplicationMain` / `@NSApplicationMain`
 
@@ -1224,7 +1249,7 @@ if #available(iOS 11.0, *) {
   }
   ```
 
-- `@inlinable` / `@usableFromInline`
+- <font color=red>**`@inlinable`**</font>/ <font color=red>**`@usableFromInline`**</font>
 
   > 跨模块内联/符号可见性微控（发布库时常用）
 
@@ -1233,7 +1258,7 @@ if #available(iOS 11.0, *) {
   @usableFromInline internal let cache = ...
   ```
   
-- `@frozen`
+- <font color=red>**`@frozen`**</font>
 
   > 冻结 `enum` 的布局，保证 ABI 稳定（库作者用）
 
@@ -1241,7 +1266,7 @@ if #available(iOS 11.0, *) {
   @frozen public enum ColorSpace { case srgb, displayP3 }
   ```
 
-- `@discardableResult`
+- <font color=red>**`@discardableResult`**</font>
 
   > 允许丢弃返回值（链式 API 常用）
 
@@ -1250,7 +1275,7 @@ if #available(iOS 11.0, *) {
   func setTitle(_ s:String) -> Self { /* ... */ return self }
   ```
 
-- `@escaping`
+-  <font color=red>**`@escaping`**</font>
 
   > 标记逃逸闭包参数
 
@@ -1258,7 +1283,7 @@ if #available(iOS 11.0, *) {
   func asyncOp(_ block: @escaping ()->Void) { /* store & call later */ }
   ```
 
-- `@autoclosure`
+- <font color=red>**`@autoclosure`**</font>
 
   > 调用端可省略 `{}` 延迟求值
 
@@ -1267,15 +1292,15 @@ if #available(iOS 11.0, *) {
   assert(1 < 2)   // 等价于 { 1 < 2 }
   ```
 
-- `@Sendable`
+- <font color=red>**`@Sendable`**</font>
 
-  > 并发安全闭包（跨 actor/线程）
+  > 并发安全闭包（跨 **actor**/线程）
 
   ```swift
   func run(_ job: @Sendable ()->Void) {}
   ```
 
-- `@MainActor` / 自定义 `@globalActor`
+- <font color=red>**`@MainActor`**</font>/ 自定义 <font color=red>**`@globalActor`**</font>
 
   > 将函数/类型限定在主线程或某个 actor 上
 
@@ -1286,11 +1311,11 @@ if #available(iOS 11.0, *) {
   }
   ```
 
-- `@preconcurrency`
+- <font color=red>**`@preconcurrency`**</font>
 
   > 为旧接口提供向后兼容的并发注释（迁移期会见到）
 
-- `@objc` / `@objcMembers` / `@nonobjc`
+- <font color=red>**`@objc`**</font>/ <font color=red>**`@objcMembers`**</font>/ <font color=red>**`@nonobjc`**</font>
 
   > 暴露/隐藏给 **Objective-C** 运行时（Selector、KVC/KVO、IB 需要）
 
@@ -1301,7 +1326,7 @@ if #available(iOS 11.0, *) {
   }
   ```
 
-- `@warn_unqualified_access`
+- <font color=red>**`@warn_unqualified_access`**</font>
 
   > 未加类型前缀调用时产生警告，逼调用方加前缀，避免 API 名称冲突
 
@@ -1310,7 +1335,7 @@ if #available(iOS 11.0, *) {
   func ambiguous() {}
   ```
 
-- `@dynamicMemberLookup` & `@dynamicCallable`
+- <font color=red>**`@dynamicMemberLookup`**</font>& <font color=red>**`@dynamicCallable`**</font>
 
   > 让类型支持 `obj.someName` 动态解析或像函数一样被“调用”
 
@@ -1321,20 +1346,20 @@ if #available(iOS 11.0, *) {
   }
   ```
 
-- `@resultBuilder`
+- <font color=red>**`@resultBuilder`**</font>
 
-  > SwiftUI 等 DSL 背后的机制。你用到的多是框架提供的具体 builder
+  > **SwiftUI** 等 **DSL** 背后的机制。你用到的多是框架提供的具体 **builder**
 
   ```swift
   @resultBuilder
   struct HTMLBuilder { /* ... */ }
   ```
 
-- `@testable import ModuleName`
+- <font color=red>**`@testable`**</font> **import ModuleName** 
 
-  > 允许测试访问目标模块的 internal 成员
+  > 允许测试访问目标模块的 **internal** 成员
 
-- `@IBAction` / `@IBOutlet`
+- <font color=red>**`@IBAction`**</font>/ <font color=red>**`@IBOutlet`**</font>
 
   > 连接 storyboard/xib
 
@@ -1343,7 +1368,7 @@ if #available(iOS 11.0, *) {
   @IBOutlet weak var titleLabel: UILabel!
   ```
 
-- `@IBInspectable` / `@IBDesignable`
+-  <font color=red>**`@IBInspectable`**</font>/ <font color=red>**`@IBDesignable`**</font>
 
   > 在 IB 可编辑/实时渲染自定义视图属性
 
@@ -1354,9 +1379,9 @@ if #available(iOS 11.0, *) {
   }
   ```
 
-- `@NSManaged`
+- <font color=red>**`@NSManaged`**</font>
 
-  > Core Data 动态解析属性/方法（不需要自己实现存取器）
+  > **Core Data**动态解析属性/方法（不需要自己实现存取器）
 
   ```swift
   class User: NSManagedObject {
@@ -1364,7 +1389,7 @@ if #available(iOS 11.0, *) {
   }
   ```
 
-- `@NSCopying`
+- <font color=red>**`@NSCopying`**</font>
 
   > 属性赋值时自动拷贝（要求值类型实现 `NSCopying`）
 
@@ -1374,7 +1399,7 @@ if #available(iOS 11.0, *) {
   }
   ```
 
-- `@State` / `@Binding` / `@StateObject` / `@ObservedObject`/`@Environment` / `@EnvironmentObject`/`@AppStorage` / `@SceneStorage` / `@FocusState`
+- <font color=red>**`@State`**</font>/<font color=red>**`@Binding`**</font>/<font color=red>**`@StateObject`**</font>/<font color=red>**`@ObservedObject`**</font>/<font color=red>**`@Environment`**</font>/<font color=red>**`@EnvironmentObject`**</font>/<font color=red>**`@AppStorage`**</font>/<font color=red>**`@SceneStorage`**</font>/<font color=red>**`@FocusState`**</font>
 
   ```swift
   struct Counter: View {
@@ -1383,7 +1408,7 @@ if #available(iOS 11.0, *) {
   }
   ```
 
-- `@Published`
+- <font color=red>**`@Published`**</font>
 
   ```swift
   class VM: ObservableObject {
@@ -1391,7 +1416,7 @@ if #available(iOS 11.0, *) {
   }
   ```
 
-- `@unchecked`
+- <font color=red>**`@unchecked`**</font>
 
   > 它是 **[Swift](https://developer.apple.com/swift/) 的一个属性修饰符**，目前主要和 **协议 `Sendable`** 结合使用
   >
@@ -1415,17 +1440,17 @@ if #available(iOS 11.0, *) {
     > - 值类型（`struct`，内部全是 `Sendable` 成员） → 自动符合 `Sendable`。
     > - 引用类型（`class`） → 默认 **不是 `Sendable`**，因为引用可能被多线程同时访问，造成数据竞争。
 
-- `@resultBuilder`
+- <font color=red>**`@resultBuilder`**</font>
 
-- `@ViewBuilder`
+- <font color=red>**`@ViewBuilder`**</font>
 
-- `@SceneBuilder`
+- <font color=red>**`@SceneBuilder`**</font>
 
-- `@ToolbarContentBuilder`
+- <font color=red>**`@ToolbarContentBuilder`**</font>
 
-- `@CommandsBuilder`
+- <font color=red>**`@CommandsBuilder`**</font>
 
-- `@LibraryContentBuilder`
+- <font color=red>**`@LibraryContentBuilder`**</font>
 
 #### 1.2、🙋 <font color=red>**自定义注解**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -1450,7 +1475,7 @@ if #available(iOS 11.0, *) {
   print(u.name)  // "Jobs"
   ```
 
-* 宏 ([**Swift**](https://developer.apple.com/swift/) 5.9+ / Swift Macros)
+* 宏 ([**Swift**](https://developer.apple.com/swift/) 5.9+ / [**Swift**](https://developer.apple.com/swift/) Macros)
 
   > [**Swift**](https://developer.apple.com/swift/) 5.9 引入了 **宏系统**，可以写类似 `@CodingKeys`、`@AddCompletionHandler` 的 **编译期注解/代码生成**。
   >  例如 Apple 提供的 `@freestanding(expression)` / `@attached(peer)` 等。

@@ -8,8 +8,7 @@
 import UIKit
 import Foundation
 import ObjectiveC
-
-// MARK: - UILabel 链式扩展
+/// UILabel 链式扩展
 extension UILabel {
     @discardableResult
     func byText(_ text: String?) -> Self {
@@ -67,8 +66,7 @@ extension UILabel {
         }
         return self
     }
-
-    // 背景图 → 平铺色
+    // MARK: 背景图 → 平铺色
     @discardableResult
     func bgImage(_ image: UIImage?) -> Self {
         if let img = image {
@@ -76,7 +74,6 @@ extension UILabel {
         }
         return self
     }
-
     // MARK: 显示样式（把旧枚举语义映射到具体行为）
     @discardableResult
     func makeLabelByShowingType(_ type: UILabelShowingType) -> Self {
@@ -114,12 +111,10 @@ extension UILabel {
         }
         return self
     }
-
     // MARK: 方向变换（使用 CATextLayer，避免富文本/对齐丢失）
     @discardableResult
     func transformLayer(_ direction: TransformLayerDirectionType) -> Self {
         superview?.layoutIfNeeded()
-
         // 清理旧 layer（避免重复叠加）
         layer.sublayers?
             .filter { $0 is CATextLayer && $0.name == "JobsTextLayer" }
@@ -166,17 +161,18 @@ extension UILabel {
         return self
     }
 }
-
-// MARK: - 辅助
-private extension CATextLayerAlignmentMode {
-    static func fromNSTextAlignment(_ a: NSTextAlignment) -> CATextLayerAlignmentMode {
-        switch a {
-        case .left: return .left
-        case .right: return .right
-        case .center: return .center
-        case .justified: return .justified
-        case .natural: return .natural
-        @unknown default: return .natural
+/// 给 UILabel 里的文字加 下划线，并且可以指定下划线的颜色。
+extension UILabel {
+    func underline(color: UIColor) {
+        if let textString = self.text {
+            let attributedString = NSMutableAttributedString(string: textString)
+            attributedString.addAttribute(NSAttributedString.Key.underlineStyle,
+                                          value: NSUnderlineStyle.single.rawValue,
+                                          range: NSRange(location: 0, length: attributedString.length))
+            attributedString.addAttribute(NSAttributedString.Key.underlineColor,
+                                          value: color,
+                                          range: NSRange(location: 0, length: attributedString.length))
+            self.attributedText = attributedString
         }
     }
 }
