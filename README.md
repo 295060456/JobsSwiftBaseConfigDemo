@@ -978,7 +978,19 @@
 
 ## 三、💻代码讲解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-### 1、⛓️链式调用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 1、平台区分引用库 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+#if os(OSX)
+    import AppKit
+#endif
+
+#if os(iOS) || os(tvOS)
+    import UIKit
+#endif
+```
+
+### 2、⛓️链式调用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * `UILabel`
 
@@ -1003,7 +1015,7 @@
 
 * TODO
 
-### 2、📏全局比例尺 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 3、📏全局比例尺 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 实现
 
@@ -1088,7 +1100,7 @@
   CGRect(x: 20.w, y: 100.h, width: 200.w, height: 40.h)
   ```
 
-### 3、🖨️ 日志打印工具的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 4、🖨️ 日志打印工具的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > ✅ 统一格式，自动带上文件名、行号、函数名
 >
@@ -1154,7 +1166,7 @@ struct JobsLogger {
 > // [🐞 DEBUG] ViewController.swift:45 viewDidLoad() → User(name: Jobs)
 > ```
 
-### 4、避免从 `XIB`/`Storyboard` 初始化 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 5、避免从 `XIB`/`Storyboard` 初始化 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 required init?(coder: NSCoder) {
@@ -1162,7 +1174,7 @@ required init?(coder: NSCoder) {
 }
 ```
 
-### 5、使用`Color Set` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 6、使用`Color Set` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 <p align="center">
   <img src="./assets/image-20250924174836800.png" width="20%"/>
@@ -1174,7 +1186,7 @@ if #available(iOS 11.0, *) {
 }
 ```
 
-### 6、网络鉴权`Code`的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 7、网络鉴权`Code`的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > - `r0.code` 是 `Int?`
 >
@@ -1964,6 +1976,57 @@ log("Hello")  // 自动变成 { "Hello" }
   // KeyPath 转函数（Swift 5.2+）
   struct User { let name: String }
   let names = [User(name:"A"), User(name:"B")].map(\.name)
+  ```
+
+#### 4.4、⛑️ <font>避免循环引用（强持有）</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 在 [**Swift**](https://developer.apple.com/swift/)  里，<font color=red>**闭包（block）默认会强引用 `self`**</font>。如果闭包被 `self` 持有，就会形成循环引用
+
+| 写法             | 特点                                                         |
+| ---------------- | ------------------------------------------------------------ |
+| `[weak self]`    | 安全，不会崩溃；需要解包；推荐常用                           |
+| `[unowned self]` | 更简洁，但不安全；适用于生命周期有保证的情况<br>`unowned` 不需要可选解包，比 `weak` 快一点（一般忽略不计） |
+
+```mermaid
+flowchart TD
+  A["是否在闭包中捕获 self"] -->|否| Z["不用处理"]
+  A -->|是| B{"闭包与 self 的生命周期关系"}
+
+  B -->|可能更长| C["用 weak self安全，不会崩溃"]
+  B -->|不更长| D["用 unowned self需确保存在"]
+
+  C --> E{"闭包内是否频繁使用 self"}
+  D --> E
+
+  E -->|需要| F["guard let self = self else return强引用后再用"]
+  E -->|不需要| G["self?.method()可选链调用"]
+
+  C --> H["场景: 网络请求 / GCD / 计时器"]
+  D --> I["场景: 初始化闭包 / UIView.animate"]
+```
+
+*  `self` 弱引用
+
+  ```swift
+  /// [weak self]：在闭包中捕获 self 的弱引用，不会增加引用计数。
+  /// guard let self = self else { return }：解包 self，如果对象已释放则直接退出闭包。
+  /// 闭包内部再用 self，就是解包之后的强引用了，避免了 retain cycle。
+  someAsyncOperation { [weak self] in
+      guard let self = self else { return }// 固定写法（推荐）语义清晰
+      self.doSomething()// 或者 self?.doSomething()
+  }
+  ```
+
+*  `self` 无主引用（有时 `self` 的生命周期保证比闭包长，可以用 `[unowned self]`）
+
+  > ❌ 不要滥用 `[unowned self]`，一旦生命周期判断错了，会 **直接崩溃**。
+
+  ```swift
+  /// unowned 不会增加引用计数，也不需要解包。
+  /// 但如果 self 已经释放，再调用就会 野指针崩溃。
+  someAsyncOperation { [unowned self] in
+      self.doSomething()
+  }
   ```
 
 ### 5、[**Swift**](https://developer.apple.com/swift/) 运算符重载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -2771,7 +2834,47 @@ print(value)         // 15
 
 所以它比真正的<u>**指针**</u>安全一些，但语义上等价于<u>**引用传递**</u>
 
+### 15、[**Swift**](https://developer.apple.com/swift/) 数值类型 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
+#### 15.1、整数类型（内建） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 来源：**Swift 标准库 (Swift Standard Library)** 
+
+* 有符号整数 (signed)
+  * `Int`：默认整数类型（和平台位宽一致，32 位系统上就是 32 位，64 位系统上就是 64 位）
+  * `Int8`：8 位，范围 -128 ~ 127
+  * `Int16`：16 位，范围 -32,768 ~ 32,767
+  * `Int32`：32 位，范围 -2,147,483,648 ~ 2,147,483,647
+  * `Int64`：64 位，范围 -9,223,372,036,854,775,808 ~ 9,223,372,036,854,775,807
+* 无符号整数 (unsigned)
+  * `UInt`：**和平台位宽一致**
+  * `UInt8`：0 ~ 255
+  * `UInt16`：0 ~ 65,535
+  * `UInt32`：0 ~ 4,294,967,295
+  * `UInt64`：0 ~ 18,446,744,073,709,551,615
+
+#### 15.2、浮点数类型（内建） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 来源：[**Swift**](https://developer.apple.com/swift/) **标准库 (Swift Standard Library)** 
+>
+> [**Swift**](https://developer.apple.com/swift/) 遵循 **IEEE 754** 标准
+
+* `Float`：32 位浮点数（约 6 位十进制精度）
+* `Double`：64 位浮点数（约 15 位十进制精度）
+* `Float16`：16 位半精度浮点数（精度低，常用于图形/机器学习优化）
+* `Float80`：80 位扩展精度浮点数（仅在某些平台可用，比如 **macOS** 的 `x86_64`；**Apple Silicon** 上已经没有）
+
+#### 15.3、其他数值相关类型 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* `Decimal`（来自 **`Foundation`**）：高精度十进制浮点数，常用于金融/货币计算，避免 `Double` 的精度误差。
+* `NSNumber`（来自 **`Foundation`**，**Objc** 桥接）：可以包装 **Int**、**Float**、**Double**、**Bool** 等。
+* `CGFloat`（来自 **CoreGraphics**）：<font color=red>**在 32 位平台是 `Float`，在 64 位平台是 `Double`，常用于 UI 框架。**</font>
+
+#### 15.4、特殊类型 / 标记 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* `Bool`：严格来说不是数值类型，但只有 `true` / `false`，底层存储为 1 bit/1 byte。
+* `Character`、`UnicodeScalar` 虽然能转成数值（`asciiValue` / `value`），但不算数值类型。
+* `SIMD` 向量类型（`SIMD2<Float>`、`SIMD4<Double>` 等）：Apple 针对并行计算/Metal 提供的数值向量。
 
 ## 五、<font color=red>**F**</font><font color=green>**A**</font><font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -2870,11 +2973,11 @@ print(value)         // 15
   >
   > `class` ✅ 可以继承
 
-* ARC 管理
+* **ARC** 管理
 
-  > `struct`：因为是值类型，不需要 ARC 管理，生命周期简单。
+  > `struct`：因为是值类型，不需要 **ARC** 管理，生命周期简单。
   >
-  > `class`：由 ARC 管理，可能有 **循环引用** 问题，需要 `weak` / `unowned`。
+  > `class`：由 **ARC** 管理，可能有 **循环引用** 问题，需要 `weak` / `unowned`。
 
 * 可变性
 
@@ -3221,7 +3324,7 @@ print(value)         // 15
 
 ### 9、<font id=ABI不兼容>什么是ABI不兼容？</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-假设你用 Swift 5 编译了一个动态库：
+假设你用 [**Swift**](https://developer.apple.com/swift/) 5 编译了一个动态库：
 
 ```swift
 public struct Point {
@@ -3230,12 +3333,12 @@ public struct Point {
 }
 ```
 
-在 Swift 5 里，`Point` 的 ABI 规定：
+在 [**Swift**](https://developer.apple.com/swift/) 5 里，`Point` 的 ABI 规定：
 
 - 内存布局：先 `x`，再 `y`，每个都是 8 字节 → 共 16 字节
 - 调用时，参数怎么压栈，返回值怎么放寄存器
 
-如果 **Swift 6** 突然决定改布局，比如：
+如果 [**Swift**](https://developer.apple.com/swift/) 6 突然决定改布局，比如：
 
 ```swift
 struct Point {
@@ -3248,7 +3351,14 @@ struct Point {
 
 这就是 **ABI 不兼容**。
 
+### 10、📃文件 `*.xcuserstate` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
+> `*.xcworkspace`是由`pod install`生成
+
+* 完整路径：`*.xcworkspace`/`xcuserdata`/`mac.xcuserdatad`/<font color=red>`UserInterfaceState.xcuserstate`</font> 
+* 记录 **Xcode 界面状态**：比如工程窗口大小、面板布局、文件展开/折叠状态、光标位置、断点信息等。
+* 属于 **用户本地个性化配置**，不同开发者的 `*.xcuserstate` 文件内容一般不同。
+* 不影响代码逻辑和工程编译，只是为了下次打开工程时恢复你上次的编辑环境。
 
 
 
