@@ -168,7 +168,6 @@ extension UILabel {
 }
 
 // MARK: - 辅助
-
 private extension CATextLayerAlignmentMode {
     static func fromNSTextAlignment(_ a: NSTextAlignment) -> CATextLayerAlignmentMode {
         switch a {
