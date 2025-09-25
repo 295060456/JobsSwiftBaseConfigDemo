@@ -1260,7 +1260,7 @@ if #available(iOS 11.0, *) {
   
 - <font color=red>**`@frozen`**</font>
 
-  > 冻结 `enum` 的布局，保证 ABI 稳定（库作者用）
+  > 冻结 `enum` 的布局，保证 **ABI** 稳定（库作者用）
 
   ```swift
   @frozen public enum ColorSpace { case srgb, displayP3 }
@@ -1302,7 +1302,7 @@ if #available(iOS 11.0, *) {
 
 - <font color=red>**`@MainActor`**</font>/ 自定义 <font color=red>**`@globalActor`**</font>
 
-  > 将函数/类型限定在主线程或某个 actor 上
+  > 将函数/类型限定在主线程或某个 **actor** 上
 
   ```swift
   @MainActor
@@ -1317,7 +1317,7 @@ if #available(iOS 11.0, *) {
 
 - <font color=red>**`@objc`**</font>/ <font color=red>**`@objcMembers`**</font>/ <font color=red>**`@nonobjc`**</font>
 
-  > 暴露/隐藏给 **Objective-C** 运行时（Selector、KVC/KVO、IB 需要）
+  > 暴露/隐藏给 **Objective-C** 运行时（<font color=red>**Selector**</font>、**KVC/KVO**、**IB** 需要）
 
   ```swift
   @objcMembers class Foo: NSObject {
@@ -2627,6 +2627,88 @@ class DisplayDriver {
 
 ### 13、`Subscript` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
+### 14、<font color=red>**`inout`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> - <font color=red>**`inout`**</font> 用来 **把参数当作引用传递**（类似 **C++** 的引用 / 指针，或者 **Objc** 的 `&` 参数）
+> - 默认情况下，[**Swift**](https://developer.apple.com/swift/) 的函数参数是 **值传递**，函数里修改不会影响外部
+> - 用 <font color=red>**`inout`**</font> 修饰后，函数里修改的就是外部变量本身
+
+#### 1、基本用法 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 为什么要写 `&`
+> - [**Swift**](https://developer.apple.com/swift/) 很强调安全性，不允许你<u>无意中</u>把一个值传进去就被函数改掉。
+> - `&` 是一个 **显式标记**，告诉编译器和读代码的人：⚠️ 这个函数会修改传进去的值。
+
+```swift
+func addTen(to number: inout Int) {
+    number += 10
+}
+
+var value = 5
+addTen(to: &value)   // 传参时要加 & 符号
+print(value)         // 15
+```
+
+#### 2、[**参数传递的比较**](#普通参数传递🆚inout参数传递) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 3、<font color=red>**`inout`**</font>的限制 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 只能传变量，不能传常量 / 字面量
+
+  ```swift
+  var a = 10
+  addTen(to: &a)   // ✅ OK
+  
+  addTen(to: &5)   // ❌ 报错：不能直接传字面量
+  ```
+
+* **不能默认值**（比如 `inout Int = 0` 这种写法不行）
+
+* **不能和可变参数 `...` 一起用**
+
+#### 4、使用场景 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 交换两个变量
+
+  ```swift
+  func mySwap<T>(_ a: inout T, _ b: inout T) {
+      let tmp = a
+      a = b
+      b = tmp
+  }
+  
+  var x = 1, y = 2
+  mySwap(&x, &y)
+  print(x, y) // 2 1
+  ```
+
+* 原地修改集合
+
+  ```swift
+  func doubleAll(_ numbers: inout [Int]) {
+      for i in numbers.indices {
+          numbers[i] *= 2
+      }
+  }
+  
+  var list = [1, 2, 3]
+  doubleAll(&list)
+  print(list)  // [2, 4, 6]
+  
+  ```
+
+#### 5、底层理解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> `inout` 本质上是 **Copy-In Copy-Out**：
+
+- 调用时，把变量的地址传进函数。
+- 函数内部操作的是临时引用。
+- 函数返回时，把修改同步回原变量。
+
+所以它比真正的<u>**指针**</u>安全一些，但语义上等价于<u>**引用传递**</u>
+
+
+
 ## 五、<font color=red>**F**</font><font color=green>**A**</font><font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、[**Swift**](https://developer.apple.com/swift/) 纯类 🆚 `NSObject` 子类 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -2959,6 +3041,51 @@ class DisplayDriver {
   }
   ```
 
+#### 3、<font id=普通参数传递🆚inout参数传递>**普通参数传递** 🆚 <font color=red>**`inout`**</font> **参数传递**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 普通参数传递（值传递）
+
+  ```swift
+  func addTen(_ number: Int) {
+      var num = number
+      num += 10
+  }
+  
+  var value = 5
+  addTen(value)
+  print(value)   // 5
+  ```
+
+  ```mermaid
+  flowchart TD
+      A["value = 5 (外部变量)"]
+      B["number = 5 (函数参数副本)"]
+  
+      A -- "复制" --> B
+      B -- "修改后=15" --> B
+      A -. "不受影响" .-> A
+  ```
+
+* <font color=red>**`inout`**</font> 参数传递（引用传递）
+
+  ```	swift
+  func addTen(_ number: inout Int) {
+      number += 10
+  }
+  
+  var value = 5
+  addTen(&value)
+  print(value)   // 15
+  ```
+
+  ```mermaid
+  flowchart TD
+      A["value = 5 (外部变量)"]
+      B["number 引用 -> value"]
+  
+      A <--> B
+      B -- "修改=15" --> A
+  ```
 
 ### 7、`throw`/`do`/`try`/`catch`/`finally` 为什么在**Objc**里面几乎不用，而[**Swift**](https://developer.apple.com/swift/)里面却被大量使用？<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
