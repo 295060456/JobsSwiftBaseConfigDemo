@@ -939,7 +939,7 @@
 
 * `UIImageView`
 
-* 
+* TODO
 
 ### 2、📏全局比例尺 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -1111,6 +1111,85 @@ if #available(iOS 11.0, *) {
     UIColor(named: "TextColor0")
 }
 ```
+
+### 6、网络鉴权`Code`的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> - `r0.code` 是 `Int?`
+>
+> - `JXAuthCode.tokenEmpty` 是一个 **枚举值 (`JXAuthCode`)**
+>
+> - [**Swift**](https://developer.apple.com/swift/) 不允许直接比较 `Int` 和 `JXAuthCode`。
+>
+>   ```swift
+>   if r0.code == JXAuthCode.tokenEmpty.rawValue
+>       || r0.code == JXAuthCode.tokenInvalid.rawValue
+>       || r0.code == JXAuthCode.loginExpired.rawValue
+>       || r0.code == JXAuthCode.authorizationFail.rawValue {
+>       print("需要重新登录")
+>   }
+>   ```
+
+* 定义封装
+
+  ```swift
+  // MARK: -网络鉴权
+  public enum JXAuthCode: UInt {
+      case tokenEmpty        = 10006  // 令牌为空
+      case tokenInvalid      = 10007  // 令牌错误
+      case loginExpired      = 10008  // 登陆过期
+      case authorizationFail = 10014  // 授权失败
+      case success           = 10000  // 成功
+  }
+  ```
+
+  ```swift
+  // MARK: - 扩展 Int 与 JXAuthCode 的比较。避免写rawValue
+  public func ==(lhs: Int?, rhs: JXAuthCode) -> Bool {
+      guard let lhs = lhs else { return false }
+      return lhs == Int(rhs.rawValue)
+  }
+  
+  public func ==(lhs: Int, rhs: JXAuthCode) -> Bool {
+      return lhs == Int(rhs.rawValue)
+  }
+  
+  public func ==(lhs: JXAuthCode, rhs: Int?) -> Bool {
+      guard let rhs = rhs else { return false }
+      return Int(lhs.rawValue) == rhs
+  }
+  
+  public func ==(lhs: JXAuthCode, rhs: Int) -> Bool {
+      return Int(lhs.rawValue) == rhs
+  }
+  
+  // MARK: - 扩展 Int 与 JXAuthCode 的不等于
+  public func !=(lhs: Int?, rhs: JXAuthCode) -> Bool {
+      !(lhs == rhs)
+  }
+  
+  public func !=(lhs: Int, rhs: JXAuthCode) -> Bool {
+      !(lhs == rhs)
+  }
+  
+  public func !=(lhs: JXAuthCode, rhs: Int?) -> Bool {
+      !(lhs == rhs)
+  }
+  
+  public func !=(lhs: JXAuthCode, rhs: Int) -> Bool {
+      !(lhs == rhs)
+  }
+  ```
+
+* 使用
+
+  ```swift
+  if (r0.code == JXAuthCode.tokenEmpty // 令牌为空
+   || r0.code == 10007 // 令牌错误
+   || r0.code == 10008 // 登陆过期
+   || r0.code == 10056
+   || r0.code == 10014)// 授权失败
+  {/*TODO*/}
+  ```
 
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 

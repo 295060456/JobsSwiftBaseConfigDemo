@@ -9,8 +9,7 @@
 // Swift Enum Definitions
 
 import Foundation
-// MARK: - 系统相关
-/// 开发环境
+// MARK: - 开发环境
 public enum JobsNetworkingEnvir: NSInteger {
     case undefined = 0,
          dev,    /// 开发环境
@@ -18,7 +17,7 @@ public enum JobsNetworkingEnvir: NSInteger {
          uat,    /// UAT环境
          product /// 生产环境
 }
-/// 文件类型枚举定义
+// MARK: - 文件类型枚举定义
 public enum FileType: UInt {
     case txt = 0,/// 文本文件
          image,  /// 图片文件
@@ -26,24 +25,24 @@ public enum FileType: UInt {
          sound,  /// 音频文件
          plist   /// 属性列表文件
 }
-/// 图片填充模式
+// MARK: - 图片填充模式
 public enum DWContentMode: Int {
     case scaleAspectFit,  /// 适应模式
          scaleAspectFill, /// 填充模式
          scaleToFill      /// 拉伸模式
 }
-/// 启动模式
+// MARK: - 启动模式
 public enum BitsMonitorRunMode: UInt {
     case autoRun = 0,/// 自启动模式
          manualRun   /// 手动启动模式
 }
-/// 启动状态
+// MARK: - 启动状态
 public enum DispatchTimerState: Int {
     case `init` = 0,
          resume,
          suspend
 }
-/// 屏幕分辨率
+// MARK: - 屏幕分辨率
 public enum iPhScrPxType: UInt {
     case none
     case _4_4S,                             /// 屏幕分辨率(px) = 640 * 960
@@ -78,14 +77,14 @@ public enum iPhScrPxType: UInt {
          _16Pro,                            /// 屏幕分辨率(px) = 1179 * 2556
          _16ProMax                          /// 屏幕分辨率(px) = 1290 * 2796
 }
-/// 平台维护状态
+// MARK: - 平台维护状态
 public enum JobsAppStatus: Int {
     case undefined = 0,
          maintenance,   /// 平台维护中
          ok,            /// 平台正常
          close          /// 平台关闭
 }
-/// 终端类型
+// MARK: - 终端类型
 public enum JobsOperationType: Int {
     case undefined = 0,  /// 未定义
          pc,             /// PC端
@@ -97,36 +96,36 @@ public enum JobsOperationType: Int {
          androidBrowser, /// Android浏览器网页
          unknown         /// 未知
 }
-/// 控制器的推进方式
+// MARK: - 控制器的推进方式
 public enum ComingStyle: UInt {
     case unknown = 0, push, present, pop
 }
-///
+// MARK: -
 public enum JobsHeaderFooterViewStyle: Int {
     case none = 0, header, footer
 }
-/// WGradientProgress
+// MARK: - WGradientProgress
 public enum WGradientProgressType: UInt {
     case colorNormal = 0,/// 单一色
          colorRoll       /// 色彩在不断的翻滚
 }
-/// 倒计时模式
+// MARK: - 倒计时模式
 public enum TimerStyle: UInt {
     case clockwise = 0,/// 顺时针模式
          anticlockwise /// 逆时针模式（倒计时模式）
 }
-/// 排序方向
+// MARK: - 排序方向
 public enum SortingType: Int {
     case positive = 0,/// 排序方向-正序
          reverse      /// 排序方向-倒序
 }
-/// 用哪一种模式进行初始化NSTimer定时器
+// MARK: - 用哪一种模式进行初始化NSTimer定时器
 public enum ScheduledTimerType: UInt {
     case type0 = 0,/// scheduledTimerWithTimeInterval/repeats/block
          type1,    /// scheduledTimerWithTimeInterval/invocation/repeats
          type2     /// scheduledTimerWithTimeInterval/target/selector/userInfo/repeats
 }
-/// NSTimer定时器当前状态
+// MARK: - NSTimer定时器当前状态
 public enum NSTimerCurrentStatus: UInt {
     case unknown = 0,/// 定时器未知状态
          run,        /// 定时器正在运行
@@ -134,19 +133,19 @@ public enum NSTimerCurrentStatus: UInt {
          pause,      /// 定时器暂停
          destroy     /// 定时器销毁
 }
-/// 登录方式
+// MARK: - 登录方式
 public enum LoginType: Int {
     case silent = 0,/// 静默登录（只在账密登录成功后有效）
          manual     /// 非静默登录
 }
-/// 更新类型
+// MARK: - 更新类型
 public enum JobsUpdateType: Int {
     case undefined,/// 不更新
          bySys,    /// 系统强制更新
          byUser,   /// 用户手动更新
          all       /// 系统自动更新
 }
-/// 系统支持语言
+// MARK: - 系统支持语言
 public enum AppLanguage: Int {
     case bySys,      /// App语言跟随当前系统
          Simplified, /// zh-Hans：简体中文
@@ -154,25 +153,25 @@ public enum AppLanguage: Int {
          English,    /// en：标准英语
          Tagalog     /// tl：菲律宾他加禄语
 }
-///
+// MARK: -
 public enum IntervalStyle: UInt {
     case seconds = 0,/// 单位：秒
          milliseconds/// 单位：毫秒
 }
-/// 屏幕方向
+// MARK: - 屏幕方向
 public enum DeviceOrientation: Int {
     case unknown, /// 未知方向
          portrait,/// 竖屏
          landscape/// 横屏
 }
-/// 文字方向
+// MARK: - 文字方向
 public enum TransformLayerDirectionType: UInt {
     case up = 0,/// 文字方向朝上(默认正常)
          left,  /// 文字方向朝左
          down,  /// 文字方向朝下
          right  /// 文字方向朝右
 }
-///
+// MARK: -
 public enum NSObject_SPAlertControllerInitType: UInt {
     case type1 = 0,/// alertControllerWithTitle/message/preferredStyle
          type2,    /// alertControllerWithTitle/message/preferredStyle/animationType
@@ -180,7 +179,7 @@ public enum NSObject_SPAlertControllerInitType: UInt {
          type4,    /// alertControllerWithCustomHeaderView/preferredStyle/animationType
          type5     /// alertControllerWithCustomActionSequenceView/title/message/preferredStyle/animationType
 }
-/// 计时器运行状态
+// MARK: - 计时器运行状态
 public enum TimerProcessType: Int {
     case ready = 0,/// 准备状态
          running,  /// 运行状态
@@ -188,7 +187,7 @@ public enum TimerProcessType: Int {
          resume,   /// 恢复运行状态
          stop      /// 结束状态
 }
-/// Label 的表现方式
+// MARK: - Label 的表现方式
 public enum UILabelShowingType: UInt {
     case type01 = 1,/// 一行显示。定宽、定高、定字体。多余部分用…表示（省略号的位置由NSLineBreakMode控制）
          type02,    /// 一行显示。定宽、定高、定字体。多余部分scrollerView
@@ -196,13 +195,13 @@ public enum UILabelShowingType: UInt {
          type04,    /// 一行显示。定宽、定高。缩小字体方式全展示 【单行：ByWidth】
          type05     /// 多行显示。定宽、不定高、定字体 【多行：ByFont】
 }
-/// 当前类型
+// MARK: - 当前类型
 public enum ComponentType: Int {
     case unknown,      /// 其他
          view,         /// 视图
          viewController/// 控制器
 }
-/// 时区
+// MARK: - 时区
 public enum TimeZoneType: Int {
     case UTC,               /// 协调世界时
          GMT,               /// 格林尼治标准时间
@@ -238,7 +237,7 @@ public enum TimeZoneType: Int {
          MYT,               /// 马来西亚时间
          KST                /// 韩国标准时间
 }
-/// 图片编码格式
+// MARK: - 图片编码格式
 public enum PicToStrStyle: Int {
     case hexadecimal = 0,/// 图片 转 十六进制
          base16,         /// 图片 转 Base16字符编码
@@ -247,17 +246,17 @@ public enum PicToStrStyle: Int {
          base85,         /// 图片 转 Base85字符编码
          mime            /// 图片 转 MIME
 }
-/// 刷新阶段
+// MARK: - 刷新阶段
 public enum RefreshingType: Int {
     case beginRefreshing = 0,/// 开始刷新
          endRefreshing       /// 结束刷新
 }
-/// banner滚动方向
+// MARK: - banner滚动方向
 public enum JhtBannerViewOrientation: Int {
     case horizontal,/// 横向
          vertical   /// 纵向
 }
-/// JobsDropDownListView的方向
+// MARK: - JobsDropDownListView的方向
 public enum JobsDropDownListViewDirection: Int {
     case down = 0,
          up
@@ -277,7 +276,7 @@ public enum JobsDropDownListViewDirection: Int {
  
  【需要权限的接口】请求头加上authorization字段，值为服务器颁发的jwt令牌。令牌无感刷新，需实时更新
  */
-/// 请求数据返回的状态码、根据自己的服务端数据来
+// MARK: - 请求数据返回的状态码、根据自己的服务端数据来
 public enum HTTPResponseCode: Int {
     case serveError = 10005               /// 服务器异常
     case success = 200                    /// 请求成功
@@ -295,33 +294,33 @@ public enum HTTPResponseCode: Int {
     case withdrawMaintenance = 1006000014 /// 提现功能维护
     ///其他代号，展示msg内容即可
 }
-/// 语言
+// MARK: - 语言
 public enum HTTPRequestHeaderLanguageType: Int {
     case en,  /// 英文
          cn,  /// 中文
          other/// 其他语言
 }
-/// 抖音模式
+// MARK: - 抖音模式
 public enum MKRightBtnViewBtnType: Int {
     case love,   /// 点赞
          comment,/// 评论
          share   /// 分享
 }
-/// Push/pop 控制器的方向
+// MARK: - Push/pop 控制器的方向
 public enum JobsTransitionDirection: UInt {
     case top,   /// 从上面进出
          bottom,/// 从下面进出
          left,  /// 从左边进出
          right  /// 从右边进出
 }
-/// 滑动方向
+// MARK: - 滑动方向
 public enum MoveDirection: Int {
     case verticalUp = 0,/// 垂直方向(向上)滑动
          verticalDown,  /// 垂直方向(向下)滑动
          horizontLeft,  /// 水平方向(向左)滑动
          horizontRight  /// 水平方向(向右)滑动
 }
-/// 滚动方向
+// MARK: - 滚动方向
 public enum ScrollDirection: Int {
     case none = 0,
          right,     /// 右👉🏻
@@ -333,20 +332,19 @@ public enum ScrollDirection: Int {
          rightDown, /// 右下👉🏻👇🏻
          leftDown   /// 左下👈🏻👇🏻
 }
-/// 比较结果
+// MARK: - 比较结果
 public enum CompareRes: Int {
     case error,
          moreThan,  /// >
          equal,     /// ==
          lessThan   /// <
 }
-/// 搜索策略
+// MARK: - 搜索策略
 public enum JobsSearchStrategy: Int {
     case accurate = 0,/// 精确查询
          fuzzy        /// 模糊查询
 }
-// MARK: - 订单相关
-/// 时间定义
+// MARK: - 订单相关@时间定义
 public enum JobsOrderDate: Int {
     case undefined = -1,
          today,     /// 今天
@@ -355,7 +353,7 @@ public enum JobsOrderDate: Int {
          inOneMonth,/// 一个月内
          all        /// 全部
 }
-/// 支付类型
+// MARK: - 订单相关@支付类型
 public enum JobsPayType: Int {
     case undefined,       /// 未定义
          bankCard,        /// 银行卡
@@ -368,14 +366,14 @@ public enum JobsPayType: Int {
          mataCreditScore, /// 信用分支付
          all
 }
-/// 默认支付类型
+// MARK: - 订单相关@默认支付类型
 public enum JobsPayDefaultType: Int {
     case undefined,
          main,      /// 主支付类型
          other,     /// 副支付类型
          all
 }
-/// 订单类型
+// MARK: - 订单相关@订单类型
 public enum JobsOrderType: Int {
     case undefined,
          mall,       /// 商城订单
@@ -383,12 +381,12 @@ public enum JobsOrderType: Int {
          course,     /// 课程订单
          all
 }
-/// 存取款
+// MARK: - 订单相关@存取款
 public enum BankStyle: Int {
     case deposit,/// 存款
          withdraw/// 提款
 }
-/// 订单状态
+// MARK: - 订单相关@订单状态
 public enum JobsOrderState: Int {
     case undefined
     case due,               /// 待付款订单
@@ -402,8 +400,7 @@ public enum JobsOrderState: Int {
          deleted,           /// 订单已经被删除
          all
 }
-// MARK: - 会员相关
-/// 更新用户信息类型
+// MARK: - 会员相关@更新用户信息类型
 public enum JobsUpdateUserInfoType: Int {
     case undefined = 0,     /// 未定义
          nation,            /// 国家
@@ -426,11 +423,11 @@ public enum JobsUpdateUserInfoType: Int {
          whatsApp,          /// WhatsApp账号
          all                /// 全部更新
 }
-/// 会员等级
+// MARK: - 会员相关@会员等级
 public enum JobsRankClass: Int {
     case undefined = 0, vip0, vip1, vip2, vip3, vip4, vip5, vip6, vip7, vip8, vip9, vip10, all
 }
-/// 活动状态
+// MARK: - 会员相关@活动状态
 public enum JobsActiveState: Int {
     case undefined = 0,/// 未定义
          joined,       /// 参与活动
@@ -439,17 +436,17 @@ public enum JobsActiveState: Int {
          joinedBefore, /// 已参与过活动
          all
 }
-/// 开关状态
+// MARK: - 会员相关@开关状态
 public enum JobsSwitchType: Int {
     case open = 0,/// 启用（正常）
          close    /// 停用
 }
-/// 开关状态
+// MARK: - 会员相关@开关状态
 public enum JobsSwitchType2: Int {
     case close = 0,/// 停用
          open      /// 启用（正常）
 }
-/// 客服平台标识
+// MARK: - 会员相关@客服平台标识
 public enum JobsCustomerContactStyle: Int {
     case undefined = 0,/// 未定义
          qq,           /// QQ
@@ -460,7 +457,7 @@ public enum JobsCustomerContactStyle: Int {
          onlineURL,    /// onlineURL
          all
 }
-/// 消息类型
+// MARK: - 会员相关@消息类型
 public enum JobsMsgType: Int {
     case undefined = 0,/// 未定义
          notify,       /// 通知
@@ -469,12 +466,12 @@ public enum JobsMsgType: Int {
          bonus,        /// 红利
          all
 }
-/// 账户类型
+// MARK: - 会员相关@账户类型
 public enum AccountStyle: Int {
     case gcCash,/// GCCash
          bank   /// 银行
 }
-///
+// MARK: - 会员相关@
 public enum FMActionType: Int {
     case signin = 0,     /// 注册
          login,          /// 登录
@@ -484,20 +481,20 @@ public enum FMActionType: Int {
          bindEwallet,    /// 绑定加密货币地址
          withdraw        /// 提现
 }
-///
+// MARK: - 会员相关@
 public enum FMGameListStyle: Int {
     case new = 0,/// 最新
          hot,    /// 热门
          all,    /// 全部
          fav     /// 最爱
 }
-/// KYC
+// MARK: - 会员相关@KYC
 public enum VerificationStatus: Int {
     case unverified = 0,/// 未认证
          verifying,     /// 认证中
          verified       /// 已认证
 }
-/// 广告类型
+// MARK: - 会员相关@广告类型
 public enum FMAdsType: Int {
     case homeBanner = 0     /// 首页天顶轮播大Banner
     case navbarMini = 1     /// 导航栏4小Banner
@@ -507,14 +504,14 @@ public enum FMAdsType: Int {
     case announcement = 5   /// 公告
     case homeWindowPop = 6  /// 首页弹窗广告
 }
-/// 账号类型
+// MARK: - 会员相关@账号类型
 public enum FMAccType: Int {
     case allMember = 0,     /// 所有会员
          designatedMember,  /// 指定会员
          allAgency,         /// 全代理线
          designatedAgency   /// 指定代理线
 }
-/// 跳转类型
+// MARK: - 会员相关@跳转类型
 public enum FMJumpType: Int {
     case designatedGame = 0,/// 指定游戏
          stadium,           /// 场馆大厅
@@ -522,28 +519,28 @@ public enum FMJumpType: Int {
          webURL,            /// 网站地址
          noJump             /// 不跳转
 }
-/// 跳转类型：记录是什么触发登录操作的（登录成功继续进行流程）
+// MARK: - 会员相关@跳转类型：记录是什么触发登录操作的（登录成功继续进行流程）
 public enum FMLoginWork: Int {
     case `default` = 0, myFav, myBank
 }
-/// KYC状态
+// MARK: - 会员相关@KYC状态
 public enum KYCStatus: Int {
     case pending = 0,/// 待审核
          approved,   /// 通过
          rejected,   /// 拒绝
          notSubmitted/// 未提交
 }
-/// 提现额度
+// MARK: - 会员相关@提现额度
 public enum JobsWithdrawalAmountType: Int {
     case normal = 0,/// 普通提现
          largeAmount/// 大额提现
 }
-/// 是否已KYC验证
+// MARK: - 会员相关@是否已KYC验证
 public enum KYCOK: Int {
     case failed = 0,/// 未通过
          passed     /// 已经通过
 }
-/// 首页游戏列表名
+// MARK: - 会员相关@首页游戏列表名
 public enum HomeBarListStyle: Int {
     case sports = 1001101,      /// Sports 体育
          liveCasino = 1001102,  /// Live Casino 真人
@@ -552,18 +549,18 @@ public enum HomeBarListStyle: Int {
          lottery = 1001105,     /// Lottery 彩票
          esport = 1001106       /// ESport 电竞
 }
-/// 绑定状态
+// MARK: - 会员相关@绑定状态
 public enum BindStyle: Int {
     case unbound = 0,/// 未绑定
          bound = 1   /// 已绑定
 }
-/// 绑定状态
+// MARK: - 会员相关@绑定状态
 public enum NeedRealName: Int {
     case noNeed = 0,/// 不需要
          need1,     /// 需要-单姓名
          needMore   /// 需要-可以多姓名
 }
-/// ID 类型
+// MARK: - 会员相关@ID 类型
 public enum IdTypeEnum: Int {
     case philNationalID = 1,        /// Philippine National ID
          driversLicense = 2,        /// Driver's License
@@ -585,30 +582,30 @@ public enum IdTypeEnum: Int {
          acr = 18,                  /// Alien Certificate of Registration
          icr = 19                   /// Immigrant Certificate of Registration
 }
-/// 活动类型：1、日常； 2、签到 ；3、存款优惠
+// MARK: - 会员相关@活动类型：1、日常； 2、签到 ；3、存款优惠
 public enum ActivityType: Int {
     case normal = 0,        /// 日常
          signin = 1,        /// 签到
          depositPromo = 2   /// 存款优惠
 }
-/// 奖励发放：1、自动发放；2、人工审核
+// MARK: - 会员相关@奖励发放：1、自动发放；2、人工审核
 public enum RewardDistributionType: Int {
     case auto = 1,  /// 自动发放
          manual = 2 /// 人工审核
 }
-/// 活动周期：1、长期有效；2、指定时间
+// MARK: - 会员相关@活动周期：1、长期有效；2、指定时间
 public enum ActivityDuration: Int {
     case longterm = 1,      /// 长期有效
          specifiedTime = 2  /// 指定时间
 }
-/// 活动分类：0、新手；1、日常；2、优惠；3、限时
+// MARK: - 会员相关@活动分类：0、新手；1、日常；2、优惠；3、限时
 public enum ActivityCategory: Int {
     case newbie = 0,    /// 新手
          daily = 1,     /// 日常
          promotion = 2, /// 优惠
          limitedTime = 3/// 限时
 }
-/// 活动状态：-2、删除；-1、过期；0、禁用；1、预热；2、开启
+// MARK: - 会员相关@活动状态：-2、删除；-1、过期；0、禁用；1、预热；2、开启
 public enum ActivityStatus: Int {
     case deleted = -2,  /// 删除
          expired = -1,  /// 过期
@@ -616,33 +613,33 @@ public enum ActivityStatus: Int {
          preheating = 1,/// 预热
          Open = 2       /// 开启
 }
-/// 代理线设置：1、全部参与；2、排除代理线；3、指定代理线
+// MARK: - 会员相关@代理线设置：1、全部参与；2、排除代理线；3、指定代理线
 public enum AgentLineSetting: Int {
     case all = 1, /// 全部参与
          exclude, /// 排除代理线
          specified/// 指定代理线
 }
-/// 是否有子游戏：1.有 0.没有
+// MARK: - 会员相关@是否有子游戏：1.有 0.没有
 public enum HasSubSetting: Int {
     case no = 0,/// 没有子游戏
          yes = 1/// 有子游戏
 }
-/// 是否热门：0.是 1.否
+// MARK: - 会员相关@是否热门：0.是 1.否
 public enum IsHotGameSetting: Int {
     case hot = 0,  /// 是热门游戏
          notHot = 1/// 不是热门游戏
 }
-/// 状态：0.开始 1.禁用
+// MARK: - 会员相关@状态：0.开始 1.禁用
 public enum StatusSetting: Int {
     case started = 0,/// 开始
          disabled = 1/// 禁用
 }
-/// 电子标签类型：1. Hot 2. New
+// MARK: - 会员相关@电子标签类型：1. Hot 2. New
 public enum ElectronicLabelTypeSetting: Int {
     case hot = 1,/// 热门
          new = 2 /// 新品
 }
-/// 用户类型设置
+// MARK: - 会员相关@用户类型设置
 public enum UserTypeSetting: Int {
     case register = 1,      /// 注册
          login = 2,         /// 登录
@@ -656,12 +653,12 @@ public enum UserTypeSetting: Int {
          deposit = 10,      /// 代理代存
          bindEWallet = 11   /// 绑定电子钱包
 }
-/// 业务来源
+// MARK: - 会员相关@业务来源
 public enum BusinessSourceSetting: Int {
     case member = 1,/// 会员（默认）
          agent = 2  /// 代理
 }
-/// 站内信类型
+// MARK: - 会员相关@站内信类型
 public enum FMINBOXTYPE: Int {
     case undefined = -1,    /// 未定义或所有类型
     sportsAnnouncement = 1, /// 体育赛事公告
@@ -670,17 +667,17 @@ public enum FMINBOXTYPE: Int {
     personal,               /// 个人
     announcement            /// 公告
 }
-/// 当前类型
+// MARK: - 会员相关@当前类型
 public enum ReadStatus: Int {
     case unread,/// 未读
          read   /// 已读
 }
-/// 结算状态
+// MARK: - 会员相关@结算状态
 public enum SettleFlag: Int {
     case no = 0,/// 未结算
          yes    /// 已结算
 }
-/// 查询时间类型
+// MARK: - 会员相关@查询时间类型
 public enum JobsQueryTimeType: Int {
     case specific = 0,  /// 具体时间
          today,         /// 当天
@@ -688,7 +685,7 @@ public enum JobsQueryTimeType: Int {
          within7Days,   /// 7天内
          within30Days   /// 30天内
 }
-/// 交易订单统一状态
+// MARK: - 会员相关@交易订单统一状态
 public enum JobsTransactionStatus: Int {
     case all = -1,   /// 查询全部
     processing = 0,  /// 处理中
@@ -696,7 +693,7 @@ public enum JobsTransactionStatus: Int {
     failure,         /// 失败
     review           /// 审核中
 }
-/// 交易订单类型
+// MARK: - 会员相关@交易订单类型
 public enum JobsTransactionType: Int {
     case all = -1,   /// 查询全部
     deposit = 1,     /// 充值（存款）
@@ -707,18 +704,18 @@ public enum JobsTransactionType: Int {
     systemAdjustment,/// 系统调整
     live             /// 直播
 }
-/// 交易类型
+// MARK: - 会员相关@交易类型
 public enum JobsTransactionDirection: Int {
     case income = 0,/// 收入
          expense    /// 支出
 }
-/// 线上支付渠道
+// MARK: - 会员相关@线上支付渠道
 public enum FMWalletType: Int {
     case gcash = 1, /// GCash
          mayaPay,   /// MayaPay
          grabPay    /// GrabPay
 }
-/// 提现类型
+// MARK: - 会员相关@提现类型
 public enum FMWithdrawalType: Int {
     case bankCard = 0,/// 银行卡提现
          exclusive,   /// 专属提现
@@ -726,24 +723,24 @@ public enum FMWithdrawalType: Int {
          ebpay,       /// EBpay 提现
          ewallet      /// 电子钱包提现
 }
-/// 广告标签类型
+// MARK: - 会员相关@广告标签类型
 public enum FMAdTagType: Int {
     case all = 0,    /// 全部广告
          limitedTime,/// 限时广告
          newAccount, /// 新账户广告
          daily       /// 日常广告
 }
-/// 教程标签类型
+// MARK: - 会员相关@教程标签类型
 public enum FMTutorialType: Int {
     case common = 1,/// 常见教程
          aboutUs = 2/// 关于我们
 }
-/// 来源类型枚举定义
+// MARK: - 会员相关@来源类型枚举定义
 public enum SourceType: UInt {
     case home = 0,/// 来自首页
          favorite /// 来自收藏
 }
-/// 数据来源
+// MARK: - 会员相关@数据来源
 public enum DataSourceType: UInt {
     case unknown = 0,   /// 未知来源
          login,         /// 登录
@@ -751,7 +748,7 @@ public enum DataSourceType: UInt {
          forgotPassword,/// 忘记密码
          settingNewPwd  /// 修改密码
 }
-/// 资金渠道
+// MARK: - 会员相关@资金渠道
 public enum JobsFundsChannel: Int {
     case allBank = 0,
          fortunePay,
@@ -763,8 +760,7 @@ public enum JobsFundsChannel: Int {
          qrph,
          unionBank
 }
-
-/// ShadowDirection
+// MARK: - ShadowDirection
 struct ShadowDirection: OptionSet {
     let rawValue: UInt
     static let top        = ShadowDirection([])
@@ -777,8 +773,7 @@ struct ShadowDirection: OptionSet {
     static let rightDown  = ShadowDirection(rawValue: 1 << 6)
     static let all: ShadowDirection = [.top, .down, .left, .right, .leftTop, .leftDown, .rightTop, .rightDown]
 }
-
-/// UIBorderSideType
+// MARK: - UIBorderSideType
 struct UIBorderSideType: OptionSet {
     let rawValue: UInt
     static let all    = UIBorderSideType([])
@@ -787,16 +782,24 @@ struct UIBorderSideType: OptionSet {
     static let left   = UIBorderSideType(rawValue: 1 << 2)
     static let right  = UIBorderSideType(rawValue: 1 << 3)
 }
-/// 这样写的话，外面可以JobsIndexPath.section 进行调用
+// MARK: - 这样写的话，外面可以JobsIndexPath.section 进行调用
 struct JobsIndexPath {
     var section: Int
     var rowOrItem: Int
 }
-/// 无数据占位图的类型
+// MARK: - 无数据占位图的类型
 struct JobsEmptyViewType: OptionSet {
     let rawValue: UInt
     static let none       = JobsEmptyViewType([])
     static let label      = JobsEmptyViewType(rawValue: 1 << 0)
     static let button     = JobsEmptyViewType(rawValue: 1 << 1)
     static let customView = JobsEmptyViewType(rawValue: 1 << 2)
+}
+// MARK: -网络鉴权
+public enum JXAuthCode: UInt {
+    case tokenEmpty        = 10006  // 令牌为空
+    case tokenInvalid      = 10007  // 令牌错误
+    case loginExpired      = 10008  // 登陆过期
+    case authorizationFail = 10014  // 授权失败
+    case success           = 10000  // 成功
 }

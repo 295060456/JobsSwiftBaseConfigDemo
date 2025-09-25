@@ -10,6 +10,8 @@
 		0438A71C2E8400E7008F763B /* JobsCorConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0438A71B2E8400E3008F763B /* JobsCorConst.swift */; };
 		0442717B2E8139CF0084B25C /* ColorAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0442717A2E8139CF0084B25C /* ColorAssets.xcassets */; };
 		044272852E8146130084B25C /* JXScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044272842E8146130084B25C /* JXScale.swift */; };
+		045920E42E84EC73008C8D6A /* SwiftTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E32E84EC72008C8D6A /* SwiftTools.swift */; };
+		045920E62E84F389008C8D6A /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E52E84F386008C8D6A /* CALayer.swift */; };
 		0487AADA2E840CB200B5D307 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0487AAD92E840CB200B5D307 /* UIColorExtensions.swift */; };
 		0487AADC2E840EE300B5D307 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0487AADB2E840EE300B5D307 /* libc++.tbd */; };
 		049FD82F2E82729400636950 /* JobsLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049FD82E2E82729000636950 /* JobsLog.swift */; };
@@ -91,6 +93,8 @@
 		0438A71B2E8400E3008F763B /* JobsCorConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsCorConst.swift; sourceTree = "<group>"; };
 		0442717A2E8139CF0084B25C /* ColorAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ColorAssets.xcassets; sourceTree = "<group>"; };
 		044272842E8146130084B25C /* JXScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXScale.swift; sourceTree = "<group>"; };
+		045920E32E84EC72008C8D6A /* SwiftTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTools.swift; sourceTree = "<group>"; };
+		045920E52E84F386008C8D6A /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
 		0487AAD92E840CB200B5D307 /* UIColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		0487AADB2E840EE300B5D307 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		049FD82E2E82729000636950 /* JobsLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsLog.swift; sourceTree = "<group>"; };
@@ -191,6 +195,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		045920E22E84EC64008C8D6A /* SwiftTools */ = {
+			isa = PBXGroup;
+			children = (
+				045920E32E84EC72008C8D6A /* SwiftTools.swift */,
+			);
+			path = SwiftTools;
+			sourceTree = "<group>";
+		};
 		B8CEBE2669D72254F6970521 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -229,6 +241,7 @@
 		C564FBDD2E09580B0079B5C1 /* JobsSwiftBaseConfigDemo */ = {
 			isa = PBXGroup;
 			children = (
+				045920E22E84EC64008C8D6A /* SwiftTools */,
 				C564FEEC2E0AAC900079B5C1 /* SwiftDefines */,
 				C564FEEB2E0AAC5A0079B5C1 /* 主业务流程 */,
 				C564FEEA2E0AAC2B0079B5C1 /* UIKit.extension */,
@@ -337,6 +350,7 @@
 		C564FEEA2E0AAC2B0079B5C1 /* UIKit.extension */ = {
 			isa = PBXGroup;
 			children = (
+				045920E52E84F386008C8D6A /* CALayer.swift */,
 				C564FC742E0959620079B5C1 /* Inlines.swift */,
 				C564FC762E0959620079B5C1 /* NSObject.swift */,
 				C564FC752E0959620079B5C1 /* UIActivityIndicatorView.swift */,
@@ -638,6 +652,7 @@
 				C564FC2E2E0958E80079B5C1 /* HUDHelper.swift in Sources */,
 				C564FC9A2E0959640079B5C1 /* UITextView.swift in Sources */,
 				C564FC942E0959640079B5C1 /* UIPageViewController.swift in Sources */,
+				045920E62E84F389008C8D6A /* CALayer.swift in Sources */,
 				0487AADA2E840CB200B5D307 /* UIColorExtensions.swift in Sources */,
 				C564FC9D2E0959640079B5C1 /* UIDatePicker.swift in Sources */,
 				C564FCA42E0959640079B5C1 /* UITextField.swift in Sources */,
@@ -665,6 +680,7 @@
 				C564FC982E0959640079B5C1 /* NSObject.swift in Sources */,
 				C564FCB12E0959990079B5C1 /* CollectionCell.swift in Sources */,
 				C564FC362E09590B0079B5C1 /* JobsProtocol.swift in Sources */,
+				045920E42E84EC73008C8D6A /* SwiftTools.swift in Sources */,
 				C564FC622E0959510079B5C1 /* Enum_struct_defines.swift in Sources */,
 				C564FC972E0959640079B5C1 /* UIActivityIndicatorView.swift in Sources */,
 				C564FCA22E0959640079B5C1 /* UITableView.swift in Sources */,
