@@ -4021,7 +4021,86 @@ struct Point {
 | 并发安全 | 手动加锁         | 编译器/运行时自动保证        |
 | 调用方法 | 直接调用         | `await` 调用（异步安全边界） |
 
-### 16、<font color=red id=COW>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite（先共享，写的时候才真正拷贝）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 16、**Objc**.`id` 🆚 [**Swift**](https://developer.apple.com/swift/).`AnyObject` 🆚 [**Swift**](https://developer.apple.com/swift/).`Any` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **Objc**.`id`
+
+  > ```objective-c
+  > id obj = @"Hello";   // NSString
+  > obj = @123;          // NSNumber
+  > obj = [UIView new];  // UIView
+  > ```
+
+  * * **含义**：
+      `id` 表示「某个 **Objc对象实例**」，不要求声明具体类型。
+
+    * **特性**：
+
+      - 动态绑定（运行时决定真正类型）。
+      - 编译器不做严格检查，调用方法时，是否能执行取决于运行时。
+      - 只能存放 **Objc 对象**（继承自 `NSObject` 的类），**不能存放值类型**（比如 `int`、`struct`）。
+
+     * **风险**：
+
+       ```objective-c
+       [obj length];  // 如果 obj 是 NSString ✅
+                      // 如果 obj 是 UIView ❌ -> crash: unrecognized selector 
+       ```
+
+* [**Swift**](https://developer.apple.com/swift/).`AnyObject`
+
+  > 👉 可以理解为：**`AnyObject ≈ Swift 里的安全版 id`**
+  >
+  > ```swift
+  > var obj: AnyObject = "Hello" as NSString
+  > obj = NSNumber(value: 123)
+  > obj = UIView()
+  > ```
+
+  * **含义**：
+      `AnyObject` 表示「任意类对象」，它是 [**Swift**](https://developer.apple.com/swift/) 世界里对标 `id` 的关键字。
+
+  * **特性**：
+
+     - 只能表示 **class 类型**，不能存放 **struct**/**enum** 等值类型。
+
+     - 属于静态类型系统的一部分，支持 `is`、`as?` 等安全检查：
+
+       ```swift
+       if let str = obj as? NSString {
+           print(str.length)
+       }
+       ```
+
+     - 遵循 **更安全的类型检查**，不会像 `id` 那样任你乱调方法直接崩。
+
+* [**Swift**](https://developer.apple.com/swift/).`Any` 
+
+  > ```swift
+  > var x: Any = "Hello"   // String
+  > x = 123                // Int
+  > x = UIView()           // UIView
+  > ```
+
+  * **含义**：
+     `Any` 表示「任何类型」，比 `AnyObject` 和 `id` 都更广。
+  
+  * **特性**：
+  
+    - 可以存 **类对象**、**值类型**、**enum**、**struct**、甚至函数。
+  
+    - [**Swift**](https://developer.apple.com/swift/) 把所有类型都能装进去，但取出来时必须手动转换：
+  
+      ```
+      let a: Any = 42
+      if let num = a as? Int {
+          print(num + 1)  // ✅ 43
+      }
+      ```
+  
+    - 常用于 **混合数据容器**（比如 `[String: Any]` 的 **JSON** 字典）。
+
+### 17、<font color=red id=COW>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite（先共享，写的时候才真正拷贝）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > * **定义**：当你复制一个值类型的时候，[**Swift**](https://developer.apple.com/swift/) 不会立即复制它的底层存储，而是让两个变量共享同一块内存
 > * **触发拷贝的时机**：一旦其中一个变量尝试 **写入（修改）** 数据，[**Swift**](https://developer.apple.com/swift/) 才会真正复制一份新的内存，以保证<u>值语义</u>的正确性
