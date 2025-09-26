@@ -1333,7 +1333,31 @@ if #available(iOS 11.0, *) {
   }
   ```
 
-### 9、<font id=弱引用的等价写法>**弱引用的等价写法**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 9、`UIScrollView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+/// TODO
+```
+
+### 10、`UITableView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+mainTableView = GKPageTableView(frame: .zero, style: .plain)
+    .byDataSource(self)
+    .byDelegate(self)
+    .bySeparatorStyle(.none)
+    .byShowsVerticalScrollIndicator(false)
+    .byShowsHorizontalScrollIndicator(false)
+    .registerCellByID(CellCls: UITableViewCell.self, ID: "cell")
+```
+
+### 11、`UICollectionView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+/// TODO
+```
+
+### 12、<font id=弱引用的等价写法>**弱引用的等价写法**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
   guard let `self` = self else { return }
@@ -1400,7 +1424,7 @@ if #available(iOS 11.0, *) {
   }
   ```
 
-### 10、对通知名的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 13、对通知名的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
   import Foundation
@@ -3166,6 +3190,20 @@ func resizableImage(edge: UIEdgeInsets = UIEdgeInsets(top: 10.h,
   print(b.isEmptyOrNil)  // true
   ```
 
+### 19、返回类对象 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **Objc**写法
+
+  ```objective-c
+  UITableViewCell.class
+  ```
+
+* [**Swift**](https://developer.apple.com/swift/)写法
+
+  ```swift
+  UITableViewCell.self
+  ```
+
 ## 五、<font color=red>**F**</font><font color=green>**A**</font><font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、[**Swift**](https://developer.apple.com/swift/) 纯类 🆚 `NSObject` 子类 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -3751,6 +3789,141 @@ struct Point {
 * 记录 **Xcode 界面状态**：比如工程窗口大小、面板布局、文件展开/折叠状态、光标位置、断点信息等。
 * 属于 **用户本地个性化配置**，不同开发者的 `*.xcuserstate` 文件内容一般不同。
 * 不影响代码逻辑和工程编译，只是为了下次打开工程时恢复你上次的编辑环境。
+
+### 13、**OC**.`NSString` 🆚 [**Swift**](https://developer.apple.com/swift/).`String` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> [**Swift**](https://developer.apple.com/swift/) 的 `String` 和 **OC** 的 `NSString` 是 **桥接类型**
+>
+> 编译器会在大多数场景下自动桥接，但不会做<u>隐式双向完全转换</u>
+
+#### 13.1、**OC**.`NSString` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* `NSString` 是一个 **类**（继承自 `NSObject`）
+* 属于 **引用类型**（指针语义）
+* `@"abc"` 这样的字符串字面量其实是一个 `NSString` 对象
+* 不可变，修改会新建对象
+* 有 `NSMutableString`，可变字符串
+* 存储是 UTF-16 为主
+
+#### 13.2、[**Swift**](https://developer.apple.com/swift/).`String` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* `String` 是一个 **结构体**（`struct`）
+* 属于 **值类型**（拷贝语义，但编译器做了写时拷贝优化）
+* 底层是 `String` + `Substring`，实现更现代，支持 `Unicode Scalar`、`Extended Grapheme Cluster`
+* 是值类型，但 [**Swift**](https://developer.apple.com/swift/) 优化了 [<font color=red>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite](#COW)
+* 底层存储是 UTF-8 优先，更现代，支持 Unicode 复杂字符
+* 比 `NSString` 更高效，尤其在处理多语言/**emoji**
+
+#### 13.3、互转方法 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* ```swift
+  let ns: NSString = "Hello ObjC"
+  let swiftStr: String = ns as String   // 显式转换
+  ```
+
+* ```swift
+  let swiftStr: String = "Hello Swift"
+  let ns: NSString = swiftStr as NSString   // 显式转换
+  ```
+
+### 14、<font color=red id=COW>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite（先共享，写的时候才真正拷贝） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> * **定义**：当你复制一个值类型的时候，[**Swift**](https://developer.apple.com/swift/) 不会立即复制它的底层存储，而是让两个变量共享同一块内存
+> * **触发拷贝的时机**：一旦其中一个变量尝试 **写入（修改）** 数据，[**Swift**](https://developer.apple.com/swift/) 才会真正复制一份新的内存，以保证<u>值语义</u>的正确性
+> * 为什么这样设计？
+>   * **性能优化**：避免不必要的深拷贝，提升效率
+>   * **值语义安全**：对外表现上 `Array` 仍然是<u>值类型</u>，互不影响
+>   * **内存友好**：只有在真的需要修改时，才额外分配内存
+> * 内存管理细节（**COW**的运行机制）
+>   * [**Swift**](https://developer.apple.com/swift/) 底层用一个 **引用计数的 buffer** 来存放元素
+>   * 每次赋值，引用计数 +1；
+>   * 当有人写入时，发现引用计数 > 1，就触发拷贝 → 新 buffer
+
+* 没有修改 → 不会拷贝
+
+  ```swift
+  var a = [1, 2, 3]
+  var b = a   // 这里只是增加引用计数，共享存储
+  print(a === b) // Swift 不允许直接 === 比较数组，但内部确实指向同一块存储
+  ```
+
+* 修改时 → 才会拷贝
+
+  ```swift
+  var a = [1, 2, 3]
+  var b = a   // 共享存储
+  b.append(4) // 🚨 此刻触发 copy-on-write，b 拷贝一份新的存储
+  print(a)    // [1, 2, 3]
+  print(b)    // [1, 2, 3, 4]
+  ```
+
+* 概念图
+
+  * **COW**概念图（共享→写入→分裂）
+
+    ```mermaid
+    graph LR
+        subgraph "赋值后（尚未写入）"
+            A["var a"]
+            B["var b"]
+            Buf1["Buffer #1: [1,2,3]"]
+            A --> Buf1
+            B --> Buf1
+            note1["引用计数 = 2"]
+            Buf1 --- note1
+        end
+    
+        subgraph "b 发生写入（append 4）"
+            A2["var a"]
+            B2["var b"]
+            Buf1b["Buffer #1: [1,2,3]"]
+            Buf2["Buffer #2: [1,2,3,4]"]
+            A2 --> Buf1b
+            B2 --> Buf2
+            note2["写时拷贝触发 → b 获得新缓冲"]
+            Buf2 --- note2
+        end
+    
+        A -.-> A2
+        B -.-> B2
+    ```
+  
+  * 时间线（谁什么时候共享/拷贝）
+  
+    ```mermaid
+    sequenceDiagram
+        participant Dev as 你（代码）
+        participant A as 变量 a
+        participant B as 变量 b
+        participant Buf1 as Buffer #1([1,2,3])
+        participant Buf2 as Buffer #2
+    
+        Dev->>A: var a = [1,2,3]
+        A->>Buf1: 绑定存储（RC=1）
+    
+        Dev->>B: var b = a
+        B->>Buf1: 共享存储（RC=2）\n（尚未拷贝）
+    
+        Dev->>B: b.append(4)
+        Note over B,Buf1: 发现 RC>1 -> 触发 COW
+        B-->>Buf2: 复制 Buffer（新建）\n写入 4 -> [1,2,3,4]
+    
+        A-->>Buf1: 仍指向旧缓冲\n值保持 [1,2,3]
+        B-->>Buf2: 指向新缓冲\n值为 [1,2,3,4]
+    ```
+  
+  * 状态流转（决策视角）
+  
+    ```mermaid
+    flowchart TD
+        S["复制赋值: b = a"] --> C{"是否写入?"}
+        C -- 否 --> Share["共享同一缓冲<br/>(无拷贝, RC+=1)"]
+        C -- 是 --> RC{"引用计数 > 1 ?"}
+        RC -- 否 --> InPlace["独占缓冲<br/>原地修改"]
+        RC -- 是 --> Copy["分配新缓冲<br/>拷贝后写入"]
+    ```
+  
+  * 
 
 
 

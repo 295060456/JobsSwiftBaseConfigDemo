@@ -13,48 +13,52 @@
     import UIKit
 #endif
 import ObjectiveC
-
 /// 🍬语法糖@注册：UITableViewCell、HeaderFooterView、HeaderFooterView
 extension UITableView {
+    
     @discardableResult
-    func registerCell<T: UITableViewCell>(_ cellClass: T.Type) -> Self {
+    public func registerCell<T: UITableViewCell>(_ cellClass: T.Type) -> Self {
         self.register(cellClass, forCellReuseIdentifier: String(describing: cellClass))
         return self
     }
-    public func py_register(cellClassType: UITableViewCell.Type) {
+    public func py_register(cellClassType: UITableViewCell.Type) -> Self {
         let cellId = cellClassType.className
         let cellClass: AnyClass = cellClassType.classForCoder()
         self.register(cellClass, forCellReuseIdentifier: cellId)
+        return self
     }
 
-    public func py_register(cellNibType: UITableViewCell.Type) {
+    public func py_register(cellNibType: UITableViewCell.Type) -> Self{
         let cellId = cellNibType.className
         let cellNib = UINib(nibName: cellId, bundle: nil)
         self.register(cellNib, forCellReuseIdentifier: cellId)
+        return self
     }
 
-    public func py_register(headerFooterViewClassType: UIView.Type) {
+    public func py_register(headerFooterViewClassType: UIView.Type) -> Self{
         let reuseId = headerFooterViewClassType.className
         let viewType: AnyClass = headerFooterViewClassType.classForCoder()
         self.register(viewType, forHeaderFooterViewReuseIdentifier: reuseId)
+        return self
     }
 
-    public func py_register(headerFooterViewNibType: UIView.Type) {
+    public func py_register(headerFooterViewNibType: UIView.Type) -> Self{
         let reuseId = headerFooterViewNibType.className
         let viewNib = UINib(nibName: reuseId, bundle: nil)
         self.register(viewNib, forHeaderFooterViewReuseIdentifier: reuseId)
+        return self
     }
 }
 /// 🍬语法糖@数据源
 extension UITableView {
     @discardableResult
-    func byDelegate(_ delegate: UITableViewDelegate) -> Self {
+    public func byDelegate(_ delegate: UITableViewDelegate) -> Self {
         self.delegate = delegate
         return self
     }
 
     @discardableResult
-    func byDataSource(_ dataSource: UITableViewDataSource) -> Self {
+    public func byDataSource(_ dataSource: UITableViewDataSource) -> Self {
         self.dataSource = dataSource
         return self
     }
@@ -66,7 +70,7 @@ extension UITableView {
         return self.dequeueReusableCell(withIdentifier: cy_cellId, for: indexPath) as! T
     }
 
-    func py_dequeueReusableHeaderFooterView<T: UIView>(headerFooterViewWithType: T.Type) -> T {
+    public func py_dequeueReusableHeaderFooterView<T: UIView>(headerFooterViewWithType: T.Type) -> T {
         let reuseId = headerFooterViewWithType.className
         return self.dequeueReusableHeaderFooterView(withIdentifier: reuseId) as! T
     }
@@ -74,34 +78,34 @@ extension UITableView {
 /// 🍬语法糖@UI
 extension UITableView {
     @discardableResult
-    func byRowHeight(_ height: CGFloat) -> Self {
+    public func byRowHeight(_ height: CGFloat) -> Self {
         self.rowHeight = height
         return self
     }
 
     @discardableResult
-    func bySeparatorStyle(_ style: UITableViewCell.SeparatorStyle) -> Self {
+    public func bySeparatorStyle(_ style: UITableViewCell.SeparatorStyle) -> Self {
         self.separatorStyle = style
         return self
     }
 
     @discardableResult
-    func byTableFooterView(_ view: UIView?) -> Self {
+    public func byTableFooterView(_ view: UIView?) -> Self {
         self.tableFooterView = view
         return self
     }
 
     @discardableResult
-    func byTableHeaderView(_ view: UIView?) -> Self {
+    public func byTableHeaderView(_ view: UIView?) -> Self {
         self.tableHeaderView = view
         return self
     }
     // MARK: - 隐藏分割线
-    func hiddenSeparator() {
+    public func hiddenSeparator() {
         tableFooterView = UIView().byBgColor(UIColor.clear)
     }
     // MARK: -设置整个区圆角
-    func sectionConner(cell: UITableViewCell,
+    public func sectionConner(cell: UITableViewCell,
                        bgColor: UIColor = UIColor.systemBackground,
                        indexPath: IndexPath,
                        cornerRadius: CGFloat = 10.0) {
@@ -159,13 +163,13 @@ extension UITableView {
     }
 
     @discardableResult
-    func jobs_setEmptyView(_ view: UIView?) -> Self {
+    public func jobs_setEmptyView(_ view: UIView?) -> Self {
         self.jobs_emptyView = view
         return self
     }
 
     @discardableResult
-    func jobs_reloadEmptyView(rowCount: Int, sectionCount: Int = 1) -> Self {
+    public func jobs_reloadEmptyView(rowCount: Int, sectionCount: Int = 1) -> Self {
         let isEmpty = rowCount == 0 || sectionCount == 0
         self.jobs_emptyView?.isHidden = !isEmpty
         return self
