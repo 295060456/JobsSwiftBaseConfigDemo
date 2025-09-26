@@ -1463,6 +1463,47 @@ addSubview(mainTableView)
   > NotificationCenter.default.post(name: .userDidLogin, object: nil)
   > ```
 
+### 14、回调主线程（三大手段） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **C.GCD**
+
+  > 1️⃣ **GCD 的底层实现** → 在 **`libdispatch`** 里（C 语言库），属于 **Darwin** 系统的一部分。
+  >
+  > 2️⃣ **在 iOS / macOS 上** → GCD 是 **系统级 API**，不是 `Foundation` 提供的。
+  >
+  > 3️⃣ **[Swift](https://developer.apple.com/swift/) 里使用 `DispatchQueue`** → 其实是 Apple 在 `Dispatch` 模块里给 GCD 做的 [**Swift**](https://developer.apple.com/swift/) 封装。
+  >
+  > 4️⃣ 底层调度框架，性能好、粒度细，API 偏底层
+
+  ``` swift
+  DispatchQueue.main.async {
+      // UI 更新
+  }
+  ```
+
+* **`Foundation`.OperationQueue**
+
+  > 高层封装（基于**Objc**/[**Swift**](https://developer.apple.com/swift/)），内部默认还是用 **GCD** 调度。
+
+  ```swift
+  OperationQueue.main.addOperation {
+      // UI 更新
+  }
+  ```
+
+* **[Swift](https://developer.apple.com/swift/) Concurrency** <font color=red>**现代推荐方式**</font>
+
+  ```swift
+  @MainActor
+  func updateUI() {
+      // UI 更新
+  }
+  /// 调用
+  Task {
+      await updateUI()
+  }
+  ```
+
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -1566,7 +1607,7 @@ addSubview(mainTableView)
 
 - <font color=red>**`@objc`**</font>/ <font color=red>**`@objcMembers`**</font>/ <font color=red>**`@nonobjc`**</font>
 
-  > 暴露/隐藏给 **Objective-C** 运行时（<font color=red>**Selector**</font>、**KVC/KVO**、**IB** 需要）
+  > 暴露/隐藏给 **Objc** 运行时（<font color=red>**Selector**</font>、**KVC/KVO**、**IB** 需要）
 
   ```swift
   @objcMembers class Foo: NSObject {
@@ -3207,6 +3248,90 @@ func resizableImage(edge: UIEdgeInsets = UIEdgeInsets(top: 10.h,
   UITableViewCell.self
   ```
 
+### 20、[**Swift**](https://developer.apple.com/swift/).**Actor**（高阶用法） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 👉 `class` 是多线程「共享内存，自己小心加锁」
+>  👉 `actor` 是「默认不共享内存，[**Swift**](https://developer.apple.com/swift/)  编译器帮你保证不会同时访问」
+
+* **Actor** 是什么？
+
+  * **Actor = 一种引用类型（像 class 一样），但默认是线程安全的。**（[**Swift**](https://developer.apple.com/swift/) 5.5 引入）
+
+  * 它和 `class` 一样是**引用类型**，有 `init`，可以继承协议，甚至也能继承 `NSObject`
+
+  * **内部状态隔离**
+
+    - `actor` 的存储属性不能被外部直接并发访问，访问时必须通过 `await`。
+    - 编译器会强制你写 `await`，防止误用。
+
+  * **非隔离方法 (`nonisolated`)**
+
+    > 如果方法内部没有访问受保护的状态，可以标记为 `nonisolated`，这样外部调用时就不需要 `await`：
+
+    ```swift
+    actor Logger {
+        nonisolated func version() -> String {
+            "1.0"
+        }
+    }
+    print(Logger().version())  // 不需要 await
+    ```
+
+  * 但它的关键特性是：
+    - **内部状态是受保护的**，只能在同一个「执行上下文」里访问，避免多线程数据竞争
+    - **通过异步消息传递来隔离并发访问**
+    
+  * <font color=red>**`@MainActor`**</font>
+
+    > 特殊的 actor，保证代码在主线程执行
+
+    ```swift
+    @MainActor
+    class ViewModel {
+        func updateUI() {
+            // 一定在主线程
+        }
+    }
+    ```
+
+* [**和类的区别**](#Actor🆚Clas)
+
+* 使用场景
+
+  * **如果你写的 App 逻辑都在主线程（比如常规 UI 逻辑），可能一辈子用不到 `actor`**
+  * 但如果你写 **网络请求层、数据库层、后台任务、并发算法**，`actor` 就能替代锁和队列，大幅降低线程安全的复杂度
+  * 需要保证 **线程安全** 的全局共享对象（计数器、缓存、数据库 session）
+  * 替代手动加锁的场景
+  * iOS/SwiftUI 里常用来保证 UI 更新一定在主线程
+  
+* 基本用法
+
+  ```swift
+  actor Counter {
+      private var value = 0
+      
+      func increment() {
+          value += 1
+      }
+      
+      func getValue() -> Int {
+          value
+      }
+  }
+  ```
+
+  ```swift
+  let counter = Counter()
+  
+  // actor 的方法默认是隔离的，要用 await
+  Task {
+      await counter.increment()
+      let v = await counter.getValue()
+      print(v)
+  }
+  ```
+
+
 ## 五、<font color=red>**F**</font><font color=green>**A**</font><font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、[**Swift**](https://developer.apple.com/swift/) 纯类 🆚 `NSObject` 子类 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -3829,7 +3954,74 @@ struct Point {
   let ns: NSString = swiftStr as NSString   // 显式转换
   ```
 
-### 14、<font color=red id=COW>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite（先共享，写的时候才真正拷贝） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 14、`A()`可能是： <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **函数** → 直接执行
+
+  ```swift
+  func A() -> String {
+      return "xxx"
+  }
+  ```
+
+* **Class/Struct/Actor** → 实例化（调用 init）
+
+  > <font color=red>**Enum**</font> 和 <font color=red>**Protocol**</font> **不能直接（）**
+
+  * **Class**
+
+    ```swift
+    class A {
+        init() {
+            print("A init")
+        }
+    }
+    ```
+
+  * **Struct**
+
+    ```
+    struct A {
+        var name: String = "default"
+    }
+    ```
+
+  * **Actor** ([**Swift**](https://developer.apple.com/swift/) 并发里的类型)
+
+    ```
+    actor A {
+        init() {
+            print("actor created")
+        }
+    }
+    ```
+
+* **闭包变量** → 调用闭包
+
+  ```swift
+  let A: () -> String = {
+      return "xxx"
+  }
+  ```
+
+* **枚举 case** → 工厂方法
+
+  ```swift
+  enum MyEnum {
+      case A(Int)
+  }
+  ```
+
+### 15、<font id=Actor🆚Class>[**Swift**](https://developer.apple.com/swift/).**Actor** 🆚 [**Swift**](https://developer.apple.com/swift/).**Class**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+| 特性     | class            | actor                        |
+| -------- | ---------------- | ---------------------------- |
+| 类型     | 引用类型         | 引用类型                     |
+| 内存共享 | 多线程可同时访问 | 受保护，只能单线程访问       |
+| 并发安全 | 手动加锁         | 编译器/运行时自动保证        |
+| 调用方法 | 直接调用         | `await` 调用（异步安全边界） |
+
+### 16、<font color=red id=COW>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite（先共享，写的时候才真正拷贝）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > * **定义**：当你复制一个值类型的时候，[**Swift**](https://developer.apple.com/swift/) 不会立即复制它的底层存储，而是让两个变量共享同一块内存
 > * **触发拷贝的时机**：一旦其中一个变量尝试 **写入（修改）** 数据，[**Swift**](https://developer.apple.com/swift/) 才会真正复制一份新的内存，以保证<u>值语义</u>的正确性
