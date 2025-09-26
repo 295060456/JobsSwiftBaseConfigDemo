@@ -36,6 +36,8 @@
 		0487AADA2E840CB200B5D307 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0487AAD92E840CB200B5D307 /* UIColorExtensions.swift */; };
 		0487AADC2E840EE300B5D307 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0487AADB2E840EE300B5D307 /* libc++.tbd */; };
 		049FD82F2E82729400636950 /* JobsLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049FD82E2E82729000636950 /* JobsLog.swift */; };
+		04A18E4D2E86533B004BB9DC /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A18E4C2E865336004BB9DC /* UIImage.swift */; };
+		04AC74C52E86682E004B8305 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AC74C42E86682D004B8305 /* Notification.swift */; };
 		28B3B2C7F8E21BC854851508 /* Pods_JobsSwiftBaseConfigDemoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA9261964B37E24BC5754CC1 /* Pods_JobsSwiftBaseConfigDemoUITests.framework */; };
 		39AB45F55599F62A12939F29 /* Pods_JobsSwiftBaseConfigDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE98D9D036CE4AAA3EA72C02 /* Pods_JobsSwiftBaseConfigDemoTests.framework */; };
 		51D5A6F95393861C97CA7D45 /* Pods_JobsSwiftBaseConfigDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3933E8883C7E8B6A888BA7 /* Pods_JobsSwiftBaseConfigDemo.framework */; };
@@ -140,6 +142,8 @@
 		0487AAD92E840CB200B5D307 /* UIColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		0487AADB2E840EE300B5D307 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		049FD82E2E82729000636950 /* JobsLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsLog.swift; sourceTree = "<group>"; };
+		04A18E4C2E865336004BB9DC /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		04AC74C42E86682D004B8305 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		1D3933E8883C7E8B6A888BA7 /* Pods_JobsSwiftBaseConfigDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JobsSwiftBaseConfigDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43AC2F32E62C31BD8D0F4D55 /* Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemoTests/Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		498373BA0509D1FCFC7035BF /* Pods-JobsSwiftBaseConfigDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemo.release.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemo/Pods-JobsSwiftBaseConfigDemo.release.xcconfig"; sourceTree = "<group>"; };
@@ -483,6 +487,8 @@
 		C564FEEA2E0AAC2B0079B5C1 /* UIKit.extension */ = {
 			isa = PBXGroup;
 			children = (
+				04AC74C42E86682D004B8305 /* Notification.swift */,
+				04A18E4C2E865336004BB9DC /* UIImage.swift */,
 				045921142E8557FB008C8D6A /* UIFont.swift */,
 				045920E92E84FD77008C8D6A /* NSString.swift */,
 				045920E52E84F386008C8D6A /* CALayer.swift */,
@@ -806,6 +812,7 @@
 				C5489B5E2E0AB30700B05447 /* JobsBlock.swift in Sources */,
 				C564FCA32E0959640079B5C1 /* UIStepper.swift in Sources */,
 				C564FC862E0959640079B5C1 /* WKWebView.swift in Sources */,
+				04AC74C52E86682E004B8305 /* Notification.swift in Sources */,
 				C5489B5D2E0AB2D300B05447 /* JobsBlockDef.swift in Sources */,
 				C564FC8A2E0959640079B5C1 /* UISegmentedControl.swift in Sources */,
 				C564FC892E0959640079B5C1 /* UICollectionView.swift in Sources */,
@@ -823,6 +830,7 @@
 				0459210A2E854FFB008C8D6A /* Float16.swift in Sources */,
 				C564FC932E0959640079B5C1 /* UIToolbar.swift in Sources */,
 				C564FCA12E0959640079B5C1 /* UIPageControl.swift in Sources */,
+				04A18E4D2E86533B004BB9DC /* UIImage.swift in Sources */,
 				045921122E855769008C8D6A /* JobsPaddedLabel.swift in Sources */,
 				0459210C2E855004008C8D6A /* Float80.swift in Sources */,
 				C564FCAC2E09597C0079B5C1 /* ViewController.swift in Sources */,

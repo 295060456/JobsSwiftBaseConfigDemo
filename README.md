@@ -1290,6 +1290,152 @@ if #available(iOS 11.0, *) {
   }
   ```
 
+### 8、`UIButton` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **防止用户快速连续点按钮**
+
+  > ```swift
+  > sender.disableAfterClick(interval: 2)
+  > ```
+
+  ```swift
+  extension UIButton {
+      func disableAfterClick(interval: TimeInterval = 1.0) {
+          self.isUserInteractionEnabled = false
+          DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
+              self.isUserInteractionEnabled = true
+          }
+      }
+  }
+  ```
+
+* **给按钮添加闭包回调**
+
+  > ```swift
+  > button.addAction { sender in
+  >   /// TODO
+  > }
+  > ```
+
+  ```swift
+  private var actionKey: Void?
+  extension UIButton {
+      func addAction(_ action: @escaping (UIButton) -> Void) {
+          objc_setAssociatedObject(self, &actionKey, action, .OBJC_ASSOCIATION_COPY_NONATOMIC)
+          self.addTarget(self, action: #selector(handleAction(_:)), for: .touchUpInside)
+      }
+  
+      @objc private func handleAction(_ sender: UIButton) {
+          if let action = objc_getAssociatedObject(self, &actionKey) as? (UIButton) -> Void {
+              action(sender)
+          }
+      }
+  }
+  ```
+
+### 9、<font id=弱引用的等价写法>**弱引用的等价写法**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* ```swift
+  guard let `self` = self else { return }
+  ```
+
+  * 传统写法，[用了反引号 ``self``，把关键字 <font color=red>**`self`**</font> 当作常量名，避开关键字冲突](#swift关键字用作变量名) 
+
+  * 实际意义：
+
+    ```swift
+    if let tmp = self {
+        let `self` = tmp   // 临时强引用
+    } else {
+        return
+    }
+    ```
+
+  * 后续用的就是新的强引用 `self`
+
+* ```swift
+  someAsync { [weak self] in
+      self?.doSomething()// 每次都要写 ?，如果要调用多行逻辑就会很啰嗦。
+  }
+  ```
+
+* ```swift
+  guard let self else { return }
+  ```
+
+  * [**Swift**](https://developer.apple.com/swift/) 5.7+ 简写写法，更简洁
+
+  * 相当于
+
+    ```swift
+    guard let self = self else { return }
+    ```
+
+  * 编译器自动把右边的 `self` 当作可选（`Self?`），左边的 `self` 当作新的解包常量。
+
+* ```swift
+  guard let strongSelf = self else { return }
+  ```
+
+  * 兼容**Objc**的代码风格
+  * 命名不同，读起来更直观，避免关键字混淆
+  * 后续用`strongSelf`
+
+* 模式匹配
+
+  ```swift
+  someAsync { [weak self] in
+      guard case let self? = self else { return }
+      self.doSomething()
+  }
+  ```
+
+* 更函数式
+
+  > 可读性差，不常见。
+
+  ```swift
+  someAsync { [weak self] in
+      self.map { $0.doSomething() }// 这里 self 是 Optional，用 map 只在有值时执行。
+  }
+  ```
+
+### 10、对通知名的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* ```swift
+  import Foundation
+  /// 通知分类
+  extension Notification.Name {
+      /// 用户登陆
+      static let userDidLogin = Notification.Name("userDidLogin")
+      /// 跳转在线客服通知
+      static let pushOnlineCustomerService = Notification.Name("pushOnlineCustomerService")
+  }
+  ```
+
+  > ```swift
+  > Notification.Name.userDidLogin
+  > NotificationCenter.default.post(name: .userDidLogin, object: nil)
+  > ```
+
+* ```swift
+  import Foundation
+  /// 通知分类
+  extension Notification {
+      struct Jobs {
+      /// 用户登陆
+      static let userDidLogin = Notification.Name("userDidLogin")
+      /// 跳转在线客服通知
+      static let pushOnlineCustomerService = Notification.Name("pushOnlineCustomerService")
+      }
+  }
+  ```
+
+  > ```swift
+  > Notification.Jobs.userDidLogin
+  > NotificationCenter.default.post(name: .userDidLogin, object: nil)
+  > ```
+
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -2007,12 +2153,14 @@ flowchart TD
 
 *  `self` 弱引用
 
+  👉[**弱引用的等价写法**](#弱引用的等价写法)
+
   ```swift
   /// [weak self]：在闭包中捕获 self 的弱引用，不会增加引用计数。
-  /// guard let self = self else { return }：解包 self，如果对象已释放则直接退出闭包。
+  /// guard let `self` = self else { return }：解包 self，如果对象已释放则直接退出闭包。
   /// 闭包内部再用 self，就是解包之后的强引用了，避免了 retain cycle。
   someAsyncOperation { [weak self] in
-      guard let self = self else { return }// 固定写法（推荐）语义清晰
+      guard let `self` = self else { return }// 固定写法（推荐）语义清晰
       self.doSomething()// 或者 self?.doSomething()
   }
   ```
@@ -2876,19 +3024,161 @@ print(value)         // 15
 * `Character`、`UnicodeScalar` 虽然能转成数值（`asciiValue` / `value`），但不算数值类型。
 * `SIMD` 向量类型（`SIMD2<Float>`、`SIMD4<Double>` 等）：Apple 针对并行计算/Metal 提供的数值向量。
 
+### 16、<font id=swift关键字用作变量名>[**Swift**](https://developer.apple.com/swift/)关键字用作变量名</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 将[**Swift**](https://developer.apple.com/swift/)关键字用反引号包起来
+
+```swift
+let `class` = "Jobs"
+print(`class`)   // 输出 "Jobs"
+```
+
+### 17、[**Swift**](https://developer.apple.com/swift/)方法的重载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 在 [**Swift**](https://developer.apple.com/swift/) 里，只要 **方法签名（方法名 + 参数标签 + 参数类型）不同**，就可以视为不同的方法，不会冲突。
+
+```swift
+func resizableImage(edge: UIEdgeInsets = UIEdgeInsets(top: 10.h,
+                                                      left: 20.w,
+                                                      bottom: 10.h,
+                                                      right: 20.w)) -> UIImage {
+    return self.resizableImage(
+        withCapInsets: edge,
+        resizingMode: .stretch
+    )
+}
+```
+
+### 18、[**Swift**](https://developer.apple.com/swift/).<font color=red>**extension**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> **能做的事**：
+>
+> * 添加 **计算属性**（不能加存储属性）
+> * 添加 **方法**（实例方法、静态方法）
+> * 添加 **下标**
+> * 添加 **嵌套类型**
+> * 添加 **协议适配**
+>
+> **能做的事**：
+>
+> * 不能加存储属性
+> * 不能 <font color=red>**@override**</font>
+
+#### 18.1、[**Swift**](https://developer.apple.com/swift/).<font color=red>**extension**</font>的基本使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> [**Swift**](https://developer.apple.com/swift/) 里面 <font color=red>**extension**</font> 可以加在任何类型上，不局限于类（<font color=red>**class**</font>），也可以是 <font color=red>**struct**</font>、<font color=red>**enum**</font>、甚至 <font color=red>**protocol**</font>
+
+* **class**
+
+  ```swift
+  class Dog {
+      var name: String
+      init(name: String) { self.name = name }
+  }
+  
+  extension Dog {
+      func bark() { print("\(name) is barking!") }
+  }
+  
+  let d = Dog(name: "Buddy")
+  d.bark()  // Buddy is barking!
+  ```
+
+* **struct**
+
+  ```swift
+  struct Point {
+      var x: Double
+      var y: Double
+  }
+  
+  extension Point {
+      var distance: Double {
+          sqrt(x * x + y * y)
+      }
+  }
+  
+  let p = Point(x: 3, y: 4)
+  print(p.distance)  // 5.0
+  
+  ```
+
+* **enum**
+
+  ```swift
+  enum Direction {
+      case north, south, east, west
+  }
+  
+  extension Direction {
+      var description: String {
+          switch self {
+          case .north: return "⬆️"
+          case .south: return "⬇️"
+          case .east:  return "➡️"
+          case .west:  return "⬅️"
+          }
+      }
+  }
+  
+  print(Direction.north.description)  // ⬆️
+  ```
+
+* **protocol**
+
+  ```swift
+  protocol Flyable {
+      func fly()
+  }
+  
+  // 提供默认实现（伪继承）
+  extension Flyable {
+      func fly() {
+          print("Default flying...")
+      }
+  }
+  
+  struct Bird: Flyable {}
+  Bird().fly()  // Default flying...
+  ```
+
+#### 18.2、[**Swift**](https://developer.apple.com/swift/).<font color=red>**extension**</font>的限制使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> ```swift
+> extension <类型> where <条件> {
+>     // 只有满足条件时才生效的方法 / 属性
+> }
+> ```
+
+* 扩展只对 `String?` 生效，`Int?` 就不能用
+
+  ```swift
+  extension Optional where Wrapped == String {
+      var isEmptyOrNil: Bool {
+          return self?.isEmpty ?? true
+      }
+  }
+  
+  let a: String? = nil
+  print(a.isEmptyOrNil)  // true
+  
+  let b: String? = ""
+  print(b.isEmptyOrNil)  // true
+  ```
+
 ## 五、<font color=red>**F**</font><font color=green>**A**</font><font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、[**Swift**](https://developer.apple.com/swift/) 纯类 🆚 `NSObject` 子类 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 2、[**Swift**](https://developer.apple.com/swift/) `属性观察器` 🆚 **Objc** `KVO` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-| 特性     | Swift 属性观察器             | **ObjC** KVO               |
-| -------- | ---------------------------- | -------------------------- |
-| 监听范围 | 自身属性                     | 其他对象属性               |
-| 实现方式 | 编译器注入                   | Runtime 动态子类           |
-| 简洁度   | 简单（`willSet` / `didSet`） | 繁琐（add/removeObserver） |
-| 使用场景 | 内部逻辑、状态更新           | 跨对象监听、数据绑定       |
-| 可替代性 | 不能完全替代 KVO             | 比观察器更强大，但更复杂   |
+| 特性     | [**Swift**](https://developer.apple.com/swift/) 属性观察器 | **ObjC** KVO               |
+| -------- | ---------------------------------------------------------- | -------------------------- |
+| 监听范围 | 自身属性                                                   | 其他对象属性               |
+| 实现方式 | 编译器注入                                                 | Runtime 动态子类           |
+| 简洁度   | 简单（`willSet` / `didSet`）                               | 繁琐（add/removeObserver） |
+| 使用场景 | 内部逻辑、状态更新                                         | 跨对象监听、数据绑定       |
+| 可替代性 | 不能完全替代 KVO                                           | 比观察器更强大，但更复杂   |
 
 * [**Swift**](https://developer.apple.com/swift/) `属性观察器`：`willSet` / `didSet` → **轻量级、自用**的属性变化钩子。
 
@@ -2915,7 +3205,7 @@ print(value)         // 15
   }
   ```
 
-* **Objective-C** `KVO` ：**通用、跨对象**的观察机制。
+* **Objc** `KVO` ：**通用、跨对象**的观察机制。
 
   > **作用范围**：可以观察 **其他对象的属性**。
   >
@@ -3208,7 +3498,7 @@ print(value)         // 15
   }
   ```
 
-#### 3、<font id=普通参数传递🆚inout参数传递>**普通参数传递** 🆚 <font color=red>**`inout`**</font> **参数传递**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 7、<font id=普通参数传递🆚inout参数传递>**普通参数传递** 🆚 <font color=red>**`inout`**</font> **参数传递**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 普通参数传递（值传递）
 
@@ -3254,7 +3544,7 @@ print(value)         // 15
       B -- "修改=15" --> A
   ```
 
-### 7、`throw`/`do`/`try`/`catch`/`finally` 为什么在**Objc**里面几乎不用，而[**Swift**](https://developer.apple.com/swift/)里面却被大量使用？<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 8、`throw`/`do`/`try`/`catch`/`finally` 为什么在**Objc**里面几乎不用，而[**Swift**](https://developer.apple.com/swift/)里面却被大量使用？<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 | 特性               | Objc                                 | Swift                                       |
 | ------------------ | ------------------------------------ | ------------------------------------------- |
@@ -3312,7 +3602,7 @@ print(value)         // 15
     * 你可以用 `try/try? / try!` 根据需要选择安全级别。
     * 也可以把 `throws` 转换成 `Result<T, Error>`，和 `async/await`、`Combine`、[**Swift**](https://developer.apple.com/swift/) **Concurrency** 配合非常好。
 
-### 8、<font id=API🆚ABI>**API 🆚 ABI**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 9、<font id=API🆚ABI>**API 🆚 ABI**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **API** = 代码层的接口（函数名、参数、返回值）
 
@@ -3322,7 +3612,109 @@ print(value)         // 15
 
   > <font color=red>**A**</font>pplication <font color=red>**B**</font>inary <font color=red>**I**</font>nterface
 
-### 9、<font id=ABI不兼容>什么是ABI不兼容？</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 10、[**Swift**](https://developer.apple.com/swift/) 中`NSObject` 🆚 `NSObjectProtocol` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 主要起到 **桥接Objc和相关约束** 的作用，保证了相等比较、哈希、描述、动态调用等基础能力
+
+#### 10.1、相关定义与继承关系 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+@available(iOS 2.0, *)
+open class NSObject : NSObjectProtocol {
+    deinit
+    open class func load()
+    open class func initialize()
+    public init()
+  
+    @available(*, deprecated, message: "Objective-C garbage collection is no longer supported")
+    open func finalize()
+
+    open func copy() -> Any
+    open func mutableCopy() -> Any
+    open class func instancesRespond(to aSelector: Selector!) -> Bool
+    open class func conforms(to protocol: Protocol) -> Bool
+    open func method(for aSelector: Selector!) -> IMP!
+    open class func instanceMethod(for aSelector: Selector!) -> IMP!
+    open func doesNotRecognizeSelector(_ aSelector: Selector!)
+  
+    @available(iOS 2.0, *)
+    open func forwardingTarget(for aSelector: Selector!) -> Any?
+
+    open class func isSubclass(of aClass: AnyClass) -> Bool
+
+    @available(iOS 2.0, *)
+    open class func resolveClassMethod(_ sel: Selector!) -> Bool
+
+    @available(iOS 2.0, *)
+    open class func resolveInstanceMethod(_ sel: Selector!) -> Bool
+
+    open class func hash() -> Int
+    open class func superclass() -> AnyClass?
+    open class func description() -> String
+    open class func debugDescription() -> String
+}
+```
+
+#### 10.2、`NSObjectProtocol` 是 **Objc 世界所有对象的最小公共接口** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 生命周期相关
+
+  * **`deinit`**：析构函数，对象销毁前调用。[**Swift**](https://developer.apple.com/swift/) 自动调用，不需要你手动写 `dealloc`。
+  * **`init()`**：构造函数，创建实例时调用。 
+  * **`finalize()`**（已废弃）：以前是给 **Objc 垃圾回收（GC）** 用的，现在 ARC 不支持了，所以废弃。
+
+* 类加载 & 初始化
+
+  * **`load()`**：**类第一次被加载进运行时时调用**（比 `initialize` 还早）。几乎不用在 [**Swift**](https://developer.apple.com/swift/) 里写，但在 OC 里可以用来做<u>类级别的 hook</u>
+  * **`initialize()`**：**类第一次接收消息时调用**，只会调用一次。常用于旧时代的类初始化逻辑（[**Swift**](https://developer.apple.com/swift/) 里一般用 `static let` 来替代）
+
+* 拷贝相关
+
+  * **`copy()`**：返回一个不可变拷贝（浅拷贝/深拷贝取决于类实现）（遵守 `NSCopying` 协议的类会实现这个）
+  * **`mutableCopy()`**：返回一个可变拷贝（遵守 `NSMutableCopying` 协议的类会实现这个）
+
+* 消息转发 & 动态方法解析
+
+  这些是 **Objc 动态派发机制**的核心：
+
+  - **`instancesRespond(to:)`**：判断类的实例是否能响应某个 `Selector`
+
+    ```swift
+    UIButton.instancesRespond(to: #selector(UIButton.setTitle(_:for:)))
+    ```
+
+  - **`conforms(to:)`**：判断类是否遵守某个协议。
+
+  - **`method(for:)`**：获取实例方法的函数指针（`IMP`），可以直接调用实现函数（底层调用）。
+
+  - **`instanceMethod(for:)`**：类方法，获取实例方法的实现。
+
+  - **`doesNotRecognizeSelector(_:)`**：当对象收到一个 **未实现的 Selector** 时会调用 → 默认直接 crash。可以 override 做拦截（但一般用于调试）。
+
+  - **`forwardingTarget(for:)`**：消息转发：如果对象不能响应某个方法，可以转发给其他对象。
+
+  - **`resolveClassMethod(_:)` / `resolveInstanceMethod(_:)`**：动态方法解析：运行时尝试给类/实例动态添加方法。常用于 **runtime 动态注入方法**。
+
+* 运行时类型 & 继承
+
+  **`isSubclass(of:)`**： 判断一个类是否是另一个类的子类
+
+  ```swift
+  UIView.isSubclass(of: UIResponder.self) // true
+  ```
+
+  **`superclass()`**：获取父类
+
+* 标识 & 描述
+
+  * **`hash()`**：返回对象的哈希值，用于集合（`Set`、`Dictionary` 的 key）
+     👉 默认基于内存地址，可以 <font color=red>**`@override`**</font>
+  * **`description()`**:返回对象的字符串描述，常用于 `print()`
+     👉 默认返回 `<ClassName: memoryAddress>`
+  * **`debugDescription()`**:调试时的描述，比 `description` 更详细
+     👉 Xcode 调试器里 `po 对象` 打印出来的就是这个
+
+### 11、<font id=ABI不兼容>什么是ABI不兼容？</font><a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 假设你用 [**Swift**](https://developer.apple.com/swift/) 5 编译了一个动态库：
 
@@ -3351,7 +3743,7 @@ struct Point {
 
 这就是 **ABI 不兼容**。
 
-### 10、📃文件 `*.xcuserstate` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 12、📃文件 `*.xcuserstate` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > `*.xcworkspace`是由`pod install`生成
 
