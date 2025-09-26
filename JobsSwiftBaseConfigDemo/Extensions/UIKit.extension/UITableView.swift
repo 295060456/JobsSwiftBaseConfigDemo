@@ -15,33 +15,38 @@
 import ObjectiveC
 /// 🍬语法糖@注册：UITableViewCell、HeaderFooterView、HeaderFooterView
 extension UITableView {
-    
     @discardableResult
     public func registerCell<T: UITableViewCell>(_ cellClass: T.Type) -> Self {
         self.register(cellClass, forCellReuseIdentifier: String(describing: cellClass))
         return self
     }
+    @discardableResult
+    public func registerCellByID<T: UITableViewCell>(CellCls cellClass: T.Type,ID id:String) -> Self {
+        self.register(cellClass, forCellReuseIdentifier: id)
+        return self
+    }
+    @discardableResult
     public func py_register(cellClassType: UITableViewCell.Type) -> Self {
         let cellId = cellClassType.className
         let cellClass: AnyClass = cellClassType.classForCoder()
         self.register(cellClass, forCellReuseIdentifier: cellId)
         return self
     }
-
+    @discardableResult
     public func py_register(cellNibType: UITableViewCell.Type) -> Self{
         let cellId = cellNibType.className
         let cellNib = UINib(nibName: cellId, bundle: nil)
         self.register(cellNib, forCellReuseIdentifier: cellId)
         return self
     }
-
+    @discardableResult
     public func py_register(headerFooterViewClassType: UIView.Type) -> Self{
         let reuseId = headerFooterViewClassType.className
         let viewType: AnyClass = headerFooterViewClassType.classForCoder()
         self.register(viewType, forHeaderFooterViewReuseIdentifier: reuseId)
         return self
     }
-
+    @discardableResult
     public func py_register(headerFooterViewNibType: UIView.Type) -> Self{
         let reuseId = headerFooterViewNibType.className
         let viewNib = UINib(nibName: reuseId, bundle: nil)
@@ -77,6 +82,23 @@ extension UITableView {
 }
 /// 🍬语法糖@UI
 extension UITableView {
+    // MARK: - iOS 11+ 禁止自动调整 contentInset
+    @discardableResult
+    public func byNoContentInsetAdjustment() -> Self {
+        if #available(iOS 11.0, *) {
+            self.contentInsetAdjustmentBehavior = .never
+        }
+        return self
+    }
+    // MARK: - iOS 15+ 去掉 section header 顶部默认间距
+    @discardableResult
+    public func byNoSectionHeaderTopPadding() -> Self {
+        if #available(iOS 15.0, *) {
+            self.setValue(0, forKey: "sectionHeaderTopPadding")
+        }
+        return self
+    }
+
     @discardableResult
     public func byRowHeight(_ height: CGFloat) -> Self {
         self.rowHeight = height

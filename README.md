@@ -1349,6 +1349,9 @@ mainTableView = GKPageTableView(frame: .zero, style: .plain)
     .byShowsVerticalScrollIndicator(false)
     .byShowsHorizontalScrollIndicator(false)
     .registerCellByID(CellCls: UITableViewCell.self, ID: "cell")
+    .byNoContentInsetAdjustment()
+    .byNoSectionHeaderTopPadding()
+addSubview(mainTableView)
 ```
 
 ### 11、`UICollectionView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
