@@ -4021,9 +4021,9 @@ struct Point {
 | 并发安全 | 手动加锁         | 编译器/运行时自动保证        |
 | 调用方法 | 直接调用         | `await` 调用（异步安全边界） |
 
-### 16、**Objc**.`id` 🆚 [**Swift**](https://developer.apple.com/swift/).`AnyObject` 🆚 [**Swift**](https://developer.apple.com/swift/).`Any` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 16、[**Objc**.`id`](#ID) 🆚 [**Swift**](https://developer.apple.com/swift/).[**`AnyObject`**](#AnyObject) 🆚 [**Swift**](https://developer.apple.com/swift/).[**`Any`**](#Any) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* **Objc**.`id`
+* <font id=ID>**Objc**.`id`</font>
 
   > ```objective-c
   > id obj = @"Hello";   // NSString
@@ -4032,13 +4032,14 @@ struct Point {
   > ```
 
   * * **含义**：
-      `id` 表示「某个 **Objc对象实例**」，不要求声明具体类型。
+      `id` 表示「某个 **Objc对象实例**」，不要求声明具体类型
 
     * **特性**：
 
-      - 动态绑定（运行时决定真正类型）。
-      - 编译器不做严格检查，调用方法时，是否能执行取决于运行时。
-      - 只能存放 **Objc 对象**（继承自 `NSObject` 的类），**不能存放值类型**（比如 `int`、`struct`）。
+      - 动态绑定（运行时决定真正类型）
+      - 编译器不做严格检查，调用方法时，是否能执行取决于运行时
+      - 只能存放 **Objc 对象**（继承自 `NSObject` 的类），**不能存放值类型**（比如 `int`、`struct`）
+      - 在 [**Swift**](https://developer.apple.com/swift/) 混编时会自动桥接成 `AnyObject`
 
      * **风险**：
 
@@ -4047,7 +4048,7 @@ struct Point {
                       // 如果 obj 是 UIView ❌ -> crash: unrecognized selector 
        ```
 
-* [**Swift**](https://developer.apple.com/swift/).`AnyObject`
+* <font id=AnyObject>**[Swift](https://developer.apple.com/swift/).`AnyObject`**</font>
 
   > 👉 可以理解为：**`AnyObject ≈ Swift 里的安全版 id`**
   >
@@ -4074,7 +4075,7 @@ struct Point {
 
      - 遵循 **更安全的类型检查**，不会像 `id` 那样任你乱调方法直接崩。
 
-* [**Swift**](https://developer.apple.com/swift/).`Any` 
+* <font id=Any>**[Swift](https://developer.apple.com/swift/).`Any`**</font>
 
   > ```swift
   > var x: Any = "Hello"   // String
