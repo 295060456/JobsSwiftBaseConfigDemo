@@ -1360,6 +1360,195 @@ addSubview(mainTableView)
 /// TODO
 ```
 
+### 12、手势的封装（使用） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 因为手势只能添加到**UIView**及其子类上，所以我们对**UIView**进行扩充
+
+* **链式调用**
+
+  * 直接设置手势（未锚定视图）
+
+    * Tap（点击）
+
+      ```swift
+      // MARK: - 点击 Tap
+      UIView().addGestureRecognizer(
+          UITapGestureRecognizer
+              .byConfig { gr in
+                  print("Tap 触发 on: \(String(describing: gr.view))")
+              }
+              .byTaps(2)                       // 双击
+              .byTouches(1)                    // 单指
+              .byCancelsTouchesInView(true)
+              .byEnabled(true)
+              .byName("customTap")
+      )
+      ```
+
+    * 长按 LongPress
+
+      ```swift
+      // MARK: - 长按 LongPress
+      UIView().addGestureRecognizer(
+          UILongPressGestureRecognizer
+              .byConfig { gr in
+                  if gr.state == .began {
+                      print("长按开始")
+                  } else if gr.state == .ended {
+                      print("长按结束")
+                  }
+              }
+              .byMinDuration(0.8)              // 最小按压时长
+              .byMovement(12)                  // 允许移动距离
+              .byTouches(1)                    // 单指
+      )
+      ```
+
+    * 拖拽 Pan
+
+      ```swift
+      // MARK: - 拖拽 Pan
+      UIView().addGestureRecognizer(
+          UIPanGestureRecognizer
+              .byConfig { gr in
+                  let p = (gr as! UIPanGestureRecognizer).translation(in: gr.view)
+                  if gr.state == .changed {
+                      print("拖拽中: \(p)")
+                  } else if gr.state == .ended {
+                      print("拖拽结束")
+                  }
+              }
+              .byMinTouches(1)
+              .byMaxTouches(2)
+              .byCancelsTouchesInView(true)
+      )
+      ```
+
+    * 轻扫 Swipe（单方向）
+
+      ```swift
+      // MARK: - 轻扫 Swipe（单方向）
+      UIView().addGestureRecognizer(
+          UISwipeGestureRecognizer
+              .byConfig { _ in
+                  print("👉 右滑触发")
+              }
+              .byDirection(.right)
+              .byTouches(1)
+      )
+      ```
+
+    * 轻扫 Swipe（多方向）
+
+      ```swift
+      // MARK: - 轻扫 Swipe（多方向）
+      let swipeContainer = UIView()
+      swipeContainer.addGestureRecognizer(
+          UISwipeGestureRecognizer
+              .byConfig { _ in print("← 左滑") }
+              .byDirection(.left)
+      )
+      swipeContainer.addGestureRecognizer(
+          UISwipeGestureRecognizer
+              .byConfig { _ in print("→ 右滑") }
+              .byDirection(.right)
+      )
+      swipeContainer.addGestureRecognizer(
+          UISwipeGestureRecognizer
+              .byConfig { _ in print("↑ 上滑") }
+              .byDirection(.up)
+      )
+      swipeContainer.addGestureRecognizer(
+          UISwipeGestureRecognizer
+              .byConfig { _ in print("↓ 下滑") }
+              .byDirection(.down)
+      )
+      ```
+
+    * 捏合 Pinch
+
+      ```swift
+      // MARK: - 捏合 Pinch
+      UIView().addGestureRecognizer(
+          UIPinchGestureRecognizer
+              .byConfig { _ in }
+              .byOnScaleChange { gr, scale in
+                  if gr.state == .changed {
+                      print("缩放比例: \(scale)")
+                  }
+              }
+              .byScale(1.0)
+      )
+      ```
+
+    * 旋转 Rotate
+
+      ```swift
+      // MARK: - 旋转 Rotate
+      UIView().addGestureRecognizer(
+          UIRotationGestureRecognizer
+              .byConfig { _ in }
+              .byOnRotationChange { gr, r in
+                  if gr.state == .changed {
+                      print("旋转角度(弧度): \(r)")
+                  }
+              }
+              .byRotation(0)
+      )
+      ```
+
+  * 直接设置手势（已锚定视图）
+
+    ```swift
+    let views = UIView()
+        .addTapAction { gr in
+            print("点击 \(gr.view!)")
+        }
+        .addLongPressAction { gr in
+            if gr.state == .began { print("长按开始") }
+        }
+        .addPanAction { gr in
+            let p = (gr as! UIPanGestureRecognizer).translation(in: gr.view)
+            print("拖拽中: \(p)")
+        }
+        .addPinchAction { gr in
+            let scale = (gr as! UIPinchGestureRecognizer).scale
+            print("缩放比例：\(scale)")
+        }
+        .addRotationAction { gr in
+            let rotation = (gr as! UIRotationGestureRecognizer).rotation
+            print("旋转角度：\(rotation)")
+        }
+    ```
+
+* <font color=red>在已有的手势触发事件里面新增手势行为：`byAction`</font>
+
+  ```swift
+  UIView().addGestureRecognizer(UISwipeGestureRecognizer()
+      .byDirection(.left)
+      .byAction { gr in print("左滑 \(gr.view!)") })
+  ```
+
+* **多个方向的 swipe 并存**
+
+  ```swift
+  // 同一 view 上同时添加四个方向的 swipe
+  let idL = view.addSwipeActionMulti(direction: .left)  { gr in print("←") }
+  let idR = view.addSwipeActionMulti(direction: .right) { gr in print("→") }
+  let idU = view.addSwipeActionMulti(direction: .up)    { gr in print("↑") }
+  let idD = view.addSwipeActionMulti(direction: .down)  { gr in print("↓") }
+  
+  // 指定 id，方便链式与管理
+  view.addSwipeActionMulti(use: "swipe.left", direction: .left) { _ in }
+      .addSwipeActionMulti(use: "swipe.right", direction: .right) { _ in }
+  
+  // 精确移除某一个
+  view.removeSwipeActionMulti(id: idL)
+  // 或批量移除该类手势
+  view.removeAllSwipeActionsMulti()
+
+
+
 ### 12、<font id=弱引用的等价写法>**弱引用的等价写法**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
@@ -1503,6 +1692,28 @@ addSubview(mainTableView)
       await updateUI()
   }
   ```
+
+### 15、Block的安全调用（等价调用） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **Objc**
+
+  ```objective-c
+  if (success) {
+      success(YES);
+  }
+  ```
+
+* [**Swift**](https://developer.apple.com/swift/)
+
+  * ```swift
+    if let success = success {
+        success(true)
+    }
+    ```
+
+  * ```swift
+    success?(true)
+    ```
 
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -2045,7 +2256,7 @@ class DataManager {
   }
   ```
 
-### 4、[**Swift**](https://developer.apple.com/swift/) 闭包 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 4、💼 [**Swift**](https://developer.apple.com/swift/) 闭包 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 #### 4.1、**闭包表达式** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -2139,21 +2350,47 @@ class DataManager {
 
 ##### 4.2.2、逃逸<font color=red>**`@escaping`**</font>/非逃逸闭包 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-> 1️⃣ 逃逸闭包用 <font color=red>**`@escaping`**</font> 标记，会在函数返回后才调用
+> 1️⃣ 当一个闭包在函数**返回之后**还会被**持有或执行**时，这个闭包就是「逃逸闭包」。
 >
-> 2️⃣ 常见于 **异步回调/存储/跨越生命周期**、任务完成时通知
+> 2️⃣ 逃逸闭包用 <font color=red>**`@escaping`**</font> 标记，会在函数返回后才调用
 >
-> 3️⃣ **默认**：参数闭包是**非逃逸**（函数体内调用完就结束）
+> 3️⃣ 常见于 **异步回调/存储/跨越生命周期**、任务完成时通知
 >
-> 4️⃣ **判断口诀**：闭包被**保存**（属性/数组）或**异步**调用 ⇒ <font color=red>**`@escaping`**</font>
+> 4️⃣ **默认**：参数闭包是**非逃逸**（函数体内调用完就结束）
+>
+> 5️⃣ **判断口诀**：闭包被**保存**（属性/数组）或**异步**调用 ⇒ <font color=red>**`@escaping`**</font>
 
-```swift
-func asyncWork(completion: @escaping (String) -> Void) {
-    DispatchQueue.global().async {
-        completion("done")
-    }
-}
-```
+* 逃逸闭包
+
+  ```swift
+  /// asyncOperation 调用结束时函数体已经返回；
+  /// 但闭包 completion 还被 DispatchQueue 保存起来；
+  /// 所以闭包在函数结束后才被执行；
+  /// 因此必须标记为 @escaping。
+  func asyncOperation(completion: @escaping (String) -> Void) {
+      DispatchQueue.global().async {
+          print("正在执行耗时任务...")
+          sleep(2)
+          completion("done")// 函数早已返回，这里闭包延迟执行
+      }
+  }
+  ```
+
+  > ```swift
+  > asyncOperation {
+  >     print("任务完成")
+  > }
+  > ```
+
+* 非逃逸闭包（默认）
+
+  ```swift
+  /// 如果闭包在函数内部立即执行，不需要逃逸
+  /// 不需要 @escaping，因为闭包会在函数返回前执行完毕
+  func performNow(task: () -> Void) {
+      task()
+  }
+  ```
 
 ##### 4.2.3、自动闭包<font color=red>**`@autoclosure`**</font>  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
