@@ -642,9 +642,9 @@
     
       ```ruby
       # 核心库
-      pod 'RxSwift', # 核心
-      pod 'RxCocoa', # UI 绑定：UIKit、AppKit 的扩展
-      pod 'RxRelay', # 安全替代 Variable，常用于 ViewModel
+      pod 'RxSwift'                  # 核心
+      pod 'RxCocoa'                  # UI 绑定：UIKit、AppKit 的扩展
+      pod 'RxRelay'                  # 安全替代 Variable，常用于 ViewModel
       ```
     
     * [<font color=red>**S**</font>wift <font color=red>**P**</font>ackage <font color=red>**M**</font>anager](#SPM)
@@ -1360,6 +1360,160 @@ addSubview(mainTableView)
 /// TODO
 ```
 
+### 13、✍️`UITextField` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> ```swift
+> override func loadView() {
+>     super.loadView()
+>     // 建议在 App 启动时调用一次
+>     UITextField.enableDeleteBackwardBroadcast()
+> }
+> ```
+
+#### 13.1、📮 邮箱输入框 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 一般性封装
+
+  ```swift
+  private lazy var emailTF: UITextField = {
+      let tf = UITextField()
+          // 数据源
+          .byDelegate(self)
+          // 基础视觉
+          .byPlaceholder("请输入邮箱（至少 3 个字符）")
+          .byTextColor(.label)
+          .byFont(.systemFont(ofSize: 16))
+          .byTextAlignment(.natural)
+          .byBorderStyle(.roundedRect)
+          .byClearButtonMode(.whileEditing)
+          .byInputAccessoryView(accessory)
+          // 键盘
+          .byKeyboardType(.emailAddress)
+          .byKeyboardAppearance(.dark)
+          .byReturnKeyType(.next)
+          .byEnablesReturnKeyAutomatically(true)
+          // 智能输入
+          .byAutocapitalizationType(.none)
+          .byAutocorrectionType(.no)
+          .bySpellCheckingType(.no)
+          .bySmartQuotesType(.no)
+          .bySmartDashesType(.no)
+          .bySmartInsertDeleteType(.no)
+          // 内容类型
+          .byTextContentType(.emailAddress)
+          // 编辑属性
+          .byAllowsEditingTextAttributes(true)
+          .byDefaultTextAttributes([.kern: 0.5]) // 字距
+          .byTypingAttributes([.foregroundColor: UIColor.label])
+          // 左/右视图
+          //.byLeftView(makeIcon("envelope"), mode: .always)
+          .byLeftIcon(UIImage(systemName: "envelope"),
+                      tint: .secondaryLabel,
+                      size: .init(width: 18, height: 18),
+                      leading: 12, spacing: 8)
+      // iOS 17+
+      if #available(iOS 17.0, *) {
+          tf.byInlinePredictionType(.default)
+      }
+      // iOS 18+（演示：即使邮箱框也能设置，不影响）
+      if #available(iOS 18.0, *) {
+          tf.byMathExpressionCompletionType(.default)
+            .byWritingToolsBehavior(.default)
+            .byAllowedWritingToolsResultOptions([])
+      }
+      return tf
+  }()
+  ```
+  
+* 功能性封装
+
+  * 删除按键的监听
+  
+    ```swift
+    // MARK: Rx 绑定 —— 删除键广播
+    emailTF.didPressDelete
+        .subscribe(onNext: { [weak self] in
+            guard let self else { return }
+            print("🗑 delete on emailTF:", self.emailTF.text ?? "")
+        })
+        .disposed(by: rx.disposeBag)
+    ```
+  
+  * 用`textInput`限定输入字符过滤条件
+  
+    ```swift
+    // MARK: Rx 绑定 —— 邮箱：去空格 + 最长 8 + 简单规则
+    emailTF.textInput(
+        maxLength: 8,
+        formatter: { $0.trimmingCharacters(in: .whitespaces) },
+        validator: { $0.count >= 3 && $0.contains("@") }
+    ).isValid
+        .subscribe(onNext: { print("📧 email valid:", $0) })
+        .disposed(by: rx.disposeBag)
+    ```
+
+#### 13.2、🔒 密码输入框 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 一般性封装（`.byLimitLength(5)// 输入长度限制`）
+
+  ```swift
+  private lazy var passwordTF: UITextField = {
+      let eye = UIButton(type: .system)
+      eye.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+      eye.setImage(UIImage(systemName: "eye"), for: .selected)
+      eye.contentEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 6)
+      eye.addTarget(self, action: #selector(toggleEye), for: .touchUpInside)
+  
+      let tf = UITextField()
+          .byDelegate(self) // 数据源
+          .byPlaceholder("请输入密码（6-20 位）")
+          .bySecureTextEntry(true)// ‼️
+          .byInputAccessoryView(passwordAccessory)
+          .byBorderStyle(.roundedRect)
+          .byReturnKeyType(.done)
+          .byTextContentType(.password)
+          .byPasswordRules(nil) // 也可自定义
+       // .byLeftView(Self.makeIcon("lock"), mode: .always)
+          .byLeftIcon(UIImage(systemName: "lock"),
+                      tint: .secondaryLabel,
+                      size: .init(width: 18, height: 18),
+                      leading: 12, spacing: 8)
+          .byRightView(eye, mode: .always)
+          .byAllowsNumberPadPopover(true) // iPad 数字键盘弹窗
+          .byInputView(datePicker) // 演示自定义 inputView：点密码框弹日期（纯展示，不建议真实项目这么用）
+          .byLimitLength(5)// 输入长度限制
+  
+      return tf
+  }()
+  ```
+
+* 功能性封装
+
+  * 用`textInput`限定输入字符过滤条件（但是没有设置输入长度限制，输入长度限制用`.byLimitLength(5)`）
+  
+    ```swift
+    // MARK: Rx 绑定 —— 密码：不做任何限制，只是监听（不要传 nil，直接用默认）
+    passwordTF.textInput(
+        maxLength: 5,
+        formatter: { $0.trimmingCharacters(in: .whitespaces) },
+        validator: nil
+    )
+    .isValid
+    .subscribe(onNext: { print("🔐 password valid:", $0) })
+    .disposed(by: rx.disposeBag)
+    ```
+  
+  * 删除按键的监听
+  
+    ```swift
+    // MARK: 监听删除键（无 .rx）
+    passwordTF.didPressDelete
+        .subscribe(onNext: { print("delete pressed") })
+        .disposed(by: rx.disposeBag)
+    ```
+
+
+
 ### 12、手势的封装（使用） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 因为手势只能添加到**UIView**及其子类上，所以我们对**UIView**进行扩充
@@ -1546,8 +1700,6 @@ addSubview(mainTableView)
   view.removeSwipeActionMulti(id: idL)
   // 或批量移除该类手势
   view.removeAllSwipeActionsMulti()
-
-
 
 ### 12、<font id=弱引用的等价写法>**弱引用的等价写法**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 

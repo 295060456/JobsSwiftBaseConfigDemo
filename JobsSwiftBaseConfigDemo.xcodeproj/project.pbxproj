@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		041F5B012E87B51800984EEB /* TextFieldVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041F5B002E87B50F00984EEB /* TextFieldVC.swift */; };
 		0438A71C2E8400E7008F763B /* JobsCorConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0438A71B2E8400E3008F763B /* JobsCorConst.swift */; };
 		0442717B2E8139CF0084B25C /* ColorAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0442717A2E8139CF0084B25C /* ColorAssets.xcassets */; };
 		044272852E8146130084B25C /* JXScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044272842E8146130084B25C /* JXScale.swift */; };
@@ -114,6 +115,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		041F5B002E87B50F00984EEB /* TextFieldVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldVC.swift; sourceTree = "<group>"; };
 		0438A71B2E8400E3008F763B /* JobsCorConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsCorConst.swift; sourceTree = "<group>"; };
 		0442717A2E8139CF0084B25C /* ColorAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ColorAssets.xcassets; sourceTree = "<group>"; };
 		044272842E8146130084B25C /* JXScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXScale.swift; sourceTree = "<group>"; };
@@ -462,6 +464,7 @@
 		C564FCA82E0959690079B5C1 /* VC */ = {
 			isa = PBXGroup;
 			children = (
+				041F5B002E87B50F00984EEB /* TextFieldVC.swift */,
 				C564FCA92E09597C0079B5C1 /* VC2.swift */,
 				C564FCAA2E09597C0079B5C1 /* ViewController.swift */,
 			);
@@ -772,12 +775,8 @@
 			);
 			inputFileListPaths = (
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -821,6 +820,7 @@
 				C564FC892E0959640079B5C1 /* UICollectionView.swift in Sources */,
 				C564FCB32E0959990079B5C1 /* CustomCell.swift in Sources */,
 				045920FA2E854FA5008C8D6A /* Int64.swift in Sources */,
+				041F5B012E87B51800984EEB /* TextFieldVC.swift in Sources */,
 				C564FC902E0959640079B5C1 /* UILabel.swift in Sources */,
 				C564FC9E2E0959640079B5C1 /* UINavigationController.swift in Sources */,
 				C564FCA52E0959640079B5C1 /* UIPickerView.swift in Sources */,

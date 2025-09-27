@@ -51,7 +51,7 @@ use_frameworks! :linkage => :static
 # 几乎每个App都会用到的
 def swiftAppCommon
   pod 'IQKeyboardManager'
-  pod 'Alamofire', '~> 5.9'  # ❤️ 显式指定新版本
+  pod 'Alamofire', '~> 5.9'      # ❤️ 显式指定新版本
   pod 'Moya', :modular_headers => true
   pod 'SDWebImage'
   pod 'GKNavigationBarSwift'
@@ -61,6 +61,10 @@ def swiftAppCommon
   pod 'JXSegmentedView'
   pod "HTMLReader"
   pod 'KakaJSON'
+  pod 'RxSwift'                  # 核心
+  pod 'RxCocoa'                  # UI 绑定：UIKit、AppKit 的扩展
+  pod 'RxRelay'                  # 安全替代 Variable，常用于 ViewModel
+  pod 'NSObject+Rx'
 end
 
 # 调试框架

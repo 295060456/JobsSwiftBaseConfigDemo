@@ -7,6 +7,13 @@
 
 import Foundation
 import ObjectiveC.runtime
+
+public enum IOSAvail {
+    case v17
+    case v18
+    // 需要更多版本再加 case
+}
+
 /// Swift 的 extension 是不能新增存储属性的，因此用关联对象 (objc_getAssociatedObject) 来模拟属性
 /// 写法一
 //extension NSObject: MyProtocol {
