@@ -37,11 +37,10 @@ extension UIImage {
                              y: endPoint.y * size.height)
             ctx.cgContext.drawLinearGradient(gradient, start: sp, end: ep, options: [])
         }
-
         guard let cg = img.cgImage else { return nil }
         self.init(cgImage: cg, scale: img.scale, orientation: .up)
     }
-    //MARK: - 绘制纯色图片
+    //MARK: - 通用绘制器👉绘制纯色图片
     public static func solidColor(size: CGSize,
                                   color: UIColor,
                                   opaque: Bool = false) -> UIImage? {
@@ -51,6 +50,16 @@ extension UIImage {
         color.setFill()
         UIRectFill(CGRect(origin: .zero, size: size))
         return UIGraphicsGetImageFromCurrentImageContext()
+    }
+    // MARK: - 按钮背景/控件填充👉将任意 UIColor 转换成一张纯色 UIImage
+    public static func jobs_fromColor(_ color: UIColor, size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
+        let rect = CGRect(origin: .zero, size: size)
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        color.setFill()
+        UIRectFill(rect)
+        let image = UIGraphicsGetImageFromCurrentImageContext() ?? UIImage()
+        UIGraphicsEndImageContext()
+        return image.resizableImage(withCapInsets: .zero, resizingMode: .stretch)
     }
     //MARK: - 图片转灰度
     public func grayScale() -> UIImage? {

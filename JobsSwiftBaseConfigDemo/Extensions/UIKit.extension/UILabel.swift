@@ -167,7 +167,7 @@ extension UILabel {
         return self
     }
 }
-/// 给 UILabel 里的文字加 下划线，并且可以指定下划线的颜色。
+// MARK: 给 UILabel 里的文字加 下划线，并且可以指定下划线的颜色。
 extension UILabel {
     func underline(color: UIColor) {
         if let textString = self.text {
@@ -180,5 +180,12 @@ extension UILabel {
                                           range: NSRange(location: 0, length: attributedString.length))
             self.attributedText = attributedString
         }
+    }
+}
+// MARK: 设置富文本
+public extension UILabel {
+    func richTextBy(_ runs: [JobsRichRun], paragraphStyle: NSMutableParagraphStyle? = nil) {
+        self.attributedText = JobsRichText.make(runs, paragraphStyle: paragraphStyle)
+        self.isUserInteractionEnabled = false
     }
 }

@@ -1,5 +1,5 @@
 //
-//  TextFieldVC.swift
+//  UITextFieldDemoVC.swift
 //  JobsSwiftBaseConfigDemo
 //
 //  Created by Mac on 9/27/25.
@@ -13,7 +13,7 @@ import RxRelay
 import NSObject_Rx
 import ObjectiveC
 
-final class TextFieldVC: UIViewController, UITextFieldDelegate, HasDisposeBag {
+final class UITextFieldDemoVC: UIViewController, UITextFieldDelegate, HasDisposeBag {
     // MARK: - UI
     // 左边信封图标
     private static func makeIcon(_ name: String) -> UIImageView {

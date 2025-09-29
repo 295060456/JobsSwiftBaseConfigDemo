@@ -197,3 +197,379 @@ extension UITableView {
         return self
     }
 }
+// MARK: - DataSource / Delegate Plus
+extension UITableView {
+    /// iOS 10.0+ 预取数据源
+    @available(iOS 10.0, *)
+    @discardableResult
+    public func byPrefetchDataSource(_ ds: UITableViewDataSourcePrefetching?) -> Self {
+        self.prefetchDataSource = ds
+        return self
+    }
+    /// iOS 15.0+ 是否启用预取
+    @available(iOS 15.0, *)
+    @discardableResult
+    public func byPrefetchingEnabled(_ enabled: Bool) -> Self {
+        self.isPrefetchingEnabled = enabled
+        return self
+    }
+    /// iOS 11.0+ 拖拽代理
+    @available(iOS 11.0, *)
+    @discardableResult
+    public func byDragDelegate(_ delegate: UITableViewDragDelegate?) -> Self {
+        self.dragDelegate = delegate
+        return self
+    }
+    /// iOS 11.0+ 放置代理
+    @available(iOS 11.0, *)
+    @discardableResult
+    public func byDropDelegate(_ delegate: UITableViewDropDelegate?) -> Self {
+        self.dropDelegate = delegate
+        return self
+    }
+    /// iOS 11.0+ 是否允许拖拽交互
+    @available(iOS 11.0, *)
+    @discardableResult
+    public func byDragInteractionEnabled(_ enabled: Bool) -> Self {
+        self.dragInteractionEnabled = enabled
+        return self
+    }
+}
+// MARK: - Heights & Insets
+extension UITableView {
+
+    @discardableResult
+    public func bySectionHeaderHeight(_ h: CGFloat) -> Self {
+        self.sectionHeaderHeight = h
+        return self
+    }
+
+    @discardableResult
+    public func bySectionFooterHeight(_ h: CGFloat) -> Self {
+        self.sectionFooterHeight = h
+        return self
+    }
+    /// iOS 7.0+
+    @available(iOS 7.0, *)
+    @discardableResult
+    public func byEstimatedRowHeight(_ h: CGFloat) -> Self {
+        self.estimatedRowHeight = h
+        return self
+    }
+    /// iOS 7.0+
+    @available(iOS 7.0, *)
+    @discardableResult
+    public func byEstimatedSectionHeaderHeight(_ h: CGFloat) -> Self {
+        self.estimatedSectionHeaderHeight = h
+        return self
+    }
+    /// iOS 7.0+
+    @available(iOS 7.0, *)
+    @discardableResult
+    public func byEstimatedSectionFooterHeight(_ h: CGFloat) -> Self {
+        self.estimatedSectionFooterHeight = h
+        return self
+    }
+    /// iOS 15.0+ 填充行高度
+    @available(iOS 15.0, *)
+    @discardableResult
+    public func byFillerRowHeight(_ h: CGFloat) -> Self {
+        self.fillerRowHeight = h
+        return self
+    }
+    /// iOS 15.0+ section header 顶部间距
+    @available(iOS 15.0, *)
+    @discardableResult
+    public func bySectionHeaderTopPadding(_ padding: CGFloat) -> Self {
+        self.sectionHeaderTopPadding = padding
+        return self
+    }
+    /// iOS 11.0+ 分割线 inset 参考系
+    @available(iOS 11.0, *)
+    @discardableResult
+    public func bySeparatorInsetReference(_ ref: UITableView.SeparatorInsetReference) -> Self {
+        self.separatorInsetReference = ref
+        return self
+    }
+    /// 分割线 inset
+    @discardableResult
+    public func bySeparatorInset(_ inset: UIEdgeInsets) -> Self {
+        self.separatorInset = inset
+        return self
+    }
+    /// iOS 11.0+ 单元自适应失效控制
+    @available(iOS 16.0, *)
+    @discardableResult
+    public func bySelfSizingInvalidation(_ value: UITableView.SelfSizingInvalidation) -> Self {
+        self.selfSizingInvalidation = value
+        return self
+    }
+    /// iOS 11.0+ 子视图是否插入安全区
+    @available(iOS 11.0, *)
+    @discardableResult
+    public func byInsetsContentViewsToSafeArea(_ enable: Bool) -> Self {
+        self.insetsContentViewsToSafeArea = enable
+        return self
+    }
+}
+// MARK: - Background / Context Menu
+extension UITableView {
+
+    @discardableResult
+    public func byBackgroundView(_ view: UIView?) -> Self {
+        self.backgroundView = view
+        return self
+    }
+    /// iOS 14.0+ 配置 contextMenuInteraction（只读属性，提供配置闭包）
+    @available(iOS 14.0, *)
+    @discardableResult
+    public func byContextMenuInteraction(_ config: (UIContextMenuInteraction) -> Void) -> Self {
+        if let interaction = self.contextMenuInteraction {
+            config(interaction)
+        }
+        return self
+    }
+}
+// MARK: - Separator & Layout Margins
+extension UITableView {
+
+    @discardableResult
+    public func bySeparatorColor(_ color: UIColor?) -> Self {
+        self.separatorColor = color
+        return self
+    }
+    /// iOS 8.0+
+    @available(iOS 8.0, *)
+    @discardableResult
+    public func bySeparatorEffect(_ effect: UIVisualEffect?) -> Self {
+        self.separatorEffect = effect
+        return self
+    }
+    /// iOS 9.0+
+    @available(iOS 9.0, *)
+    @discardableResult
+    public func byCellLayoutMarginsFollowReadableWidth(_ follow: Bool) -> Self {
+        self.cellLayoutMarginsFollowReadableWidth = follow
+        return self
+    }
+}
+// MARK: - Selection / Focus / Editing
+extension UITableView {
+
+    @discardableResult
+    public func byAllowsSelection(_ allow: Bool) -> Self {
+        self.allowsSelection = allow
+        return self
+    }
+
+    @discardableResult
+    public func byAllowsSelectionDuringEditing(_ allow: Bool) -> Self {
+        self.allowsSelectionDuringEditing = allow
+        return self
+    }
+    /// iOS 5.0+
+    @available(iOS 5.0, *)
+    @discardableResult
+    public func byAllowsMultipleSelection(_ allow: Bool) -> Self {
+        self.allowsMultipleSelection = allow
+        return self
+    }
+    /// iOS 5.0+
+    @available(iOS 5.0, *)
+    @discardableResult
+    public func byAllowsMultipleSelectionDuringEditing(_ allow: Bool) -> Self {
+        self.allowsMultipleSelectionDuringEditing = allow
+        return self
+    }
+    /// 设置编辑状态（带动画）
+    @discardableResult
+    public func byEditing(_ editing: Bool, animated: Bool = true) -> Self {
+        self.setEditing(editing, animated: animated)
+        return self
+    }
+    /// iOS 14.0+ 焦点移动自动选中
+    @available(iOS 14.0, *)
+    @discardableResult
+    public func bySelectionFollowsFocus(_ enable: Bool) -> Self {
+        self.selectionFollowsFocus = enable
+        return self
+    }
+    /// iOS 15.0+ 允许焦点
+    @available(iOS 15.0, *)
+    @discardableResult
+    public func byAllowsFocus(_ allow: Bool) -> Self {
+        self.allowsFocus = allow
+        return self
+    }
+    /// iOS 15.0+ 编辑时允许焦点
+    @available(iOS 15.0, *)
+    @discardableResult
+    public func byAllowsFocusDuringEditing(_ allow: Bool) -> Self {
+        self.allowsFocusDuringEditing = allow
+        return self
+    }
+    /// iOS 9.0+ 记住上次聚焦行
+    @available(iOS 9.0, *)
+    @discardableResult
+    public func byRemembersLastFocusedIndexPath(_ remember: Bool) -> Self {
+        self.remembersLastFocusedIndexPath = remember
+        return self
+    }
+    /// section 索引最少显示行数
+    @discardableResult
+    public func bySectionIndexMinimumDisplayRowCount(_ count: Int) -> Self {
+        self.sectionIndexMinimumDisplayRowCount = count
+        return self
+    }
+    /// iOS 6.0+
+    @available(iOS 6.0, *)
+    @discardableResult
+    public func bySectionIndexColor(_ color: UIColor?) -> Self {
+        self.sectionIndexColor = color
+        return self
+    }
+    /// iOS 7.0+
+    @available(iOS 7.0, *)
+    @discardableResult
+    public func bySectionIndexBackgroundColor(_ color: UIColor?) -> Self {
+        self.sectionIndexBackgroundColor = color
+        return self
+    }
+    /// iOS 6.0+
+    @available(iOS 6.0, *)
+    @discardableResult
+    public func bySectionIndexTrackingBackgroundColor(_ color: UIColor?) -> Self {
+        self.sectionIndexTrackingBackgroundColor = color
+        return self
+    }
+    /// 选择 / 取消选择
+    @discardableResult
+    public func bySelectRow(_ indexPath: IndexPath?, animated: Bool = true, scrollPosition: UITableView.ScrollPosition = .none) -> Self {
+        self.selectRow(at: indexPath, animated: animated, scrollPosition: scrollPosition)
+        return self
+    }
+    @discardableResult
+    public func byDeselectRow(_ indexPath: IndexPath, animated: Bool = true) -> Self {
+        self.deselectRow(at: indexPath, animated: animated)
+        return self
+    }
+}
+// MARK: - Scrolling Helpers
+extension UITableView {
+
+    @discardableResult
+    public func byScrollToRow(_ indexPath: IndexPath, at position: UITableView.ScrollPosition, animated: Bool = true) -> Self {
+        self.scrollToRow(at: indexPath, at: position, animated: animated)
+        return self
+    }
+
+    @discardableResult
+    public func byScrollToNearestSelectedRow(at position: UITableView.ScrollPosition, animated: Bool = true) -> Self {
+        self.scrollToNearestSelectedRow(at: position, animated: animated)
+        return self
+    }
+}
+// MARK: - Batch Updates & Reload APIs
+extension UITableView {
+    /// iOS 11.0+
+    @available(iOS 11.0, *)
+    @discardableResult
+    public func byPerformBatchUpdates(_ updates: (() -> Void)?, completion: ((Bool) -> Void)? = nil) -> Self {
+        self.performBatchUpdates(updates, completion: completion)
+        return self
+    }
+
+    @discardableResult
+    public func byBeginUpdates() -> Self {
+        self.beginUpdates()
+        return self
+    }
+
+    @discardableResult
+    public func byEndUpdates() -> Self {
+        self.endUpdates()
+        return self
+    }
+
+    @discardableResult
+    public func byInsertSections(_ sections: IndexSet, with animation: UITableView.RowAnimation = .automatic) -> Self {
+        self.insertSections(sections, with: animation)
+        return self
+    }
+
+    @discardableResult
+    public func byDeleteSections(_ sections: IndexSet, with animation: UITableView.RowAnimation = .automatic) -> Self {
+        self.deleteSections(sections, with: animation)
+        return self
+    }
+    /// iOS 5.0+
+    @available(iOS 5.0, *)
+    @discardableResult
+    public func byMoveSection(_ from: Int, to newSection: Int) -> Self {
+        self.moveSection(from, toSection: newSection)
+        return self
+    }
+    /// iOS 3.0+
+    @available(iOS 3.0, *)
+    @discardableResult
+    public func byReloadSections(_ sections: IndexSet, with animation: UITableView.RowAnimation = .automatic) -> Self {
+        self.reloadSections(sections, with: animation)
+        return self
+    }
+
+    @discardableResult
+    public func byInsertRows(at indexPaths: [IndexPath], with animation: UITableView.RowAnimation = .automatic) -> Self {
+        self.insertRows(at: indexPaths, with: animation)
+        return self
+    }
+
+    @discardableResult
+    public func byDeleteRows(at indexPaths: [IndexPath], with animation: UITableView.RowAnimation = .automatic) -> Self {
+        self.deleteRows(at: indexPaths, with: animation)
+        return self
+    }
+    /// iOS 5.0+
+    @available(iOS 5.0, *)
+    @discardableResult
+    public func byMoveRow(from: IndexPath, to: IndexPath) -> Self {
+        self.moveRow(at: from, to: to)
+        return self
+    }
+    /// iOS 3.0+
+    @available(iOS 3.0, *)
+    @discardableResult
+    public func byReloadRows(at indexPaths: [IndexPath], with animation: UITableView.RowAnimation = .automatic) -> Self {
+        self.reloadRows(at: indexPaths, with: animation)
+        return self
+    }
+    /// iOS 15.0+ 仅重新配置（不重载）
+    @available(iOS 15.0, *)
+    @discardableResult
+    public func byReconfigureRows(at indexPaths: [IndexPath]) -> Self {
+        self.reconfigureRows(at: indexPaths)
+        return self
+    }
+    /// 重新载入数据 / 索引标题
+    @discardableResult
+    public func byReloadData() -> Self {
+        self.reloadData()
+        return self
+    }
+    /// iOS 3.0+
+    @available(iOS 3.0, *)
+    @discardableResult
+    public func byReloadSectionIndexTitles() -> Self {
+        self.reloadSectionIndexTitles()
+        return self
+    }
+}
+// MARK: - iOS 18.0+ Content Hugging Elements
+extension UITableView {
+    /// iOS 18.0+ 内容 Hugging 策略
+    @available(iOS 18.0, *)
+    @discardableResult
+    public func byContentHuggingElements(_ value: UITableViewContentHuggingElements) -> Self {
+        self.contentHuggingElements = value
+        return self
+    }
+}

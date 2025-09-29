@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		041F5B012E87B51800984EEB /* TextFieldVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041F5B002E87B50F00984EEB /* TextFieldVC.swift */; };
+		041F5B012E87B51800984EEB /* UITextFieldDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041F5B002E87B50F00984EEB /* UITextFieldDemoVC.swift */; };
 		0438A71C2E8400E7008F763B /* JobsCorConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0438A71B2E8400E3008F763B /* JobsCorConst.swift */; };
 		0442717B2E8139CF0084B25C /* ColorAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0442717A2E8139CF0084B25C /* ColorAssets.xcassets */; };
 		044272852E8146130084B25C /* JXScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044272842E8146130084B25C /* JXScale.swift */; };
@@ -40,6 +40,12 @@
 		049FD82F2E82729400636950 /* JobsLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049FD82E2E82729000636950 /* JobsLog.swift */; };
 		04A18E4D2E86533B004BB9DC /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A18E4C2E865336004BB9DC /* UIImage.swift */; };
 		04AC74C52E86682E004B8305 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AC74C42E86682D004B8305 /* Notification.swift */; };
+		04CF028C2E8808540083ACF0 /* ❤️Untitled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028B2E8808500083ACF0 /* ❤️Untitled.swift */; };
+		04CF028E2E8A37BB0083ACF0 /* TextInputStrategies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */; };
+		04CF02902E8A3A160083ACF0 /* UITextViewDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028F2E8A3A0F0083ACF0 /* UITextViewDemoVC.swift */; };
+		04CF03152E8A75E80083ACF0 /* JobsRichText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF03142E8A75E70083ACF0 /* JobsRichText.swift */; };
+		04CF03172E8A76500083ACF0 /* RichTextDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF03162E8A76490083ACF0 /* RichTextDemoVC.swift */; };
+		04CF03192E8A80CE0083ACF0 /* AppTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF03182E8A80CA0083ACF0 /* AppTools.swift */; };
 		28B3B2C7F8E21BC854851508 /* Pods_JobsSwiftBaseConfigDemoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA9261964B37E24BC5754CC1 /* Pods_JobsSwiftBaseConfigDemoUITests.framework */; };
 		39AB45F55599F62A12939F29 /* Pods_JobsSwiftBaseConfigDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE98D9D036CE4AAA3EA72C02 /* Pods_JobsSwiftBaseConfigDemoTests.framework */; };
 		51D5A6F95393861C97CA7D45 /* Pods_JobsSwiftBaseConfigDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3933E8883C7E8B6A888BA7 /* Pods_JobsSwiftBaseConfigDemo.framework */; };
@@ -115,7 +121,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		041F5B002E87B50F00984EEB /* TextFieldVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldVC.swift; sourceTree = "<group>"; };
+		041F5B002E87B50F00984EEB /* UITextFieldDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldDemoVC.swift; sourceTree = "<group>"; };
 		0438A71B2E8400E3008F763B /* JobsCorConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsCorConst.swift; sourceTree = "<group>"; };
 		0442717A2E8139CF0084B25C /* ColorAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ColorAssets.xcassets; sourceTree = "<group>"; };
 		044272842E8146130084B25C /* JXScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXScale.swift; sourceTree = "<group>"; };
@@ -148,6 +154,12 @@
 		049FD82E2E82729000636950 /* JobsLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsLog.swift; sourceTree = "<group>"; };
 		04A18E4C2E865336004BB9DC /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		04AC74C42E86682D004B8305 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
+		04CF028B2E8808500083ACF0 /* ❤️Untitled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "❤️Untitled.swift"; sourceTree = "<group>"; };
+		04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputStrategies.swift; sourceTree = "<group>"; };
+		04CF028F2E8A3A0F0083ACF0 /* UITextViewDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextViewDemoVC.swift; sourceTree = "<group>"; };
+		04CF03142E8A75E70083ACF0 /* JobsRichText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsRichText.swift; sourceTree = "<group>"; };
+		04CF03162E8A76490083ACF0 /* RichTextDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichTextDemoVC.swift; sourceTree = "<group>"; };
+		04CF03182E8A80CA0083ACF0 /* AppTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTools.swift; sourceTree = "<group>"; };
 		1D3933E8883C7E8B6A888BA7 /* Pods_JobsSwiftBaseConfigDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JobsSwiftBaseConfigDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43AC2F32E62C31BD8D0F4D55 /* Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemoTests/Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		498373BA0509D1FCFC7035BF /* Pods-JobsSwiftBaseConfigDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemo.release.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemo/Pods-JobsSwiftBaseConfigDemo.release.xcconfig"; sourceTree = "<group>"; };
@@ -248,6 +260,9 @@
 		045920E22E84EC64008C8D6A /* SwiftTools */ = {
 			isa = PBXGroup;
 			children = (
+				04CF03182E8A80CA0083ACF0 /* AppTools.swift */,
+				04CF03142E8A75E70083ACF0 /* JobsRichText.swift */,
+				04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */,
 				045920E32E84EC72008C8D6A /* SwiftTools.swift */,
 			);
 			path = SwiftTools;
@@ -464,7 +479,9 @@
 		C564FCA82E0959690079B5C1 /* VC */ = {
 			isa = PBXGroup;
 			children = (
-				041F5B002E87B50F00984EEB /* TextFieldVC.swift */,
+				04CF03162E8A76490083ACF0 /* RichTextDemoVC.swift */,
+				04CF028F2E8A3A0F0083ACF0 /* UITextViewDemoVC.swift */,
+				041F5B002E87B50F00984EEB /* UITextFieldDemoVC.swift */,
 				C564FCA92E09597C0079B5C1 /* VC2.swift */,
 				C564FCAA2E09597C0079B5C1 /* ViewController.swift */,
 			);
@@ -504,6 +521,7 @@
 				C564FC6A2E0959610079B5C1 /* UIAlertController.swift */,
 				C564FC6B2E0959610079B5C1 /* UIBarButtonItem.swift */,
 				C564FC652E0959600079B5C1 /* UIButton.swift */,
+				04CF028B2E8808500083ACF0 /* ❤️Untitled.swift */,
 				C564FC672E0959600079B5C1 /* UICollectionView.swift */,
 				C564FC7B2E0959630079B5C1 /* UIDatePicker.swift */,
 				C564FC692E0959610079B5C1 /* UIImageView.swift */,
@@ -578,6 +596,7 @@
 				C564FBD82E09580B0079B5C1 /* Frameworks */,
 				C564FBD92E09580B0079B5C1 /* Resources */,
 				FF63B6FA62F2B3BC9032C39A /* [CP] Copy Pods Resources */,
+				04CF02912E8A3DE40083ACF0 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -702,6 +721,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		04CF02912E8A3DE40083ACF0 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "
+";
+		};
 		7B3A39613349068F02F6EC3B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -775,8 +812,12 @@
 			);
 			inputFileListPaths = (
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -809,7 +850,9 @@
 				045921042E854FE1008C8D6A /* UInt32.swift in Sources */,
 				C564FC9D2E0959640079B5C1 /* UIDatePicker.swift in Sources */,
 				045921062E854FE9008C8D6A /* UInt64.swift in Sources */,
+				04CF03172E8A76500083ACF0 /* RichTextDemoVC.swift in Sources */,
 				C564FCA42E0959640079B5C1 /* UITextField.swift in Sources */,
+				04CF03152E8A75E80083ACF0 /* JobsRichText.swift in Sources */,
 				C564FC9C2E0959640079B5C1 /* UIPopoverPresentationController.swift in Sources */,
 				C5489B5E2E0AB30700B05447 /* JobsBlock.swift in Sources */,
 				C564FCA32E0959640079B5C1 /* UIStepper.swift in Sources */,
@@ -820,7 +863,7 @@
 				C564FC892E0959640079B5C1 /* UICollectionView.swift in Sources */,
 				C564FCB32E0959990079B5C1 /* CustomCell.swift in Sources */,
 				045920FA2E854FA5008C8D6A /* Int64.swift in Sources */,
-				041F5B012E87B51800984EEB /* TextFieldVC.swift in Sources */,
+				041F5B012E87B51800984EEB /* UITextFieldDemoVC.swift in Sources */,
 				C564FC902E0959640079B5C1 /* UILabel.swift in Sources */,
 				C564FC9E2E0959640079B5C1 /* UINavigationController.swift in Sources */,
 				C564FCA52E0959640079B5C1 /* UIPickerView.swift in Sources */,
@@ -832,6 +875,7 @@
 				C564FC9F2E0959640079B5C1 /* UISearchBar.swift in Sources */,
 				0459210A2E854FFB008C8D6A /* Float16.swift in Sources */,
 				C564FC932E0959640079B5C1 /* UIToolbar.swift in Sources */,
+				04CF028C2E8808540083ACF0 /* ❤️Untitled.swift in Sources */,
 				C564FCA12E0959640079B5C1 /* UIPageControl.swift in Sources */,
 				04A18E4D2E86533B004BB9DC /* UIImage.swift in Sources */,
 				045921122E855769008C8D6A /* JobsPaddedLabel.swift in Sources */,
@@ -850,10 +894,13 @@
 				C564FCA22E0959640079B5C1 /* UITableView.swift in Sources */,
 				048E37702E87997A004C3A41 /* UIGestureRecognizer.swift in Sources */,
 				C564FC8E2E0959640079B5C1 /* UITabBarController.swift in Sources */,
+				04CF02902E8A3A160083ACF0 /* UITextViewDemoVC.swift in Sources */,
 				045921022E854FDA008C8D6A /* UInt16.swift in Sources */,
 				C564FCAB2E09597C0079B5C1 /* VC2.swift in Sources */,
 				C564FC8C2E0959640079B5C1 /* UIAlertController.swift in Sources */,
+				04CF028E2E8A37BB0083ACF0 /* TextInputStrategies.swift in Sources */,
 				C564FC9B2E0959640079B5C1 /* UIStackView.swift in Sources */,
+				04CF03192E8A80CE0083ACF0 /* AppTools.swift in Sources */,
 				C564FC952E0959640079B5C1 /* UIView.swift in Sources */,
 				0438A71C2E8400E7008F763B /* JobsCorConst.swift in Sources */,
 				045920F62E854F8C008C8D6A /* Int16.swift in Sources */,

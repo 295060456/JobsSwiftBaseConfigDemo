@@ -46,19 +46,36 @@
   * 作为其他项目的参考，可以快速的了解到项目的架构，代码规范，以及一些设计模式
   * 这么一些优秀的成果，其来源不仅仅是来自于作者本身的持续付出与积累。更是这个领域大家庭中各路优秀作者的智慧结晶
 
-## 二、👥 项目配置 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+## 二、👥 项目配置支持 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-### 1、软件支持 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 1、系统环境配置 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* [**过期的模拟器配件**](https://github.com/295060456/Xcode_Sys_lib) 
+* Apple电脑的芯片分为**`intel芯片`**和**`M系列自研芯片`**。底层区别在于指令集的不同。但是Apple停止了对**`intel芯片`**机型的支持，无法更新MacOS到最新，间接的导致无法更新到最新版本的Xcode。软件开发相关的SDK其实也对MacOS的系统环境以及Xcode版本有关联影响。即：即便是都是使用统一版本的[**Swift**](https://developer.apple.com/swift/)也可能导致某些API报错（找不到）
 
-* [**quicktype**](https://app.quicktype.io/)：从 **JSON** / **GraphQL** /其它数据格式 自动生成对应语言的类型定义
+* 这个版本是「Xcode 当前自带 [**Swift**](https://developer.apple.com/swift/) 工具链」的版本，不一定与项目 **Build Settings** 中使用的版本完全一致（项目可选择旧版编译）。
 
-* [**snipaste**](https://www.snipaste.com/)：截图工具
+  ```shell
+  ➜  ~ xcrun swift --version
+  swift-driver version: 1.127.14.1 Apple Swift version 6.2 (swiftlang-6.2.0.19.9 clang-1700.3.19.1)
+  Target: arm64-apple-macosx26.0
+  ```
 
-* [**Sip**](https://sipapp.io/)：取色器
+* 找到`Swift Language Version`
 
-### 2、第三方管理 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+  ![image-20250929113942861](./assets/image-20250929113942861.png)
+
+* 查项目里的配置：如果项目有多个 target，每个 target 可能定义不同的 `SWIFT_VERSION`，所以可能会有多行输出：
+
+  ```shell
+  ➜  MyApp git:(developer) ✗ grep SWIFT_VERSION MyApp.xcodeproj/project.pbxproj
+  				SWIFT_VERSION = 5.0;
+  				SWIFT_VERSION = 5.0;
+  ```
+
+  >```
+  >YourProject.xcodeproj/
+  > └── project.pbxproj   ✅ 实际配置文件
+  >```
 
 * **Mac OS 15** 以后，苹果采取了更加严格的权限写入机制。新[**Swift**](https://developer.apple.com/swift/)项目如果要利用[**`Cocoapods`**](https://cocoapods.org/)来集成第三方，就比如在**xcode**里面做如下设置，否则编译失败：`TARGETS`->`Build Settings`->`ENABLE_USER_SCRIPT_SANDBOXING`-><font color=red>`NO`</font>
 
@@ -127,6 +144,360 @@
   fi
   
   print_green "🎉 修改完成！已将 ENABLE_USER_SCRIPT_SANDBOXING 设置为 NO"
+  ```
+
+### 2、周边软件支持 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* [**过期的模拟器配件**](https://github.com/295060456/Xcode_Sys_lib) 
+
+* [**quicktype**](https://app.quicktype.io/)：从 **JSON** / **GraphQL** /其它数据格式 自动生成对应语言的类型定义
+
+* [**snipaste**](https://www.snipaste.com/)：截图工具
+
+* [**Sip**](https://sipapp.io/)：取色器
+
+* [**Fastlane**](https://fastlane.tools/)：自动化工具集
+
+  > 一个开源的 **移动应用（iOS / Android）自动化工具集**，目的是把那些繁琐、重复、容易出错的 App 构建 / 签名 / 发布 / 测试 / 上架 等流程，变成<u>写一个脚本、一键执行</u>的工作。
+
+* [**SwiftLint**](https://github.com/realm/SwiftLint)：[**Swift**](https://developer.apple.com/swift/) 代码静态检查工具。 **自动分析 Swift 源代码，帮助保持统一、规范、可维护的代码风格**。
+
+  > 原本要靠团队 Code Review 去发现的细节，[**SwiftLint**](https://github.com/realm/SwiftLint) 都能自动扫出来 ⚡️
+
+  ```shell
+  ➜  ~ brew install swiftlint
+  ```
+
+  * `.swiftlint.yml` 模板
+
+    ```yml
+    # =========================================
+    # SwiftLint 配置文件（标准模板，含中文注释）
+    # 放到仓库根目录，与 .gitignore 同级
+    # =========================================
+    
+    # Swift 版本（有助于规则解析；不写也能跑）
+    swift_version: 5.9
+    
+    # 选择使用哪种报告器：
+    # - xcode（默认，警告出现在 Xcode Issues 面板）
+    # - json / markdown / emoji 等
+    reporter: xcode
+    
+    # 需要扫描的路径（相对仓库根；不填则扫描全仓库）
+    # 一般列出你的 App 源码根目录，避免扫 Pods
+    included:
+      - JobsSwiftBaseConfigDemo
+    
+    # 需要忽略的路径（优先级高于 included）
+    excluded:
+      - Pods
+      - Carthage
+      - .build
+      - DerivedData
+      - Generated
+      - Scripts
+      - fastlane
+      - **/*.generated.swift  # 忽略代码生成产物
+    
+    # 关闭的规则（团队共识下“不想看”的提示）
+    disabled_rules:
+      - trailing_whitespace           # 行尾空格
+      - file_header                   # 文件头注释
+      - redundant_objc_available      # 重复的 @available 提示（常与 #available 混用触发）
+      - nesting                       # 允许较深的类型/语句嵌套
+      - todo                          # 允许 TODO/FIXME 留存
+      # - force_cast                  # 如你仍需强转可以关掉，但更推荐保留
+      # - force_try                   # 如你仍需 try! 可以关掉
+    
+    # 选择性开启的“可选规则”（opt-in，不默认开启）
+    # 这些通常更严格/更主观；按需取舍
+    opt_in_rules:
+      - empty_count                   # 建议用 isEmpty 而不是 .count == 0
+      - operator_usage_whitespace     # 运算符两边空格
+      - closure_spacing               # 闭包内部空格
+      - explicit_init                 # 禁止冗余的 .init 调用
+      - vertical_parameter_alignment_on_call # 调用对齐
+      - discouraged_optional_boolean  # 不推荐 Optional<Bool>
+    
+    # -------------------- 基础阈值类规则 --------------------
+    # 每行最大长度（超过 warning 给黄，超过 error 给红）
+    line_length:
+      warning: 160
+      error: 200
+      ignores_urls: true
+      ignores_function_declarations: true
+      ignores_comments: true
+      ignores_interpolated_strings: true
+    
+    # 单文件最大行数
+    file_length:
+      warning: 600
+      error: 1200
+    
+    # 类型（class/struct/enum）体积限制
+    type_body_length:
+      warning: 300
+      error: 600
+    
+    # 函数体积限制（逻辑太多需要拆分）
+    function_body_length:
+      warning: 60
+      error: 120
+    
+    # 圈复杂度（分支过多建议拆解）
+    cyclomatic_complexity:
+      warning: 12
+      error: 20
+      ignores_case_statements: true
+    
+    # 参数过多（可以推动重构或对象封装）
+    function_parameter_count:
+      warning: 6
+      error: 8
+    
+    # 嵌套深度（if/for/switch/类型嵌套）
+    # 已在 disabled_rules 里关了 nesting，就无需此项；如要启用可放开：
+    # nesting:
+    #   type_level: 2
+    #   statement_level: 5
+    
+    # -------------------- 命名规范 --------------------
+    # 标识符命名长度（变量/常量/参数）
+    identifier_name:
+      min_length: 2
+      max_length: 50
+      allowed_symbols: ["_"]          # 允许下划线
+      excluded:                       # 以下短名不警告
+        - id
+        - x
+        - y
+        - i
+        - j
+        - w
+        - h
+        - rx
+    
+    # 类型命名（类/结构体/枚举/协议）
+    type_name:
+      min_length: 2
+      max_length: 60
+      excluded:
+        - T
+        - U
+        - V
+    
+    # 枚举 case 命名（如需允许大写或特殊前缀可在此配置）
+    enum_case_associated_values_count:
+      warning: 5
+      error: 8
+    
+    # -------------------- 风格/可读性 --------------------
+    # 空行数量（可避免过多空行）
+    vertical_whitespace:
+      max_empty_lines: 2
+    
+    trailing_newline: warning          # 文件末尾需要换行
+    
+    # 导入顺序（按字母排序，同类合并）
+    # 如你使用 Swift 5.9+ 的 import 子模块分组，可按需关闭
+    sorted_imports: true
+    
+    # 明确的访问控制（public/internal/private）可选启用
+    # explicit_acl: warning
+    
+    # 明确 self（仅在闭包中或歧义时要求 self）
+    # explicit_self: warning
+    
+    # -------------------- 分析器规则（需使用 Swift 语义信息，较慢） --------------------
+    # analyzer_rules 适合 CI 或本地全量检查，能发现更复杂问题
+    analyzer_rules:
+      - unused_declaration            # 未使用的声明（变量/函数/类型）
+      - unused_import                 # 未使用的 import
+    
+    # -------------------- 自定义规则（可用正则自定团队风格） --------------------
+    # 例如：禁止 print，统一用自家日志工具
+    custom_rules:
+      no_print:
+        included: ".*\\.swift"
+        name: "Avoid print"
+        regex: "\\bprint\\s*\\("
+        message: "请使用日志工具（如 JobsLog / os_log），不要直接使用 print。"
+        severity: warning
+    
+      no_todo_merge:
+        name: "No TODO in merge"
+        regex: "(TODO|FIXME)"
+        match_kinds:
+          - comment
+        severity: warning
+    
+    # -------------------- 规则严重级别统一提升/降低（可选） --------------------
+    # 自定义 severity 的集中调整（需要时再开）
+    # severity_configuration:
+    #   warning: error
+    
+    # =========================================
+    # 使用提示：
+    # - 运行：swiftlint            # 仅检查
+    # - 自动修复：swiftlint autocorrect
+    # - 指定文件：swiftlint lint --path path/to/File.swift
+    # - 在 Xcode Build Phases 添加 Run Script：swiftlint
+    # =========================================
+    ```
+
+  * 工作原理（底层逻辑）
+
+    * [**SwiftLint**](https://github.com/realm/SwiftLint) 读取你的项目源码
+    * 根据 `.swiftlint.yml` 配置文件中定义的规则集
+    * 使用 **SwiftSyntax / SourceKit** 分析 AST（抽象语法树）
+    * 检查每条规则对应的模式
+    * 把违反规则的地方以 <u>**warning / error**</u> 形式输出到控制台或 Xcode
+
+  * 功能
+
+    | 功能            | 说明                                                       |
+    | --------------- | ---------------------------------------------------------- |
+    | 🔍 代码风格检测  | 自动检查代码是否符合 Swift 官方推荐或自定义规范            |
+    | 🚫 错误/警告提示 | 在 Xcode、终端显示黄色/红色提示                            |
+    | 🧠 自动修复      | 可自动修复部分简单问题（如空格、缩进、空行）               |
+    | 🧩 可配置规则    | 通过 `.swiftlint.yml` 自定义规则、忽略目录、排除特例       |
+    | 🧱 CI 集成       | 能嵌入到 Xcode Build、Fastlane、GitHub Actions 中          |
+    | 🔕 局部禁用      | 通过注释临时关闭规则，如：`// swiftlint:disable rule_name` |
+
+### 3、第三方代码管理工具的配置 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **Podfile**
+
+  ```ruby
+  # Uncomment the next line to define a global platform for your project
+  # ❤️TARGETS->Build Settings->ENABLE_USER_SCRIPT_SANDBOXING->NO❤️
+  platform :ios, '13.0'   # ❤️ 顶层直接设 13.0，和 post_install 保持一致
+  
+  ## 通过 Bundler 运行 CocoaPods 命令
+  ## bundle exec pod update
+  #begin
+  #  require 'bundler/setup'
+  #  Bundler.setup(:default)
+  #  puts 'Bundler setup completed'
+  #  require 'cocoapods-downloader'
+  #  puts 'cocoapods-downloader plugin loaded'
+  #rescue LoadError => e
+  #  puts 'cocoapods-downloader plugin could not be loaded'
+  #  puts e.message
+  #end
+  #puts 'Podfile is being loaded...'
+  # 加速 CocoaPods 依赖下载的工具 https://github.com/CocoaPods/cocoapods-downloader
+  # 使用前提：gem install cocoapods-downloader
+  #plugin 'cocoapods-downloader', {
+  #  'https://github.com/CocoaPods/Specs.git' => [
+  #    'https://mirrors.aliyun.com/pods/specs.git',
+  #    'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git',
+  #    'https://mirrors.cloud.tencent.com/CocoaPods/Specs.git',
+  #    'https://mirrors.ustc.edu.cn/CocoaPods/Specs.git'
+  #  ]
+  #}
+  
+  #plugin 'cocoapods-repo-update'
+  
+  ## 指明依赖库的来源地址
+  #source 'https://cdn.cocoapods.org/'
+  #source 'https://github.com/CocoaPods/Specs.git'# 使用官方默认地址（默认）
+  #source 'https://github.com/Artsy/Specs.git'# 使用其他来源地址
+  
+  # 需要特别说明的：在 post_install 时，为了一些版本的兼容，需要遍历所有 target，调整一部分库的版本；但是如果开启了 generate_multiple_pod_projects 的话，由于项目结构的变化，installer.pod_targets 就没办法获得所有 pods 引入的 target 了
+  install! 'cocoapods',# install! 只走一次，多次使用只以最后一个标准执行
+    :deterministic_uuids => false,
+    # ❤️ 暂时关掉 generate_multiple_pod_projects，避免 SnapKit 等 Swift-only 库 slice 异常
+    # :generate_multiple_pod_projects => true,
+    :disable_input_output_paths => true
+  
+  inhibit_all_warnings!
+  # 用于指定你的 Pod 项目应使用静态库而不是动态库。
+  # 这个选项主要用于解决某些与动态库相关的兼容性和性能问题。
+  use_frameworks! :linkage => :static
+  
+  # 全局 modular headers（和 use_frameworks! 不能同时使用）
+  #use_modular_headers!
+  
+  # 几乎每个App都会用到的
+  def swiftAppCommon
+    pod 'IQKeyboardManager'
+    pod 'Alamofire', '~> 5.9'      # ❤️ 显式指定新版本
+    pod 'Moya', :modular_headers => true
+    pod 'SDWebImage'
+    pod 'GKNavigationBarSwift'
+    pod 'ReactiveSwift', '~> 6.7'  # ❤️ 新版本支持 arm64 模拟器
+    pod 'lottie-ios'
+    pod 'SnapKit', '~> 5.7'        # ❤️ 新版本支持 arm64 模拟器
+    pod 'JXSegmentedView'
+    pod "HTMLReader"
+    pod 'KakaJSON'
+    pod 'RxSwift'                  # 核心
+    pod 'RxCocoa'                  # UI 绑定：UIKit、AppKit 的扩展
+    pod 'RxRelay'                  # 安全替代 Variable，常用于 ViewModel
+    pod 'NSObject+Rx'
+  end
+  
+  # 调试框架
+  def debugPods
+  # pod 'Bugly'
+  # pod 'DoraemonKit'
+  # pod 'CocoaDebug'
+  # pod 'FLEX'
+  # pod 'JJException'
+  # pod 'FBRetainCycleDetector'
+    #pod 'LookinServer', :configurations => ['Debug']
+  end
+  
+  # 基础的公共配置
+  def cocoPodsConfig
+    target 'JobsSwiftBaseConfigDemoTests' do
+      inherit! :search_paths
+    end
+    target 'JobsSwiftBaseConfigDemoUITests' do
+      inherit! :search_paths
+    end
+  
+    pre_install do |installer|
+      # 做一些安装之前的更改
+    end
+  
+    post_install do |installer|
+      require 'open3'
+      is_apple_silicon = `uname -m`.strip == 'arm64'
+  
+      installer.pods_project.targets.each do |target|
+        puts "!!!! #{target.name}"
+        target.build_configurations.each do |config|
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+          config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+          config.build_settings['CODE_SIGNING_REQUIRED'] = 'NO'
+          # ✅ 只有 Apple Silicon 模拟器下才排除 arm64
+          # ❗️改为：不排除（删除可能被其他地方写入的排除项），保证生成 arm64-apple-ios-simulator slice
+          if is_apple_silicon
+            config.build_settings.delete('EXCLUDED_ARCHS[sdk=iphonesimulator*]')  # ❤️ 关键修改
+          end
+        end
+      end
+  
+      installer.pods_project.build_configurations.each do |config|
+        config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
+        # ❗️同理：不排除 arm64 模拟器
+        if is_apple_silicon
+          config.build_settings.delete('EXCLUDED_ARCHS[sdk=iphonesimulator*]')    # ❤️ 关键修改
+        end
+      end
+    end
+  end
+  
+  # ❤️新工程需要修改这里❤️
+  target 'JobsSwiftBaseConfigDemo' do
+    debugPods
+    swiftAppCommon
+    cocoPodsConfig
+  end
+  ```
 
 * <font color=red id=SPM>**S**</font>wift <font color=red>**P**</font>ackage <font color=red>**M**</font>anager
 
@@ -135,11 +506,11 @@
     <img src="./assets/image-20250616174404275.png" alt="image-2" style="width:65%; display:inline-block; vertical-align: top;" />
   </div>
 
-### 3、一些适用于[Swift](https://developer.apple.com/swift/)的第三方框架（持续更新...） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 4、一些适用于[Swift](https://developer.apple.com/swift/)的第三方框架（持续更新...） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 3.1、[**DeviceKit**](https://github.com/devicekit/DeviceKit) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 4.1、[**DeviceKit**](https://github.com/devicekit/DeviceKit) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 3.2、[**HandyJSON**](https://github.com/alibaba/HandyJSON) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 4.2、[**HandyJSON**](https://github.com/alibaba/HandyJSON) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1、阿里巴巴开发
 >
@@ -199,7 +570,7 @@
     }
     ```
 
-#### 3.3、[**SnapKit**](https://github.com/SnapKit/SnapKit) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 4.3、[**SnapKit**](https://github.com/SnapKit/SnapKit) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
   * 安装
   
@@ -320,7 +691,7 @@
         make.edges.equalToSuperview().inset(UIEdgeInsets(top: 10, left: 15, bottom: 20, right: 15))
         ```
 
-#### 3.4、[**Alamofire**](https://github.com/Alamofire/Alamofire) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 4.4、[**Alamofire**](https://github.com/Alamofire/Alamofire) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > **Alamofire** 是 Swift 社区最流行的 **网络请求库**，基于 **URLSession** 封装，简化了 HTTP 请求、响应处理、JSON 解析、文件上传下载等操作。
 >  它的特点是：
@@ -459,7 +830,7 @@
               }
           }
 
-#### 3.5、[**Moya**](https://github.com/Moya/Moya) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 4.5、[**Moya**](https://github.com/Moya/Moya) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > - **定位**：[**Moya**](https://github.com/Moya/Moya) 是一个 **网络抽象层**（Networking Abstraction Layer）。
 > - **底层**：它基于 [**Alamofire**](https://github.com/Alamofire/Alamofire) 实现请求发送，但对业务开发者屏蔽了繁琐的配置。
@@ -616,7 +987,7 @@
     }
     ```
 
-#### 3.6、[**RxSwift**](https://github.com/ReactiveX/RxSwift) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 4.6、[**RxSwift**](https://github.com/ReactiveX/RxSwift) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > **最小依赖**：只用 `RxSwift`。
 >
@@ -914,6 +1285,19 @@
   
 
 ### 3、其他 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 👉 [**Swift**](https://developer.apple.com/swift/) 的<u>API 展望（提前声明未来能力）</u>这种机制，**在Objc世界几乎不存在**
+
+  ```
+  @available(iOS 26.0, *)
+  public static var presentationIntent: UIWritingToolsResultOptions { get }
+  ```
+
+  > 1️⃣ `.presentationIntent` 是 Apple 未来（iOS 26.0）才准备开放的能力；
+  >
+  > 2️⃣` .list`、`.table` 可能会在 **18.x 或 19.x** 的系统中逐步启用；
+  >
+  > 3️⃣ 当前 18.0 SDK 虽有声明，但实现未激活。
 
 * 个别地区（比如：柬埔寨），需要将浏览器语言改为英文状态，方可进入[**苹果开发者网站**](https://developer.apple.com/)
 
@@ -1360,7 +1744,7 @@ addSubview(mainTableView)
 /// TODO
 ```
 
-### 13、✍️`UITextField` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 12、✍️`UITextField` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > ```swift
 > override func loadView() {
@@ -1370,7 +1754,7 @@ addSubview(mainTableView)
 > }
 > ```
 
-#### 13.1、📮 邮箱输入框 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 12.1、📮 邮箱输入框 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 一般性封装
 
@@ -1452,7 +1836,7 @@ addSubview(mainTableView)
         .disposed(by: rx.disposeBag)
     ```
 
-#### 13.2、🔒 密码输入框 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 12.2、🔒 密码输入框 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 一般性封装（`.byLimitLength(5)// 输入长度限制`）
 
@@ -1512,9 +1896,11 @@ addSubview(mainTableView)
         .disposed(by: rx.disposeBag)
     ```
 
+### 13、✍️`UITextView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 
-### 12、手势的封装（使用） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+### 14、手势的封装（使用） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 因为手势只能添加到**UIView**及其子类上，所以我们对**UIView**进行扩充
 
@@ -1701,7 +2087,156 @@ addSubview(mainTableView)
   // 或批量移除该类手势
   view.removeAllSwipeActionsMulti()
 
-### 12、<font id=弱引用的等价写法>**弱引用的等价写法**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 15、富文本的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 15.1、设置富文本 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* ```swift
+  UILabel().richTextBy(runs, paragraphStyle: ps)
+  ```
+
+* ```swift
+  UITextView().richTextBy(runs, paragraphStyle: ps)
+  ```
+
+* ```swift
+  UITextField().richTextBy(runs, paragraphStyle: ps)
+  ```
+
+#### 15.2、富文本形式 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 下划线
+
+  ```swift
+  // 段落样式
+  let ps = jobsMakeParagraphStyle {
+      $0.alignment = .center
+      $0.lineSpacing = 6
+  }
+  // 富文本配置数组
+  let runs: [JobsRichRun] = [
+      JobsRichRun(.text("欢迎使用 "))
+          .font(.systemFont(ofSize: 18))
+          .color(.secondaryLabel),
+  
+      JobsRichRun(.text("JobsRichText "))
+          .font(.boldSystemFont(ofSize: 18))
+          .color(.systemBlue)
+          .underline(.single, color: .systemBlue),
+  
+      JobsRichRun(.text("封装示例"))
+          .font(.systemFont(ofSize: 18))
+          .strike(.single, color: .systemRed)
+  ]
+  ```
+
+* 超链接
+
+  ```swift
+  let ps = jobsMakeParagraphStyle {
+      $0.alignment = .center
+      $0.lineSpacing = 4
+  }
+  
+  let runs: [JobsRichRun] = [
+      JobsRichRun(.text("如需帮助，请联系 "))
+          .font(.systemFont(ofSize: 15))
+          .color(.secondaryLabel),
+  
+      JobsRichRun(.text("专属客服"))
+          .font(.systemFont(ofSize: 15))
+          .color(.systemBlue)
+          .link("click://customer")
+  ]
+  ```
+
+  > <font color=red>**富文本的点击事件处理**</font>
+  >
+  > * 利用 **`UITextViewDelegate`** 处理点击事件
+  >
+  >   ```swift
+  >   extension RichTextDemoVC: UITextViewDelegate {
+  >       // MARK: ✅ iOS17+ 新 API
+  >       @available(iOS 17.0, *)
+  >       func textView(_ textView: UITextView,
+  >                     textItemMenuConfiguration configuration: UITextItem.MenuConfiguration,
+  >                     for textRange: UITextRange,
+  >                     point: CGPoint) -> UITextItem.MenuConfiguration? {
+  >           // 可自定义菜单行为（复制/打开/分享）
+  >           return configuration
+  >       }
+  >   
+  >       @available(iOS 17.0, *)
+  >       func textView(_ textView: UITextView,
+  >                     primaryActionFor textItem: UITextItem) -> UIAction? {
+  >   
+  >           switch textItem.content {
+  >           case .link(let url):
+  >               if url.scheme == "click" {
+  >                   print("点击事件")
+  >                   // 返回 nil 表示不执行系统默认行为
+  >                   return nil
+  >               }
+  >               return nil
+  >   
+  >           default:
+  >               // 非 link 类型的内容，保持默认
+  >               return nil
+  >           }
+  >       }
+  >       // MARK: ✅ iOS16 及以下旧 API
+  >       @available(iOS, introduced: 10.0, deprecated: 17.0, message: "Use textView(_:primaryActionFor:) on iOS17+ instead")
+  >       func textView(_ textView: UITextView,
+  >                     shouldInteractWith URL: URL,
+  >                     in characterRange: NSRange,
+  >                     interaction: UITextItemInteraction) -> Bool {
+  >           if URL.scheme == "click" {
+  >               print("点击事件")
+  >               return false
+  >           }
+  >           return true
+  >       }
+  >   }
+  >   ```
+  >
+  > * 利用 [**RxSwift**](https://github.com/ReactiveX/RxSwift)/[**RxCocoa**](https://github.com/ReactiveX/RxSwift) 处理点击事件
+  >
+  >   ```swift
+  >   // 🔹订阅点击（RAC风格）
+  >   textView.linkTap
+  >           .observe(on: MainScheduler.instance)
+  >           .subscribe(onNext: { [weak self] url in
+  >               guard let self else { return }
+  >               if url.scheme == "click" {
+  >                   self.presentAlert(for: url.absoluteString)
+  >               }
+  >           })
+  >           .disposed(by: disposeBag)
+  >   ```
+
+* 富文本@图
+
+  ```swift
+  // 图标附件
+  let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .medium)
+  let image = UIImage(systemName: "paperclip", withConfiguration: config)!
+  let att = NSTextAttachment()
+  att.image = image
+  
+  let ps = jobsMakeParagraphStyle {
+      $0.alignment = .center
+      $0.lineSpacing = 2
+  }
+  
+  let runs: [JobsRichRun] = [
+      JobsRichRun(.attachment(att, CGSize(width: 16, height: 16))),
+      JobsRichRun(.text("  附件说明"))
+          .font(.systemFont(ofSize: 15))
+          .color(.secondaryLabel)
+  ]
+  ```
+
+### 16、<font id=弱引用的等价写法>**弱引用的等价写法**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
   guard let `self` = self else { return }
@@ -1768,7 +2303,7 @@ addSubview(mainTableView)
   }
   ```
 
-### 13、对通知名的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 17、对通知名的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
   import Foundation
@@ -1804,7 +2339,7 @@ addSubview(mainTableView)
   > NotificationCenter.default.post(name: .userDidLogin, object: nil)
   > ```
 
-### 14、回调主线程（三大手段） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 18、回调主线程（三大手段） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **C.GCD**
 
@@ -1845,7 +2380,7 @@ addSubview(mainTableView)
   }
   ```
 
-### 15、Block的安全调用（等价调用） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 19、Block的安全调用（等价调用） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **Objc**
 
@@ -3691,7 +4226,7 @@ func resizableImage(edge: UIEdgeInsets = UIEdgeInsets(top: 10.h,
   * 但如果你写 **网络请求层、数据库层、后台任务、并发算法**，`actor` 就能替代锁和队列，大幅降低线程安全的复杂度
   * 需要保证 **线程安全** 的全局共享对象（计数器、缓存、数据库 session）
   * 替代手动加锁的场景
-  * iOS/SwiftUI 里常用来保证 UI 更新一定在主线程
+  * **iOS.SwiftUI**里常用来保证 UI 更新一定在主线程
   
 * 基本用法
 
@@ -3720,6 +4255,103 @@ func resizableImage(edge: UIEdgeInsets = UIEdgeInsets(top: 10.h,
   }
   ```
 
+### 21、<font color=red>**@available**</font> 的使用示例 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 21.1、基本语法
+
+```swift
+@available(平台名称 版本号, introduced: 引入版本, deprecated: 弃用版本, obsoleted: 废弃版本, message: "提示信息")
+```
+
+| 平台名称 | 说明           |
+| -------- | -------------- |
+| iOS      | 适用于 iOS     |
+| macOS    | 适用于 macOS   |
+| tvOS     | 适用于 tvOS    |
+| watchOS  | 适用于 watchOS |
+| *        | 适用于所有平台 |
+
+#### 21.2、常见写法示例 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 指定可用平台和版本
+
+  ```swift
+  @available(iOS 15.0, *)
+  func useModernAPI() {
+      print("仅在 iOS 15.0+ 可用")
+  }
+  ```
+
+* 多平台版本分别声明
+
+  ```swift
+  @available(iOS 15.0, macOS 12.0, *)
+  func crossPlatformFeature() {
+      print("多平台版本要求")
+  }
+  ```
+
+* 弃用（**`Deprecated`**）和废弃（**`Obsoleted`**）
+
+  * 编译器会警告：“已弃用，请改用 newAPI()”。
+
+    ```swift
+    @available(iOS, deprecated: 16.0, message: "请改用 newAPI()")
+    func oldAPI() {
+        print("旧方法")
+    }
+    ```
+
+  * `obsoleted` 会导致 **编译错误**（无法再使用）。
+
+    ```swift
+    @available(iOS, obsoleted: 18.0, message: "此方法在 iOS 18 后不可用")
+    func removedAPI() {}
+    ```
+
+* 同时指定 **`introduced`** / **`deprecated`** / **`obsoleted`**
+  ```swift
+  @available(iOS, introduced: 13.0, deprecated: 17.0, obsoleted: 18.0, message: "请迁移到新版本接口")
+  func lifecycleAPI() {
+      print("生命周期管理API")
+  }
+  ```
+
+* 仅标记弃用信息
+
+  ```swift
+  @available(*, deprecated, message: "不再推荐使用")
+  func legacyFunc() {}
+  ```
+
+* 限定某平台不可用
+
+  ```swift
+  /// 在 macOS 环境下编译会直接报错。
+  @available(macOS, unavailable)
+  func iOSOnlyFeature() {
+      print("此功能仅支持 iOS，不支持 macOS")
+  }
+  ```
+
+* 结合 <font color=red>#available</font> 动态判断
+
+  ```swift
+  if #available(iOS 17.0, *) {
+      useModernAPI()
+  } else {
+      useLegacyAPI()
+  }
+  ```
+
+* 标记类或结构体
+
+  ```swift
+  @available(iOS 16.0, *)
+  class ModernViewController: UIViewController {
+      // ...
+  }
+  ```
 
 ## 五、<font color=red>**F**</font><font color=green>**A**</font><font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -4303,9 +4935,24 @@ struct Point {
 > `*.xcworkspace`是由`pod install`生成
 
 * 完整路径：`*.xcworkspace`/`xcuserdata`/`mac.xcuserdatad`/<font color=red>`UserInterfaceState.xcuserstate`</font> 
+
 * 记录 **Xcode 界面状态**：比如工程窗口大小、面板布局、文件展开/折叠状态、光标位置、断点信息等。
+
 * 属于 **用户本地个性化配置**，不同开发者的 `*.xcuserstate` 文件内容一般不同。
+
 * 不影响代码逻辑和工程编译，只是为了下次打开工程时恢复你上次的编辑环境。
+
+* 加入`.gitignore`进行忽略
+
+  ```
+  *.xcuserstate
+  ```
+
+* 删除`.git`里面已经存在的`*.xcuserstate`（需要提交）
+
+  ```shell
+  git rm --cached -r *.xcuserstate
+  ```
 
 ### 13、**OC**.`NSString` 🆚 [**Swift**](https://developer.apple.com/swift/).`String` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -4490,7 +5137,36 @@ struct Point {
   
     - 常用于 **混合数据容器**（比如 `[String: Any]` 的 **JSON** 字典）。
 
-### 17、<font color=red id=COW>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite（先共享，写的时候才真正拷贝）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 17、连续打包（不修改代码）产物Hash不一样 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+| 场景                                   | 是否可能 hash 相同 | 说明                    |
+| -------------------------------------- | ------------------ | ----------------------- |
+| iOS Xcode 两次 Archive                 | ❌ 几乎不可能       | codesign 含时间戳       |
+| Android 两次 Gradle 构建               | ❌ 默认不同         | zip entry、签名时间不同 |
+| Flutter build apk/ipa                  | ❌ 默认不同         | 打包嵌入时间/随机 key   |
+| 全部使用 reproducible 构建（冻结时钟） | ✅ 理论可行         | 需极端控制              |
+
+### 18、桥接视图 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> UIKit 框架在 [**Swift**](https://developer.apple.com/swift/) 和**Objc** 混合演进中的<u>语言映射机制</u>问题
+
+#### 18.1、文件路径 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> `arm64.swiftinterface`
+> `arm64e.swiftinterface`
+> `x86_64.swiftinterface`
+
+```url
+Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/UIKit.framework/Modules/UIKit.swiftmodule/
+```
+
+#### 18.2、介绍 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 是由 **Clang importer 自动生成的桥接视图**，并不是Apple真正写的；
+* 并不是每个类都生成对应 `.swift` 源码；在某些 API 上你点进去时，Xcode 会直接跳转到 `.h`
+* 当 [**Swift**](https://developer.apple.com/swift/) 接口文件不存在时，Xcode 会自动跳到原始的 Objective-C `*.h` 文件。
+
+### 19、<font color=red id=COW>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite（先共享，写的时候才真正拷贝）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > * **定义**：当你复制一个值类型的时候，[**Swift**](https://developer.apple.com/swift/) 不会立即复制它的底层存储，而是让两个变量共享同一块内存
 > * **触发拷贝的时机**：一旦其中一个变量尝试 **写入（修改）** 数据，[**Swift**](https://developer.apple.com/swift/) 才会真正复制一份新的内存，以保证<u>值语义</u>的正确性

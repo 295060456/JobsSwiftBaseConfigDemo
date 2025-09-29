@@ -16,6 +16,29 @@
 import ObjectiveC
 import RxSwift
 import RxCocoa
+import ObjectiveC.runtime
+
+private enum _TFKeys {
+    static var limitBag = UInt8(0)
+    static var textInputActive = UInt8(0)
+}
+// MARK: 🧱组件模型：RxTextInput：一个输入框的“响应式视图模型”，把常用流打包给你
+public struct RxTextInput {
+    /// 原始文本（可选）与非可选文本（orEmpty）
+    public let text: Observable<String?>
+    public let textOrEmpty: Observable<String>
+    /// 去首尾空格
+    public let trimmed: Observable<String>
+    /// 是否正在编辑
+    public let isEditing: Observable<Bool>
+    /// 删除键事件 / 回车事件
+    public let didPressDelete: Observable<Void>
+    public let didPressReturn: Observable<Void>
+    /// 实时有效性（基于 validator）。每当输入框内容变化，就会根据你传入的 validator 校验规则动态发出 true 或 false。
+    public let isValid: Observable<Bool>
+    /// 将“格式化后的文本”回写到 textField（避免光标跳动做了节制）
+    public let formattedBinder: Binder<String>
+}
 // MARK: ✏️ UITextField 链式配置
 public extension UITextField {
     // MARK: 🌸 基础文本属性
@@ -378,23 +401,6 @@ public extension Reactive where Base: UITextField {
     var didBeginEditing: ControlEvent<Void> { controlEvent(.editingDidBegin) }
     var didEndEditing:   ControlEvent<Void> { controlEvent(.editingDidEnd)   }
 }
-// MARK: 🧱组件模型：RxTextInput：一个输入框的“响应式视图模型”，把常用流打包给你
-public struct RxTextInput {
-    /// 原始文本（可选）与非可选文本（orEmpty）
-    public let text: Observable<String?>
-    public let textOrEmpty: Observable<String>
-    /// 去首尾空格
-    public let trimmed: Observable<String>
-    /// 是否正在编辑
-    public let isEditing: Observable<Bool>
-    /// 删除键事件 / 回车事件
-    public let didPressDelete: Observable<Void>
-    public let didPressReturn: Observable<Void>
-    /// 实时有效性（基于 validator）。每当输入框内容变化，就会根据你传入的 validator 校验规则动态发出 true 或 false。
-    public let isValid: Observable<Bool>
-    /// 将“格式化后的文本”回写到 textField（避免光标跳动做了节制）
-    public let formattedBinder: Binder<String>
-}
 /**
     | 输入序列                                    | distinct = true 是否回调                          |
     | ----------------------------------- | --------------------------------------------- |
@@ -514,7 +520,7 @@ public extension Reactive where Base: UITextField {
      }
  */
 // MARK: 切换密码可见性
-extension UITextField {
+public extension UITextField {
     func togglePasswordVisibility() {
         /// 临时去掉光标颜色（防止闪烁）
         let existingTintColor = tintColor
@@ -595,14 +601,6 @@ public extension UITextField {
                             validator: v,
                             distinct: distinct)
     }
-}
-
-private enum _TFKeys {
-    static var limitBag = UInt8(0)
-    static var textInputActive = UInt8(0)
-}
-// 给 UITextField 直接用的“无 .rx”监听
-public extension UITextField {
     /// 文本流（等价于 rx.text.orEmpty.asObservable()）
     var textStream: Observable<String> {
         rx.text.orEmpty.asObservable()
@@ -614,5 +612,11 @@ public extension UITextField {
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: handler)
+    }
+}
+// MARK: - 设置富文本（UITextField）
+public extension UITextField {
+    func richTextBy(_ runs: [JobsRichRun], paragraphStyle: NSMutableParagraphStyle? = nil) {
+        self.attributedText = JobsRichText.make(runs, paragraphStyle: paragraphStyle)
     }
 }
