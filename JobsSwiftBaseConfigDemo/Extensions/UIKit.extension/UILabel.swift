@@ -14,7 +14,7 @@
 #endif
 import Foundation
 import ObjectiveC
-/// UILabel 链式扩展
+// MARK: - UILabel 链式扩展
 extension UILabel {
     @discardableResult
     func byText(_ text: String?) -> Self {
@@ -167,8 +167,40 @@ extension UILabel {
         return self
     }
 }
-// MARK: 给 UILabel 里的文字加 下划线，并且可以指定下划线的颜色。
+
 extension UILabel {
+    // MARK: - 检测点击位置是否在指定富文本范围内
+    func didTapAttributedText(in range: NSRange, at: UITapGestureRecognizer) -> Bool {
+        guard let attributedText = attributedText else { return false }
+
+        // 1️⃣ 创建 NSTextStorage 管理文本
+        let textStorage = NSTextStorage(attributedString: attributedText)
+        let layoutManager = NSLayoutManager()
+        let textContainer = NSTextContainer(size: bounds.size)
+        textContainer.lineFragmentPadding = 0
+        textContainer.maximumNumberOfLines = numberOfLines
+        textContainer.lineBreakMode = lineBreakMode
+
+        layoutManager.addTextContainer(textContainer)
+        textStorage.addLayoutManager(layoutManager)
+
+        // 2️⃣ 计算点击位置
+        let location = at.location(in: self)
+        let textBoundingBox = layoutManager.usedRect(for: textContainer)
+        let offset = CGPoint(
+            x: (bounds.size.width - textBoundingBox.size.width) * 0.5 - textBoundingBox.origin.x,
+            y: (bounds.size.height - textBoundingBox.size.height) * 0.5 - textBoundingBox.origin.y
+        )
+        let locationInTextContainer = CGPoint(
+            x: location.x - offset.x,
+            y: location.y - offset.y
+        )
+
+        // 3️⃣ 获取点击的字符索引
+        let index = layoutManager.characterIndex(for: locationInTextContainer, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
+        return NSLocationInRange(index, range)
+    }
+    // MARK: 给 UILabel 里的文字加 下划线，并且可以指定下划线的颜色。
     func underline(color: UIColor) {
         if let textString = self.text {
             let attributedString = NSMutableAttributedString(string: textString)
