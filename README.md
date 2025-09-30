@@ -5629,7 +5629,22 @@ Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS
 * 并不是每个类都生成对应 `.swift` 源码；在某些 API 上你点进去时，Xcode 会直接跳转到 `.h`
 * 当 [**Swift**](https://developer.apple.com/swift/) 接口文件不存在时，Xcode 会自动跳到原始的 Objective-C `*.h` 文件。
 
-### 19、<font color=red id=COW>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite（先共享，写的时候才真正拷贝）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 19、**`UIButton`**的配置冲突问题 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 在 iOS 15+ 引入 **UIButton.Configuration** 体系后，一旦某个按钮启用了它（例如设置了 `button.configuration = .filled()`），UIKit 内部的绘制和状态管理机制就会**切换到新的渲染管线**。而老式写法（直接操作 `setTitle(_:for:)`、`setTitleColor(_:for:)`、`setImage(_:for:)`、`titleLabel?.font` 等）会出现异常或失效现象
+
+* **UIButton.Configuration**一旦启用，就接管了传统的外观管理
+
+* 如果封装链式逻辑没有区分新旧体系，那么只要有一个按钮启用了 config，旧逻辑就会异常
+
+* | 现象           | 原因                                         | 解决方案                                              |
+  | -------------- | -------------------------------------------- | ----------------------------------------------------- |
+  | 按钮文字消失   | 同时 setTitle + 使用 configuration.title     | 改为只用其中一种                                      |
+  | 标题颜色不生效 | configuration 管理颜色，setTitleColor 被忽略 | 用 `configurationUpdateHandler` 设置                  |
+  | 字体失效       | titleLabel?.font 无效                        | 需改为 `configuration.titleTextAttributesTransformer` |
+  | 按钮尺寸变大   | configuration 自带 contentInsets             | 手动调整 `configuration.contentInsets`                |
+
+### 20、<font color=red id=COW>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite（先共享，写的时候才真正拷贝）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > * **定义**：当你复制一个值类型的时候，[**Swift**](https://developer.apple.com/swift/) 不会立即复制它的底层存储，而是让两个变量共享同一块内存
 > * **触发拷贝的时机**：一旦其中一个变量尝试 **写入（修改）** 数据，[**Swift**](https://developer.apple.com/swift/) 才会真正复制一份新的内存，以保证<u>值语义</u>的正确性

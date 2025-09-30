@@ -40,6 +40,11 @@
 		0477D9752E8B9146002C6427 /* SafetyPresentDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9742E8B9141002C6427 /* SafetyPresentDemoVC.swift */; };
 		0477D9772E8B9381002C6427 /* UIResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9762E8B937A002C6427 /* UIResponder.swift */; };
 		0477D9792E8BADB2002C6427 /* DemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9782E8BADB1002C6427 /* DemoVC.swift */; };
+		0477D97D2E8BDB95002C6427 /* JobsCountdownButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D97C2E8BDB94002C6427 /* JobsCountdownButton.swift */; };
+		0477D97F2E8BDBBC002C6427 /* JobsCountdownDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D97E2E8BDBB7002C6427 /* JobsCountdownDemoVC.swift */; };
+		0477D9832E8BE9FC002C6427 /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9822E8BE9FB002C6427 /* KeyboardObserver.swift */; };
+		0477D9852E8BEACB002C6427 /* Reactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9842E8BEACA002C6427 /* Reactive.swift */; };
+		0477D9872E8BEF64002C6427 /* KeyboardDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9862E8BEF62002C6427 /* KeyboardDemoVC.swift */; };
 		0487AADA2E840CB200B5D307 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0487AAD92E840CB200B5D307 /* UIColorExtensions.swift */; };
 		0487AADC2E840EE300B5D307 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0487AADB2E840EE300B5D307 /* libc++.tbd */; };
 		048E37702E87997A004C3A41 /* UIGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048E376F2E879978004C3A41 /* UIGestureRecognizer.swift */; };
@@ -73,7 +78,6 @@
 		C564FC362E09590B0079B5C1 /* JobsProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC352E09590B0079B5C1 /* JobsProtocol.swift */; };
 		C564FC622E0959510079B5C1 /* Enum_struct_defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC612E0959510079B5C1 /* Enum_struct_defines.swift */; };
 		C564FC862E0959640079B5C1 /* WKWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC642E0959600079B5C1 /* WKWebView.swift */; };
-		C564FC872E0959640079B5C1 /* UIButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC652E0959600079B5C1 /* UIButtons.swift */; };
 		C564FC882E0959640079B5C1 /* UISlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC662E0959600079B5C1 /* UISlider.swift */; };
 		C564FC892E0959640079B5C1 /* UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC672E0959600079B5C1 /* UICollectionView.swift */; };
 		C564FC8A2E0959640079B5C1 /* UISegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC682E0959610079B5C1 /* UISegmentedControl.swift */; };
@@ -162,6 +166,11 @@
 		0477D9742E8B9141002C6427 /* SafetyPresentDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafetyPresentDemoVC.swift; sourceTree = "<group>"; };
 		0477D9762E8B937A002C6427 /* UIResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIResponder.swift; sourceTree = "<group>"; };
 		0477D9782E8BADB1002C6427 /* DemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoVC.swift; sourceTree = "<group>"; };
+		0477D97C2E8BDB94002C6427 /* JobsCountdownButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsCountdownButton.swift; sourceTree = "<group>"; };
+		0477D97E2E8BDBB7002C6427 /* JobsCountdownDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsCountdownDemoVC.swift; sourceTree = "<group>"; };
+		0477D9822E8BE9FB002C6427 /* KeyboardObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardObserver.swift; sourceTree = "<group>"; };
+		0477D9842E8BEACA002C6427 /* Reactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reactive.swift; sourceTree = "<group>"; };
+		0477D9862E8BEF62002C6427 /* KeyboardDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDemoVC.swift; sourceTree = "<group>"; };
 		0487AAD92E840CB200B5D307 /* UIColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		0487AADB2E840EE300B5D307 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		048E376F2E879978004C3A41 /* UIGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIGestureRecognizer.swift; sourceTree = "<group>"; };
@@ -200,7 +209,6 @@
 		C564FC352E09590B0079B5C1 /* JobsProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JobsProtocol.swift; sourceTree = "<group>"; };
 		C564FC612E0959510079B5C1 /* Enum_struct_defines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enum_struct_defines.swift; sourceTree = "<group>"; };
 		C564FC642E0959600079B5C1 /* WKWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WKWebView.swift; sourceTree = "<group>"; };
-		C564FC652E0959600079B5C1 /* UIButtons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIButtons.swift; sourceTree = "<group>"; };
 		C564FC662E0959600079B5C1 /* UISlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UISlider.swift; sourceTree = "<group>"; };
 		C564FC672E0959600079B5C1 /* UICollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UICollectionView.swift; sourceTree = "<group>"; };
 		C564FC682E0959610079B5C1 /* UISegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UISegmentedControl.swift; sourceTree = "<group>"; };
@@ -276,6 +284,8 @@
 		045920E22E84EC64008C8D6A /* SwiftTools */ = {
 			isa = PBXGroup;
 			children = (
+				0477D9822E8BE9FB002C6427 /* KeyboardObserver.swift */,
+				0477D97C2E8BDB94002C6427 /* JobsCountdownButton.swift */,
 				0477D96C2E8B83CA002C6427 /* JobsSafeTransitions.swift */,
 				04CF03182E8A80CA0083ACF0 /* AppTools.swift */,
 				04CF03142E8A75E70083ACF0 /* JobsRichText.swift */,
@@ -379,6 +389,8 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				0477D9862E8BEF62002C6427 /* KeyboardDemoVC.swift */,
+				0477D97E2E8BDBB7002C6427 /* JobsCountdownDemoVC.swift */,
 				0477D9782E8BADB1002C6427 /* DemoVC.swift */,
 				0477D9742E8B9141002C6427 /* SafetyPresentDemoVC.swift */,
 				0477D9702E8B896A002C6427 /* SafetyPushDemoVC.swift */,
@@ -539,6 +551,7 @@
 		C564FEEA2E0AAC2B0079B5C1 /* UIKit.extension */ = {
 			isa = PBXGroup;
 			children = (
+				0477D9842E8BEACA002C6427 /* Reactive.swift */,
 				0477D9762E8B937A002C6427 /* UIResponder.swift */,
 				0477D96E2E8B8478002C6427 /* UIApplication.swift */,
 				048E376F2E879978004C3A41 /* UIGestureRecognizer.swift */,
@@ -552,7 +565,6 @@
 				C564FC752E0959620079B5C1 /* UIActivityIndicatorView.swift */,
 				C564FC6A2E0959610079B5C1 /* UIAlertController.swift */,
 				C564FC6B2E0959610079B5C1 /* UIBarButtonItem.swift */,
-				C564FC652E0959600079B5C1 /* UIButtons.swift */,
 				04CF028B2E8808500083ACF0 /* UIButton.swift */,
 				C564FC672E0959600079B5C1 /* UICollectionView.swift */,
 				C564FC7B2E0959630079B5C1 /* UIDatePicker.swift */,
@@ -881,17 +893,20 @@
 				C564FC942E0959640079B5C1 /* UIPageViewController.swift in Sources */,
 				045920E62E84F389008C8D6A /* CALayer.swift in Sources */,
 				0487AADA2E840CB200B5D307 /* UIColorExtensions.swift in Sources */,
+				0477D9832E8BE9FC002C6427 /* KeyboardObserver.swift in Sources */,
 				045921042E854FE1008C8D6A /* UInt32.swift in Sources */,
 				0477D96F2E8B8479002C6427 /* UIApplication.swift in Sources */,
 				C564FC9D2E0959640079B5C1 /* UIDatePicker.swift in Sources */,
 				045921062E854FE9008C8D6A /* UInt64.swift in Sources */,
 				04CF03172E8A76500083ACF0 /* RichTextDemoVC.swift in Sources */,
+				0477D9852E8BEACB002C6427 /* Reactive.swift in Sources */,
 				C564FCA42E0959640079B5C1 /* UITextField.swift in Sources */,
 				04CF03152E8A75E80083ACF0 /* JobsRichText.swift in Sources */,
 				C564FC9C2E0959640079B5C1 /* UIPopoverPresentationController.swift in Sources */,
 				C5489B5E2E0AB30700B05447 /* JobsBlock.swift in Sources */,
 				C564FCA32E0959640079B5C1 /* UIStepper.swift in Sources */,
 				C564FC862E0959640079B5C1 /* WKWebView.swift in Sources */,
+				0477D97D2E8BDB95002C6427 /* JobsCountdownButton.swift in Sources */,
 				04AC74C52E86682E004B8305 /* Notification.swift in Sources */,
 				C5489B5D2E0AB2D300B05447 /* JobsBlockDef.swift in Sources */,
 				C564FC8A2E0959640079B5C1 /* UISegmentedControl.swift in Sources */,
@@ -911,6 +926,7 @@
 				C5489B5C2E0AB19F00B05447 /* NSProtocol.swift in Sources */,
 				C564FC9F2E0959640079B5C1 /* UISearchBar.swift in Sources */,
 				0459210A2E854FFB008C8D6A /* Float16.swift in Sources */,
+				0477D9872E8BEF64002C6427 /* KeyboardDemoVC.swift in Sources */,
 				C564FC932E0959640079B5C1 /* UIToolbar.swift in Sources */,
 				04CF028C2E8808540083ACF0 /* UIButton.swift in Sources */,
 				C564FCA12E0959640079B5C1 /* UIPageControl.swift in Sources */,
@@ -935,6 +951,7 @@
 				04CF02902E8A3A160083ACF0 /* UITextViewDemoVC.swift in Sources */,
 				045921022E854FDA008C8D6A /* UInt16.swift in Sources */,
 				C564FCAB2E09597C0079B5C1 /* VC2.swift in Sources */,
+				0477D97F2E8BDBBC002C6427 /* JobsCountdownDemoVC.swift in Sources */,
 				C564FC8C2E0959640079B5C1 /* UIAlertController.swift in Sources */,
 				04CF028E2E8A37BB0083ACF0 /* TextInputStrategies.swift in Sources */,
 				04A8C54E2E8AA9F900381701 /* RootListVC.swift in Sources */,
@@ -944,7 +961,6 @@
 				04A8C54C2E8AA94D00381701 /* UIButtonDemoVC.swift in Sources */,
 				0438A71C2E8400E7008F763B /* JobsCorConst.swift in Sources */,
 				045920F62E854F8C008C8D6A /* Int16.swift in Sources */,
-				C564FC872E0959640079B5C1 /* UIButtons.swift in Sources */,
 				C564FBE92E09580B0079B5C1 /* JobsSwiftBaseConfigDemo.xcdatamodeld in Sources */,
 				045921082E854FF3008C8D6A /* Float.swift in Sources */,
 				C564FCA62E0959640079B5C1 /* UINavigationBar.swift in Sources */,

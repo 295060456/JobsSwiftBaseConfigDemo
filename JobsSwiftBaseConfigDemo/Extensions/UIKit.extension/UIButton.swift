@@ -19,6 +19,10 @@ extension UIButton {
     @discardableResult
     func byTitle(_ title: String?, for state: UIControl.State = .normal) -> Self {
         self.setTitle(title, for: state)
+        if #available(iOS 15.0, *), var cfg = self.configuration {   // ✅ 同步到 configuration
+            if state == .normal { cfg.title = title }
+            self.configuration = cfg
+        }
         return self
     }
 
@@ -31,6 +35,12 @@ extension UIButton {
     @discardableResult
     func byTitleColor(_ color: UIColor, for state: UIControl.State = .normal) -> Self {
         self.setTitleColor(color, for: state)
+        if #available(iOS 15.0, *), var cfg = self.configuration {   // ✅ 同步到 configuration
+            if state == .normal && cfg.baseForegroundColor == nil {
+                cfg.baseForegroundColor = color
+            }
+            self.configuration = cfg
+        }
         return self
     }
 
@@ -145,16 +155,26 @@ extension UIButton {
 /// 布局 / 外观（iOS15+ 走 configuration，旧版兜底）
 extension UIButton {
     // MARK: - 背景色（按 state）
+    /// iOS15+ 走 configuration（原本就有），但**记得把 title 一并带上**，否则会出现“只有底色没字”
     @discardableResult
     func byBackgroundColor(_ color: UIColor, for state: UIControl.State = .normal) -> Self {
         if #available(iOS 15.0, *), state == .normal {
-            var cfg = configuration ?? .plain()
+            var cfg = self.configuration ?? .plain()
             var bg = cfg.background
             bg.backgroundColor = color
             cfg.background = bg
-            configuration = cfg
+
+            // ✅ 如果 configuration 里还没 title，就把现有 setTitle 的内容同步过来
+            if cfg.title == nil, let t = self.title(for: .normal), !t.isEmpty {
+                cfg.title = t
+            }
+            // ✅ 同步可见的文字颜色（否则看起来像“没字”）
+            if cfg.baseForegroundColor == nil, let tc = self.titleColor(for: .normal) {
+                cfg.baseForegroundColor = tc
+            }
+            self.configuration = cfg
         } else {
-            setBackgroundColor(color, forState: state)
+            self.setBgCor(color, forState: state) // 你原来的兜底实现
         }
         return self
     }
@@ -557,5 +577,67 @@ extension UIButton {
         addGestureRecognizer(gr)
         isUserInteractionEnabled = true
         return self
+    }
+}
+// MARK: - 把按钮切到 configuration 模式（无警告版）
+@available(iOS 15.0, *)
+public extension UIButton {
+    @discardableResult
+    func byAdoptConfigurationIfAvailable() -> Self {
+        var cfg = self.configuration ?? .plain()
+        if cfg.title == nil, let t = self.title(for: .normal), !t.isEmpty { cfg.title = t }
+        if cfg.baseForegroundColor == nil, let tc = self.titleColor(for: .normal) { cfg.baseForegroundColor = tc }
+        self.configuration = cfg
+        self.automaticallyUpdatesConfiguration = false
+        return self
+    }
+}
+// MARK: - 禁止再用 setTitle / setTitleColor / titleLabel?.font，全部改用下面这些方法。
+@available(iOS 15.0, *)
+public extension UIButton {
+    /// 统一读取或创建 configuration
+    @discardableResult
+    func cfg(_ edit: (inout UIButton.Configuration) -> Void) -> Self {
+        var c = self.configuration ?? .plain()
+        edit(&c)
+        self.configuration = c
+        return self
+    }
+
+    /// 只在 Configuration 管线里设置标题（会清空 attributedTitle 的干扰）
+    @discardableResult
+    func cfgTitle(_ title: String?) -> Self {
+        cfg { c in
+            c.attributedTitle = nil
+            c.title = title
+        }
+    }
+
+    /// 标题颜色（旧的 setTitleColor 在 Configuration 下无效）
+    @discardableResult
+    func cfgTitleColor(_ color: UIColor) -> Self {
+        cfg { $0.baseForegroundColor = color }
+    }
+
+    /// 背景色、圆角、内边距
+    @discardableResult
+    func cfgBackground(_ color: UIColor) -> Self { cfg { $0.baseBackgroundColor = color } }
+
+    @discardableResult
+    func cfgCorner(_ style: UIButton.Configuration.CornerStyle) -> Self { cfg { $0.cornerStyle = style } }
+
+    @discardableResult
+    func cfgInsets(_ insets: NSDirectionalEdgeInsets) -> Self { cfg { $0.contentInsets = insets } }
+
+    /// 字体：只能通过 TextAttributesTransformer 设置
+    @discardableResult
+    func cfgFont(_ font: UIFont) -> Self {
+        cfg { c in
+            c.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+                var attrs = incoming
+                attrs.font = font
+                return attrs
+            }
+        }
     }
 }

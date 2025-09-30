@@ -305,101 +305,7 @@ public extension UITextView {
         NotificationCenter.default.post(name: UITextView.didPressDeleteNotification, object: self)
     }
 }
-// MARK: 🧩 Reactive 扩展（基础事件）
-public extension Reactive where Base: UITextView {
-    /// 删除键（空文本也会触发）
-    var didPressDelete: ControlEvent<Void> {
-        let src = NotificationCenter.default.rx
-            .notification(UITextView.didPressDeleteNotification, object: base)
-            .map { _ in () }
-        return ControlEvent(events: src)
-    }
-    /// Return（注意：UITextView 默认回车是“换行”而非“结束编辑”，
-    /// 如需把回车当“完成”，建议使用 shouldChangeTextIn delegate 或键盘 toolbar）
-    var didPressReturnAsNewline: ControlEvent<Void> {
-        let src = base.rx.didChange
-            .withLatestFrom(base.rx.text.orEmpty) { _, text in text }
-            .map { _ in () }
-        return ControlEvent(events: src)
-    }
-}
-// MARK: 🧠 入口：textView 版 textInput
-public extension Reactive where Base: UITextView {
-    func textInput(
-        maxLength: Int? = nil,
-        formatter: ((String) -> String)? = nil,
-        validator: @escaping (String) -> Bool = { _ in true },
-        distinct: Bool = true
-    ) -> RxTextViewInput {
 
-        let rawText = base.rx.text.asObservable()
-        let textOrEmpty = base.rx.text.orEmpty.asObservable()
-        let trimmed = textOrEmpty.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-
-        let began = base.rx.didBeginEditing.map { true }.asObservable()
-        let ended = base.rx.didEndEditing.map { false }.asObservable()
-        let isEditing = Observable.merge(began, ended)
-            .startWith(base.isFirstResponder)
-
-        let deleteEvt = base.rx.didPressDelete.asObservable()
-        let didChangeEvt = base.rx.didChange // ControlEvent<Void>
-
-        let bag = DisposeBag()
-
-        let process: (String) -> String = { input in
-            var s = input
-            if let f = formatter { s = f(s) }
-            if let m = maxLength, s.count > m {
-                s = String(s.unicodeScalars.prefix(m).map(Character.init))
-            }
-            return s
-        }
-
-        textOrEmpty
-            .map(process)
-            .withLatestFrom(textOrEmpty) { processed, original in (processed, original) }
-            .filter { $0.0 != $0.1 }
-            .map { $0.0 }
-            .bind(to: base.rx.text)
-            .disposed(by: bag)
-
-        let validity = trimmed
-            .map(validator)
-            .distinctUntilChanged()
-
-        let formattedBinder = Binder<String>(base) { tv, value in
-            let v = process(value)
-            if tv.text != v { tv.text = v }
-        }
-
-        let textOut: Observable<String?> = distinct ? rawText.distinctUntilChanged { ($0 ?? "") == ($1 ?? "") } : rawText
-        let textOrEmptyOut: Observable<String> = distinct ? textOrEmpty.distinctUntilChanged() : textOrEmpty
-        let trimmedOut: Observable<String> = distinct ? trimmed.distinctUntilChanged() : trimmed
-
-        return RxTextViewInput(
-            text: textOut,
-            textOrEmpty: textOrEmptyOut,
-            trimmed: trimmedOut,
-            isEditing: isEditing.distinctUntilChanged(),
-            didPressDelete: deleteEvt,
-            didChange: didChangeEvt,
-            isValid: validity,
-            formattedBinder: formattedBinder
-        )
-    }
-    /// UITextView 与 BehaviorRelay<String> 双向绑定
-    func bindTwoWay(_ relay: BehaviorRelay<String>) -> Disposable {
-        let d1 = self.text.orEmpty
-            .distinctUntilChanged()
-            .bind(onNext: { relay.accept($0) })
-
-        let d2 = relay
-            .distinctUntilChanged()
-            .bind(to: self.text)
-
-        return Disposables.create(d1, d2)
-    }
-}
 // MARK: - Rx 快捷桥接（去掉 .rx,给 UITextView 直接用）
 public extension UITextView {
     // MARK: 通用输入绑定：带格式化 / 校验 / 最大长度 / 去重
@@ -477,7 +383,7 @@ public extension UITextView {
     }
 }
 // MARK: - 私有代理（手势 + 命中计算）
-private final class _LinkTapProxy: NSObject, UIGestureRecognizerDelegate {
+public final class _LinkTapProxy: NSObject, UIGestureRecognizerDelegate {
     let relay = PublishRelay<URL>()
 
     @objc func handleTap(_ gr: UITapGestureRecognizer) {
@@ -514,36 +420,7 @@ private final class _LinkTapProxy: NSObject, UIGestureRecognizerDelegate {
         }
     }
     // 与系统手势并发，避免被内建选择/链接手势抢走
-    func gestureRecognizer(_ g: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith other: UIGestureRecognizer) -> Bool { true }
-}
-private var kProxyKey: UInt8 = 0
-private var kTapKey:   UInt8 = 0
-// MARK: - Rx 扩展（原生写法保留）
-public extension Reactive where Base: UITextView {
-    var linkTap: ControlEvent<URL> {
-        let proxy: _LinkTapProxy
-        if let p = objc_getAssociatedObject(base, &kProxyKey) as? _LinkTapProxy {
-            proxy = p
-        } else {
-            proxy = _LinkTapProxy()
-            objc_setAssociatedObject(base, &kProxyKey, proxy, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-
-            // 交互配置：让手势优先可用
-            base.isEditable = false
-            base.isSelectable = false        // ⬅️ 关键：关掉系统选择/链接交互，避免“吞”掉 tap
-            base.isScrollEnabled = false
-            base.dataDetectorTypes = []      // 仅走自定义 link
-            base.isUserInteractionEnabled = true
-            base.delaysContentTouches = false
-
-            let tap = UITapGestureRecognizer(target: proxy, action: #selector(_LinkTapProxy.handleTap(_:)))
-            tap.cancelsTouchesInView = true
-            tap.delegate = proxy             // ⬅️ 允许并发识别
-            base.addGestureRecognizer(tap)
-            objc_setAssociatedObject(base, &kTapKey, tap, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-        return ControlEvent(events: proxy.relay.asObservable())
-    }
+    public func gestureRecognizer(_ g: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith other: UIGestureRecognizer) -> Bool { true }
 }
 // MARK: - 语义扩展：tv.linkTap（省略 .rx）
 public extension UITextView {

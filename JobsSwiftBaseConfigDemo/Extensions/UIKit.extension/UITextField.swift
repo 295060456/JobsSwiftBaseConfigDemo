@@ -18,7 +18,7 @@ import RxSwift
 import RxCocoa
 import ObjectiveC.runtime
 
-private enum _TFKeys {
+public enum JobsTFKeys {
     static var limitBag = UInt8(0)
     static var textInputActive = UInt8(0)
 }
@@ -384,133 +384,6 @@ public extension UITextField {
         )
     }
 }
-// MARK: 键盘按键行为监听
-public extension Reactive where Base: UITextField {
-    /// 每次按下删除键都会触发（空文本时也会触发）
-    var didPressDelete: ControlEvent<Void> {
-        let source = NotificationCenter.default.rx
-            .notification(UITextField.didPressDeleteNotification, object: base)
-            .map { _ in () }
-        return ControlEvent(events: source)
-    }
-    /// Return（editingDidEndOnExit）
-    var didPressReturn: ControlEvent<Void> {
-        controlEvent(.editingDidEndOnExit)
-    }
-    /// 开始/结束编辑
-    var didBeginEditing: ControlEvent<Void> { controlEvent(.editingDidBegin) }
-    var didEndEditing:   ControlEvent<Void> { controlEvent(.editingDidEnd)   }
-}
-/**
-    | 输入序列                                    | distinct = true 是否回调                          |
-    | ----------------------------------- | --------------------------------------------- |
-    | "" → "A"                                    | ✅ 触发                                                   |
-    | "A" → "AB"                               | ✅ 触发                                                   |
-    | "AB" → "ABC"                          | ✅ 触发                                                    |
-    | "A" → "A"（程序重复设同值） | ❌ 不触发                                                |
-    | "A " →（trim 后是 "A"）           | trimmed/isValid 可能 ❌（修剪后没变） |
-*/
-// MARK: 🧠 规则模型：RxTextInput
-// MARK: - 一体化模型（Reactive）
-public extension Reactive where Base: UITextField {
-    /// 与 `byLimitLength(_:)` 互斥：本方法会标记当前 TextField 已启用 textInput
-    func textInput(
-        maxLength: Int? = nil,                                 // 最大长度
-        formatter: ((String) -> String)? = nil,                // 文本格式化（如 uppercased、trim 等）
-        validator: @escaping (String) -> Bool = { _ in true }, // 校验规则（返回 true/false）
-        distinct: Bool = true                                  // 输出去重
-    ) -> RxTextInput {
-
-        // ✅ 标记：该 TextField 已启用 textInput（供 byLimitLength 等功能做互斥判断）
-        objc_setAssociatedObject(base,
-                                 &_TFKeys.textInputActive,
-                                 true,
-                                 .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-
-        // 基础源
-        let rawText     = base.rx.text.asObservable()               // String?
-        let textOrEmpty = base.rx.text.orEmpty.asObservable()       // String
-        let trimmed     = textOrEmpty.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-
-        // 编辑态
-        let began    = base.rx.didBeginEditing.map { true }.asObservable()
-        let ended    = base.rx.didEndEditing  .map { false }.asObservable()
-        let isEditing = Observable.merge(began, ended)
-            .startWith(base.isFirstResponder)
-
-        // 删除 / 回车
-        let deleteEvt = base.rx.didPressDelete.asObservable()
-        let returnEvt = base.rx.didPressReturn.asObservable()
-
-        // 组合处理器：先 formatter 再 maxLength（按 Character 截断，避免拆 emoji/合成字符）
-        let process: (String) -> String = { [weak base] input in
-            // 1) 正在组字（中文/日文等 IME），直接放行
-            if let tf = base, tf.markedTextRange != nil { return input }
-
-            var s = input
-            if let f = formatter { s = f(s) }
-            if let m = maxLength, s.count > m {
-                s = String(s.prefix(m))
-            }
-            return s
-        }
-
-        // 仅在需要改写时回写，避免光标跳跃
-        _ = textOrEmpty
-            .map(process)
-            .withLatestFrom(textOrEmpty) { processed, original in (processed, original) }
-            .filter { $0.0 != $0.1 }
-            .map { $0.0 }
-            .observe(on: MainScheduler.instance)
-            .take(until: base.rx.deallocated)                 // 绑定到 textField 生命周期
-            .bind(to: base.rx.text)
-
-        // 有效性
-        let validity = trimmed
-            .map(validator)
-            .distinctUntilChanged()
-
-        // 外部“强制回写”的 Binder
-        let formattedBinder = Binder<String>(base) { tf, value in
-            if tf.markedTextRange != nil { return }          // IME 保护
-            let v = process(value)
-            if tf.text != v { tf.text = v }
-        }
-
-        // 输出去重策略
-        let textOut: Observable<String?>       = distinct ? rawText.distinctUntilChanged { ($0 ?? "") == ($1 ?? "") } : rawText
-        let textOrEmptyOut: Observable<String> = distinct ? textOrEmpty.distinctUntilChanged() : textOrEmpty
-        let trimmedOut: Observable<String>     = distinct ? trimmed.distinctUntilChanged() : trimmed
-
-        return RxTextInput(
-            text: textOut,
-            textOrEmpty: textOrEmptyOut,
-            trimmed: trimmedOut,
-            isEditing: isEditing.distinctUntilChanged(),
-            didPressDelete: deleteEvt,
-            didPressReturn: returnEvt,
-            isValid: validity,
-            formattedBinder: formattedBinder
-        )
-    }
-}
-// MARK: 🔁 双向绑定辅助
-public extension Reactive where Base: UITextField {
-    /// 把一个 BehaviorRelay<String> 与 UITextField 双向绑定
-    /// - 注意：会自动去重，避免循环回写
-    func bindTwoWay(_ relay: BehaviorRelay<String>) -> Disposable {
-        let d1 = self.text.orEmpty
-            .distinctUntilChanged()
-            .observe(on: MainScheduler.instance)
-            .bind(onNext: { relay.accept($0) })
-        let d2 = relay
-            .distinctUntilChanged()
-            .observe(on: MainScheduler.instance)
-            .bind(to: self.text)
-
-        return Disposables.create(d1, d2)
-    }
-}
 /**
      passwordTextField.isSecureTextEntry = true
 
@@ -552,7 +425,7 @@ public extension UITextField {
         guard maxLength > 0 else { return self }
 
         // 若已启用 textInput，则跳过（避免双向回写冲突）
-        if (objc_getAssociatedObject(self, &_TFKeys.textInputActive) as? Bool) == true {
+        if (objc_getAssociatedObject(self, &JobsTFKeys.textInputActive) as? Bool) == true {
             #if DEBUG
             print("⚠️ byLimitLength 与 textInput 互斥：已启用 textInput，忽略限长。")
             #endif
@@ -561,7 +434,7 @@ public extension UITextField {
 
         // 为当前 textField 挂一个专用 DisposeBag（重复调用会覆盖旧的）
         let bag = DisposeBag()
-        objc_setAssociatedObject(self, &_TFKeys.limitBag, bag, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        objc_setAssociatedObject(self, &JobsTFKeys.limitBag, bag, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
 
         // 基于 Character 截断（避免拆 emoji/合成字符）
         rx.text.orEmpty

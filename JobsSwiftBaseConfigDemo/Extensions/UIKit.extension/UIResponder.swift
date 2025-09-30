@@ -5,7 +5,14 @@
 //  Created by Jobs on 2025/09/30.
 //
 
-import UIKit
+#if os(OSX)
+    import AppKit
+#endif
+
+#if os(iOS) || os(tvOS)
+    import UIKit
+#endif
+
 import ObjectiveC
 // MARK: - 路由目的地等价（避免重名-前缀化）
 /// 默认“同类型 = 同目的地”。需要区分同类不同参数时，在目标 VC 里 override `jobs_isSameDestination(as:)`
