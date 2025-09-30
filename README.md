@@ -146,7 +146,9 @@
   print_green "🎉 修改完成！已将 ENABLE_USER_SCRIPT_SANDBOXING 设置为 NO"
   ```
 
-### 2、周边软件支持 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 2、开发周边支持 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* [**JobsDocs**](https://github.com/295060456/JobsDocs)
 
 * [**过期的模拟器配件**](https://github.com/295060456/Xcode_Sys_lib) 
 
