@@ -507,9 +507,10 @@ extension UIButton {
 private var actionKey: Void?
 extension UIButton {
     /// 低版本兜底的闭包事件；iOS14+ 请优先使用 onTap（内部优先 UIAction）
-    func addAction(_ action: @escaping (UIButton) -> Void) {
+    func addAction(_ action: @escaping (UIButton) -> Void) -> Self {
         objc_setAssociatedObject(self, &actionKey, action, .OBJC_ASSOCIATION_COPY_NONATOMIC)
         self.addTarget(self, action: #selector(handleAction(_:)), for: .touchUpInside)
+        return self
     }
 
     @objc private func handleAction(_ sender: UIButton) {
@@ -529,7 +530,7 @@ extension UIButton {
                 handler(s)
             }, for: .touchUpInside)
         } else {
-            self.addAction(handler)
+            _ = self.addAction(handler)
         }
         return self
     }

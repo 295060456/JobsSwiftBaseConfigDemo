@@ -31,10 +31,18 @@ final class SafetyPresentDemoVC: UIViewController {
             make.center.equalToSuperview()
         }
         // 1️⃣ 系统 present 按钮（会触发我们 swizzle 的逻辑）
-        let btn1 = UIButton(type: .system)
-        btn1.setTitle("系统 present (连点不会重复)", for: .normal)
-        btn1.addTarget(self, action: #selector(onSystemPresent), for: .touchUpInside)
-        stack.addArrangedSubview(btn1)
+        stack.addArrangedSubview(UIButton(type: .system)
+            .byTitle("系统 present (连点不会重复)")
+            .addAction { _ in
+//                let vc = DemoDetailVC()
+//                present(vc, animated: true, completion: nil)
+                DemoDetailVC()
+                    .byData(3.14)// 基本数据类型
+                    .onResult { name in
+                        print("回来了 \(name)")
+                    }
+                    .byPresent(self)
+            })
         // 2️⃣ 从 UIView 内触发 presentSafely
         let demoView = DemoInnerPresentView()
         demoView.backgroundColor = .systemGreen.withAlphaComponent(0.2)
@@ -45,42 +53,28 @@ final class SafetyPresentDemoVC: UIViewController {
         }
         stack.addArrangedSubview(demoView)
 
-        let tip = UILabel()
-        tip.text = "👆 点击绿色区域也会触发 presentSafely"
-        tip.textColor = .secondaryLabel
-        tip.font = .systemFont(ofSize: 14)
-        stack.addArrangedSubview(tip)
+        stack.addArrangedSubview(UILabel()
+            .byText("👆 点击绿色区域也会触发 presentSafely")
+            .byTextAlignment(.center)
+            .byTextColor(.secondaryLabel)
+            .byFont(.systemFont(ofSize: 14)))
 
         // 3️⃣ 新增入口：自定义高度 present
-        let btn2 = UIButton(type: .system)
-        btn2.setTitle("自定义高度 present (320)", for: .normal)
-        btn2.addTarget(self, action: #selector(onCustomHeightPresent), for: .touchUpInside)
-        stack.addArrangedSubview(btn2)
-    }
-    // MARK: - Actions
-    /// 系统 present：直接调用系统 API（可能被你的 present 安全防抖 swizzle 接管）
-    @objc private func onSystemPresent() {
-//        let vc = DemoDetailVC()
-//        present(vc, animated: true, completion: nil)
-        DemoDetailVC()
-            .byData(3.14)// 基本数据类型
-            .onResult { name in
-                print("回来了 \(name)")
-            }
-            .byPresent(self)
-    }
-    /// 自定义高度 present：.custom + UIPresentationController
-    /// .custom 之后，系统不会给你装手势 → 需要自己加 pan + 交互式转场（上面已给补丁）。
-    /// 想省事且 iOS 15+ → 用 .pageSheet + detents，系统自带手势。
-    @objc private func onCustomHeightPresent() {
-        HalfSheetDemoVC()
-            .byModalPresentationStyle(.custom)
-            .byTransitioningDelegate(self)
-            .byData(["大树","小草","太阳"])
-            .onResult { id in
-                print("回来了 \(id)")
-            }
-            .byPresent(self)           // 自带防重入，连点不重复
+        stack.addArrangedSubview(UIButton(type: .system)
+            .byTitle("自定义高度 present (320)")
+            .addAction { _ in
+                /// 自定义高度 present：.custom + UIPresentationController
+                /// .custom 之后，系统不会给你装手势 → 需要自己加 pan + 交互式转场（上面已给补丁）。
+                /// 想省事且 iOS 15+ → 用 .pageSheet + detents，系统自带手势。
+                HalfSheetDemoVC()
+                    .byModalPresentationStyle(.custom)
+                    .byTransitioningDelegate(self)
+                    .byData(["大树","小草","太阳"])
+                    .onResult { id in
+                        print("回来了 \(id)")
+                    }
+                    .byPresent(self)           // 自带防重入，连点不重复
+            })
     }
 }
 // MARK: - UIResponder 内触发 presentVC 示例（保持不变）
@@ -91,7 +85,11 @@ final class DemoInnerPresentView: UIView {
         lbl.textAlignment = .center
         lbl.textColor = .systemGreen
         lbl.font = .systemFont(ofSize: 15, weight: .medium)
-        return lbl
+        return UILabel()
+            .byText("👉 点我 (View 内触发 presentSafely)")
+            .byTextAlignment(.center)
+            .byTextColor(.systemGreen)
+            .byFont(.systemFont(ofSize: 15, weight: .medium))
     }()
 
     override init(frame: CGRect) {

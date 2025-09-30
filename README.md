@@ -2231,6 +2231,31 @@ private func demo_DeleteBackward_Observe() {
       )
       ```
 
+      ```swift
+      final class DemoInnerView: UIView {
+          override init(frame: CGRect) {
+              super.init(frame: frame)
+      
+              isUserInteractionEnabled = true
+              addGestureRecognizer(
+                  UITapGestureRecognizer
+                      .byConfig { gr in
+                          DemoDetailVC()
+                              .byData(DemoModel(id: 7, title: "详情"))
+                              .onResult { id in
+                                  print("回来了 id=\(id)")
+                              }
+                              .byPush(self)           // 自带防重入，连点不重复
+                      }
+              )
+          }
+      
+          required init?(coder: NSCoder) {
+              fatalError("init(coder:) has not been implemented")
+          }
+      }
+      ```
+
     * 长按 LongPress
 
       ```swift
