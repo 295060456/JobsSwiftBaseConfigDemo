@@ -17,10 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
         let window = UIWindow(windowScene: windowScene)
-//        let rootVC = ViewController()
-//        let rootVC = UITextFieldDemoVC()
-//        let rootVC = UITextViewDemoVC()
-        let rootVC = RichTextDemoVC()
+        let rootVC = RootListVC()
         let nav = UINavigationController(rootViewController: rootVC)
         window.rootViewController = nav
         self.window = window

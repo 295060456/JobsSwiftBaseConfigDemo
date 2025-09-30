@@ -1,5 +1,5 @@
 //
-//  UIButton+JobsChain.swift
+//  UIButton.swift
 //  JobsSwiftBaseConfigDemo
 //
 //  Created by Jobs on 2025/6/16.
@@ -14,8 +14,7 @@ import UIKit
 #endif
 
 import ObjectiveC
-
-// MARK: - 基础链式（保留并补强）
+/// 基础链式
 extension UIButton {
     @discardableResult
     func byTitle(_ title: String?, for state: UIControl.State = .normal) -> Self {
@@ -74,12 +73,17 @@ extension UIButton {
         return self
     }
 }
-
-// MARK: - 进阶：按 state 的链式代理
+/// 进阶：按 state 的链式代理
 extension UIButton {
-    struct StateProxy {
-        fileprivate unowned let button: UIButton
+    /// 按 state 的链式代理（class + 强引用，安全不易崩）
+    final class StateProxy {
+        private let button: UIButton
         let state: UIControl.State
+
+        init(button: UIButton, state: UIControl.State) {
+            self.button = button
+            self.state = state
+        }
 
         @discardableResult
         func title(_ text: String?) -> UIButton {
@@ -112,7 +116,7 @@ extension UIButton {
             button.setPreferredSymbolConfiguration(configuration, forImageIn: state); return button
         }
 
-        /// 背景色（state 级）—— iOS15+ 的 normal 走 Configuration，其它/低版本用 1×1 背景图兜底
+        /// 背景色（state 级）：iOS15+ 仅 normal 用 configuration，其它/低版本用 1×1 背景图兜底
         @discardableResult
         func backgroundColor(_ color: UIColor) -> UIButton {
             if #available(iOS 15.0, *), state == .normal {
@@ -138,10 +142,9 @@ extension UIButton {
         StateProxy(button: self, state: state)
     }
 }
-
-// MARK: - 布局 / 外观（iOS15+ 走 configuration，旧版兜底）
+/// 布局 / 外观（iOS15+ 走 configuration，旧版兜底）
 extension UIButton {
-    /// 背景色（按 state）
+    // MARK: - 背景色（按 state）
     @discardableResult
     func byBackgroundColor(_ color: UIColor, for state: UIControl.State = .normal) -> Self {
         if #available(iOS 15.0, *), state == .normal {
@@ -170,8 +173,7 @@ extension UIButton {
     func byTitleAlignment(_ alignment: NSTextAlignment) -> Self {
         titleLabel?.textAlignment = alignment; return self
     }
-
-    /// iOS15+ 优先 contentInsets，否则回落到 UIEdgeInsets
+    // MARK: - iOS15+ 优先 contentInsets，否则回落到 UIEdgeInsets
     @discardableResult
     func byContentInsets(_ insets: NSDirectionalEdgeInsets) -> Self {
         if #available(iOS 15.0, *) {
@@ -186,8 +188,7 @@ extension UIButton {
         }
         return self
     }
-
-    /// 兼容旧签名：UIEdgeInsets -> NSDirectionalEdgeInsets（iOS15+）
+    // MARK: - 兼容旧签名：UIEdgeInsets -> NSDirectionalEdgeInsets（iOS15+）
     @discardableResult
     func byContentEdgeInsets(_ insets: UIEdgeInsets) -> Self {
         if #available(iOS 15.0, *) {
@@ -202,8 +203,7 @@ extension UIButton {
         }
         return self
     }
-
-    /// iOS15+ 推荐用 imagePadding；旧版保留 imageEdgeInsets
+    // MARK: - iOS15+ 推荐用 imagePadding；旧版保留 imageEdgeInsets
     @discardableResult
     func byImageEdgeInsets(_ insets: UIEdgeInsets) -> Self {
         if #available(iOS 15.0, *) {
@@ -215,8 +215,7 @@ extension UIButton {
         }
         return self
     }
-
-    /// iOS15+ 建议用 contentInsets/配置副标题；旧版保留 titleEdgeInsets
+    // MARK: - iOS15+ 建议用 contentInsets/配置副标题；旧版保留 titleEdgeInsets
     @discardableResult
     func byTitleEdgeInsets(_ insets: UIEdgeInsets) -> Self {
         if #available(iOS 15.0, *) {
@@ -266,8 +265,7 @@ extension UIButton {
         layer.masksToBounds = false
         return self
     }
-
-    /// 图片与标题的相对位置（iOS15+ 原生；低版本尽力而为）
+    // MARK: - 图片与标题的相对位置（iOS15+ 原生；低版本尽力而为）
     @discardableResult
     func byImagePlacement(_ placement: NSDirectionalRectEdge, padding: CGFloat = 8) -> Self {
         if #available(iOS 15.0, *) {
@@ -290,8 +288,7 @@ extension UIButton {
         }
         return self
     }
-
-    // iOS15+ Configuration mutate 钩子
+    // MARK: - iOS15+ Configuration mutate 钩子
     @available(iOS 15.0, *)
     @discardableResult
     func byConfiguration(_ mutate: (inout UIButton.Configuration) -> Void) -> Self {
@@ -300,8 +297,7 @@ extension UIButton {
         configuration = cfg
         return self
     }
-
-    // iOS15+ 副标题（优先 configuration.subtitle）
+    // MARK: - iOS15+ 副标题（优先 configuration.subtitle）
     @discardableResult
     func bySubtitle(_ text: String?,
                     color: UIColor? = nil,
@@ -326,74 +322,65 @@ extension UIButton {
         return self
     }
 }
-
-// MARK: - 交互 / 菜单 / 角色 / Pointer / Configuration 生命周期
+/// 交互 / 菜单 / 角色 / Pointer / Configuration 生命周期
 extension UIButton {
-    /// 设置 UIAction 菜单
+    // MARK: - 设置 UIAction 菜单
     @available(iOS 14.0, *)
     @discardableResult
     func byMenu(_ menu: UIMenu?) -> Self {
         self.menu = menu
         return self
     }
-
-    /// 是否把菜单作为主动作（长按/点按直接展示）
+    // MARK: - 是否把菜单作为主动作（长按/点按直接展示）
     @available(iOS 14.0, *)
     @discardableResult
     func byShowsMenuAsPrimaryAction(_ on: Bool) -> Self {
         self.showsMenuAsPrimaryAction = on
         return self
     }
-
-    /// 指针交互
+    // MARK: - 指针交互
     @available(iOS 13.4, *)
     @discardableResult
     func byPointerInteractionEnabled(_ on: Bool) -> Self {
         self.isPointerInteractionEnabled = on
         return self
     }
-
-    /// 按钮语义角色（.normal / .cancel / .destructive 等）
+    // MARK: - 按钮语义角色（.normal / .cancel / .destructive 等）
     @available(iOS 14.0, *)
     @discardableResult
     func byRole(_ role: UIButton.Role) -> Self {
         self.role = role
         return self
     }
-
-    /// 菜单元素排序策略（iOS16+）
+    // MARK: - 菜单元素排序策略（iOS16+）
     @available(iOS 16.0, *)
     @discardableResult
     func byPreferredMenuElementOrder(_ order: UIContextMenuConfiguration.ElementOrder) -> Self {
         self.preferredMenuElementOrder = order
         return self
     }
-
-    /// 主动作是否切换 selected（iOS15+）
+    // MARK: - 主动作是否切换 selected（iOS15+）
     @available(iOS 15.0, *)
     @discardableResult
     func byChangesSelectionAsPrimaryAction(_ on: Bool) -> Self {
         self.changesSelectionAsPrimaryAction = on
         return self
     }
-
-    /// 配置自动更新（iOS15+）
+    // MARK: - 配置自动更新（iOS15+）
     @available(iOS 15.0, *)
     @discardableResult
     func byAutomaticallyUpdatesConfiguration(_ on: Bool) -> Self {
         self.automaticallyUpdatesConfiguration = on
         return self
     }
-
-    /// 配置更新回调（iOS15+）：根据 state 动态更新 configuration
+    // MARK: - 配置更新回调（iOS15+）：根据 state 动态更新 configuration
     @available(iOS 15.0, *)
     @discardableResult
     func byConfigurationUpdateHandler(_ handler: @escaping UIButton.ConfigurationUpdateHandler) -> Self {
         self.configurationUpdateHandler = handler
         return self
     }
-
-    /// 请求更新 configuration（iOS15+）
+    // MARK: - 请求更新 configuration（iOS15+）
     @available(iOS 15.0, *)
     @discardableResult
     func bySetNeedsUpdateConfiguration() -> Self {
@@ -401,7 +388,6 @@ extension UIButton {
         return self
     }
 }
-
 // MARK: - 便捷构造 & 背景色兜底（保留）
 extension UIButton {
     /// Convenience constructor for UIButton.
@@ -414,9 +400,8 @@ extension UIButton {
         self.init(frame: CGRect(x: x, y: y, width: w, height: h))
         addTarget(target, action: action, for: UIControl.Event.touchUpInside)
     }
-
     /// Set a background color for the button (用于低版本或非 normal state 兜底).
-    public func setBackgroundColor(_ color: UIColor, forState: UIControl.State) {
+    public func setBgCor(_ color: UIColor, forState: UIControl.State) {
         UIGraphicsBeginImageContext(CGSize(width: 1, height: 1))
         UIGraphicsGetCurrentContext()?.setFillColor(color.cgColor)
         UIGraphicsGetCurrentContext()?.fill(CGRect(x: 0, y: 0, width: 1, height: 1))
@@ -424,12 +409,20 @@ extension UIButton {
         UIGraphicsEndImageContext()
         self.setBackgroundImage(colorImage, for: forState)
     }
+    /// iOS15 以下用 1×1 背景图模拟 per-state 背景色
+    fileprivate func setBackgroundColor(_ color: UIColor, forState state: UIControl.State) {
+        let size = CGSize(width: 1, height: 1)
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        color.setFill()
+        UIBezierPath(rect: CGRect(origin: .zero, size: size)).fill()
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        setBackgroundImage(img, for: state)
+    }
 }
-
 // MARK: - 旋转动画（保留）
 extension UIButton {
     public static let rotationKey = "jobs.rotation"
-
     public enum RotationScope {
         case imageView
         case wholeButton
@@ -501,7 +494,6 @@ extension UIButton {
                     key: key, resetTransformOnStop: resetTransformOnStop)
     }
 }
-
 // MARK: - 防止快速连点（保留）
 extension UIButton {
     func disableAfterClick(interval: TimeInterval = 1.0) {
@@ -511,8 +503,7 @@ extension UIButton {
         }
     }
 }
-
-// MARK: - 闭包回调（保留）
+// MARK: - 闭包回调
 private var actionKey: Void?
 extension UIButton {
     /// 低版本兜底的闭包事件；iOS14+ 请优先使用 onTap（内部优先 UIAction）
@@ -527,10 +518,9 @@ extension UIButton {
         }
     }
 }
-
-// MARK: - onTap / onLongPress（统一事件入口）
+/// 点按事统一入口
 extension UIButton {
-    /// 点按事件（iOS14+ 使用 UIAction；低版本回退到上面的 addAction(_:)）
+    // MARK: - 点按事件（iOS14+ 使用 UIAction；低版本回退到上面的 addAction(_:)）
     @discardableResult
     func onTap(_ handler: @escaping (UIButton) -> Void) -> Self {
         if #available(iOS 14.0, *) {
@@ -543,8 +533,7 @@ extension UIButton {
         }
         return self
     }
-
-    /// 长按事件（所有版本可用，使用 UILongPressGestureRecognizer）
+    // MARK: - 长按事件（所有版本可用，使用 UILongPressGestureRecognizer）
     @discardableResult
     func onLongPress(minimumPressDuration: TimeInterval = 0.5,
                      _ handler: @escaping (UIButton, UILongPressGestureRecognizer) -> Void) -> Self {

@@ -15,7 +15,6 @@ import SnapKit              // 约束用 SnapKit
 private extension NSAttributedString.Key {
     static let jobsAction = NSAttributedString.Key("jobsAction")
 }
-
 // MARK: - 仅两个 cell：1) Delegate 方案  2) RAC 方案
 //  - “专属客服”使用系统默认蓝色（.link）
 //  - “400-123-4567” 可点击拨号，样式=红字+蓝色下划线（自定义）
