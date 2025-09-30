@@ -232,7 +232,7 @@ final class UIButtonDemoVC: UIViewController {
                 _ = btnUpdate
                     .byAutomaticallyUpdatesConfiguration(true)
                     .byConfigurationUpdateHandler { btn in
-                        var cfg = btn.configuration ?? .plain()
+                        let cfg = btn.configuration ?? .plain()
                         // 根据 state 动态变更（这里只是演示调 alpha）
                         btn.alpha = btn.isHighlighted ? 0.6 : 1.0
                         btn.configuration = cfg
@@ -251,7 +251,7 @@ final class UIButtonDemoVC: UIViewController {
                 .byBackgroundColor(.systemPurple)
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
                 .onTap { [weak self] b in
-                    guard let self else { return }
+                    guard self != nil else { return }
                     // 防止频繁点击抖动
                     b.disableAfterClick(interval: 0.25)
 
@@ -328,13 +328,3 @@ final class UIButtonDemoVC: UIViewController {
     }
 }
 
-// MARK: - 少量便捷 then（可选）
-// 仅为本 VC 书写体验，避免引入外部 Then 库；不影响按钮语法糖展示
-private protocol Then {}
-extension Then where Self: AnyObject {
-    @discardableResult
-    func then(_ block: (Self) -> Void) -> Self {
-        block(self); return self
-    }
-}
-extension NSObject: Then {}

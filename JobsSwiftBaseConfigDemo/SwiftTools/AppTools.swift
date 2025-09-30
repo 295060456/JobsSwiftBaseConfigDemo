@@ -40,3 +40,12 @@ public func presentAlert(for urlString: String, on textView: UITextView) {
         vc.present(alert, animated: true)
     }
 }
+// MARK: - 少量便捷 then（可选）
+public protocol Then {}
+extension Then where Self: AnyObject {
+    @discardableResult
+    func then(_ block: (Self) -> Void) -> Self {
+        block(self); return self
+    }
+}
+extension NSObject: Then {}

@@ -13,7 +13,9 @@ final class RootListVC: UIViewController {
         ("UITextField Demo", UITextFieldDemoVC.self),
         ("UITextView Demo", UITextViewDemoVC.self),
         ("RichText Demo", RichTextDemoVC.self),
-        ("UIButton Demo", UIButtonDemoVC.self)
+        ("UIButton Demo", UIButtonDemoVC.self),
+        ("SafetyPushDemo Demo", SafetyPushDemoVC.self),
+        ("SafetyPresentDemo Demo", SafetyPresentDemoVC.self)
     ]
 
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)

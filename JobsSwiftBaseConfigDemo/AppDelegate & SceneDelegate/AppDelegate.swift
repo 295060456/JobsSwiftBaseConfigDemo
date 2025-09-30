@@ -19,7 +19,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // ✅ 启用 UITextView 的 deleteBackward 广播（与 UITextField 互不影响）
         UITextView.enableDeleteBackwardBroadcast()
 
+        // ✅ 全局比例尺
         JXScale.setup(designWidth: 375, designHeight: 812, useSafeArea: false)
+
+        // ✅ 安全 push/present 页面
+        JobsSafePushSwizzler.enable()      // 只拦 push
+        JobsSafePresentSwizzler.enable()   // 只拦 present
         return true
     }
 

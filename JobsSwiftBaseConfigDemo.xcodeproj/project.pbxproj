@@ -34,6 +34,12 @@
 		0459211E2E85588C008C8D6A /* DS-DIGIB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0459211C2E85588C008C8D6A /* DS-DIGIB.ttf */; };
 		0459211F2E85588C008C8D6A /* fonteditor.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0459211B2E85588C008C8D6A /* fonteditor.ttf */; };
 		045921202E85588C008C8D6A /* DIN-Black-2.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0459211A2E85588C008C8D6A /* DIN-Black-2.otf */; };
+		0477D96D2E8B83D6002C6427 /* JobsSafeTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D96C2E8B83CA002C6427 /* JobsSafeTransitions.swift */; };
+		0477D96F2E8B8479002C6427 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D96E2E8B8478002C6427 /* UIApplication.swift */; };
+		0477D9712E8B897D002C6427 /* SafetyPushDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9702E8B896A002C6427 /* SafetyPushDemoVC.swift */; };
+		0477D9752E8B9146002C6427 /* SafetyPresentDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9742E8B9141002C6427 /* SafetyPresentDemoVC.swift */; };
+		0477D9772E8B9381002C6427 /* UIResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9762E8B937A002C6427 /* UIResponder.swift */; };
+		0477D9792E8BADB2002C6427 /* DemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9782E8BADB1002C6427 /* DemoVC.swift */; };
 		0487AADA2E840CB200B5D307 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0487AAD92E840CB200B5D307 /* UIColorExtensions.swift */; };
 		0487AADC2E840EE300B5D307 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0487AADB2E840EE300B5D307 /* libc++.tbd */; };
 		048E37702E87997A004C3A41 /* UIGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048E376F2E879978004C3A41 /* UIGestureRecognizer.swift */; };
@@ -150,6 +156,12 @@
 		0459211A2E85588C008C8D6A /* DIN-Black-2.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DIN-Black-2.otf"; sourceTree = "<group>"; };
 		0459211B2E85588C008C8D6A /* fonteditor.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = fonteditor.ttf; sourceTree = "<group>"; };
 		0459211C2E85588C008C8D6A /* DS-DIGIB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DS-DIGIB.ttf"; sourceTree = "<group>"; };
+		0477D96C2E8B83CA002C6427 /* JobsSafeTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsSafeTransitions.swift; sourceTree = "<group>"; };
+		0477D96E2E8B8478002C6427 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
+		0477D9702E8B896A002C6427 /* SafetyPushDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafetyPushDemoVC.swift; sourceTree = "<group>"; };
+		0477D9742E8B9141002C6427 /* SafetyPresentDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafetyPresentDemoVC.swift; sourceTree = "<group>"; };
+		0477D9762E8B937A002C6427 /* UIResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIResponder.swift; sourceTree = "<group>"; };
+		0477D9782E8BADB1002C6427 /* DemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoVC.swift; sourceTree = "<group>"; };
 		0487AAD92E840CB200B5D307 /* UIColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		0487AADB2E840EE300B5D307 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		048E376F2E879978004C3A41 /* UIGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIGestureRecognizer.swift; sourceTree = "<group>"; };
@@ -264,6 +276,7 @@
 		045920E22E84EC64008C8D6A /* SwiftTools */ = {
 			isa = PBXGroup;
 			children = (
+				0477D96C2E8B83CA002C6427 /* JobsSafeTransitions.swift */,
 				04CF03182E8A80CA0083ACF0 /* AppTools.swift */,
 				04CF03142E8A75E70083ACF0 /* JobsRichText.swift */,
 				04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */,
@@ -366,6 +379,9 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				0477D9782E8BADB1002C6427 /* DemoVC.swift */,
+				0477D9742E8B9141002C6427 /* SafetyPresentDemoVC.swift */,
+				0477D9702E8B896A002C6427 /* SafetyPushDemoVC.swift */,
 				04A8C54B2E8AA94B00381701 /* UIButtonDemoVC.swift */,
 				04CF03162E8A76490083ACF0 /* RichTextDemoVC.swift */,
 				04CF028F2E8A3A0F0083ACF0 /* UITextViewDemoVC.swift */,
@@ -523,6 +539,8 @@
 		C564FEEA2E0AAC2B0079B5C1 /* UIKit.extension */ = {
 			isa = PBXGroup;
 			children = (
+				0477D9762E8B937A002C6427 /* UIResponder.swift */,
+				0477D96E2E8B8478002C6427 /* UIApplication.swift */,
 				048E376F2E879978004C3A41 /* UIGestureRecognizer.swift */,
 				04AC74C42E86682D004B8305 /* Notification.swift */,
 				04A18E4C2E865336004BB9DC /* UIImage.swift */,
@@ -856,12 +874,15 @@
 				C564FC8D2E0959640079B5C1 /* UIBarButtonItem.swift in Sources */,
 				C564FC2E2E0958E80079B5C1 /* HUDHelper.swift in Sources */,
 				045920F22E854F79008C8D6A /* Int.swift in Sources */,
+				0477D9752E8B9146002C6427 /* SafetyPresentDemoVC.swift in Sources */,
 				045920F42E854F85008C8D6A /* Int8.swift in Sources */,
+				0477D96D2E8B83D6002C6427 /* JobsSafeTransitions.swift in Sources */,
 				C564FC9A2E0959640079B5C1 /* UITextView.swift in Sources */,
 				C564FC942E0959640079B5C1 /* UIPageViewController.swift in Sources */,
 				045920E62E84F389008C8D6A /* CALayer.swift in Sources */,
 				0487AADA2E840CB200B5D307 /* UIColorExtensions.swift in Sources */,
 				045921042E854FE1008C8D6A /* UInt32.swift in Sources */,
+				0477D96F2E8B8479002C6427 /* UIApplication.swift in Sources */,
 				C564FC9D2E0959640079B5C1 /* UIDatePicker.swift in Sources */,
 				045921062E854FE9008C8D6A /* UInt64.swift in Sources */,
 				04CF03172E8A76500083ACF0 /* RichTextDemoVC.swift in Sources */,
@@ -874,12 +895,14 @@
 				04AC74C52E86682E004B8305 /* Notification.swift in Sources */,
 				C5489B5D2E0AB2D300B05447 /* JobsBlockDef.swift in Sources */,
 				C564FC8A2E0959640079B5C1 /* UISegmentedControl.swift in Sources */,
+				0477D9772E8B9381002C6427 /* UIResponder.swift in Sources */,
 				C564FC892E0959640079B5C1 /* UICollectionView.swift in Sources */,
 				C564FCB32E0959990079B5C1 /* CustomCell.swift in Sources */,
 				045920FA2E854FA5008C8D6A /* Int64.swift in Sources */,
 				041F5B012E87B51800984EEB /* UITextFieldDemoVC.swift in Sources */,
 				C564FC902E0959640079B5C1 /* UILabel.swift in Sources */,
 				C564FC9E2E0959640079B5C1 /* UINavigationController.swift in Sources */,
+				0477D9792E8BADB2002C6427 /* DemoVC.swift in Sources */,
 				C564FCA52E0959640079B5C1 /* UIPickerView.swift in Sources */,
 				C564FC882E0959640079B5C1 /* UISlider.swift in Sources */,
 				C564FC912E0959640079B5C1 /* UIScrollView.swift in Sources */,
@@ -894,6 +917,7 @@
 				04A18E4D2E86533B004BB9DC /* UIImage.swift in Sources */,
 				045921122E855769008C8D6A /* JobsPaddedLabel.swift in Sources */,
 				0459210C2E855004008C8D6A /* Float80.swift in Sources */,
+				0477D9712E8B897D002C6427 /* SafetyPushDemoVC.swift in Sources */,
 				C564FCAC2E09597C0079B5C1 /* ViewController.swift in Sources */,
 				C564FC962E0959640079B5C1 /* Inlines.swift in Sources */,
 				045920EE2E854BE7008C8D6A /* Double.swift in Sources */,

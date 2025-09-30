@@ -2688,7 +2688,7 @@ private func demo_DeleteBackward_Observe() {
   }
   ```
 
-### 19、Block的安全调用（等价调用） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 19、Block的安全调用（等价调用）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **Objc**
 
@@ -2708,6 +2708,136 @@ private func demo_DeleteBackward_Observe() {
 
   * ```swift
     success?(true)
+    ```
+
+### 20、Then（自定义/使用）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 定义
+
+  ```swift
+  // MARK: - 少量便捷 then（可选）
+  public protocol Then {}
+  extension Then where Self: AnyObject {
+      @discardableResult
+      func then(_ block: (Self) -> Void) -> Self {
+          block(self); return self
+      }
+  }
+  extension NSObject: Then {}
+  ```
+
+* 使用
+
+  ```swift
+  let label = UILabel().then {
+      $0.text = "Hello"
+      $0.textColor = .red
+      $0.textAlignment = .center
+  }
+  
+  let label = UILabel()
+  label.text = "Hello"
+  label.textColor = .red
+  label.textAlignment = .center
+  ```
+
+### 21、获取高频系统关键量 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* `jobsNearestVC`
+
+  > 从任意 **UIResponder**（View / VC）向上找到最近的宿主 VC；若全程找不到则兜底到 **`keyWindow`** 的 **root**
+
+* `jobsKeyWindow` 👉 统一的 **KeyWindow** 获取（支持 iOS 13 多场景；老系统兜底）
+
+  ```swift
+  UIApplication.jobsKeyWindow()?
+  ```
+
+* `jobsTopMostVC` 👉（递归解析）获取当前“最顶层可见”的 **UIViewController**
+
+  ```swift
+  // MARK: - 顶层可见 VC（配合 jobsKeyWindow）
+  /// 获取当前“最顶层可见”的 UIViewController（递归解析：Nav/Tab/Split/Presented）
+  static func jobsTopMostVC(from root: UIViewController? = {
+      jobsKeyWindow()?.rootViewController
+  }()) -> UIViewController? {
+      guard let root = root else { return nil }
+  
+      // UINavigationController
+      if let nav = root as? UINavigationController {
+          return jobsTopMostVC(from: nav.visibleViewController ?? nav.topViewController)
+      }
+      // UITabBarController
+      if let tab = root as? UITabBarController {
+          return jobsTopMostVC(from: tab.selectedViewController)
+      }
+      // UISplitViewController（取最右侧详情栈）
+      if let split = root as? UISplitViewController, let last = split.viewControllers.last {
+          return jobsTopMostVC(from: last)
+      }
+      // 被 present 出来的控制器
+      if let presented = root.presentedViewController {
+          // 若是 UIAlertController，按需返回其 presenting（看你业务，这里不特殊处理）
+          return jobsTopMostVC(from: presented)
+      }
+      // 其他情况：就是它本身
+      return root
+  }
+  ```
+
+### 22、<font color=red>推页面@带参数</font>（`push`/`present`）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 1️⃣ 封装在`UIResponder`层，能全覆盖：**任意控制器**和**任意视图**
+>
+> 2️⃣ 设计只有一个入参，当多参数的时候，建议封装成一个模型，进行整体传入，方便管理
+>
+> 3️⃣ 这个参数可以是：字符串、基本数据类型、自定义模型（类/结构体）、字典、数组
+>
+> 4️⃣ <font color=red>**框架内部防止了多次点击造成的多次推出页面的问题**</font>
+>
+> ```swift
+> .byData(DemoModel(id: 7, title: "详情"))// 自定义模型类 DemoModel（类/结构体）
+> .byData(["id": 7, "title": "详情", "price": 9.9])// 字典
+> .byData(["大树","小草","太阳"])// 数组
+> .byData("Jobs")// 字符串
+> .byData(3.14)// 基本数据类型
+> ```
+
+* 强行`push`页面进行展示。发起者可以是：任意控制器（**即便这个控制器目前是不具备导航控制器的**）、任意视图
+
+  ```swift
+  DemoDetailVC()
+      .byData(Data)
+      .onResult { id in
+          print("回来了 id=\(id)")
+      }
+      .byPush(self)           // 自带防重入，连点不重复
+  ```
+
+* 强行`present`页面进行展示。发起者可以是：任意控制器（**即便这个控制器目前是不具备导航控制器的**）、任意视图
+
+  * 系统默认高度
+
+    ```swift
+    DemoDetailVC()
+        .byData(Data)
+        .onResult { name in
+            print("回来了 \(name)")
+        }
+        .byPresent(self)           // 自带防重入，连点不重复
+    ```
+
+  * 自定义`present`的页面高度
+
+    ```swift
+    HalfSheetDemoVC()
+        .byModalPresentationStyle(.custom)
+        .byTransitioningDelegate(self)
+        .byData(Data)
+        .onResult { id in
+            print("回来了 \(id)")
+        }
+        .byPresent(self)           // 自带防重入，连点不重复
     ```
 
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>

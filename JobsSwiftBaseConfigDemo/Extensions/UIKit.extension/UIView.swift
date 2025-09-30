@@ -12,7 +12,6 @@
 #if os(iOS) || os(tvOS)
     import UIKit
 #endif
-
 // MARK: 语法糖🍬
 extension UIView {
     @discardableResult
@@ -72,7 +71,7 @@ extension UIView {
 }
 // MARK: - UIView · Geometry / Transform / Scale / Touch
 extension UIView {
-    // 几何
+    /// 几何
     @discardableResult
     func byFrame(_ frame: CGRect) -> Self {
         self.frame = frame
@@ -90,8 +89,7 @@ extension UIView {
         self.center = center
         return self
     }
-
-    // 2D/3D 变换
+    /// 2D/3D 变换
     @discardableResult
     func byTransform(_ transform: CGAffineTransform) -> Self {
         self.transform = transform
@@ -104,24 +102,21 @@ extension UIView {
         self.transform3D = t3d
         return self
     }
-
-    // 缩放因子（渲染分辨率）
+    /// 缩放因子（渲染分辨率）
     @available(iOS 4.0, *)
     @discardableResult
     func byContentScaleFactor(_ scale: CGFloat) -> Self {
         self.contentScaleFactor = scale
         return self
     }
-
-    // 锚点（注意：会影响 frame，需要配合 position/center 调整）
+    /// 锚点（注意：会影响 frame，需要配合 position/center 调整）
     @available(iOS 16.0, *)
     @discardableResult
     func byAnchorPoint(_ anchor: CGPoint) -> Self {
         self.anchorPoint = anchor
         return self
     }
-
-    // 触摸行为
+    /// 触摸行为
     @discardableResult
     func byMultipleTouchEnabled(_ enabled: Bool) -> Self {
         self.isMultipleTouchEnabled = enabled
@@ -278,21 +273,18 @@ extension UIView {
         setNeedsLayout()
         return self
     }
-
     /// 立即布局
     @discardableResult
     func byLayoutIfNeeded() -> Self {
         layoutIfNeeded()
         return self
     }
-
     /// 自适应到指定尺寸（仅设置，不触发布局）
     @discardableResult
     func bySizeThatFits(_ size: CGSize) -> Self {
         _ = sizeThatFits(size)
         return self
     }
-
     /// 自身尺寸适配
     @discardableResult
     func bySizeToFit() -> Self {
