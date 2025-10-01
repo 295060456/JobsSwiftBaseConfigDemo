@@ -1026,7 +1026,7 @@ public extension UIView {
                 return 0
             }
             // 键盘是屏幕坐标，这里转到当前视图的坐标系，计算遮挡
-            let window = self.window ?? UIApplication.shared.windows.first
+            let window = UIApplication.jobsKeyWindow()
             let endInView: CGRect = {
                 if let win = window {
                     let rInWin = win.convert(frame, from: nil)

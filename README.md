@@ -1651,7 +1651,7 @@ if #available(iOS 11.0, *) {
   {/*TODO*/}
   ```
 
-### 7、`UILabel` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 7、🏷️`UILabel` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 给 `UILabel` 里的文字加 **下划线**，并且可以指定下划线的颜色
 
@@ -1676,7 +1676,20 @@ if #available(iOS 11.0, *) {
   }
   ```
 
-### 8、`UIButton` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 8、<font id=UIButton>🔘`UIButton`</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+let eye = UIButton(type: .system)
+    .byImage(UIImage(systemName: "eye.slash"), for: .normal)   // 未选中
+    .byImage(UIImage(systemName: "eye"), for: .selected)       // 选中
+    .byContentEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 6))
+    .onTap { [weak self] sender in
+        guard let self else { return }                // 或写成 guard let strongSelf = self else { return }
+        sender.isSelected.toggle()
+        self.passwordTF.isSecureTextEntry.toggle()
+        self.passwordTF.togglePasswordVisibility()    // 你自己的游标/清空修复
+    }
+```
 
 * **防止用户快速连续点按钮**
 
@@ -2206,7 +2219,39 @@ private func demo_DeleteBackward_Observe() {
 }
 ```
 
-### 14、手势的封装（使用） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 14、`UIToolbar`/`UIBarButtonItem` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+private lazy var passwordAccessory: UIToolbar = {
+    let bar = UIToolbar()
+    bar.items = [
+        UIBarButtonItem()
+            .byTitle("清空")
+            .byTitleFont(.systemFont(ofSize: 15))
+            .byTitleColor(.systemRed)
+            .byStyle(.plain)
+            .onTap { [weak self] _ in
+                guard let self = self else { return }   // ✅ 确保生命周期安全
+                self.passwordTF.text = ""
+                // 也可以：self.passwordTF.rx.text.onNext("")
+            },
+        UIBarButtonItem(systemItem: .flexibleSpace),
+        UIBarButtonItem()
+            .byTitle("完成")
+            .byTitleFont(.systemFont(ofSize: 15))
+            .byTitleColor(.systemYellow)
+            .byStyle(.done)
+            .onTap { [weak self] _ in
+                guard let self = self else { return }   // ✅ 确保生命周期安全
+                view.endEditing(true)
+            },
+    ]
+    bar.sizeToFit()
+    return bar
+}()
+```
+
+### 15、手势的封装（使用）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 因为手势只能添加到**UIView**及其子类上，所以我们对**UIView**进行扩充
 
@@ -2418,9 +2463,9 @@ private func demo_DeleteBackward_Observe() {
   // 或批量移除该类手势
   view.removeAllSwipeActionsMulti()
 
-### 15、富文本的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 16、富文本的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 15.1、设置富文本 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 16.1、设置富文本 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
   UILabel().richTextBy(runs, paragraphStyle: ps)
@@ -2434,7 +2479,7 @@ private func demo_DeleteBackward_Observe() {
   UITextField().richTextBy(runs, paragraphStyle: ps)
   ```
 
-#### 15.2、富文本形式 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 16.2、富文本形式 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 下划线
 
@@ -2569,7 +2614,7 @@ private func demo_DeleteBackward_Observe() {
 
 
 
-### 16、<font id=弱引用的等价写法>**弱引用的等价写法**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 17、<font id=弱引用的等价写法>**弱引用的等价写法**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
   guard let `self` = self else { return }
@@ -2636,7 +2681,7 @@ private func demo_DeleteBackward_Observe() {
   }
   ```
 
-### 17、对通知名的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 18、对通知名的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
   import Foundation
@@ -2672,7 +2717,7 @@ private func demo_DeleteBackward_Observe() {
   > NotificationCenter.default.post(name: .userDidLogin, object: nil)
   > ```
 
-### 18、回调主线程（三大手段） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 19、回调主线程（三大手段） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **C.GCD**
 
@@ -2713,7 +2758,9 @@ private func demo_DeleteBackward_Observe() {
   }
   ```
 
-### 19、Block的安全调用（等价调用）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 20、`Block/闭包` 的安全调用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 以下为等价调用
 
 * **Objc**
 
@@ -2735,7 +2782,7 @@ private func demo_DeleteBackward_Observe() {
     success?(true)
     ```
 
-### 20、Then（自定义/使用）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 21、Then（自定义/使用）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 定义
 
@@ -2766,7 +2813,7 @@ private func demo_DeleteBackward_Observe() {
   label.textAlignment = .center
   ```
 
-### 21、获取高频系统关键量 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 22、获取高频系统关键量 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * `jobsNearestVC`
 
@@ -2810,7 +2857,51 @@ private func demo_DeleteBackward_Observe() {
   }
   ```
 
-### 22、<font color=red>推页面@带参数</font>（`push`/`present`）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 23、获取高频系统关键量 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* `jobsNearestVC`
+
+  > 从任意 **UIResponder**（View / VC）向上找到最近的宿主 VC；若全程找不到则兜底到 **`keyWindow`** 的 **root**
+
+* `jobsKeyWindow` 👉 统一的 **KeyWindow** 获取（支持 iOS 13 多场景；老系统兜底）
+
+  ```swift
+  UIApplication.jobsKeyWindow()?
+  ```
+
+* `jobsTopMostVC` 👉（递归解析）获取当前“最顶层可见”的 **UIViewController**
+
+  ```swift
+  // MARK: - 顶层可见 VC（配合 jobsKeyWindow）
+  /// 获取当前“最顶层可见”的 UIViewController（递归解析：Nav/Tab/Split/Presented）
+  static func jobsTopMostVC(from root: UIViewController? = {
+      jobsKeyWindow()?.rootViewController
+  }()) -> UIViewController? {
+      guard let root = root else { return nil }
+  
+      // UINavigationController
+      if let nav = root as? UINavigationController {
+          return jobsTopMostVC(from: nav.visibleViewController ?? nav.topViewController)
+      }
+      // UITabBarController
+      if let tab = root as? UITabBarController {
+          return jobsTopMostVC(from: tab.selectedViewController)
+      }
+      // UISplitViewController（取最右侧详情栈）
+      if let split = root as? UISplitViewController, let last = split.viewControllers.last {
+          return jobsTopMostVC(from: last)
+      }
+      // 被 present 出来的控制器
+      if let presented = root.presentedViewController {
+          // 若是 UIAlertController，按需返回其 presenting（看你业务，这里不特殊处理）
+          return jobsTopMostVC(from: presented)
+      }
+      // 其他情况：就是它本身
+      return root
+  }
+  ```
+
+### 24、<font color=red>推页面@带参数</font>（`push`/`present`）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ 封装在`UIResponder`层，能全覆盖：**任意控制器**和**任意视图**
 >
@@ -2864,6 +2955,59 @@ private func demo_DeleteBackward_Observe() {
         }
         .byPresent(self)           // 自带防重入，连点不重复
     ```
+
+### 25、懒加载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+private lazy var datePicker: UIDatePicker = {
+    return UIDatePicker()
+        .byPreferredDatePickerStyle(.wheels)
+        .byDatePickerMode(.date)
+}()
+```
+
+### 26、点击事件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 26.1、封装在`UIControl` 层的点击事件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* ```swift
+  let toggle = UISwitch()
+      .onJobsChange { sw in
+          print("开关状态：\(sw.isOn)")
+      }
+  ```
+
+* ```swift
+  let datePicker = UIDatePicker()
+      .byDatePickerMode(.date)
+      .onJobsChange { picker in
+          print("选择日期：\(picker.date)")
+      }
+  ```
+
+* ```swift
+  let slider = UISlider()
+      .onJobsChange { slider in
+          print("滑块值：\(slider.value)")
+      }
+  ```
+
+* ```swift
+  let textField = UITextField()
+      .onJobsEvent(.editingChanged) { tf in
+          print("文字变化：\(tf.text ?? "")")
+      }
+  ```
+
+#### 26.2、[**封装在`UIButton` 层的点击事件**](#UIButton) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+let button = UIButton(type: .system)
+    .byTitle("提交")
+    .onTap { btn in
+        print("✅ 使用 UIButton 专属 UIAction 实现")
+    }
+```
 
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -5627,22 +5771,20 @@ Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS
 
 * 是由 **Clang importer 自动生成的桥接视图**，并不是Apple真正写的；
 * 并不是每个类都生成对应 `.swift` 源码；在某些 API 上你点进去时，Xcode 会直接跳转到 `.h`
-* 当 [**Swift**](https://developer.apple.com/swift/) 接口文件不存在时，Xcode 会自动跳到原始的 Objective-C `*.h` 文件。
+* 当 [**Swift**](https://developer.apple.com/swift/) 接口文件不存在时，Xcode 会自动跳到原始的 **Objc** `*.h` 文件。
 
 ### 19、**`UIButton`**的配置冲突问题 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* 在 iOS 15+ 引入 **UIButton.Configuration** 体系后，一旦某个按钮启用了它（例如设置了 `button.configuration = .filled()`），UIKit 内部的绘制和状态管理机制就会**切换到新的渲染管线**。而老式写法（直接操作 `setTitle(_:for:)`、`setTitleColor(_:for:)`、`setImage(_:for:)`、`titleLabel?.font` 等）会出现异常或失效现象
+| 现象           | 原因                                                       | 解决方案                                              |
+| -------------- | ---------------------------------------------------------- | ----------------------------------------------------- |
+| 按钮文字消失   | 同时 setTitle ➕ 使用  **`UIButtonConfiguration`**.title    | 改为只用其中一种                                      |
+| 标题颜色不生效 | **`UIButtonConfiguration`** 管理颜色，setTitleColor 被忽略 | 用 `configurationUpdateHandler` 设置                  |
+| 字体失效       | titleLabel?.font 无效                                      | 需改为 `configuration.titleTextAttributesTransformer` |
+| 按钮尺寸变大   | **`UIButtonConfiguration`** 自带 contentInsets             | 手动调整 `configuration.contentInsets`                |
 
-* **UIButton.Configuration**一旦启用，就接管了传统的外观管理
-
-* 如果封装链式逻辑没有区分新旧体系，那么只要有一个按钮启用了 config，旧逻辑就会异常
-
-* | 现象           | 原因                                         | 解决方案                                              |
-  | -------------- | -------------------------------------------- | ----------------------------------------------------- |
-  | 按钮文字消失   | 同时 setTitle + 使用 configuration.title     | 改为只用其中一种                                      |
-  | 标题颜色不生效 | configuration 管理颜色，setTitleColor 被忽略 | 用 `configurationUpdateHandler` 设置                  |
-  | 字体失效       | titleLabel?.font 无效                        | 需改为 `configuration.titleTextAttributesTransformer` |
-  | 按钮尺寸变大   | configuration 自带 contentInsets             | 手动调整 `configuration.contentInsets`                |
+* 在 iOS 15+ 引入  **`UIButtonConfiguration`** 体系后，一旦某个按钮启用了它（例如设置了 `button.configuration = .filled()`），UIKit 内部的绘制和状态管理机制就会**切换到新的渲染管线**。而老式写法（直接操作 `setTitle(_:for:)`、`setTitleColor(_:for:)`、`setImage(_:for:)`、`titleLabel?.font` 等）会出现异常或失效现象
+*  **`UIButtonConfiguration`**一旦启用，就接管了传统的外观管理
+* 如果封装链式逻辑没有区分新旧体系，那么只要有一个按钮启用了 **`UIButtonConfiguration`**，旧逻辑就会异常
 
 ### 20、<font color=red id=COW>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite（先共享，写的时候才真正拷贝）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 

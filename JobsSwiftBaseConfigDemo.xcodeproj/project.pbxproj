@@ -59,6 +59,9 @@
 		04CF03152E8A75E80083ACF0 /* JobsRichText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF03142E8A75E70083ACF0 /* JobsRichText.swift */; };
 		04CF03172E8A76500083ACF0 /* RichTextDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF03162E8A76490083ACF0 /* RichTextDemoVC.swift */; };
 		04CF03192E8A80CE0083ACF0 /* AppTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF03182E8A80CA0083ACF0 /* AppTools.swift */; };
+		04D0C96C2E8CCA7400580020 /* UIBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D0C96B2E8CCA7200580020 /* UIBarItem.swift */; };
+		04D0C96E2E8CD14B00580020 /* UIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D0C96D2E8CD14900580020 /* UIControl.swift */; };
+		04D0C9722E8CD39300580020 /* JobsControlEventsDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D0C9712E8CD39200580020 /* JobsControlEventsDemoVC.swift */; };
 		28B3B2C7F8E21BC854851508 /* Pods_JobsSwiftBaseConfigDemoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA9261964B37E24BC5754CC1 /* Pods_JobsSwiftBaseConfigDemoUITests.framework */; };
 		39AB45F55599F62A12939F29 /* Pods_JobsSwiftBaseConfigDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE98D9D036CE4AAA3EA72C02 /* Pods_JobsSwiftBaseConfigDemoTests.framework */; };
 		51D5A6F95393861C97CA7D45 /* Pods_JobsSwiftBaseConfigDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3933E8883C7E8B6A888BA7 /* Pods_JobsSwiftBaseConfigDemo.framework */; };
@@ -185,6 +188,9 @@
 		04CF03142E8A75E70083ACF0 /* JobsRichText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsRichText.swift; sourceTree = "<group>"; };
 		04CF03162E8A76490083ACF0 /* RichTextDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichTextDemoVC.swift; sourceTree = "<group>"; };
 		04CF03182E8A80CA0083ACF0 /* AppTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTools.swift; sourceTree = "<group>"; };
+		04D0C96B2E8CCA7200580020 /* UIBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBarItem.swift; sourceTree = "<group>"; };
+		04D0C96D2E8CD14900580020 /* UIControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIControl.swift; sourceTree = "<group>"; };
+		04D0C9712E8CD39200580020 /* JobsControlEventsDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsControlEventsDemoVC.swift; sourceTree = "<group>"; };
 		1D3933E8883C7E8B6A888BA7 /* Pods_JobsSwiftBaseConfigDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JobsSwiftBaseConfigDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43AC2F32E62C31BD8D0F4D55 /* Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemoTests/Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		498373BA0509D1FCFC7035BF /* Pods-JobsSwiftBaseConfigDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemo.release.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemo/Pods-JobsSwiftBaseConfigDemo.release.xcconfig"; sourceTree = "<group>"; };
@@ -389,6 +395,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				04D0C9712E8CD39200580020 /* JobsControlEventsDemoVC.swift */,
 				0477D9862E8BEF62002C6427 /* KeyboardDemoVC.swift */,
 				0477D97E2E8BDBB7002C6427 /* JobsCountdownDemoVC.swift */,
 				0477D9782E8BADB1002C6427 /* DemoVC.swift */,
@@ -551,6 +558,8 @@
 		C564FEEA2E0AAC2B0079B5C1 /* UIKit.extension */ = {
 			isa = PBXGroup;
 			children = (
+				04D0C96D2E8CD14900580020 /* UIControl.swift */,
+				04D0C96B2E8CCA7200580020 /* UIBarItem.swift */,
 				0477D9842E8BEACA002C6427 /* Reactive.swift */,
 				0477D9762E8B937A002C6427 /* UIResponder.swift */,
 				0477D96E2E8B8478002C6427 /* UIApplication.swift */,
@@ -883,6 +892,7 @@
 				C564FCB22E0959990079B5C1 /* EmptyView.swift in Sources */,
 				045920FC2E854FA9008C8D6A /* UInt.swift in Sources */,
 				045920FF2E854FBD008C8D6A /* UInt8.swift in Sources */,
+				04D0C96C2E8CCA7400580020 /* UIBarItem.swift in Sources */,
 				C564FC8D2E0959640079B5C1 /* UIBarButtonItem.swift in Sources */,
 				C564FC2E2E0958E80079B5C1 /* HUDHelper.swift in Sources */,
 				045920F22E854F79008C8D6A /* Int.swift in Sources */,
@@ -909,6 +919,7 @@
 				0477D97D2E8BDB95002C6427 /* JobsCountdownButton.swift in Sources */,
 				04AC74C52E86682E004B8305 /* Notification.swift in Sources */,
 				C5489B5D2E0AB2D300B05447 /* JobsBlockDef.swift in Sources */,
+				04D0C9722E8CD39300580020 /* JobsControlEventsDemoVC.swift in Sources */,
 				C564FC8A2E0959640079B5C1 /* UISegmentedControl.swift in Sources */,
 				0477D9772E8B9381002C6427 /* UIResponder.swift in Sources */,
 				C564FC892E0959640079B5C1 /* UICollectionView.swift in Sources */,
@@ -933,6 +944,7 @@
 				04A18E4D2E86533B004BB9DC /* UIImage.swift in Sources */,
 				045921122E855769008C8D6A /* JobsPaddedLabel.swift in Sources */,
 				0459210C2E855004008C8D6A /* Float80.swift in Sources */,
+				04D0C96E2E8CD14B00580020 /* UIControl.swift in Sources */,
 				0477D9712E8B897D002C6427 /* SafetyPushDemoVC.swift in Sources */,
 				C564FCAC2E09597C0079B5C1 /* ViewController.swift in Sources */,
 				C564FC962E0959640079B5C1 /* Inlines.swift in Sources */,

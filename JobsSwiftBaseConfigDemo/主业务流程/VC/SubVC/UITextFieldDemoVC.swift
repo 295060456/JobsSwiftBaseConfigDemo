@@ -13,7 +13,9 @@ import RxRelay
 import NSObject_Rx
 import ObjectiveC
 
-final class UITextFieldDemoVC: UIViewController, UITextFieldDelegate, HasDisposeBag {
+final class UITextFieldDemoVC: UIViewController,
+                                UITextFieldDelegate,
+                                HasDisposeBag {
     // MARK: - UI
     // 左边信封图标
     private static func makeIcon(_ name: String) -> UIImageView {
@@ -29,7 +31,15 @@ final class UITextFieldDemoVC: UIViewController, UITextFieldDelegate, HasDispose
         let bar = UIToolbar()
         bar.items = [
             UIBarButtonItem(systemItem: .flexibleSpace),
-            UIBarButtonItem(title: "完成", style: .done, target: self, action: #selector(dismissKB))
+            UIBarButtonItem()
+                .byTitle("完成")
+                .byTitleFont(.systemFont(ofSize: 15))
+                .byTitleColor(.systemYellow)
+                .byStyle(.done)
+                .onTap { [weak self] _ in
+                    guard let self = self else { return }   // ✅ 确保生命周期安全
+                    view.endEditing(true)
+                },
         ]
         bar.sizeToFit()
         return bar
@@ -89,10 +99,15 @@ final class UITextFieldDemoVC: UIViewController, UITextFieldDelegate, HasDispose
     // 密码输入框（带“眼睛”）@byLimitLength（5）
     private lazy var passwordTF: UITextField = {
         let eye = UIButton(type: .system)
-        eye.setImage(UIImage(systemName: "eye.slash"), for: .normal)
-        eye.setImage(UIImage(systemName: "eye"), for: .selected)
-        eye.contentEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 6)
-        eye.addTarget(self, action: #selector(toggleEye), for: .touchUpInside)
+            .byImage(UIImage(systemName: "eye.slash"), for: .normal)   // 未选中
+            .byImage(UIImage(systemName: "eye"), for: .selected)       // 选中
+            .byContentEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 6))
+            .onTap { [weak self] sender in
+                guard let self else { return }                // 或写成 guard let strongSelf = self else { return }
+                sender.isSelected.toggle()
+                self.passwordTF.isSecureTextEntry.toggle()
+                self.passwordTF.togglePasswordVisibility()    // 你自己的游标/清空修复
+            }
 
         let tf = UITextField()
             .byDelegate(self) // 数据源
@@ -120,9 +135,26 @@ final class UITextFieldDemoVC: UIViewController, UITextFieldDelegate, HasDispose
     private lazy var passwordAccessory: UIToolbar = {
         let bar = UIToolbar()
         bar.items = [
-            UIBarButtonItem(title: "清空", style: .plain, target: self, action: #selector(clearPassword)),
+            UIBarButtonItem()
+                .byTitle("清空")
+                .byTitleFont(.systemFont(ofSize: 15))
+                .byTitleColor(.systemRed)
+                .byStyle(.plain)
+                .onTap { [weak self] _ in
+                    guard let self = self else { return }   // ✅ 确保生命周期安全
+                    self.passwordTF.text = ""
+                    // 也可以：self.passwordTF.rx.text.onNext("")
+                },
             UIBarButtonItem(systemItem: .flexibleSpace),
-            UIBarButtonItem(title: "完成", style: .done, target: self, action: #selector(dismissKB))
+            UIBarButtonItem()
+                .byTitle("完成")
+                .byTitleFont(.systemFont(ofSize: 15))
+                .byTitleColor(.systemYellow)
+                .byStyle(.done)
+                .onTap { [weak self] _ in
+                    guard let self = self else { return }   // ✅ 确保生命周期安全
+                    view.endEditing(true)
+                },
         ]
         bar.sizeToFit()
         return bar
@@ -130,10 +162,9 @@ final class UITextFieldDemoVC: UIViewController, UITextFieldDelegate, HasDispose
 
     // 自定义 inputView（示例：日期选择器，只为展示 byInputView 用法）
     private lazy var datePicker: UIDatePicker = {
-        let dp = UIDatePicker()
-        dp.preferredDatePickerStyle = .wheels
-        dp.datePickerMode = .date
-        return dp
+        return UIDatePicker()
+            .byPreferredDatePickerStyle(.wheels)
+            .byDatePickerMode(.date)
     }()
 
     override func loadView() {
@@ -192,22 +223,6 @@ final class UITextFieldDemoVC: UIViewController, UITextFieldDelegate, HasDispose
             .subscribe(onNext: { print("delete pressed") })
             .disposed(by: rx.disposeBag)
     }
-
-    // MARK: - Actions
-    @objc private func dismissKB() { view.endEditing(true) }
-
-    @objc private func clearPassword() {
-        passwordTF.text = ""
-        // 也可以：passwordTF.rx.text.onNext("")
-    }
-
-    @objc private func toggleEye(_ sender: UIButton) {
-        sender.isSelected.toggle()
-        passwordTF.isSecureTextEntry.toggle()
-        // 修正 iOS 切换 secureTextEntry 的光标/清空问题
-        passwordTF.togglePasswordVisibility()
-    }
-
     // MARK: - UITextFieldDelegate
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField === emailTF {

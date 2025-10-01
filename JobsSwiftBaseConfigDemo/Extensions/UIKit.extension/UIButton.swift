@@ -72,8 +72,14 @@ extension UIButton {
     }
 
     @discardableResult
-    func byFont(_ font: UIFont) -> Self {
+    func byTitleFont(_ font: UIFont) -> Self {
         self.titleLabel?.font = font
+        return self
+    }
+
+    @discardableResult
+    func bySubtitleFont(_ font: UIFont) -> Self {
+        self.subtitleLabel?.font = font
         return self
     }
 
@@ -639,5 +645,14 @@ public extension UIButton {
                 return attrs
             }
         }
+    }
+}
+// MARK: - 关联属性：当前倒计时秒数（供 configurationUpdateHandler 拉取）
+private var _jobsSecKey: Void?
+public extension UIButton {
+    /// 保存“当前倒计时剩余秒数”
+    var jobs_sec: Int {
+        get { (objc_getAssociatedObject(self, &_jobsSecKey) as? Int) ?? 0 }
+        set { objc_setAssociatedObject(self, &_jobsSecKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
 }

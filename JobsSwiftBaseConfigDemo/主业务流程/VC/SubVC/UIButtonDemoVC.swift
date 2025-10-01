@@ -43,7 +43,7 @@ final class UIButtonDemoVC: UIViewController {
             let btnBasic = UIButton(type: .system)
                 .byTitle("1) 基础链式：Title / Color / Font / Image / BG")
                 .byTitleColor(.white)
-                .byFont(.systemFont(ofSize: 15, weight: .medium))
+                .byTitleFont(.systemFont(ofSize: 15, weight: .medium))
                 .byBackgroundColor(.systemBlue)
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
                 .onTap { _ in print("基础链式 tapped") }
@@ -64,7 +64,7 @@ final class UIButtonDemoVC: UIViewController {
             let btnState = UIButton(type: .system)
                 .byTitle("2) StateProxy：Normal / Highlighted", for: .normal)
                 .byTitleColor(.white, for: .normal)
-                .byFont(.systemFont(ofSize: 15, weight: .medium))
+                .byTitleFont(.systemFont(ofSize: 15, weight: .medium))
                 .byBackgroundColor(.systemIndigo, for: .normal)
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
                 .onTap { _ in print("StateProxy tapped") }
@@ -83,7 +83,7 @@ final class UIButtonDemoVC: UIViewController {
             let btnBG = UIButton(type: .system)
                 .byTitle("3) 背景色兜底（Normal / Disabled）")
                 .byTitleColor(.white)
-                .byFont(.systemFont(ofSize: 15, weight: .medium))
+                .byTitleFont(.systemFont(ofSize: 15, weight: .medium))
                 .byBackgroundColor(.systemTeal, for: .normal)
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
                 .onTap { btn in
@@ -102,7 +102,7 @@ final class UIButtonDemoVC: UIViewController {
             let btnInsets = UIButton(type: .system)
                 .byTitle("4) ContentInsets / EdgeInsets（左右 24）")
                 .byTitleColor(.white)
-                .byFont(.systemFont(ofSize: 15, weight: .medium))
+                .byTitleFont(.systemFont(ofSize: 15, weight: .medium))
                 .byBackgroundColor(.systemGreen)
 
             // iOS 15+ 优先 directionalInsets；否则回落到 UIEdgeInsets
@@ -116,7 +116,7 @@ final class UIButtonDemoVC: UIViewController {
             let btnPlacement = UIButton(type: .system)
                 .byTitle("5) imagePlacement = .trailing, padding=8")
                 .byTitleColor(.white)
-                .byFont(.systemFont(ofSize: 15, weight: .medium))
+                .byTitleFont(.systemFont(ofSize: 15, weight: .medium))
                 .byBackgroundColor(.systemOrange)
                 .byContentEdgeInsets(UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12))
 
@@ -134,7 +134,7 @@ final class UIButtonDemoVC: UIViewController {
             let btnSubtitle = UIButton(type: .system)
                 .byTitle("6) 主标题")
                 .byTitleColor(.white)
-                .byFont(.systemFont(ofSize: 15, weight: .semibold))
+                .byTitleFont(.systemFont(ofSize: 15, weight: .semibold))
                 .byBackgroundColor(.systemPink)
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
                 .bySubtitle("副标题：iOS15+ 走 configuration.subtitle", color: .white, font: .systemFont(ofSize: 12))
@@ -147,7 +147,7 @@ final class UIButtonDemoVC: UIViewController {
             let btnMenu = UIButton(type: .system)
                 .byTitle("7) 菜单作为主动作（点我弹出）")
                 .byTitleColor(.white)
-                .byFont(.systemFont(ofSize: 15, weight: .medium))
+                .byTitleFont(.systemFont(ofSize: 15, weight: .medium))
                 .byBackgroundColor(.systemBrown)
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
 
@@ -169,7 +169,7 @@ final class UIButtonDemoVC: UIViewController {
             let btnPointer = UIButton(type: .system)
                 .byTitle("8) Pointer Interaction（iPad/悬停设备）")
                 .byTitleColor(.white)
-                .byFont(.systemFont(ofSize: 15, weight: .medium))
+                .byTitleFont(.systemFont(ofSize: 15, weight: .medium))
                 .byBackgroundColor(.systemCyan)
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
                 .onTap { _ in print("Pointer tapped") }
@@ -186,7 +186,7 @@ final class UIButtonDemoVC: UIViewController {
             let btnRole = UIButton(type: .system)
                 .byTitle("9) Role = .destructive（删除）")
                 .byTitleColor(.white)
-                .byFont(.systemFont(ofSize: 15, weight: .semibold))
+                .byTitleFont(.systemFont(ofSize: 15, weight: .semibold))
                 .byBackgroundColor(.systemRed)
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
                 .onTap { _ in print("Destructive tapped") }
@@ -203,7 +203,7 @@ final class UIButtonDemoVC: UIViewController {
             let btnToggle = UIButton(type: .system)
                 .byTitle("10) 点击切换 selected", for: .normal)
                 .byTitleColor(.white, for: .normal)
-                .byFont(.systemFont(ofSize: 15, weight: .medium))
+                .byTitleFont(.systemFont(ofSize: 15, weight: .medium))
                 .byBackgroundColor(.systemMint, for: .normal)
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
                 .for(.selected).title("10) ✅ 已选择")
@@ -224,7 +224,7 @@ final class UIButtonDemoVC: UIViewController {
             let btnUpdate = UIButton(type: .system)
                 .byTitle("11) configurationUpdateHandler：高亮时降透明")
                 .byTitleColor(.white)
-                .byFont(.systemFont(ofSize: 15, weight: .medium))
+                .byTitleFont(.systemFont(ofSize: 15, weight: .medium))
                 .byBackgroundColor(.systemBlue)
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
 
@@ -247,7 +247,7 @@ final class UIButtonDemoVC: UIViewController {
             let btnRotate = UIButton(type: .system)
                 .byTitle("12) 旋转动画（点击切换）")
                 .byTitleColor(.white)
-                .byFont(.systemFont(ofSize: 15, weight: .medium))
+                .byTitleFont(.systemFont(ofSize: 15, weight: .medium))
                 .byBackgroundColor(.systemPurple)
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
                 .onTap { [weak self] b in
@@ -277,7 +277,7 @@ final class UIButtonDemoVC: UIViewController {
             let btnLong = UIButton(type: .system)
                 .byTitle("13) 长按 0.8s 触发（含手势对象回调）")
                 .byTitleColor(.white)
-                .byFont(.systemFont(ofSize: 15, weight: .medium))
+                .byTitleFont(.systemFont(ofSize: 15, weight: .medium))
                 .byBackgroundColor(.systemGray)
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
                 .onLongPress(minimumPressDuration: 0.8) { btn, gr in
@@ -298,7 +298,7 @@ final class UIButtonDemoVC: UIViewController {
             let btnAction = UIButton(type: .system)
                 .byTitle("14) onTap：iOS14+走UIAction，低版本走 addAction 兜底")
                 .byTitleColor(.white)
-                .byFont(.systemFont(ofSize: 15, weight: .medium))
+                .byTitleFont(.systemFont(ofSize: 15, weight: .medium))
                 .byBackgroundColor(.systemBlue)
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
                 .onTap { _ in
@@ -313,7 +313,7 @@ final class UIButtonDemoVC: UIViewController {
             let btnSymbol = UIButton(type: .system)
                 .byTitle("15) per-state Symbol 配置（Normal/Highlighted）")
                 .byTitleColor(.white)
-                .byFont(.systemFont(ofSize: 15, weight: .medium))
+                .byTitleFont(.systemFont(ofSize: 15, weight: .medium))
                 .byBackgroundColor(.systemOrange)
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
 

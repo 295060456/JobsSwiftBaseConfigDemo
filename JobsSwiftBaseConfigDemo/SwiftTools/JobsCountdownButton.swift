@@ -27,7 +27,6 @@ public enum JobsCountdownMode {
         }
     }
 }
-
 // ================================== 文本输出（兼容老系统） ==================================
 public enum JobsCountdownTitle {
     case plain(String)
@@ -35,10 +34,11 @@ public enum JobsCountdownTitle {
 }
 
 @available(iOS 15.0, *)
-fileprivate extension AttributedString {
-    init(_ ns: NSAttributedString) { self = AttributedString(ns) }
+extension AttributedString {
+    init?(safeFrom ns: NSAttributedString) {
+        self.init(ns)   // ✅ 使用无标签构造器
+    }
 }
-
 // ================================== 计时内核（可插拔） ==================================
 public protocol JobsTicker: AnyObject {
     var isRunning: Bool { get }
