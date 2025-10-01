@@ -17,7 +17,36 @@ import UIKit
  */
 // MARK: - Key Window（跨版本最大兼容）
 public extension UIApplication {
-    /// 统一的 KeyWindow 获取（支持 iOS 13 多场景；老系统兜底）
+    /// 顶层可见 VC（配合 jobsKeyWindow）
+    // MARK: - 获取当前“最顶层可见”的 UIViewController（递归解析：Nav/Tab/Split/Presented）
+    static func jobsTopMostVC(from root: UIViewController? = {
+        jobsKeyWindow()?.rootViewController
+    }()) -> UIViewController? {
+        guard let root = root else { return nil }
+        // UINavigationController
+        if let nav = root as? UINavigationController {
+            return jobsTopMostVC(from: nav.visibleViewController ?? nav.topViewController)
+        }
+        // UITabBarController
+        if let tab = root as? UITabBarController {
+            return jobsTopMostVC(from: tab.selectedViewController)
+        }
+        // UISplitViewController（取最右侧详情栈）
+        if let split = root as? UISplitViewController, let last = split.viewControllers.last {
+            return jobsTopMostVC(from: last)
+        }
+        // 被 present 出来的控制器
+        if let presented = root.presentedViewController {
+            // 若是 UIAlertController，按需返回其 presenting（看你业务，这里不特殊处理）
+            return jobsTopMostVC(from: presented)
+        }
+        // 其他情况：就是它本身
+        return root
+    }
+}
+
+public extension UIApplication {
+    // MARK: - 统一的 KeyWindow 获取（支持 iOS 13 多场景；老系统兜底）
     static func jobsKeyWindow(in scene: UIScene? = nil) -> UIWindow? {
         if #available(iOS 13.0, *) {
             // 1) 场景优先：先用传入的 scene；否则用所有 connectedScenes
@@ -55,31 +84,27 @@ public extension UIApplication {
                 ?? UIApplication.shared.windows.first
         }
     }
-    // MARK: - 顶层可见 VC（配合 jobsKeyWindow）
-    /// 获取当前“最顶层可见”的 UIViewController（递归解析：Nav/Tab/Split/Presented）
-    static func jobsTopMostVC(from root: UIViewController? = {
-        jobsKeyWindow()?.rootViewController
-    }()) -> UIViewController? {
-        guard let root = root else { return nil }
-
-        // UINavigationController
-        if let nav = root as? UINavigationController {
-            return jobsTopMostVC(from: nav.visibleViewController ?? nav.topViewController)
-        }
-        // UITabBarController
-        if let tab = root as? UITabBarController {
-            return jobsTopMostVC(from: tab.selectedViewController)
-        }
-        // UISplitViewController（取最右侧详情栈）
-        if let split = root as? UISplitViewController, let last = split.viewControllers.last {
-            return jobsTopMostVC(from: last)
-        }
-        // 被 present 出来的控制器
-        if let presented = root.presentedViewController {
-            // 若是 UIAlertController，按需返回其 presenting（看你业务，这里不特殊处理）
-            return jobsTopMostVC(from: presented)
-        }
-        // 其他情况：就是它本身
-        return root
+    // MARK: - 全局安全区 Insets（无视当前 VC）
+    static var jobsSafeAreaInsets: UIEdgeInsets {
+        jobsKeyWindow()?.safeAreaInsets ?? .zero
+    }
+    // MARK: - 顶部安全区（状态栏 + 自定义导航栏）
+    static var jobsSafeTopInset: CGFloat {
+        let statusBarHeight = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?
+            .statusBarManager?.statusBarFrame.height ?? 0
+        let navHeight: CGFloat = 44
+        return statusBarHeight + navHeight
+    }
+    // MARK: - 底部安全区（Home Indicator / TabBar）
+    static var jobsSafeBottomInset: CGFloat {
+        jobsKeyWindow()?.safeAreaInsets.bottom ?? 0
+    }
+    // MARK: - 左安全区（横屏时）
+    static var jobsSafeLeftInset: CGFloat {
+        jobsKeyWindow()?.safeAreaInsets.left ?? 0
+    }
+    // MARK: - 右安全区（横屏时）
+    static var jobsSafeRightInset: CGFloat {
+        jobsKeyWindow()?.safeAreaInsets.right ?? 0
     }
 }

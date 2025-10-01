@@ -240,7 +240,13 @@ public extension UITextField {
     // MARK: 🔢 iPad 弹窗控制
     @discardableResult
     func byAllowsNumberPadPopover(_ allows: Bool) -> Self {
-        self.allowsNumberPadPopover = allows
+        if self.responds(to: Selector(("setAllowsNumberPadPopover:"))) {
+            self.setValue(allows, forKey: "allowsNumberPadPopover")
+        } else {
+            #if DEBUG
+            print("⚠️ 当前系统不支持 allowsNumberPadPopover 属性")
+            #endif
+        }
         return self
     }
     // MARK: 🎨 左右视图 / 清除按钮

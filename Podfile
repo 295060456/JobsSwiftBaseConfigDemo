@@ -65,6 +65,7 @@ def swiftAppCommon
   pod 'RxCocoa'                            # UI 绑定：UIKit、AppKit 的扩展
   pod 'RxRelay'                            # 安全替代 Variable，常用于 ViewModel
   pod 'NSObject+Rx'
+  pod 'ESPullToRefresh'
 
   pod 'MJRefresh'
 end

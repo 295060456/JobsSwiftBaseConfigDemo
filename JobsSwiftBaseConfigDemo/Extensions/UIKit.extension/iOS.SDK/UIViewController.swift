@@ -13,15 +13,6 @@
     import UIKit
 #endif
 
-extension UIViewController {
-    func doAsync(after delay: TimeInterval = 1.0,
-                 _ block: @escaping (Self) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
-            guard let strongSelf = self else { return }
-            block(strongSelf as! Self)
-        }
-    }
-}
 @MainActor
 extension UIViewController {
     @discardableResult
@@ -262,5 +253,15 @@ public extension UIViewController {
         nav.modalPresentationStyle = modalStyle
         present(nav, animated: animated, completion: nil)
         return self
+    }
+}
+
+extension UIViewController {
+    func doAsync(after delay: TimeInterval = 1.0,
+                 _ block: @escaping (Self) -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+            guard let strongSelf = self else { return }
+            block(strongSelf as! Self)
+        }
     }
 }

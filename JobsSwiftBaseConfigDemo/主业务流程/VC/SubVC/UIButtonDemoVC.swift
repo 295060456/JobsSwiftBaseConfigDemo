@@ -10,6 +10,14 @@ import SnapKit
 
 final class UIButtonDemoVC: UIViewController {
 
+    // 滚动容器
+    private let scroll = UIScrollView().then {
+        $0.alwaysBounceVertical = true
+        $0.showsVerticalScrollIndicator = true
+        $0.contentInsetAdjustmentBehavior = .automatic
+        $0.keyboardDismissMode = .onDrag
+    }
+
     // 用垂直栈统一承载所有演示按钮，便于扩展/复制
     private let stack = UIStackView().then {
         $0.axis = .vertical
@@ -28,10 +36,22 @@ final class UIButtonDemoVC: UIViewController {
     }
 
     private func setupLayout() {
-        view.addSubview(stack)
+        // 1) 加入 ScrollView
+        view.addSubview(scroll)
+        scroll.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+
+        // 2) 将 stack 放入 ScrollView，并用 contentLayoutGuide/ frameLayoutGuide 约束
+        scroll.addSubview(stack)
         stack.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
-            make.left.right.equalToSuperview().inset(16)
+            // 内容四边贴 contentLayoutGuide
+            make.top.equalTo(scroll.contentLayoutGuide.snp.top).offset(16)
+            make.left.equalTo(scroll.contentLayoutGuide.snp.left).offset(16)
+            make.right.equalTo(scroll.contentLayoutGuide.snp.right).inset(16)
+            make.bottom.equalTo(scroll.contentLayoutGuide.snp.bottom).inset(16)
+            // 宽度跟随可视区域，确保只垂直滚动
+            make.width.equalTo(scroll.frameLayoutGuide.snp.width).offset(-32)
         }
     }
 
@@ -48,7 +68,6 @@ final class UIButtonDemoVC: UIViewController {
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
                 .onTap { _ in print("基础链式 tapped") }
 
-            // SF Symbol 示例（iOS 13+ 可按需设置符号大小）
             if #available(iOS 13.0, *) {
                 let img = UIImage(systemName: "bolt.fill")
                 _ = btnBasic.byImage(img, for: .normal)
@@ -69,7 +88,6 @@ final class UIButtonDemoVC: UIViewController {
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
                 .onTap { _ in print("StateProxy tapped") }
 
-            // 使用 StateProxy 配置 highlighted 的样式
             btnState
                 .for(.highlighted).title("2) Highlighted 标题")
                 .for(.highlighted).titleColor(.yellow)
@@ -86,12 +104,8 @@ final class UIButtonDemoVC: UIViewController {
                 .byTitleFont(.systemFont(ofSize: 15, weight: .medium))
                 .byBackgroundColor(.systemTeal, for: .normal)
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
-                .onTap { btn in
-                    // 点击切换 enable，观察 .disabled 状态样式
-                    btn.isEnabled.toggle()
-                }
+                .onTap { btn in btn.isEnabled.toggle() }
 
-            // 非 normal 的 state 一律调用兜底方法
             btnBG.for(.disabled).backgroundColor(.systemGray)
 
             stack.addArrangedSubview(btnBG)
@@ -105,9 +119,7 @@ final class UIButtonDemoVC: UIViewController {
                 .byTitleFont(.systemFont(ofSize: 15, weight: .medium))
                 .byBackgroundColor(.systemGreen)
 
-            // iOS 15+ 优先 directionalInsets；否则回落到 UIEdgeInsets
             _ = btnInsets.byContentInsets(NSDirectionalEdgeInsets(top: 8, leading: 24, bottom: 8, trailing: 24))
-
             stack.addArrangedSubview(btnInsets)
         }
 
@@ -125,7 +137,6 @@ final class UIButtonDemoVC: UIViewController {
                     .byTintColor(.white)
             }
             _ = btnPlacement.byImagePlacement(.trailing, padding: 8)
-
             stack.addArrangedSubview(btnPlacement)
         }
 
@@ -138,7 +149,6 @@ final class UIButtonDemoVC: UIViewController {
                 .byBackgroundColor(.systemPink)
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
                 .bySubtitle("副标题：iOS15+ 走 configuration.subtitle", color: .white, font: .systemFont(ofSize: 12))
-
             stack.addArrangedSubview(btnSubtitle)
         }
 
@@ -157,10 +167,9 @@ final class UIButtonDemoVC: UIViewController {
                     UIAction(title: "分享", image: UIImage(systemName: "square.and.arrow.up")) { _ in print("分享") },
                     UIAction(title: "删除", image: UIImage(systemName: "trash"), attributes: .destructive) { _ in print("删除") }
                 ]
-                let menu = UIMenu(title: "操作", children: items)
-                _ = btnMenu.byMenu(menu).byShowsMenuAsPrimaryAction(true)
+                _ = btnMenu.byMenu(UIMenu(title: "操作", children: items))
+                    .byShowsMenuAsPrimaryAction(true)
             }
-
             stack.addArrangedSubview(btnMenu)
         }
 
@@ -177,11 +186,10 @@ final class UIButtonDemoVC: UIViewController {
             if #available(iOS 13.4, *) {
                 _ = btnPointer.byPointerInteractionEnabled(true)
             }
-
             stack.addArrangedSubview(btnPointer)
         }
 
-        // 9) Role（iOS14+）：.destructive 等；演示 destructive 风格
+        // 9) Role（iOS14+）
         do {
             let btnRole = UIButton(type: .system)
                 .byTitle("9) Role = .destructive（删除）")
@@ -191,14 +199,11 @@ final class UIButtonDemoVC: UIViewController {
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
                 .onTap { _ in print("Destructive tapped") }
 
-            if #available(iOS 14.0, *) {
-                _ = btnRole.byRole(.destructive)
-            }
-
+            if #available(iOS 14.0, *) { _ = btnRole.byRole(.destructive) }
             stack.addArrangedSubview(btnRole)
         }
 
-        // 10) 主动作切换 selected（iOS15+）：byChangesSelectionAsPrimaryAction
+        // 10) 主动作切换 selected（iOS15+）
         do {
             let btnToggle = UIButton(type: .system)
                 .byTitle("10) 点击切换 selected", for: .normal)
@@ -212,14 +217,12 @@ final class UIButtonDemoVC: UIViewController {
             if #available(iOS 15.0, *) {
                 _ = btnToggle.byChangesSelectionAsPrimaryAction(true)
             } else {
-                // 低版本手动切换
                 _ = btnToggle.onTap { b in b.isSelected.toggle() }
             }
-
             stack.addArrangedSubview(btnToggle)
         }
 
-        // 11) Configuration Update（iOS15+）：根据 state 动态更新样式
+        // 11) Configuration Update（iOS15+）
         do {
             let btnUpdate = UIButton(type: .system)
                 .byTitle("11) configurationUpdateHandler：高亮时降透明")
@@ -233,12 +236,10 @@ final class UIButtonDemoVC: UIViewController {
                     .byAutomaticallyUpdatesConfiguration(true)
                     .byConfigurationUpdateHandler { btn in
                         let cfg = btn.configuration ?? .plain()
-                        // 根据 state 动态变更（这里只是演示调 alpha）
                         btn.alpha = btn.isHighlighted ? 0.6 : 1.0
                         btn.configuration = cfg
                     }
             }
-
             stack.addArrangedSubview(btnUpdate)
         }
 
@@ -252,15 +253,11 @@ final class UIButtonDemoVC: UIViewController {
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
                 .onTap { [weak self] b in
                     guard self != nil else { return }
-                    // 防止频繁点击抖动
                     b.disableAfterClick(interval: 0.25)
-
                     if b.isRotating() {
-                        _ = b.stopRotating(resetTransformOnStop: true)
-                        print("停止旋转")
+                        _ = b.stopRotating(resetTransformOnStop: true); print("停止旋转")
                     } else {
-                        _ = b.startRotating(duration: 0.9, scope: .imageView, clockwise: true)
-                        print("开始旋转")
+                        _ = b.startRotating(duration: 0.9, scope: .imageView, clockwise: true); print("开始旋转")
                     }
                 }
 
@@ -268,11 +265,10 @@ final class UIButtonDemoVC: UIViewController {
                 _ = btnRotate.byImage(UIImage(systemName: "arrow.2.circlepath.circle.fill"), for: .normal)
                     .byTintColor(.white)
             }
-
             stack.addArrangedSubview(btnRotate)
         }
 
-        // 13) 长按事件：onLongPress(minimumPressDuration:)
+        // 13) 长按事件
         do {
             let btnLong = UIButton(type: .system)
                 .byTitle("13) 长按 0.8s 触发（含手势对象回调）")
@@ -281,19 +277,13 @@ final class UIButtonDemoVC: UIViewController {
                 .byBackgroundColor(.systemGray)
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
                 .onLongPress(minimumPressDuration: 0.8) { btn, gr in
-                    if gr.state == .began {
-                        print("长按开始 on \(btn)")
-                        btn.alpha = 0.7
-                    } else if gr.state == .ended || gr.state == .cancelled {
-                        btn.alpha = 1.0
-                        print("长按结束")
-                    }
+                    if gr.state == .began { btn.alpha = 0.7; print("长按开始 on \(btn)") }
+                    else if gr.state == .ended || gr.state == .cancelled { btn.alpha = 1.0; print("长按结束") }
                 }
-
             stack.addArrangedSubview(btnLong)
         }
 
-        // 14) UIAction（iOS14+）与低版本闭包回退：onTap 已封装优先 UIAction
+        // 14) onTap 统一封装（UIAction / addTarget 兜底）
         do {
             let btnAction = UIButton(type: .system)
                 .byTitle("14) onTap：iOS14+走UIAction，低版本走 addAction 兜底")
@@ -301,14 +291,11 @@ final class UIButtonDemoVC: UIViewController {
                 .byTitleFont(.systemFont(ofSize: 15, weight: .medium))
                 .byBackgroundColor(.systemBlue)
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
-                .onTap { _ in
-                    print("onTap 统一入口（内部已区分 iOS14+ / 低版本）")
-                }
-
+                .onTap { _ in print("onTap 统一入口（内部已区分 iOS14+ / 低版本）") }
             stack.addArrangedSubview(btnAction)
         }
 
-        // 15) iOS13+ 的 per-state Symbol 配置（preferredSymbolConfiguration）
+        // 15) per-state Symbol 配置
         do {
             let btnSymbol = UIButton(type: .system)
                 .byTitle("15) per-state Symbol 配置（Normal/Highlighted）")
@@ -327,4 +314,3 @@ final class UIButtonDemoVC: UIViewController {
         }
     }
 }
-
