@@ -51,20 +51,22 @@ use_frameworks! :linkage => :static
 # 几乎每个App都会用到的
 def swiftAppCommon
   pod 'IQKeyboardManager'
-  pod 'Alamofire', '~> 5.9'      # ❤️ 显式指定新版本
+  pod 'Alamofire', '~> 5.9'                # ❤️ 显式指定新版本
   pod 'Moya', :modular_headers => true
-  pod 'SDWebImage'
+  pod 'Kingfisher'                         # Swift上的SDWebImage
   pod 'GKNavigationBarSwift'
-  pod 'ReactiveSwift', '~> 6.7'  # ❤️ 新版本支持 arm64 模拟器
+  pod 'ReactiveSwift', '~> 6.7'            # ❤️ 新版本支持 arm64 模拟器
   pod 'lottie-ios'
-  pod 'SnapKit', '~> 5.7'        # ❤️ 新版本支持 arm64 模拟器
+  pod 'SnapKit', '~> 5.7'                  # ❤️ 新版本支持 arm64 模拟器
   pod 'JXSegmentedView'
   pod "HTMLReader"
   pod 'KakaJSON'
-  pod 'RxSwift'                  # 核心
-  pod 'RxCocoa'                  # UI 绑定：UIKit、AppKit 的扩展
-  pod 'RxRelay'                  # 安全替代 Variable，常用于 ViewModel
+  pod 'RxSwift'                            # 核心
+  pod 'RxCocoa'                            # UI 绑定：UIKit、AppKit 的扩展
+  pod 'RxRelay'                            # 安全替代 Variable，常用于 ViewModel
   pod 'NSObject+Rx'
+
+  pod 'MJRefresh'
 end
 
 # 调试框架

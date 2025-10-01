@@ -98,17 +98,6 @@ final class UITextFieldDemoVC: UIViewController,
 
     // 密码输入框（带“眼睛”）@byLimitLength（5）
     private lazy var passwordTF: UITextField = {
-        let eye = UIButton(type: .system)
-            .byImage(UIImage(systemName: "eye.slash"), for: .normal)   // 未选中
-            .byImage(UIImage(systemName: "eye"), for: .selected)       // 选中
-            .byContentEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 6))
-            .onTap { [weak self] sender in
-                guard let self else { return }                // 或写成 guard let strongSelf = self else { return }
-                sender.isSelected.toggle()
-                self.passwordTF.isSecureTextEntry.toggle()
-                self.passwordTF.togglePasswordVisibility()    // 你自己的游标/清空修复
-            }
-
         let tf = UITextField()
             .byDelegate(self) // 数据源
             .byPlaceholder("请输入密码（6-20 位）")
@@ -123,7 +112,16 @@ final class UITextFieldDemoVC: UIViewController,
                         tint: .secondaryLabel,
                         size: .init(width: 18, height: 18),
                         leading: 12, spacing: 8)
-            .byRightView(eye, mode: .always)
+            .byRightView(UIButton(type: .system)
+                .byImage(UIImage(systemName: "eye.slash"), for: .normal)   // 未选中
+                .byImage(UIImage(systemName: "eye"), for: .selected)       // 选中
+                .byContentEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 6))
+                .onTap { [weak self] sender in
+                    guard let self else { return }                // 或写成 guard let strongSelf = self else { return }
+                    sender.isSelected.toggle()
+                    self.passwordTF.isSecureTextEntry.toggle()
+                    self.passwordTF.togglePasswordVisibility()    // 你自己的游标/清空修复
+                }, mode: .always)
             .byAllowsNumberPadPopover(true) // iPad 数字键盘弹窗
             .byInputView(datePicker) // 演示自定义 inputView：点密码框弹日期（纯展示，不建议真实项目这么用）
             .byLimitLength(5)

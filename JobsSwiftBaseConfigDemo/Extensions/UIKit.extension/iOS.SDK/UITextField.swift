@@ -392,7 +392,7 @@ public extension UITextField {
          passwordTextField.togglePasswordVisibility()
      }
  */
-// MARK: 切换密码可见性
+// MARK: 用于在切换 isSecureTextEntry（明文/密文）后，修复 iOS 的文字丢失、光标闪烁和位置偏移问题，确保切换显示稳定、内容不丢失、光标正常。
 public extension UITextField {
     func togglePasswordVisibility() {
         /// 临时去掉光标颜色（防止闪烁）

@@ -989,7 +989,29 @@
     }
     ```
 
-#### 4.6、[**RxSwift**](https://github.com/ReactiveX/RxSwift) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 4.6、[**ESPullToRefresh**](https://github.com/eggswift/pull-to-refresh?tab=readme-ov-file) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 比 [**MJRefresh**](https://github.com/CoderMJLee/MJRefresh) 更现代的 [**Swift**](https://developer.apple.com/swift/) 写法，支持自定义动画。
+
+```swift
+import ESPullToRefresh
+
+tableView.es.addPullToRefresh {
+    print("下拉刷新")
+    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        self.tableView.es.stopPullToRefresh()
+    }
+}
+
+tableView.es.addInfiniteScrolling {
+    print("上拉加载")
+    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        self.tableView.es.stopLoadingMore()
+    }
+}
+```
+
+#### 4.7、[**RxSwift**](https://github.com/ReactiveX/RxSwift) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > **最小依赖**：只用 `RxSwift`。
 >
@@ -1560,17 +1582,28 @@ required init?(coder: NSCoder) {
 }
 ```
 
-### 6、使用`Color Set` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 6、🖼️ <font color=red>**使用`Color Set`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-<p align="center">
-  <img src="./assets/image-20250924174836800.png" width="20%"/>
-  <img src="./assets/image-20250924175446796.png" width="60%"/>
-</p>
-```swift
-if #available(iOS 11.0, *) {
-    UIColor(named: "TextColor0")
-}
-```
+* 选中图片以后，跳到第四个选项卡
+
+  ```swift
+  if #available(iOS 11.0, *) {
+      UIColor(named: "TextColor0")
+  }
+  ```
+
+  <p align="center">
+    <img src="./assets/image-20250924174836800.png" width="20%"/>
+    <img src="./assets/image-20250924175446796.png" width="60%"/>
+  </p>
+
+* 支持暗黑模式
+
+  > Dark优先级高一些，如果在Dark里面没有找到对应的图片，会去Any找
+
+![image-20251001161600357](./assets/image-20251001161600357.png)
+
+
 
 ### 7、网络鉴权`Code`的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -1855,32 +1888,39 @@ addSubview(mainTableView)
 
 * 一般性封装（`.byLimitLength(5)// 输入长度限制`）
 
+  > ```swift
+  > passwordTF.isSecureTextEntry.toggle()/// 切换输入框 明文/密文
+  > ```
+
   ```swift
   private lazy var passwordTF: UITextField = {
-      let eye = UIButton(type: .system)
-      eye.setImage(UIImage(systemName: "eye.slash"), for: .normal)
-      eye.setImage(UIImage(systemName: "eye"), for: .selected)
-      eye.contentEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 6)
-      eye.addTarget(self, action: #selector(toggleEye), for: .touchUpInside)
-  
       let tf = UITextField()
           .byDelegate(self) // 数据源
           .byPlaceholder("请输入密码（6-20 位）")
-          .bySecureTextEntry(true)// ‼️
+          .bySecureTextEntry(true)
           .byInputAccessoryView(passwordAccessory)
           .byBorderStyle(.roundedRect)
           .byReturnKeyType(.done)
           .byTextContentType(.password)
           .byPasswordRules(nil) // 也可自定义
-       // .byLeftView(Self.makeIcon("lock"), mode: .always)
+  //            .byLeftView(Self.makeIcon("lock"), mode: .always)
           .byLeftIcon(UIImage(systemName: "lock"),
                       tint: .secondaryLabel,
                       size: .init(width: 18, height: 18),
                       leading: 12, spacing: 8)
-          .byRightView(eye, mode: .always)
+          .byRightView(UIButton(type: .system)
+              .byImage(UIImage(systemName: "eye.slash"), for: .normal)   // 未选中
+              .byImage(UIImage(systemName: "eye"), for: .selected)       // 选中
+              .byContentEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 6))
+              .onTap { [weak self] sender in
+                  guard let self else { return }                // 或写成 guard let strongSelf = self else { return }
+                  sender.isSelected.toggle()
+                  self.passwordTF.isSecureTextEntry.toggle()
+                  self.passwordTF.togglePasswordVisibility()    // 你自己的游标/清空修复
+              }, mode: .always)
           .byAllowsNumberPadPopover(true) // iPad 数字键盘弹窗
           .byInputView(datePicker) // 演示自定义 inputView：点密码框弹日期（纯展示，不建议真实项目这么用）
-          .byLimitLength(5)// 输入长度限制
+          .byLimitLength(5)
   
       return tf
   }()
@@ -2717,7 +2757,7 @@ private lazy var passwordAccessory: UIToolbar = {
   > NotificationCenter.default.post(name: .userDidLogin, object: nil)
   > ```
 
-### 19、回调主线程（三大手段） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 19、回调主线程（三大手段）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **C.GCD**
 
@@ -2813,49 +2853,9 @@ private lazy var passwordAccessory: UIToolbar = {
   label.textAlignment = .center
   ```
 
-### 22、获取高频系统关键量 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 22、TODO <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* `jobsNearestVC`
 
-  > 从任意 **UIResponder**（View / VC）向上找到最近的宿主 VC；若全程找不到则兜底到 **`keyWindow`** 的 **root**
-
-* `jobsKeyWindow` 👉 统一的 **KeyWindow** 获取（支持 iOS 13 多场景；老系统兜底）
-
-  ```swift
-  UIApplication.jobsKeyWindow()?
-  ```
-
-* `jobsTopMostVC` 👉（递归解析）获取当前“最顶层可见”的 **UIViewController**
-
-  ```swift
-  // MARK: - 顶层可见 VC（配合 jobsKeyWindow）
-  /// 获取当前“最顶层可见”的 UIViewController（递归解析：Nav/Tab/Split/Presented）
-  static func jobsTopMostVC(from root: UIViewController? = {
-      jobsKeyWindow()?.rootViewController
-  }()) -> UIViewController? {
-      guard let root = root else { return nil }
-  
-      // UINavigationController
-      if let nav = root as? UINavigationController {
-          return jobsTopMostVC(from: nav.visibleViewController ?? nav.topViewController)
-      }
-      // UITabBarController
-      if let tab = root as? UITabBarController {
-          return jobsTopMostVC(from: tab.selectedViewController)
-      }
-      // UISplitViewController（取最右侧详情栈）
-      if let split = root as? UISplitViewController, let last = split.viewControllers.last {
-          return jobsTopMostVC(from: last)
-      }
-      // 被 present 出来的控制器
-      if let presented = root.presentedViewController {
-          // 若是 UIAlertController，按需返回其 presenting（看你业务，这里不特殊处理）
-          return jobsTopMostVC(from: presented)
-      }
-      // 其他情况：就是它本身
-      return root
-  }
-  ```
 
 ### 23、获取高频系统关键量 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -2966,9 +2966,54 @@ private lazy var datePicker: UIDatePicker = {
 }()
 ```
 
-### 26、点击事件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 26、加载图片（本地/网络）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 26.1、封装在`UIControl` 层的点击事件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 26.1、依据<font color=red>**字符串**</font>取本地图片 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+/// 本地图像名（在 Assets 中放一张叫 "Ani" 的图）
+localImageView.image = "Ani".img
+```
+
+#### 26.2、取网络图片@[**Kingfisher**](https://github.com/onevcat/Kingfisher) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> ```ruby
+> pod 'Kingfisher'             # Swift上的SDWebImage
+> ```
+>
+> ```swift
+> import Kingfisherx
+> ```
+
+* 字符串调用`kfLoadImage()`
+
+  ```swift
+  // ✅ 使用 Kingfisher async/await 异步加载
+  let remoteURL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5V57u3uwX8dGkmezFuaB0DJZAKZ96WSqkIESLbqA9tDovtwHMenRqkZSgnU53po0D848OguVoTqzxzzGaUusl-OorK_miHQ3p4c6gjrJI9w"
+  
+  Task {
+      do {
+          let image = try await remoteURL.kfLoadImage()
+          UIImageView().image = image
+          print("✅ 加载成功 (async)：\(remoteURL)")
+      } catch {
+          print("❌ 加载失败 (async)：\(error)")
+      }
+  }
+  ```
+
+* `UIImageView()`调用`setImage`
+
+  ```swift
+  // ✅ 使用自定义封装 setImage(from:placeholder:)
+  let fakeURL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5V57u3uwX8dGkmezFuaB0DJZAKZ96WSqkIESLbqA9tDovtwHMenRqkZSgnU53po0D848OguVoTqzxzzGaUusl-OorK_miHQ3p4c6gjrJI9w"
+  UIImageView().setImage(from: fakeURL, placeholder: "Ani".img)
+  ```
+
+
+### 27、点击事件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 27.1、封装在`UIControl` 层的点击事件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
   let toggle = UISwitch()
@@ -2999,7 +3044,7 @@ private lazy var datePicker: UIDatePicker = {
       }
   ```
 
-#### 26.2、[**封装在`UIButton` 层的点击事件**](#UIButton) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 27.2、[**封装在`UIButton` 层的点击事件**](#UIButton) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 let button = UIButton(type: .system)
@@ -3462,9 +3507,11 @@ struct User {
 
 #### 3.2、`计算属性` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-> 1️⃣ 不直接存储值，而是通过 **getter/setter** 计算出来。
+> 1️⃣ 不直接存储值，而是通过 **getter/setter** 计算出来。**每次访问都会重新计算**
 >
-> 2️⃣ <font color=red>可以定义在 **类、结构体、枚举**里</font>。
+> 2️⃣ 计算属性不支持 `async throws`
+>
+> 3️⃣ <font color=red>可以定义在 **类、结构体、枚举**里</font>
 
 ```swift
 struct Rectangle {
@@ -4864,7 +4911,7 @@ func resizableImage(edge: UIEdgeInsets = UIEdgeInsets(top: 10.h,
 
 ### 21、<font color=red>**@available**</font> 的使用示例 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 21.1、基本语法
+#### 21.1、基本语法 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 @available(平台名称 版本号, introduced: 引入版本, deprecated: 弃用版本, obsoleted: 废弃版本, message: "提示信息")

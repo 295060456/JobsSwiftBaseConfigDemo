@@ -14,11 +14,12 @@ final class RootListVC: UIViewController {
         ("UITextView Demo", UITextViewDemoVC.self),
         ("RichText Demo", RichTextDemoVC.self),
         ("UIButton Demo", UIButtonDemoVC.self),
-        ("SafetyPushDemo Demo", SafetyPushDemoVC.self),
+        ("SafetyPush Demo", SafetyPushDemoVC.self),
         ("SafetyPresent Demo", SafetyPresentDemoVC.self),
         ("JobsCountdown Demo", JobsCountdownDemoVC.self),
-        ("KeyboardDemo Demo", KeyboardDemoVC.self),
-        ("ControlEventsDemo Demo", JobsControlEventsDemoVC.self)
+        ("Keyboard Demo", KeyboardDemoVC.self),
+        ("ControlEvents Demo", JobsControlEventsDemoVC.self),
+        ("PicLoad Demo", PicLoadDemoVC.self)
     ]
 
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)

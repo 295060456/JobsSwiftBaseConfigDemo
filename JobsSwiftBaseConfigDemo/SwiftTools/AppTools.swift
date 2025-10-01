@@ -49,3 +49,24 @@ extension Then where Self: AnyObject {
     }
 }
 extension NSObject: Then {}
+// MARK: - LanguageManager 单例
+final class LanguageManager {
+    static let shared = LanguageManager()
+    private init() {}
+
+    /// 当前语言对应的 Bundle
+    var localizedBundle: Bundle {
+        // 你可以根据自己的逻辑动态返回
+        // 比如通过 UserDefaults 保存的语言 key
+        if let path = Bundle.main.path(forResource: currentLanguageCode, ofType: "lproj"),
+           let bundle = Bundle(path: path) {
+            return bundle
+        }
+        return .main
+    }
+
+    /// 当前语言代码（默认系统语言）
+    var currentLanguageCode: String {
+        UserDefaults.standard.string(forKey: "AppLanguage") ?? Locale.preferredLanguages.first ?? "en"
+    }
+}
