@@ -2872,32 +2872,8 @@ private lazy var passwordAccessory: UIToolbar = {
 * `jobsTopMostVC` 👉（递归解析）获取当前“最顶层可见”的 **UIViewController**
 
   ```swift
-  // MARK: - 顶层可见 VC（配合 jobsKeyWindow）
-  /// 获取当前“最顶层可见”的 UIViewController（递归解析：Nav/Tab/Split/Presented）
-  static func jobsTopMostVC(from root: UIViewController? = {
-      jobsKeyWindow()?.rootViewController
-  }()) -> UIViewController? {
-      guard let root = root else { return nil }
-  
-      // UINavigationController
-      if let nav = root as? UINavigationController {
-          return jobsTopMostVC(from: nav.visibleViewController ?? nav.topViewController)
-      }
-      // UITabBarController
-      if let tab = root as? UITabBarController {
-          return jobsTopMostVC(from: tab.selectedViewController)
-      }
-      // UISplitViewController（取最右侧详情栈）
-      if let split = root as? UISplitViewController, let last = split.viewControllers.last {
-          return jobsTopMostVC(from: last)
-      }
-      // 被 present 出来的控制器
-      if let presented = root.presentedViewController {
-          // 若是 UIAlertController，按需返回其 presenting（看你业务，这里不特殊处理）
-          return jobsTopMostVC(from: presented)
-      }
-      // 其他情况：就是它本身
-      return root
+  if let topVC = UIApplication.jobsTopMostVC() {
+     /// TODO
   }
   ```
 

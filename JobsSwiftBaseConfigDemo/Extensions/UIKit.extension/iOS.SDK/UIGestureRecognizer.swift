@@ -16,7 +16,6 @@ import ObjectiveC
      .byEnabled(true)
  */
 public extension UIGestureRecognizer {
-
     // MARK: - 初始化方法封装
     @discardableResult
     func byTarget(_ target: Any?, action: Selector?) -> Self {
@@ -26,21 +25,18 @@ public extension UIGestureRecognizer {
         }
         return self
     }
-
     // MARK: - Delegate
     @discardableResult
     func byDelegate(_ delegate: UIGestureRecognizerDelegate?) -> Self {
         self.delegate = delegate
         return self
     }
-
     // MARK: - 是否启用
     @discardableResult
     func byEnabled(_ isEnabled: Bool) -> Self {
         self.isEnabled = isEnabled
         return self
     }
-
     // MARK: - 触摸控制属性
     @discardableResult
     func byCancelsTouchesInView(_ value: Bool) -> Self {
@@ -59,7 +55,6 @@ public extension UIGestureRecognizer {
         self.delaysTouchesEnded = value
         return self
     }
-
     // MARK: - iOS9+ 触摸类型
     @available(iOS 9.0, *)
     @discardableResult
@@ -74,7 +69,6 @@ public extension UIGestureRecognizer {
         self.allowedPressTypes = types
         return self
     }
-
     // MARK: - iOS9.2+ 独占触摸
     @available(iOS 9.2, *)
     @discardableResult
@@ -82,7 +76,6 @@ public extension UIGestureRecognizer {
         self.requiresExclusiveTouchType = value
         return self
     }
-
     // MARK: - iOS11+ 手势命名
     @available(iOS 11.0, *)
     @discardableResult
@@ -90,7 +83,6 @@ public extension UIGestureRecognizer {
         self.name = name
         return self
     }
-
     // MARK: - iOS13.4+ 键盘修饰符 / 鼠标按钮
     @available(iOS 13.4, *)
     @discardableResult
@@ -106,7 +98,6 @@ public extension UIGestureRecognizer {
         // 同上，buttonMask 也是只读
         return self
     }
-
     // MARK: - 公共辅助方法
     @discardableResult
     func byRequireToFail(_ other: UIGestureRecognizer) -> Self {
@@ -114,28 +105,22 @@ public extension UIGestureRecognizer {
         return self
     }
 }
-
-
 // ================================== 闭包容器 ==================================
 private final class _GestureClosureBox {
     let block: (UIGestureRecognizer) -> Void
     init(_ block: @escaping (UIGestureRecognizer) -> Void) { self.block = block }
 }
-
-private var GestureBlockKey: UInt8 = 0
-
 // ================================== UIGestureRecognizer 链式 block 初始化 ==================================
+private var GestureBlockKey: UInt8 = 0
 public extension UIGestureRecognizer {
-
-    /// 通过闭包配置（替代 target/selector）
+    // MARK: - 通过闭包配置（替代 target/selector）
     static func byConfig(_ block: @escaping (UIGestureRecognizer) -> Void) -> Self {
         let gesture = Self()
         gesture._setActionBlock(block)
         gesture.addTarget(gesture, action: #selector(_gestureInvoke(_:)))
         return gesture
     }
-
-    /// 为已有手势添加 block（非静态）
+    // MARK: - 为已有手势添加 block（非静态）
     @discardableResult
     func byAction(_ block: @escaping (UIGestureRecognizer) -> Void) -> Self {
         _setActionBlock(block)
@@ -151,7 +136,6 @@ public extension UIGestureRecognizer {
         objc_setAssociatedObject(self, &GestureBlockKey, _GestureClosureBox(block), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
 }
-
 // ================================== 子类专属链式扩展 ==================================
 public extension UITapGestureRecognizer {
     @discardableResult func byTaps(_ count: Int) -> Self { numberOfTapsRequired = count; return self }
@@ -173,24 +157,21 @@ public extension UISwipeGestureRecognizer {
     @discardableResult func byDirection(_ d: UISwipeGestureRecognizer.Direction) -> Self { direction = d; return self }
     @discardableResult func byTouches(_ n: Int) -> Self { numberOfTouchesRequired = n; return self }
 }
-
 // ================================== Pinch（捏合缩放） ==================================
 public extension UIPinchGestureRecognizer {
-    /// 当前缩放比例（scale）
+    // MARK: - 当前缩放比例（scale）
     @discardableResult
     func byScale(_ value: CGFloat) -> Self {
         self.scale = value
         return self
     }
-
-    /// 复位缩放比例到默认值 1.0
+    // MARK: - 复位缩放比例到默认值 1.0
     @discardableResult
     func byResetScale() -> Self {
         self.scale = 1.0
         return self
     }
-
-    /// 在闭包里获取当前 scale
+    // MARK: - 在闭包里获取当前 scale
     @discardableResult
     func byOnScaleChange(_ block: @escaping (UIPinchGestureRecognizer, CGFloat) -> Void) -> Self {
         self.byAction { gesture in
@@ -201,24 +182,21 @@ public extension UIPinchGestureRecognizer {
         return self
     }
 }
-
 // ================================== Rotation（旋转） ==================================
 public extension UIRotationGestureRecognizer {
-    /// 当前旋转角度（弧度）
+    // MARK: - 当前旋转角度（弧度）
     @discardableResult
     func byRotation(_ value: CGFloat) -> Self {
         self.rotation = value
         return self
     }
-
-    /// 复位旋转角度为 0
+    // MARK: - 复位旋转角度为 0
     @discardableResult
     func byResetRotation() -> Self {
         self.rotation = 0
         return self
     }
-
-    /// 在闭包里获取旋转角度
+    // MARK: - 在闭包里获取旋转角度
     @discardableResult
     func byOnRotationChange(_ block: @escaping (UIRotationGestureRecognizer, CGFloat) -> Void) -> Self {
         self.byAction { gesture in
@@ -229,4 +207,3 @@ public extension UIRotationGestureRecognizer {
         return self
     }
 }
-

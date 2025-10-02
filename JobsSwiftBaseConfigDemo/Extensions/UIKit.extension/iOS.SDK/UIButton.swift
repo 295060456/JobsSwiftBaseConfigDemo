@@ -79,7 +79,11 @@ extension UIButton {
 
     @discardableResult
     func bySubtitleFont(_ font: UIFont) -> Self {
-        self.subtitleLabel?.font = font
+        if #available(iOS 15.0, *) {
+            self.subtitleLabel?.font = font
+        } else {
+            // iOS14 及以下没有 subtitleLabel，可做 fallback 或忽略
+        }
         return self
     }
 

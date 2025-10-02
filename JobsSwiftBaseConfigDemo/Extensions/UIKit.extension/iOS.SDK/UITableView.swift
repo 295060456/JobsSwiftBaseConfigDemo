@@ -13,6 +13,7 @@
     import UIKit
 #endif
 import ObjectiveC
+import SnapKit
 /// 🍬语法糖@注册：UITableViewCell、HeaderFooterView、HeaderFooterView
 extension UITableView {
     @discardableResult
@@ -126,7 +127,7 @@ extension UITableView {
     public func hiddenSeparator() {
         tableFooterView = UIView().byBgColor(UIColor.clear)
     }
-    // MARK: -设置整个区圆角
+    // MARK: - 设置整个区圆角
     public func sectionConner(cell: UITableViewCell,
                        bgColor: UIColor = UIColor.systemBackground,
                        indexPath: IndexPath,
@@ -166,68 +167,94 @@ extension UITableView {
 /// UITableView@空数据源占位图
 private var tableEmptyViewKey: Void?
 extension UITableView {
+    // MARK: - 关联的空视图
     private var jobs_emptyView: UIView? {
         get { objc_getAssociatedObject(self, &tableEmptyViewKey) as? UIView }
         set {
-            jobs_emptyView?.removeFromSuperview()
+            // 移除旧视图
+            (objc_getAssociatedObject(self, &tableEmptyViewKey) as? UIView)?.removeFromSuperview()
+
             if let view = newValue {
                 addSubview(view)
-                bringSubviewToFront(view)
-                view.translatesAutoresizingMaskIntoConstraints = false
-                NSLayoutConstraint.activate([
-                    view.centerXAnchor.constraint(equalTo: centerXAnchor),
-                    view.centerYAnchor.constraint(equalTo: centerYAnchor),
-                    view.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 0.9)
-                ])
+                // 先清掉可能遗留的约束，再重建
+                view.snp.removeConstraints()
+                // 居中 + 宽度自适应（<= 父视图 90%），并尽量不贴边
+                view.snp.makeConstraints { make in
+                    make.center.equalToSuperview()
+                    make.width.lessThanOrEqualToSuperview().multipliedBy(0.9)
+                    make.leading.greaterThanOrEqualToSuperview().offset(16)
+                    make.trailing.lessThanOrEqualToSuperview().inset(16)
+                }
             }
-            objc_setAssociatedObject(self, &tableEmptyViewKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self,
+                                     &tableEmptyViewKey,
+                                     newValue,
+                .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
-
+    // MARK: - 设置空视图
     @discardableResult
     public func jobs_setEmptyView(_ view: UIView?) -> Self {
         self.jobs_emptyView = view
         return self
     }
-
+    // MARK: - 手动指定计数刷新
     @discardableResult
     public func jobs_reloadEmptyView(rowCount: Int, sectionCount: Int = 1) -> Self {
-        let isEmpty = rowCount == 0 || sectionCount == 0
+        let isEmpty = (sectionCount == 0) || (rowCount == 0)
+        self.jobs_emptyView?.isHidden = !isEmpty
+        return self
+    }
+    // MARK: - 自动统计全表数据行数刷新（可选增强）
+    /// 无需手算 rowCount：遍历 dataSource 的所有 section/row 自动判断
+    @discardableResult
+    public func jobs_reloadEmptyViewAuto() -> Self {
+        guard let ds = dataSource else {
+            self.jobs_emptyView?.isHidden = false
+            return self
+        }
+        let sections = ds.numberOfSections?(in: self) ?? 1
+        var totalRows = 0
+        for s in 0..<sections {
+            totalRows += ds.tableView(self, numberOfRowsInSection: s)
+            if totalRows > 0 { break } // 早退出
+        }
+        let isEmpty = (sections == 0) || (totalRows == 0)
         self.jobs_emptyView?.isHidden = !isEmpty
         return self
     }
 }
-// MARK: - DataSource / Delegate Plus
+/// DataSource / Delegate Plus
 extension UITableView {
-    /// iOS 10.0+ 预取数据源
+    // MARK: - iOS 10.0+ 预取数据源
     @available(iOS 10.0, *)
     @discardableResult
     public func byPrefetchDataSource(_ ds: UITableViewDataSourcePrefetching?) -> Self {
         self.prefetchDataSource = ds
         return self
     }
-    /// iOS 15.0+ 是否启用预取
+    // MARK: - iOS 15.0+ 是否启用预取
     @available(iOS 15.0, *)
     @discardableResult
     public func byPrefetchingEnabled(_ enabled: Bool) -> Self {
         self.isPrefetchingEnabled = enabled
         return self
     }
-    /// iOS 11.0+ 拖拽代理
+    // MARK: - iOS 11.0+ 拖拽代理
     @available(iOS 11.0, *)
     @discardableResult
     public func byDragDelegate(_ delegate: UITableViewDragDelegate?) -> Self {
         self.dragDelegate = delegate
         return self
     }
-    /// iOS 11.0+ 放置代理
+    // MARK: - iOS 11.0+ 放置代理
     @available(iOS 11.0, *)
     @discardableResult
     public func byDropDelegate(_ delegate: UITableViewDropDelegate?) -> Self {
         self.dropDelegate = delegate
         return self
     }
-    /// iOS 11.0+ 是否允许拖拽交互
+    // MARK: - iOS 11.0+ 是否允许拖拽交互
     @available(iOS 11.0, *)
     @discardableResult
     public func byDragInteractionEnabled(_ enabled: Bool) -> Self {

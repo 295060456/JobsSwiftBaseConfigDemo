@@ -51,7 +51,7 @@ extension UIImage {
         UIRectFill(CGRect(origin: .zero, size: size))
         return UIGraphicsGetImageFromCurrentImageContext()
     }
-    // MARK: - 按钮背景/控件填充👉将任意 UIColor 转换成一张纯色 UIImage
+    //MARK: - 按钮背景/控件填充👉将任意 UIColor 转换成一张纯色 UIImage
     public static func jobs_fromColor(_ color: UIColor, size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
         let rect = CGRect(origin: .zero, size: size)
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
@@ -196,7 +196,6 @@ extension UIImage {
 
         guard let data = self.jpegData(compressionQuality: 1.0) else { return nil }
         if data.count <= maxByteSize { return data }
-
         // 逐步降低质量
         var q: CGFloat = 1.0
         while q > minQ {
@@ -205,7 +204,6 @@ extension UIImage {
                 return d
             }
         }
-
         // 缩尺寸 + 最低质量
         var currentImage = self
         while let d = currentImage.jpegData(compressionQuality: minQ) {
