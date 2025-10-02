@@ -150,6 +150,8 @@
 
 * [**JobsDocs**](https://github.com/295060456/JobsDocs)
 
+  * [**中国公民身份证校验规则**](https://github.com/295060456/JobsDocs/blob/main/中国公民身份证校验规则.md/中国公民身份证校验规则.md)
+
 * [**过期的模拟器配件**](https://github.com/295060456/Xcode_Sys_lib) 
 
 * [**quicktype**](https://app.quicktype.io/)：从 **JSON** / **GraphQL** /其它数据格式 自动生成对应语言的类型定义
