@@ -3849,9 +3849,11 @@ flowchart TD
     }
     ```
 
-### 6、[**Swift**](https://developer.apple.com/swift/) <font color=red>**单例**</font>的写法 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 6、<font color=red>**单例**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 6.1、线程安全懒加载单例（推荐写法）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 6.1、无法主动销毁的单例 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+##### 6.1.1、推荐写法 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ <font color=red>**`static let` **</font>**懒加载**： [**Swift**](https://developer.apple.com/swift/) 中 `static let` 天生就是线程安全的懒加载。不会提前初始化，也不用额外加锁。
 >
@@ -3860,6 +3862,7 @@ flowchart TD
 > 3️⃣ <font color=red>**`private` **</font>**私有化 init**：避免 `MySingleton()` 被外部直接调用，保证唯一性。
 
 ```swift
+/// 线程安全懒加载单例
 final class MySingleton {
     // 唯一实例（静态常量，懒加载 + 线程安全）
     static let shared = MySingleton()
@@ -3878,11 +3881,12 @@ final class MySingleton {
 MySingleton.shared.doSomething()
 ```
 
-#### 6.2、其他写法（对比） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 6.1.2、其他写法（对比） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* **延迟存储属性 + `static var`**（不推荐，代码更复杂）
+* 不推荐，代码更复杂
 
   ```swift 
+  /// 延迟存储属性 + static var
   class MySingleton {
       static var shared: MySingleton = {
           let instance = MySingleton()
@@ -3892,7 +3896,7 @@ MySingleton.shared.doSomething()
   }
   ```
 
-* ****ObjC** 风格的 `dispatch_once`**（Swift 1/2 时代用的，现在多余）本质等价于 `static let`
+* **ObjC** 风格的 `dispatch_once`（[**Swift**](https://developer.apple.com/swift/) 1/2 时代用的，现在多余）本质等价于 `static let`
 
   ```swift 
   class MySingleton {
@@ -3902,6 +3906,25 @@ MySingleton.shared.doSomething()
       private init() {}
   }
   ```
+
+#### 6.2、可以主动销毁的单例 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 需要**自己维护引用**，而不是 `static let`：
+
+```swift
+final class MySingleton {
+    static var shared: MySingleton? = MySingleton()
+    private init() { print("初始化") }
+    
+    static func destroy() {
+        print("销毁单例")
+        shared = nil
+    }
+}
+
+MySingleton.shared?.doSomething()
+MySingleton.destroy()
+```
 
 ### 7、[**Swift**](https://developer.apple.com/swift/)派发（Dispatch）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
