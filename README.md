@@ -1713,58 +1713,64 @@ required init?(coder: NSCoder) {
 
 ### 8、<font id=UIButton>🔘`UIButton`</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-```swift
-let eye = UIButton(type: .system)
-    .byImage(UIImage(systemName: "eye.slash"), for: .normal)   // 未选中
-    .byImage(UIImage(systemName: "eye"), for: .selected)       // 选中
-    .byContentEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 6))
-    .onTap { [weak self] sender in
-        guard let self else { return }                // 或写成 guard let strongSelf = self else { return }
-        sender.isSelected.toggle()
-        self.passwordTF.isSecureTextEntry.toggle()
-        self.passwordTF.togglePasswordVisibility()    // 你自己的游标/清空修复
-    }
-```
+#### 8.1、创建按钮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 普通按钮（懒加载）
+
+  ```swift
+  private lazy var exampleButton: UIButton = {
+      UIButton(type: .system)
+          // 普通文字：未选中状态标题
+          .byTitle("显示", for: .normal)
+          // 选中状态标题
+          .byTitle("隐藏", for: .selected)
+          // 文字颜色：区分状态
+          .byTitleColor(.systemBlue, for: .normal)
+          .byTitleColor(.systemRed, for: .selected)
+          // 字体统一
+          .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+          // 图标（SF Symbol）
+          .byImage(UIImage(systemName: "eye.slash"), for: .normal)   // 未选中图标
+          .byImage(UIImage(systemName: "eye"), for: .selected)       // 选中图标
+          // 图文内边距
+          .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+          // 图标与文字间距
+          .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+          // 点按事件（统一入口）
+          .onTap { [weak self] sender in
+              guard let self else { return }
+              sender.isSelected.toggle()
+              // 文字与图标自动切换
+              self.passwordTF.isSecureTextEntry.toggle()
+              self.passwordTF.togglePasswordVisibility()
+              print("👁 当前状态：\(sender.isSelected ? "隐藏密码" : "显示密码")")
+          }
+          .byAddTo(view) { [unowned self] make in
+              make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(40)
+              make.left.right.equalToSuperview().inset(24)
+              make.height.equalTo(44)
+          }
+  }()
+  ```
+
+* 倒计时按钮
+
+  ```swift
+  /// TODO
+  ```
+
+#### 8.2、按钮功能拓展 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **按钮选中/非选中**
+
+  ```swift
+  sender.isSelected.toggle()
+  ```
 
 * **防止用户快速连续点按钮**
 
-  > ```swift
-  > sender.disableAfterClick(interval: 2)
-  > ```
-
   ```swift
-  extension UIButton {
-      func disableAfterClick(interval: TimeInterval = 1.0) {
-          self.isUserInteractionEnabled = false
-          DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
-              self.isUserInteractionEnabled = true
-          }
-      }
-  }
-  ```
-
-* **给按钮添加闭包回调**
-
-  > ```swift
-  > button.addAction { sender in
-  >   /// TODO
-  > }
-  > ```
-
-  ```swift
-  private var actionKey: Void?
-  extension UIButton {
-      func addAction(_ action: @escaping (UIButton) -> Void) {
-          objc_setAssociatedObject(self, &actionKey, action, .OBJC_ASSOCIATION_COPY_NONATOMIC)
-          self.addTarget(self, action: #selector(handleAction(_:)), for: .touchUpInside)
-      }
-  
-      @objc private func handleAction(_ sender: UIButton) {
-          if let action = objc_getAssociatedObject(self, &actionKey) as? (UIButton) -> Void {
-              action(sender)
-          }
-      }
-  }
+  sender.disableAfterClick(interval: 2)
   ```
 
 ### 9、`UIScrollView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -1776,16 +1782,22 @@ let eye = UIButton(type: .system)
 ### 10、`UITableView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
-mainTableView = GKPageTableView(frame: .zero, style: .plain)
-    .byDataSource(self)
-    .byDelegate(self)
-    .bySeparatorStyle(.none)
-    .byShowsVerticalScrollIndicator(false)
-    .byShowsHorizontalScrollIndicator(false)
-    .registerCellByID(CellCls: UITableViewCell.self, ID: "cell")
-    .byNoContentInsetAdjustment()
-    .byNoSectionHeaderTopPadding()
-addSubview(mainTableView)
+private lazy var mainTableView: UITableView = {
+    UITableView(frame: .zero, style: .plain)
+        .byDataSource(self)
+        .byDelegate(self)
+        .bySeparatorStyle(.none)
+        .byShowsVerticalScrollIndicator(false)
+        .byShowsHorizontalScrollIndicator(false)
+        .registerCellByID(CellCls: UITableViewCell.self, ID: "cell")
+        .byNoContentInsetAdjustment()
+        .byNoSectionHeaderTopPadding()
+        .byAddTo(view) { [unowned self] make in
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(40)
+            make.left.right.equalToSuperview().inset(24)
+            make.height.equalTo(44)
+        }
+}()
 ```
 
 ### 11、`UICollectionView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -1798,19 +1810,20 @@ addSubview(mainTableView)
 
 > ```swift
 > override func loadView() {
->     super.loadView()
->     // 建议在 App 启动时调用一次
->     UITextField.enableDeleteBackwardBroadcast()
+>       super.loadView()
+>       // 建议在 App 启动时调用一次
+>       UITextField.enableDeleteBackwardBroadcast()
 > }
 > ```
 
 #### 12.1、📮 邮箱输入框 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* 一般性封装
+* 一般性封装 
 
   ```swift
+  ///邮箱输入框
   private lazy var emailTF: UITextField = {
-      let tf = UITextField()
+      UITextField()
           // 数据源
           .byDelegate(self)
           // 基础视觉
@@ -1820,6 +1833,7 @@ addSubview(mainTableView)
           .byTextAlignment(.natural)
           .byBorderStyle(.roundedRect)
           .byClearButtonMode(.whileEditing)
+  
           .byInputAccessoryView(accessory)
           // 键盘
           .byKeyboardType(.emailAddress)
@@ -1845,18 +1859,23 @@ addSubview(mainTableView)
                       tint: .secondaryLabel,
                       size: .init(width: 18, height: 18),
                       leading: 12, spacing: 8)
-      // iOS 17+
-      if #available(iOS 17.0, *) {
-          tf.byInlinePredictionType(.default)
-      }
-      // iOS 18+（演示：即使邮箱框也能设置，不影响）
-      if #available(iOS 18.0, *) {
-          tf.byMathExpressionCompletionType(.default)
-            .byWritingToolsBehavior(.default)
-            .byAllowedWritingToolsResultOptions([])
-      }
-      return tf
+          .byAddTo(view) { [unowned self] make in
+              make.top.equalTo(textField.snp.bottom).offset(12)
+              make.centerX.equalToSuperview()
+              make.height.equalTo(36)
+          }
   }()
+  
+  // iOS 17+
+  if #available(iOS 17.0, *) {
+      emailTF.byInlinePredictionType(.default)
+  }
+  // iOS 18+（演示：即使邮箱框也能设置，不影响）
+  if #available(iOS 18.0, *) {
+      emailTF.byMathExpressionCompletionType(.default)
+             .byWritingToolsBehavior(.default)
+      		   .byAllowedWritingToolsResultOptions([])
+  }
   ```
   
 * 功能性封装
@@ -1896,35 +1915,74 @@ addSubview(mainTableView)
 
   ```swift
   private lazy var passwordTF: UITextField = {
-      let tf = UITextField()
+      UITextField()
           .byDelegate(self) // 数据源
           .byPlaceholder("请输入密码（6-20 位）")
           .bySecureTextEntry(true)
-          .byInputAccessoryView(passwordAccessory)
+          .byInputAccessoryView(UIToolbar().byItems([
+              UIBarButtonItem()
+                  .byTitle("清空")
+                  .byTitleFont(.systemFont(ofSize: 15))
+                  .byTitleColor(.systemRed)
+                  .byStyle(.plain)
+                  .onTap { [weak self] _ in
+                      guard let self = self else { return }   // ✅ 确保生命周期安全
+                      /// TODO
+                  },
+              UIBarButtonItem(systemItem: .flexibleSpace),
+              UIBarButtonItem()
+                  .byTitle("完成")
+                  .byTitleFont(.systemFont(ofSize: 15))
+                  .byTitleColor(.systemYellow)
+                  .byStyle(.done)
+                  .onTap { [weak self] _ in
+                      guard let self = self else { return }   // ✅ 确保生命周期安全
+                      view.endEditing(true)
+                  },
+          ])
+          .bySizeToFit())                                     // ✅ 给密码框自定义 inputAccessoryView
           .byBorderStyle(.roundedRect)
           .byReturnKeyType(.done)
           .byTextContentType(.password)
           .byPasswordRules(nil) // 也可自定义
-  //            .byLeftView(Self.makeIcon("lock"), mode: .always)
+      //            .byLeftView(Self.makeIcon("lock"), mode: .always)
           .byLeftIcon(UIImage(systemName: "lock"),
                       tint: .secondaryLabel,
                       size: .init(width: 18, height: 18),
                       leading: 12, spacing: 8)
           .byRightView(UIButton(type: .system)
-              .byImage(UIImage(systemName: "eye.slash"), for: .normal)   // 未选中
-              .byImage(UIImage(systemName: "eye"), for: .selected)       // 选中
-              .byContentEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 6))
-              .onTap { [weak self] sender in
-                  guard let self else { return }                // 或写成 guard let strongSelf = self else { return }
-                  sender.isSelected.toggle()
-                  self.passwordTF.isSecureTextEntry.toggle()
-                  self.passwordTF.togglePasswordVisibility()    // 你自己的游标/清空修复
-              }, mode: .always)
-          .byAllowsNumberPadPopover(true) // iPad 数字键盘弹窗
+                       // 普通文字：未选中状态标题
+                       .byTitle("显示", for: .normal)
+                       // 选中状态标题
+                       .byTitle("隐藏", for: .selected)
+                       // 文字颜色：区分状态
+                       .byTitleColor(.systemBlue, for: .normal)
+                       .byTitleColor(.systemRed, for: .selected)
+                       // 字体统一
+                       .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+                       // 图标（SF Symbol）
+                       .byImage(UIImage(systemName: "eye.slash"), for: .normal)   // 未选中图标
+                       .byImage(UIImage(systemName: "eye"), for: .selected)       // 选中图标
+                       // 图文内边距
+                       .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+                       // 图标与文字间距
+                       .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+                       // 点按事件（统一入口）
+                       .onTap { [weak self] sender in
+                           guard let self else { return }
+                           sender.isSelected.toggle()
+                           // 文字与图标自动切换
+                           self.passwordTF.isSecureTextEntry.toggle()
+                           self.passwordTF.togglePasswordVisibility()
+                           print("👁 当前状态：\(sender.isSelected ? "隐藏密码" : "显示密码")")
+                       }, mode: .always)
           .byInputView(datePicker) // 演示自定义 inputView：点密码框弹日期（纯展示，不建议真实项目这么用）
           .byLimitLength(5)
-  
-      return tf
+          .byAddTo(view) { [unowned self] make in
+              make.top.equalTo(textField.snp.bottom).offset(12)
+              make.centerX.equalToSuperview()
+              make.height.equalTo(36)
+          }
   }()
   ```
 
@@ -1961,7 +2019,7 @@ addSubview(mainTableView)
 private func demo_ChainedStyling() {
     addSectionTitle("1️⃣ 基础链式样式示例")
 
-    let tv = UITextView()
+    UITextView()
         .byText("这里展示基础链式调用：字体、颜色、边框、内边距等。")
         .byFont(.systemFont(ofSize: 16))
         .byTextColor(.label)
@@ -1970,6 +2028,12 @@ private func demo_ChainedStyling() {
         .bySelectable(true)
         .byTextContainerInset(UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10))
         .byRoundedBorder(color: .systemGray4, width: 1, radius: 8)
+        .byAddTo(view) { [unowned self] make in
+                      make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(40)
+                      make.left.right.equalToSuperview().inset(24)
+                      make.height.equalTo(44)
+                  }
+          }()
 
     stack.addArrangedSubview(tv)
     tv.snp.makeConstraints { $0.height.equalTo(100) }
@@ -2293,7 +2357,7 @@ private lazy var passwordAccessory: UIToolbar = {
 }()
 ```
 
-### 15、手势的封装（使用）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 15、👋 手势的封装（使用）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 因为手势只能添加到**UIView**及其子类上，所以我们对**UIView**进行扩充
 
@@ -2855,11 +2919,37 @@ private lazy var passwordAccessory: UIToolbar = {
   label.textAlignment = .center
   ```
 
-### 22、TODO <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 22、对[**SnapKit**]()的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
+```swift
+private lazy var view: UIView = {
+    UIView()
+        .byAddTo(subView) { [unowned self] make in
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(40)
+            make.left.right.equalToSuperview().inset(24)
+            make.height.equalTo(44)
+        }
+}()
+```
 
+### 23、[**导航栏@GKNavigationBarSwift**](https://github.com/QuintGao/GKNavigationBarSwift)的二次封装和使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-### 23、获取高频系统关键量 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+```swift
+override func viewDidLoad() {
+    super.viewDidLoad()
+    jobsSetupGKNav(
+				title: "Demo 列表",
+				leftSymbol: "list.bullet",
+				rightButtons: [
+						("moon.circle.fill", .systemIndigo, { [weak self] in self?.toggleTheme() }),
+						("globe", .systemGreen, { [weak self] in self?.toggleLanguage() }),
+						("stop.circle.fill", .systemRed, { [weak self] in self?.stopRefreshing() })
+				]
+		)
+}
+```
+
+### 24、获取高频系统关键量 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * `jobsNearestVC`
 
@@ -2879,7 +2969,7 @@ private lazy var passwordAccessory: UIToolbar = {
   }
   ```
 
-### 24、<font color=red>推页面@带参数</font>（`push`/`present`）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 25、<font color=red>推页面@带参数</font>（`push`/`present`）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ 封装在`UIResponder`层，能全覆盖：**任意控制器**和**任意视图**
 >
@@ -2934,7 +3024,7 @@ private lazy var passwordAccessory: UIToolbar = {
         .byPresent(self)           // 自带防重入，连点不重复
     ```
 
-### 25、懒加载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 26、懒加载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 private lazy var datePicker: UIDatePicker = {
@@ -2944,16 +3034,16 @@ private lazy var datePicker: UIDatePicker = {
 }()
 ```
 
-### 26、加载图片（本地/网络）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 27、加载图片（本地/网络）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 26.1、依据<font color=red>**字符串**</font>取本地图片 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 27.1、依据<font color=red>**字符串**</font>取本地图片 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 /// 本地图像名（在 Assets 中放一张叫 "Ani" 的图）
 localImageView.image = "Ani".img
 ```
 
-#### 26.2、取网络图片@[**Kingfisher**](https://github.com/onevcat/Kingfisher) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 27.2、取网络图片@[**Kingfisher**](https://github.com/onevcat/Kingfisher) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > ```ruby
 > pod 'Kingfisher'             # Swift上的SDWebImage
@@ -2989,9 +3079,9 @@ localImageView.image = "Ani".img
   ```
 
 
-### 27、点击事件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 28、点击事件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 27.1、封装在`UIControl` 层的点击事件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 28.1、封装在`UIControl` 层的点击事件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
   let toggle = UISwitch()
@@ -3022,7 +3112,7 @@ localImageView.image = "Ani".img
       }
   ```
 
-#### 27.2、[**封装在`UIButton` 层的点击事件**](#UIButton) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 28.2、[**封装在`UIButton` 层的点击事件**](#UIButton) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 let button = UIButton(type: .system)
@@ -5834,7 +5924,125 @@ Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS
 *  **`UIButtonConfiguration`**一旦启用，就接管了传统的外观管理
 * 如果封装链式逻辑没有区分新旧体系，那么只要有一个按钮启用了 **`UIButtonConfiguration`**，旧逻辑就会异常
 
-### 20、<font color=red id=COW>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite（先共享，写的时候才真正拷贝）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 20、[**Swift**](https://developer.apple.com/swift/).<font color=red>**`class`**</font> 🆚 [**Swift**](https://developer.apple.com/swift/) .<font color=red>**`enum`**</font> 🆚 [**Swift**](https://developer.apple.com/swift/) .<font color=red>**`struct`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 🧩 <font color=red>**`enum`**</font> —— 状态 / 常量命名空间
+>
+> 📦 <font color=red>**`struct`**</font> —— 数据封装 / 值安全
+>
+> 🧠 <font color=red>**`class`**</font> —— 生命周期 / 继承 / 动态绑定
+
+#### 20.1、核心语义差异（值类型 🆚 引用类型）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+| 特性         | <font color=red>**`enum`**</font> | <font color=red>**`struct`**</font> | <font color=red>**`class`**</font> |
+| ------------ | --------------------------------- | ----------------------------------- | ---------------------------------- |
+| **类型语义** | 值类型                            | 值类型                              | 引用类型                           |
+| **内存语义** | 拷贝（copy）                      | 拷贝（copy）                        | 引用（reference）                  |
+| **赋值行为** | 复制一份                          | 复制一份                            | 指针指向同一实例                   |
+| **线程安全** | ✅ 较安全（独立值）                | ✅ 较安全                            | ⚠️ 不安全（共享引用）               |
+
+#### 20.2、语言特性对比表 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+| 特性                        | <font color=red>**`enum`**</font> | <font color=red>**`struct`**</font>                 | <font color=red>**`class`**</font> |
+| --------------------------- | --------------------------------- | --------------------------------------------------- | ---------------------------------- |
+| 是否支持继承                | ❌                                 | ❌                                                   | ✅                                  |
+| 是否支持协议                | ✅                                 | ✅                                                   | ✅                                  |
+| 可定义方法                  | ✅                                 | ✅                                                   | ✅                                  |
+| 可定义属性                  | ✅（需关联值）                     | ✅                                                   | ✅                                  |
+| 是否支持存储属性            | ✅（仅在关联值中）                 | ✅                                                   | ✅                                  |
+| 可定义初始化方法            | ✅                                 | ✅                                                   | ✅                                  |
+| 自定义 `init()`             | ✅                                 | ✅                                                   | ✅                                  |
+| `mutating` 方法             | ✅（改变自身 case 时）             | ✅                                                   | ❌（直接改）                        |
+| `deinit` 析构函数           | ❌                                 | ❌                                                   | ✅                                  |
+| ARC 管理                    | ❌                                 | ❌                                                   | ✅                                  |
+| 可用作常量空间              | ✅（默认不可实例化）               | ✅（需 <font color=red>**`private`**</font> `init`） | ⚠️ 可，但过重                       |
+| Equatable/Hashable 自动合成 | ✅                                 | ✅                                                   | ⚠️ 需自写                           |
+| 可被模式匹配（switch）      | ✅                                 | ⚠️ 限制                                              | ❌                                  |
+| 是否支持泛型                | ✅                                 | ✅                                                   | ✅                                  |
+| 是否支持扩展（extension）   | ✅                                 | ✅                                                   | ✅                                  |
+
+#### 20.3、生命周期与内存模型 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+| 方面       | 值类型（<font color=red>**`enum`**</font>/<font color=red>**`struct`**</font>） | 引用类型（<font color=red>**`class`**</font>） |
+| ---------- | ------------------------------------------------------------ | ---------------------------------------------- |
+| 生命周期   | 自动回收（栈）                                               | **ARC** 引用计数（堆）                         |
+| 所在内存   | 栈上                                                         | 堆上                                           |
+| 拷贝代价   | 低（小对象内联）                                             | 低（拷指针）                                   |
+| 跨线程共享 | 安全（值隔离）                                               | 危险（需同步）                                 |
+
+#### 20.4、使用场景建议 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+| 场景                       | 推荐类型                              | 原因                                           |
+| -------------------------- | ------------------------------------- | ---------------------------------------------- |
+| 只定义常量、命名空间       | ✅ <font color=red>**`enum`**</font>   | 默认不能实例化，安全                           |
+| 简单数据模型（DTO、State） | ✅ <font color=red>**`struct`**</font> | 值语义，线程安全                               |
+| 数据共享、生命周期管理     | ✅ <font color=red>**`class`**</font>  | 引用语义，可持久化                             |
+| UI 控制器、视图、响应链    | ✅ <font color=red>**`class`**</font>  | 必须继承 **UIKit** / **AppKit**                |
+| 枚举状态机、分支判断       | ✅ <font color=red>**`enum`**</font>   | 模式匹配最优雅                                 |
+| 工具函数、静态常量组       | ✅ <font color=red>**`enum`**</font>   | 无需 `init()`                                  |
+| 数据容器（含方法）         | ✅ <font color=red>**`struct`**</font> | 逻辑+数据封装                                  |
+| 对象图复杂、有继承         | ✅ <font color=red>**`class`**</font>  | 需多态、引用共享                               |
+| 生命周期需要 `deinit`      | ✅ <font color=red>**`class`**</font>  | 仅 <font color=red>**`class`**</font> 支持析构 |
+
+#### 20.5、实战设计建议 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 工具常量类
+
+  > <font color=red>**`enum` 默认禁止实例化，比 `class` 更安全**</font>
+
+  ```swift
+  enum JobsColors {
+      static let main = UIColor(named: "MainColor")!
+  }
+  ```
+
+* 纯数据模型
+
+  > 值语义，传递安全，不会意外修改。
+
+  ```swift
+  struct User {
+      let id: Int
+      var name: String
+  }
+  ```
+
+* 控制器类、服务类
+
+  > 引用语义，便于全局共享。
+
+  ```swift
+  class UserManager {
+      var currentUser: User?
+      func login() {}
+  }
+  ```
+
+*  枚举状态机
+
+  > 模式匹配极简优雅。
+
+  ```swift
+  enum NetworkState {
+      case idle
+      case loading
+      case success(Data)
+      case failure(Error)
+  }
+  ```
+
+#### 20.6、从工程维度总结 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+| 维度                             | 推荐选择                                                 |
+| -------------------------------- | -------------------------------------------------------- |
+| **轻量级数据模型**               | <font color=red>**`struct`**</font>                      |
+| **状态机 / 分支逻辑**            | <font color=red>**`enum`**</font>                        |
+| **带生命周期 / 继承 / 动态行为** | <font color=red>**`class`**</font>                       |
+| **工具库 / 常量定义**            | <font color=red>**`enum`**</font>（禁止实例化）          |
+| **可变容器但希望拷贝隔离**       | <font color=red>**`struct`**</font> + `mutating`         |
+| **全局单例或引用共享**           | <font color=red>**`class`**</font> + `static let shared` |
+
+### 21、<font color=red id=COW>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite（先共享，写的时候才真正拷贝）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > * **定义**：当你复制一个值类型的时候，[**Swift**](https://developer.apple.com/swift/) 不会立即复制它的底层存储，而是让两个变量共享同一块内存
 > * **触发拷贝的时机**：一旦其中一个变量尝试 **写入（修改）** 数据，[**Swift**](https://developer.apple.com/swift/) 才会真正复制一份新的内存，以保证<u>值语义</u>的正确性

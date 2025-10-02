@@ -31,8 +31,10 @@ class VC2: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        title = "Collection 展示"
-        
+        jobsSetupGKNav(
+            title: "UITextField 全量演示"
+        )
+
         doAsync(after: 2.0) { strongSelf in
             strongSelf.view.backgroundColor = .blue
         }
@@ -40,8 +42,6 @@ class VC2: UIViewController {
         setupCollectionView()
         setupEmptyView()
         loadInitialData()
-        
-        
         
     }
 

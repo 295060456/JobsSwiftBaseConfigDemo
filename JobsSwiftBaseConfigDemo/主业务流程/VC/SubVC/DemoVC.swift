@@ -30,39 +30,40 @@ class DemoDetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        title = "Detail"
-
-        let close = UIButton(type: .system)
-        close.setTitle("关闭", for: .normal)
-        close.titleLabel?.font = .boldSystemFont(ofSize: 16)
-        close.addTarget(self, action: #selector(onClose), for: .touchUpInside)
-
-        view.addSubview(close)
-        close.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-        }
-    }
-
-    @objc private func onClose() {
-        closeByResult(input)
+        jobsSetupGKNav(
+            title: "Detail"
+        )
+        UIButton(type: .system)
+            // 普通文字：未选中状态标题
+            .byTitle("关闭", for: .normal)
+            // 字体统一
+            .byTitleFont(.boldSystemFont(ofSize: 16))
+            // 点按事件（统一入口）
+            .onTap { [weak self] sender in
+                guard let self else { return }
+                closeByResult(input)
+            }
+            .byAddTo(view) { make in
+                make.center.equalToSuperview()
+            }
     }
 }
 // MARK: - 自定义半屏弹窗 VC（内容随便，这里示意）
 class HalfSheetDemoVC: DemoDetailVC{
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        view.layer.cornerRadius = 16
-        view.clipsToBounds = true
 
-        let titleLbl = UILabel()
-        titleLbl.text = "🍰 自定义高度 HalfSheet (320)"
-        titleLbl.font = .boldSystemFont(ofSize: 18)
-        titleLbl.textAlignment = .center
-        view.addSubview(titleLbl)
-        titleLbl.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(20)
-            make.centerX.equalToSuperview()
-        }
+        view.byBgColor(.systemBackground)
+            .byCornerRadius(16)
+            .byClipsToBounds(true)
+
+        UILabel()
+            .byText("🍰 自定义高度 HalfSheet (320)")
+            .byFont(.boldSystemFont(ofSize: 18))
+            .byTextAlignment(.center)
+            .byAddTo(view) { make in
+                make.top.equalToSuperview().offset(20)
+                make.centerX.equalToSuperview()
+            }
     }
 }

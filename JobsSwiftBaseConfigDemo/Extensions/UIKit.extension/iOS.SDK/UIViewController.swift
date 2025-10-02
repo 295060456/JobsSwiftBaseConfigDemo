@@ -13,6 +13,8 @@
     import UIKit
 #endif
 
+import GKNavigationBarSwift
+
 @MainActor
 extension UIViewController {
     @discardableResult
@@ -263,5 +265,84 @@ extension UIViewController {
             guard let strongSelf = self else { return }
             block(strongSelf as! Self)
         }
+    }
+}
+// MARK: - GKNavigationBarSwift
+public extension UIViewController {
+    /// 通用 GKNavigationBar 封装
+    func jobsSetupGKNav(
+        title: String,
+        leftSymbol: String? = nil,
+        rightButtons: [(String, UIColor, (() -> Void)?)] = []
+    ) {
+        gk_navTitle = title
+        // ✅ 左侧按钮逻辑
+        if let symbol = leftSymbol {
+            // 用户传入了自定义图标 → 自定义行为
+            gk_navLeftBarButtonItem = UIBarButtonItem(
+                customView: makeNavButton(symbol: symbol, tint: .systemBlue) {
+                    print("👈 自定义左按钮 tapped")
+                }
+            )
+        } else {
+            // 🚀 未传 symbol → 自动生成“返回”按钮
+            gk_navLeftBarButtonItem = UIBarButtonItem(
+                customView: makeNavButton(symbol: "chevron.left", tint: .systemBlue) { [weak self] in
+                    guard let self else { return }
+                    self.jobsSmartBack()
+                }
+            )
+        }
+        // ✅ 右上角按钮数组（可选）
+        if !rightButtons.isEmpty {
+            gk_navRightBarButtonItems = rightButtons.map { symbol, color, action in
+                UIBarButtonItem(customView: makeNavButton(symbol: symbol, tint: color, action: action))
+            }
+        }
+    }
+    /// 智能返回操作：自动判断是 Push 还是 Present
+    private func jobsSmartBack() {
+        if let nav = navigationController {
+            if nav.viewControllers.first != self {
+                nav.popViewController(animated: true)
+                print("⬅️ Pop 返回上一层")
+                return
+            }
+        }
+        if presentingViewController != nil {
+            dismiss(animated: true)
+            print("⬇️ Dismiss 关闭当前模态页")
+            return
+        }
+        print("⚠️ [JobsNav] 当前 VC 无法返回（既非 push 也非 present）")
+    }
+
+    private func makeNavButton(
+        symbol: String,
+        tint: UIColor,
+        action: (() -> Void)? = nil
+    ) -> UIButton {
+        return UIButton(type: .system)
+            .byFrame(CGRect(x: 0, y: 0, width: 32.w, height: 32.h))
+//            .byTitle("显示", for: .normal)// 普通文字：未选中状态标题
+//            .byTitle("隐藏", for: .selected)// 选中状态标题
+            .byTintColor(tint)
+            .byTitleColor(.systemBlue, for: .normal)// 文字颜色：区分状态（普通）
+            .byTitleColor(.systemRed, for: .selected)// 文字颜色：区分状态（选中）
+            .byTitleFont(.systemFont(ofSize: 16, weight: .medium))// 字体统一
+            .byImage(UIImage(systemName: symbol), for: .normal)   // 未选中图标
+            .byImage(UIImage(systemName: symbol), for: .selected) // 选中图标
+            .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))// 图文内边距
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))// 图标与文字间距
+            .onTap { sender in
+                sender.isSelected.toggle()
+                // ✅ guard 安全调用外部闭包
+                guard let action else {
+                    print("⚠️ [JobsNav] 未设置 action（symbol: \(symbol)）")
+                    return
+                }
+                action()
+
+            }// 点按事件（统一入口）
     }
 }

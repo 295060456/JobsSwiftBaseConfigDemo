@@ -12,10 +12,12 @@
 #if os(iOS) || os(tvOS)
     import UIKit
 #endif
+import ObjectiveC
 
 import RxSwift
 import RxCocoa
-import ObjectiveC
+import SnapKit
+
 // MARK: 语法糖🍬
 extension UIView {
     @discardableResult
@@ -23,11 +25,16 @@ extension UIView {
         self.backgroundColor = color
         return self
     }
-
+    // MARK: 设置圆角
     @discardableResult
     func byCornerRadius(_ radius: CGFloat) -> Self {
         self.layer.cornerRadius = radius
-        self.clipsToBounds = true
+        return self
+    }
+    // MARK: 裁剪超出边界
+    @discardableResult
+    func byClipsToBounds(_ enabled: Bool = true) -> Self {
+        self.clipsToBounds = enabled
         return self
     }
 
@@ -464,7 +471,6 @@ public extension UIView {
         static var pinchKey: UInt8 = 0
         static var rotateKey: UInt8 = 0
     }
-
     // MARK: - Tap（点击）
     /// 新接口：带 gesture；兼容链式配置
     @discardableResult
@@ -506,7 +512,6 @@ public extension UIView {
         }
         objc_setAssociatedObject(self, &GestureKeys.tapKey, nil, .OBJC_ASSOCIATION_ASSIGN)
     }
-
     // MARK: - LongPress（长按）
     @discardableResult
     func addLongPressAction(
@@ -545,7 +550,6 @@ public extension UIView {
         }
         objc_setAssociatedObject(self, &GestureKeys.longKey, nil, .OBJC_ASSOCIATION_ASSIGN)
     }
-
     // MARK: - Pan（拖拽）
     @discardableResult
     func addPanAction(
@@ -582,7 +586,6 @@ public extension UIView {
         }
         objc_setAssociatedObject(self, &GestureKeys.panKey, nil, .OBJC_ASSOCIATION_ASSIGN)
     }
-
     // MARK: - Swipe（轻扫）
     @discardableResult
     func addSwipeAction(
@@ -619,7 +622,6 @@ public extension UIView {
         }
         objc_setAssociatedObject(self, &GestureKeys.swipeKey, nil, .OBJC_ASSOCIATION_ASSIGN)
     }
-
     // MARK: - Pinch（捏合缩放）
     @discardableResult
     func addPinchAction(_ action: @escaping (UIGestureRecognizer) -> Void) -> Self {
@@ -650,7 +652,6 @@ public extension UIView {
         }
         objc_setAssociatedObject(self, &GestureKeys.pinchKey, nil, .OBJC_ASSOCIATION_ASSIGN)
     }
-
     // MARK: - Rotation（旋转）
     @discardableResult
     func addRotationAction(_ action: @escaping (UIGestureRecognizer) -> Void) -> Self {
@@ -681,7 +682,6 @@ public extension UIView {
         }
         objc_setAssociatedObject(self, &GestureKeys.rotateKey, nil, .OBJC_ASSOCIATION_ASSIGN)
     }
-
     // MARK: - 便利方法：一次性清理
     func removeAllGestureActions() {
         removeTapAction()
@@ -719,7 +719,6 @@ public extension UIView {
         static var pinchMap:  UInt8 = 0
         static var rotateMap: UInt8 = 0
     }
-
     // 取/存 通用 map（view 维度）
     private func _grMap(for key: UnsafeRawPointer) -> [String: UIGestureRecognizer] {
         (objc_getAssociatedObject(self, key) as? [String: UIGestureRecognizer]) ?? [:]
@@ -727,7 +726,6 @@ public extension UIView {
     private func _setGrMap(_ map: [String: UIGestureRecognizer], for key: UnsafeRawPointer) {
         objc_setAssociatedObject(self, key, map, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
-
     // MARK: - Tap（多实例）
     /// 返回生成的 id（便于后续精确移除）
     @discardableResult
@@ -757,7 +755,6 @@ public extension UIView {
         _setGrMap(map, for: &GestureMultiKeys.tapMap)
         return id
     }
-
     /// 提供一个便于链式的重载：你自己指定 id，可继续链式
     @discardableResult
     func addTapActionMulti(
@@ -785,7 +782,6 @@ public extension UIView {
         map.removeAll()
         _setGrMap(map, for: &GestureMultiKeys.tapMap)
     }
-
     // MARK: - LongPress（多实例）
     @discardableResult
     func addLongPressActionMulti(
@@ -834,7 +830,6 @@ public extension UIView {
         map.values.forEach { removeGestureRecognizer($0) }
         map.removeAll(); _setGrMap(map, for: &GestureMultiKeys.longMap)
     }
-
     // MARK: - Pan（多实例）
     @discardableResult
     func addPanActionMulti(
@@ -880,7 +875,6 @@ public extension UIView {
         map.values.forEach { removeGestureRecognizer($0) }
         map.removeAll(); _setGrMap(map, for: &GestureMultiKeys.panMap)
     }
-
     // MARK: - Swipe（多实例）
     @discardableResult
     func addSwipeActionMulti(
@@ -926,7 +920,6 @@ public extension UIView {
         map.values.forEach { removeGestureRecognizer($0) }
         map.removeAll(); _setGrMap(map, for: &GestureMultiKeys.swipeMap)
     }
-
     // MARK: - Pinch（多实例）
     @discardableResult
     func addPinchActionMulti(
@@ -963,7 +956,6 @@ public extension UIView {
         map.values.forEach { removeGestureRecognizer($0) }
         map.removeAll(); _setGrMap(map, for: &GestureMultiKeys.pinchMap)
     }
-
     // MARK: - Rotation（多实例）
     @discardableResult
     func addRotationActionMulti(
@@ -1062,5 +1054,42 @@ public extension UIView {
 
         objc_setAssociatedObject(self, &kKeyboardHeightKey, stream, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         return stream
+    }
+}
+/// 对 SnapKit 的封装
+public extension UIView {
+    // MARK: - 添加到父视图
+    @discardableResult
+    func byAddTo(_ superview: UIView,
+                 _ closure: ((_ make: ConstraintMaker) -> Void)? = nil) -> Self {
+        superview.addSubview(self)
+        if let closure {
+            self.snp.makeConstraints(closure)
+        }
+        return self
+    }
+    // MARK: - 链式 makeConstraints
+    @discardableResult
+    func byMakeConstraints(_ closure: (_ make: ConstraintMaker) -> Void) -> Self {
+        self.snp.makeConstraints(closure)
+        return self
+    }
+    // MARK: - 链式 remakeConstraints
+    @discardableResult
+    func byRemakeConstraints(_ closure: (_ make: ConstraintMaker) -> Void) -> Self {
+        self.snp.remakeConstraints(closure)
+        return self
+    }
+    // MARK: - 链式 updateConstraints
+    @discardableResult
+    func byUpdateConstraints(_ closure: (_ make: ConstraintMaker) -> Void) -> Self {
+        self.snp.updateConstraints(closure)
+        return self
+    }
+    // MARK: - 链式 removeConstraints
+    @discardableResult
+    func byRemoveConstraints() -> Self {
+        self.snp.removeConstraints()
+        return self
     }
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class JobsCorConst: NSObject {
+enum JobsCorConst {
     static let main_color: UIColor      = UIColor(named: "MainColor")!
     // MARK: - 文本 626C90、A6B0C8
     static let text0_color: UIColor      = UIColor(named: "TextColor0")!

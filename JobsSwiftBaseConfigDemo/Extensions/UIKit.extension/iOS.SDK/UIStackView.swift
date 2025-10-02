@@ -13,7 +13,7 @@
     import UIKit
 #endif
 
-extension UIStackView {
+public extension UIStackView {
     @discardableResult
     func byAxis(_ axis: NSLayoutConstraint.Axis) -> Self {
         self.axis = axis
@@ -35,6 +35,12 @@ extension UIStackView {
     @discardableResult
     func bySpacing(_ spacing: CGFloat) -> Self {
         self.spacing = spacing
+        return self
+    }
+
+    @discardableResult
+    func byAddArrangedSubview(_ view: UIView) -> Self {
+        self.addArrangedSubview(view)
         return self
     }
 

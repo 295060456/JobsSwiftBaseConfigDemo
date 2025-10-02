@@ -9,46 +9,46 @@ import UIKit
 import SnapKit
 
 final class JobsControlEventsDemoVC: UIViewController {
-
     // 统一用一个垂直栈承载所有 Demo
-    private let stack = UIStackView().then {
-        $0.axis = .vertical
-        $0.alignment = .fill
-        $0.spacing = 14
-        $0.distribution = .equalSpacing
-    }
+    private lazy var stack: UIStackView = {
+        UIStackView()
+            .byAxis(.vertical)
+            .byAlignment(.fill)
+            .bySpacing(14)
+            .byDistribution(.equalSpacing)
+            .byAddTo(view) { [unowned self] make in
+                make.top.equalTo(gk_navigationBar.snp.bottom).offset(10.h)
+                make.left.right.equalToSuperview().inset(16)
+                make.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide).inset(16)
+            }
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "UIControl/UIButton 事件链式 Demo"
+        jobsSetupGKNav(
+            title: "UIControl/UIButton 事件链式 Demo",
+        )
         view.backgroundColor = .systemBackground
-
-        setupLayout()
         buildDemos()
-
         // 点击空白收键盘
-        let tap = UITapGestureRecognizer(target: self, action: #selector(endEditingNow))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
-
-    private func setupLayout() {
-        view.addSubview(stack)
-        stack.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
-            make.left.right.equalToSuperview().inset(16)
-            make.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide).inset(16)
-        }
+        view.addGestureRecognizer(
+            UITapGestureRecognizer
+                .byConfig { [unowned self] gr in
+                    self.view.endEditing(true)
+                }
+                .byCancelsTouchesInView(false)
+        )
     }
 
     private func buildDemos() {
+        stack.alpha = 1;
+
         demo_Switch_onJobsChange()
         demo_DatePicker_onJobsChange()
         demo_Slider_onJobsChange()
         demo_TextField_onJobsEvent()
         demo_Button_onTap()
     }
-
     // MARK: - 26.1 在 UIControl 层的演示
     /// UISwitch → onJobsChange
     private func demo_Switch_onJobsChange() {
@@ -121,9 +121,5 @@ final class JobsControlEventsDemoVC: UIViewController {
         stack.addArrangedSubview(UILabel().byText(text)
             .byFont(.systemFont(ofSize: 13, weight: .semibold))
             .byTextColor(.secondaryLabel))
-    }
-
-    @objc private func endEditingNow() {
-        view.endEditing(true)
     }
 }

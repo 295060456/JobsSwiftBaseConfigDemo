@@ -237,18 +237,6 @@ public extension UITextField {
         self.passwordRules = rules
         return self
     }
-    // MARK: 🔢 iPad 弹窗控制
-    @discardableResult
-    func byAllowsNumberPadPopover(_ allows: Bool) -> Self {
-        if self.responds(to: Selector(("setAllowsNumberPadPopover:"))) {
-            self.setValue(allows, forKey: "allowsNumberPadPopover")
-        } else {
-            #if DEBUG
-            print("⚠️ 当前系统不支持 allowsNumberPadPopover 属性")
-            #endif
-        }
-        return self
-    }
     // MARK: 🎨 左右视图 / 清除按钮
     @discardableResult
     func byClearButtonMode(_ mode: UITextField.ViewMode) -> Self {

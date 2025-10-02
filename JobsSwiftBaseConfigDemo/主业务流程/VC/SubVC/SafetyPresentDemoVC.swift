@@ -20,7 +20,9 @@ final class SafetyPresentDemoVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "🧱 Safety Present Demo"
+        jobsSetupGKNav(
+            title: "🧱 Safety Present Demo"
+        )
         view.backgroundColor = .systemBackground
         setupUI()
     }

@@ -1,12 +1,9 @@
 //
-//  JobsDefineAllEnumHeader.swift
+//  EnumDefines.swift
 //  JobsSwiftBaseConfigDemo
 //
 //  Created by Jobs on 2025/6/16.
 //
-
-// Converted from JobsDefineAllEnumHeader.h
-// Swift Enum Definitions
 
 import Foundation
 // MARK: - 开发环境
@@ -795,11 +792,23 @@ struct JobsEmptyViewType: OptionSet {
     static let button     = JobsEmptyViewType(rawValue: 1 << 1)
     static let customView = JobsEmptyViewType(rawValue: 1 << 2)
 }
-// MARK: -网络鉴权
+// MARK: - 网络鉴权
 public enum JXAuthCode: UInt {
     case tokenEmpty        = 10006  // 令牌为空
     case tokenInvalid      = 10007  // 令牌错误
     case loginExpired      = 10008  // 登陆过期
     case authorizationFail = 10014  // 授权失败
     case success           = 10000  // 成功
+}
+// MARK: - 中国公民身份证校验
+enum CNIDError: Error, CustomStringConvertible {
+    case format, birthDate, sequence, checksum
+    var description: String {
+        switch self {
+        case .format:    return "格式错误：18位(前17位数字+最后一位数字或X) 或 15位纯数字"
+        case .birthDate: return "出生日期无效或超出合理范围"
+        case .sequence:  return "顺序码无效（不能为000）"
+        case .checksum:  return "校验位不匹配"
+        }
+    }
 }

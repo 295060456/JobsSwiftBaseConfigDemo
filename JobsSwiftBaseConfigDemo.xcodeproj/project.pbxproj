@@ -66,12 +66,15 @@
 		04D0C97D2E8D19AB00580020 /* MJRefreshAutoNormalFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D0C97B2E8D19AB00580020 /* MJRefreshAutoNormalFooter.swift */; };
 		04D0C97E2E8D19AB00580020 /* MJRefreshNormalHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D0C97A2E8D19AB00580020 /* MJRefreshNormalHeader.swift */; };
 		04D0C9822E8D1CF400580020 /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D0C9812E8D1CF300580020 /* Optional.swift */; };
+		04E8D5B92E8E550200E85CDA /* StructDefines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D5B82E8E54FF00E85CDA /* StructDefines.swift */; };
+		04E8D5BB2E8E5AD000E85CDA /* CNIDDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D5BA2E8E5ACF00E85CDA /* CNIDDemoVC.swift */; };
+		04E8D6172E8E6E7F00E85CDA /* UIBarButtonItemAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D6162E8E6E7E00E85CDA /* UIBarButtonItemAppearance.swift */; };
+		04E8D6192E8E6EC300E85CDA /* UIToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D6182E8E6EBF00E85CDA /* UIToolbar.swift */; };
+		04E8D61B2E8E837D00E85CDA /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D61A2E8E837C00E85CDA /* NSMutableAttributedString.swift */; };
+		04E8D6232E8E884500E85CDA /* BaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D6222E8E883F00E85CDA /* BaseVC.swift */; };
 		28B3B2C7F8E21BC854851508 /* Pods_JobsSwiftBaseConfigDemoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA9261964B37E24BC5754CC1 /* Pods_JobsSwiftBaseConfigDemoUITests.framework */; };
 		39AB45F55599F62A12939F29 /* Pods_JobsSwiftBaseConfigDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE98D9D036CE4AAA3EA72C02 /* Pods_JobsSwiftBaseConfigDemoTests.framework */; };
 		51D5A6F95393861C97CA7D45 /* Pods_JobsSwiftBaseConfigDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3933E8883C7E8B6A888BA7 /* Pods_JobsSwiftBaseConfigDemo.framework */; };
-		C5489B5C2E0AB19F00B05447 /* NSProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC772E0959620079B5C1 /* NSProtocol.swift */; };
-		C5489B5D2E0AB2D300B05447 /* JobsBlockDef.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC302E0958FF0079B5C1 /* JobsBlockDef.swift */; };
-		C5489B5E2E0AB30700B05447 /* JobsBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC312E0959000079B5C1 /* JobsBlock.swift */; };
 		C564FBE62E09580B0079B5C1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C564FBE42E09580B0079B5C1 /* Main.storyboard */; };
 		C564FBE92E09580B0079B5C1 /* JobsSwiftBaseConfigDemo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C564FBE72E09580B0079B5C1 /* JobsSwiftBaseConfigDemo.xcdatamodeld */; };
 		C564FBEB2E09580D0079B5C1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C564FBEA2E09580D0079B5C1 /* Assets.xcassets */; };
@@ -82,8 +85,7 @@
 		C564FC2B2E0958D50079B5C1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC292E0958D50079B5C1 /* AppDelegate.swift */; };
 		C564FC2C2E0958D50079B5C1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC2A2E0958D50079B5C1 /* SceneDelegate.swift */; };
 		C564FC2E2E0958E80079B5C1 /* HUDHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC2D2E0958E80079B5C1 /* HUDHelper.swift */; };
-		C564FC362E09590B0079B5C1 /* JobsProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC352E09590B0079B5C1 /* JobsProtocol.swift */; };
-		C564FC622E0959510079B5C1 /* Enum_struct_defines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC612E0959510079B5C1 /* Enum_struct_defines.swift */; };
+		C564FC622E0959510079B5C1 /* EnumDefines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC612E0959510079B5C1 /* EnumDefines.swift */; };
 		C564FC862E0959640079B5C1 /* WKWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC642E0959600079B5C1 /* WKWebView.swift */; };
 		C564FC882E0959640079B5C1 /* UISlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC662E0959600079B5C1 /* UISlider.swift */; };
 		C564FC892E0959640079B5C1 /* UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC672E0959600079B5C1 /* UICollectionView.swift */; };
@@ -96,7 +98,7 @@
 		C564FC902E0959640079B5C1 /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC6E2E0959610079B5C1 /* UILabel.swift */; };
 		C564FC912E0959640079B5C1 /* UIScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC6F2E0959610079B5C1 /* UIScrollView.swift */; };
 		C564FC922E0959640079B5C1 /* UISwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC702E0959620079B5C1 /* UISwitch.swift */; };
-		C564FC932E0959640079B5C1 /* UIToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC712E0959620079B5C1 /* UIToolbar.swift */; };
+		C564FC932E0959640079B5C1 /* UIToolbarAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC712E0959620079B5C1 /* UIToolbarAppearance.swift */; };
 		C564FC942E0959640079B5C1 /* UIPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC722E0959620079B5C1 /* UIPageViewController.swift */; };
 		C564FC952E0959640079B5C1 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC732E0959620079B5C1 /* UIView.swift */; };
 		C564FC962E0959640079B5C1 /* Inlines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC742E0959620079B5C1 /* Inlines.swift */; };
@@ -199,6 +201,12 @@
 		04D0C97A2E8D19AB00580020 /* MJRefreshNormalHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MJRefreshNormalHeader.swift; sourceTree = "<group>"; };
 		04D0C97B2E8D19AB00580020 /* MJRefreshAutoNormalFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MJRefreshAutoNormalFooter.swift; sourceTree = "<group>"; };
 		04D0C9812E8D1CF300580020 /* Optional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
+		04E8D5B82E8E54FF00E85CDA /* StructDefines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructDefines.swift; sourceTree = "<group>"; };
+		04E8D5BA2E8E5ACF00E85CDA /* CNIDDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNIDDemoVC.swift; sourceTree = "<group>"; };
+		04E8D6162E8E6E7E00E85CDA /* UIBarButtonItemAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBarButtonItemAppearance.swift; sourceTree = "<group>"; };
+		04E8D6182E8E6EBF00E85CDA /* UIToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIToolbar.swift; sourceTree = "<group>"; };
+		04E8D61A2E8E837C00E85CDA /* NSMutableAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedString.swift; sourceTree = "<group>"; };
+		04E8D6222E8E883F00E85CDA /* BaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
 		1D3933E8883C7E8B6A888BA7 /* Pods_JobsSwiftBaseConfigDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JobsSwiftBaseConfigDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43AC2F32E62C31BD8D0F4D55 /* Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemoTests/Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		498373BA0509D1FCFC7035BF /* Pods-JobsSwiftBaseConfigDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemo.release.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemo/Pods-JobsSwiftBaseConfigDemo.release.xcconfig"; sourceTree = "<group>"; };
@@ -218,10 +226,7 @@
 		C564FC292E0958D50079B5C1 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C564FC2A2E0958D50079B5C1 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		C564FC2D2E0958E80079B5C1 /* HUDHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUDHelper.swift; sourceTree = "<group>"; };
-		C564FC302E0958FF0079B5C1 /* JobsBlockDef.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JobsBlockDef.swift; sourceTree = "<group>"; };
-		C564FC312E0959000079B5C1 /* JobsBlock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JobsBlock.swift; sourceTree = "<group>"; };
-		C564FC352E09590B0079B5C1 /* JobsProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JobsProtocol.swift; sourceTree = "<group>"; };
-		C564FC612E0959510079B5C1 /* Enum_struct_defines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enum_struct_defines.swift; sourceTree = "<group>"; };
+		C564FC612E0959510079B5C1 /* EnumDefines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnumDefines.swift; sourceTree = "<group>"; };
 		C564FC642E0959600079B5C1 /* WKWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WKWebView.swift; sourceTree = "<group>"; };
 		C564FC662E0959600079B5C1 /* UISlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UISlider.swift; sourceTree = "<group>"; };
 		C564FC672E0959600079B5C1 /* UICollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UICollectionView.swift; sourceTree = "<group>"; };
@@ -234,13 +239,12 @@
 		C564FC6E2E0959610079B5C1 /* UILabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
 		C564FC6F2E0959610079B5C1 /* UIScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIScrollView.swift; sourceTree = "<group>"; };
 		C564FC702E0959620079B5C1 /* UISwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UISwitch.swift; sourceTree = "<group>"; };
-		C564FC712E0959620079B5C1 /* UIToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIToolbar.swift; sourceTree = "<group>"; };
+		C564FC712E0959620079B5C1 /* UIToolbarAppearance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIToolbarAppearance.swift; sourceTree = "<group>"; };
 		C564FC722E0959620079B5C1 /* UIPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIPageViewController.swift; sourceTree = "<group>"; };
 		C564FC732E0959620079B5C1 /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		C564FC742E0959620079B5C1 /* Inlines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Inlines.swift; sourceTree = "<group>"; };
 		C564FC752E0959620079B5C1 /* UIActivityIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIActivityIndicatorView.swift; sourceTree = "<group>"; };
 		C564FC762E0959620079B5C1 /* NSObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSObject.swift; sourceTree = "<group>"; };
-		C564FC772E0959620079B5C1 /* NSProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSProtocol.swift; sourceTree = "<group>"; };
 		C564FC782E0959620079B5C1 /* UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITextView.swift; sourceTree = "<group>"; };
 		C564FC792E0959620079B5C1 /* UIStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIStackView.swift; sourceTree = "<group>"; };
 		C564FC7A2E0959630079B5C1 /* UIPopoverPresentationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIPopoverPresentationController.swift; sourceTree = "<group>"; };
@@ -358,6 +362,7 @@
 		0459210F2E85572C008C8D6A /* Inheritance */ = {
 			isa = PBXGroup;
 			children = (
+				04E8D61D2E8E882000E85CDA /* UIViewController */,
 				045921102E855750008C8D6A /* UILabel */,
 			);
 			path = Inheritance;
@@ -403,6 +408,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				04E8D5BA2E8E5ACF00E85CDA /* CNIDDemoVC.swift */,
 				04D0C9782E8D066000580020 /* PicLoadDemoVC.swift */,
 				04D0C9712E8CD39200580020 /* JobsControlEventsDemoVC.swift */,
 				0477D9862E8BEF62002C6427 /* KeyboardDemoVC.swift */,
@@ -441,6 +447,8 @@
 		04D0C9802E8D19FC00580020 /* iOS.SDK */ = {
 			isa = PBXGroup;
 			children = (
+				04E8D61A2E8E837C00E85CDA /* NSMutableAttributedString.swift */,
+				04E8D6162E8E6E7E00E85CDA /* UIBarButtonItemAppearance.swift */,
 				04D0C9812E8D1CF300580020 /* Optional.swift */,
 				04D0C96D2E8CD14900580020 /* UIControl.swift */,
 				04D0C96B2E8CCA7200580020 /* UIBarItem.swift */,
@@ -481,12 +489,21 @@
 				C564FC802E0959630079B5C1 /* UITableView.swift */,
 				C564FC822E0959640079B5C1 /* UITextField.swift */,
 				C564FC782E0959620079B5C1 /* UITextView.swift */,
-				C564FC712E0959620079B5C1 /* UIToolbar.swift */,
+				04E8D6182E8E6EBF00E85CDA /* UIToolbar.swift */,
+				C564FC712E0959620079B5C1 /* UIToolbarAppearance.swift */,
 				C564FC732E0959620079B5C1 /* UIView.swift */,
 				C564FC7E2E0959630079B5C1 /* UIViewController.swift */,
 				C564FC642E0959600079B5C1 /* WKWebView.swift */,
 			);
 			path = iOS.SDK;
+			sourceTree = "<group>";
+		};
+		04E8D61D2E8E882000E85CDA /* UIViewController */ = {
+			isa = PBXGroup;
+			children = (
+				04E8D6222E8E883F00E85CDA /* BaseVC.swift */,
+			);
+			path = UIViewController;
 			sourceTree = "<group>";
 		};
 		B8CEBE2669D72254F6970521 /* Pods */ = {
@@ -577,24 +594,6 @@
 			path = "AppDelegate & SceneDelegate";
 			sourceTree = "<group>";
 		};
-		C564FC2F2E0958F40079B5C1 /* JobsBlock */ = {
-			isa = PBXGroup;
-			children = (
-				C564FC312E0959000079B5C1 /* JobsBlock.swift */,
-				C564FC302E0958FF0079B5C1 /* JobsBlockDef.swift */,
-			);
-			path = JobsBlock;
-			sourceTree = "<group>";
-		};
-		C564FC342E0959050079B5C1 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				C564FC772E0959620079B5C1 /* NSProtocol.swift */,
-				C564FC352E09590B0079B5C1 /* JobsProtocol.swift */,
-			);
-			path = Protocols;
-			sourceTree = "<group>";
-		};
 		C564FC372E0959120079B5C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -654,10 +653,9 @@
 		C564FEEC2E0AAC900079B5C1 /* SwiftDefines */ = {
 			isa = PBXGroup;
 			children = (
+				04E8D5B82E8E54FF00E85CDA /* StructDefines.swift */,
 				0438A71B2E8400E3008F763B /* JobsCorConst.swift */,
-				C564FC612E0959510079B5C1 /* Enum_struct_defines.swift */,
-				C564FC342E0959050079B5C1 /* Protocols */,
-				C564FC2F2E0958F40079B5C1 /* JobsBlock */,
+				C564FC612E0959510079B5C1 /* EnumDefines.swift */,
 			);
 			path = SwiftDefines;
 			sourceTree = "<group>";
@@ -938,7 +936,9 @@
 				C564FC9A2E0959640079B5C1 /* UITextView.swift in Sources */,
 				C564FC942E0959640079B5C1 /* UIPageViewController.swift in Sources */,
 				045920E62E84F389008C8D6A /* CALayer.swift in Sources */,
+				04E8D5B92E8E550200E85CDA /* StructDefines.swift in Sources */,
 				0487AADA2E840CB200B5D307 /* UIColor.swift in Sources */,
+				04E8D6232E8E884500E85CDA /* BaseVC.swift in Sources */,
 				0477D9832E8BE9FC002C6427 /* KeyboardObserver.swift in Sources */,
 				045921042E854FE1008C8D6A /* UInt32.swift in Sources */,
 				0477D96F2E8B8479002C6427 /* UIApplication.swift in Sources */,
@@ -949,20 +949,21 @@
 				C564FCA42E0959640079B5C1 /* UITextField.swift in Sources */,
 				04CF03152E8A75E80083ACF0 /* JobsRichText.swift in Sources */,
 				C564FC9C2E0959640079B5C1 /* UIPopoverPresentationController.swift in Sources */,
-				C5489B5E2E0AB30700B05447 /* JobsBlock.swift in Sources */,
 				C564FCA32E0959640079B5C1 /* UIStepper.swift in Sources */,
 				04D0C97D2E8D19AB00580020 /* MJRefreshAutoNormalFooter.swift in Sources */,
 				04D0C97E2E8D19AB00580020 /* MJRefreshNormalHeader.swift in Sources */,
+				04E8D6172E8E6E7F00E85CDA /* UIBarButtonItemAppearance.swift in Sources */,
 				C564FC862E0959640079B5C1 /* WKWebView.swift in Sources */,
 				0477D97D2E8BDB95002C6427 /* JobsCountdownButton.swift in Sources */,
 				04AC74C52E86682E004B8305 /* Notification.swift in Sources */,
-				C5489B5D2E0AB2D300B05447 /* JobsBlockDef.swift in Sources */,
 				04D0C9722E8CD39300580020 /* JobsControlEventsDemoVC.swift in Sources */,
 				C564FC8A2E0959640079B5C1 /* UISegmentedControl.swift in Sources */,
 				0477D9772E8B9381002C6427 /* UIResponder.swift in Sources */,
+				04E8D5BB2E8E5AD000E85CDA /* CNIDDemoVC.swift in Sources */,
 				C564FC892E0959640079B5C1 /* UICollectionView.swift in Sources */,
 				C564FCB32E0959990079B5C1 /* CustomCell.swift in Sources */,
 				045920FA2E854FA5008C8D6A /* Int64.swift in Sources */,
+				04E8D61B2E8E837D00E85CDA /* NSMutableAttributedString.swift in Sources */,
 				041F5B012E87B51800984EEB /* UITextFieldDemoVC.swift in Sources */,
 				C564FC902E0959640079B5C1 /* UILabel.swift in Sources */,
 				C564FC9E2E0959640079B5C1 /* UINavigationController.swift in Sources */,
@@ -972,11 +973,10 @@
 				C564FC912E0959640079B5C1 /* UIScrollView.swift in Sources */,
 				049FD82F2E82729400636950 /* JobsLog.swift in Sources */,
 				C564FC8F2E0959640079B5C1 /* UIProgressView.swift in Sources */,
-				C5489B5C2E0AB19F00B05447 /* NSProtocol.swift in Sources */,
 				C564FC9F2E0959640079B5C1 /* UISearchBar.swift in Sources */,
 				0459210A2E854FFB008C8D6A /* Float16.swift in Sources */,
 				0477D9872E8BEF64002C6427 /* KeyboardDemoVC.swift in Sources */,
-				C564FC932E0959640079B5C1 /* UIToolbar.swift in Sources */,
+				C564FC932E0959640079B5C1 /* UIToolbarAppearance.swift in Sources */,
 				04CF028C2E8808540083ACF0 /* UIButton.swift in Sources */,
 				C564FCA12E0959640079B5C1 /* UIPageControl.swift in Sources */,
 				04A18E4D2E86533B004BB9DC /* UIImage.swift in Sources */,
@@ -989,11 +989,10 @@
 				045920EE2E854BE7008C8D6A /* Double.swift in Sources */,
 				C564FC982E0959640079B5C1 /* NSObject.swift in Sources */,
 				C564FCB12E0959990079B5C1 /* CollectionCell.swift in Sources */,
-				C564FC362E09590B0079B5C1 /* JobsProtocol.swift in Sources */,
 				045920E42E84EC73008C8D6A /* SwiftTools.swift in Sources */,
 				045920EA2E84FD82008C8D6A /* String.swift in Sources */,
 				045920F82E854F91008C8D6A /* Int32.swift in Sources */,
-				C564FC622E0959510079B5C1 /* Enum_struct_defines.swift in Sources */,
+				C564FC622E0959510079B5C1 /* EnumDefines.swift in Sources */,
 				C564FC972E0959640079B5C1 /* UIActivityIndicatorView.swift in Sources */,
 				C564FCA22E0959640079B5C1 /* UITableView.swift in Sources */,
 				048E37702E87997A004C3A41 /* UIGestureRecognizer.swift in Sources */,
@@ -1014,6 +1013,7 @@
 				04D0C9792E8D066900580020 /* PicLoadDemoVC.swift in Sources */,
 				045920F62E854F8C008C8D6A /* Int16.swift in Sources */,
 				C564FBE92E09580B0079B5C1 /* JobsSwiftBaseConfigDemo.xcdatamodeld in Sources */,
+				04E8D6192E8E6EC300E85CDA /* UIToolbar.swift in Sources */,
 				045921082E854FF3008C8D6A /* Float.swift in Sources */,
 				C564FCA62E0959640079B5C1 /* UINavigationBar.swift in Sources */,
 				C564FC2C2E0958D50079B5C1 /* SceneDelegate.swift in Sources */,

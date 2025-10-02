@@ -11,10 +11,8 @@ import RxSwift
 import RxCocoa
 import RxRelay
 import NSObject_Rx
-
 // MARK: - VC
 final class UITextViewDemoVC: UIViewController, HasDisposeBag {
-
     // ====== UI 容器 ======
     private let scroll = UIScrollView().byAlwaysBounceVertical(true)
     private let stack  = UIStackView()
@@ -26,7 +24,9 @@ final class UITextViewDemoVC: UIViewController, HasDisposeBag {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "UITextView 语法糖 Demo"
+        jobsSetupGKNav(
+            title: "UITextView 语法糖 Demo",
+        )
         view.backgroundColor = .systemBackground
 
         setupUI()
@@ -38,7 +38,6 @@ final class UITextViewDemoVC: UIViewController, HasDisposeBag {
         demo_TwoWayBinding()
         demo_DeleteBackward_Observe()
     }
-
     // MARK: - 布局初始化
     private func setupUI() {
         view.byAddSubviewRetSub(scroll).snp.makeConstraints { $0.edges.equalToSuperview() }
@@ -47,22 +46,27 @@ final class UITextViewDemoVC: UIViewController, HasDisposeBag {
             $0.width.equalToSuperview()
         }
     }
-
     // MARK: - 输入栏工具（Done 收起键盘）
     private func setupAccessoryToolbar() {
         let bar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 0, height: 44))
-        let flex = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let done = UIBarButtonItem(title: "完成", style: .done, target: self, action: #selector(endEditingNow))
-        bar.items = [flex, done]
+            .byItems([
+                UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+                UIBarButtonItem()
+                    .byTitle("完成")
+                    .byTitleFont(.systemFont(ofSize: 15))
+                    .byTitleColor(.systemYellow)
+                    .byStyle(.done)
+                    .onTap { [weak self] _ in
+                        guard let self = self else { return }   // ✅ 确保生命周期安全
+                        view.endEditing(true)
+                    },
+        ])
+        .bySizeToFit()
+
         stack.arrangedSubviews.compactMap { $0 as? UITextView }.forEach {
             $0.byInputAccessoryView(bar)
         }
     }
-
-    @objc private func endEditingNow() {
-        view.endEditing(true)
-    }
-
     // MARK: - 1️⃣ 基础链式样式
     private func demo_ChainedStyling() {
         addSectionTitle("1️⃣ 基础链式样式示例")
@@ -145,13 +149,11 @@ final class UITextViewDemoVC: UIViewController, HasDisposeBag {
             string: "🔗 默认蓝色链接（系统样式）：",
             attributes: [.font: UIFont.systemFont(ofSize: 15),
                          .foregroundColor: UIColor.secondaryLabel]
-        )
-        attrBlue.append(NSAttributedString(
+        ).byAppend(NSAttributedString(
             string: " Apple 官网",
             attributes: [.link: URL(string: "https://www.apple.com")!,
                          .font: UIFont.boldSystemFont(ofSize: 16)]
-        ))
-        attrBlue.append(NSAttributedString(
+        )).byAppend(NSAttributedString(
             string: "\n客服电话：400-123-4567",
             attributes: [.font: UIFont.systemFont(ofSize: 15)]
         ))
@@ -171,13 +173,11 @@ final class UITextViewDemoVC: UIViewController, HasDisposeBag {
             string: "🔴 自定义红色链接：",
             attributes: [.font: UIFont.systemFont(ofSize: 15),
                          .foregroundColor: UIColor.secondaryLabel]
-        )
-        attrRed.append(NSAttributedString(
+        ).byAppend(NSAttributedString(
             string: " Jobs 官网",
             attributes: [.link: URL(string: "https://www.google.com")!,
                          .font: UIFont.boldSystemFont(ofSize: 16)]
-        ))
-        attrRed.append(NSAttributedString(
+        )).byAppend(NSAttributedString(
             string: "\n客服电话：400-123-4567",
             attributes: [.font: UIFont.systemFont(ofSize: 15)]
         ))
@@ -213,7 +213,6 @@ final class UITextViewDemoVC: UIViewController, HasDisposeBag {
         if #available(iOS 16.0, *) {
             tvFind.byFindInteractionEnabled(true)
         }
-
         // iOS18+：配置高亮颜色（在系统“查找结果/写作工具”时由系统使用）
         if #available(iOS 18.0, *) {
             tvFind.byTextHighlightAttributes([
@@ -223,63 +222,51 @@ final class UITextViewDemoVC: UIViewController, HasDisposeBag {
 
         stack.addArrangedSubview(tvFind)
         tvFind.snp.makeConstraints { $0.height.equalTo(160) }
-
         // ——— 工具按钮区 ———
-        let btnRow = UIStackView()
+        stack.addArrangedSubview(UIStackView()
             .byAxis(.horizontal)
             .bySpacing(8)
             .byAlignment(.fill)
             .byDistribution(.fillEqually)
-
-        let btnFind  = UIButton(type: .system)
-        btnFind.setTitle("打开查找面板", for: .normal)
-
-        let btnHi    = UIButton(type: .system)
-        btnHi.setTitle("模拟高亮“iOS”", for: .normal)
-
-        let btnClear = UIButton(type: .system)
-        btnClear.setTitle("清除高亮", for: .normal)
-
-        btnRow.addArrangedSubview(btnFind)
-        btnRow.addArrangedSubview(btnHi)
-        btnRow.addArrangedSubview(btnClear)
-        stack.addArrangedSubview(btnRow)
-
-        // 打开系统查找 UI（iOS16+）
-        if #available(iOS 16.0, *) {
-            btnFind.addAction(UIAction { _ in
-                tvFind.becomeFirstResponder()
-                tvFind.findInteraction?.presentFindNavigator(showingReplace: false)
-            }, for: .touchUpInside)
-        } else {
-            btnFind.isEnabled = false
-            btnFind.setTitle("系统版本需 ≥ iOS16", for: .normal)
-        }
-
-        // 模拟把“iOS”全部高亮（演示效果；与 iOS18 的 textHighlightAttributes 无冲突）
-        btnHi.addAction(UIAction { _ in
-            let text = tvFind.text as NSString? ?? ""
-            let full = NSRange(location: 0, length: text.length)
-            let regex = try? NSRegularExpression(pattern: "iOS", options: .caseInsensitive)
-            tvFind.textStorage.beginEditing()
-            regex?.enumerateMatches(in: text as String, options: [], range: full) { match, _, _ in
-                if let r = match?.range {
-                    tvFind.textStorage.addAttributes(
-                        [.backgroundColor: UIColor.systemYellow.withAlphaComponent(0.35)],
-                        range: r
-                    )
-                }
-            }
-            tvFind.textStorage.endEditing()
-        }, for: .touchUpInside)
-
-        // 清除模拟高亮
-        btnClear.addAction(UIAction { _ in
-            let full = NSRange(location: 0, length: (tvFind.text as NSString?)?.length ?? 0)
-            tvFind.textStorage.beginEditing()
-            tvFind.textStorage.removeAttribute(.backgroundColor, range: full)
-            tvFind.textStorage.endEditing()
-        }, for: .touchUpInside)
+            // 打开系统查找 UI（iOS16+）
+            .byAddArrangedSubview(UIButton(type: .system)
+                .byTitle("打开查找面板")
+                .onTap { sender in
+                    if #available(iOS 16.0, *) {
+                        tvFind.becomeFirstResponder()
+                        tvFind.findInteraction?.presentFindNavigator(showingReplace: false)
+                    } else {
+                        sender.isEnabled = false
+                        sender.setTitle("系统版本需 ≥ iOS16", for: .normal)
+                    }
+                })
+            // 模拟把“iOS”全部高亮（演示效果；与 iOS18 的 textHighlightAttributes 无冲突）
+            .byAddArrangedSubview(UIButton(type: .system)
+                .byTitle("模拟高亮“iOS”")
+                .onTap { sender in
+                    let text = tvFind.text as NSString? ?? ""
+                    let full = NSRange(location: 0, length: text.length)
+                    let regex = try? NSRegularExpression(pattern: "iOS", options: .caseInsensitive)
+                    tvFind.textStorage.beginEditing()
+                    regex?.enumerateMatches(in: text as String, options: [], range: full) { match, _, _ in
+                        if let r = match?.range {
+                            tvFind.textStorage.addAttributes(
+                                [.backgroundColor: UIColor.systemYellow.withAlphaComponent(0.35)],
+                                range: r
+                            )
+                        }
+                    }
+                    tvFind.textStorage.endEditing()
+            })
+            // 清除模拟高亮
+            .byAddArrangedSubview(UIButton(type: .system)
+                .byTitle("清除高亮”")
+                .onTap { sender in
+                    let full = NSRange(location: 0, length: (tvFind.text as NSString?)?.length ?? 0)
+                    tvFind.textStorage.beginEditing()
+                    tvFind.textStorage.removeAttribute(.backgroundColor, range: full)
+                    tvFind.textStorage.endEditing()
+                }))
     }
     // MARK: - 6️⃣ 双向绑定：A ⇄ B ⇄ Relay
     private func demo_TwoWayBinding() {

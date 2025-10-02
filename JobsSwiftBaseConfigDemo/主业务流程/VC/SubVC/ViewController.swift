@@ -61,6 +61,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        jobsSetupGKNav(
+            title: "Demo 列表",
+        )
 
         let obj = NSObject()
         obj.name = "Jobs"
@@ -71,7 +74,6 @@ class ViewController: UIViewController {
     }
 
     private func setupUI() {
-
 
         view.addSubview(emptyView)
         emptyView.snp.makeConstraints { $0.edges.equalToSuperview() }

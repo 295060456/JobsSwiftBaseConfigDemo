@@ -12,7 +12,9 @@ final class SafetyPushDemoVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "🚦 Safety Push Demo"
+        jobsSetupGKNav(
+            title: "🚦 Safety Push Demo"
+        )
         view.backgroundColor = .systemBackground
         setupUI()
     }
@@ -50,11 +52,10 @@ final class SafetyPushDemoVC: UIViewController {
         stack.addArrangedSubview(customView)
 
         // label
-        let tip = UILabel()
-        tip.text = "👆 点上面蓝色 View 看是否能推页面"
-        tip.textColor = .secondaryLabel
-        tip.font = .systemFont(ofSize: 14)
-        stack.addArrangedSubview(tip)
+        stack.addArrangedSubview(UILabel()
+            .byText("👆 点上面蓝色 View 看是否能推页面")
+            .byTextColor(.secondaryLabel)
+            .byFont(.systemFont(ofSize: 14)))
     }
 }
 // MARK: 一个自定义 View，内部点击时也能调用 pushVC

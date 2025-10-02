@@ -5,6 +5,8 @@
 //  Created by Mac on 9/25/25.
 //
 
+import Foundation
+
 // MARK: - 扩展 Int 与 JXAuthCode 的比较
 public func ==(lhs: Int?, rhs: JXAuthCode) -> Bool {
     guard let lhs = lhs else { return false }
@@ -38,6 +40,39 @@ public func !=(lhs: JXAuthCode, rhs: Int?) -> Bool {
 
 public func !=(lhs: JXAuthCode, rhs: Int) -> Bool {
     !(lhs == rhs)
+}
+// MARK: - 🧠 Unicode 解码：把 \uXXXX / \UXXXXXXXX 转成真实字符
+private func decodeUnicodeEscapes(in string: String) -> String {
+    let temp = string
+        .replacingOccurrences(of: "\\u", with: "\\U")
+        .replacingOccurrences(of: "\"", with: "\\\"")
+    let data = "\"\(temp)\"".data(using: .utf8)!
+    if let decoded = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? String {
+        return decoded
+    }
+    return string
+}
+// MARK: - 🚀 统一日志打印
+func log(_ items: Any..., separator: String = " ", terminator: String = "\n",
+         file: String = #file,
+         line: Int = #line,
+         function: String = #function) {
+    // 1️⃣ 拼接参数
+    let message = items.map { "\($0)" }.joined(separator: separator)
+    let decoded = decodeUnicodeEscapes(in: message)
+    // 2️⃣ 文件名提取
+    let fileName = (file as NSString).lastPathComponent
+    // 3️⃣ 时间戳
+    let time = currentTimeString()
+    // 4️⃣ 输出格式（最简洁但信息量最大）
+    Swift.print("🕒 \(time) | \(fileName):\(line) | \(function) → \(decoded)", terminator: terminator)
+}
+/// 🕒 时间格式（时:分:秒）
+private func currentTimeString() -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "HH:mm:ss"
+    formatter.locale = Locale(identifier: "zh_CN")
+    return formatter.string(from: Date())
 }
 // MARK: - 工具：常用格式化 & 校验
 enum JobsFormatters {
@@ -77,7 +112,6 @@ enum JobsFormatters {
             return str.isEmpty ? "" : str
         }
     }
-
     /// 中国大陆手机号 3-4-4 分组（仅清洗与分组，不做合法号段校验）
     static func phoneCN() -> (String) -> String {
         return { s in
@@ -101,24 +135,3 @@ enum JobsFormatters {
     }
 }
 
-enum JobsValidators {
-    /// 非空验证
-    static func nonEmpty(_ s: String) -> Bool { !s.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
-    /// 数值范围验证器
-    static func decimal(min: Double? = nil, max: Double? = nil) -> (String) -> Bool {
-        return { s in
-            guard let v = Double(s) else { return false }
-            if let min = min, v < min { return false }
-            if let max = max, v > max { return false }
-            return true
-        }
-    }
-    ///手机号验证（中国大陆）
-    static func phoneCN() -> (String) -> Bool {
-        return { s in
-            // 去空格后的纯数字长度 11
-            let digits = s.filter(\.isNumber)
-            return digits.count == 11
-        }
-    }
-}

@@ -29,8 +29,9 @@ final class UIButtonDemoVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        title = "UIButton 语法糖 Demo"
-
+        jobsSetupGKNav(
+            title: "UIButton 语法糖 Demo"
+        )
         setupLayout()
         buildDemos()
     }
@@ -39,7 +40,8 @@ final class UIButtonDemoVC: UIViewController {
         // 1) 加入 ScrollView
         view.addSubview(scroll)
         scroll.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
+            make.top.equalTo(gk_navigationBar.snp.bottom).offset(10.h)
+            make.left.right.bottom.equalTo(view.safeAreaLayoutGuide)
         }
 
         // 2) 将 stack 放入 ScrollView，并用 contentLayoutGuide/ frameLayoutGuide 约束
@@ -54,7 +56,6 @@ final class UIButtonDemoVC: UIViewController {
             make.width.equalTo(scroll.frameLayoutGuide.snp.width).offset(-32)
         }
     }
-
     // MARK: - 构建所有示例（每个按钮都是局部变量，注释写清用途）
     private func buildDemos() {
 

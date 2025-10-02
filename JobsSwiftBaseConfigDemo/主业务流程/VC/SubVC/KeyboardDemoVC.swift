@@ -13,28 +13,51 @@ import SnapKit
 final class KeyboardDemoVC: UIViewController {
 
     private let bag = DisposeBag()
-
     // 输入框
-    private let textField = UITextField().then {
-        $0.placeholder = "请输入文字，弹出键盘试试"
-        $0.borderStyle = .roundedRect
-    }
-
+    private lazy var textField: UITextField = {
+        UITextField()
+            .byPlaceholder("请输入文字，弹出键盘试试")
+            .byBorderStyle(.roundedRect)
+            .byAddTo(view) { [unowned self] make in
+                make.top.equalTo(gk_navigationBar.snp.bottom).offset(80.h)
+                make.left.right.equalToSuperview().inset(20)
+                make.height.equalTo(44)
+            }
+    }()
     // 底部工具栏（跟随键盘上移）
-    private let bottomBar = UIView().then {
-        $0.backgroundColor = .systemGray6
-    }
+    private lazy var bottomBar: UIView = {
+        UIView()
+            .byBgColor(.systemGray6)
+            .byAddTo(view) { [unowned self] make in
+                make.left.right.equalToSuperview()
+                make.height.equalTo(60)
+                make.bottom.equalToSuperview() // 初始状态贴底
+            }
+    }()
+
+    private lazy var label: UILabel = {
+        UILabel()
+            .byText("我是底部栏，会跟随键盘上移")
+            .byTextColor(.darkGray)
+            .byTextAlignment(.center)
+            .byAddTo(bottomBar) { make in
+                make.edges.equalToSuperview()
+            }
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Keyboard Height Demo"
+        jobsSetupGKNav(
+            title: "Keyboard Height Demo"
+        )
         view.backgroundColor = .systemBackground
-        setupUI()
+        textField.alpha = 1;
+        bottomBar.alpha = 1;
+        label.alpha = 1;
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
         // ✅ 核心：监听键盘高度
         view.keyboardHeight
             .subscribe(onNext: { [weak self] height in
@@ -49,29 +72,5 @@ final class KeyboardDemoVC: UIViewController {
                 }
             })
             .disposed(by: bag)
-    }
-
-    private func setupUI() {
-        view.addSubview(textField)
-        view.addSubview(bottomBar)
-
-        textField.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(80)
-            make.left.right.equalToSuperview().inset(20)
-            make.height.equalTo(44)
-        }
-
-        bottomBar.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.height.equalTo(60)
-            make.bottom.equalToSuperview() // 初始状态贴底
-        }
-
-        let label = UILabel()
-        label.text = "我是底部栏，会跟随键盘上移"
-        label.textColor = .darkGray
-        label.textAlignment = .center
-        bottomBar.addSubview(label)
-        label.snp.makeConstraints { $0.edges.equalToSuperview() }
     }
 }

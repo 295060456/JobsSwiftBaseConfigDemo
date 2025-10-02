@@ -11,21 +11,23 @@ import SnapKit
 final class JobsCountdownDemoVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Countdown 按钮 Demo"
+        jobsSetupGKNav(
+            title: "Countdown 按钮 Demo"
+        )
         view.backgroundColor = .systemBackground
 
         if #available(iOS 15.0, *) {
             setupUI_iOS15()
         } else {
-            let lab = UILabel()
-            lab.text = "需要 iOS 15+ 的 UIButton.Configuration"
-            lab.textColor = .secondaryLabel
-            lab.textAlignment = .center
-            view.addSubview(lab)
-            lab.snp.makeConstraints { $0.center.equalToSuperview() }
+            UILabel()
+                .byText("需要 iOS 15+ 的 UIButton.Configuration")
+                .byTextColor(.secondaryLabel)
+                .byTextAlignment(.center)
+                .byAddTo(view) { make in
+                    make.center.equalToSuperview()
+                }
         }
     }
-
     // MARK: - iOS15+ Demo
     @available(iOS 15.0, *)
     private func setupUI_iOS15() {
@@ -37,7 +39,11 @@ final class JobsCountdownDemoVC: UIViewController {
         content.alignment = .fill
 
         view.addSubview(scroll)
-        scroll.snp.makeConstraints { $0.edges.equalTo(view.safeAreaLayoutGuide) }
+
+        scroll.snp.makeConstraints {
+            $0.top.equalTo(gk_navigationBar.snp.bottom).offset(10.h)
+            $0.left.bottom.right.equalTo(view.safeAreaLayoutGuide)
+        }
 
         scroll.addSubview(content)
         content.snp.makeConstraints {

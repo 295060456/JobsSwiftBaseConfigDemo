@@ -27,39 +27,35 @@ final class RichTextDemoVC: UIViewController, HasDisposeBag {
     private let phoneText    = "400-123-4567"
     private let phoneURL     = "tel://4001234567"
 
-    private let tableView = UITableView(frame: .zero, style: .plain)
+    private lazy var tableView: UITableView = {
+        UITableView(frame: .zero, style: .plain)
+            .byDataSource(self)
+            .byDelegate(self)
+            .bySeparatorStyle(.none)
+            .byRowHeight(UITableView.automaticDimension)
+            .byEstimatedRowHeight(120)
+            .byScrollEnabled(false)
+            .registerCellByID(CellCls: LinkCell.self, ID: LinkCell.reuseID)
+            .byAddTo(view) { [unowned self] make in
+                make.top.equalTo(gk_navigationBar.snp.bottom).offset(10.h)
+                make.left.right.equalToSuperview()
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            }
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "富文本演示（Delegate & RAC）"
         view.backgroundColor = .systemBackground
-        setupTable()
-    }
-
-    private func setupTable() {
-        tableView.separatorStyle = .none
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 120
-        tableView.isScrollEnabled = false
-
-        view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.left.right.equalToSuperview()
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-        }
-
-        tableView.register(LinkCell.self, forCellReuseIdentifier: LinkCell.reuseID)
-        tableView.dataSource = self
-        tableView.delegate   = self
+        jobsSetupGKNav(
+            title: "富文本演示（Delegate & RAC）"
+        )
+        tableView.alpha = 1;
     }
 }
 
 // MARK: - DataSource / Delegate
 extension RichTextDemoVC: UITableViewDataSource, UITableViewDelegate {
-
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { 2 }
-
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let mode: LinkCell.Mode = (indexPath.row == 0) ? .delegate : .rac

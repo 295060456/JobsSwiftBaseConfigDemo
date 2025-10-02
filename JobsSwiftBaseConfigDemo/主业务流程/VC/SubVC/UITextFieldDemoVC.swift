@@ -19,17 +19,14 @@ final class UITextFieldDemoVC: UIViewController,
     // MARK: - UI
     // 左边信封图标
     private static func makeIcon(_ name: String) -> UIImageView {
-        let iv = UIImageView(image: UIImage(systemName: name))
-        iv.tintColor = .secondaryLabel
-        iv.contentMode = .scaleAspectFit
-        iv.frame = CGRect(x: 0, y: 0, width: 22, height: 22)
-        return iv
+        return UIImageView(image: UIImage(systemName: name))
+            .byTintColor(.secondaryLabel)
+            .byContentMode(.scaleAspectFit)
+            .byFrame(CGRect(x: 0, y: 0, width: 22, height: 22))
     }
-
     // 顶部工具条（“完成”）
     private lazy var accessory: UIToolbar = {
-        let bar = UIToolbar()
-        bar.items = [
+        UIToolbar().byItems([
             UIBarButtonItem(systemItem: .flexibleSpace),
             UIBarButtonItem()
                 .byTitle("完成")
@@ -40,11 +37,9 @@ final class UITextFieldDemoVC: UIViewController,
                     guard let self = self else { return }   // ✅ 确保生命周期安全
                     view.endEditing(true)
                 },
-        ]
-        bar.sizeToFit()
-        return bar
+        ])
+        .bySizeToFit()
     }()
-
     // 邮箱输入框
     private lazy var emailTF: UITextField = {
         let tf = UITextField()
@@ -57,7 +52,6 @@ final class UITextFieldDemoVC: UIViewController,
             .byTextAlignment(.natural)
             .byBorderStyle(.roundedRect)
             .byClearButtonMode(.whileEditing)
-
             .byInputAccessoryView(accessory)
             // 键盘
             .byKeyboardType(.emailAddress)
@@ -83,6 +77,11 @@ final class UITextFieldDemoVC: UIViewController,
                         tint: .secondaryLabel,
                         size: .init(width: 18, height: 18),
                         leading: 12, spacing: 8)
+            .byAddTo(view) { [unowned self] make in
+                make.top.equalTo(gk_navigationBar.snp.bottom).offset(10.h)
+                make.left.right.equalToSuperview().inset(20)
+                make.height.equalTo(44)
+            }
         // iOS 17+
         if #available(iOS 17.0, *) {
             tf.byInlinePredictionType(.default)
@@ -95,69 +94,76 @@ final class UITextFieldDemoVC: UIViewController,
         }
         return tf
     }()
-
     // 密码输入框（带“眼睛”）@byLimitLength（5）
     private lazy var passwordTF: UITextField = {
-        let tf = UITextField()
+        UITextField()
             .byDelegate(self) // 数据源
             .byPlaceholder("请输入密码（6-20 位）")
             .bySecureTextEntry(true)
-            .byInputAccessoryView(passwordAccessory)
+            .byInputAccessoryView(UIToolbar().byItems([
+                UIBarButtonItem()
+                    .byTitle("清空")
+                    .byTitleFont(.systemFont(ofSize: 15))
+                    .byTitleColor(.systemRed)
+                    .byStyle(.plain)
+                    .onTap { [weak self] _ in
+                        guard let self = self else { return }   // ✅ 确保生命周期安全
+                        /// TODO
+                    },
+                UIBarButtonItem(systemItem: .flexibleSpace),
+                UIBarButtonItem()
+                    .byTitle("完成")
+                    .byTitleFont(.systemFont(ofSize: 15))
+                    .byTitleColor(.systemYellow)
+                    .byStyle(.done)
+                    .onTap { [weak self] _ in
+                        guard let self = self else { return }   // ✅ 确保生命周期安全
+                        view.endEditing(true)
+                    },
+            ])
+            .bySizeToFit())                                     // ✅ 给密码框自定义 inputAccessoryView
             .byBorderStyle(.roundedRect)
             .byReturnKeyType(.done)
             .byTextContentType(.password)
             .byPasswordRules(nil) // 也可自定义
-//            .byLeftView(Self.makeIcon("lock"), mode: .always)
+        //            .byLeftView(Self.makeIcon("lock"), mode: .always)
             .byLeftIcon(UIImage(systemName: "lock"),
                         tint: .secondaryLabel,
                         size: .init(width: 18, height: 18),
                         leading: 12, spacing: 8)
             .byRightView(UIButton(type: .system)
-                .byImage(UIImage(systemName: "eye.slash"), for: .normal)   // 未选中
-                .byImage(UIImage(systemName: "eye"), for: .selected)       // 选中
-                .byContentEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 6))
-                .onTap { [weak self] sender in
-                    guard let self else { return }                // 或写成 guard let strongSelf = self else { return }
-                    sender.isSelected.toggle()
-                    self.passwordTF.isSecureTextEntry.toggle()
-                    self.passwordTF.togglePasswordVisibility()    // 你自己的游标/清空修复
-                }, mode: .always)
-            .byAllowsNumberPadPopover(true) // iPad 数字键盘弹窗
+                         // 普通文字：未选中状态标题
+                         .byTitle("显示", for: .normal)
+                         // 选中状态标题
+                         .byTitle("隐藏", for: .selected)
+                         // 文字颜色：区分状态
+                         .byTitleColor(.systemBlue, for: .normal)
+                         .byTitleColor(.systemRed, for: .selected)
+                         // 字体统一
+                         .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+                         // 图标（SF Symbol）
+                         .byImage(UIImage(systemName: "eye.slash"), for: .normal)   // 未选中图标
+                         .byImage(UIImage(systemName: "eye"), for: .selected)       // 选中图标
+                         // 图文内边距
+                         .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+                         // 图标与文字间距
+                         .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+                         // 点按事件（统一入口）
+                         .onTap { [weak self] sender in
+                             guard let self else { return }
+                             sender.isSelected.toggle()
+                             // 文字与图标自动切换
+                             self.passwordTF.isSecureTextEntry.toggle()
+                             self.passwordTF.togglePasswordVisibility()
+                             print("👁 当前状态：\(sender.isSelected ? "隐藏密码" : "显示密码")")
+                         }, mode: .always)
             .byInputView(datePicker) // 演示自定义 inputView：点密码框弹日期（纯展示，不建议真实项目这么用）
             .byLimitLength(5)
-
-        return tf
+            .byAddTo(view) { [unowned self] make in
+                make.top.equalTo(emailTF.snp.bottom).offset(16)
+                make.left.right.height.equalTo(emailTF)
+            }
     }()
-
-    // 可选：给密码框自定义 inputAccessoryView
-    private lazy var passwordAccessory: UIToolbar = {
-        let bar = UIToolbar()
-        bar.items = [
-            UIBarButtonItem()
-                .byTitle("清空")
-                .byTitleFont(.systemFont(ofSize: 15))
-                .byTitleColor(.systemRed)
-                .byStyle(.plain)
-                .onTap { [weak self] _ in
-                    guard let self = self else { return }   // ✅ 确保生命周期安全
-                    self.passwordTF.text = ""
-                    // 也可以：self.passwordTF.rx.text.onNext("")
-                },
-            UIBarButtonItem(systemItem: .flexibleSpace),
-            UIBarButtonItem()
-                .byTitle("完成")
-                .byTitleFont(.systemFont(ofSize: 15))
-                .byTitleColor(.systemYellow)
-                .byStyle(.done)
-                .onTap { [weak self] _ in
-                    guard let self = self else { return }   // ✅ 确保生命周期安全
-                    view.endEditing(true)
-                },
-        ]
-        bar.sizeToFit()
-        return bar
-    }()
-
     // 自定义 inputView（示例：日期选择器，只为展示 byInputView 用法）
     private lazy var datePicker: UIDatePicker = {
         return UIDatePicker()
@@ -173,22 +179,11 @@ final class UITextFieldDemoVC: UIViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "UITextField 全量演示"
+        jobsSetupGKNav(
+            title: "UITextField 全量演示"
+        )
         view.backgroundColor = .systemBackground
-
-        // MARK: 布局
-        view.addSubview(emailTF)
-        view.addSubview(passwordTF)
-        emailTF.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(32)
-            $0.left.right.equalToSuperview().inset(20)
-            $0.height.equalTo(44)
-        }
-        passwordTF.snp.makeConstraints {
-            $0.top.equalTo(emailTF.snp.bottom).offset(16)
-            $0.left.right.height.equalTo(emailTF)
-        }
-
+        emailTF.alpha = 1;
         // MARK: Rx 绑定 —— 删除键广播
         emailTF.didPressDelete
             .subscribe(onNext: { [weak self] in
@@ -196,7 +191,6 @@ final class UITextFieldDemoVC: UIViewController,
                 print("🗑 delete on emailTF:", self.emailTF.text ?? "")
             })
             .disposed(by: rx.disposeBag)
-
         // MARK: Rx 绑定 —— 邮箱：去空格 + 最长 8 + 简单规则
         emailTF.textInput(
             maxLength: 8,
@@ -205,7 +199,6 @@ final class UITextFieldDemoVC: UIViewController,
         ).isValid
             .subscribe(onNext: { print("📧 email valid:", $0) })
             .disposed(by: rx.disposeBag)
-
         // MARK: Rx 绑定 —— 密码：不做任何限制，只是监听（不要传 nil，直接用默认）
         passwordTF.textInput(
             maxLength: 5,
@@ -215,7 +208,6 @@ final class UITextFieldDemoVC: UIViewController,
         .isValid
         .subscribe(onNext: { print("🔐 password valid:", $0) })
         .disposed(by: rx.disposeBag)
-
         // MARK: 监听删除键（无 .rx）
         passwordTF.didPressDelete
             .subscribe(onNext: { print("delete pressed") })

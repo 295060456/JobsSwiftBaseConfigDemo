@@ -35,13 +35,6 @@ public extension UIImageView {
         self.contentMode = mode
         return self
     }
-    // MARK: 裁剪超出边界
-    @discardableResult
-    func byClipsToBounds(_ clips: Bool = true) -> Self {
-        self.clipsToBounds = clips
-        return self
-    }
-
     // MARK: 是否可交互 UIView.byUserInteractionEnabled
 
     // MARK: 是否高亮
