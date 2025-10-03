@@ -170,6 +170,12 @@
 
 * [**Sip**](https://sipapp.io/)：取色器
 
+* [**UI界面调试工具**](https://lookin.work/)
+
+  > ```ruby
+  > pod 'LookinServer', :subspecs => ['Swift'], :configurations => ['Debug']
+  > ```
+
 * [**Fastlane**](https://fastlane.tools/)：自动化工具集
 
   > 一个开源的 **移动应用（iOS / Android）自动化工具集**，目的是把那些繁琐、重复、容易出错的 App 构建 / 签名 / 发布 / 测试 / 上架 等流程，变成<u>写一个脚本、一键执行</u>的工作。

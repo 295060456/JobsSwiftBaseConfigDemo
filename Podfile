@@ -66,7 +66,7 @@ def swiftAppCommon
   pod 'RxRelay'                            # 安全替代 Variable，常用于 ViewModel
   pod 'NSObject+Rx'
   pod 'ESPullToRefresh'
-
+  pod 'LookinServer'
   pod 'MJRefresh'
 end
 
