@@ -66,7 +66,7 @@ def swiftAppCommon
   pod 'RxRelay'                            # 安全替代 Variable，常用于 ViewModel
   pod 'NSObject+Rx'
   pod 'ESPullToRefresh'
-  pod 'LookinServer', :subspecs => ['Swift'], :configurations => ['Debug']
+
   pod 'MJRefresh'
 end
 
@@ -78,7 +78,7 @@ def debugPods
 # pod 'FLEX'
 # pod 'JJException'
 # pod 'FBRetainCycleDetector'
-  #pod 'LookinServer', :configurations => ['Debug']
+ pod 'LookinServer', :subspecs => ['Swift'], :configurations => ['Debug']
 end
 
 # 基础的公共配置
