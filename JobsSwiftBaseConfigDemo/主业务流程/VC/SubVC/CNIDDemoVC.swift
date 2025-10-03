@@ -95,7 +95,6 @@ final class CNIDDemoVC: UIViewController {
     private func printDemo() {
         // 1) 普通文本 / 参数混合
         log("你好，世界", 123, true)
-
         // 2) JSON：自动识别 String/Data/字典/数组（默认 pretty + 中文还原）
         log(#"{"key":"\u7231\u60c5"}"#)                 // String JSON
         log(["user": "张三", "tags": ["iOS","Swift"]])  // 字典/数组
@@ -108,13 +107,11 @@ final class CNIDDemoVC: UIViewController {
             receivedAt: Date(),
             retryable: false
         ))                            // Data
-
         // 3) 对象：自动反射为 JSON（防环、可控深度）
         struct User { let id: Int; let name: String }
         let u = User(id: 1, name: "张三")
         log(u)                      // .auto 下会转对象 JSON
         log(u, mode: .object)       // 强制对象模式（不走 stringify）
-
         // 4) 指定级别（仍是一个入口）
         log("启动完成", level: .info)
         log("接口慢",  level: .warn)

@@ -1522,69 +1522,37 @@ tableView.es.addInfiniteScrolling {
 
 ### 4、🖨️ 日志打印工具的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-> ✅ 统一格式，自动带上文件名、行号、函数名
->
-> ✅ 区分 `print` / `debugPrint` 使用场景
->
-> ✅ 可以加开关（`isDebugEnabled` / `#if DEBUG`）来控制是否输出
->
-> ✅ 日志等级清晰（info / warning / error / debug）
+> 时间+文件全名+当前的打印触发行数+当前所在方法名+顶层main+具体的打印内容
 
 ```swift
-enum LogLevel: String {
-    case info = "ℹ️ INFO"
-    case warning = "⚠️ WARNING"
-    case error = "❌ ERROR"
-    case debug = "🐞 DEBUG"
-}
-
-struct JobsLogger {
-    // 是否开启调试模式
-    static var isDebugEnabled: Bool = true
-
-    /// 普通日志（print）
-    static func log(_ items: Any..., level: LogLevel = .info,
-                    file: String = #file, line: Int = #line, function: String = #function) {
-        #if DEBUG
-        let fileName = (file as NSString).lastPathComponent
-        let message = items.map { "\($0)" }.joined(separator: " ")
-        Swift.print("[\(level.rawValue)] \(fileName):\(line) \(function) → \(message)")
-        #endif
-    }
-
-    /// 调试日志（debugPrint）
-    static func debug(_ items: Any..., file: String = #file, line: Int = #line, function: String = #function) {
-        #if DEBUG
-        guard isDebugEnabled else { return }
-        let fileName = (file as NSString).lastPathComponent
-        Swift.debugPrint("[\(LogLevel.debug.rawValue)] \(fileName):\(line) \(function) →", terminator: " ")
-        for item in items {
-            Swift.debugPrint(item, terminator: " ")
-        }
-        Swift.debugPrint("") // 换行
-        #endif
-    }
+// MARK: - 打印示例
+private func printDemo() {
+    // 1) 普通文本 / 参数混合
+    log("你好，世界", 123, true)
+    // 2) JSON：自动识别 String/Data/字典/数组（默认 pretty + 中文还原）
+    log(#"{"key":"\u7231\u60c5"}"#)                 // String JSON
+    log(["user": "张三", "tags": ["iOS","Swift"]])  // 字典/数组
+    log(DataFromNetwork(
+        statusCode: 200,
+        message: "OK",
+        url: URL(string: "https://api.example.com/users")!,
+        headers: ["Content-Type": "application/json"],
+        body: #"{"user":"\u5f20\u4e09","tags":["iOS","Swift"],"ok":true}"#.data(using: .utf8),
+        receivedAt: Date(),
+        retryable: false
+    ))                            // Data
+    // 3) 对象：自动反射为 JSON（防环、可控深度）
+    struct User { let id: Int; let name: String }
+    let u = User(id: 1, name: "张三")
+    log(u)                      // .auto 下会转对象 JSON
+    log(u, mode: .object)       // 强制对象模式（不走 stringify）
+    // 4) 指定级别（仍是一个入口）
+    log("启动完成", level: .info)
+    log("接口慢",  level: .warn)
+    log(["err": "timeout"], level: .error)
+    log(["arr": ["\\u7231\\u60c5", 1]], level: .debug)
 }
 ```
-
-> ```swift
-> struct User: CustomStringConvertible, CustomDebugStringConvertible {
->     let name: String
->     var description: String { "👤 用户名: \(name)" }
->     var debugDescription: String { "User(name: \(name))" }
-> }
-> 
-> let u = User(name: "Jobs")
-> 
-> JobsLogger.log("应用启动成功")  
-> // [ℹ️ INFO] AppDelegate.swift:23 application(_:didFinishLaunchingWithOptions:) → 应用启动成功
-> 
-> JobsLogger.log("网络超时", level: .warning)
-> // [⚠️ WARNING] NetworkManager.swift:87 request() → 网络超时
-> 
-> JobsLogger.debug(u)
-> // [🐞 DEBUG] ViewController.swift:45 viewDidLoad() → User(name: Jobs)
-> ```
 
 ### 5、避免从 `XIB`/`Storyboard` 初始化 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 

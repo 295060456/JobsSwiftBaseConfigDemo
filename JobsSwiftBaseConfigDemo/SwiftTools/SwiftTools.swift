@@ -100,12 +100,11 @@ enum JobsFormatters {
         }
     }
 }
-// ================================== JobsLog（统一入口） ==================================
+// MARK: - JobsLog（统一入口）
 public enum JobsLog {
     // 全局开关
     public static var enabled: Bool = true
     public static var showThread: Bool = true
-
     // 等级（可选，默认 .plain）
     public enum Level: String { case plain = "LOG", info = "INFO", warn = "WARN", error = "ERROR", debug = "DEBUG"
         var symbol: String {
@@ -118,10 +117,8 @@ public enum JobsLog {
             }
         }
     }
-
     // 模式（统一入口：自动识别/强制 JSON/强制对象/纯文本）
     public enum Mode { case auto, json, object, plain }
-
     // 统一入口（你只用这个）
     public static func log(_ items: Any...,
                            level: Level = .plain,
@@ -146,7 +143,6 @@ public enum JobsLog {
         Swift.print("\(level.symbol) \(timeNow()) | \(fileName):\(line) | \(function)\(threadPart) → \(msg)",
                     terminator: terminator)
     }
-
     // 统一渲染：根据模式/类型输出
     private static func render(_ any: Any, mode: Mode, prettyJSON: Bool, maxDepth: Int) -> String {
         switch mode {
@@ -170,13 +166,11 @@ public enum JobsLog {
             return stringify(any)
         }
     }
-
     // ---------- 基础工具 ----------
     private static func timeNow() -> String {
         let f = DateFormatter(); f.dateFormat = "HH:mm:ss"; f.locale = Locale(identifier: "zh_CN")
         return f.string(from: Date())
     }
-
     // 人类可读 stringify（递归容器 + Unicode 反转义）
     private static func stringify(_ v: Any) -> String {
         if case Optional<Any>.none = v as Any? { return "nil" }
@@ -223,10 +217,8 @@ public enum JobsLog {
             }.joined(separator: ", ")
             return "{\(body)}"
         }
-
         return decodeUnicodeEscapes(String(describing: x))
     }
-
     // Unicode 反转义（支持 \uXXXX / \UXXXXXX）
     private static func decodeUnicodeEscapes(_ s: String) -> String {
         let t = s.replacingOccurrences(of: "\\u", with: "\\U")
@@ -237,7 +229,6 @@ public enum JobsLog {
         }
         return s
     }
-
     // ---------- JSON Utilities ----------
     private static func toJSONString(_ any: Any, pretty: Bool, decodeUnicode: Bool) -> String? {
         let options: JSONSerialization.WritingOptions = pretty ? [.prettyPrinted] : []
@@ -261,7 +252,6 @@ public enum JobsLog {
             }
             return nil
         }
-
         return nil
     }
 
@@ -283,7 +273,6 @@ public enum JobsLog {
         }
         return nil
     }
-
     // ---------- Object → JSON-ready（反射，防循环） ----------
     private static func toJSONStringFromObject(_ any: Any, pretty: Bool, maxDepth: Int) -> String? {
         var visited = Set<ObjectIdentifier>()
@@ -341,12 +330,10 @@ public enum JobsLog {
         }
 
         let mirror = Mirror(reflecting: value)
-
         // 3) Array / Set
         if mirror.displayStyle == .collection || mirror.displayStyle == .set {
             return mirror.children.map { toJSONReady($0.value, depth: depth - 1, visited: &visited) }
         }
-
         // 4) Dictionary（child 是 (key,value) 元组，这里稳妥拆解）
         if mirror.displayStyle == .dictionary {
             var dict: [String: Any] = [:]
@@ -365,7 +352,6 @@ public enum JobsLog {
             }
             return dict
         }
-
         // 5) Enum（记录类型、case、关联值）
         if mirror.displayStyle == .enum {
             var out: [String: Any] = ["_type": String(describing: type(of: value))]
@@ -377,7 +363,6 @@ public enum JobsLog {
             }
             return out
         }
-
         // 6) Class/Struct：采集属性；Class 做循环检测
         var props: [String: Any] = [:]
         if mirror.displayStyle == .class, let obj = value as AnyObject? {
@@ -400,7 +385,7 @@ public enum JobsLog {
         return ["_type": String(describing: type(of: value)), "_props": props]
     }
 }
-// ================================== 全局函数（免前缀） ==================================
+// MARK: - 全局函数（免前缀）
 @inline(__always)
 public func log(_ items: Any...,
                 level: JobsLog.Level = .plain,
