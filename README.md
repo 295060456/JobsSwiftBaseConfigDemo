@@ -1520,7 +1520,7 @@ tableView.es.addInfiniteScrolling {
   CGRect(x: 20.w, y: 100.h, width: 200.w, height: 40.h)
   ```
 
-### 4、🖨️ 日志打印工具的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 4、🖨️ 日志打印工具的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 时间+文件全名+当前的打印触发行数+当前所在方法名+顶层main+具体的打印内容
 
@@ -1553,6 +1553,61 @@ private func printDemo() {
     log(["arr": ["\\u7231\\u60c5", 1]], level: .debug)
 }
 ```
+
+> ```swift
+> 📝 10:16:56 | CNIDDemoVC.swift:97 | printDemo() | main → 你好，世界 123 true
+> 📝 10:16:56 | CNIDDemoVC.swift:99 | printDemo() | main → {
+>   "key" : "爱情"
+> }
+> 📝 10:16:56 | CNIDDemoVC.swift:100 | printDemo() | main → {
+>   "user" : "张三",
+>   "tags" : [
+>     "iOS",
+>     "Swift"
+>   ]
+> }
+> 📝 10:16:56 | CNIDDemoVC.swift:101 | printDemo() | main → {
+>   "_type" : "DataFromNetwork",
+>   "_props" : {
+>     "body" : {
+>       "<Data>" : 56
+>     },
+>     "statusCode" : 200,
+>     "headers" : {
+>       "Content-Type" : "application\/json"
+>     },
+>     "url" : "https:\/\/api.example.com\/users",
+>     "message" : "OK",
+>     "receivedAt" : "2025-10-03T03:16:56Z",
+>     "retryable" : false
+>   }
+> }
+> 📝 10:16:56 | CNIDDemoVC.swift:113 | printDemo() | main → {
+>   "_props" : {
+>     "name" : "张三",
+>     "id" : 1
+>   },
+>   "_type" : "User"
+> }
+> 📝 10:16:56 | CNIDDemoVC.swift:114 | printDemo() | main → {
+>   "_props" : {
+>     "name" : "张三",
+>     "id" : 1
+>   },
+>   "_type" : "User"
+> }
+> ℹ️ 10:16:56 | CNIDDemoVC.swift:116 | printDemo() | main → 启动完成
+> ⚠️ 10:16:56 | CNIDDemoVC.swift:117 | printDemo() | main → 接口慢
+> ❌ 10:16:56 | CNIDDemoVC.swift:118 | printDemo() | main → {
+>   "err" : "timeout"
+> }
+> 🐞 10:16:56 | CNIDDemoVC.swift:119 | printDemo() | main → {
+>   "arr" : [
+>     "爱情",
+>     1
+>   ]
+> }
+> ```
 
 ### 5、避免从 `XIB`/`Storyboard` 初始化 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 

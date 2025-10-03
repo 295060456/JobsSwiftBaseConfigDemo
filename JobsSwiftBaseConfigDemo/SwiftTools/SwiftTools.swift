@@ -219,13 +219,17 @@ public enum JobsLog {
         }
         return decodeUnicodeEscapes(String(describing: x))
     }
-    // Unicode 反转义（支持 \uXXXX / \UXXXXXX）
+    // 更稳的 Unicode 反转义：支持 \uXXXX / \UXXXXXXXX，且能处理整段文本
     private static func decodeUnicodeEscapes(_ s: String) -> String {
-        let t = s.replacingOccurrences(of: "\\u", with: "\\U")
-                 .replacingOccurrences(of: "\"", with: "\\\"")
-        let data = "\"\(t)\"".data(using: .utf8)!
-        if let x = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? String {
-            return x
+        // 先把可能的 “双反斜杠转义” 规整为单反斜杠，避免被当作普通字符
+        let normalized = s
+            .replacingOccurrences(of: #"\\u"#, with: #"\u"#)
+            .replacingOccurrences(of: #"\\U"#, with: #"\U"#)
+
+        let ms = NSMutableString(string: normalized)
+        // "Any-Hex/Java" 会把 \uXXXX / \UXXXXXXXX 都转为真实字符
+        if CFStringTransform(ms, nil, "Any-Hex/Java" as CFString, true) {
+            return ms as String
         }
         return s
     }
