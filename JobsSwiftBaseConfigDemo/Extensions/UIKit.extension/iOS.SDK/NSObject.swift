@@ -70,14 +70,6 @@ extension NSObject {
             function(strongOwner)()
         }
     }
-
-    /// 延迟执行 block，自动处理 weak self
-    func doAsync(after delay: TimeInterval = 1.0, _ block: @escaping (Self) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
-            guard let strongSelf = self else { return }
-            block(strongSelf as! Self)
-        }
-    }
 }
 
 extension NSObject {
@@ -103,3 +95,5 @@ extension NSObject {
         return output
     }
 }
+
+extension NSObject: JobsAsyncable {}

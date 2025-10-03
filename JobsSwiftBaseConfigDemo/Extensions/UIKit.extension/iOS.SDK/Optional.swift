@@ -7,10 +7,6 @@
 
 import Foundation
 import UIKit
-// MARK: - 安全解包 Optional
-protocol SafeUnwrappedInitializable {
-    init()
-}
 
 extension Optional where Wrapped: SafeUnwrappedInitializable {
     func safelyUnwrapped(defaultValue: Wrapped? = nil) -> Wrapped {

@@ -31,7 +31,7 @@ class DemoDetailVC: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         jobsSetupGKNav(
-            title: "Detail"
+            title: "🍰 自定义高度 HalfSheet (320)"
         )
         UIButton(type: .system)
             // 普通文字：未选中状态标题
@@ -58,7 +58,7 @@ class HalfSheetDemoVC: DemoDetailVC{
             .byClipsToBounds(true)
 
         UILabel()
-            .byText("🍰 自定义高度 HalfSheet (320)")
+            .byText("")
             .byFont(.boldSystemFont(ofSize: 18))
             .byTextAlignment(.center)
             .byAddTo(view) { make in

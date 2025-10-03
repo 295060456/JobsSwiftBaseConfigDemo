@@ -5161,6 +5161,148 @@ func resizableImage(edge: UIEdgeInsets = UIEdgeInsets(top: 10.h,
   }
   ```
 
+### 22、嵌套定义 **<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>**
+
+#### 22.1、嵌套 <font color=red>class</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+class Outer {
+    class Inner {
+        func say() {
+            print("👋 Inner class")
+        }
+    }
+}
+
+// 使用：
+let inner = Outer.Inner()
+inner.say()
+```
+
+#### 22.2、嵌套 <font color=red>struct</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+struct Container {
+    struct Item {
+        let name: String
+    }
+}
+
+// 使用：
+let i = Container.Item(name: "🍎 Apple")
+print(i.name)
+```
+
+#### 22.3、嵌套 <font color=red>enum</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+class DownloadManager {
+    enum Status {
+        case idle
+        case downloading
+        case finished
+    }
+}
+
+// 使用：
+let s: DownloadManager.Status = .downloading
+print("状态：\(s)")
+```
+
+#### 22.4、嵌套 <font color=red>protocol</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+class Player {
+    protocol Delegate {
+        func didScore(points: Int)
+    }
+}
+```
+
+> ```swift
+> class Coach: Player.Delegate {
+>     func didScore(points: Int) {
+>         print("👏 Scored \(points)")
+>     }
+> }
+> ```
+
+#### 22.5、嵌套 <font color=red>actor</font>（[**Swift**](https://developer.apple.com/swift/) 5.5+）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+class DataCenter {
+    actor Storage {
+        private var data: [String: String] = [:]
+
+        func save(key: String, value: String) {
+            data[key] = value
+        }
+    }
+}
+
+// 使用：
+let s = DataCenter.Storage()
+Task {
+    await s.save(key: "name", value: "Jobs")
+}
+```
+
+#### 22.6、嵌套 <font color=red>func</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+func outer() {
+    func inner(_ text: String) {
+        print("💬", text)
+    }
+
+    inner("Hello from inner function")
+}
+
+outer()
+```
+
+#### 22.7、🚫不支持嵌套的（仅备注）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+func badExample() {
+    // ❌ 以下会报错：
+    // class Inner {}     // ❌ 不能定义类
+    // struct S {}        // ❌ 不能定义结构体
+    // enum E {}          // ❌ 不能定义枚举
+}
+```
+
+### 23、<font color=red>typealias</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* ```swift
+  func example() {
+      typealias IntHandler = (Int) -> Void
+  
+      func run(handler: IntHandler) {
+          handler(42)
+      }
+  
+      run { print("🎯 \($0)") }
+  }
+  
+  example()
+  ```
+
+* ```swift
+  struct Network {
+      typealias Completion = (Bool) -> Void
+  
+      func request(done: Completion) {
+          done(true)
+      }
+  }
+  
+  // 使用：
+  Network().request { success in
+      print("✅ 成功: \(success)")
+  }
+  ```
+
 ## 五、<font color=red>**F**</font><font color=green>**A**</font><font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、[**Swift**](https://developer.apple.com/swift/) 纯类 🆚 `NSObject` 子类 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>

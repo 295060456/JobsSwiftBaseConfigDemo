@@ -16,7 +16,7 @@
 import GKNavigationBarSwift
 
 @MainActor
-extension UIViewController {
+public extension UIViewController {
     @discardableResult
     func byTitle(_ title: String?) -> Self {
         self.title = title
@@ -107,45 +107,6 @@ extension UIViewController {
         self.preferredTransition = transition
         return self
     }
-    /// 统一语义化 present（animated = true）
-    /// 让“被展示者”自己找到合适的“宿主”，由宿主来 present(self)
-    @discardableResult
-    func byPresent(_ from: UIResponder,
-                   animated: Bool = true,
-                   completion: (() -> Void)? = nil) -> Self {
-        // 1) 不能拿一个已经在层级里的 VC 去 present（比如导航栈里的自己）
-        if self.parent != nil || self.presentingViewController != nil {
-            assertionFailure("❌ Trying to present a VC that already has a parent or is presented: \(self)")
-            return self
-        }
-
-        // 2) 从 responder 链找到“可用宿主”
-        func findHost(from responder: UIResponder?) -> UIViewController? {
-            var r = responder
-            while let cur = r {
-                if let vc = cur as? UIViewController, vc.view.window != nil { return vc }
-                r = cur.next
-            }
-            // 兜底找 keyWindow 的 root
-            return UIApplication.shared.connectedScenes
-                .compactMap { ($0 as? UIWindowScene)?.keyWindow?.rootViewController }
-                .first
-        }
-
-        guard let host = findHost(from: from) else {
-            assertionFailure("❌ No presenting host VC found from responder chain.")
-            return self
-        }
-        // 3) 防止“自己 present 自己”
-        if host === self {
-            assertionFailure("❌ Don't present self on self. host === presented: \(host)")
-            return self
-        }
-
-        host.present(self, animated: animated, completion: completion) // ✅ 正确方向
-        return self
-    }
-
     /// 统一语义化 dismiss
     @discardableResult
     func byDismiss(animated: Bool = true,
@@ -226,47 +187,6 @@ extension UIViewController {
         return self
     }
 }
-// ================================== 导航语义：push / present 安全代理 ==================================
-// 语义：在任何 VC 中都可直接调用 pushVC()，自动代理到 nav 或包一层 nav 再 present
-@MainActor
-public extension UIViewController {
-    @discardableResult
-    func pushVC(_ viewController: UIViewController, animated: Bool = true) -> Self {
-        if let nav = self as? UINavigationController {
-            UINavigationController.pushViewController(nav)(viewController, animated: animated)
-        } else if let nav = navigationController {
-            UINavigationController.pushViewController(nav)(viewController, animated: animated)
-        } else {
-            let nav = UINavigationController(rootViewController: viewController)
-            nav.isNavigationBarHidden = true
-            nav.modalPresentationStyle = .fullScreen
-            present(nav, animated: animated, completion: nil)
-        }
-        return self
-    }
-    /// 在“没有导航栈”场景，自动包导航后 present
-    @discardableResult
-    func presentWithNavigation(_ viewController: UIViewController,
-                               animated: Bool = true,
-                               barHidden: Bool = false,
-                               modalStyle: UIModalPresentationStyle = .fullScreen) -> Self {
-        let nav = UINavigationController(rootViewController: viewController)
-        nav.isNavigationBarHidden = barHidden
-        nav.modalPresentationStyle = modalStyle
-        present(nav, animated: animated, completion: nil)
-        return self
-    }
-}
-
-extension UIViewController {
-    func doAsync(after delay: TimeInterval = 1.0,
-                 _ block: @escaping (Self) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
-            guard let strongSelf = self else { return }
-            block(strongSelf as! Self)
-        }
-    }
-}
 // MARK: - GKNavigationBarSwift
 public extension UIViewController {
     /// 通用 GKNavigationBar 封装
@@ -344,5 +264,132 @@ public extension UIViewController {
                 action()
 
             }// 点按事件（统一入口）
+    }
+}
+// MARK: - 数据传递（byData / inputData / onResult / sendResult）
+private enum JobsAssocKey {
+    static var inputData: UInt8 = 0
+    static var onResult: UInt8 = 1   // ⬅️ 只保留 Any 回调
+}
+
+extension UIViewController: JobsRouteComparable {
+    @inline(__always)
+    func jobs_isSameDestination(as other: UIViewController) -> Bool {
+        type(of: self) == type(of: other)
+    }
+}
+// MARK: - 兜底：任何 VC 都能先把数据塞进关联对象，VC 内再 `inputData()` 取
+public extension UIViewController {
+    // MARK: - 任意类型数据注入
+    /// 可注入任何类型（Int、Double、String、Array、Dictionary、自定义结构体...）
+    @discardableResult
+    func byData(_ data: Any?) -> Self {
+        objc_setAssociatedObject(self, &JobsAssocKey.inputData, data, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        return self
+    }
+    // MARK: - 数据读取:按指定类型取出注入的数据（类型安全）
+    func inputData<T>() -> T? {
+        objc_getAssociatedObject(self, &JobsAssocKey.inputData) as? T
+    }
+    // MARK: - 结果回调:订阅任意回传类型
+    @discardableResult
+    func onResult(_ callback: @escaping (Any) -> Void) -> Self {
+        objc_setAssociatedObject(self, &JobsAssocKey.onResult, callback, .OBJC_ASSOCIATION_COPY_NONATOMIC)
+        return self
+    }
+    // MARK: - 触发回传（传任何类型都行）
+    func sendResult(_ result: Any) {
+        if let cb = objc_getAssociatedObject(self, &JobsAssocKey.onResult) as? (Any) -> Void {
+            cb(result)
+        }
+    }
+    // MARK: - 便捷：回传后关闭当前页（push→pop / present→dismiss）
+    @discardableResult
+    func closeByResult(_ result: Any?, animated: Bool = true) -> Self {
+        if let r = result { sendResult(r) }
+        if let nav = navigationController { nav.popViewController(animated: animated) }
+        else { dismiss(animated: animated) }
+        return self
+    }
+}
+// MARK: - 链式导航（基于“栈内容去重”，无时间节流）
+public enum JobsPresentPolicy {
+    /// 有东西正在展示就忽略（最稳，默认）
+    case ignoreIfBusy
+    /// 沿着 presented 链找到最顶层再 present（适合强行顶层弹窗）
+    case presentOnTopMost
+}
+public extension UIViewController {
+    // MARK: - Push：基于“目的地等价”逻辑
+    /// 1) 栈顶同目的地 → 忽略
+    /// 2) 栈内存在同目的地 → popTo
+    /// 3) 否则 → push
+    @discardableResult
+    func byPush(_ from: UIResponder, animated: Bool = true) -> Self {
+        guard let host = from.jobsNearestVC() else {
+            assertionFailure("byPush: 未找到宿主 VC"); return self
+        }
+
+        if let nav = (host as? UINavigationController) ?? host.navigationController {
+            nav.jobs_pushOrPopTo(self, animated: animated)
+            return self
+        } else {
+            // 没有导航栈 → 包一层再 present（首次进入）
+            guard self.parent == nil else { return self } // 目标不能已挂载
+            if host.transitionCoordinator != nil || host.presentedViewController != nil { return self }
+
+            let wrapper = UINavigationController(rootViewController: self)
+            wrapper.isNavigationBarHidden = true
+            wrapper.modalPresentationStyle = .fullScreen
+            host.present(wrapper, animated: animated)
+            return self
+        }
+    }
+    // MARK: - 统一语义化 present：合法性校验 + 同目的地已展示则忽略
+    @discardableResult
+    func byPresent(_ from: UIResponder,
+                   animated: Bool = true,
+                   policy: JobsPresentPolicy = .ignoreIfBusy,
+                   completion: (() -> Void)? = nil) -> Self {
+        assert(Thread.isMainThread, "byPresent must be called on main thread")
+        // 1) 目标不能已挂载或已被展示
+        guard self.parent == nil,
+              self.presentingViewController == nil else {
+            assertionFailure("❌ Trying to present a VC that already has a parent/presenter: \(self)")
+            return self
+        }
+        // 2) 找宿主（你的 jobsNearestVC 已封装了 keyWindow 兜底）
+        guard var host = from.jobsNearestVC() else {
+            assertionFailure("❌ byPresent: 未找到宿主 VC")
+            return self
+        }
+        // 3) 策略：忽略 or 顶层
+        switch policy {
+        case .ignoreIfBusy:
+            if let presented = host.presentedViewController {
+                // 同目的地 → 忽略；否则也忽略（保持简单、稳定）
+                if self.jobs_isSameDestination(as: presented) { return self }
+                return self
+            }
+        case .presentOnTopMost:
+            // 沿链条爬到最顶（正在 dismiss 的不算稳定锚点）
+            while let p = host.presentedViewController, !p.isBeingDismissed {
+                host = p
+            }
+        }
+        // 4) 防止“自己 present 自己”
+        guard host !== self else {
+            assertionFailure("❌ Don't present self on self. host === presented: \(host)")
+            return self
+        }
+        // 5) 宿主正在转场：等转场完成再 present（避免系统警告/掉帧）
+        if let tc = host.transitionCoordinator {
+            tc.animate(alongsideTransition: nil) { _ in
+                host.present(self, animated: animated, completion: completion)
+            }
+            return self
+        }
+        host.present(self, animated: animated, completion: completion)
+        return self
     }
 }

@@ -1,5 +1,5 @@
 //
-//  EnumDefines.swift
+//  BaseEnumDefines.swift
 //  JobsSwiftBaseConfigDemo
 //
 //  Created by Jobs on 2025/6/16.
@@ -7,7 +7,6 @@
 
 import Foundation
 import UIKit
-
 // MARK: - 开发环境
 public enum JobsNetworkingEnvir: NSInteger {
     case undefined = 0,
