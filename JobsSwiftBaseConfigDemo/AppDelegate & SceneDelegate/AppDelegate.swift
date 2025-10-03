@@ -29,6 +29,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // ✅ 安全 push/present 页面
         JobsSafePushSwizzler.enable()      // 只拦 push
         JobsSafePresentSwizzler.enable()   // 只拦 present
+
+        #if DEBUG
+        JobsLog.enabled = true
+        #else
+        JobsLog.enabled = false    // Release 关闭日志
+        #endif
+        JobsLog.showThread = true
+
         return true
     }
 

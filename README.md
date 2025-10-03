@@ -52,6 +52,16 @@
 
 * Apple电脑的芯片分为**`intel芯片`**和**`M系列自研芯片`**。底层区别在于指令集的不同。但是Apple停止了对**`intel芯片`**机型的支持，无法更新MacOS到最新，间接的导致无法更新到最新版本的Xcode。软件开发相关的SDK其实也对MacOS的系统环境以及Xcode版本有关联影响。即：即便是都是使用统一版本的[**Swift**](https://developer.apple.com/swift/)也可能导致某些API报错（找不到）
 
+* 如果Apple开发者账号，新加入了设备，需要在本地的xcode里面更新**开发描述文件**。否则打出的`*.ipa`包，没有办法在新加入的设备里面安装
+
+  <table style="width:100%; table-layout:fixed;">
+    <tr>
+      <td><img src="./assets/image-20251003094132519.png" style="width:80%; height:auto;"></td>
+      <td><img src="./assets/image-20251003094412609.png" style="width:100%; height:auto;"></td>
+    </tr>
+  </table>
+
+
 * 这个版本是「Xcode 当前自带 [**Swift**](https://developer.apple.com/swift/) 工具链」的版本，不一定与项目 **Build Settings** 中使用的版本完全一致（项目可选择旧版编译）。
 
   ```shell
@@ -2921,33 +2931,55 @@ private lazy var passwordAccessory: UIToolbar = {
 
 ### 22、对[**SnapKit**]()的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-```swift
-private lazy var view: UIView = {
-    UIView()
-        .byAddTo(subView) { [unowned self] make in
-            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(40)
-            make.left.right.equalToSuperview().inset(24)
-            make.height.equalTo(44)
-        }
-}()
-```
+* 集成
+
+  ```ruby
+  pod 'SnapKit'
+  ```
+
+* 使用
+
+  ```swift
+  import SnapKit
+  
+  private lazy var view: UIView = {
+      UIView()
+          .byAddTo(subView) { [unowned self] make in
+              make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(40)
+              make.left.right.equalToSuperview().inset(24)
+              make.height.equalTo(44)
+          }
+  }()
+  ```
 
 ### 23、[**导航栏@GKNavigationBarSwift**](https://github.com/QuintGao/GKNavigationBarSwift)的二次封装和使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-```swift
-override func viewDidLoad() {
-    super.viewDidLoad()
-    jobsSetupGKNav(
-				title: "Demo 列表",
-				leftSymbol: "list.bullet",
-				rightButtons: [
-						("moon.circle.fill", .systemIndigo, { [weak self] in self?.toggleTheme() }),
-						("globe", .systemGreen, { [weak self] in self?.toggleLanguage() }),
-						("stop.circle.fill", .systemRed, { [weak self] in self?.stopRefreshing() })
-				]
-		)
-}
-```
+* 集成
+
+  ```ruby
+  pod 'GKNavigationBarSwift'
+  ```
+
+* 使用
+
+  ```swift
+  import GKNavigationBarSwift
+  
+  override func viewDidLoad() {
+      super.viewDidLoad()
+      jobsSetupGKNav(
+  				title: "Demo 列表",
+  				leftSymbol: "list.bullet",
+  				rightButtons: [
+  						("moon.circle.fill", .systemIndigo, { [weak self] in self?.toggleTheme() }),
+  						("globe", .systemGreen, { [weak self] in self?.toggleLanguage() }),
+  						("stop.circle.fill", .systemRed, { [weak self] in self?.stopRefreshing() })
+  				]
+  		)
+  }
+  ```
+
+
 
 ### 24、获取高频系统关键量 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -2955,7 +2987,7 @@ override func viewDidLoad() {
 
   > 从任意 **UIResponder**（View / VC）向上找到最近的宿主 VC；若全程找不到则兜底到 **`keyWindow`** 的 **root**
 
-* `jobsKeyWindow` 👉 统一的 **KeyWindow** 获取（支持 iOS 13 多场景；老系统兜底）
+* `jobsKeyWindow` 👉 统一的 **KeyWindow** 获取（**支持 iOS 13 多场景；老系统兜底**）
 
   ```swift
   UIApplication.jobsKeyWindow()?
@@ -6038,11 +6070,57 @@ Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS
 | **轻量级数据模型**               | <font color=red>**`struct`**</font>                      |
 | **状态机 / 分支逻辑**            | <font color=red>**`enum`**</font>                        |
 | **带生命周期 / 继承 / 动态行为** | <font color=red>**`class`**</font>                       |
-| **工具库 / 常量定义**            | <font color=red>**`enum`**</font>（禁止实例化）          |
+| **工具库 / 常量定义**            | <font color=red>**`enum`**</font>（**禁止实例化**）      |
 | **可变容器但希望拷贝隔离**       | <font color=red>**`struct`**</font> + `mutating`         |
 | **全局单例或引用共享**           | <font color=red>**`class`**</font> + `static let shared` |
 
-### 21、<font color=red id=COW>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite（先共享，写的时候才真正拷贝）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 21、普通字符串（大量转义）🆚 原始字符串（一眼看懂）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 单行
+
+  ```swift
+  // 普通单行
+  let a = "line1\nline2"        // 有换行
+  let b = "He said: \"Hi\""     // 引号要转义
+  
+  // 原始单行
+  let r1 = #"C:\Users\name\Desktop"#
+  let r2 = #"{"user":"\u5f20\u4e09","ok":true}"#  // \u 不会被还原
+  ```
+
+* 多行
+
+  ```swift
+  // 普通多行
+  let c = """
+  {
+    "k": "v"
+  }
+  """
+  
+  // 原始多行
+  let r3 = #"""
+  {
+    "regex": "\\d+",
+    "path": "C:\\Users\\name"
+  }
+  """#
+  ```
+
+* 原始字符串里的插值（注意 #）
+
+  ```swift
+  let r4 = #"user id: \#(id)"#   // 输出 "user id: 42"
+  ```
+
+* // 当内容里出现 `"#`，就多加 #
+
+  ```swift
+  let tricky = ##"包含 "# 号 与 \#(插值) 的原文"##
+  let ok     = ##"真的插值：\##(id)"##  // 两个 #，插值也用两 # 匹配
+  ```
+
+### 22、<font color=red id=COW>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite（先共享，写的时候才真正拷贝）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > * **定义**：当你复制一个值类型的时候，[**Swift**](https://developer.apple.com/swift/) 不会立即复制它的底层存储，而是让两个变量共享同一块内存
 > * **触发拷贝的时机**：一旦其中一个变量尝试 **写入（修改）** 数据，[**Swift**](https://developer.apple.com/swift/) 才会真正复制一份新的内存，以保证<u>值语义</u>的正确性

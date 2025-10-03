@@ -20,7 +20,7 @@ public enum JXScale {
     }
     
     private static var screenSize: CGSize {
-        guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else {
+        guard let window = UIApplication.jobsKeyWindow() else {
             return UIScreen.main.bounds.size
         }
         if useSafeArea {
