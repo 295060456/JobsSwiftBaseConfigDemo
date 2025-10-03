@@ -170,7 +170,7 @@
 
 * [**Sip**](https://sipapp.io/)：取色器
 
-* [**UI界面调试工具**](https://lookin.work/)（必须是有线连接）
+* [**UI界面调试工具**](https://lookin.work/)（必须是有线连接，并且**`Lookin.app`**要先于项目文件启动）
 
   > ```ruby
   > pod 'LookinServer', :subspecs => ['Swift'], :configurations => ['Debug']
@@ -1641,10 +1641,12 @@ required init?(coder: NSCoder) {
 * 支持暗黑模式
 
   > Dark优先级高一些，如果在Dark里面没有找到对应的图片，会去Any找
+  >
+  > ```swift
+  > self.nameLabel.textColor = .textColor1// 代码里面只对应一个值。但是在textColor1这个资源包里面区分 白天/黑夜
+  > ```
 
 ![image-20251001161600357](./assets/image-20251001161600357.png)
-
-
 
 ### 7、网络鉴权`Code`的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
