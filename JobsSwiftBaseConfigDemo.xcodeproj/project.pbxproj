@@ -12,6 +12,8 @@
 		0401DCFC2E9102BC00D572AD /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DCFB2E9102BB00D572AD /* UserDefaults.swift */; };
 		0401DCFE2E91069F00D572AD /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DCFD2E91069E00D572AD /* DateFormatter.swift */; };
 		0401DD002E910B3500D572AD /* BaseLet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DCFF2E910B3200D572AD /* BaseLet.swift */; };
+		0401DD062E9115CE00D572AD /* JobsToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DD052E9115CD00D572AD /* JobsToast.swift */; };
+		0401DD082E91183000D572AD /* ToastDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DD072E91182900D572AD /* ToastDemoVC.swift */; };
 		041F5B012E87B51800984EEB /* UITextFieldDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041F5B002E87B50F00984EEB /* UITextFieldDemoVC.swift */; };
 		043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */; };
 		0442717B2E8139CF0084B25C /* ColorAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0442717A2E8139CF0084B25C /* ColorAssets.xcassets */; };
@@ -151,6 +153,8 @@
 		0401DCFB2E9102BB00D572AD /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		0401DCFD2E91069E00D572AD /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		0401DCFF2E910B3200D572AD /* BaseLet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseLet.swift; sourceTree = "<group>"; };
+		0401DD052E9115CD00D572AD /* JobsToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsToast.swift; sourceTree = "<group>"; };
+		0401DD072E91182900D572AD /* ToastDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastDemoVC.swift; sourceTree = "<group>"; };
 		041F5B002E87B50F00984EEB /* UITextFieldDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldDemoVC.swift; sourceTree = "<group>"; };
 		043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProtocolDefs.swift; sourceTree = "<group>"; };
 		0442717A2E8139CF0084B25C /* ColorAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ColorAssets.xcassets; sourceTree = "<group>"; };
@@ -310,6 +314,7 @@
 		045920E22E84EC64008C8D6A /* SwiftTools */ = {
 			isa = PBXGroup;
 			children = (
+				0401DD052E9115CD00D572AD /* JobsToast.swift */,
 				0477D9822E8BE9FB002C6427 /* KeyboardObserver.swift */,
 				0477D97C2E8BDB94002C6427 /* JobsCountdownButton.swift */,
 				0477D96C2E8B83CA002C6427 /* JobsSafeTransitions.swift */,
@@ -416,6 +421,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				0401DD072E91182900D572AD /* ToastDemoVC.swift */,
 				04E8D5BA2E8E5ACF00E85CDA /* CNIDDemoVC.swift */,
 				04D0C9782E8D066000580020 /* PicLoadDemoVC.swift */,
 				04D0C9712E8CD39200580020 /* JobsControlEventsDemoVC.swift */,
@@ -980,6 +986,7 @@
 				041F5B012E87B51800984EEB /* UITextFieldDemoVC.swift in Sources */,
 				C564FC902E0959640079B5C1 /* UILabel.swift in Sources */,
 				C564FC9E2E0959640079B5C1 /* UINavigationController.swift in Sources */,
+				0401DD062E9115CE00D572AD /* JobsToast.swift in Sources */,
 				0477D9792E8BADB2002C6427 /* DemoVC.swift in Sources */,
 				C564FCA52E0959640079B5C1 /* UIPickerView.swift in Sources */,
 				C564FC882E0959640079B5C1 /* UISlider.swift in Sources */,
@@ -1020,6 +1027,7 @@
 				04A8C54E2E8AA9F900381701 /* RootListVC.swift in Sources */,
 				C564FC9B2E0959640079B5C1 /* UIStackView.swift in Sources */,
 				043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */,
+				0401DD082E91183000D572AD /* ToastDemoVC.swift in Sources */,
 				04CF03192E8A80CE0083ACF0 /* AppTools.swift in Sources */,
 				04D0C9822E8D1CF400580020 /* Optional.swift in Sources */,
 				C564FC952E0959640079B5C1 /* UIView.swift in Sources */,
