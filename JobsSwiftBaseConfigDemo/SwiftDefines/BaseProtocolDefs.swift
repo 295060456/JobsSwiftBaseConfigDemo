@@ -12,10 +12,11 @@
 #if os(iOS) || os(tvOS)
     import UIKit
 #endif
+// MARK: - 查找当前对象所在的控制器
+protocol ViewControllerFindable {}
+protocol _UISafeUnwrappedBan {}     // 标记“UI 禁用默认兜底”
 // MARK: - 安全解包 Optional
-protocol SafeUnwrappedInitializable {
-    init()
-}
+protocol SafeUnwrappedInitializable { init() }
 // MARK: - 强类型输入协议（可选实现）
 protocol JobsDataReceivable {
     associatedtype InputData

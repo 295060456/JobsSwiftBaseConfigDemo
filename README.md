@@ -5303,6 +5303,16 @@ func badExample() {
   }
   ```
 
+### 24、编译器（方法过期）警告抑制 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+@available(iOS, introduced: 2.0, obsoleted: 13.0)
+@available(*, deprecated, message: "Use UIWindowScene.keyWindow instead on iOS 13+")
+public func legacyKeyWindowPreiOS13() -> UIWindow? {
+    return UIApplication.shared.keyWindow ?? UIApplication.shared.windows.first
+}
+```
+
 ## 五、<font color=red>**F**</font><font color=green>**A**</font><font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、[**Swift**](https://developer.apple.com/swift/) 纯类 🆚 `NSObject` 子类 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>

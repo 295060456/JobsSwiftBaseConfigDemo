@@ -17,6 +17,7 @@ import GKNavigationBarSwift
 
 @MainActor
 public extension UIViewController {
+    // ================================== 标题 / 背景 ==================================
     @discardableResult
     func byTitle(_ title: String?) -> Self {
         self.title = title
@@ -25,70 +26,45 @@ public extension UIViewController {
 
     @discardableResult
     func byBgColor(_ color: UIColor) -> Self {
-        // ⚠️ 确保 view 已加载，否则强制加载
         if viewIfLoaded == nil { loadViewIfNeeded() }
         self.view.backgroundColor = color
         return self
     }
 
+    // ================================== Segue ==================================
     @discardableResult
-    func addChildVC(_ child: UIViewController) -> Self {
-        self.addChild(child)
-        self.view.addSubview(child.view)
-        child.didMove(toParent: self)
-        return self
-    }
-    /// 标准三步逆过程：willMove(nil) -> removeFromSuperview -> removeFromParent
-    @discardableResult
-    func removeFromParentVC() -> Self {
-        guard parent != nil else { return self }
-        self.willMove(toParent: nil)
-        // 只移除自身 root view，不动外部 UI
-        self.view.removeFromSuperview()
-        self.removeFromParent()
+    func byPerformSegue(_ identifier: String, sender: Any? = nil) -> Self {
+        self.performSegue(withIdentifier: identifier, sender: sender)
         return self
     }
 
+    // ================================== Modal 展示 / 解散 ==================================
+    /// 无动画 Present
+    @discardableResult
+    func byPresent(_ viewController: UIViewController,
+                   animated: Bool = false,
+                   completion: (() -> Void)? = nil) -> Self {
+        self.present(viewController, animated: animated, completion: completion)
+        return self
+    }
+
+    /// 有动画 Present
     @discardableResult
     func byPresentModallyAnimated(_ viewController: UIViewController,
                                   completion: (() -> Void)? = nil) -> Self {
-        self.present(viewController,
-                     animated: true,
-                     completion: completion)
-        return self
-    }
-    /// preferredContentSize 常用于 sheet / popover / containment
-    @discardableResult
-    func byPreferredContentSize(_ size: CGSize) -> Self {
-        self.preferredContentSize = size
-        return self
-    }
-    // ------------------------------ 状态栏外观 ------------------------------
-    /// iOS 13+ 建议与 overrideUserInterfaceStyle / preferredStatusBarStyle 配合
-    @discardableResult
-    func byOverrideUserInterfaceStyle(_ style: UIUserInterfaceStyle) -> Self {
-        self.overrideUserInterfaceStyle = style
-        return self
-    }
-    /// 触发状态栏刷新动画
-    @discardableResult
-    func byNeedsStatusBarUpdate() -> Self {
-        self.setNeedsStatusBarAppearanceUpdate()
-        return self
-    }
-    // ------------------------------ 布局区域控制 ------------------------------
-    @discardableResult
-    func byEdgesForExtendedLayout(_ edges: UIRectEdge) -> Self {
-        self.edgesForExtendedLayout = edges
+        self.present(viewController, animated: true, completion: completion)
         return self
     }
 
+    /// 统一语义化 dismiss
     @discardableResult
-    func byExtendedLayoutIncludesOpaqueBars(_ flag: Bool) -> Self {
-        self.extendedLayoutIncludesOpaqueBars = flag
+    func byDismiss(animated: Bool = true,
+                   completion: (() -> Void)? = nil) -> Self {
+        self.dismiss(animated: animated, completion: completion)
         return self
     }
-    // ------------------------------ 展示/解散（modal） ------------------------------
+
+    // ================================== Modal 属性 ==================================
     @discardableResult
     func byModalPresentationStyle(_ style: UIModalPresentationStyle) -> Self {
         self.modalPresentationStyle = style
@@ -100,21 +76,55 @@ public extension UIViewController {
         self.modalTransitionStyle = style
         return self
     }
-    /// iOS 18 新增首选过渡（系统可能忽略），保持语义
+
     @available(iOS 18.0, *)
     @discardableResult
     func byPreferredTransition(_ transition: UIViewController.Transition?) -> Self {
         self.preferredTransition = transition
         return self
     }
-    /// 统一语义化 dismiss
+
+    @available(iOS 7.0, *)
     @discardableResult
-    func byDismiss(animated: Bool = true,
-                   completion: (() -> Void)? = nil) -> Self {
-        self.dismiss(animated: animated, completion: completion)
+    func byTransitioningDelegate(_ delegate: UIViewControllerTransitioningDelegate?) -> Self {
+        self.transitioningDelegate = delegate
         return self
     }
-    // ------------------------------ show / showDetail（分栏/分屏友好） ------------------------------
+
+    // ================================== Content Size / Layout ==================================
+    @discardableResult
+    func byPreferredContentSize(_ size: CGSize) -> Self {
+        self.preferredContentSize = size
+        return self
+    }
+
+    var jobs_preferredContentSize: CGSize {
+        self.preferredContentSize
+    }
+
+    @discardableResult
+    func byEdgesForExtendedLayout(_ edges: UIRectEdge) -> Self {
+        self.edgesForExtendedLayout = edges
+        return self
+    }
+
+    @discardableResult
+    func byExtendedLayoutIncludesOpaqueBars(_ flag: Bool) -> Self {
+        self.extendedLayoutIncludesOpaqueBars = flag
+        return self
+    }
+
+    @discardableResult
+    func byAutomaticallyAdjustsScrollInsets(_ flag: Bool) -> Self {
+        if #available(iOS 11.0, *) {
+            assertionFailure("iOS 11+ 请使用 UIScrollView.contentInsetAdjustmentBehavior")
+        } else {
+            self.automaticallyAdjustsScrollViewInsets = flag
+        }
+        return self
+    }
+
+    // ================================== show / showDetail（安全命名） ==================================
     @discardableResult
     func byShow(_ vc: UIViewController, sender: Any? = nil) -> Self {
         self.show(vc, sender: sender)
@@ -126,36 +136,79 @@ public extension UIViewController {
         self.showDetailViewController(vc, sender: sender)
         return self
     }
-    // ------------------------------ 容器：安全 add/remove child ------------------------------
+
+    // ================================== 状态栏 / 外观 ==================================
+    @discardableResult
+    func byOverrideUserInterfaceStyle(_ style: UIUserInterfaceStyle) -> Self {
+        self.overrideUserInterfaceStyle = style
+        return self
+    }
+
+    @discardableResult
+    func byNeedsStatusBarUpdate() -> Self {
+        self.setNeedsStatusBarAppearanceUpdate()
+        return self
+    }
+
+    @discardableResult
+    func byPreferredStatusBarStyle(_ style: UIStatusBarStyle) -> Self {
+        assertionFailure("请在子类中 override preferredStatusBarStyle 实现此功能")
+        return self
+    }
+
+    // ================================== 子控制器管理 ==================================
     /// 标准三步：addChild -> addSubview -> didMove(toParent:)
     @discardableResult
     func addChildVC(_ child: UIViewController,
                     into container: UIView? = nil,
                     layout: ((UIView) -> Void)? = nil) -> Self {
-        // 1) 建立父子
         self.addChild(child)
-
-        // 2) 准备容器 & 子视图
         if viewIfLoaded == nil { loadViewIfNeeded() }
         let host = container ?? self.view!
         host.addSubview(child.view)
-
-        // 3) 可选布局闭包（Auto Layout/SnapKit 由你决定）
         layout?(child.view)
-
-        // 4) 完成回调
         child.didMove(toParent: self)
         return self
     }
-    // ------------------------------ 滚动联动（iOS15+） ------------------------------
-    /// 将某个方向的滚动视图与本 VC 绑定，支持大标题折叠等行为
+
+    /// 快速添加（不指定容器）
+    @discardableResult
+    func addChildVC(_ child: UIViewController) -> Self {
+        self.addChild(child)
+        self.view.addSubview(child.view)
+        child.didMove(toParent: self)
+        return self
+    }
+
+    /// 标准三步逆过程：willMove(nil) -> removeFromSuperview -> removeFromParent
+    @discardableResult
+    func removeFromParentVC() -> Self {
+        guard parent != nil else { return self }
+        self.willMove(toParent: nil)
+        self.view.removeFromSuperview()
+        self.removeFromParent()
+        return self
+    }
+
+    /// 判断是否已有父控制器
+    var jobs_hasParent: Bool {
+        self.parent != nil
+    }
+
+    // ================================== 滚动联动（iOS15+） ==================================
     @available(iOS 15.0, *)
     @discardableResult
     func byContentScrollView(_ scrollView: UIScrollView?, for edge: NSDirectionalRectEdge) -> Self {
         self.setContentScrollView(scrollView, for: edge)
         return self
     }
-    // ------------------------------ 焦点 / 交互跟踪（TV / iOS 15+） ------------------------------
+
+    @available(iOS 15.0, *)
+    var jobs_contentScrollViewTop: UIScrollView? {
+        self.contentScrollView(for: .top)
+    }
+
+    // ================================== 焦点 / 交互追踪（TV / iOS 15+） ==================================
     @available(iOS 15.0, *)
     @discardableResult
     func byFocusGroupIdentifier(_ id: String?) -> Self {
@@ -169,21 +222,19 @@ public extension UIViewController {
         self.interactionActivityTrackingBaseName = name
         return self
     }
-    // ------------------------------ iOS 26+ 属性更新批（前瞻，占位） ------------------------------
-    /// 未来 API：属性批更新调度（不要直接调用 updateProperties）
+
+    // ================================== iOS 26+ 属性更新批 ==================================
     @available(iOS 26.0, *)
     @discardableResult
     func bySetNeedsUpdateProperties() -> Self {
         self.setNeedsUpdateProperties()
         return self
     }
-    /// 设置自定义转场动画代理
-    /// - Parameter delegate: 任何符合 UIViewControllerTransitioningDelegate 的对象
-    /// - Returns: Self（链式可继续调用）
-    @available(iOS 7.0, *)
+
+    @available(iOS 26.0, *)
     @discardableResult
-    func byTransitioningDelegate(_ delegate: UIViewControllerTransitioningDelegate?) -> Self {
-        self.transitioningDelegate = delegate
+    func byUpdatePropertiesIfNeeded() -> Self {
+        self.updatePropertiesIfNeeded()
         return self
     }
 }
@@ -325,70 +376,92 @@ public extension UIViewController {
     /// 2) 栈内存在同目的地 → popTo
     /// 3) 否则 → push
     @discardableResult
-    func byPush(_ from: UIResponder, animated: Bool = true) -> Self {
-        guard let host = from.jobsNearestVC() else {
-            assertionFailure("byPush: 未找到宿主 VC"); return self
+    func byPush(_ from: UIResponder?, animated: Bool = true) -> Self {
+        guard let host = from?.jobsNearestVC() else {
+            assertionFailure("❌ byPush: 未找到宿主 VC（传入 nil 或 responder 链断裂）")
+            return self
         }
 
         if let nav = (host as? UINavigationController) ?? host.navigationController {
             nav.jobs_pushOrPopTo(self, animated: animated)
             return self
-        } else {
-            // 没有导航栈 → 包一层再 present（首次进入）
-            guard self.parent == nil else { return self } // 目标不能已挂载
-            if host.transitionCoordinator != nil || host.presentedViewController != nil { return self }
-
-            let wrapper = UINavigationController(rootViewController: self)
-            wrapper.isNavigationBarHidden = true
-            wrapper.modalPresentationStyle = .fullScreen
-            host.present(wrapper, animated: animated)
-            return self
         }
+
+        // 没有导航栈 → 包一层 present
+        guard self.parent == nil else { return self }
+        if host.transitionCoordinator != nil || host.presentedViewController != nil { return self }
+
+        host.present(UINavigationController(rootViewController: self)
+            .byNavigationBarHidden(true)
+            .byModalPresentationStyle(.fullScreen), animated: animated)
+        return self
     }
     // MARK: - 统一语义化 present：合法性校验 + 同目的地已展示则忽略
     @discardableResult
-    func byPresent(_ from: UIResponder,
+    func byPresent(_ from: UIResponder?,
                    animated: Bool = true,
                    policy: JobsPresentPolicy = .ignoreIfBusy,
                    completion: (() -> Void)? = nil) -> Self {
         assert(Thread.isMainThread, "byPresent must be called on main thread")
+
         // 1) 目标不能已挂载或已被展示
-        guard self.parent == nil,
-              self.presentingViewController == nil else {
-            assertionFailure("❌ Trying to present a VC that already has a parent/presenter: \(self)")
+        guard self.parent == nil, self.presentingViewController == nil else {
+            assertionFailure("❌ Trying to present a VC already mounted/presented: \(self)")
             return self
         }
-        // 2) 找宿主（你的 jobsNearestVC 已封装了 keyWindow 兜底）
-        guard var host = from.jobsNearestVC() else {
-            assertionFailure("❌ byPresent: 未找到宿主 VC")
+
+        // 2) 选择宿主
+        guard var host = from?.jobsNearestVC() ?? UIWindow.wd.rootViewController else {
+            assertionFailure("❌ byPresent: no host VC (from is nil and no keyWindow rootVC)")
             return self
         }
-        // 3) 策略：忽略 or 顶层
+
+        // 2.1 取最上层可见 VC（考虑导航/标签/已present链）
+        if let top = UIApplication.jobsTopMostVC(from: host, ignoreAlert: true) {
+            host = top
+        }
+
+        // 2.2 宿主必须在窗口且未在 dismiss
+        guard host.viewIfLoaded?.window != nil, host.isBeingDismissed == false else {
+            assertionFailure("❌ byPresent: host not in window or being dismissed: \(host)")
+            return self
+        }
+
+        // 3) 策略
         switch policy {
         case .ignoreIfBusy:
-            if let presented = host.presentedViewController {
-                // 同目的地 → 忽略；否则也忽略（保持简单、稳定）
-                if self.jobs_isSameDestination(as: presented) { return self }
+            if let presented = host.presentedViewController, presented.isBeingDismissed == false {
+                // 展示中的目的地等价 → 忽略
+                if jobs_isSameDestination(as: presented) { return self }
+                // 不等价也忽略，保持简单稳定
                 return self
             }
+
         case .presentOnTopMost:
-            // 沿链条爬到最顶（正在 dismiss 的不算稳定锚点）
-            while let p = host.presentedViewController, !p.isBeingDismissed {
-                host = p
+            // 从 host 出发，递归取最上层可见 VC
+            while let top = UIApplication.jobsTopMostVC(from: host, ignoreAlert: true),
+                  top.isBeingDismissed == false,
+                  top !== host
+            {
+                host = top
             }
         }
-        // 4) 防止“自己 present 自己”
+
+        // 4) 防“自己 present 自己”
         guard host !== self else {
-            assertionFailure("❌ Don't present self on self. host === presented: \(host)")
+            assertionFailure("❌ Don't present self on self")
             return self
         }
-        // 5) 宿主正在转场：等转场完成再 present（避免系统警告/掉帧）
+
+        // 5) 若宿主在转场，等转场完成再 present
         if let tc = host.transitionCoordinator {
-            tc.animate(alongsideTransition: nil) { _ in
-                host.present(self, animated: animated, completion: completion)
+            tc.animate(alongsideTransition: nil) { [weak host, weak self] _ in
+                guard let host, let s = self else { return }
+                host.present(s, animated: animated, completion: completion)
             }
             return self
         }
+
         host.present(self, animated: animated, completion: completion)
         return self
     }

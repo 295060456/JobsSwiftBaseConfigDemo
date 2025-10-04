@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0401DCF82E90CDF500D572AD /* UIWindowScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DCF72E90CDF400D572AD /* UIWindowScene.swift */; };
+		0401DCFA2E90D91900D572AD /* UIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DCF92E90D91700D572AD /* UIWindow.swift */; };
 		041F5B012E87B51800984EEB /* UITextFieldDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041F5B002E87B50F00984EEB /* UITextFieldDemoVC.swift */; };
 		043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */; };
 		0442717B2E8139CF0084B25C /* ColorAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0442717A2E8139CF0084B25C /* ColorAssets.xcassets */; };
@@ -141,6 +143,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0401DCF72E90CDF400D572AD /* UIWindowScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindowScene.swift; sourceTree = "<group>"; };
+		0401DCF92E90D91700D572AD /* UIWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindow.swift; sourceTree = "<group>"; };
 		041F5B002E87B50F00984EEB /* UITextFieldDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldDemoVC.swift; sourceTree = "<group>"; };
 		043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProtocolDefs.swift; sourceTree = "<group>"; };
 		0442717A2E8139CF0084B25C /* ColorAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ColorAssets.xcassets; sourceTree = "<group>"; };
@@ -445,6 +449,8 @@
 		04D0C9802E8D19FC00580020 /* iOS.SDK */ = {
 			isa = PBXGroup;
 			children = (
+				0401DCF92E90D91700D572AD /* UIWindow.swift */,
+				0401DCF72E90CDF400D572AD /* UIWindowScene.swift */,
 				04E8D61A2E8E837C00E85CDA /* NSMutableAttributedString.swift */,
 				04E8D6162E8E6E7E00E85CDA /* UIBarButtonItemAppearance.swift */,
 				04D0C9812E8D1CF300580020 /* Optional.swift */,
@@ -956,6 +962,7 @@
 				04D0C9722E8CD39300580020 /* JobsControlEventsDemoVC.swift in Sources */,
 				C564FC8A2E0959640079B5C1 /* UISegmentedControl.swift in Sources */,
 				0477D9772E8B9381002C6427 /* UIResponder.swift in Sources */,
+				0401DCFA2E90D91900D572AD /* UIWindow.swift in Sources */,
 				04E8D5BB2E8E5AD000E85CDA /* CNIDDemoVC.swift in Sources */,
 				C564FC892E0959640079B5C1 /* UICollectionView.swift in Sources */,
 				C564FCB32E0959990079B5C1 /* CustomCell.swift in Sources */,
@@ -1009,6 +1016,7 @@
 				04D0C9792E8D066900580020 /* PicLoadDemoVC.swift in Sources */,
 				045920F62E854F8C008C8D6A /* Int16.swift in Sources */,
 				C564FBE92E09580B0079B5C1 /* JobsSwiftBaseConfigDemo.xcdatamodeld in Sources */,
+				0401DCF82E90CDF500D572AD /* UIWindowScene.swift in Sources */,
 				04E8D6192E8E6EC300E85CDA /* UIToolbar.swift in Sources */,
 				045921082E854FF3008C8D6A /* Float.swift in Sources */,
 				C564FCA62E0959640079B5C1 /* UINavigationBar.swift in Sources */,
