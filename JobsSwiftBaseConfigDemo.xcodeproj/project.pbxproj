@@ -59,6 +59,8 @@
 		04A8C54C2E8AA94D00381701 /* UIButtonDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A8C54B2E8AA94B00381701 /* UIButtonDemoVC.swift */; };
 		04A8C54E2E8AA9F900381701 /* RootListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A8C54D2E8AA9F800381701 /* RootListVC.swift */; };
 		04AC74C52E86682E004B8305 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AC74C42E86682D004B8305 /* Notification.swift */; };
+		04AD628F2E9120C500E18984 /* JobsTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AD628E2E9120C000E18984 /* JobsTimer.swift */; };
+		04AD62912E91230000E18984 /* TimerDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AD62902E9122FC00E18984 /* TimerDemoVC.swift */; };
 		04CF028C2E8808540083ACF0 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028B2E8808500083ACF0 /* UIButton.swift */; };
 		04CF028E2E8A37BB0083ACF0 /* TextInputStrategies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */; };
 		04CF02902E8A3A160083ACF0 /* UITextViewDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028F2E8A3A0F0083ACF0 /* UITextViewDemoVC.swift */; };
@@ -200,6 +202,8 @@
 		04A8C54B2E8AA94B00381701 /* UIButtonDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonDemoVC.swift; sourceTree = "<group>"; };
 		04A8C54D2E8AA9F800381701 /* RootListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootListVC.swift; sourceTree = "<group>"; };
 		04AC74C42E86682D004B8305 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
+		04AD628E2E9120C000E18984 /* JobsTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsTimer.swift; sourceTree = "<group>"; };
+		04AD62902E9122FC00E18984 /* TimerDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerDemoVC.swift; sourceTree = "<group>"; };
 		04CF028B2E8808500083ACF0 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputStrategies.swift; sourceTree = "<group>"; };
 		04CF028F2E8A3A0F0083ACF0 /* UITextViewDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextViewDemoVC.swift; sourceTree = "<group>"; };
@@ -314,6 +318,7 @@
 		045920E22E84EC64008C8D6A /* SwiftTools */ = {
 			isa = PBXGroup;
 			children = (
+				04AD628E2E9120C000E18984 /* JobsTimer.swift */,
 				0401DD052E9115CD00D572AD /* JobsToast.swift */,
 				0477D9822E8BE9FB002C6427 /* KeyboardObserver.swift */,
 				0477D97C2E8BDB94002C6427 /* JobsCountdownButton.swift */,
@@ -421,6 +426,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				04AD62902E9122FC00E18984 /* TimerDemoVC.swift */,
 				0401DD072E91182900D572AD /* ToastDemoVC.swift */,
 				04E8D5BA2E8E5ACF00E85CDA /* CNIDDemoVC.swift */,
 				04D0C9782E8D066000580020 /* PicLoadDemoVC.swift */,
@@ -971,6 +977,7 @@
 				04D0C97D2E8D19AB00580020 /* MJRefreshAutoNormalFooter.swift in Sources */,
 				04D0C97E2E8D19AB00580020 /* MJRefreshNormalHeader.swift in Sources */,
 				04E8D6172E8E6E7F00E85CDA /* UIBarButtonItemAppearance.swift in Sources */,
+				04AD62912E91230000E18984 /* TimerDemoVC.swift in Sources */,
 				C564FC862E0959640079B5C1 /* WKWebView.swift in Sources */,
 				0477D97D2E8BDB95002C6427 /* JobsCountdownButton.swift in Sources */,
 				04AC74C52E86682E004B8305 /* Notification.swift in Sources */,
@@ -1040,6 +1047,7 @@
 				04E8D6192E8E6EC300E85CDA /* UIToolbar.swift in Sources */,
 				045921082E854FF3008C8D6A /* Float.swift in Sources */,
 				C564FCA62E0959640079B5C1 /* UINavigationBar.swift in Sources */,
+				04AD628F2E9120C500E18984 /* JobsTimer.swift in Sources */,
 				C564FC2C2E0958D50079B5C1 /* SceneDelegate.swift in Sources */,
 				C564FC922E0959640079B5C1 /* UISwitch.swift in Sources */,
 			);

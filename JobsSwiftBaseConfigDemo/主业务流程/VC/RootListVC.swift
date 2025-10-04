@@ -24,7 +24,8 @@ final class RootListVC: UIViewController {
         ("ControlEvents Demo", JobsControlEventsDemoVC.self),
         ("PicLoad Demo", PicLoadDemoVC.self),
         ("中国大陆公民身份证号码校验 Demo", CNIDDemoVC.self),
-        ("Toast Demo", ToastDemoVC.self)
+        ("Toast Demo", ToastDemoVC.self),
+        ("Timer Demo", TimerDemoVC.self)
     ]
 
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)

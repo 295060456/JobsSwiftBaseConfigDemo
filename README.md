@@ -3156,32 +3156,55 @@ localImageView.image = "Ani".img
 #### 28.1、封装在`UIControl` 层的点击事件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
-  let toggle = UISwitch()
-      .onJobsChange { sw in
-          print("开关状态：\(sw.isOn)")
-      }
+  private lazy var toggle: UISwitch = {
+      UISwitch()
+          .onJobsChange { (sw: UISwitch) in
+              print("开关状态：\(sw.isOn)")
+          }
+  }()
   ```
-
+  
 * ```swift
-  let datePicker = UIDatePicker()
-      .byDatePickerMode(.date)
-      .onJobsChange { picker in
-          print("选择日期：\(picker.date)")
-      }
+  private lazy var datePicker: UIDatePicker = {
+      UIDatePicker()
+          .byDatePickerMode(.date)
+          .onJobsChange { (picker: UIDatePicker) in
+              print("选择日期：\(picker.date)")
+          }
+  }()
   ```
-
+  
 * ```swift
-  let slider = UISlider()
-      .onJobsChange { slider in
-          print("滑块值：\(slider.value)")
-      }
+  private lazy var slider: UISlider = {
+      UISlider()
+          .onJobsChange { (slider: UISlider) in
+              print("滑块值：\(slider.value)")
+          }
+  }()
   ```
-
+  
 * ```swift
-  let textField = UITextField()
-      .onJobsEvent(.editingChanged) { tf in
-          print("文字变化：\(tf.text ?? "")")
-      }
+  private lazy var textField: UITextField = {
+      UITextField()
+          .onJobsEvent(.editingChanged) { (tf: UITextField) in
+              print("文字变化：\(tf.text ?? "")")
+          }
+  }()
+  ```
+  
+* ```swift
+  private lazy var kindSeg: UISegmentedControl = {
+      UISegmentedControl(items: ["Foundation", "GCD", "DisplayLink", "RunLoopCore"])
+          .bySelectedSegmentIndex(0)
+          .byAddTo(view) { [unowned self] make in
+              make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(16)
+              make.left.right.equalToSuperview().inset(16)
+              make.height.equalTo(34)
+          }
+          .onJobsChange { [weak self] (_: UISegmentedControl) in
+              self?.onKindChanged()
+          }
+  }()
   ```
 
 #### 28.2、[**封装在`UIButton` 层的点击事件**](#UIButton) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -3193,6 +3216,8 @@ let button = UIButton(type: .system)
         print("✅ 使用 UIButton 专属 UIAction 实现")
     }
 ```
+
+
 
 ### 29、启动检测 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
