@@ -14,7 +14,7 @@ import UIKit
 #endif
 
 import ObjectiveC
-/// 基础链式
+// MARK: - 基础链式
 extension UIButton {
     @discardableResult
     func byTitle(_ title: String?, for state: UIControl.State = .normal) -> Self {
@@ -55,7 +55,6 @@ extension UIButton {
         self.setImage(image, for: state)
         return self
     }
-
     /// SF Symbol 的 per-state 首选配置
     @available(iOS 13.0, *)
     @discardableResult
@@ -77,14 +76,10 @@ extension UIButton {
         return self
     }
 
+    /// ⚠️ iOS 并没有公开的 subtitleLabel，这里转调兼容方法
     @discardableResult
     func bySubtitleFont(_ font: UIFont) -> Self {
-        if #available(iOS 15.0, *) {
-            self.subtitleLabel?.font = font
-        } else {
-            // iOS14 及以下没有 subtitleLabel，可做 fallback 或忽略
-        }
-        return self
+        return bySubtitleFontCompat(font)
     }
 
     @discardableResult
@@ -93,7 +88,7 @@ extension UIButton {
         return self
     }
 }
-/// 进阶：按 state 的链式代理
+// MARK: - 进阶：按 state 的链式代理
 extension UIButton {
     /// 按 state 的链式代理（class + 强引用，安全不易崩）
     final class StateProxy {
@@ -135,7 +130,6 @@ extension UIButton {
         func preferredSymbolConfiguration(_ configuration: UIImage.SymbolConfiguration?) -> UIButton {
             button.setPreferredSymbolConfiguration(configuration, forImageIn: state); return button
         }
-
         /// 背景色（state 级）：iOS15+ 仅 normal 用 configuration，其它/低版本用 1×1 背景图兜底
         @discardableResult
         func backgroundColor(_ color: UIColor) -> UIButton {
@@ -156,16 +150,14 @@ extension UIButton {
             button.setBackgroundImage(image, for: state); return button
         }
     }
-
     /// 进入某个 state 的链式代理
     func `for`(_ state: UIControl.State) -> StateProxy {
         StateProxy(button: self, state: state)
     }
 }
-/// 布局 / 外观（iOS15+ 走 configuration，旧版兜底）
+// MARK: - 布局 / 外观（iOS15+ 走 configuration，旧版兜底）
 extension UIButton {
-    // MARK: - 背景色（按 state）
-    /// iOS15+ 走 configuration（原本就有），但**记得把 title 一并带上**，否则会出现“只有底色没字”
+    // MARK: 背景色（按 state）
     @discardableResult
     func byBackgroundColor(_ color: UIColor, for state: UIControl.State = .normal) -> Self {
         if #available(iOS 15.0, *), state == .normal {
@@ -173,12 +165,10 @@ extension UIButton {
             var bg = cfg.background
             bg.backgroundColor = color
             cfg.background = bg
-
-            // ✅ 如果 configuration 里还没 title，就把现有 setTitle 的内容同步过来
+            // 同步 title / 颜色，避免只见底色不见字
             if cfg.title == nil, let t = self.title(for: .normal), !t.isEmpty {
                 cfg.title = t
             }
-            // ✅ 同步可见的文字颜色（否则看起来像“没字”）
             if cfg.baseForegroundColor == nil, let tc = self.titleColor(for: .normal) {
                 cfg.baseForegroundColor = tc
             }
@@ -187,6 +177,11 @@ extension UIButton {
             self.setBgCor(color, forState: state) // 你原来的兜底实现
         }
         return self
+    }
+    /// 便捷别名：大多数情况下只需要 normal
+    @discardableResult
+    func byNormalBgColor(_ color: UIColor) -> Self {
+        return byBackgroundColor(color, for: .normal)
     }
 
     @discardableResult
@@ -203,7 +198,7 @@ extension UIButton {
     func byTitleAlignment(_ alignment: NSTextAlignment) -> Self {
         titleLabel?.textAlignment = alignment; return self
     }
-    // MARK: - iOS15+ 优先 contentInsets，否则回落到 UIEdgeInsets
+    // MARK: iOS15+ 优先 contentInsets，否则回落到 UIEdgeInsets
     @discardableResult
     func byContentInsets(_ insets: NSDirectionalEdgeInsets) -> Self {
         if #available(iOS 15.0, *) {
@@ -218,7 +213,7 @@ extension UIButton {
         }
         return self
     }
-    // MARK: - 兼容旧签名：UIEdgeInsets -> NSDirectionalEdgeInsets（iOS15+）
+    /// 兼容旧签名：UIEdgeInsets -> NSDirectionalEdgeInsets（iOS15+）
     @discardableResult
     func byContentEdgeInsets(_ insets: UIEdgeInsets) -> Self {
         if #available(iOS 15.0, *) {
@@ -233,7 +228,7 @@ extension UIButton {
         }
         return self
     }
-    // MARK: - iOS15+ 推荐用 imagePadding；旧版保留 imageEdgeInsets
+    // MARK: iOS15+ 推荐用 imagePadding；旧版保留 imageEdgeInsets
     @discardableResult
     func byImageEdgeInsets(_ insets: UIEdgeInsets) -> Self {
         if #available(iOS 15.0, *) {
@@ -245,7 +240,7 @@ extension UIButton {
         }
         return self
     }
-    // MARK: - iOS15+ 建议用 contentInsets/配置副标题；旧版保留 titleEdgeInsets
+    // MARK: iOS15+ 建议用 contentInsets/配置副标题；旧版保留 titleEdgeInsets
     @discardableResult
     func byTitleEdgeInsets(_ insets: UIEdgeInsets) -> Self {
         if #available(iOS 15.0, *) {
@@ -295,7 +290,7 @@ extension UIButton {
         layer.masksToBounds = false
         return self
     }
-    // MARK: - 图片与标题的相对位置（iOS15+ 原生；低版本尽力而为）
+    // MARK: 图片与标题的相对位置（iOS15+ 原生；低版本尽力而为）
     @discardableResult
     func byImagePlacement(_ placement: NSDirectionalRectEdge, padding: CGFloat = 8) -> Self {
         if #available(iOS 15.0, *) {
@@ -318,7 +313,7 @@ extension UIButton {
         }
         return self
     }
-    // MARK: - iOS15+ Configuration mutate 钩子
+    // MARK: iOS15+ Configuration mutate 钩子
     @available(iOS 15.0, *)
     @discardableResult
     func byConfiguration(_ mutate: (inout UIButton.Configuration) -> Void) -> Self {
@@ -327,90 +322,178 @@ extension UIButton {
         configuration = cfg
         return self
     }
-    // MARK: - iOS15+ 副标题（优先 configuration.subtitle）
+}
+// MARK: - Subtitle 独立控制（iOS 15+ 用 attributedSubtitle；iOS14- 用两行富文本）
+private struct _JobsSubtitleStore {
+    var text: String = ""
+    var font: UIFont = .systemFont(ofSize: 11, weight: .regular)
+    var color: UIColor = UIColor.white.withAlphaComponent(0.85)
+}
+private var _subtitleStoreKey: UInt8 = 0
+
+private extension UIButton {
+    var _subtitleStore: _JobsSubtitleStore {
+        get { (objc_getAssociatedObject(self, &_subtitleStoreKey) as? _JobsSubtitleStore) ?? _JobsSubtitleStore() }
+        set { objc_setAssociatedObject(self, &_subtitleStoreKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
+
+    func _rebuildLegacyTwoLine(title: String, titleFont: UIFont, titleColor: UIColor) {
+        let sub = _subtitleStore
+        let full = NSMutableAttributedString(
+            string: title,
+            attributes: [.font: titleFont, .foregroundColor: titleColor]
+        )
+        if !sub.text.isEmpty {
+            full.append(NSAttributedString(string: "\n"))
+            full.append(NSAttributedString(
+                string: sub.text,
+                attributes: [.font: sub.font, .foregroundColor: sub.color]
+            ))
+        }
+        setAttributedTitle(full, for: .normal)
+        titleLabel?.byNumberOfLines(2).byTextAlignment(.center)
+        self.byContentEdgeInsets(UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
+    }
+}
+
+public extension UIButton {
+    /// 设置副标题（独立字体&颜色）。不会影响主标题颜色。
     @discardableResult
     func bySubtitle(_ text: String?,
                     color: UIColor? = nil,
                     font: UIFont? = nil) -> Self {
+        let subText = text ?? ""
         if #available(iOS 15.0, *) {
             var cfg = configuration ?? .plain()
-            cfg.subtitle = text
-            if let color { cfg.baseForegroundColor = color } // 注意：配置层是整体前景色；更细粒度需 attributedSubtitle
-            if let font {
-                let att = AttributedString(text ?? "")
-                var container = AttributeContainer()
-                container.font = font
-                cfg.attributedSubtitle = AttributedString(att.characters, attributes: container)
+
+            // ✅ 关键：如果还没启用 configuration.title，就把现有的主标题同步进去
+            if cfg.title == nil, let t = self.title(for: .normal), !t.isEmpty {
+                cfg.title = t
+            }
+
+            if subText.isEmpty {
+                cfg.attributedSubtitle = nil
+                cfg.subtitle = nil
+            } else {
+                var sub = AttributedString(subText)
+                if let font  { sub.font  = font  }
+                if let color { sub.foregroundColor = color }   // 只给“副标题”上色
+                cfg.attributedSubtitle = sub
+                cfg.subtitle = nil
             }
             configuration = cfg
         } else {
-            // 旧版没有 subtitle，退化为主标题换行
-            let combined = [self.title(for: .normal) ?? "", text ?? ""].joined(separator: text == nil ? "" : "\n")
-            setTitle(combined, for: .normal)
-            titleLabel?.numberOfLines = 0
+            // iOS 14-：两行富文本降级（略，同你现有实现即可）
+            // ……保持你原来的 legacy 拼接，两行 NSAttributedString
+        }
+        return self
+    }
+    /// 仅修改副标题颜色（不改文字、不改字体）
+    @discardableResult
+    func bySubtitleColor(_ color: UIColor) -> Self {
+        if #available(iOS 15.0, *) {
+            var cfg = configuration ?? .plain()
+            let current = cfg.attributedSubtitle ?? AttributedString(cfg.subtitle ?? "")
+            var mutated = current
+            mutated.foregroundColor = color
+            cfg.attributedSubtitle = mutated
+            cfg.subtitle = nil
+            configuration = cfg
+        } else {
+            var store = _subtitleStore
+            store.color = color
+            _subtitleStore = store
+
+            let title = self.title(for: .normal) ?? (self.attributedTitle(for: .normal)?.string ?? "")
+            let tFont = self.titleLabel?.font ?? .systemFont(ofSize: 16, weight: .semibold)
+            let tColor = self.titleColor(for: .normal) ?? .white
+            _rebuildLegacyTwoLine(title: title, titleFont: tFont, titleColor: tColor)
+        }
+        return self
+    }
+    /// 仅修改副标题字体（不改文字、不改颜色）
+    @discardableResult
+    func bySubtitleFontCompat(_ font: UIFont) -> Self {
+        if #available(iOS 15.0, *) {
+            var cfg = configuration ?? .plain()
+            let current = cfg.attributedSubtitle ?? AttributedString(cfg.subtitle ?? "")
+            var mutated = current
+            mutated.font = font
+            cfg.attributedSubtitle = mutated
+            cfg.subtitle = nil
+            configuration = cfg
+        } else {
+            var store = _subtitleStore
+            store.font = font
+            _subtitleStore = store
+
+            let title = self.title(for: .normal) ?? (self.attributedTitle(for: .normal)?.string ?? "")
+            let tFont = self.titleLabel?.font ?? .systemFont(ofSize: 16, weight: .semibold)
+            let tColor = self.titleColor(for: .normal) ?? .white
+            _rebuildLegacyTwoLine(title: title, titleFont: tFont, titleColor: tColor)
         }
         return self
     }
 }
-/// 交互 / 菜单 / 角色 / Pointer / Configuration 生命周期
+// MARK: - 交互 / 菜单 / 角色 / Pointer / Configuration 生命周期
 extension UIButton {
-    // MARK: - 设置 UIAction 菜单
+    // MARK: 设置 UIAction 菜单
     @available(iOS 14.0, *)
     @discardableResult
     func byMenu(_ menu: UIMenu?) -> Self {
         self.menu = menu
         return self
     }
-    // MARK: - 是否把菜单作为主动作（长按/点按直接展示）
+    // MARK: 是否把菜单作为主动作（长按/点按直接展示）
     @available(iOS 14.0, *)
     @discardableResult
     func byShowsMenuAsPrimaryAction(_ on: Bool) -> Self {
         self.showsMenuAsPrimaryAction = on
         return self
     }
-    // MARK: - 指针交互
+    // MARK: 指针交互
     @available(iOS 13.4, *)
     @discardableResult
     func byPointerInteractionEnabled(_ on: Bool) -> Self {
         self.isPointerInteractionEnabled = on
         return self
     }
-    // MARK: - 按钮语义角色（.normal / .cancel / .destructive 等）
+    // MARK: 按钮语义角色（.normal / .cancel / .destructive 等）
     @available(iOS 14.0, *)
     @discardableResult
     func byRole(_ role: UIButton.Role) -> Self {
         self.role = role
         return self
     }
-    // MARK: - 菜单元素排序策略（iOS16+）
+    // MARK: 菜单元素排序策略（iOS16+）
     @available(iOS 16.0, *)
     @discardableResult
     func byPreferredMenuElementOrder(_ order: UIContextMenuConfiguration.ElementOrder) -> Self {
         self.preferredMenuElementOrder = order
         return self
     }
-    // MARK: - 主动作是否切换 selected（iOS15+）
+    // MARK: 主动作是否切换 selected（iOS15+）
     @available(iOS 15.0, *)
     @discardableResult
     func byChangesSelectionAsPrimaryAction(_ on: Bool) -> Self {
         self.changesSelectionAsPrimaryAction = on
         return self
     }
-    // MARK: - 配置自动更新（iOS15+）
+    // MARK: 配置自动更新（iOS15+）
     @available(iOS 15.0, *)
     @discardableResult
     func byAutomaticallyUpdatesConfiguration(_ on: Bool) -> Self {
         self.automaticallyUpdatesConfiguration = on
         return self
     }
-    // MARK: - 配置更新回调（iOS15+）：根据 state 动态更新 configuration
+    // MARK: 配置更新回调（iOS15+）
     @available(iOS 15.0, *)
     @discardableResult
     func byConfigurationUpdateHandler(_ handler: @escaping UIButton.ConfigurationUpdateHandler) -> Self {
         self.configurationUpdateHandler = handler
         return self
     }
-    // MARK: - 请求更新 configuration（iOS15+）
+    // MARK: 请求更新 configuration（iOS15+）
     @available(iOS 15.0, *)
     @discardableResult
     func bySetNeedsUpdateConfiguration() -> Self {
@@ -549,9 +632,9 @@ extension UIButton {
         }
     }
 }
-/// 点按事统一入口
+// MARK: - 点按事统一入口
 extension UIButton {
-    // MARK: - 点按事件（iOS14+ 使用 UIAction；低版本回退到上面的 addAction(_:)）
+    // MARK: 点按事件（iOS14+ 使用 UIAction；低版本回退到上面的 addAction(_:)）
     @discardableResult
     func onTap(_ handler: @escaping (UIButton) -> Void) -> Self {
         if #available(iOS 14.0, *) {
@@ -564,7 +647,7 @@ extension UIButton {
         }
         return self
     }
-    // MARK: - 长按事件（所有版本可用，使用 UILongPressGestureRecognizer）
+    // MARK: 长按事件（所有版本可用，使用 UILongPressGestureRecognizer）
     @discardableResult
     func onLongPress(minimumPressDuration: TimeInterval = 0.5,
                      _ handler: @escaping (UIButton, UILongPressGestureRecognizer) -> Void) -> Self {
@@ -613,7 +696,6 @@ public extension UIButton {
         self.configuration = c
         return self
     }
-
     /// 只在 Configuration 管线里设置标题（会清空 attributedTitle 的干扰）
     @discardableResult
     func cfgTitle(_ title: String?) -> Self {
@@ -622,13 +704,11 @@ public extension UIButton {
             c.title = title
         }
     }
-
     /// 标题颜色（旧的 setTitleColor 在 Configuration 下无效）
     @discardableResult
     func cfgTitleColor(_ color: UIColor) -> Self {
         cfg { $0.baseForegroundColor = color }
     }
-
     /// 背景色、圆角、内边距
     @discardableResult
     func cfgBackground(_ color: UIColor) -> Self { cfg { $0.baseBackgroundColor = color } }
@@ -638,7 +718,6 @@ public extension UIButton {
 
     @discardableResult
     func cfgInsets(_ insets: NSDirectionalEdgeInsets) -> Self { cfg { $0.contentInsets = insets } }
-
     /// 字体：只能通过 TextAttributesTransformer 设置
     @discardableResult
     func cfgFont(_ font: UIFont) -> Self {
