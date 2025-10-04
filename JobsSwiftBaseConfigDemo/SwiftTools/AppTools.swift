@@ -27,7 +27,6 @@ public func presentAlert(for urlString: String, on textView: UITextView) {
 final class LanguageManager {
     static let shared = LanguageManager()
     private init() {}
-
     /// 当前语言对应的 Bundle
     var localizedBundle: Bundle {
         // 你可以根据自己的逻辑动态返回
@@ -38,9 +37,39 @@ final class LanguageManager {
         }
         return .main
     }
-
     /// 当前语言代码（默认系统语言）
     var currentLanguageCode: String {
-        UserDefaults.standard.string(forKey: "AppLanguage") ?? Locale.preferredLanguages.first ?? "en"
+        UD.string(forKey: "AppLanguage") ?? Locale.preferredLanguages.first ?? "en"
+    }
+}
+// MARK: - 启动分类处理（Block DSL）
+///
+/// - Parameters:
+///   - firstInstall: 安装后第一次启动
+///   - firstToday: 当天第一次启动
+///   - normal: 普通启动
+public struct AppLaunchManager {
+    @discardableResult
+    public static func handleLaunch(
+        firstInstall: (() -> Void)? = nil,
+        firstToday: (() -> Void)? = nil,
+        normal: (() -> Void)? = nil
+    ) -> LaunchKind {
+
+        let kind = LaunchChecker.markAndClassifyThisLaunch()
+
+        switch kind {
+        case .firstInstallLaunch:
+            print("🎉 首次安装启动")
+            firstInstall?()
+        case .firstLaunchToday:
+            print("🌅 当日首次启动")
+            firstToday?()
+        case .normal:
+            print("📦 普通启动")
+            normal?()
+        }
+
+        return kind
     }
 }

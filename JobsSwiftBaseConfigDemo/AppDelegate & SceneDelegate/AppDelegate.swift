@@ -29,6 +29,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // ✅ 安全 push/present 页面
         JobsSafePushSwizzler.enable()      // 只拦 push
         JobsSafePresentSwizzler.enable()   // 只拦 present
+        // ✅ 启动检测
+        AppLaunchManager.handleLaunch(
+            firstInstall: {
+                log("🚀 新用户引导 / 初始化配置")
+            },
+            firstToday: {
+                log("☀️ 每日签到弹窗 / 刷新缓存")
+            },
+            normal: {
+                log("➡️ 正常启动 / 常规逻辑")
+            }
+        )
 
         #if DEBUG
         JobsLog.enabled = true

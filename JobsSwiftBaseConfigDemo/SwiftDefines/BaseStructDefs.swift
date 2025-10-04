@@ -6,13 +6,48 @@
 //
 
 import Foundation
-
-struct JobsValidators {
-    /// 非空验证
+// MARK: - ShadowDirection
+struct ShadowDirection: OptionSet {
+    let rawValue: UInt
+    static let top        = ShadowDirection([])
+    static let down       = ShadowDirection(rawValue: 1 << 0)
+    static let left       = ShadowDirection(rawValue: 1 << 1)
+    static let right      = ShadowDirection(rawValue: 1 << 2)
+    static let leftTop    = ShadowDirection(rawValue: 1 << 3)
+    static let leftDown   = ShadowDirection(rawValue: 1 << 4)
+    static let rightTop   = ShadowDirection(rawValue: 1 << 5)
+    static let rightDown  = ShadowDirection(rawValue: 1 << 6)
+    static let all: ShadowDirection = [.top, .down, .left, .right, .leftTop, .leftDown, .rightTop, .rightDown]
+}
+// MARK: - UIBorderSideType
+struct UIBorderSideType: OptionSet {
+    let rawValue: UInt
+    static let all    = UIBorderSideType([])
+    static let top    = UIBorderSideType(rawValue: 1 << 0)
+    static let bottom = UIBorderSideType(rawValue: 1 << 1)
+    static let left   = UIBorderSideType(rawValue: 1 << 2)
+    static let right  = UIBorderSideType(rawValue: 1 << 3)
+}
+// MARK: - 这样写的话，外面可以JobsIndexPath.section 进行调用
+struct JobsIndexPath {
+    var section: Int
+    var rowOrItem: Int
+}
+// MARK: - 无数据占位图的类型
+struct JobsEmptyViewType: OptionSet {
+    let rawValue: UInt
+    static let none       = JobsEmptyViewType([])
+    static let label      = JobsEmptyViewType(rawValue: 1 << 0)
+    static let button     = JobsEmptyViewType(rawValue: 1 << 1)
+    static let customView = JobsEmptyViewType(rawValue: 1 << 2)
+}
+/// 一些小工具
+public struct JobsValidators {
+    // MARK: - 非空验证
     static func nonEmpty(_ s: String) -> Bool {
         !s.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
-    /// 数值范围验证器
+    // MARK: - 数值范围验证器
     static func decimal(min: Double? = nil, max: Double? = nil) -> (String) -> Bool {
         return { s in
             guard let v = Double(s) else { return false }
@@ -21,7 +56,7 @@ struct JobsValidators {
             return true
         }
     }
-    /// 手机号验证（中国大陆）
+    // MARK: - 手机号验证（中国大陆）
     static func phoneCN() -> (String) -> Bool {
         return { s in
             // 去空格后的纯数字长度 11
@@ -43,7 +78,8 @@ struct JobsValidators {
      print("isValid(18):", CNID.isValid(id18))
      print("isValid(15):", CNID.isValid(id15))
  */
-struct CNID {
+// MARK: - 中国大陆居民身份证号码校验
+public struct CNID {
     private static let re18 = try! NSRegularExpression(pattern: #"^\d{17}[\dX]$"#)
     private static let re15 = try! NSRegularExpression(pattern: #"^\d{15}$"#)
     private static let weights = [7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2]
@@ -75,7 +111,7 @@ struct CNID {
         let check = checksumFor(body17)
         return body17 + String(check)
     }
-    // MARK: - 私有
+
     private static func match(_ re: NSRegularExpression, _ s: String) -> Bool {
         re.firstMatch(in: s, range: NSRange(s.startIndex..., in: s)) != nil
     }
@@ -108,5 +144,127 @@ struct CNID {
         }
         let r = sum % 11
         return map[r]!
+    }
+}
+// MARK: - App 启动检查
+public struct LaunchChecker {
+    // 存储键（全部用 UInt8）
+    private static let kFirstLaunchFlag = "com.jobs.launch.first"   // 0/1
+    private static let kY = "com.jobs.launch.y"     // 年(偏移量)
+    private static let kM = "com.jobs.launch.m"     // 月(1...12)
+    private static let kD = "com.jobs.launch.d"     // 日(1...31)
+    // 年份用 UInt8 不够装绝对年，这里做“偏移年”方案：year - 2000
+    // 2000...2255 对应 0...255（足够未来几十年）
+    private static let yearBase: Int = 2000
+    /// 核心：执行一次检查并返回这次启动的类型
+    @discardableResult
+    public static func markAndClassifyThisLaunch(now: Date = Date()) -> LaunchKind {
+        // 1) 是否首次安装启动
+        let firstFlag = UD.uint8(forKey: kFirstLaunchFlag) ?? 0
+        if firstFlag == 0 {
+            UD.setUInt8(1, forKey: kFirstLaunchFlag)
+            // 同时写入“今天”的 Y/M/D
+            let (y,m,d) = ymd(from: now)
+            writeYMD(y, m, d, UD: UD)
+            UD.synchronize()
+            logLaunch(kind: .firstInstallLaunch, now: now, lastYMD: nil)
+            return .firstInstallLaunch
+        }
+        // 2) 当日首次：对比存储的 Y/M/D（全是 UInt8）
+        let storedY = UD.uint8(forKey: kY)
+        let storedM = UD.uint8(forKey: kM)
+        let storedD = UD.uint8(forKey: kD)
+        let (curY, curM, curD) = ymd(from: now)
+
+        if storedY != curY || storedM != curM || storedD != curD {
+            // 新的一天 → 更新 Y/M/D
+            writeYMD(curY, curM, curD, UD: UD)
+            UD.synchronize()
+            logLaunch(kind: .firstLaunchToday,
+                      now: now,
+                      lastYMD: (storedY, storedM, storedD))
+            return .firstLaunchToday
+        }
+        // 3) 普通启动
+        logLaunch(kind: .normal, now: now, lastYMD: (storedY, storedM, storedD))
+        return .normal
+    }
+    /// 是否为安装后的第一次启动（不产生副作用，纯读）
+    public static var isFirstInstallLaunch: Bool {
+        (UD.uint8(forKey: kFirstLaunchFlag) ?? 0) == 0
+    }
+    /// 是否为今天的第一次启动（不产生副作用，纯读）
+    public static func isFirstLaunchToday(now: Date = Date()) -> Bool {
+        guard
+            let y = UD.uint8(forKey: kY),
+            let m = UD.uint8(forKey: kM),
+            let dd = UD.uint8(forKey: kD)
+        else { return true } // 没存过，当作今天第一次
+        let (cy, cm, cd) = ymd(from: now)
+        return y != cy || m != cm || dd != cd
+    }
+    /// 调试/测试用：清空标记
+    public static func reset() {
+        UD.removeBy(kFirstLaunchFlag)
+            .removeBy(kY)
+            .removeBy(kM)
+    }
+}
+// MARK: - 私有工具
+private extension LaunchChecker {
+    /// 以 UInt8 表示的 Y/M/D（年为 2000 基准偏移）
+    static func ymd(from date: Date) -> (UInt8, UInt8, UInt8) {
+        var cal = Calendar(identifier: .gregorian)
+        cal.locale = Locale(identifier: "zh_CN")
+        cal.timeZone = .current
+        let c = cal.dateComponents([.year, .month, .day], from: date)
+        let y = UInt8(clamping: (c.year ?? 2000) - yearBase)
+        let m = UInt8(clamping: c.month ?? 1)
+        let d = UInt8(clamping: c.day ?? 1)
+        return (y, m, d)
+    }
+
+    static func writeYMD(_ y: UInt8,
+                         _ m: UInt8,
+                         _ d: UInt8,
+                         UD: UserDefaults) {
+        UD.setUInt8(y, forKey: kY)
+        UD.setUInt8(m, forKey: kM)
+        UD.setUInt8(d, forKey: kD)
+    }
+    /// “尽可能最全”的时间格式化（用于打印，而不是存储）
+    static func fullFormatter() -> DateFormatter {
+        let f = DateFormatter() 
+        // 年月日 时分秒.毫秒 时区 星期 以及具体时区名和公历
+        f.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS ZZZZZ (VV) EEEE G"
+        f.calendar = Calendar(identifier: .gregorian)
+        f.locale = Locale(identifier: "zh_CN")
+        f.timeZone = .current
+        return f
+    }
+    static func logLaunch(
+        kind: LaunchKind,
+        now: Date,
+        lastYMD: (UInt8?, UInt8?, UInt8?)? = nil
+    ) {
+        let stamp = fullFormatter().string(from: now)
+        let last = lastYMD ?? (nil, nil, nil)
+
+        func desc(_ tuple: (UInt8?, UInt8?, UInt8?)) -> String {
+            if let y = tuple.0, let m = tuple.1, let d = tuple.2 {
+                let absYear = Int(y) + yearBase
+                return "\(absYear)-\(m)-\(d)"
+            } else {
+                return "缺失"
+            }
+        }
+        switch kind {
+        case .firstInstallLaunch:
+            log("🎉 [Launch] 首次安装启动 @ \(stamp)")
+        case .firstLaunchToday:
+            log("🌅 [Launch] 当日首次启动 @ \(stamp)（上次记录：\(desc(last))）")
+        case .normal:
+            log("➡️ [Launch] 普通启动 @ \(stamp)（最近启动日：\(desc(last))）")
+        }
     }
 }

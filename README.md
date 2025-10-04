@@ -3194,6 +3194,22 @@ let button = UIButton(type: .system)
     }
 ```
 
+### 29、启动检测 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+AppLaunchManager.handleLaunch(
+    firstInstall: {
+        log("🚀 新用户引导 / 初始化配置")
+    },
+    firstToday: {
+        log("☀️ 每日签到弹窗 / 刷新缓存")
+    },
+    normal: {
+        log("➡️ 正常启动 / 常规逻辑")
+    }
+)
+```
+
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>

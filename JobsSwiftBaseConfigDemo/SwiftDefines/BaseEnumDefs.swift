@@ -7,6 +7,12 @@
 
 import Foundation
 import UIKit
+// MARK: - 启动检查的枚举
+public enum LaunchKind {
+    case firstInstallLaunch      // 安装后第一次
+    case firstLaunchToday        // 今天第一次
+    case normal                  // 普通启动
+}
 // MARK: - 开发环境
 public enum JobsNetworkingEnvir: NSInteger {
     case undefined = 0,
@@ -758,41 +764,6 @@ public enum JobsFundsChannel: Int {
          qrph,
          unionBank
 }
-// MARK: - ShadowDirection
-struct ShadowDirection: OptionSet {
-    let rawValue: UInt
-    static let top        = ShadowDirection([])
-    static let down       = ShadowDirection(rawValue: 1 << 0)
-    static let left       = ShadowDirection(rawValue: 1 << 1)
-    static let right      = ShadowDirection(rawValue: 1 << 2)
-    static let leftTop    = ShadowDirection(rawValue: 1 << 3)
-    static let leftDown   = ShadowDirection(rawValue: 1 << 4)
-    static let rightTop   = ShadowDirection(rawValue: 1 << 5)
-    static let rightDown  = ShadowDirection(rawValue: 1 << 6)
-    static let all: ShadowDirection = [.top, .down, .left, .right, .leftTop, .leftDown, .rightTop, .rightDown]
-}
-// MARK: - UIBorderSideType
-struct UIBorderSideType: OptionSet {
-    let rawValue: UInt
-    static let all    = UIBorderSideType([])
-    static let top    = UIBorderSideType(rawValue: 1 << 0)
-    static let bottom = UIBorderSideType(rawValue: 1 << 1)
-    static let left   = UIBorderSideType(rawValue: 1 << 2)
-    static let right  = UIBorderSideType(rawValue: 1 << 3)
-}
-// MARK: - 这样写的话，外面可以JobsIndexPath.section 进行调用
-struct JobsIndexPath {
-    var section: Int
-    var rowOrItem: Int
-}
-// MARK: - 无数据占位图的类型
-struct JobsEmptyViewType: OptionSet {
-    let rawValue: UInt
-    static let none       = JobsEmptyViewType([])
-    static let label      = JobsEmptyViewType(rawValue: 1 << 0)
-    static let button     = JobsEmptyViewType(rawValue: 1 << 1)
-    static let customView = JobsEmptyViewType(rawValue: 1 << 2)
-}
 // MARK: - 网络鉴权
 public enum JXAuthCode: UInt {
     case tokenEmpty        = 10006  // 令牌为空
@@ -802,9 +773,9 @@ public enum JXAuthCode: UInt {
     case success           = 10000  // 成功
 }
 // MARK: - 中国公民身份证校验
-enum CNIDError: Error, CustomStringConvertible {
+public enum CNIDError: Error, CustomStringConvertible {
     case format, birthDate, sequence, checksum
-    var description: String {
+    public var description: String {
         switch self {
         case .format:    return "格式错误：18位(前17位数字+最后一位数字或X) 或 15位纯数字"
         case .birthDate: return "出生日期无效或超出合理范围"
@@ -814,7 +785,7 @@ enum CNIDError: Error, CustomStringConvertible {
     }
 }
 // MARK: - 颜色的定义
-enum JobsCorConst {
+public enum JobsCorConst {
     static let main_color: UIColor      = UIColor(named: "MainColor")!
     // MARK: - 文本 626C90、A6B0C8
     static let text0_color: UIColor      = UIColor(named: "TextColor0")!

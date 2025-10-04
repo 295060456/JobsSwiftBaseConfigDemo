@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		0401DCF82E90CDF500D572AD /* UIWindowScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DCF72E90CDF400D572AD /* UIWindowScene.swift */; };
 		0401DCFA2E90D91900D572AD /* UIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DCF92E90D91700D572AD /* UIWindow.swift */; };
+		0401DCFC2E9102BC00D572AD /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DCFB2E9102BB00D572AD /* UserDefaults.swift */; };
+		0401DCFE2E91069F00D572AD /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DCFD2E91069E00D572AD /* DateFormatter.swift */; };
+		0401DD002E910B3500D572AD /* BaseLet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DCFF2E910B3200D572AD /* BaseLet.swift */; };
 		041F5B012E87B51800984EEB /* UITextFieldDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041F5B002E87B50F00984EEB /* UITextFieldDemoVC.swift */; };
 		043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */; };
 		0442717B2E8139CF0084B25C /* ColorAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0442717A2E8139CF0084B25C /* ColorAssets.xcassets */; };
@@ -145,6 +148,9 @@
 /* Begin PBXFileReference section */
 		0401DCF72E90CDF400D572AD /* UIWindowScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindowScene.swift; sourceTree = "<group>"; };
 		0401DCF92E90D91700D572AD /* UIWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindow.swift; sourceTree = "<group>"; };
+		0401DCFB2E9102BB00D572AD /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
+		0401DCFD2E91069E00D572AD /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
+		0401DCFF2E910B3200D572AD /* BaseLet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseLet.swift; sourceTree = "<group>"; };
 		041F5B002E87B50F00984EEB /* UITextFieldDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldDemoVC.swift; sourceTree = "<group>"; };
 		043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProtocolDefs.swift; sourceTree = "<group>"; };
 		0442717A2E8139CF0084B25C /* ColorAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ColorAssets.xcassets; sourceTree = "<group>"; };
@@ -449,6 +455,8 @@
 		04D0C9802E8D19FC00580020 /* iOS.SDK */ = {
 			isa = PBXGroup;
 			children = (
+				0401DCFD2E91069E00D572AD /* DateFormatter.swift */,
+				0401DCFB2E9102BB00D572AD /* UserDefaults.swift */,
 				0401DCF92E90D91700D572AD /* UIWindow.swift */,
 				0401DCF72E90CDF400D572AD /* UIWindowScene.swift */,
 				04E8D61A2E8E837C00E85CDA /* NSMutableAttributedString.swift */,
@@ -656,6 +664,7 @@
 		C564FEEC2E0AAC900079B5C1 /* SwiftDefines */ = {
 			isa = PBXGroup;
 			children = (
+				0401DCFF2E910B3200D572AD /* BaseLet.swift */,
 				043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */,
 				04E8D5B82E8E54FF00E85CDA /* BaseStructDefs.swift */,
 				C564FC612E0959510079B5C1 /* BaseEnumDefs.swift */,
@@ -976,7 +985,9 @@
 				C564FC882E0959640079B5C1 /* UISlider.swift in Sources */,
 				C564FC912E0959640079B5C1 /* UIScrollView.swift in Sources */,
 				C564FC8F2E0959640079B5C1 /* UIProgressView.swift in Sources */,
+				0401DCFE2E91069F00D572AD /* DateFormatter.swift in Sources */,
 				C564FC9F2E0959640079B5C1 /* UISearchBar.swift in Sources */,
+				0401DCFC2E9102BC00D572AD /* UserDefaults.swift in Sources */,
 				0459210A2E854FFB008C8D6A /* Float16.swift in Sources */,
 				0477D9872E8BEF64002C6427 /* KeyboardDemoVC.swift in Sources */,
 				C564FC932E0959640079B5C1 /* UIToolbarAppearance.swift in Sources */,
@@ -1015,6 +1026,7 @@
 				04A8C54C2E8AA94D00381701 /* UIButtonDemoVC.swift in Sources */,
 				04D0C9792E8D066900580020 /* PicLoadDemoVC.swift in Sources */,
 				045920F62E854F8C008C8D6A /* Int16.swift in Sources */,
+				0401DD002E910B3500D572AD /* BaseLet.swift in Sources */,
 				C564FBE92E09580B0079B5C1 /* JobsSwiftBaseConfigDemo.xcdatamodeld in Sources */,
 				0401DCF82E90CDF500D572AD /* UIWindowScene.swift in Sources */,
 				04E8D6192E8E6EC300E85CDA /* UIToolbar.swift in Sources */,
