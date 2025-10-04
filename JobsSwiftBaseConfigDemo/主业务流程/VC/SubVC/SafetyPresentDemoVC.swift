@@ -44,6 +44,9 @@ final class SafetyPresentDemoVC: UIViewController {
                         print("回来了 \(name)")
                     }
                     .byPresent(self)
+                    .byCompletion{
+                        print("结束")
+                    }
             })
         // 2️⃣ 从 UIView 内触发 presentSafely
         let demoView = DemoInnerPresentView()
@@ -76,6 +79,9 @@ final class SafetyPresentDemoVC: UIViewController {
                         print("回来了 \(id)")
                     }
                     .byPresent(self)           // 自带防重入，连点不重复
+                    .byCompletion{
+                        print("结束")
+                    }
             })
     }
 }

@@ -3059,6 +3059,9 @@ private lazy var passwordAccessory: UIToolbar = {
           print("回来了 id=\(id)")
       }
       .byPush(self)           // 自带防重入，连点不重复
+      .byCompletion{
+          print("结束")
+      }
   ```
 
 * 强行`present`页面进行展示。发起者可以是：任意控制器（**即便这个控制器目前是不具备导航控制器的**）、任意视图
@@ -3072,10 +3075,13 @@ private lazy var passwordAccessory: UIToolbar = {
             print("回来了 \(name)")
         }
         .byPresent(self)           // 自带防重入，连点不重复
+        .byCompletion{
+            print("结束")
+        }
     ```
-
+  
   * 自定义`present`的页面高度
-
+  
     ```swift
     HalfSheetDemoVC()
         .byModalPresentationStyle(.custom)
@@ -3085,6 +3091,9 @@ private lazy var passwordAccessory: UIToolbar = {
             print("回来了 \(id)")
         }
         .byPresent(self)           // 自带防重入，连点不重复
+        .byCompletion{
+            print("结束")
+        }
     ```
 
 ### 26、懒加载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>

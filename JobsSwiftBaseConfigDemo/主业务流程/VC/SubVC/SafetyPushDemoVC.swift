@@ -40,6 +40,9 @@ final class SafetyPushDemoVC: UIViewController {
                         print("回来了 id=\(id)")
                     }
                     .byPush(self)           // 自带防重入，连点不重复
+                    .byCompletion{
+                        print("❤️结束❤️")
+                    }
             })
         // 2️⃣ 自定义 View，内部自己调用 pushSafely
         let customView = DemoInnerView()
@@ -85,6 +88,9 @@ final class DemoInnerView: UIView {
                             print("回来了 id=\(id)")
                         }
                         .byPush(self)           // 自带防重入，连点不重复
+                        .byCompletion{
+                            print("❤️结束❤️")
+                        }
                 }
         )
 
