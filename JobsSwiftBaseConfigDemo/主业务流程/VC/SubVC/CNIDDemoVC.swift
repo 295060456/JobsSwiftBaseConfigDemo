@@ -94,7 +94,7 @@ final class CNIDDemoVC: UIViewController {
     // MARK: - 打印示例
     private func printDemo() {
         // 1) 普通文本 / 参数混合
-        log("你好，世界", 123, true)
+        log("好，世界", 123, true)
         // 2) JSON：自动识别 String/Data/字典/数组（默认 pretty + 中文还原）
         log(#"{"key":"\u7231\u60c5"}"#)                 // String JSON
         log(["user": "张三", "tags": ["iOS","Swift"]])  // 字典/数组

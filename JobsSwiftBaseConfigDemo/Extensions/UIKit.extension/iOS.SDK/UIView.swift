@@ -755,7 +755,7 @@ public extension UIView {
         _setGrMap(map, for: &GestureMultiKeys.tapMap)
         return id
     }
-    /// 提供一个便于链式的重载：你自己指定 id，可继续链式
+    /// 提供一个便于链式的重载：自己指定 id，可继续链式
     @discardableResult
     func addTapActionMulti(
         use id: String,

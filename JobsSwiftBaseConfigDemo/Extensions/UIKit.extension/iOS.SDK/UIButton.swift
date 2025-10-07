@@ -642,7 +642,7 @@ extension UIButton {
         }
     }
 }
-// MARK: - 点按事件统一入口 + 你的别名
+// MARK: - 点按事件统一入口 + 的别名
 extension UIButton {
     /// iOS14+ 使用 UIAction；低版本回退到 addAction(_:)
     @discardableResult
@@ -860,7 +860,7 @@ public extension UIButton {
             if remain > 0 {
                 self.setTitle("\(remain)s", for: .normal)
 
-                // 简版 tick（你原有的）
+                // 简版 tick（原有的）
                 if let tick = objc_getAssociatedObject(self, &_jobsCountdownTickKey) as? (Int, Int) -> Void {
                     tick(remain, total)
                 }
@@ -875,7 +875,7 @@ public extension UIButton {
                     as? (UIButton, JobsTimerKind) -> Void {
                     ex(self, kind)
                 }
-                // 触发你的收尾逻辑（会调用简版 finish 回调、复原按钮等）
+                // 触发的收尾逻辑（会调用简版 finish 回调、复原按钮等）
                 self.stopJobsCountdown(triggerFinish: true)
             }
         }

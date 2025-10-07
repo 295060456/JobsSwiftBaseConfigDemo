@@ -9,7 +9,7 @@
 //  一个统一演示定时器实现差异与一致 API 的示例控制器。
 //  支持四种实现：Foundation.Timer / DispatchSourceTimer(GCD) / CADisplayLink / CFRunLoopTimer。
 //  通过协议统一「启动 / 暂停 / 继续 / 停止 / Fire」；UI 用状态机驱动按钮可用与配色。
-//  你要求：全部懒加载；链式 API（byXX / onJobsXX / byAddTo）；两排按钮；开始按钮在运行时显示当前计数；
+//  要求：全部懒加载；链式 API（byXX / onJobsXX / byAddTo）；两排按钮；开始按钮在运行时显示当前计数；
 //  可输入“步长”（interval），修改后立刻生效（重建定时器）；Fire 与 Stop 文案区分清楚。
 //
 
@@ -24,7 +24,7 @@
 //  一个统一演示定时器实现差异与一致 API 的示例控制器。
 //  支持四种实现：Foundation.Timer / DispatchSourceTimer(GCD) / CADisplayLink / CFRunLoopTimer。
 //  通过协议统一「启动 / 暂停 / 继续 / 停止 / Fire」；UI 用状态机驱动按钮可用与配色。
-//  你要求：全部懒加载；链式 API（byXX / onJobsXX / byAddTo）；两排按钮；开始按钮在运行时显示当前计数；
+//  要求：全部懒加载；链式 API（byXX / onJobsXX / byAddTo）；两排按钮；开始按钮在运行时显示当前计数；
 //  可输入“步长”（interval），修改后立刻生效（重建定时器）；Fire 与 Stop 文案区分清楚。
 //  ✅ 新增：倒计时峰值输入框 + 倒计时演示按钮（Jobs风格）
 //
@@ -36,8 +36,7 @@ final class TimerDemoVC: UIViewController {
     let horizontalInset: CGFloat = 40
     let spacing: CGFloat = 12
     // MARK: - UI 状态机
-    private enum UIState { case idle, running, paused, stopped }
-    private var uiState: UIState = .idle { didSet { updateButtonStates() } }
+    private var uiState: TimerState = .idle { didSet { updateButtonStates() } }
     // MARK: - 定时器 & 配置
     // 属性
     private var timer: (any JobsTimerProtocol)?
@@ -223,7 +222,7 @@ final class TimerDemoVC: UIViewController {
             .onTap { [weak self] btn in
                 guard let self else { return }
                 let total = self.parseCountdownTotal()   // 来自 countdownField
-                let step  = self.intervalSec             // 来自 intervalField（你已有逻辑维护）
+                let step  = self.intervalSec             // 来自 intervalField（已有逻辑维护）
                 let kind  = self.currentKind             // 来自 segmented
                 btn.startJobsCountdown(total: total,
                                        interval: step,

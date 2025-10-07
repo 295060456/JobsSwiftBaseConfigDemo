@@ -94,7 +94,7 @@ public final class TimerTicker: JobsTicker {
 public struct JobsCountdownConfig {
     public var mode: JobsCountdownMode = .down(from: 60)
 
-    /// iOS15+：给你 “秒数 + 基线配置”，返回最终配置
+    /// iOS15+：给 “秒数 + 基线配置”，返回最终配置
     public var renderConfiguration: ((Int, UIButton.Configuration) -> UIButton.Configuration)?
     /// 老系统：返回字符串或富文本
     public var renderLegacy: ((Int) -> JobsCountdownTitle)?

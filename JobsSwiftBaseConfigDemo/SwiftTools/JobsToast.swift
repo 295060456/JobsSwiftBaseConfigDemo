@@ -20,7 +20,7 @@ public final class JobsToast: UIView {
     // 供懒加载按钮的点按回调占位（由 show(...) 注入）
     private var tapHandler: ((UIButton) -> Void)?
 
-    // ✅ 懒加载按钮，使用你给的链式 API
+    // ✅ 懒加载按钮，使用给的链式 API
     private lazy var contentButton: UIButton = {
         UIButton(type: .system)
             // 默认占位标题；真正文案在 show(...) 里设置

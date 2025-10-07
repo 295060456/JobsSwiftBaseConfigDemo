@@ -41,7 +41,7 @@ install! 'cocoapods',# install! 只走一次，多次使用只以最后一个标
   :disable_input_output_paths => true
 
 inhibit_all_warnings!
-# 用于指定你的 Pod 项目应使用静态库而不是动态库。
+# 用于指定的 Pod 项目应使用静态库而不是动态库。
 # 这个选项主要用于解决某些与动态库相关的兼容性和性能问题。
 use_frameworks! :linkage => :static
 

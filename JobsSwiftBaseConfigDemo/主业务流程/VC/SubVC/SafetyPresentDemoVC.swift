@@ -68,7 +68,7 @@ final class SafetyPresentDemoVC: UIViewController {
             .byTitle("自定义高度 present (320)")
             .onTap { _ in
                 /// 自定义高度 present：.custom + UIPresentationController
-                /// .custom 之后，系统不会给你装手势 → 需要自己加 pan + 交互式转场（上面已给补丁）。
+                /// .custom 之后，系统不会给装手势 → 需要自己加 pan + 交互式转场（上面已给补丁）。
                 /// 想省事且 iOS 15+ → 用 .pageSheet + detents，系统自带手势。
                 HalfSheetDemoVC()
                     .byModalPresentationStyle(.custom)
@@ -105,7 +105,7 @@ final class DemoInnerPresentView: UIView {
             UITapGestureRecognizer
                 .byConfig { gr in
                     print("Tap 触发 on: \(String(describing: gr.view))")
-                    // 这里仍然使用你项目里的 presentVC() / presentSafely()（定义在 UIResponder 的扩展中）
+                    // 这里仍然使用项目里的 presentVC() / presentSafely()（定义在 UIResponder 的扩展中）
                     DemoDetailVC()
                         .byData("Jobs")// 字符串
                         .onResult { name in

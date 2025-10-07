@@ -82,7 +82,7 @@ public extension UIBarButtonItem {
         }
     }
 
-    // ========= 3) 链式：按你一贯风格补常用点语法 =========
+    // ========= 3) 链式：按一贯风格补常用点语法 =========
     @discardableResult
     func byStyle(_ style: UIBarButtonItem.Style) -> Self {
         self.style = style

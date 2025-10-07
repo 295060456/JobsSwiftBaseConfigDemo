@@ -67,7 +67,7 @@ public enum TextFormatStrategy {
             }
             return filtered
         case .phoneCNGrouped:
-            // 展示分组：3-4-4；内部你可以在回写 VM 时去空格
+            // 展示分组：3-4-4；内部可以在回写 VM 时去空格
             let digits = s.filter { $0.isNumber }.prefix(11)
             let raw = String(digits)
             switch raw.count {

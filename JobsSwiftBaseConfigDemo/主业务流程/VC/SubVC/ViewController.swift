@@ -8,8 +8,8 @@
 import UIKit
 import SnapKit
 //import JobsObj
-//如果你真的想要 import JobsObj，你要这样做：
-//你就得 把 JobsObj.swift 单独做成 module，方法如下：
+//如果真的想要 import JobsObj，要这样做：
+//就得 把 JobsObj.swift 单独做成 module，方法如下：
 //创建一个新 Framework Target（例如叫 JobsObj）；
 //把 JobsObj.swift 拖进去；
 //在主 App Target 中 import JobsObj；

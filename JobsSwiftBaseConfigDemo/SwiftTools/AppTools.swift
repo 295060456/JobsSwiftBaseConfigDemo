@@ -29,7 +29,7 @@ final class LanguageManager {
     private init() {}
     /// 当前语言对应的 Bundle
     var localizedBundle: Bundle {
-        // 你可以根据自己的逻辑动态返回
+        // 可以根据自己的逻辑动态返回
         // 比如通过 UserDefaults 保存的语言 key
         if let path = Bundle.main.path(forResource: currentLanguageCode, ofType: "lproj"),
            let bundle = Bundle(path: path) {

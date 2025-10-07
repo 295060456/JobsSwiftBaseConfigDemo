@@ -22,7 +22,7 @@ public enum JobsTFKeys {
     static var limitBag = UInt8(0)
     static var textInputActive = UInt8(0)
 }
-// MARK: 🧱组件模型：RxTextInput：一个输入框的“响应式视图模型”，把常用流打包给你
+// MARK: 🧱组件模型：RxTextInput：一个输入框的“响应式视图模型”，把常用流打包给
 public struct RxTextInput {
     /// 原始文本（可选）与非可选文本（orEmpty）
     public let text: Observable<String?>
@@ -34,7 +34,7 @@ public struct RxTextInput {
     /// 删除键事件 / 回车事件
     public let didPressDelete: Observable<Void>
     public let didPressReturn: Observable<Void>
-    /// 实时有效性（基于 validator）。每当输入框内容变化，就会根据你传入的 validator 校验规则动态发出 true 或 false。
+    /// 实时有效性（基于 validator）。每当输入框内容变化，就会根据传入的 validator 校验规则动态发出 true 或 false。
     public let isValid: Observable<Bool>
     /// 将“格式化后的文本”回写到 textField（避免光标跳动做了节制）
     public let formattedBinder: Binder<String>
@@ -393,7 +393,7 @@ public extension UITextField {
         let existingTintColor = tintColor
         tintColor = .clear
         /// 修复 iOS 的文字丢失 bug
-        /// Bug 背景：当你把 isSecureTextEntry 从 false 改回 true 时，如果用户光标不在最后、继续输入新字，系统会直接清空原有文字（奇怪的行为）。
+        /// Bug 背景：当把 isSecureTextEntry 从 false 改回 true 时，如果用户光标不在最后、继续输入新字，系统会直接清空原有文字（奇怪的行为）。
         /// 修复思路：先删掉当前内容；再用 replace() 写回去；这样系统会重新渲染文字，但不会清空输入
         if let existingText = text, isSecureTextEntry {
             deleteBackward()

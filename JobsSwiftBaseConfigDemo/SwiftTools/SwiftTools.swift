@@ -119,7 +119,7 @@ public enum JobsLog {
     }
     // 模式（统一入口：自动识别/强制 JSON/强制对象/纯文本）
     public enum Mode { case auto, json, object, plain }
-    // 统一入口（你只用这个）
+    // 统一入口（只用这个）
     public static func log(_ items: Any...,
                            level: Level = .plain,
                            mode: Mode = .auto,

@@ -263,7 +263,7 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
         // 手势：先清旧，再加新
         textView.gestureRecognizers?.forEach { textView.removeGestureRecognizer($0) }
 
-        // ✅ 使用你的手势 DSL：byConfig / byCancelsTouchesInView / byTaps / byTouches …
+        // ✅ 使用的手势 DSL：byConfig / byCancelsTouchesInView / byTaps / byTouches …
         let tap = textView.jobs_addGesture(UITapGestureRecognizer
             .byConfig { gr in
                 print("Tap 触发 on: \(String(describing: gr.view))")

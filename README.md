@@ -3366,6 +3366,75 @@ AppLaunchManager.handleLaunch(
 
 #### 30.2、[**字符串加载图片资源**](#字符串加载图片资源) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
+### 31、⏰ 计时器的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 31.1、（`NSTimer`/`GCD`/`DisplayLink`/`RunLoop`）统一协议方便调用  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> ```swift
+> public protocol JobsTimerProtocol: AnyObject {
+>     /// 当前是否运行中
+>     var isRunning: Bool { get }
+>     /// 启动计时器
+>     func start()
+>     /// 暂停计时器
+>     func pause()
+>     /// 恢复计时器
+>     func resume()
+>     /// 立即触发一次（fire）
+>     func fireOnce()
+>     /// 停止计时器（销毁）
+>     func stop()
+>     /// 注册回调（每 tick 执行一次）
+>     @discardableResult
+>     func onTick(_ block: @escaping () -> Void) -> Self
+>     /// 注册完成回调（用于一次性定时器或倒计时）
+>     @discardableResult
+>     func onFinish(_ block: @escaping () -> Void) -> Self
+> }
+> // MARK: - 计时器状态
+> public enum TimerState { case idle, running, paused, stopped }
+> ```
+>
+> ```swift
+> private var timer: (any JobsTimerProtocol)?
+> private var uiState: TimerState = .idle { didSet { updateButtonStates() } }
+> ```
+
+* ⏰ 计时器开始
+
+  ```swift
+  timer?.start()
+  uiState = .running
+  ```
+
+* ⏰ 计时器暂停
+
+  ```swift
+  self?.timer?.pause()
+  self?.uiState = .paused
+  ```
+
+* ⏰ 计时器重新开始
+
+  ```swift
+  self?.timer?.resume()
+  self?.uiState = .running
+  ```
+
+* ⏰ 计时器销毁
+
+  ```swift
+  self?.timer?.fireOnce()
+  self?.uiState = .stopped
+  ```
+
+* ⏰ 计时器停止
+
+  ```swift
+  self?.timer?.stop()
+  self?.uiState = .stopped
+  ```
+
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>

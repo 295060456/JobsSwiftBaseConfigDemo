@@ -54,26 +54,19 @@ public extension JobsAsyncable {
 public protocol JobsTimerProtocol: AnyObject {
     /// 当前是否运行中
     var isRunning: Bool { get }
-
     /// 启动计时器
     func start()
-
     /// 暂停计时器
     func pause()
-
     /// 恢复计时器
     func resume()
-
     /// 立即触发一次（fire）
     func fireOnce()
-
     /// 停止计时器（销毁）
     func stop()
-
     /// 注册回调（每 tick 执行一次）
     @discardableResult
     func onTick(_ block: @escaping () -> Void) -> Self
-
     /// 注册完成回调（用于一次性定时器或倒计时）
     @discardableResult
     func onFinish(_ block: @escaping () -> Void) -> Self

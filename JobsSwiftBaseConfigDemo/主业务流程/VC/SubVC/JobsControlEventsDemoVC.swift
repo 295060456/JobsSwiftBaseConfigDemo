@@ -61,8 +61,8 @@ final class JobsControlEventsDemoVC: UIViewController {
     private func demo_DatePicker_onJobsChange() {
         addSectionTitle("26.1-2️⃣  UIDatePicker：onJobsChange(.valueChanged)")
         stack.addArrangedSubview(UIDatePicker()
-            .byDatePickerMode(.date)                           // 你的链式样式
-            .byPreferredDatePickerStyle(.wheels)               // 你的链式样式
+            .byDatePickerMode(.date)                           // 的链式样式
+            .byPreferredDatePickerStyle(.wheels)               // 的链式样式
             .onJobsChange { (picker :UIDatePicker) in
                 print("选择日期：\(picker.date)")
             })
@@ -88,7 +88,7 @@ final class JobsControlEventsDemoVC: UIViewController {
             print("文字变化：\(tf.text ?? "")")
         })
     }
-    // MARK: - 26.2 在 UIButton 层的演示（保留你原有 onTap）
+    // MARK: - 26.2 在 UIButton 层的演示（保留原有 onTap）
     private func demo_Button_onTap() {
         addSectionTitle("26.2 🔘 UIButton：onTap（UIButton 专属 UIAction）")
         stack.addArrangedSubview(UIButton(type: .system)

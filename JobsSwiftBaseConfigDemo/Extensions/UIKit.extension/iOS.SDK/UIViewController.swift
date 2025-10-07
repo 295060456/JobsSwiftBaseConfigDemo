@@ -42,7 +42,7 @@ public extension UIViewController {
 
     // ================================== Modal 展示 / 解散 ==================================
     // ⚠️ 已删除：byPresent(_ viewController: UIViewController, ...) 这个容易误用的重载
-    // 如果你确实想保留，请放开下面注释，并保留所有护栏（强烈建议不要改）：
+    // 如果确实想保留，请放开下面注释，并保留所有护栏（强烈建议不要改）：
     /*
     @discardableResult
     func byPresent(_ viewController: UIViewController,
@@ -254,13 +254,13 @@ public extension UIViewController {
         gk_navTitle = title
         if let symbol = leftSymbol {
             gk_navLeftBarButtonItem = UIBarButtonItem(
-                customView: makeNavButton(symbol: symbol, tint: .systemBlue) {
+                customView: makeNavButton(symbol: symbol, tint: .white) {
                     print("👈 自定义左按钮 tapped")
                 }
             )
         } else {
             gk_navLeftBarButtonItem = UIBarButtonItem(
-                customView: makeNavButton(symbol: "chevron.left", tint: .systemBlue) { [weak self] in
+                customView: makeNavButton(symbol: "chevron.left", tint: .white) { [weak self] in
                     guard let self else { return }
                     self.jobsSmartBack()
                 }

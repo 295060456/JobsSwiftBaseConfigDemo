@@ -12,7 +12,7 @@ import UIKit
 
      // 取最顶层可见 VC（做 push/present 的宿主）
      if let topVC = UIApplication.jobsTopMostVC() {
-         // ... 用 topVC 做 present 或你的 pushSafely 入口
+         // ... 用 topVC 做 present 或的 pushSafely 入口
      }
  */
 // MARK: - Key Window（跨版本最大兼容）
