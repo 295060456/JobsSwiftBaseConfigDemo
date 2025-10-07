@@ -35,7 +35,7 @@ final class SafetyPresentDemoVC: UIViewController {
         // 1️⃣ 系统 present 按钮（会触发我们 swizzle 的逻辑）
         stack.addArrangedSubview(UIButton(type: .system)
             .byTitle("系统 present (连点不会重复)")
-            .addAction { _ in
+            .onTap { _ in
 //                let vc = DemoDetailVC()
 //                present(vc, animated: true, completion: nil)
                 DemoDetailVC()
@@ -49,14 +49,13 @@ final class SafetyPresentDemoVC: UIViewController {
                     }
             })
         // 2️⃣ 从 UIView 内触发 presentSafely
-        let demoView = DemoInnerPresentView()
-        demoView.backgroundColor = .systemGreen.withAlphaComponent(0.2)
-        demoView.layer.cornerRadius = 8
-        demoView.snp.makeConstraints { make in
-            make.width.equalTo(260)
-            make.height.equalTo(60)
-        }
-        stack.addArrangedSubview(demoView)
+        DemoInnerPresentView()
+            .byBgColor(.systemGreen.withAlphaComponent(0.2))
+            .byCornerRadius(8)
+            .byAddTo(stack) { make in
+                make.width.equalTo(260)
+                make.height.equalTo(60)
+            }
 
         stack.addArrangedSubview(UILabel()
             .byText("👆 点击绿色区域也会触发 presentSafely")
@@ -67,7 +66,7 @@ final class SafetyPresentDemoVC: UIViewController {
         // 3️⃣ 新增入口：自定义高度 present
         stack.addArrangedSubview(UIButton(type: .system)
             .byTitle("自定义高度 present (320)")
-            .addAction { _ in
+            .onTap { _ in
                 /// 自定义高度 present：.custom + UIPresentationController
                 /// .custom 之后，系统不会给你装手势 → 需要自己加 pan + 交互式转场（上面已给补丁）。
                 /// 想省事且 iOS 15+ → 用 .pageSheet + detents，系统自带手势。
@@ -87,42 +86,38 @@ final class SafetyPresentDemoVC: UIViewController {
 }
 // MARK: - UIResponder 内触发 presentVC 示例（保持不变）
 final class DemoInnerPresentView: UIView {
-    private let label: UILabel = {
-        let lbl = UILabel()
-        lbl.text = "👉 点我 (View 内触发 presentSafely)"
-        lbl.textAlignment = .center
-        lbl.textColor = .systemGreen
-        lbl.font = .systemFont(ofSize: 15, weight: .medium)
-        return UILabel()
+    private lazy var label : UILabel = {
+        UILabel()
             .byText("👉 点我 (View 内触发 presentSafely)")
             .byTextAlignment(.center)
             .byTextColor(.systemGreen)
             .byFont(.systemFont(ofSize: 15, weight: .medium))
+            .byAddTo(self) { [unowned self] make in
+                make.edges.equalToSuperview()
+            }
     }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(label)
-        label.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        label.byAlpha(1)
 
-        let tap = UITapGestureRecognizer(target: self, action: #selector(onTap))
-        addGestureRecognizer(tap)
+        addGestureRecognizer(
+            UITapGestureRecognizer
+                .byConfig { gr in
+                    print("Tap 触发 on: \(String(describing: gr.view))")
+                    // 这里仍然使用你项目里的 presentVC() / presentSafely()（定义在 UIResponder 的扩展中）
+                    DemoDetailVC()
+                        .byData("Jobs")// 字符串
+                        .onResult { name in
+                            print("回来了 \(name)")
+                        }
+                        .byPresent(self)
+                }
+        )
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    @objc private func onTap() {
-        // 这里仍然使用你项目里的 presentVC() / presentSafely()（定义在 UIResponder 的扩展中）
-        DemoDetailVC()
-            .byData("Jobs")// 字符串
-            .onResult { name in
-                print("回来了 \(name)")
-            }
-            .byPresent(self)           // 自带防重入，连点不重复
     }
 }
 // MARK: - 自定义 PresentationController（控制高度/位置/遮罩）
@@ -131,7 +126,7 @@ final class HalfSheetPresentationController: UIPresentationController {
     private lazy var dimmingView: UIView = {
         let v = UIView(frame: containerView?.bounds ?? .zero)
         v.backgroundColor = UIColor.black.withAlphaComponent(0.38)
-        v.alpha = 0
+        v.byAlpha(1)
         v.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTapDim)))
         return v
     }()
@@ -156,13 +151,13 @@ final class HalfSheetPresentationController: UIPresentationController {
 
         // 跟随系统转场动画
         presentedViewController.transitionCoordinator?.animate(alongsideTransition: { _ in
-            self.dimmingView.alpha = 1
+            self.dimmingView.byAlpha(1)
         })
     }
 
     override func dismissalTransitionWillBegin() {
         presentedViewController.transitionCoordinator?.animate(alongsideTransition: { _ in
-            self.dimmingView.alpha = 0
+            self.dimmingView.byAlpha(0)
         })
     }
 

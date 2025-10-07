@@ -46,7 +46,7 @@ public extension NSMutableAttributedString {
     }
     // MARK: - 追加
     @discardableResult
-    func byAppend(_ attrString: NSAttributedString) -> Self {
+    func add(_ attrString: NSAttributedString) -> Self {
         self.append(attrString)
         return self
     }

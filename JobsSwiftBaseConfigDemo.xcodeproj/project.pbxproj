@@ -15,6 +15,7 @@
 		0401DD062E9115CE00D572AD /* JobsToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DD052E9115CD00D572AD /* JobsToast.swift */; };
 		0401DD082E91183000D572AD /* ToastDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DD072E91182900D572AD /* ToastDemoVC.swift */; };
 		041F5B012E87B51800984EEB /* UITextFieldDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041F5B002E87B50F00984EEB /* UITextFieldDemoVC.swift */; };
+		042B67CE2E95085A000A2970 /* NSTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B67CD2E950858000A2970 /* NSTextAttachment.swift */; };
 		043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */; };
 		0442717B2E8139CF0084B25C /* ColorAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0442717A2E8139CF0084B25C /* ColorAssets.xcassets */; };
 		044272852E8146130084B25C /* JXScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044272842E8146130084B25C /* JXScale.swift */; };
@@ -158,6 +159,7 @@
 		0401DD052E9115CD00D572AD /* JobsToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsToast.swift; sourceTree = "<group>"; };
 		0401DD072E91182900D572AD /* ToastDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastDemoVC.swift; sourceTree = "<group>"; };
 		041F5B002E87B50F00984EEB /* UITextFieldDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldDemoVC.swift; sourceTree = "<group>"; };
+		042B67CD2E950858000A2970 /* NSTextAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTextAttachment.swift; sourceTree = "<group>"; };
 		043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProtocolDefs.swift; sourceTree = "<group>"; };
 		0442717A2E8139CF0084B25C /* ColorAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ColorAssets.xcassets; sourceTree = "<group>"; };
 		044272842E8146130084B25C /* JXScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXScale.swift; sourceTree = "<group>"; };
@@ -467,6 +469,7 @@
 		04D0C9802E8D19FC00580020 /* iOS.SDK */ = {
 			isa = PBXGroup;
 			children = (
+				042B67CD2E950858000A2970 /* NSTextAttachment.swift */,
 				0401DCFD2E91069E00D572AD /* DateFormatter.swift */,
 				0401DCFB2E9102BB00D572AD /* UserDefaults.swift */,
 				0401DCF92E90D91700D572AD /* UIWindow.swift */,
@@ -1014,6 +1017,7 @@
 				0477D9712E8B897D002C6427 /* SafetyPushDemoVC.swift in Sources */,
 				C564FCAC2E09597C0079B5C1 /* ViewController.swift in Sources */,
 				C564FC962E0959640079B5C1 /* Inlines.swift in Sources */,
+				042B67CE2E95085A000A2970 /* NSTextAttachment.swift in Sources */,
 				045920EE2E854BE7008C8D6A /* Double.swift in Sources */,
 				C564FC982E0959640079B5C1 /* NSObject.swift in Sources */,
 				C564FCB12E0959990079B5C1 /* CollectionCell.swift in Sources */,

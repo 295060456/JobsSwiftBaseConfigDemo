@@ -7,6 +7,9 @@
 
 import UIKit
 import ObjectiveC
+import RxSwift
+import RxCocoa
+import NSObject_Rx          // 自动提供 disposeBag
 /**
  let tap = UITapGestureRecognizer()
      .byTarget(self, action: #selector(onTap))
@@ -205,5 +208,12 @@ public extension UIRotationGestureRecognizer {
             }
         }
         return self
+    }
+}
+
+public extension UITapGestureRecognizer {
+    /// 语义属性：等价于 `.rx.event`
+    var event: ControlEvent<UITapGestureRecognizer> {
+        self.rx.event
     }
 }

@@ -1759,25 +1759,37 @@ required init?(coder: NSCoder) {
 * 普通按钮（懒加载）
 
   ```swift
+  /// 富文本的优先级大于普通文本
   private lazy var exampleButton: UIButton = {
       UIButton(type: .system)
-          // 普通文字：未选中状态标题
+          /// 普通字符串@设置主标题
           .byTitle("显示", for: .normal)
-          // 选中状态标题
           .byTitle("隐藏", for: .selected)
-          // 文字颜色：区分状态
           .byTitleColor(.systemBlue, for: .normal)
           .byTitleColor(.systemRed, for: .selected)
-          // 字体统一
           .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
-          // 图标（SF Symbol）
-          .byImage(UIImage(systemName: "eye.slash"), for: .normal)   // 未选中图标
-          .byImage(UIImage(systemName: "eye"), for: .selected)       // 选中图标
-          // 图文内边距
-          .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
-          // 图标与文字间距
-          .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
-          // 点按事件（统一入口）
+          /// 普通字符串@设置副标题
+          .bySubTitle("显示", for: .normal)
+          .bySubTitle("隐藏", for: .selected)
+          .bySubTitleColor(.systemBlue, for: .normal)
+          .bySubTitleColor(.systemRed, for: .selected)
+          .bySubTitleFont(.systemFont(ofSize: 16, weight: .medium))
+          /// 富文本字@设置主标题
+          .byRichTitle(JobsRichText.make([
+              JobsRichRun(.text("¥99")).font(.systemFont(ofSize: 18, weight: .semibold)).color(.systemRed),
+              JobsRichRun(.text(" /月")).font(.systemFont(ofSize: 16)).color(.white)
+          ]))
+           /// 富文本字@设置副标题
+          .byRichSubTitle(JobsRichText.make([
+              JobsRichRun(.text("原价 ")).font(.systemFont(ofSize: 12)).color(.white.withAlphaComponent(0.8)),
+              JobsRichRun(.text("¥199")).font(.systemFont(ofSize: 12, weight: .medium)).color(.systemYellow)
+          ]))
+          /// 按钮图片@图文关系
+          .byImage(UIImage(systemName: "eye.slash"), for: .normal)                // 未选中图标
+          .byImage(UIImage(systemName: "eye"), for: .selected)                    // 选中图标
+          .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))// 图文内边距
+          .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6)) // 图标与文字间距
+          /// 事件触发@点按
           .onTap { [weak self] sender in
               guard let self else { return }
               sender.isSelected.toggle()
@@ -1786,6 +1798,16 @@ required init?(coder: NSCoder) {
               self.passwordTF.togglePasswordVisibility()
               print("👁 当前状态：\(sender.isSelected ? "隐藏密码" : "显示密码")")
           }
+          /// 事件触发@长按
+          .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+               if gr.state == .began {
+                   btn.alpha = 0.6
+                   print("长按开始 on \(btn)")
+               } else if gr.state == .ended || gr.state == .cancelled {
+                   btn.alpha = 1.0
+                   print("长按结束")
+               }
+           }
           .byAddTo(view) { [unowned self] make in
               make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(40)
               make.left.right.equalToSuperview().inset(24)
@@ -1797,7 +1819,33 @@ required init?(coder: NSCoder) {
 * 倒计时按钮
 
   ```swift
-  /// TODO
+  private lazy var countdownButton: UIButton = {
+      UIButton(type: .system)
+          .byTitle("获取验证码", for: .normal)
+          .byTitleColor(.white, for: .normal)
+          .byBackgroundColor(.systemGreen, for: .normal)
+          .onCountdownTick { btn, remain, total, kind in
+               log("⏱️ [\(kind.jobs_displayName)] \(remain)/\(total)")
+           }
+           .onCountdownFinish { btn, kind in
+               log("✅ [\(kind.jobs_displayName)] 倒计时完成")
+           }
+          .onTap { [weak self] btn in
+              guard let self else { return }
+              let total = self.parseCountdownTotal()   // 来自 countdownField
+              let step  = self.intervalSec             // 来自 intervalField（你已有逻辑维护）
+              let kind  = self.currentKind             // 来自 segmented
+              btn.startJobsCountdown(total: total,
+                                     interval: step,
+                                     kind: kind)
+          }
+          .byAddTo(view) { [unowned self] make in
+              make.top.equalTo(self.hintLabel.snp.bottom).offset(20)
+              make.left.equalToSuperview().offset(horizontalInset)
+              make.right.equalToSuperview().inset(horizontalInset)
+              make.height.equalTo(50)
+          }
+  }()
   ```
 
 #### 8.2、按钮功能拓展 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -3106,9 +3154,9 @@ private lazy var datePicker: UIDatePicker = {
 }()
 ```
 
-### 27、加载图片（本地/网络）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 27、<font id=字符串加载图片资源>依据<font color=red>**字符串**</font>加载图片资源</font>（本地/网络）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 27.1、依据<font color=red>**字符串**</font>取本地图片 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 27.1、取本地图片 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 /// 本地图像名（在 Assets 中放一张叫 "Ani" 的图）
@@ -3217,8 +3265,6 @@ let button = UIButton(type: .system)
     }
 ```
 
-
-
 ### 29、启动检测 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
@@ -3234,6 +3280,91 @@ AppLaunchManager.handleLaunch(
     }
 )
 ```
+
+### 30、🍡 字符串 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 30.1、🍡 通用格式的转换  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **`String`** → **`Int`**
+
+  ```swift
+  "123".toInt()   
+  // ✅ 输出：123
+  // 📘 说明：将字符串转为 Int，如果包含非数字字符则返回 nil
+  ```
+
+* **`String`** → **`Int64`**
+
+  ```swift
+  "9876543210".toInt64()   
+  // ✅ 输出：9876543210
+  // 📘 说明：适用于超出 Int 范围的大整数
+  ```
+
+* **`String`** → **`Double`**
+
+  ```swift
+  "3.14159".toDouble()   
+  // ✅ 输出：3.14159
+  // 📘 说明：支持小数点与千分位（如 "1,234.56" → 1234.56）
+  ```
+
+* **`String`** → **`Double`**（带精度控制）
+
+  ```swift
+  "3.1".toDouble(2, 2)   
+  // ✅ 输出：3.10
+  // 📘 说明：限制最多 2 位小数，最少也显示 2 位（自动补零）
+  ```
+
+* **`String`** → **`Float`**
+
+  ```swift
+  "123.45".toFloat()   
+  // ✅ 输出：123.45
+  // 📘 说明：浮点数版本（精度略低于 Double）
+
+* **`String`** → **`Bool`**
+
+  ```swift
+  "true".toBool()     // ✅ true
+  "False".toBool()    // ✅ false
+  "YES".toBool()      // ✅ true
+  "no".toBool()       // ✅ false
+  "1".toBool()        // ✅ true
+  "0".toBool()        // ✅ false
+  "maybe".toBool()    // ❌ nil（无法识别）
+  // 📘 说明：大小写不敏感
+  ```
+
+* **`String`** → **`NSString`**
+
+  ```swift
+  "你好".toNSString   
+  // ✅ 输出：NSString("你好")
+  // 📘 说明：Swift String 转 Foundation NSString
+  ```
+
+* <font color=red>**`String`** → **`NSAttributedString`**</font>
+
+  ```swift
+  "Hello".rich   
+  // ✅ 输出：NSAttributedString("Hello")
+  // 📘 说明：将普通字符串转为富文本（无样式）
+  ```
+
+* <font color=red>**`String`** → **`NSAttributedString`**</font> 带属性
+
+  ```swift
+  "红色加粗".rich([
+      .foregroundColor: UIColor.red,
+      .font: UIFont.boldSystemFont(ofSize: 18)
+  ])
+  // ✅ 输出：红色加粗（富文本样式）
+  // 📘 说明：附加字体与颜色属性
+  ```
+
+#### 30.2、[**字符串加载图片资源**](#字符串加载图片资源) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 

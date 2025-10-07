@@ -64,15 +64,31 @@ extension String {
     }
     // MARK: - String 转 Bool
     public func toBool() -> Bool? {
-        let trimmedString = self.lowercased()
-        if trimmedString == "true" || trimmedString == "false" {
-            return (trimmedString as NSString).boolValue
+        let trimmedString = self
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+
+        switch trimmedString {
+        case "true", "yes", "1":
+            return true
+        case "false", "no", "0":
+            return false
+        default:
+            return nil
         }
-        return nil
     }
     // MARK: - String 转 NSString
     public var toNSString: NSString {
         return self as NSString
+    }
+    // MARK: - String 转 NSAttributedString
+    /// 转富文本（默认空属性）
+    var rich: NSAttributedString {
+        NSAttributedString(string: self)
+    }
+    /// 转富文本并附加属性
+    func rich(_ attrs: [NSAttributedString.Key: Any]) -> NSAttributedString {
+        NSAttributedString(string: self, attributes: attrs)
     }
 }
 // MARK: - 辅助

@@ -33,7 +33,7 @@ final class SafetyPushDemoVC: UIViewController {
         // 1️⃣ 普通按钮，测试重复点击防重 push
         stack.addArrangedSubview(UIButton(type: .system)
             .byTitle("Push Detail (快速连点试试)")
-            .addAction { _ in
+            .onTap { _ in
                 DemoDetailVC()
                     .byData(["id": 7, "title": "详情", "price": 9.9])// 字典
                     .onResult { id in

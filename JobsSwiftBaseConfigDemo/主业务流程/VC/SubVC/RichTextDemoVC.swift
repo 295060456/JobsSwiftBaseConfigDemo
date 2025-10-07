@@ -49,7 +49,7 @@ final class RichTextDemoVC: UIViewController, HasDisposeBag {
         jobsSetupGKNav(
             title: "富文本演示（Delegate & RAC）"
         )
-        tableView.alpha = 1;
+        tableView.byAlpha(1)
     }
 }
 
@@ -61,55 +61,43 @@ extension RichTextDemoVC: UITableViewDataSource, UITableViewDelegate {
         let mode: LinkCell.Mode = (indexPath.row == 0) ? .delegate : .rac
         let cell = tableView.dequeueReusableCell(withIdentifier: LinkCell.reuseID,
                                                  for: indexPath) as! LinkCell
-
-        let title = (mode == .delegate)
-        ? "Delegate 方案（专属客服默认样式 + 电话红字蓝线）"
-        : "RAC 方案（专属客服默认样式 + 电话红字蓝线）"
-
         // 主文案：两个可点击片段
         // ① “专属客服” → 用 .link，走系统默认蓝色
         // ② “电话”     → 不用 .link；先按红字+蓝线渲染，稍后在 cell 内打 .jobsAction 标记
-        let ps = jobsMakeParagraphStyle { $0.alignment = .center; $0.lineSpacing = 4 }
-        let runs: [JobsRichRun] = [
-            JobsRichRun(.text("如需帮助，请联系 "))
-                .font(.systemFont(ofSize: 16))
-                .color(.label),
-
-            JobsRichRun(.text(customerText))        // 系统默认蓝色
-                .font(.systemFont(ofSize: 16))
-                .link(customerURL),
-
-            JobsRichRun(.text(" ")),                // 空格分隔
-
-            JobsRichRun(.text(phoneText))           // 红字 + 蓝线（自定义动作，非系统 link）
-                .font(.systemFont(ofSize: 16))
-                .color(.red)
-                .underline(.single, color: .blue)
-        ]
-
-        // 卡片里的“图标附件”示例：回形针 + “附件说明”
-        let paperclipConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .medium)
-        let paperclipImage  = UIImage(systemName: "paperclip", withConfiguration: paperclipConfig)!
-        let att = NSTextAttachment(); att.image = paperclipImage
-
-        let attachPS = jobsMakeParagraphStyle { $0.alignment = .center; $0.lineSpacing = 2 }
-        let attachRuns: [JobsRichRun] = [
-            JobsRichRun(.attachment(att, CGSize(width: 16, height: 16))),
-            JobsRichRun(.text("  附件说明"))
-                .font(.systemFont(ofSize: 15))
-                .color(.secondaryLabel)
-        ]
-
         cell.configure(
-            title: title,
-            runs: runs,
-            paragraphStyle: ps,
+            title: (mode == .delegate)
+            ? "Delegate 方案（专属客服默认样式 + 电话红字蓝线）"
+            : "RAC 方案（专属客服默认样式 + 电话红字蓝线）",
+            runs: [
+                JobsRichRun(.text("如需帮助，请联系 "))
+                    .font(.systemFont(ofSize: 16))
+                    .color(.label),
+
+                JobsRichRun(.text(customerText))        // 系统默认蓝色
+                    .font(.systemFont(ofSize: 16))
+                    .link(customerURL),
+
+                JobsRichRun(.text(" ")),                // 空格分隔
+
+                JobsRichRun(.text(phoneText))           // 红字 + 蓝线（自定义动作，非系统 link）
+                    .font(.systemFont(ofSize: 16))
+                    .color(.red)
+                    .underline(.single, color: .blue)
+            ],
+            paragraphStyle: jobsMakeParagraphStyle { $0.alignment = .center; $0.lineSpacing = 4 },
             // “电话”的自定义点击与样式将在 cell 内补充（.jobsAction）
             phoneText: phoneText,
             phoneURL: phoneURL,
             // 附件示例
-            attachmentRuns: attachRuns,
-            attachmentParagraphStyle: attachPS,
+            attachmentRuns: [
+                JobsRichRun(.attachment(NSTextAttachment().byImage(UIImage(systemName: "paperclip",
+                                                                           withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .medium))!),
+                                        CGSize(width: 16, height: 16))),
+                JobsRichRun(.text("  附件说明"))
+                    .font(.systemFont(ofSize: 15))
+                    .color(.secondaryLabel)
+            ],
+            attachmentParagraphStyle: jobsMakeParagraphStyle { $0.alignment = .center; $0.lineSpacing = 2 },
             mode: mode,
             vc: self
         )
@@ -162,67 +150,75 @@ extension RichTextDemoVC: UITextViewDelegate {
         }
     }
 }
-
 // MARK: - 单一 Cell（支持 Delegate / RAC）
 final class LinkCell: UITableViewCell, HasDisposeBag {
 
     enum Mode { case delegate, rac }
     static let reuseID = "LinkCell"
 
-    private let titleLabel      = UILabel()
-    private let cardView        = UIView()
-    private let textView        = UITextView()
-    private let attachmentLabel = UILabel()
+    // ============================== UI（懒加载：内部完成 add + 约束） ==============================
+    private lazy var titleLabel: UILabel = { [unowned self] in
+        UILabel()
+            .byFont(.systemFont(ofSize: 13, weight: .medium))
+            .byTextColor(.secondaryLabel)
+            .byNumberOfLines(1)
+            .byAddTo(self.contentView) { make in
+                make.top.equalToSuperview().offset(12)
+                make.left.equalToSuperview().offset(16)
+                make.right.lessThanOrEqualToSuperview().offset(-16)
+            }
+    }()
 
+    private lazy var cardView: UIView = { [unowned self] in
+        UIView()
+            .byBgColor(.systemGray6)
+            .byCornerRadius(10)
+            .byClipsToBounds(true)
+            .byAddTo(self.contentView) { make in
+                make.top.equalTo(self.titleLabel.snp.bottom).offset(8)
+                make.left.equalToSuperview().offset(16)
+                make.right.equalToSuperview().offset(-16)
+                make.bottom.equalToSuperview().offset(-12)
+            }
+    }()
+
+    private lazy var textView: UITextView = { [unowned self] in
+        UITextView()
+            .byEditable(false)
+            .bySelectable(true)               // 最终由 configure 调整
+            .byTextAlignment(.center)
+            .byBgColor(.clear)
+            .byTextContainerInset(UIEdgeInsets(top: 14, left: 12, bottom: 6, right: 12))
+            .byAddTo(self.cardView) { make in
+                make.top.left.right.equalToSuperview()
+            }
+    }()
+
+    private lazy var attachmentLabel: UILabel = { [unowned self] in
+        UILabel()
+            .byTextAlignment(.center)
+            .byNumberOfLines(1)
+            .byAddTo(self.cardView) { make in
+                make.top.equalTo(self.textView.snp.bottom).offset(8)
+                make.left.right.equalToSuperview().inset(12)
+                make.bottom.equalToSuperview().inset(12)
+            }
+    }()
+
+    // ============================== Init ==============================
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
-        contentView.backgroundColor = .clear
-
-        titleLabel.font = .systemFont(ofSize: 13, weight: .medium)
-        titleLabel.textColor = .secondaryLabel
-        contentView.addSubview(titleLabel)
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(12)
-            make.left.equalToSuperview().offset(16)
-            make.right.lessThanOrEqualToSuperview().offset(-16)
-        }
-
-        cardView.backgroundColor = .systemGray6
-        cardView.layer.cornerRadius = 10
-        contentView.addSubview(cardView)
-        cardView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(8)
-            make.left.equalToSuperview().offset(16)
-            make.right.equalToSuperview().offset(-16)
-            make.bottom.equalToSuperview().offset(-12)
-        }
-
-        textView.isEditable = false
-        textView.isScrollEnabled = false
-        textView.textAlignment = .center
-        textView.backgroundColor = .clear
-        textView.textContainerInset = UIEdgeInsets(top: 14, left: 12, bottom: 6, right: 12)
-        // 不设置 linkTextAttributes，允许“专属客服”走系统默认、“电话”走自定义
-        cardView.addSubview(textView)
-
-        attachmentLabel.textAlignment = .center
-        attachmentLabel.numberOfLines = 1
-        cardView.addSubview(attachmentLabel)
-
-        textView.snp.makeConstraints { make in
-            make.top.left.right.equalToSuperview()
-        }
-        attachmentLabel.snp.makeConstraints { make in
-            make.top.equalTo(textView.snp.bottom).offset(8)
-            make.left.right.equalToSuperview().inset(12)
-            make.bottom.equalToSuperview().inset(12)
-        }
+        contentView.byBgColor(.clear)
+        // 唤起懒加载（不改变视觉状态）
+        titleLabel.byAlpha(1)
+        cardView.byAlpha(1)
+        textView.byAlpha(1)
+        attachmentLabel.byAlpha(1)
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
-    /// 统一配置
+    // ============================== 配置入口 ==============================
     func configure(title: String,
                    runs: [JobsRichRun],
                    paragraphStyle: NSMutableParagraphStyle,
@@ -233,15 +229,20 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
                    mode: Mode,
                    vc: RichTextDemoVC) {
 
-        titleLabel.text = title
-        textView.delegate = nil
-        textView.dataDetectorTypes = []
-        textView.isSelectable = (mode == .delegate)   // Delegate 用系统 link；RAC 关闭以避免冲突
+        // 懒加载可能尚未唤起，保险再“点”一次
+        titleLabel.byAlpha(1); cardView.byAlpha(1); textView.byAlpha(1); attachmentLabel.byAlpha(1)
+
+        titleLabel.byText(title)
+
+        // 复用安全：清理旧状态
+        textView.byDelegate(nil)
+            .byDataDetectorTypes([])
+            .bySelectable(mode == .delegate)
 
         // 主富文本
         textView.richTextBy(runs, paragraphStyle: paragraphStyle)
 
-        // 给“电话”片段打上自定义可点击标记 + 红字蓝线（保证样式）
+        // 给“电话”片段打 .jobsAction + 颜色/下划线
         if let ms = textView.attributedText?.mutableCopy() as? NSMutableAttributedString {
             let full = ms.string as NSString
             let range = full.range(of: phoneText)
@@ -252,73 +253,50 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
                     .underlineStyle: NSUnderlineStyle.single.rawValue,
                     .underlineColor: UIColor.blue
                 ], range: range)
-                textView.attributedText = ms
+                textView.byAttributedText(ms)
             }
         }
 
-        // 附件示例（回形针 + 文本）
+        // 附件文案
         attachmentLabel.richTextBy(attachmentRuns, paragraphStyle: attachmentParagraphStyle)
 
-        // 清理旧手势
+        // 手势：先清旧，再加新
         textView.gestureRecognizers?.forEach { textView.removeGestureRecognizer($0) }
 
-        // 安装点击处理：Delegate 模式只补“电话”；RAC 模式同时管“专属客服”和“电话”
-        let tap = UITapGestureRecognizer()
-        tap.cancelsTouchesInView = false   // 允许系统 link（专属客服）继续工作
-        // ⚠️ 不再设置 tap.delegate，彻底规避 UIGestureRecognizerDelegate 的冗余遵循问题
-        textView.addGestureRecognizer(tap)
+        // ✅ 使用你的手势 DSL：byConfig / byCancelsTouchesInView / byTaps / byTouches …
+        let tap = textView.jobs_addGesture(UITapGestureRecognizer
+            .byConfig { gr in
+                print("Tap 触发 on: \(String(describing: gr.view))")
+            }
+            .byCancelsTouchesInView(false)
+            .byTaps(1)
+            .byTouches(1))
 
-        if mode == .delegate {
-            // 仅处理自定义动作（电话）；“专属客服”交给 UITextViewDelegate
-            tap.rx.event
-                .subscribe(onNext: { [weak self, weak vc] gr in
+        switch mode {
+        case .delegate:
+            // 仅处理自定义“电话”；系统 link（专属客服）交给 UITextViewDelegate
+            tap!.event
+                .subscribe(onNext: { [weak self, weak vc] (gr: UITapGestureRecognizer) in   // 👈 显式标注类型
                     guard let self, let vc else { return }
                     if let url = self.urlAtTap(in: self.textView, gesture: gr, preferJobsAction: true) {
-                        if url.scheme == "tel" || url.scheme == "telprompt" {
-                            #if targetEnvironment(simulator)
-                            let ac = UIAlertController(title: "提示",
-                                                       message: "模拟器不支持拨号：\(url.absoluteString)",
-                                                       preferredStyle: .alert)
-                            ac.addAction(UIAlertAction(title: "确定", style: .default))
-                            vc.present(ac, animated: true)
-                            #else
-                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                            #endif
-                        }
+                        self.handle(url: url, on: vc)
                     }
                 })
                 .disposed(by: disposeBag)
-
-            textView.delegate = vc
-        } else {
-            // RAC：自管两种点击
-            tap.rx.event
-                .subscribe(onNext: { [weak self, weak vc] gr in
+            textView.byDelegate(vc)
+        case .rac:
+            // 自管“专属客服”+“电话”
+            tap!.event
+                .subscribe(onNext: { [weak self, weak vc] (gr: UITapGestureRecognizer) in   // 👈 显式标注类型
                     guard let self, let vc else { return }
                     guard let url = self.urlAtTap(in: self.textView, gesture: gr, preferJobsAction: true) else { return }
-                    if url.scheme == "click", url.host == "customer" {
-                        let ac = UIAlertController(title: "RAC 点击",
-                                                   message: "点了：专属客服",
-                                                   preferredStyle: .alert)
-                        ac.addAction(UIAlertAction(title: "确定", style: .default))
-                        vc.present(ac, animated: true)
-                    } else if url.scheme == "tel" || url.scheme == "telprompt" {
-                        #if targetEnvironment(simulator)
-                        let ac = UIAlertController(title: "提示",
-                                                   message: "模拟器不支持拨号：\(url.absoluteString)",
-                                                   preferredStyle: .alert)
-                        ac.addAction(UIAlertAction(title: "确定", style: .default))
-                        vc.present(ac, animated: true)
-                        #else
-                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                        #endif
-                    }
+                    self.handle(url: url, on: vc, racCustomerAlert: true)
                 })
                 .disposed(by: disposeBag)
         }
-    }
 
-    // 点击命中：优先匹配自定义 .jobsAction（电话），其次匹配系统 .link（专属客服）
+    }
+    // ============================== 命中算法（优先 .jobsAction） ==============================
     private func urlAtTap(in textView: UITextView,
                           gesture: UITapGestureRecognizer,
                           preferJobsAction: Bool) -> URL? {
@@ -330,18 +308,48 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
 
         let glyph = lm.glyphIndex(for: p, in: tc)
         guard glyph < lm.numberOfGlyphs else { return nil }
-        let char  = lm.characterIndexForGlyph(at: glyph)
+
+        var usedRect = lm.lineFragmentUsedRect(forGlyphAt: glyph, effectiveRange: nil, withoutAdditionalLayout: true)
+        usedRect.origin.x += textView.textContainerInset.left
+        usedRect.origin.y += textView.textContainerInset.top
+        guard usedRect.contains(gesture.location(in: textView)) else { return nil }
+
+        let char = lm.characterIndexForGlyph(at: glyph)
         guard char < textView.attributedText.length else { return nil }
 
         let attrs = textView.attributedText.attributes(at: char, effectiveRange: nil)
 
         if preferJobsAction,
            let action = attrs[.jobsAction] as? String,
-           let url = URL(string: action) {
-            return url
-        }
+           let url = URL(string: action) { return url }
+
         if let v = attrs[.link] as? URL { return v }
         if let s = attrs[.link] as? String, let url = URL(string: s) { return url }
         return nil
+    }
+    // ============================== URL 处理 ==============================
+    private func handle(url: URL,
+                        on vc: UIViewController,
+                        racCustomerAlert: Bool = false) {
+        if url.scheme == "click", url.host == "customer" {
+            if racCustomerAlert {
+                let ac = UIAlertController(title: "RAC 点击", message: "点了：专属客服", preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "确定", style: .default))
+                vc.present(ac, animated: true)
+            }
+            return
+        }
+
+        if url.scheme == "tel" || url.scheme == "telprompt" {
+            #if targetEnvironment(simulator)
+            let ac = UIAlertController(title: "提示",
+                                       message: "模拟器不支持拨号：\(url.absoluteString)",
+                                       preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "确定", style: .default))
+            vc.present(ac, animated: true)
+            #else
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            #endif
+        }
     }
 }

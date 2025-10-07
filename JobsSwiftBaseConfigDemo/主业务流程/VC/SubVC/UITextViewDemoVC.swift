@@ -149,11 +149,11 @@ final class UITextViewDemoVC: UIViewController, HasDisposeBag {
             string: "🔗 默认蓝色链接（系统样式）：",
             attributes: [.font: UIFont.systemFont(ofSize: 15),
                          .foregroundColor: UIColor.secondaryLabel]
-        ).byAppend(NSAttributedString(
+        ).add(NSAttributedString(
             string: " Apple 官网",
             attributes: [.link: URL(string: "https://www.apple.com")!,
                          .font: UIFont.boldSystemFont(ofSize: 16)]
-        )).byAppend(NSAttributedString(
+        )).add(NSAttributedString(
             string: "\n客服电话：400-123-4567",
             attributes: [.font: UIFont.systemFont(ofSize: 15)]
         ))
@@ -173,11 +173,11 @@ final class UITextViewDemoVC: UIViewController, HasDisposeBag {
             string: "🔴 自定义红色链接：",
             attributes: [.font: UIFont.systemFont(ofSize: 15),
                          .foregroundColor: UIColor.secondaryLabel]
-        ).byAppend(NSAttributedString(
+        ).add(NSAttributedString(
             string: " Jobs 官网",
             attributes: [.link: URL(string: "https://www.google.com")!,
                          .font: UIFont.boldSystemFont(ofSize: 16)]
-        )).byAppend(NSAttributedString(
+        )).add(NSAttributedString(
             string: "\n客服电话：400-123-4567",
             attributes: [.font: UIFont.systemFont(ofSize: 15)]
         ))
@@ -323,9 +323,9 @@ final class UITextViewDemoVC: UIViewController, HasDisposeBag {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: {
                 hint.isHidden = false
-                hint.alpha = 1
+                hint.byAlpha(1)
                 UIView.animate(withDuration: 0.3, delay: 0.8, options: []) {
-                    hint.alpha = 0
+                    hint.byAlpha(0)
                 } completion: { _ in hint.isHidden = true }
             })
             .disposed(by: rx.disposeBag)

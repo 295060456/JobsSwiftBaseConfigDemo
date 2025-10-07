@@ -51,9 +51,9 @@ final class KeyboardDemoVC: UIViewController {
             title: "Keyboard Height Demo"
         )
         view.backgroundColor = .systemBackground
-        textField.alpha = 1;
-        bottomBar.alpha = 1;
-        label.alpha = 1;
+        textField.byAlpha(1)
+        bottomBar.byAlpha(1)
+        label.byAlpha(1)
     }
 
     override func viewDidAppear(_ animated: Bool) {

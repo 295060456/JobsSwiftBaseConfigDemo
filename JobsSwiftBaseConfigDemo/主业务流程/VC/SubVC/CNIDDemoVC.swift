@@ -81,10 +81,10 @@ final class CNIDDemoVC: UIViewController {
             title: "身份证校验 Demo"
         )
         printDemo()// 打印示例
-        textField.alpha = 1;// 输入框
-        exampleButton.alpha = 1;// 示例按钮（自动填充）
-        checkButton.alpha = 1;// 校验按钮
-        resultLabel.alpha = 1;// 结果标签
+        textField.byAlpha(1) // 输入框
+        exampleButton.byAlpha(1) // 示例按钮（自动填充）
+        checkButton.byAlpha(1) // 校验按钮
+        resultLabel.byAlpha(1) // 结果标签
     }
     // MARK: - 更新显示结果
     private func updateResult(_ text: String, success: Bool) {

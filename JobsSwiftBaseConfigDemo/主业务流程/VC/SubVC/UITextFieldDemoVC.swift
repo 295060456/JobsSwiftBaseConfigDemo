@@ -183,7 +183,7 @@ final class UITextFieldDemoVC: UIViewController,
             title: "UITextField 全量演示"
         )
         view.backgroundColor = .systemBackground
-        emailTF.alpha = 1;
+        emailTF.byAlpha(1)
         // MARK: Rx 绑定 —— 删除键广播
         emailTF.didPressDelete
             .subscribe(onNext: { [weak self] in

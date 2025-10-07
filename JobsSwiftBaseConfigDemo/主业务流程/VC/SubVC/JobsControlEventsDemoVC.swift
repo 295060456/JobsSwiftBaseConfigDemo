@@ -41,8 +41,7 @@ final class JobsControlEventsDemoVC: UIViewController {
     }
 
     private func buildDemos() {
-        stack.alpha = 1;
-
+        stack.byAlpha(1)
         demo_Switch_onJobsChange()
         demo_DatePicker_onJobsChange()
         demo_Slider_onJobsChange()
