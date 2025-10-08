@@ -26,7 +26,8 @@ final class RootListVC: BaseVC {
         ("中国大陆公民身份证号码校验 Demo", CNIDDemoVC.self),
         ("Toast Demo", ToastDemoVC.self),
         ("Timer Demo", TimerDemoVC.self),
-        ("JobsOpen Demo", JobsOpenDemoVC.self)
+        ("JobsOpen Demo", JobsOpenDemoVC.self),
+        ("MarqueeUsage Demo", MarqueeUsageDemoVC.self)
     ]
 
     private lazy var tableView: UITableView = {

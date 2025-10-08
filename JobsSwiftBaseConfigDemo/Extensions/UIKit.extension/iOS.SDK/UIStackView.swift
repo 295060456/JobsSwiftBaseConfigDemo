@@ -93,3 +93,26 @@ public extension UIStackView {
         return self
     }
 }
+
+public extension UIStackView {
+    // 批量添加（数组版）
+    @discardableResult
+    func byAddArrangedSubviews(_ views: [UIView]) -> Self {
+        views.forEach { self.addArrangedSubview($0) }
+        return self
+    }
+    // 语义化“清空重建”
+    @discardableResult
+    func byResetArrangedSubviews(_ make: () -> [UIView]) -> Self {
+        self.arrangedSubviews.forEach { self.removeArrangedSubview($0); $0.removeFromSuperview() }
+        make().forEach { self.addArrangedSubview($0) }
+        return self
+    }
+    // 开启 layoutMarginsRelative + 设置边距（更好用的安全间距）
+    @discardableResult
+    func byLayoutMargins(_ insets: UIEdgeInsets, relative: Bool = true) -> Self {
+        self.isLayoutMarginsRelativeArrangement = relative
+        self.layoutMargins = insets
+        return self
+    }
+}

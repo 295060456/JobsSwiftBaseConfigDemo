@@ -3596,14 +3596,10 @@ private lazy var countdownButton: UIButton = {
 }()
 ```
 
-### 32、iOS模拟器剔除 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 32、跑马灯+轮播图 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
-#if targetEnvironment(simulator)
-/// TODO
-#else
-/// TODO
-#endif
+
 ```
 
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -5732,6 +5728,50 @@ func badExample() {
 public func legacyKeyWindowPreiOS13() -> UIWindow? {
     return UIApplication.shared.keyWindow ?? UIApplication.shared.windows.first
 }
+```
+
+### 25、按钮的配置项 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 在**Objc**里面，按钮的配置项`UIButtonConfiguration`是专门以类的形式出现的
+
+  > ```objective-c
+  > UIKIT_EXTERN API_AVAILABLE(ios(15.0), tvos(15.0)) API_UNAVAILABLE(watchos) NS_SWIFT_UI_ACTOR
+  > @interface UIButtonConfiguration : NSObject <NSCopying, NSSecureCoding>
+  > /// TODO
+  > @end
+  > ```
+
+* 而在[**Swift**](https://developer.apple.com/swift/)里面，按钮的配置项`UIButton.Configuration`是以类的内部结构体的形式出现的
+
+  > ```swift
+  > @available(iOS 15.0, tvOS 15.0, *)
+  > @available(watchOS, unavailable)
+  > extension UIButton {
+  >     public struct Configuration : Hashable {/*TODO*/}
+  > }
+  > ```
+
+  ```swift
+  UIButton(type: .system).byConfiguration { c in
+      c = UIButton.Configuration.filled()
+          .byTitle(title)
+          .byImage(image)
+          .byImagePadding(8)
+          .byBaseForeground(.white)
+          .byBaseBackground(.systemBlue)
+          .byTitleAlignment(.center)
+          .byContentInsets(.init(top: 8, leading: 12, bottom: 8, trailing: 12))
+  }
+  ```
+
+### 26、iOS模拟器剔除 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+#if targetEnvironment(simulator)
+/// TODO
+#else
+/// TODO
+#endif
 ```
 
 ## 五、<font color=red>**F**</font><font color=green>**A**</font><font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
