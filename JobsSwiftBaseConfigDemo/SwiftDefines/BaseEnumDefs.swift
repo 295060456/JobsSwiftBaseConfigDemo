@@ -836,3 +836,19 @@ public enum JobsCorConst {
     static let gradient_vip_start: UIColor      = (UIColor(hexString: "#D2B592"))!
     static let gradient_vip_end: UIColor      = (UIColor(hexString: "#F2DFCE"))!
 }
+/// 统一结果态：用它来做日志和灰度
+public enum JobsOpenResult {
+    case opened                 // 成功触发了系统打开
+    case cannotOpen             // 系统认为不能打开（未安装/被限制）
+    case invalidInput           // 入参不是一个有效的 URL/电话
+}
+/// 图片解析错误类型
+public enum KFError: Error {
+    case badURL          // 非法 URL 或无法解析
+    case notFound        // 本地图片不存在
+}
+/// 统一来源：远程 or 本地
+public enum ImageSource {
+    case remote(URL)
+    case local(String)
+}

@@ -1841,20 +1841,59 @@ required init?(coder: NSCoder) {
 ### 10、`UITableView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
-private lazy var mainTableView: UITableView = {
-    UITableView(frame: .zero, style: .plain)
+private lazy var tableView: UITableView = {
+    UITableView(frame: .zero, style: .insetGrouped)
         .byDataSource(self)
         .byDelegate(self)
-        .bySeparatorStyle(.none)
-        .byShowsVerticalScrollIndicator(false)
-        .byShowsHorizontalScrollIndicator(false)
-        .registerCellByID(CellCls: UITableViewCell.self, ID: "cell")
+        .registerCell(UITableViewCell.self)
         .byNoContentInsetAdjustment()
+        .bySeparatorStyle(.singleLine)
         .byNoSectionHeaderTopPadding()
-        .byAddTo(view) { [unowned self] make in
-            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(40)
-            make.left.right.equalToSuperview().inset(24)
-            make.height.equalTo(44)
+        .byContentInset(UIEdgeInsets(
+            top: UIApplication.jobsSafeTopInset + 30,
+            left: 0,
+            bottom: 0,
+            right: 0
+        ))
+        // 下拉刷新（自定义 JobsHeaderAnimator）
+        .pullDownWithJobsAnimator({ [weak self] in
+            guard let self = self, !self.isPullRefreshing else { return }
+            self.isPullRefreshing = true
+            print("⬇️ 下拉刷新触发")
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                self.isPullRefreshing = false
+                self.tableView.byReloadData()
+                self.tableView.pullDownStop()               // 结束下拉
+                self.updateFooterAvailability()
+                print("✅ 下拉刷新完成")
+            }
+        }, config: { animator in
+            animator.idleDescription = "下拉刷新"
+            animator.releaseToRefreshDescription = "松开立即刷新"
+            animator.loadingDescription = "正在刷新中..."
+            animator.noMoreDataDescription = "已经是最新数据"
+        })
+        // 上拉加载（自定义 JobsFooterAnimator）
+        .pullUpWithJobsAnimator({ [weak self] in
+            guard let self = self, !self.isLoadingMore else { return }
+            self.isLoadingMore = true
+            print("⬆️ 上拉加载触发")
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                self.isLoadingMore = false
+                self.tableView.pullUpStop()                 // 结束上拉
+                self.updateFooterAvailability()
+                print("✅ 上拉加载完成")
+            }
+        }, config: { animator in
+            animator.idleDescription = "上拉加载更多"
+            animator.releaseToRefreshDescription = "松开立即加载"
+            animator.loadingMoreDescription = "加载中..."
+            animator.noMoreDataDescription = "已经到底了～"
+        })
+        .byAddTo(view) { make in
+            make.edges.equalToSuperview()
         }
 }()
 ```
@@ -3336,6 +3375,46 @@ AppLaunchManager.handleLaunch(
 
 #### 30.2、[**字符串加载图片资源**](#字符串加载图片资源) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
+#### 30.3、字符串打开 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 打开网站 / **`Scheme`**（带参）
+
+  ```swift
+  "www.baidu.com".open()
+  "https://example.com/search?q=中文 关键词".open()
+  ```
+
+* 打电话（仅支持真机）
+
+  ```swift
+  "13434343434".call()
+  ```
+
+* 发邮件（带参）
+
+  ```swift
+  "test@qq.com".mail()
+  ```
+
+  ```swift
+  "ops@company.com".mail(
+      subject: "反馈",
+      body: "你好，遇到一个问题..."
+  )
+  ```
+
+  ```swift
+  "a@b.com,c@d.com".mail(
+      subject: "日报",
+      body: "<b>今天完成：</b><br/>1. xxx<br/>2. yyy",
+      isHTML: true,
+      cc: ["pm@company.com"],
+      bcc: ["boss@company.com"]
+  ) { result in
+      print("mail result = \(result)")
+  }
+  ```
+
 ### 31、⏰ 计时器（按钮）的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ 将 iOS系统内置的4大基本计时器（`NSTimer`/`GCD`/`DisplayLink`/`RunLoop`）以协议的方式进行统一封装：开始、暂停、重启、停止、销毁
@@ -3512,6 +3591,16 @@ private lazy var countdownButton: UIButton = {
             make.height.equalTo(50)
         }
 }()
+```
+
+### 32、iOS模拟器剔除 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+#if targetEnvironment(simulator)
+/// TODO
+#else
+/// TODO
+#endif
 ```
 
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>

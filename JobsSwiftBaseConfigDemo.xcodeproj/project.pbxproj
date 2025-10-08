@@ -75,6 +75,7 @@
 		04D0C97D2E8D19AB00580020 /* MJRefreshAutoNormalFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D0C97B2E8D19AB00580020 /* MJRefreshAutoNormalFooter.swift */; };
 		04D0C97E2E8D19AB00580020 /* MJRefreshNormalHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D0C97A2E8D19AB00580020 /* MJRefreshNormalHeader.swift */; };
 		04D0C9822E8D1CF400580020 /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D0C9812E8D1CF300580020 /* Optional.swift */; };
+		04D842292E96377B001E8C90 /* JobsOpenDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D842282E96377A001E8C90 /* JobsOpenDemoVC.swift */; };
 		04E8D5B92E8E550200E85CDA /* BaseStructDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D5B82E8E54FF00E85CDA /* BaseStructDefs.swift */; };
 		04E8D5BB2E8E5AD000E85CDA /* CNIDDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D5BA2E8E5ACF00E85CDA /* CNIDDemoVC.swift */; };
 		04E8D6172E8E6E7F00E85CDA /* UIBarButtonItemAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D6162E8E6E7E00E85CDA /* UIBarButtonItemAppearance.swift */; };
@@ -219,6 +220,7 @@
 		04D0C97A2E8D19AB00580020 /* MJRefreshNormalHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MJRefreshNormalHeader.swift; sourceTree = "<group>"; };
 		04D0C97B2E8D19AB00580020 /* MJRefreshAutoNormalFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MJRefreshAutoNormalFooter.swift; sourceTree = "<group>"; };
 		04D0C9812E8D1CF300580020 /* Optional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
+		04D842282E96377A001E8C90 /* JobsOpenDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsOpenDemoVC.swift; sourceTree = "<group>"; };
 		04E8D5B82E8E54FF00E85CDA /* BaseStructDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseStructDefs.swift; sourceTree = "<group>"; };
 		04E8D5BA2E8E5ACF00E85CDA /* CNIDDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNIDDemoVC.swift; sourceTree = "<group>"; };
 		04E8D6162E8E6E7E00E85CDA /* UIBarButtonItemAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBarButtonItemAppearance.swift; sourceTree = "<group>"; };
@@ -428,6 +430,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				04D842282E96377A001E8C90 /* JobsOpenDemoVC.swift */,
 				04AD62902E9122FC00E18984 /* TimerDemoVC.swift */,
 				0401DD072E91182900D572AD /* ToastDemoVC.swift */,
 				04E8D5BA2E8E5ACF00E85CDA /* CNIDDemoVC.swift */,
@@ -986,6 +989,7 @@
 				04AC74C52E86682E004B8305 /* Notification.swift in Sources */,
 				04D0C9722E8CD39300580020 /* JobsControlEventsDemoVC.swift in Sources */,
 				C564FC8A2E0959640079B5C1 /* UISegmentedControl.swift in Sources */,
+				04D842292E96377B001E8C90 /* JobsOpenDemoVC.swift in Sources */,
 				0477D9772E8B9381002C6427 /* UIResponder.swift in Sources */,
 				0401DCFA2E90D91900D572AD /* UIWindow.swift in Sources */,
 				04E8D5BB2E8E5AD000E85CDA /* CNIDDemoVC.swift in Sources */,
