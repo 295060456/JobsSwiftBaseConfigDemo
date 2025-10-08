@@ -557,13 +557,31 @@ extension UIButton {
 // MARK: - 闭包回调（低版本兜底）
 private var actionKey: Void?
 extension UIButton {
-    func jobs_addTapClosure(_ action: @escaping (UIButton) -> Void) -> Self {
+    /// 统一底层实现：存闭包 + 绑定/去重
+    @discardableResult
+    private func _bindTapClosure(_ action: @escaping (UIButton) -> Void,
+                                 for events: UIControl.Event = .touchUpInside) -> Self {
+        // 存最新闭包
         objc_setAssociatedObject(self, &actionKey, action, .OBJC_ASSOCIATION_COPY_NONATOMIC)
-        self.addTarget(self, action: #selector(handleAction(_:)), for: .touchUpInside)
+        // 去重（避免多次 addTarget 导致重复触发）
+        removeTarget(self, action: #selector(_jobsHandleAction(_:)), for: events)
+        addTarget(self, action: #selector(_jobsHandleAction(_:)), for: events)
         return self
     }
+    /// 旧接口：jobs_addTapClosure（保留）
+    @discardableResult
+    func jobs_addTapClosure(_ action: @escaping (UIButton) -> Void,
+                            for events: UIControl.Event = .touchUpInside) -> Self {
+        _bindTapClosure(action, for: events)
+    }
+    /// 旧接口：addAction（保留，但建议新代码用 onTap）
+    @discardableResult
+    func addAction(_ action: @escaping (UIButton) -> Void,
+                   for events: UIControl.Event = .touchUpInside) -> Self {
+        _bindTapClosure(action, for: events)
+    }
 
-    @objc private func handleAction(_ sender: UIButton) {
+    @objc private func _jobsHandleAction(_ sender: UIButton) {
         if let action = objc_getAssociatedObject(self, &actionKey) as? (UIButton) -> Void {
             action(sender)
         }
