@@ -750,38 +750,64 @@ public final class JobsHeaderAnimator: UIView, ESRefreshProtocol, ESRefreshAnima
     public var trigger: CGFloat = 60
     public var executeIncremental: CGFloat = 60
 
-    private let titleLabel = UILabel()
-    private let indicator  = UIActivityIndicatorView(style: .medium)
+    // === 内部画布：等屏宽，居中于父视图 ===
+    private lazy var canvas: UIView = {
+        UIView()
+            .byBgColor(.clear)
+            /// 画布：等屏宽、中心对齐到父视图
+            .byAddTo(self) { [unowned self] make in
+                make.centerX.equalToSuperview()                  // ✅ 中心对齐（不从 0,0 起）
+                make.centerY.equalToSuperview()
+                self.canvasWidthConstraint = make.width.equalTo(UIScreen.main.bounds.width).constraint
+                make.height.greaterThanOrEqualTo(executeIncremental)
+            }
+    }()
+
+    private lazy var titleLabel: UILabel = {
+        UILabel()
+            .byFont(.systemFont(ofSize: 14))
+            .byTextColor(.secondaryLabel)
+            .byTextAlignment(.center)
+            .byHugging(.required, axis: .horizontal)
+            .byCompressionResistance(.required, axis: .horizontal)
+            /// 文本：永远居中在“画布”的几何中心
+            .byAddTo(canvas) { [unowned self] make in
+                make.centerX.equalTo(canvas.snp.centerX)         // ✅ 真正中线
+                make.centerY.equalTo(canvas.snp.centerY)
+                make.leading.greaterThanOrEqualTo(canvas.snp.leading).offset(16)
+                make.trailing.lessThanOrEqualTo(canvas.snp.trailing).inset(16)
+            }
+    }()
+
+    private lazy var indicator: UIActivityIndicatorView = {
+        UIActivityIndicatorView(style: .medium)
+            .byHidesWhenStopped(true)
+            .byAddTo(canvas) { [unowned self] make in
+                make.centerY.equalTo(titleLabel)
+                make.trailing.equalTo(titleLabel.snp.leading).offset(-6)
+            }
+    }()
+
+    private var canvasWidthConstraint: Constraint?
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        setupUI()
-        setupConstraints()
+        byBgColor(.clear).byUserInteractionEnabled(false)
+        canvas.byAlpha(1)
     }
-
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
-    private func setupUI() {
-        titleLabel.font = .systemFont(ofSize: 14)
-        titleLabel.textColor = .secondaryLabel
-        titleLabel.textAlignment = .center
-
-        addSubview(titleLabel)
-        addSubview(indicator)
-    }
-
-    private func setupConstraints() {
-        indicator.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.trailing.equalTo(self.snp.centerX).offset(-6)
-        }
-        titleLabel.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.leading.equalTo(self.snp.centerX).offset(6)
+    // 跟随窗口宽度（适配横竖屏 / iPad 分屏）
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        let w = (self.window?.bounds.width).map { CGFloat($0) } ?? UIScreen.main.bounds.width
+        canvasWidthConstraint?.update(offset: 0)
+        canvas.snp.updateConstraints { make in
+            make.width.equalTo(w)
         }
     }
-
+    // MARK: - ESRefreshProtocol
     public func refresh(view: ESRefreshComponent, progressDidChange progress: CGFloat) {}
+
     public func refresh(view: ESRefreshComponent, stateDidChange state: ESRefreshViewState) {
         self.state = state
         switch state {
@@ -817,38 +843,71 @@ public final class JobsFooterAnimator: UIView, ESRefreshProtocol, ESRefreshAnima
     public var trigger: CGFloat = 52
     public var executeIncremental: CGFloat = 52
 
+    private let canvas = UIView()
     private let titleLabel = UILabel()
     private let indicator  = UIActivityIndicatorView(style: .medium)
+
+    private var canvasWidthConstraint: Constraint?
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
         setupConstraints()
     }
-
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     private func setupUI() {
+        backgroundColor = .clear
+        isUserInteractionEnabled = false
+
+        canvas.backgroundColor = .clear
+        addSubview(canvas)
+
         titleLabel.font = .systemFont(ofSize: 14)
         titleLabel.textColor = .secondaryLabel
         titleLabel.textAlignment = .center
+        titleLabel.setContentHuggingPriority(.required, for: .horizontal)
+        titleLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
 
-        addSubview(titleLabel)
-        addSubview(indicator)
+        indicator.hidesWhenStopped = true
+
+        canvas.addSubview(titleLabel)
+        canvas.addSubview(indicator)
     }
 
     private func setupConstraints() {
-        indicator.snp.makeConstraints { make in
+        canvas.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()                 // ✅ 居中对齐父视图
             make.centerY.equalToSuperview()
-            make.trailing.equalTo(self.snp.centerX).offset(-6)
+            self.canvasWidthConstraint = make.width.equalTo(UIScreen.main.bounds.width).constraint
+            make.height.greaterThanOrEqualTo(executeIncremental)
         }
+
         titleLabel.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.leading.equalTo(self.snp.centerX).offset(6)
+            make.centerX.equalTo(canvas.snp.centerX)        // ✅ 文本居中于画布
+            make.centerY.equalTo(canvas.snp.centerY)
+            make.leading.greaterThanOrEqualTo(canvas.snp.leading).offset(16)
+            make.trailing.lessThanOrEqualTo(canvas.snp.trailing).inset(16)
+        }
+
+        indicator.snp.makeConstraints { make in
+            make.centerY.equalTo(titleLabel)
+            make.trailing.equalTo(titleLabel.snp.leading).offset(-6)
         }
     }
 
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        let w = (self.window?.bounds.width).map { CGFloat($0) } ?? UIScreen.main.bounds.width
+        canvasWidthConstraint?.update(offset: 0)
+        canvas.snp.updateConstraints { make in
+            make.width.equalTo(w)
+        }
+    }
+
+    // MARK: - ESRefreshProtocol
     public func refresh(view: ESRefreshComponent, progressDidChange progress: CGFloat) {}
+
     public func refresh(view: ESRefreshComponent, stateDidChange state: ESRefreshViewState) {
         self.state = state
         switch state {

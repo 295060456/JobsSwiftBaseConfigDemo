@@ -57,10 +57,10 @@ final class RootListVC: BaseVC {
                     print("✅ 下拉刷新完成")
                 }
             }, config: { animator in
-                animator.idleDescription = "下拉刷新"
-                animator.releaseToRefreshDescription = "松开立即刷新"
-                animator.loadingDescription = "正在刷新中..."
-                animator.noMoreDataDescription = "已经是最新数据"
+                animator.idleDescription = "Jobs@下拉刷新"
+                animator.releaseToRefreshDescription = "Jobs@松开立即刷新"
+                animator.loadingDescription = "Jobs@正在刷新中..."
+                animator.noMoreDataDescription = "Jobs@已经是最新数据"
             })
             // 上拉加载（自定义 JobsFooterAnimator）
             .pullUpWithJobsAnimator({ [weak self] in
@@ -75,10 +75,10 @@ final class RootListVC: BaseVC {
                     print("✅ 上拉加载完成")
                 }
             }, config: { animator in
-                animator.idleDescription = "上拉加载更多"
-                animator.releaseToRefreshDescription = "松开立即加载"
-                animator.loadingMoreDescription = "加载中..."
-                animator.noMoreDataDescription = "已经到底了～"
+                animator.idleDescription = "Jobs@上拉加载更多"
+                animator.releaseToRefreshDescription = "Jobs@松开立即加载"
+                animator.loadingMoreDescription = "Jobs@加载中..."
+                animator.noMoreDataDescription = "Jobs@已经到底了～"
             })
             .byAddTo(view) { make in
                 make.edges.equalToSuperview()

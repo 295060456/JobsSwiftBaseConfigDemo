@@ -72,6 +72,19 @@ extension UILabel {
         }
         return self
     }
+    @discardableResult
+    func byHugging(_ priority: UILayoutPriority,
+                   axis: NSLayoutConstraint.Axis = .horizontal) -> Self {
+        setContentHuggingPriority(priority, for: axis)
+        return self
+    }
+
+    @discardableResult
+    func byCompressionResistance(_ priority: UILayoutPriority,
+                                 axis: NSLayoutConstraint.Axis = .horizontal) -> Self {
+        setContentCompressionResistancePriority(priority, for: axis)
+        return self
+    }
     // MARK: 背景图 → 平铺色
     @discardableResult
     func bgImage(_ image: UIImage?) -> Self {
@@ -167,12 +180,16 @@ extension UILabel {
         return self
     }
 }
-
+/// 一些功能性的
 extension UILabel {
+    // MARK: 设置富文本
+    func richTextBy(_ runs: [JobsRichRun], paragraphStyle: NSMutableParagraphStyle? = nil) {
+        self.attributedText = JobsRichText.make(runs, paragraphStyle: paragraphStyle)
+        self.isUserInteractionEnabled = false
+    }
     // MARK: - 检测点击位置是否在指定富文本范围内
     func didTapAttributedText(in range: NSRange, at: UITapGestureRecognizer) -> Bool {
         guard let attributedText = attributedText else { return false }
-
         // 1️⃣ 创建 NSTextStorage 管理文本
         let textStorage = NSTextStorage(attributedString: attributedText)
         let layoutManager = NSLayoutManager()
@@ -183,7 +200,6 @@ extension UILabel {
 
         layoutManager.addTextContainer(textContainer)
         textStorage.addLayoutManager(layoutManager)
-
         // 2️⃣ 计算点击位置
         let location = at.location(in: self)
         let textBoundingBox = layoutManager.usedRect(for: textContainer)
@@ -195,7 +211,6 @@ extension UILabel {
             x: location.x - offset.x,
             y: location.y - offset.y
         )
-
         // 3️⃣ 获取点击的字符索引
         let index = layoutManager.characterIndex(for: locationInTextContainer, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
         return NSLocationInRange(index, range)
@@ -212,12 +227,5 @@ extension UILabel {
                                           range: NSRange(location: 0, length: attributedString.length))
             self.attributedText = attributedString
         }
-    }
-}
-// MARK: 设置富文本
-public extension UILabel {
-    func richTextBy(_ runs: [JobsRichRun], paragraphStyle: NSMutableParagraphStyle? = nil) {
-        self.attributedText = JobsRichText.make(runs, paragraphStyle: paragraphStyle)
-        self.isUserInteractionEnabled = false
     }
 }
