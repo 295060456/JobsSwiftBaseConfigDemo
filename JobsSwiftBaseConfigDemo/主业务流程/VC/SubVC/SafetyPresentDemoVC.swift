@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 // MARK: - Demo 页面
-final class SafetyPresentDemoVC: UIViewController {
+final class SafetyPresentDemoVC: BaseVC {
     // MARK: - UI
     private let stack = UIStackView().then {
         $0.axis = .vertical

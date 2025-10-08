@@ -8,7 +8,8 @@
 import UIKit
 import SnapKit
 
-final class ToastDemoVC: UIViewController {
+final class ToastDemoVC: BaseVC {
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground

@@ -13,7 +13,7 @@ struct DemoModel {
     let title: String
 }
 // MARK: - 一个示例页面（用来被 push）
-class DemoDetailVC: UIViewController {
+class DemoDetailVC: BaseVC {
     // ✅ 缓存任意类型的入参
     private var input: Any?
     override func loadView() {

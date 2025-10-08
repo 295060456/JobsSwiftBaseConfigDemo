@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-final class PicLoadDemoVC: UIViewController {
+final class PicLoadDemoVC: BaseVC {
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class JobsCountdownDemoVC: UIViewController {
+final class JobsCountdownDemoVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         jobsSetupGKNav(

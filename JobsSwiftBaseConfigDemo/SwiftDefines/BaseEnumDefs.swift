@@ -836,5 +836,3 @@ public enum JobsCorConst {
     static let gradient_vip_start: UIColor      = (UIColor(hexString: "#D2B592"))!
     static let gradient_vip_end: UIColor      = (UIColor(hexString: "#F2DFCE"))!
 }
-// MARK: - 计时器状态
-public enum TimerState { case idle, running, paused, stopped }

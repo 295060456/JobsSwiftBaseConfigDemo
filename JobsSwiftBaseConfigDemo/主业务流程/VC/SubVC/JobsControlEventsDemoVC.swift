@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class JobsControlEventsDemoVC: UIViewController {
+final class JobsControlEventsDemoVC: BaseVC {
     // 统一用一个垂直栈承载所有 Demo
     private lazy var stack: UIStackView = {
         UIStackView()

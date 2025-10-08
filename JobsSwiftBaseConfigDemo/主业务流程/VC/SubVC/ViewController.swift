@@ -16,7 +16,20 @@ import SnapKit
 //在主 Target 的 General > Frameworks, Libraries, and Embedded Content 中添加该 framework；
 //编译。
 class ViewController: UIViewController {
-    
+
+    deinit {
+        // 清理资源
+        print("deinit")
+//        Task { @MainActor in
+//            JobsToast.show(
+//                text: "当前控制器销毁成功",
+//                config: JobsToast.Config()
+//                    .byBgColor(.systemGreen.withAlphaComponent(0.9))
+//                    .byCornerRadius(12)
+//            )
+//        }
+    }
+
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
             .registerCell(CustomCell.self)

@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class SafetyPushDemoVC: UIViewController {
+final class SafetyPushDemoVC: BaseVC {
 
     override func viewDidLoad() {
         super.viewDidLoad()

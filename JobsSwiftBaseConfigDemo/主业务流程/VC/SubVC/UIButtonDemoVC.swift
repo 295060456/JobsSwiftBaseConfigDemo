@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class UIButtonDemoVC: UIViewController {
+final class UIButtonDemoVC: BaseVC {
     // 滚动容器
     private lazy var scroll: UIScrollView = {
         UIScrollView()

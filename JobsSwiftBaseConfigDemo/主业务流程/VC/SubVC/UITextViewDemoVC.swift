@@ -12,7 +12,7 @@ import RxCocoa
 import RxRelay
 import NSObject_Rx
 // MARK: - VC
-final class UITextViewDemoVC: UIViewController, HasDisposeBag {
+final class UITextViewDemoVC: BaseVC, HasDisposeBag {
     // ====== UI 容器 ======
     private let scroll = UIScrollView().byAlwaysBounceVertical(true)
     private let stack  = UIStackView()

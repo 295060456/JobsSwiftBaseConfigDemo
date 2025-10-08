@@ -19,7 +19,7 @@ private extension NSAttributedString.Key {
 //  - “专属客服”使用系统默认蓝色（.link）
 //  - “400-123-4567” 可点击拨号，样式=红字+蓝色下划线（自定义）
 //  - 在卡片里追加一个“图标附件”示例（回形针 + 文本）
-final class RichTextDemoVC: UIViewController, HasDisposeBag {
+final class RichTextDemoVC: BaseVC, HasDisposeBag {
 
     private let customerText = "专属客服"
     private let customerURL  = "click://customer"

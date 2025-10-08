@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class VC2: UIViewController {
+class VC2: BaseVC {
 
     var collectionView: UICollectionView!
     var data: [String] = []

@@ -10,7 +10,7 @@ import RxSwift
 import RxCocoa
 import SnapKit
 
-final class KeyboardDemoVC: UIViewController {
+final class KeyboardDemoVC: BaseVC {
 
     private let bag = DisposeBag()
     // 输入框

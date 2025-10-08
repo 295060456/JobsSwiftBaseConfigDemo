@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class CNIDDemoVC: UIViewController {
+final class CNIDDemoVC: BaseVC {
 
     private lazy var textField: UITextField = {
         UITextField()
