@@ -7,42 +7,42 @@
 
 import UIKit
 import SnapKit
+
+#if canImport(Kingfisher)
 import Kingfisher
-import SDWebImage   // 用到 UIButton 的 SDWebImage 扩展
+#endif
+
+#if canImport(SDWebImage)
+import SDWebImage
+#endif
 
 final class PicLoadDemoVC: BaseVC {
-    // MARK: - ScrollView（懒加载 + 点语法）
     private lazy var scrollView: UIScrollView = {
-        let sv = UIScrollView()
+        UIScrollView()
             .byShowsIndicators(vertical: true, horizontal: false)
             .byAlwaysBounceVertical(true)
             .byContentInset(.init(top: 0, left: 0, bottom: 24, right: 0))
+            .byContentInsetAdjustmentBehavior(.never)
             .byAddTo(view) { [unowned self] make in
                 make.top.equalTo(gk_navigationBar.snp.bottom).offset(10) // 占满
                 make.left.right.bottom.equalTo(view) // 占满
             }
-        // iOS 11+：别自动调整 inset（按你项目风格自行取舍）
-        if #available(iOS 11.0, *) {
-            _ = sv.byContentInsetAdjustmentBehavior(.never)
-        }
-        return sv
     }()
-    // MARK: - 顶部本地图片
+    // MARK: - UIImageView
+    /// 字符串本地图@UIImageView
     private lazy var localImgView: UIImageView = {
         UIImageView()
             .byImage("Ani".img)
             .byContentMode(.scaleAspectFill)
             .byClipsToBounds()
             .byAddTo(scrollView) { [unowned self] make in
-                // 垂直锚到 contentLayoutGuide
                 make.top.equalTo(scrollView.contentLayoutGuide.snp.top).offset(10.h)
-                // 水平锚到 frameLayoutGuide，保证宽度跟随可视宽度
                 make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
                 make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
                 make.height.equalTo(180)
             }
     }()
-    // MARK: - async/await 网络图
+    /// UIImageView字符串网络图@Kingfisher
     private lazy var asyncImgView: UIImageView = {
         let imageView = UIImageView()
             .byContentMode(.scaleAspectFill)
@@ -56,38 +56,72 @@ final class PicLoadDemoVC: BaseVC {
         Task {
             do {
                 imageView.byImage(try await "https://picsum.photos/200/300".kfLoadImage())
-                print("✅ 加载成功 (async)")
+                print("✅ 加载成功 (KF async)")
             } catch {
-                print("❌ 加载失败 (async)：\(error)")
+                print("❌ 加载失败 (KF async)：\(error)")
             }
         }
         return imageView
     }()
-    // MARK: - 包装封装的 setImage(from:)
-    private lazy var wrapperImgView: UIImageView = {
-        UIImageView()
+    /// 字符串网络图@SDWebImage
+    private lazy var asyncImgViewSD: UIImageView = {
+        let imageView = UIImageView()
             .byContentMode(.scaleAspectFill)
             .byClipsToBounds()
-            .setImage(from: "https://picsum.photos/200", placeholder: "Ani".img)
             .byAddTo(scrollView) { [unowned self] make in
                 make.top.equalTo(asyncImgView.snp.bottom).offset(20)
                 make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
                 make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
                 make.height.equalTo(180)
             }
+        Task {
+            do {
+                imageView.byImage(try await "https://picsum.photos/400/300".sdLoadImage())
+                print("✅ 加载成功 (SD async)")
+            } catch {
+                print("❌ 加载失败 (SD async)：\(error)")
+            }
+        }
+        return imageView
     }()
-    // MARK: - 按钮（懒加载 + 直接触发加载）
-    /// 背景图按钮：背景图（bgNormalLoad）
+    /// 网络图（失败兜底图）@Kingfisher
+    private lazy var wrapperImgView: UIImageView = {
+        UIImageView()
+            .byContentMode(.scaleAspectFill)
+            .byClipsToBounds()
+            .kf_setImage(from: "https://picsum.photos/200", placeholder: "Ani".img)
+            .byAddTo(scrollView) { [unowned self] make in
+                make.top.equalTo(asyncImgViewSD.snp.bottom).offset(20)
+                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
+                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
+                make.height.equalTo(180)
+            }
+    }()
+    /// 网络图（失败兜底图）@SDWebImage
+    private lazy var wrapperImgViewSD: UIImageView = {
+        UIImageView()
+            .byContentMode(.scaleAspectFill)
+            .byClipsToBounds()
+            .sd_setImage(from: "https://picsum.photos/200", placeholder: "Ani".img)
+            .byAddTo(scrollView) { [unowned self] make in
+                make.top.equalTo(wrapperImgView.snp.bottom).offset(20)
+                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
+                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
+                make.height.equalTo(180)
+            }
+    }()
+    // MARK: - UIButton
+    /// 按钮网络背景图@SDWebImage
     private lazy var btnBG: UIButton = {
         let b = UIButton(type: .system)
             .byCornerRadius(12)
             .byClipsToBounds(true)
-            .imageURL("https://picsum.photos/300/200")
-            .placeholderImage(nil)
-            .options([.scaleDownLargeImages, .retryFailed])
-            .bgNormalLoad()
+            .sd_imageURL("https://picsum.photos/300/200")
+            .sd_placeholderImage(nil)
+            .sd_options([.scaleDownLargeImages, .retryFailed])
+            .sd_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
             .byAddTo(scrollView) { [unowned self] make in
-                make.top.equalTo(wrapperImgView.snp.bottom).offset(24)
+                make.top.equalTo(wrapperImgViewSD.snp.bottom).offset(24)
                 make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
                 make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
                 make.height.equalTo(64)
@@ -109,25 +143,23 @@ final class PicLoadDemoVC: BaseVC {
         }
         return b
     }()
-    /// 前景图按钮：按钮自身 image（normalLoad）
+    /// 按钮网络前景图@SDWebImage
     private lazy var btnImage: UIButton = {
         let b = UIButton(type: .system)
             .byCornerRadius(12)
             .byBorderWidth(1)
             .byBorderColor(UIColor.systemGray3)
             .byClipsToBounds(true)
-            .imageURL("https://i.pinimg.com/736x/26/5b/ef/265bef0c9ee367b30847a85ba0075f14.jpg")
-            .placeholderImage(nil)
-            .options([.retryFailed, .highPriority, .scaleDownLargeImages])
-            .normalLoad()
+            .sd_imageURL("https://i.pinimg.com/736x/26/5b/ef/265bef0c9ee367b30847a85ba0075f14.jpg")
+            .sd_placeholderImage(nil)
+            .sd_options([.retryFailed, .highPriority, .scaleDownLargeImages])
+            .sd_normalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
             .byAddTo(scrollView) { [unowned self] make in
                 make.top.equalTo(btnBG.snp.bottom).offset(16)
                 make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
                 make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
                 make.height.greaterThanOrEqualTo(56)
             }
-            .byAlpha(1)
-
         if #available(iOS 15.0, *) {
             b.byConfiguration { c in
                 c.byTitle("前景图：Button Image")
@@ -144,7 +176,65 @@ final class PicLoadDemoVC: BaseVC {
         }
         return b
     }()
-
+    /// 按钮网络背景图@Kingfisher
+    private lazy var btnBG_KF: UIButton = {
+        UIButton(type: .system)
+            .byCornerRadius(12)
+            .byClipsToBounds(true)
+            .byConfiguration { c in
+                c.byTitle("背景图：Kingfisher")
+                    .byBaseForegroundCor(.white)
+                    .byCornerStyle(.large)
+                    .byContentInsets(.init(top: 16, leading: 16, bottom: 16, trailing: 16))
+            }
+            .kf_imageURL("https://picsum.photos/300/200")
+            .kf_placeholderImage(nil)
+            .kf_options([
+                .processor(DownsamplingImageProcessor(size: CGSize(width: 500, height: 200))),
+                .scaleFactor(UIScreen.main.scale),
+                .cacheOriginalImage,
+                .transition(.fade(0.25)),
+                .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
+            ])
+            .kf_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
+            .byAddTo(scrollView) { [unowned self] make in
+                make.top.equalTo(btnImage.snp.bottom).offset(24)
+                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
+                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
+                make.height.equalTo(64)
+            }
+    }()
+    /// 按钮网络前景图@Kingfisher
+    private lazy var btnImage_KF: UIButton = {
+        UIButton(type: .system)
+            .byCornerRadius(12)
+            .byBorderWidth(1)
+            .byBorderColor(UIColor.systemGray3)
+            .byClipsToBounds(true)
+            .byConfiguration { c in
+                c.byTitle("前景图：Kingfisher")
+                    .byBaseForegroundCor(.label)
+                    .byContentInsets(.init(top: 14, leading: 16, bottom: 14, trailing: 16))
+                    .byImagePlacement(.leading)
+                    .byImagePadding(10)
+            }
+            .kf_imageURL("https://i.pinimg.com/736x/26/5b/ef/265bef0c9ee367b30847a85ba0075f14.jpg")
+            .kf_placeholderImage(nil)
+            .kf_options([
+                .processor(DownsamplingImageProcessor(size: CGSize(width: 64, height: 64))),
+                .scaleFactor(UIScreen.main.scale),
+                .cacheOriginalImage,
+                .transition(.fade(0.25)),
+                .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
+            ])
+            .kf_normalLoad() // 之前是配置项，这里才是真正决定渲染背景图/前景图
+            .byAddTo(scrollView) { [unowned self] make in
+                make.top.equalTo(btnBG_KF.snp.bottom).offset(16)
+                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
+                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
+                make.height.equalTo(64)
+            }
+    }()
     // MARK: - 生命周期
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -152,15 +242,18 @@ final class PicLoadDemoVC: BaseVC {
         jobsSetupGKNav(title: "PicLoad Demo")
 
         scrollView.byAlpha(1)
-        localImgView.byAlpha(1)         // UIImageView@本地图片
-        asyncImgView.byAlpha(1)         // UIImageView@Kingfisher 网络图 kfLoadImage
-        wrapperImgView.byAlpha(1)       // UIImageView@Kingfisher 网络图 setImage(from:placeholder:fade:)
-        btnBG.byAlpha(1)                // UIButton@SDWebImage 背景图
-        btnImage.byAlpha(1)             // UIButton@SDWebImage 前景图
-
-        // 结束滚动内容：把最后一个控件的 bottom 贴到 contentLayoutGuide.bottom
+        localImgView.byAlpha(1)      // UIImageView@字符串本地图
+        asyncImgView.byAlpha(1)      // UIImageView字符串网络图@Kingfisher
+        asyncImgViewSD.byAlpha(1)    // UIImageView字符串网络图@SDWebImage
+        wrapperImgView.byAlpha(1)    // UIImageView网络图（失败兜底图）@Kingfisher
+        wrapperImgViewSD.byAlpha(1)  // UIImageView网络图（失败兜底图）@SDWebImage
+        btnBG.byAlpha(1)             // 按钮网络背景图@SDWebImage
+        btnImage.byAlpha(1)          // 按钮网络前景图@SDWebImage
+        btnBG_KF.byAlpha(1)          // 按钮网络背景图@Kingfisher
+        btnImage_KF.byAlpha(1)       // 按钮网络前景图@Kingfisher
+        // 结束滚动内容
         scrollView.contentLayoutGuide.snp.makeConstraints { make in
-            make.bottom.equalTo(btnImage.snp.bottom).offset(24)
+            make.bottom.equalTo(btnImage_KF.snp.bottom).offset(24)
         }
     }
 }

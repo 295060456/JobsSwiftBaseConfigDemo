@@ -31,8 +31,6 @@ import UIKit
 
 import Foundation
 import ObjectiveC
-import ObjectiveC.runtime
-import SDWebImage
 // MARK: - 基础链式（保留）
 extension UIButton {
     @discardableResult
@@ -1031,7 +1029,35 @@ public extension UIButton {
         return self
     }
 }
-// MARK: - 配置载体（等价你 OC 的 SDWebImageModel）
+// MARK: -
+private extension UIButton {
+    @MainActor
+    func jobsResetBtnImage(_ image: UIImage?, for state: UIControl.State) {
+        if #available(iOS 15.0, *), var cfg = self.configuration {
+            cfg.image = image
+            self.configuration = cfg
+        } else {
+            self.setImage(image, for: state)
+        }
+    }
+
+    @MainActor
+    func jobsResetBtnBgImage(_ image: UIImage?, for state: UIControl.State) {
+        if #available(iOS 15.0, *), var cfg = self.configuration {
+            var bg = cfg.background
+            bg.image = image
+            cfg.background = bg
+            self.configuration = cfg
+        } else {
+            self.setBackgroundImage(image, for: state)
+        }
+    }
+}
+#if canImport(SDWebImage)
+import UIKit
+import SDWebImage
+import ObjectiveC.runtime
+// MARK: - 配置载体（等价 OC 的 SDWebImageModel）
 public struct SDButtonLoadConfig {
     public var url: URL?
     public var placeholder: UIImage?
@@ -1042,7 +1068,7 @@ public struct SDButtonLoadConfig {
 
     public init() {}
 }
-// MARK: - AO Key（✅使用稳定地址的 UInt8，避免 String 取址）
+// MARK: - AO Key（使用稳定地址的 UInt8，避免 String 取址）
 private enum _SDButtonAOKey {
     static var config: UInt8 = 0
 }
@@ -1054,145 +1080,72 @@ private extension UIButton {
             ?? SDButtonLoadConfig()
         }
         set {
-            objc_setAssociatedObject(self,
-                                     &_SDButtonAOKey.config,
-                                     newValue,
-                                     .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &_SDButtonAOKey.config, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
 }
-// MARK: - 私有收口：避免重载互调产生歧义
+// MARK: - 私有收口
 private extension UIButton {
-    @discardableResult
-    func _setImageURL(_ url: URL?) -> Self {
-        var cfg = _sd_config
-        cfg.url = url
-        _sd_config = cfg
-        return self
+    @discardableResult func _sd_setImageURL(_ url: URL?) -> Self {
+        var cfg = _sd_config; cfg.url = url; _sd_config = cfg; return self
     }
-
-    @discardableResult
-    func _setPlaceholder(_ img: UIImage?) -> Self {
-        var cfg = _sd_config
-        cfg.placeholder = img
-        _sd_config = cfg
-        return self
+    @discardableResult func _sd_setPlaceholder(_ img: UIImage?) -> Self {
+        var cfg = _sd_config; cfg.placeholder = img; _sd_config = cfg; return self
     }
-
-    @discardableResult
-    func _setOptions(_ opts: SDWebImageOptions) -> Self {
-        var cfg = _sd_config
-        cfg.options = opts
-        _sd_config = cfg
-        return self
+    @discardableResult func _sd_setOptions(_ opts: SDWebImageOptions) -> Self {
+        var cfg = _sd_config; cfg.options = opts; _sd_config = cfg; return self
     }
-
-    @discardableResult
-    func _setContext(_ ctx: [SDWebImageContextOption: Any]?) -> Self {
-        var cfg = _sd_config
-        cfg.context = ctx
-        _sd_config = cfg
-        return self
+    @discardableResult func _sd_setContext(_ ctx: [SDWebImageContextOption: Any]?) -> Self {
+        var cfg = _sd_config; cfg.context = ctx; _sd_config = cfg; return self
     }
-
-    @discardableResult
-    func _setProgress(_ block: SDImageLoaderProgressBlock?) -> Self {
-        var cfg = _sd_config
-        cfg.progress = block
-        _sd_config = cfg
-        return self
+    @discardableResult func _sd_setProgress(_ block: SDImageLoaderProgressBlock?) -> Self {
+        var cfg = _sd_config; cfg.progress = block; _sd_config = cfg; return self
     }
-
-    @discardableResult
-    func _setCompleted(_ block: SDExternalCompletionBlock?) -> Self {
-        var cfg = _sd_config
-        cfg.completed = block
-        _sd_config = cfg
-        return self
+    @discardableResult func _sd_setCompleted(_ block: SDExternalCompletionBlock?) -> Self {
+        var cfg = _sd_config; cfg.completed = block; _sd_config = cfg; return self
     }
 }
-// MARK: - 对外链式 API
+// MARK: - 对外链式 API（全部 sd_ 前缀）
 public extension UIButton {
-    // MARK: URL / String
-    @discardableResult
-    func imageURL(_ url: URL?) -> Self {
-        return _setImageURL(url)
+    // 配置
+    @discardableResult func sd_imageURL(_ url: URL?) -> Self { _sd_setImageURL(url) }
+    @discardableResult func sd_imageURL(_ urlString: String?) -> Self {
+        guard let s = urlString, let u = URL(string: s) else { return _sd_setImageURL(nil) }
+        return _sd_setImageURL(u)
     }
-    /// 便捷：String 也能传（不再调用同名重载，消除歧义）
-    @discardableResult
-    func imageURL(_ urlString: String?) -> Self {
-        guard let s = urlString, let u = URL(string: s) else { return _setImageURL(nil) }
-        return _setImageURL(u)
-    }
-    // MARK: Placeholder / Options / Context / Progress / Completed
-    @discardableResult
-    func placeholderImage(_ img: UIImage?) -> Self {
-        return _setPlaceholder(img)
-    }
-
-    @discardableResult
-    func options(_ opts: SDWebImageOptions) -> Self {
-        return _setOptions(opts)
-    }
-    /// 可选 context：自定义解码器、缩放等
-    @discardableResult
-    func context(_ ctx: [SDWebImageContextOption: Any]?) -> Self {
-        return _setContext(ctx)
-    }
-
-    @discardableResult
-    func progress(_ block: SDImageLoaderProgressBlock?) -> Self {
-        return _setProgress(block)
-    }
-
-    @discardableResult
-    func completed(_ block: SDExternalCompletionBlock?) -> Self {
-        return _setCompleted(block)
-    }
-    // MARK: 执行加载：前景图（按状态）
-    @discardableResult
-    func normalLoad() -> Self      { _loadImage(for: .normal);      return self }
-    @discardableResult
-    func highlightedLoad() -> Self { _loadImage(for: .highlighted); return self }
-    @discardableResult
-    func disabledLoad() -> Self    { _loadImage(for: .disabled);    return self }
-    @discardableResult
-    func selectedLoad() -> Self    { _loadImage(for: .selected);    return self }
+    @discardableResult func sd_placeholderImage(_ img: UIImage?) -> Self { _sd_setPlaceholder(img) }
+    @discardableResult func sd_options(_ opts: SDWebImageOptions) -> Self { _sd_setOptions(opts) }
+    @discardableResult func sd_context(_ ctx: [SDWebImageContextOption: Any]?) -> Self { _sd_setContext(ctx) }
+    @discardableResult func sd_progress(_ block: SDImageLoaderProgressBlock?) -> Self { _sd_setProgress(block) }
+    @discardableResult func sd_completed(_ block: SDExternalCompletionBlock?) -> Self { _sd_setCompleted(block) }
+    // 加载：前景图（不同状态）
+    @discardableResult func sd_normalLoad() -> Self      { _sd_loadImage(for: .normal);      return self }
+    @discardableResult func sd_highlightedLoad() -> Self { _sd_loadImage(for: .highlighted); return self }
+    @discardableResult func sd_disabledLoad() -> Self    { _sd_loadImage(for: .disabled);    return self }
+    @discardableResult func sd_selectedLoad() -> Self    { _sd_loadImage(for: .selected);    return self }
     @available(iOS 9.0, *)
-    @discardableResult
-    func focusedLoad() -> Self     { _loadImage(for: .focused);     return self }
-    @discardableResult
-    func applicationLoad() -> Self { _loadImage(for: .application); return self }
-    @discardableResult
-    func reservedLoad() -> Self    { _loadImage(for: .reserved);    return self }
-    // MARK: 执行加载：背景图（按状态）
-    @discardableResult
-    func bgNormalLoad() -> Self       { _loadBackgroundImage(for: .normal);      return self }
-    @discardableResult
-    func bgHighlightedlLoad() -> Self { _loadBackgroundImage(for: .highlighted); return self }
-    @discardableResult
-    func bgDisabledLoad() -> Self     { _loadBackgroundImage(for: .disabled);    return self }
-    @discardableResult
-    func bgSelectedLoad() -> Self     { _loadBackgroundImage(for: .selected);    return self }
+    @discardableResult func sd_focusedLoad() -> Self     { _sd_loadImage(for: .focused);     return self }
+    @discardableResult func sd_applicationLoad() -> Self { _sd_loadImage(for: .application); return self }
+    @discardableResult func sd_reservedLoad() -> Self    { _sd_loadImage(for: .reserved);    return self }
+    // 加载：背景图（不同状态）
+    @discardableResult func sd_bgNormalLoad() -> Self       { _sd_loadBackgroundImage(for: .normal);      return self }
+    @discardableResult func sd_bgHighlightedLoad() -> Self  { _sd_loadBackgroundImage(for: .highlighted); return self }
+    @discardableResult func sd_bgDisabledLoad() -> Self     { _sd_loadBackgroundImage(for: .disabled);    return self }
+    @discardableResult func sd_bgSelectedLoad() -> Self     { _sd_loadBackgroundImage(for: .selected);    return self }
     @available(iOS 9.0, *)
-    @discardableResult
-    func bgFocusedLoad() -> Self      { _loadBackgroundImage(for: .focused);     return self }
-    @discardableResult
-    func bgApplicationLoad() -> Self  { _loadBackgroundImage(for: .application); return self }
-    @discardableResult
-    func bgReservedLoad() -> Self     { _loadBackgroundImage(for: .reserved);    return self }
+    @discardableResult func sd_bgFocusedLoad() -> Self      { _sd_loadBackgroundImage(for: .focused);     return self }
+    @discardableResult func sd_bgApplicationLoad() -> Self  { _sd_loadBackgroundImage(for: .application); return self }
+    @discardableResult func sd_bgReservedLoad() -> Self     { _sd_loadBackgroundImage(for: .reserved);    return self }
 }
-// MARK: - 实际加载实现
+// MARK: - 实际加载
 private extension UIButton {
-
-    func _loadImage(for state: UIControl.State) {
+    func _sd_loadImage(for state: UIControl.State) {
         let cfg = _sd_config
-        // 无 URL：直接回落到占位
         guard let url = cfg.url else {
-            _jobsResetBtnImage(cfg.placeholder, for: state)
+            Task { @MainActor in self.jobsResetBtnImage(cfg.placeholder, for: state) }
             return
         }
-        // 使用 SDWebImage 对 UIButton 的扩展
+
         self.sd_setImage(
             with: url,
             for: state,
@@ -1202,17 +1155,17 @@ private extension UIButton {
             progress: cfg.progress
         ) { [weak self] img, err, cacheType, imageURL in
             guard let self else { return }
-            // 兜底同步到 configuration / 或 setImage
-            self._jobsResetBtnImage(img ?? cfg.placeholder, for: state)
-            cfg.completed?(img, err, cacheType, imageURL)
+            Task { @MainActor in
+                self.jobsResetBtnImage(img ?? cfg.placeholder, for: state)
+                cfg.completed?(img, err, cacheType, imageURL)
+            }
         }
     }
 
-    func _loadBackgroundImage(for state: UIControl.State) {
+    func _sd_loadBackgroundImage(for state: UIControl.State) {
         let cfg = _sd_config
-
         guard let url = cfg.url else {
-            _jobsResetBtnBgImage(cfg.placeholder, for: state)
+            Task { @MainActor in self.jobsResetBtnBgImage(cfg.placeholder, for: state) }
             return
         }
 
@@ -1225,31 +1178,148 @@ private extension UIButton {
             progress: cfg.progress
         ) { [weak self] img, err, cacheType, imageURL in
             guard let self else { return }
-            self._jobsResetBtnBgImage(img ?? cfg.placeholder, for: state)
-            cfg.completed?(img, err, cacheType, imageURL)
+            Task { @MainActor in
+                self.jobsResetBtnBgImage(img ?? cfg.placeholder, for: state)
+                cfg.completed?(img, err, cacheType, imageURL)
+            }
         }
     }
 }
-// MARK: - iOS 15+ UIButton.Configuration 兜底同步
+#endif
+
+#if canImport(Kingfisher)
+import UIKit
+import Kingfisher
+import ObjectiveC.runtime
+// MARK: - 配置载体（Kingfisher 版）
+public struct KFButtonLoadConfig {
+    public var url: URL?
+    public var placeholder: UIImage?
+    public var options: KingfisherOptionsInfo = [] // [KingfisherOptionsInfoItem]
+    public var progress: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)?
+    public var completed: ((Result<RetrieveImageResult, KingfisherError>) -> Void)?
+
+    public init() {}
+}
+// MARK: - AO Key（使用稳定地址的 UInt8）
+private enum _KFButtonAOKey {
+    static var config: UInt8 = 0
+}
+// MARK: - 存取配置
 private extension UIButton {
-
-    func _jobsResetBtnImage(_ image: UIImage?, for state: UIControl.State) {
-        if #available(iOS 15.0, *), var cfg = self.configuration {
-            cfg.image = image
-            self.configuration = cfg
-        } else {
-            self.setImage(image, for: state)
+    var _kf_config: KFButtonLoadConfig {
+        get {
+            (objc_getAssociatedObject(self, &_KFButtonAOKey.config) as? KFButtonLoadConfig)
+            ?? KFButtonLoadConfig()
         }
-    }
-
-    func _jobsResetBtnBgImage(_ image: UIImage?, for state: UIControl.State) {
-        if #available(iOS 15.0, *), var cfg = self.configuration {
-            var bg = cfg.background
-            bg.image = image
-            cfg.background = bg
-            self.configuration = cfg
-        } else {
-            self.setBackgroundImage(image, for: state)
+        set {
+            objc_setAssociatedObject(self, &_KFButtonAOKey.config, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
 }
+// MARK: - 私有收口
+private extension UIButton {
+    @discardableResult func _kf_setImageURL(_ url: URL?) -> Self {
+        var cfg = _kf_config; cfg.url = url; _kf_config = cfg; return self
+    }
+    @discardableResult func _kf_setPlaceholder(_ img: UIImage?) -> Self {
+        var cfg = _kf_config; cfg.placeholder = img; _kf_config = cfg; return self
+    }
+    @discardableResult func _kf_setOptions(_ opts: KingfisherOptionsInfo) -> Self {
+        var cfg = _kf_config; cfg.options = opts; _kf_config = cfg; return self
+    }
+    @discardableResult func _kf_setProgress(_ block: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)?) -> Self {
+        var cfg = _kf_config; cfg.progress = block; _kf_config = cfg; return self
+    }
+    @discardableResult func _kf_setCompleted(_ block: ((Result<RetrieveImageResult, KingfisherError>) -> Void)?) -> Self {
+        var cfg = _kf_config; cfg.completed = block; _kf_config = cfg; return self
+    }
+}
+// MARK: - 对外链式 API（全部 kf_ 前缀）
+public extension UIButton {
+    // 配置
+    @discardableResult func kf_imageURL(_ url: URL?) -> Self { _kf_setImageURL(url) }
+    @discardableResult func kf_imageURL(_ urlString: String?) -> Self {
+        guard let s = urlString, let u = URL(string: s) else { return _kf_setImageURL(nil) }
+        return _kf_setImageURL(u)
+    }
+    @discardableResult func kf_placeholderImage(_ img: UIImage?) -> Self { _kf_setPlaceholder(img) }
+    @discardableResult func kf_options(_ opts: KingfisherOptionsInfo) -> Self { _kf_setOptions(opts) }
+    @discardableResult func kf_progress(_ block: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)?) -> Self { _kf_setProgress(block) }
+    @discardableResult func kf_completed(_ block: ((Result<RetrieveImageResult, KingfisherError>) -> Void)?) -> Self { _kf_setCompleted(block) }
+    // 加载：前景图（不同状态）
+    @discardableResult func kf_normalLoad() -> Self      { _kf_loadImage(for: .normal);      return self }
+    @discardableResult func kf_highlightedLoad() -> Self { _kf_loadImage(for: .highlighted); return self }
+    @discardableResult func kf_disabledLoad() -> Self    { _kf_loadImage(for: .disabled);    return self }
+    @discardableResult func kf_selectedLoad() -> Self    { _kf_loadImage(for: .selected);    return self }
+    @available(iOS 9.0, *)
+    @discardableResult func kf_focusedLoad() -> Self     { _kf_loadImage(for: .focused);     return self }
+    @discardableResult func kf_applicationLoad() -> Self { _kf_loadImage(for: .application); return self }
+    @discardableResult func kf_reservedLoad() -> Self    { _kf_loadImage(for: .reserved);    return self }
+    // 加载：背景图（不同状态）
+    @discardableResult func kf_bgNormalLoad() -> Self       { _kf_loadBackgroundImage(for: .normal);      return self }
+    @discardableResult func kf_bgHighlightedLoad() -> Self  { _kf_loadBackgroundImage(for: .highlighted); return self }
+    @discardableResult func kf_bgDisabledLoad() -> Self     { _kf_loadBackgroundImage(for: .disabled);    return self }
+    @discardableResult func kf_bgSelectedLoad() -> Self     { _kf_loadBackgroundImage(for: .selected);    return self }
+    @available(iOS 9.0, *)
+    @discardableResult func kf_bgFocusedLoad() -> Self      { _kf_loadBackgroundImage(for: .focused);     return self }
+    @discardableResult func kf_bgApplicationLoad() -> Self  { _kf_loadBackgroundImage(for: .application); return self }
+    @discardableResult func kf_bgReservedLoad() -> Self     { _kf_loadBackgroundImage(for: .reserved);    return self }
+}
+// MARK: - 实际加载（Kingfisher）
+private extension UIButton {
+    func _kf_loadImage(for state: UIControl.State) {
+        let cfg = _kf_config
+        guard let url = cfg.url else {
+            Task { @MainActor in self.jobsResetBtnImage(cfg.placeholder, for: state) }
+            return
+        }
+
+        self.kf.setImage(
+            with: url,
+            for: state,
+            placeholder: cfg.placeholder,
+            options: cfg.options,
+            progressBlock: { received, total in
+                cfg.progress?(Int64(received), Int64(total))
+            }
+        ) { [weak self] result in
+            guard let self else { return }
+            Task { @MainActor in
+                switch result {
+                case .success(let r): self.jobsResetBtnImage(r.image, for: state)
+                case .failure:        self.jobsResetBtnImage(cfg.placeholder, for: state)
+                }
+                cfg.completed?(result)
+            }
+        }
+    }
+
+    func _kf_loadBackgroundImage(for state: UIControl.State) {
+        let cfg = _kf_config
+        guard let url = cfg.url else {
+            Task { @MainActor in self.jobsResetBtnBgImage(cfg.placeholder, for: state) }
+            return
+        }
+
+        self.kf.setBackgroundImage(
+            with: url,
+            for: state,
+            placeholder: cfg.placeholder,
+            options: cfg.options,
+            progressBlock: { received, total in
+                cfg.progress?(Int64(received), Int64(total))
+            }
+        ) { [weak self] result in
+            guard let self else { return }
+            Task { @MainActor in
+                switch result {
+                case .success(let r): self.jobsResetBtnBgImage(r.image, for: state)
+                case .failure:        self.jobsResetBtnBgImage(cfg.placeholder, for: state)
+                }
+                cfg.completed?(result)
+            }
+        }
+    }
+}
+#endif

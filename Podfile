@@ -51,25 +51,25 @@ use_frameworks! :linkage => :static
 # 几乎每个App都会用到的
 def swiftAppCommon
 # OC
-  pod 'SDWebImage' # https://github.com/SDWebImage/SDWebImage
-  pod 'MJRefresh'
-  pod 'IQKeyboardManager'
-  pod "HTMLReader"
+  pod 'SDWebImage'                         # https://github.com/SDWebImage/SDWebImage          ❤️
+  pod 'MJRefresh'                          # https://github.com/CoderMJLee/MJRefresh           ❤️
+  pod 'IQKeyboardManager'                  # https://github.com/hackiftekhar/IQKeyboardManager ❤️
+  pod "HTMLReader"                         # https://github.com/nolanw/HTMLReader              ❤️
 # Swift
-  pod 'Alamofire', '~> 5.9'                # ❤️ 显式指定新版本
-  pod 'Moya', :modular_headers => true
-  pod 'Kingfisher'                         # Swift上的SDWebImage
-  pod 'GKNavigationBarSwift'
-  pod 'ReactiveSwift', '~> 6.7'            # ❤️ 新版本支持 arm64 模拟器
-  pod 'lottie-ios'
-  pod 'SnapKit', '~> 5.7'                  # ❤️ 新版本支持 arm64 模拟器
-  pod 'JXSegmentedView'
-  pod 'KakaJSON'
-  pod 'RxSwift'                            # 核心
-  pod 'RxCocoa'                            # UI 绑定：UIKit、AppKit 的扩展
-  pod 'RxRelay'                            # 安全替代 Variable，常用于 ViewModel
-  pod 'NSObject+Rx'
-  pod 'ESPullToRefresh'
+  pod 'Alamofire', '~> 5.9'                # https://github.com/Alamofire/Alamofire            ❤️
+  pod 'Moya', :modular_headers => true     # https://github.com/Moya/Moya                      ❤️
+  pod 'Kingfisher'                         # https://github.com/onevcat/Kingfisher             ❤️ Swift平台上的SDWebImage平替
+  pod 'GKNavigationBarSwift'               # https://github.com/QuintGao/GKNavigationBarSwift  ❤️
+  pod 'ReactiveSwift'                      # https://github.com/ReactiveCocoa/ReactiveSwift    ❤️ 新版本支持 arm64 模拟器
+  pod 'lottie-ios'                         # https://github.com/airbnb/lottie-ios              ❤️ lottie动画框架
+  pod 'SnapKit',                           # https://github.com/SnapKit/SnapKit                ❤️ Swift平台上的Masonry平替@新版本支持arm64模拟器
+  pod 'JXSegmentedView'                    # https://github.com/pujiaxin33/JXSegmentedView     ❤️ 切换子控制的一个框架
+  pod 'KakaJSON'                           # https://github.com/kakaopensource/KakaJSON        ❤️
+  pod 'RxSwift'                            # https://github.com/ReactiveX/RxSwift              ❤️ 核心
+  pod 'RxCocoa'                            # https://github.com/ReactiveX/RxSwift              ❤️ UI 绑定：UIKit、AppKit 的扩展
+  pod 'RxRelay'                            # https://cocoapods.org/pods/RxRelay                ❤️ 安全替代 Variable，常用于 ViewModel
+  pod 'NSObject+Rx'                        # https://github.com/RxSwiftCommunity/NSObject-Rx   ❤️
+  pod 'ESPullToRefresh'                    # https://github.com/eggswift/pull-to-refresh       ❤️ Swift平台上的MJRefresh平替
 end
 
 # 调试框架
@@ -80,7 +80,7 @@ def debugPods
 # pod 'FLEX'
 # pod 'JJException'
 # pod 'FBRetainCycleDetector'
- pod 'LookinServer', :subspecs => ['Swift'], :configurations => ['Debug']
+ pod 'LookinServer', :subspecs => ['Swift'], :configurations => ['Debug']                      ❤️
 end
 
 # 基础的公共配置

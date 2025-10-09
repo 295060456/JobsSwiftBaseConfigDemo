@@ -164,6 +164,8 @@
 
 * [**过期的模拟器配件**](https://github.com/295060456/Xcode_Sys_lib) 
 
+* [**CocoaPods**](https://cocoapods.org/)
+
 * [**quicktype**](https://app.quicktype.io/)：从 **JSON** / **GraphQL** /其它数据格式 自动生成对应语言的类型定义
 
 * [**图片占位符**](https://picsum.photos/)
@@ -3604,7 +3606,9 @@ private lazy var countdownButton: UIButton = {
 
 ```
 
-### 33、`DEBUG` 模式下才允许做的事 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 33、条件编译 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 33.1、`DEBUG` 模式下才允许做的事 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 定义
 
@@ -3630,6 +3634,17 @@ private lazy var countdownButton: UIButton = {
       )
   }
   ```
+
+#### 33.2、代码启用（当引入某第三方后）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+#if canImport(Kingfisher)
+import UIKit
+import Kingfisher
+import ObjectiveC.runtime
+/// TODO
+#endif
+```
 
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 

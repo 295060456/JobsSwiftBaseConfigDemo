@@ -12,8 +12,15 @@
 #if os(iOS) || os(tvOS)
     import UIKit
 #endif
-import Kingfisher
 import MessageUI
+
+#if canImport(Kingfisher)
+import Kingfisher
+#endif
+
+#if canImport(SDWebImage)
+import SDWebImage
+#endif
 /// 字符串相关格式的（通用）转换
 extension String {
     // MARK: - String 转 Int
@@ -131,6 +138,7 @@ public extension String {
             return UIImage(named: name) ?? UIImage()
         }
     }
+#if canImport(Kingfisher)
     /// 远程：通过 KF 异步下载后返回；本地：直接返回
     func kfLoadImage() async throws -> UIImage {
         guard let source = imageSource else { throw KFError.badURL }
@@ -143,6 +151,46 @@ public extension String {
             throw KFError.notFound
         }
     }
+#endif
+
+#if canImport(SDWebImage)
+    /// 远程：通过 SDWebImage 异步下载后返回；本地：直接返回
+    func sdLoadImage() async throws -> UIImage {
+        guard let source = imageSource else {
+            throw NSError(domain: "SDWebImage", code: -1000,
+                          userInfo: [NSLocalizedDescriptionKey: "Bad URL string"])
+        }
+        switch source {
+        case .remote(let url):
+            return try await withCheckedThrowingContinuation { cont in
+                SDWebImageManager.shared.loadImage(
+                    with: url,
+                    options: [],
+                    progress: nil
+                ) { image, _, error, _, _, _ in
+                    if let error = error {
+                        cont.resume(throwing: error)
+                    } else if let image = image {
+                        cont.resume(returning: image)
+                    } else {
+                        cont.resume(throwing: NSError(
+                            domain: "SDWebImage",
+                            code: -1001,
+                            userInfo: [NSLocalizedDescriptionKey: "Image not found"]
+                        ))
+                    }
+                }
+            }
+
+        case .local(let name):
+            if let img = UIImage(named: name) {
+                return img
+            }
+            throw NSError(domain: "SDWebImage", code: -1002,
+                          userInfo: [NSLocalizedDescriptionKey: "Local image not found: \(name)"])
+        }
+    }
+#endif
 }
 // MARK: - 国际化
 public extension String {

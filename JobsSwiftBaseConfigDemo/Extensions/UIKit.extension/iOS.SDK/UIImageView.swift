@@ -13,8 +13,6 @@
     import UIKit
 #endif
 
-import Kingfisher
-
 // MARK: - UIImageView 链式封装
 public extension UIImageView {
     // MARK: 图片
@@ -109,12 +107,13 @@ public extension UIImageView {
         return self
     }
 }
-
+#if canImport(Kingfisher)
+import Kingfisher
 public extension UIImageView {
     @discardableResult
-    func setImage(from string: String,
-                  placeholder: UIImage? = nil,
-                  fade: TimeInterval = 0.25) -> Self {
+    func kf_setImage(from string: String,
+                     placeholder: UIImage? = nil,
+                     fade: TimeInterval = 0.25) -> Self {
         switch string.imageSource {
         case .remote(let url)?:
             self.kf.setImage(with: url,
@@ -128,3 +127,36 @@ public extension UIImageView {
         return self
     }
 }
+#endif
+
+#if canImport(SDWebImage)
+import SDWebImage
+public extension UIImageView {
+    @discardableResult
+    func sd_setImage(from string: String,
+                     placeholder: UIImage? = nil,
+                     fade: TimeInterval = 0.25) -> Self {
+        switch string.imageSource {
+        case .remote(let url)?:
+            self.sd_setImage(
+                with: url,
+                placeholderImage: placeholder,
+                options: [.avoidAutoSetImage]
+            ) { [weak self] image, _, _, _ in
+                guard let self = self else { return }
+                UIView.transition(with: self,
+                                  duration: fade,
+                                  options: .transitionCrossDissolve,
+                                  animations: { self.image = image },
+                                  completion: nil)
+            }
+        case .local(let name)?:
+            self.image = UIImage(named: name) ?? placeholder
+        case nil:
+            self.image = placeholder
+        }
+        return self
+    }
+}
+#endif
+
