@@ -404,3 +404,10 @@ public func log(_ items: Any...,
                 separator: separator, terminator: terminator,
                 file: file, line: line, function: function)
 }
+// MARK: - DEBUG 模式下才允许做的事
+@inline(__always)
+func debugOnly(_ work: @escaping @MainActor () -> Void) {
+    #if DEBUG
+    Task { @MainActor in work() }
+    #endif
+}

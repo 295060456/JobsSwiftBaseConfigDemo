@@ -31,6 +31,8 @@ import UIKit
 
 import Foundation
 import ObjectiveC
+import ObjectiveC.runtime
+import SDWebImage
 // MARK: - 基础链式（保留）
 extension UIButton {
     @discardableResult
@@ -1027,5 +1029,227 @@ public extension UIButton {
     func onJobsCountdownFinish(_ block: @escaping () -> Void) -> Self {
         objc_setAssociatedObject(self, &_legacyCountdownFinishKey, block, .OBJC_ASSOCIATION_COPY_NONATOMIC)
         return self
+    }
+}
+// MARK: - 配置载体（等价你 OC 的 SDWebImageModel）
+public struct SDButtonLoadConfig {
+    public var url: URL?
+    public var placeholder: UIImage?
+    public var options: SDWebImageOptions = []
+    public var context: [SDWebImageContextOption: Any]? = nil
+    public var progress: SDImageLoaderProgressBlock? = nil
+    public var completed: SDExternalCompletionBlock? = nil
+
+    public init() {}
+}
+// MARK: - AO Key（✅使用稳定地址的 UInt8，避免 String 取址）
+private enum _SDButtonAOKey {
+    static var config: UInt8 = 0
+}
+// MARK: - 存取配置
+private extension UIButton {
+    var _sd_config: SDButtonLoadConfig {
+        get {
+            (objc_getAssociatedObject(self, &_SDButtonAOKey.config) as? SDButtonLoadConfig)
+            ?? SDButtonLoadConfig()
+        }
+        set {
+            objc_setAssociatedObject(self,
+                                     &_SDButtonAOKey.config,
+                                     newValue,
+                                     .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+}
+// MARK: - 私有收口：避免重载互调产生歧义
+private extension UIButton {
+    @discardableResult
+    func _setImageURL(_ url: URL?) -> Self {
+        var cfg = _sd_config
+        cfg.url = url
+        _sd_config = cfg
+        return self
+    }
+
+    @discardableResult
+    func _setPlaceholder(_ img: UIImage?) -> Self {
+        var cfg = _sd_config
+        cfg.placeholder = img
+        _sd_config = cfg
+        return self
+    }
+
+    @discardableResult
+    func _setOptions(_ opts: SDWebImageOptions) -> Self {
+        var cfg = _sd_config
+        cfg.options = opts
+        _sd_config = cfg
+        return self
+    }
+
+    @discardableResult
+    func _setContext(_ ctx: [SDWebImageContextOption: Any]?) -> Self {
+        var cfg = _sd_config
+        cfg.context = ctx
+        _sd_config = cfg
+        return self
+    }
+
+    @discardableResult
+    func _setProgress(_ block: SDImageLoaderProgressBlock?) -> Self {
+        var cfg = _sd_config
+        cfg.progress = block
+        _sd_config = cfg
+        return self
+    }
+
+    @discardableResult
+    func _setCompleted(_ block: SDExternalCompletionBlock?) -> Self {
+        var cfg = _sd_config
+        cfg.completed = block
+        _sd_config = cfg
+        return self
+    }
+}
+// MARK: - 对外链式 API
+public extension UIButton {
+    // MARK: URL / String
+    @discardableResult
+    func imageURL(_ url: URL?) -> Self {
+        return _setImageURL(url)
+    }
+    /// 便捷：String 也能传（不再调用同名重载，消除歧义）
+    @discardableResult
+    func imageURL(_ urlString: String?) -> Self {
+        guard let s = urlString, let u = URL(string: s) else { return _setImageURL(nil) }
+        return _setImageURL(u)
+    }
+    // MARK: Placeholder / Options / Context / Progress / Completed
+    @discardableResult
+    func placeholderImage(_ img: UIImage?) -> Self {
+        return _setPlaceholder(img)
+    }
+
+    @discardableResult
+    func options(_ opts: SDWebImageOptions) -> Self {
+        return _setOptions(opts)
+    }
+    /// 可选 context：自定义解码器、缩放等
+    @discardableResult
+    func context(_ ctx: [SDWebImageContextOption: Any]?) -> Self {
+        return _setContext(ctx)
+    }
+
+    @discardableResult
+    func progress(_ block: SDImageLoaderProgressBlock?) -> Self {
+        return _setProgress(block)
+    }
+
+    @discardableResult
+    func completed(_ block: SDExternalCompletionBlock?) -> Self {
+        return _setCompleted(block)
+    }
+    // MARK: 执行加载：前景图（按状态）
+    @discardableResult
+    func normalLoad() -> Self      { _loadImage(for: .normal);      return self }
+    @discardableResult
+    func highlightedLoad() -> Self { _loadImage(for: .highlighted); return self }
+    @discardableResult
+    func disabledLoad() -> Self    { _loadImage(for: .disabled);    return self }
+    @discardableResult
+    func selectedLoad() -> Self    { _loadImage(for: .selected);    return self }
+    @available(iOS 9.0, *)
+    @discardableResult
+    func focusedLoad() -> Self     { _loadImage(for: .focused);     return self }
+    @discardableResult
+    func applicationLoad() -> Self { _loadImage(for: .application); return self }
+    @discardableResult
+    func reservedLoad() -> Self    { _loadImage(for: .reserved);    return self }
+    // MARK: 执行加载：背景图（按状态）
+    @discardableResult
+    func bgNormalLoad() -> Self       { _loadBackgroundImage(for: .normal);      return self }
+    @discardableResult
+    func bgHighlightedlLoad() -> Self { _loadBackgroundImage(for: .highlighted); return self }
+    @discardableResult
+    func bgDisabledLoad() -> Self     { _loadBackgroundImage(for: .disabled);    return self }
+    @discardableResult
+    func bgSelectedLoad() -> Self     { _loadBackgroundImage(for: .selected);    return self }
+    @available(iOS 9.0, *)
+    @discardableResult
+    func bgFocusedLoad() -> Self      { _loadBackgroundImage(for: .focused);     return self }
+    @discardableResult
+    func bgApplicationLoad() -> Self  { _loadBackgroundImage(for: .application); return self }
+    @discardableResult
+    func bgReservedLoad() -> Self     { _loadBackgroundImage(for: .reserved);    return self }
+}
+// MARK: - 实际加载实现
+private extension UIButton {
+
+    func _loadImage(for state: UIControl.State) {
+        let cfg = _sd_config
+        // 无 URL：直接回落到占位
+        guard let url = cfg.url else {
+            _jobsResetBtnImage(cfg.placeholder, for: state)
+            return
+        }
+        // 使用 SDWebImage 对 UIButton 的扩展
+        self.sd_setImage(
+            with: url,
+            for: state,
+            placeholderImage: cfg.placeholder,
+            options: cfg.options,
+            context: cfg.context,
+            progress: cfg.progress
+        ) { [weak self] img, err, cacheType, imageURL in
+            guard let self else { return }
+            // 兜底同步到 configuration / 或 setImage
+            self._jobsResetBtnImage(img ?? cfg.placeholder, for: state)
+            cfg.completed?(img, err, cacheType, imageURL)
+        }
+    }
+
+    func _loadBackgroundImage(for state: UIControl.State) {
+        let cfg = _sd_config
+
+        guard let url = cfg.url else {
+            _jobsResetBtnBgImage(cfg.placeholder, for: state)
+            return
+        }
+
+        self.sd_setBackgroundImage(
+            with: url,
+            for: state,
+            placeholderImage: cfg.placeholder,
+            options: cfg.options,
+            context: cfg.context,
+            progress: cfg.progress
+        ) { [weak self] img, err, cacheType, imageURL in
+            guard let self else { return }
+            self._jobsResetBtnBgImage(img ?? cfg.placeholder, for: state)
+            cfg.completed?(img, err, cacheType, imageURL)
+        }
+    }
+}
+// MARK: - iOS 15+ UIButton.Configuration 兜底同步
+private extension UIButton {
+
+    func _jobsResetBtnImage(_ image: UIImage?, for state: UIControl.State) {
+        if #available(iOS 15.0, *), var cfg = self.configuration {
+            cfg.image = image
+            self.configuration = cfg
+        } else {
+            self.setImage(image, for: state)
+        }
+    }
+
+    func _jobsResetBtnBgImage(_ image: UIImage?, for state: UIControl.State) {
+        if #available(iOS 15.0, *), var cfg = self.configuration {
+            var bg = cfg.background
+            bg.image = image
+            cfg.background = bg
+            self.configuration = cfg
+        } else {
+            self.setBackgroundImage(image, for: state)
+        }
     }
 }

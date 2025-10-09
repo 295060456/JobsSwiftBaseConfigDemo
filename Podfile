@@ -50,7 +50,12 @@ use_frameworks! :linkage => :static
 
 # 几乎每个App都会用到的
 def swiftAppCommon
+# OC
+  pod 'SDWebImage' # https://github.com/SDWebImage/SDWebImage
+  pod 'MJRefresh'
   pod 'IQKeyboardManager'
+  pod "HTMLReader"
+# Swift
   pod 'Alamofire', '~> 5.9'                # ❤️ 显式指定新版本
   pod 'Moya', :modular_headers => true
   pod 'Kingfisher'                         # Swift上的SDWebImage
@@ -59,15 +64,12 @@ def swiftAppCommon
   pod 'lottie-ios'
   pod 'SnapKit', '~> 5.7'                  # ❤️ 新版本支持 arm64 模拟器
   pod 'JXSegmentedView'
-  pod "HTMLReader"
   pod 'KakaJSON'
   pod 'RxSwift'                            # 核心
   pod 'RxCocoa'                            # UI 绑定：UIKit、AppKit 的扩展
   pod 'RxRelay'                            # 安全替代 Variable，常用于 ViewModel
   pod 'NSObject+Rx'
   pod 'ESPullToRefresh'
-
-  pod 'MJRefresh'
 end
 
 # 调试框架

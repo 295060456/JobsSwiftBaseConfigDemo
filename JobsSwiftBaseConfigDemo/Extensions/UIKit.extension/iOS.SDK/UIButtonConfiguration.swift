@@ -56,10 +56,10 @@ public extension UIButton.Configuration {
     }
 
     // ---------- 颜色 ----------
-    @discardableResult func byBaseForeground(_ color: UIColor?) -> Self {
+    @discardableResult func byBaseForegroundCor(_ color: UIColor?) -> Self {
         var c = self; c.baseForegroundColor = color; return c
     }
-    @discardableResult func byBaseBackground(_ color: UIColor?) -> Self {
+    @discardableResult func byBaseBackgroundCor(_ color: UIColor?) -> Self {
         var c = self; c.baseBackgroundColor = color; return c
     }
     @discardableResult func byImageColorTransformer(_ transformer: UIConfigurationColorTransformer?) -> Self {

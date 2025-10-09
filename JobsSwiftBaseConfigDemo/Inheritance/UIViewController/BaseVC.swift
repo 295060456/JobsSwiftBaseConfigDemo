@@ -12,7 +12,7 @@ class BaseVC: UIViewController {
     deinit {
         // 清理资源
         print("deinit")
-        Task { @MainActor in
+        debugOnly {  // 仅 Debug 执行
             JobsToast.show(
                 text: "当前控制器销毁成功",
                 config: JobsToast.Config()

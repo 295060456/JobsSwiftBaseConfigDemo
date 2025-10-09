@@ -166,6 +166,8 @@
 
 * [**quicktype**](https://app.quicktype.io/)：从 **JSON** / **GraphQL** /其它数据格式 自动生成对应语言的类型定义
 
+* [**图片占位符**](https://picsum.photos/)
+
 * [**snipaste**](https://www.snipaste.com/)：截图工具
 
 * [**Sip**](https://sipapp.io/)：取色器
@@ -3601,6 +3603,33 @@ private lazy var countdownButton: UIButton = {
 ```swift
 
 ```
+
+### 33、`DEBUG` 模式下才允许做的事 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 定义
+
+  ```swift
+  // MARK: - DEBUG 模式下才允许做的事
+  @inline(__always)
+  func debugOnly(_ work: @escaping @MainActor () -> Void) {
+      #if DEBUG
+      Task { @MainActor in work() }
+      #endif
+  }
+  ```
+
+* 使用
+
+  ```swift
+  debugOnly {  // 仅 Debug 执行
+      JobsToast.show(
+          text: "当前控制器销毁成功",
+          config: JobsToast.Config()
+              .byBgColor(.systemGreen.withAlphaComponent(0.9))
+              .byCornerRadius(12)
+      )
+  }
+  ```
 
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 

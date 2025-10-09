@@ -22,7 +22,7 @@ final class RootListVC: BaseVC {
         ("JobsCountdown Demo", JobsCountdownDemoVC.self),
         ("Keyboard Demo", KeyboardDemoVC.self),
         ("ControlEvents Demo", JobsControlEventsDemoVC.self),
-        ("PicLoad Demo", PicLoadDemoVC.self),
+        ("图片加载Demo", PicLoadDemoVC.self),
         ("中国大陆公民身份证号码校验 Demo", CNIDDemoVC.self),
         ("Toast Demo", ToastDemoVC.self),
         ("Timer Demo", TimerDemoVC.self),
