@@ -11,32 +11,24 @@ import SnapKit
 final class MarqueeUsageDemoVC: BaseVC {
     private let kSectionSpacing: CGFloat = 12
     private let kDirToControlSpacing: CGFloat = 16
-
     // MARK: - 跑马灯（4 组）
     /// 1) 主标题 + 富文本
     private lazy var marqueeTitleRich: JobsMarqueeView = {
         JobsMarqueeView()
             .byDirection(.left)
             .byMode(.continuous(speed: 40))
-            .byContentWrapEnabled(true)                 // 按内容流式滚动
+            .byContentWrapEnabled(true)
             .byLoopEnabled(true)
             .byGestureScrollEnabled(false)
             .byOnTap { [unowned self] idx, _ in
-                Task { @MainActor in
-                    JobsToast.show(
-                        text: "跑马灯①：点击第 \(idx + 1) 项",
-                        config: JobsToast.Config()
-                            .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                            .byCornerRadius(12)
-                    )
-                }
+                Task { @MainActor in showOK("跑马灯①：点击第 \(idx + 1) 项") }
             }
             .byItems([
                 .init(title: "🔥 爆款", image: UIImage(systemName: "flame.fill"), tip: "爆款"),
                 .init(title: "⚡ 速达", image: UIImage(systemName: "bolt.fill"),  tip: "速达"),
                 .init(title: "🛒 优惠", image: UIImage(systemName: "cart.fill"),  tip: "优惠")
             ]) { btn, item, _ in
-                // 主标题 + 富文本（价格/单位）
+                // 主标题使用富文本组合（不改 configuration 的 title/subtitle）
                 let priceRich = JobsRichText.make([
                     JobsRichRun(.text("¥99")).font(.systemFont(ofSize: 18, weight: .semibold)).color(.systemRed),
                     JobsRichRun(.text(" /月")).font(.systemFont(ofSize: 16)).color(.white)
@@ -45,24 +37,22 @@ final class MarqueeUsageDemoVC: BaseVC {
                     JobsRichRun(.text("立减 ")).font(.systemFont(ofSize: 16)).color(.white),
                     JobsRichRun(.text("¥20")).font(.systemFont(ofSize: 18, weight: .semibold)).color(.systemYellow)
                 ])
-                let rich: NSAttributedString = {
-                    if item.title?.contains("爆款") == true {
-                        return JobsRichText.make([JobsRichRun(.text("爆款 ")).font(.systemFont(ofSize: 16)).color(.white)]).add(priceRich)
-                    } else {
-                        return JobsRichText.make([JobsRichRun(.text("特惠 ")).font(.systemFont(ofSize: 16)).color(.white)]).add(offRich)
-                    }
-                }()
+                let rich: NSAttributedString = (item.title?.contains("爆款") == true)
+                ? JobsRichText.make([JobsRichRun(.text("爆款 ")).font(.systemFont(ofSize: 16)).color(.white)]).add(priceRich)
+                : JobsRichText.make([JobsRichRun(.text("特惠 ")).font(.systemFont(ofSize: 16)).color(.white)]).add(offRich)
                 btn.byRichTitle(rich, for: .normal)
+
                 if #available(iOS 15.0, *) {
-                    btn.byConfiguration { c in
-                        c.byImage(item.image)
-                         .byImagePlacement(.leading)
-                         .byImagePadding(8)
-                         .byBaseForegroundCor(.white)
-                         .byBaseBackgroundCor(.systemIndigo)
-                         .byTitleAlignment(.center)
-                         .byContentInsets(.init(top: 6, leading: 10, bottom: 6, trailing: 10))
-                    }
+                    applySafeConfig(
+                        to: btn,
+                        baseBG: .systemIndigo,
+                        baseFG: .white,
+                        image: item.image,
+                        imagePlacement: .leading,
+                        imagePadding: 8,
+                        titleAlignment: .center,
+                        contentInsets: .init(top: 6, leading: 10, bottom: 6, trailing: 10)
+                    )
                 }
             }
             .byAddTo(self.view) { [unowned self] make in
@@ -71,7 +61,6 @@ final class MarqueeUsageDemoVC: BaseVC {
                 make.height.equalTo(52)
             }
     }()
-
     /// 2) 主标题 + 普通文本
     private lazy var marqueeTitlePlain: JobsMarqueeView = {
         JobsMarqueeView()
@@ -81,14 +70,7 @@ final class MarqueeUsageDemoVC: BaseVC {
             .byLoopEnabled(true)
             .byGestureScrollEnabled(false)
             .byOnTap { [unowned self] idx, _ in
-                Task { @MainActor in
-                    JobsToast.show(
-                        text: "跑马灯②：点击第 \(idx + 1) 项",
-                        config: JobsToast.Config()
-                            .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                            .byCornerRadius(12)
-                    )
-                }
+                Task { @MainActor in showOK("跑马灯②：点击第 \(idx + 1) 项") }
             }
             .byItems([
                 .init(title: "新品上线", image: UIImage(systemName: "sparkles")),
@@ -97,15 +79,16 @@ final class MarqueeUsageDemoVC: BaseVC {
             ]) { btn, item, _ in
                 btn.byTitle(item.title)
                 if #available(iOS 15.0, *) {
-                    btn.byConfiguration { c in
-                        c.byImage(item.image)
-                         .byImagePlacement(.leading)
-                         .byImagePadding(6)
-                         .byBaseForegroundCor(.white)
-                         .byBaseBackgroundCor(.systemBlue)
-                         .byTitleAlignment(.center)
-                         .byContentInsets(.init(top: 6, leading: 10, bottom: 6, trailing: 10))
-                    }
+                    applySafeConfig(
+                        to: btn,
+                        baseBG: .systemBlue,
+                        baseFG: .white,
+                        image: item.image,
+                        imagePlacement: .leading,
+                        imagePadding: 6,
+                        titleAlignment: .center,
+                        contentInsets: .init(top: 6, leading: 10, bottom: 6, trailing: 10)
+                    )
                 }
             }
             .byAddTo(self.view) { [unowned self] make in
@@ -114,7 +97,6 @@ final class MarqueeUsageDemoVC: BaseVC {
                 make.height.equalTo(52)
             }
     }()
-
     /// 3) 主标题 + 副标题（副标题富文本）
     private lazy var marqueeTitleSubRich: JobsMarqueeView = {
         JobsMarqueeView()
@@ -124,14 +106,7 @@ final class MarqueeUsageDemoVC: BaseVC {
             .byLoopEnabled(true)
             .byGestureScrollEnabled(false)
             .byOnTap { [unowned self] idx, _ in
-                Task { @MainActor in
-                    JobsToast.show(
-                        text: "跑马灯③：点击第 \(idx + 1) 项",
-                        config: JobsToast.Config()
-                            .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                            .byCornerRadius(12)
-                    )
-                }
+                Task { @MainActor in showOK("跑马灯③：点击第 \(idx + 1) 项") }
             }
             .byItems([
                 .init(title: "Pro 会员", image: UIImage(systemName: "person.crop.circle.badge.checkmark")),
@@ -145,20 +120,22 @@ final class MarqueeUsageDemoVC: BaseVC {
                 ])
                 btn.byTitle(idx == 0 ? "Pro 会员" : (idx == 1 ? "企业版" : "教育版"))
                 btn.byRichSubTitle(priceRich, for: .normal)
+
                 if #available(iOS 15.0, *) {
-                    btn.byConfiguration { c in
-                        c.byImage(
-                            [UIImage(systemName: "person.crop.circle.badge.checkmark"),
-                             UIImage(systemName: "building.2.fill"),
-                             UIImage(systemName: "graduationcap.fill")][idx]
-                        )
-                        .byImagePlacement(.leading)
-                        .byImagePadding(6)
-                        .byBaseForegroundCor(.white)
-                        .byBaseBackgroundCor(.systemPurple)
-                        .byTitleAlignment(.leading)
-                        .byContentInsets(.init(top: 6, leading: 12, bottom: 6, trailing: 12))
-                    }
+                    applySafeConfig(
+                        to: btn,
+                        baseBG: .systemPurple,
+                        baseFG: .white,
+                        image: [
+                            UIImage(systemName: "person.crop.circle.badge.checkmark"),
+                            UIImage(systemName: "building.2.fill"),
+                            UIImage(systemName: "graduationcap.fill")
+                        ][idx],
+                        imagePlacement: .leading,
+                        imagePadding: 6,
+                        titleAlignment: .leading,
+                        contentInsets: .init(top: 6, leading: 12, bottom: 6, trailing: 12)
+                    )
                 }
             }
             .byAddTo(self.view) { [unowned self] make in
@@ -167,7 +144,6 @@ final class MarqueeUsageDemoVC: BaseVC {
                 make.height.equalTo(60)
             }
     }()
-
     /// 4) 主标题 + 副标题（副标题普通文本）
     private lazy var marqueeTitleSubPlain: JobsMarqueeView = {
         JobsMarqueeView()
@@ -177,37 +153,33 @@ final class MarqueeUsageDemoVC: BaseVC {
             .byLoopEnabled(true)
             .byGestureScrollEnabled(false)
             .byOnTap { [unowned self] idx, _ in
-                Task { @MainActor in
-                    JobsToast.show(
-                        text: "跑马灯④：点击第 \(idx + 1) 项",
-                        config: JobsToast.Config()
-                            .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                            .byCornerRadius(12)
-                    )
-                }
+                Task { @MainActor in showOK("跑马灯④：点击第 \(idx + 1) 项") }
             }
             .byItems([
                 .init(title: "基础版", image: UIImage(systemName: "circle.grid.2x2.fill")),
                 .init(title: "增强版", image: UIImage(systemName: "square.stack.3d.up.fill")),
                 .init(title: "旗舰版", image: UIImage(systemName: "crown.fill"))
             ]) { btn, _, idx in
-                let sub = idx == 0 ? "入门所需" : (idx == 1 ? "更多资源" : "全特性解锁")
-                btn.byTitle(idx == 0 ? "基础版" : (idx == 1 ? "增强版" : "旗舰版"))
+                let title = (idx == 0 ? "基础版" : (idx == 1 ? "增强版" : "旗舰版"))
+                let sub   = (idx == 0 ? "入门所需" : (idx == 1 ? "更多资源" : "全特性解锁"))
+                btn.byTitle(title)
                 btn.bySubTitle(sub, for: .normal)
+
                 if #available(iOS 15.0, *) {
-                    btn.byConfiguration { c in
-                        c.byImage(
-                            [UIImage(systemName: "circle.grid.2x2.fill"),
-                             UIImage(systemName: "square.stack.3d.up.fill"),
-                             UIImage(systemName: "crown.fill")][idx]
-                        )
-                        .byImagePlacement(.leading)
-                        .byImagePadding(6)
-                        .byBaseForegroundCor(.white)
-                        .byBaseBackgroundCor(.systemTeal)
-                        .byTitleAlignment(.leading)
-                        .byContentInsets(.init(top: 6, leading: 12, bottom: 6, trailing: 12))
-                    }
+                    applySafeConfig(
+                        to: btn,
+                        baseBG: .systemTeal,
+                        baseFG: .white,
+                        image: [
+                            UIImage(systemName: "circle.grid.2x2.fill"),
+                            UIImage(systemName: "square.stack.3d.up.fill"),
+                            UIImage(systemName: "crown.fill")
+                        ][idx],
+                        imagePlacement: .leading,
+                        imagePadding: 6,
+                        titleAlignment: .leading,
+                        contentInsets: .init(top: 6, leading: 12, bottom: 6, trailing: 12)
+                    )
                 }
             }
             .byAddTo(self.view) { [unowned self] make in
@@ -216,8 +188,7 @@ final class MarqueeUsageDemoVC: BaseVC {
                 make.height.equalTo(60)
             }
     }()
-
-    // MARK: - 跑马灯方向控制（上/下/左/右）
+    // MARK: - 跑马灯方向控制
     private lazy var marqueeDirBar: UIStackView = {
         UIStackView()
             .byAxis(.horizontal)
@@ -235,8 +206,7 @@ final class MarqueeUsageDemoVC: BaseVC {
                 make.height.equalTo(40)
             }
     }()
-
-    // MARK: - 轮播图（本地 / 网络）——使用 intervalOnce 模式分页滚动
+    // MARK: - 轮播（本地 / 网络）
     private lazy var imageCarouselLocal: JobsMarqueeView = {
         JobsMarqueeView()
             .byDirection(.left)
@@ -244,14 +214,7 @@ final class MarqueeUsageDemoVC: BaseVC {
             .byLoopEnabled(true)
             .byGestureScrollEnabled(false)
             .byOnTap { [unowned self] idx, _ in
-                Task { @MainActor in
-                    JobsToast.show(
-                        text: "本地轮播：点击第 \(idx + 1) 项",
-                        config: JobsToast.Config()
-                            .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                            .byCornerRadius(12)
-                    )
-                }
+                Task { @MainActor in showOK("本地轮播：点击第 \(idx + 1) 项") }
             }
             .byAddTo(self.view) { [unowned self] make in
                 make.top.equalTo(self.marqueeDirBar.snp.bottom).offset(kSectionSpacing)
@@ -267,14 +230,7 @@ final class MarqueeUsageDemoVC: BaseVC {
             .byLoopEnabled(true)
             .byGestureScrollEnabled(false)
             .byOnTap { [unowned self] idx, _ in
-                Task { @MainActor in
-                    JobsToast.show(
-                        text: "网络轮播：点击第 \(idx + 1) 项",
-                        config: JobsToast.Config()
-                            .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                            .byCornerRadius(12)
-                    )
-                }
+                Task { @MainActor in showOK("网络轮播：点击第 \(idx + 1) 项") }
             }
             .byAddTo(self.view) { [unowned self] make in
                 make.top.equalTo(self.imageCarouselLocal.snp.bottom).offset(kSectionSpacing)
@@ -282,8 +238,7 @@ final class MarqueeUsageDemoVC: BaseVC {
                 make.height.equalTo(120)
             }
     }()
-
-    // MARK: - 轮播方向控制（上/下/左/右）
+    // MARK: - 轮播方向控制
     private lazy var carouselDirBar: UIStackView = {
         UIStackView()
             .byAxis(.horizontal)
@@ -301,7 +256,6 @@ final class MarqueeUsageDemoVC: BaseVC {
                 make.height.equalTo(40)
             }
     }()
-
     // MARK: - 底部控制（2×2：开始/暂停/恢复/停止）
     private lazy var controlGrid: UIStackView = {
         UIStackView()
@@ -334,8 +288,8 @@ final class MarqueeUsageDemoVC: BaseVC {
         setupLocalCarousel()
         Task { [weak self] in await self?.setupImageCarouselRemote() }
 
-        // alpha 唤起
-        UIView.animate(withDuration: 0.25) {
+        UIView.animate(withDuration: 0.25) { [weak self] in
+            guard let self = self else { return }
             self.marqueeTitleRich.byAlpha(1)
             self.marqueeTitlePlain.byAlpha(1)
             self.marqueeTitleSubRich.byAlpha(1)
@@ -367,19 +321,22 @@ final class MarqueeUsageDemoVC: BaseVC {
     @MainActor
     private func setupImageCarouselRemote() async {
         let urls = remoteURLs()
-        let btns: [UIButton] = (0..<urls.count).map { _ in imageBtn() }
+        let btns: [UIButton] = urls.map { _ in imageBtn() }
         imageCarouselRemote.setButtons(btns)   // 先占位
 
-        for (i, u) in urls.enumerated() {
-            let b = btns[i]
-            Task.detached { [weak b] in
-                guard let b else { return }
-                do {
-                    let img = try await u.kfLoadImage()
-                    await MainActor.run { self.applyBackgroundImage(img, to: b) }
-                } catch {
-                    await MainActor.run { self.applyBackgroundImage(UIImage(systemName: "exclamationmark.triangle"), to: b) }
+        await withTaskGroup(of: (Int, UIImage?).self) { group in
+            for (i, u) in urls.enumerated() {
+                group.addTask {
+                    do {
+                        let img = try await u.kfLoadImage()
+                        return (i, img)
+                    } catch {
+                        return (i, UIImage(systemName: "exclamationmark.triangle"))
+                    }
                 }
+            }
+            for await (i, img) in group {
+                applyBackgroundImage(img, to: btns[i])
             }
         }
     }
@@ -403,7 +360,7 @@ final class MarqueeUsageDemoVC: BaseVC {
     private func resumeAll() { [marqueeTitleRich, marqueeTitlePlain, marqueeTitleSubRich, marqueeTitleSubPlain, imageCarouselLocal, imageCarouselRemote].forEach { $0.resume() } }
     private func stopAll()   { [marqueeTitleRich, marqueeTitlePlain, marqueeTitleSubRich, marqueeTitleSubPlain, imageCarouselLocal, imageCarouselRemote].forEach { $0.stop() } }
 
-    // MARK: - 小工具
+    // MARK: - 小工具（对齐 PicLoadDemoVC 的风格）
     private func dirBtn(_ title: String, _ action: @escaping () -> Void) -> UIButton {
         let b = UIButton(type: .system)
         if #available(iOS 15.0, *) {
@@ -420,40 +377,53 @@ final class MarqueeUsageDemoVC: BaseVC {
 
     private func actionButton(_ title: String, _ action: @escaping () -> Void) -> UIButton {
         let b = UIButton(type: .system)
+        b.byTitle(title)
         if #available(iOS 15.0, *) {
-            var c = UIButton.Configuration.filled()
-            c.title = title
-            c.baseBackgroundColor = .systemBlue
-            c.baseForegroundColor = .white
-            c.contentInsets = .init(top: 8, leading: 12, bottom: 8, trailing: 12)
-            c.cornerStyle = .fixed
-            var bg = c.background; bg.cornerRadius = 0; c.background = bg
-            b.configuration = c
+            b.byConfiguration { c in
+                var cfg = c
+                    .byFilled()
+                    .byBaseBackgroundCor(.systemBlue)
+                    .byBaseForegroundCor(.white)
+                    .byContentInsets(.init(top: 8, leading: 12, bottom: 8, trailing: 12))
+                    .byCornerStyle(.fixed)
+
+                var bg = cfg.background
+                bg.cornerRadius = 0
+                cfg = cfg.byBackground(bg)
+
+                return cfg   // ← 必须显式返回新配置
+            }
         } else {
-            b.byTitle(title).byTitleColor(.white).byBgColor(.systemBlue)
+            b.byTitleColor(.white).byBgColor(.systemBlue)
         }
+
         b.onTap { _ in action() }
         return b
     }
-
     /// 轮播图专用按钮（不使用 configuration 的背景图；用 layer.contents 实现 AspectFill）
     private func imageBtn() -> UIButton {
         let b = UIButton(type: .custom)
-        b.clipsToBounds = true
-        b.backgroundColor = .tertiarySystemFill
-        if #available(iOS 15.0, *), var c = b.configuration {
-            c.cornerStyle = .fixed
-            var bg = c.background; bg.cornerRadius = 0; c.background = bg
-            b.configuration = c
+            .byContentEdgeInsets(.zero)
+            .byClipsToBounds(true)
+            .byBackgroundColor(.tertiarySystemFill)
+
+        if #available(iOS 15.0, *) {
+            b.byConfiguration { c in
+                var cfg = c
+                    .byCornerStyle(.fixed)
+
+                var bg = cfg.background
+                bg.cornerRadius = 0
+                cfg = cfg.byBackground(bg)
+
+                return cfg   // ⚠️ 必须 return 新配置（byConfiguration 是返回值语义）
+            }
         } else {
-            b.layer.cornerRadius = 0
+            // iOS 15 以下没有 UIButton.Configuration，退回 layer 方案
+            b.byCornerRadius(0)
         }
-        b.setTitle(nil, for: .normal)
-        b.setImage(nil, for: .normal)
-        b.contentEdgeInsets = .zero
         return b
     }
-
     /// 将图片作为“背景图”绘制到按钮 layer（支持 AspectFill，不叠加子视图）
     private func applyBackgroundImage(_ img: UIImage?, to button: UIButton) {
         if let cg = img?.cgImage {
@@ -465,4 +435,50 @@ final class MarqueeUsageDemoVC: BaseVC {
             button.layer.contents = nil
         }
     }
+}
+// ================================== 对齐 PicLoadDemoVC 的“统一入口”做法 ==================================
+@available(iOS 15.0, *)
+private func applySafeConfig(
+    to btn: UIButton,
+    baseBG: UIColor,
+    baseFG: UIColor,
+    image: UIImage?,
+    imagePlacement: NSDirectionalRectEdge = .leading,
+    imagePadding: CGFloat = 6,
+    titleAlignment: UIButton.Configuration.TitleAlignment = .center,
+    contentInsets: NSDirectionalEdgeInsets = .init(top: 6, leading: 10, bottom: 6, trailing: 10),
+    cornerFixed: Bool = true
+) {
+    // 取现有配置或默认 .plain()
+    var c = btn.configuration ?? .plain()
+
+    // ✅ 全部改为你的链式 API；绝不触碰 title/subtitle
+    c = c
+        .byImage(image)
+        .byImagePlacement(imagePlacement)            // 注意：你的扩展需是 ImagePlacement 版本
+        .byImagePadding(imagePadding)
+        .byBaseForegroundCor(baseFG)
+        .byBaseBackgroundCor(baseBG)
+        .byTitleAlignment(titleAlignment)
+        .byContentInsets(contentInsets)
+
+    if cornerFixed {
+        // 固定圆角样式
+        c = c.byCornerStyle(.fixed)
+        // 通过 byBackground 写回 0 圆角（不叠默认动态圆角）
+        var bg = c.background
+        bg.cornerRadius = 0
+        c = c.byBackground(bg)
+    }
+
+    // ✅ 回写
+    btn.configuration = c
+}
+
+@MainActor
+private func showOK(_ text: String, bg: UIColor = .systemGreen) {
+    JobsToast.show(text: text, config: JobsToast.Config()
+        .byBgColor(bg.withAlphaComponent(0.9))
+        .byCornerRadius(12)
+    )
 }
