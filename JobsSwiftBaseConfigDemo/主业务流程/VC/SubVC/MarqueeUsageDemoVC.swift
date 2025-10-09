@@ -55,13 +55,13 @@ final class MarqueeUsageDemoVC: BaseVC {
                 btn.byRichTitle(rich, for: .normal)
                 if #available(iOS 15.0, *) {
                     btn.byConfiguration { c in
-                        c.image = item.image
-                        c.imagePlacement = .leading
-                        c.imagePadding = 8
-                        c.baseForegroundColor = .white
-                        c.baseBackgroundColor = .systemIndigo
-                        c.titleAlignment = .center
-                        c.contentInsets = .init(top: 6, leading: 10, bottom: 6, trailing: 10)
+                        c.byImage(item.image)
+                         .byImagePlacement(.leading)
+                         .byImagePadding(8)
+                         .byBaseForegroundCor(.white)
+                         .byBaseBackgroundCor(.systemIndigo)
+                         .byTitleAlignment(.center)
+                         .byContentInsets(.init(top: 6, leading: 10, bottom: 6, trailing: 10))
                     }
                 }
             }
@@ -98,13 +98,13 @@ final class MarqueeUsageDemoVC: BaseVC {
                 btn.byTitle(item.title)
                 if #available(iOS 15.0, *) {
                     btn.byConfiguration { c in
-                        c.image = item.image
-                        c.imagePlacement = .leading
-                        c.imagePadding = 6
-                        c.baseForegroundColor = .white
-                        c.baseBackgroundColor = .systemBlue
-                        c.titleAlignment = .center
-                        c.contentInsets = .init(top: 6, leading: 10, bottom: 6, trailing: 10)
+                        c.byImage(item.image)
+                         .byImagePlacement(.leading)
+                         .byImagePadding(6)
+                         .byBaseForegroundCor(.white)
+                         .byBaseBackgroundCor(.systemBlue)
+                         .byTitleAlignment(.center)
+                         .byContentInsets(.init(top: 6, leading: 10, bottom: 6, trailing: 10))
                     }
                 }
             }
@@ -147,15 +147,17 @@ final class MarqueeUsageDemoVC: BaseVC {
                 btn.byRichSubTitle(priceRich, for: .normal)
                 if #available(iOS 15.0, *) {
                     btn.byConfiguration { c in
-                        c.image = [UIImage(systemName: "person.crop.circle.badge.checkmark"),
-                                   UIImage(systemName: "building.2.fill"),
-                                   UIImage(systemName: "graduationcap.fill")][idx]
-                        c.imagePlacement = .leading
-                        c.imagePadding = 6
-                        c.baseForegroundColor = .white
-                        c.baseBackgroundColor = .systemPurple
-                        c.titleAlignment = .leading
-                        c.contentInsets = .init(top: 6, leading: 12, bottom: 6, trailing: 12)
+                        c.byImage(
+                            [UIImage(systemName: "person.crop.circle.badge.checkmark"),
+                             UIImage(systemName: "building.2.fill"),
+                             UIImage(systemName: "graduationcap.fill")][idx]
+                        )
+                        .byImagePlacement(.leading)
+                        .byImagePadding(6)
+                        .byBaseForegroundCor(.white)
+                        .byBaseBackgroundCor(.systemPurple)
+                        .byTitleAlignment(.leading)
+                        .byContentInsets(.init(top: 6, leading: 12, bottom: 6, trailing: 12))
                     }
                 }
             }
@@ -194,15 +196,17 @@ final class MarqueeUsageDemoVC: BaseVC {
                 btn.bySubTitle(sub, for: .normal)
                 if #available(iOS 15.0, *) {
                     btn.byConfiguration { c in
-                        c.image = [UIImage(systemName: "circle.grid.2x2.fill"),
-                                   UIImage(systemName: "square.stack.3d.up.fill"),
-                                   UIImage(systemName: "crown.fill")][idx]
-                        c.imagePlacement = .leading
-                        c.imagePadding = 6
-                        c.baseForegroundColor = .white
-                        c.baseBackgroundColor = .systemTeal
-                        c.titleAlignment = .leading
-                        c.contentInsets = .init(top: 6, leading: 12, bottom: 6, trailing: 12)
+                        c.byImage(
+                            [UIImage(systemName: "circle.grid.2x2.fill"),
+                             UIImage(systemName: "square.stack.3d.up.fill"),
+                             UIImage(systemName: "crown.fill")][idx]
+                        )
+                        .byImagePlacement(.leading)
+                        .byImagePadding(6)
+                        .byBaseForegroundCor(.white)
+                        .byBaseBackgroundCor(.systemTeal)
+                        .byTitleAlignment(.leading)
+                        .byContentInsets(.init(top: 6, leading: 12, bottom: 6, trailing: 12))
                     }
                 }
             }

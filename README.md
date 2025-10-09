@@ -166,6 +166,10 @@
 
 * [**CocoaPods**](https://cocoapods.org/)
 
+* [**配置SourceTree脚本**](https://github.com/295060456/SourceTree.sh)
+
+* [**代码块**](https://github.com/295060456/JobsCodeSnippets)
+
 * [**quicktype**](https://app.quicktype.io/)：从 **JSON** / **GraphQL** /其它数据格式 自动生成对应语言的类型定义
 
 * [**图片占位符**](https://picsum.photos/)
@@ -1756,71 +1760,192 @@ required init?(coder: NSCoder) {
   }
   ```
 
-### 8、<font id=UIButton>🔘`UIButton`</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 8、🔘<font id=UIButton>`UIButton`</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 8.1、创建按钮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 8.1、🔘 创建按钮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* 普通按钮（懒加载）
+##### 8.1.1、🔘 创建普通按钮@懒加载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+private lazy var exampleButton: UIButton = {
+    UIButton(type: .system)
+        /// 普通字符串@设置主标题
+        .byTitle("显示", for: .normal)
+        .byTitle("隐藏", for: .selected)
+        .byTitleColor(.systemBlue, for: .normal)
+        .byTitleColor(.systemRed, for: .selected)
+        .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+        /// 普通字符串@设置副标题
+        .bySubTitle("显示", for: .normal)
+        .bySubTitle("隐藏", for: .selected)
+        .bySubTitleColor(.systemBlue, for: .normal)
+        .bySubTitleColor(.systemRed, for: .selected)
+        .bySubTitleFont(.systemFont(ofSize: 16, weight: .medium))
+        /// 富文本字@设置主标题
+        .byRichTitle(JobsRichText.make([
+            JobsRichRun(.text("¥99")).font(.systemFont(ofSize: 18, weight: .semibold)).color(.systemRed),
+            JobsRichRun(.text(" /月")).font(.systemFont(ofSize: 16)).color(.white)
+        ]))
+         /// 富文本字@设置副标题
+        .byRichSubTitle(JobsRichText.make([
+            JobsRichRun(.text("原价 ")).font(.systemFont(ofSize: 12)).color(.white.withAlphaComponent(0.8)),
+            JobsRichRun(.text("¥199")).font(.systemFont(ofSize: 12, weight: .medium)).color(.systemYellow)
+        ]))
+        /// 按钮图片@图文关系
+        .byImage(UIImage(systemName: "eye.slash"), for: .normal)                // 未选中图标
+        .byImage(UIImage(systemName: "eye"), for: .selected)                    // 选中图标
+        .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))// 图文内边距
+        .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6)) // 图标与文字间距
+        /// 事件触发@点按
+        .onTap { [weak self] sender in
+            guard let self else { return }
+            sender.isSelected.toggle()
+            // 文字与图标自动切换
+            self.passwordTF.isSecureTextEntry.toggle()
+            self.passwordTF.togglePasswordVisibility()
+            print("👁 当前状态：\(sender.isSelected ? "隐藏密码" : "显示密码")")
+        }
+        /// 事件触发@长按
+        .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+             if gr.state == .began {
+                 btn.alpha = 0.6
+                 print("长按开始 on \(btn)")
+             } else if gr.state == .ended || gr.state == .cancelled {
+                 btn.alpha = 1.0
+                 print("长按结束")
+             }
+         }
+        .byAddTo(view) { [unowned self] make in
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(40)
+            make.left.right.equalToSuperview().inset(24)
+            make.height.equalTo(44)
+        }
+        /// UIButtonConfiguration
+        if #available(iOS 15.0, *) {
+            b.byConfiguration { c in
+                c.byTitle("背景图：Base64 / URL")
+                    .byBaseForegroundCor(.white)
+                    .byContentInsets(.init(top: 16, leading: 16, bottom: 16, trailing: 16))
+                    .byCornerStyle(.large)
+                    .byImagePlacement(.trailing)
+                    .byImagePadding(8)
+            }
+        } else {
+            b.byTitle("背景图：Base64 / URL", for: .normal)
+                .byTitleColor(.white, for: .normal)
+                .byContentEdgeInsets(.init(top: 16, left: 16, bottom: 16, right: 16))
+                .byBgColor(.systemBlue)
+        }
+}()
+```
+
+##### 8.1.2、🔘 <font id=创建网络图按钮>**创建网络图按钮**</font>@背景图/前景图 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* [**SDWebImage**](https://github.com/SDWebImage/SDWebImage)
 
   ```swift
-  /// 富文本的优先级大于普通文本
-  private lazy var exampleButton: UIButton = {
+  /// 按钮网络背景图@SDWebImage
+  private lazy var btnBG: UIButton = {
       UIButton(type: .system)
-          /// 普通字符串@设置主标题
-          .byTitle("显示", for: .normal)
-          .byTitle("隐藏", for: .selected)
-          .byTitleColor(.systemBlue, for: .normal)
-          .byTitleColor(.systemRed, for: .selected)
-          .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
-          /// 普通字符串@设置副标题
-          .bySubTitle("显示", for: .normal)
-          .bySubTitle("隐藏", for: .selected)
-          .bySubTitleColor(.systemBlue, for: .normal)
-          .bySubTitleColor(.systemRed, for: .selected)
-          .bySubTitleFont(.systemFont(ofSize: 16, weight: .medium))
-          /// 富文本字@设置主标题
-          .byRichTitle(JobsRichText.make([
-              JobsRichRun(.text("¥99")).font(.systemFont(ofSize: 18, weight: .semibold)).color(.systemRed),
-              JobsRichRun(.text(" /月")).font(.systemFont(ofSize: 16)).color(.white)
-          ]))
-           /// 富文本字@设置副标题
-          .byRichSubTitle(JobsRichText.make([
-              JobsRichRun(.text("原价 ")).font(.systemFont(ofSize: 12)).color(.white.withAlphaComponent(0.8)),
-              JobsRichRun(.text("¥199")).font(.systemFont(ofSize: 12, weight: .medium)).color(.systemYellow)
-          ]))
-          /// 按钮图片@图文关系
-          .byImage(UIImage(systemName: "eye.slash"), for: .normal)                // 未选中图标
-          .byImage(UIImage(systemName: "eye"), for: .selected)                    // 选中图标
-          .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))// 图文内边距
-          .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6)) // 图标与文字间距
-          /// 事件触发@点按
-          .onTap { [weak self] sender in
-              guard let self else { return }
-              sender.isSelected.toggle()
-              // 文字与图标自动切换
-              self.passwordTF.isSecureTextEntry.toggle()
-              self.passwordTF.togglePasswordVisibility()
-              print("👁 当前状态：\(sender.isSelected ? "隐藏密码" : "显示密码")")
-          }
-          /// 事件触发@长按
-          .onLongPress(minimumPressDuration: 0.8) { btn, gr in
-               if gr.state == .began {
-                   btn.alpha = 0.6
-                   print("长按开始 on \(btn)")
-               } else if gr.state == .ended || gr.state == .cancelled {
-                   btn.alpha = 1.0
-                   print("长按结束")
-               }
-           }
-          .byAddTo(view) { [unowned self] make in
-              make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(40)
-              make.left.right.equalToSuperview().inset(24)
-              make.height.equalTo(44)
+          .byCornerRadius(12)
+          .byClipsToBounds(true)
+          .byTitle("我是主标题@SDWebImage")
+          .bySubTitle("我是副标题@SDWebImage")
+          .sd_imageURL("https://picsum.photos/3000/2000")
+          .sd_placeholderImage(nil)
+          .sd_options([.scaleDownLargeImages, .retryFailed])
+          .sd_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
+          .byAddTo(scrollView) { [unowned self] make in
+              make.top.equalTo(wrapperImgViewSD.snp.bottom).offset(24)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
+              make.height.equalTo(64)
           }
   }()
   ```
 
-* [**计数按钮**](#计数按钮)
+  ```swift
+  /// 按钮网络前景图@SDWebImage
+  private lazy var btnImage: UIButton = {
+      UIButton(type: .system)
+          .byCornerRadius(12)
+          .byBorderWidth(1)
+          .byBorderColor(UIColor.systemGray3)
+          .byClipsToBounds(true)
+          .byTitle("我是主标题@SDWebImage")
+          .bySubTitle("我是副标题@SDWebImage")
+          .sd_imageURL("https://picsum.photos/200")
+          .sd_placeholderImage(nil)
+          .sd_options([.retryFailed, .highPriority, .scaleDownLargeImages])
+          .sd_normalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
+          .byAddTo(scrollView) { [unowned self] make in
+              make.top.equalTo(btnBG.snp.bottom).offset(16)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
+              make.height.greaterThanOrEqualTo(56)
+          }
+  }()
+  ```
+
+* [**Kingfisher**](https://github.com/onevcat/Kingfishe)
+
+  ```swift
+  /// 按钮网络背景图@Kingfisher
+  private lazy var btnBG_KF: UIButton = {
+      UIButton(type: .system)
+          .byCornerRadius(12)
+          .byClipsToBounds(true)
+          .byTitle("我是主标题@Kingfisher")
+          .bySubTitle("我是副标题@Kingfisher")
+          .kf_imageURL("https://picsum.photos/300/200")
+          .kf_placeholderImage(nil)
+          .kf_options([
+              .processor(DownsamplingImageProcessor(size: CGSize(width: 500, height: 200))),
+              .scaleFactor(UIScreen.main.scale),
+              .cacheOriginalImage,
+              .transition(.fade(0.25)),
+              .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
+          ])
+          .kf_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
+          .byAddTo(scrollView) { [unowned self] make in
+              make.top.equalTo(btnImage.snp.bottom).offset(24)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
+              make.height.equalTo(64)
+          }
+  }()
+  ```
+
+  ```swift
+  /// 按钮网络前景图@Kingfisher
+  private lazy var btnImage_KF: UIButton = {
+      UIButton(type: .system)
+          .byCornerRadius(12)
+          .byBorderWidth(1)
+          .byBorderColor(UIColor.systemGray3)
+          .byClipsToBounds(true)
+          .byTitle("我是主标题@Kingfisher")
+          .bySubTitle("我是副标题@Kingfisher")
+          .kf_imageURL("https://picsum.photos/200")
+          .kf_placeholderImage(nil)
+          .kf_options([
+              .processor(DownsamplingImageProcessor(size: CGSize(width: 64, height: 64))),
+              .scaleFactor(UIScreen.main.scale),
+              .cacheOriginalImage,
+              .transition(.fade(0.25)),
+              .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
+          ])
+          .kf_normalLoad() // 之前是配置项，这里才是真正决定渲染背景图/前景图
+          .byAddTo(scrollView) { [unowned self] make in
+              make.top.equalTo(btnBG_KF.snp.bottom).offset(16)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
+              make.height.equalTo(64)
+          }
+  }()
+  ```
+
+##### 8.1.3、🔘 创建[**计数按钮**](#计数按钮) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 #### 8.2、按钮功能拓展 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -1835,6 +1960,8 @@ required init?(coder: NSCoder) {
   ```swift
   sender.disableAfterClick(interval: 2)
   ```
+
+
 
 ### 9、`UIScrollView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -2462,7 +2589,93 @@ private lazy var passwordAccessory: UIToolbar = {
 }()
 ```
 
-### 15、👋 手势的封装（使用）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 15、`UIImageView`网络图渲染 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* [**Kingfisher**](https://github.com/onevcat/Kingfishe)
+
+  ```swift
+  /// UIImageView字符串网络图@Kingfisher
+  private lazy var asyncImgView: UIImageView = {
+      let imageView = UIImageView()
+          .byContentMode(.scaleAspectFill)
+          .byClipsToBounds()
+          .byAddTo(scrollView) { [unowned self] make in
+              make.top.equalTo(localImgView.snp.bottom).offset(20)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
+              make.height.equalTo(180)
+          }
+      Task {
+          do {
+              imageView.byImage(try await "https://picsum.photos/200/300".kfLoadImage())
+              print("✅ 加载成功 (KF async)")
+          } catch {
+              print("❌ 加载失败 (KF async)：\(error)")
+          }
+      }
+      return imageView
+  }()
+  ```
+
+  ```swift
+  /// UIImageView网络图（失败兜底图）@Kingfisher
+  private lazy var wrapperImgView: UIImageView = {
+      UIImageView()
+          .byContentMode(.scaleAspectFill)
+          .byClipsToBounds()
+          .kf_setImage(from: "https://picsum.photos/200", placeholder: "Ani".img)
+          .byAddTo(scrollView) { [unowned self] make in
+              make.top.equalTo(asyncImgViewSD.snp.bottom).offset(20)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
+              make.height.equalTo(180)
+          }
+  }()
+  ```
+
+* [**SDWebImage**](https://github.com/SDWebImage/SDWebImage)
+
+  ```swift
+  /// UIImageView字符串网络图@SDWebImage
+  private lazy var asyncImgViewSD: UIImageView = {
+      let imageView = UIImageView()
+          .byContentMode(.scaleAspectFill)
+          .byClipsToBounds()
+          .byAddTo(scrollView) { [unowned self] make in
+              make.top.equalTo(asyncImgView.snp.bottom).offset(20)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
+              make.height.equalTo(180)
+          }
+      Task {
+          do {
+              imageView.byImage(try await "https://picsum.photos/400/300".sdLoadImage())
+              print("✅ 加载成功 (SD async)")
+          } catch {
+              print("❌ 加载失败 (SD async)：\(error)")
+          }
+      }
+      return imageView
+  }()
+  ```
+
+  ```swift
+  /// UIImageView网络图（失败兜底图）@SDWebImage
+  private lazy var wrapperImgViewSD: UIImageView = {
+      UIImageView()
+          .byContentMode(.scaleAspectFill)
+          .byClipsToBounds()
+          .sd_setImage(from: "https://picsum.photos/200", placeholder: "Ani".img)
+          .byAddTo(scrollView) { [unowned self] make in
+              make.top.equalTo(wrapperImgView.snp.bottom).offset(20)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
+              make.height.equalTo(180)
+          }
+  }()
+  ```
+
+### 16、👋 手势的封装（使用）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 因为手势只能添加到**UIView**及其子类上，所以我们对**UIView**进行扩充
 
@@ -2674,9 +2887,9 @@ private lazy var passwordAccessory: UIToolbar = {
   // 或批量移除该类手势
   view.removeAllSwipeActionsMulti()
 
-### 16、富文本的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 17、富文本的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 16.1、设置富文本 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 17.1、设置富文本 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
   UILabel().richTextBy(runs, paragraphStyle: ps)
@@ -2690,7 +2903,7 @@ private lazy var passwordAccessory: UIToolbar = {
   UITextField().richTextBy(runs, paragraphStyle: ps)
   ```
 
-#### 16.2、富文本形式 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 17.2、富文本形式 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 下划线
 
@@ -2823,9 +3036,7 @@ private lazy var passwordAccessory: UIToolbar = {
   ]
   ```
 
-
-
-### 17、<font id=弱引用的等价写法>**弱引用的等价写法**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 18、<font id=弱引用的等价写法>**弱引用的等价写法**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
   guard let `self` = self else { return }
@@ -2892,7 +3103,7 @@ private lazy var passwordAccessory: UIToolbar = {
   }
   ```
 
-### 18、对通知名的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 19、对通知名的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
   import Foundation
@@ -2928,7 +3139,7 @@ private lazy var passwordAccessory: UIToolbar = {
   > NotificationCenter.default.post(name: .userDidLogin, object: nil)
   > ```
 
-### 19、回调主线程（三大手段）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 20、回调主线程（三大手段）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **C.GCD**
 
@@ -2969,7 +3180,7 @@ private lazy var passwordAccessory: UIToolbar = {
   }
   ```
 
-### 20、`Block/闭包` 的安全调用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 21、`Block/闭包` 的安全调用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 以下为等价调用
 
@@ -2993,7 +3204,7 @@ private lazy var passwordAccessory: UIToolbar = {
     success?(true)
     ```
 
-### 21、Then（自定义/使用）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 22、Then（自定义/使用）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 定义
 
@@ -3024,7 +3235,7 @@ private lazy var passwordAccessory: UIToolbar = {
   label.textAlignment = .center
   ```
 
-### 22、对[**SnapKit**]()的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 23、对[**SnapKit**]()的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 集成
 
@@ -3047,7 +3258,7 @@ private lazy var passwordAccessory: UIToolbar = {
   }()
   ```
 
-### 23、[**导航栏@GKNavigationBarSwift**](https://github.com/QuintGao/GKNavigationBarSwift)的二次封装和使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 24、[**导航栏@GKNavigationBarSwift**](https://github.com/QuintGao/GKNavigationBarSwift)的二次封装和使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 集成
 
@@ -3074,9 +3285,7 @@ private lazy var passwordAccessory: UIToolbar = {
   }
   ```
 
-
-
-### 24、获取高频系统关键量 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 25、获取高频系统关键量 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * `jobsNearestVC`
 
@@ -3096,7 +3305,7 @@ private lazy var passwordAccessory: UIToolbar = {
   }
   ```
 
-### 25、<font color=red>推页面@带参数</font>（`push`/`present`）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 26、<font color=red>推页面@带参数</font>（`push`/`present`）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ 封装在`UIResponder`层，能全覆盖：**任意控制器**和**任意视图**
 >
@@ -3160,7 +3369,7 @@ private lazy var passwordAccessory: UIToolbar = {
         }
     ```
 
-### 26、懒加载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 27、懒加载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 private lazy var datePicker: UIDatePicker = {
@@ -3170,54 +3379,126 @@ private lazy var datePicker: UIDatePicker = {
 }()
 ```
 
-### 27、<font id=字符串加载图片资源>依据<font color=red>**字符串**</font>加载图片资源</font>（本地/网络）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 28、<font id=字符串加载图片资源>依据<font color=red>**字符串**</font>加载图片资源</font>（本地/网络）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 27.1、取本地图片 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 28.1、取本地图片 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 /// 本地图像名（在 Assets 中放一张叫 "Ani" 的图）
 localImageView.image = "Ani".img
 ```
 
-#### 27.2、取网络图片@[**Kingfisher**](https://github.com/onevcat/Kingfisher) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 28.2、取网络图片@[**Kingfisher**](https://github.com/onevcat/Kingfisher) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > ```ruby
-> pod 'Kingfisher'             # Swift上的SDWebImage
+> pod 'Kingfisher'                         # https://github.com/onevcat/Kingfisher             ❤️ Swift平台上的SDWebImage平替
 > ```
 >
 > ```swift
 > import Kingfisherx
 > ```
 
-* 字符串调用`kfLoadImage()`
+* 直接取，不处理失败兜底
 
   ```swift
-  // ✅ 使用 Kingfisher async/await 异步加载
-  let remoteURL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5V57u3uwX8dGkmezFuaB0DJZAKZ96WSqkIESLbqA9tDovtwHMenRqkZSgnU53po0D848OguVoTqzxzzGaUusl-OorK_miHQ3p4c6gjrJI9w"
-  
-  Task {
-      do {
-          let image = try await remoteURL.kfLoadImage()
-          UIImageView().image = image
-          print("✅ 加载成功 (async)：\(remoteURL)")
-      } catch {
-          print("❌ 加载失败 (async)：\(error)")
+  /// UIImageView字符串网络图@Kingfisher
+  private lazy var asyncImgView: UIImageView = {
+      let imageView = UIImageView()
+          .byContentMode(.scaleAspectFill)
+          .byClipsToBounds()
+          .byAddTo(scrollView) { [unowned self] make in
+              make.top.equalTo(localImgView.snp.bottom).offset(20)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
+              make.height.equalTo(180)
+          }
+      Task {
+          do {
+              imageView.byImage(try await "https://picsum.photos/200/300".kfLoadImage())
+              print("✅ 加载成功 (KF async)")
+          } catch {
+              print("❌ 加载失败 (KF async)：\(error)")
+          }
       }
-  }
+      return imageView
+  }()
   ```
 
-* `UIImageView()`调用`setImage`
+* 失败兜底处理
 
   ```swift
-  // ✅ 使用自定义封装 setImage(from:placeholder:)
-  let fakeURL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5V57u3uwX8dGkmezFuaB0DJZAKZ96WSqkIESLbqA9tDovtwHMenRqkZSgnU53po0D848OguVoTqzxzzGaUusl-OorK_miHQ3p4c6gjrJI9w"
-  UIImageView().setImage(from: fakeURL, placeholder: "Ani".img)
+  /// UIImageView网络图（失败兜底图）@Kingfisher
+  private lazy var wrapperImgView: UIImageView = {
+      UIImageView()
+          .byContentMode(.scaleAspectFill)
+          .byClipsToBounds()
+          .kf_setImage(from: "https://picsum.photos/200", placeholder: "Ani".img)
+          .byAddTo(scrollView) { [unowned self] make in
+              make.top.equalTo(asyncImgViewSD.snp.bottom).offset(20)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
+              make.height.equalTo(180)
+          }
+  }()
   ```
 
+#### 28.3、取网络图片@[**SDWebImage**](https://github.com/SDWebImage/SDWebImage) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-### 28、点击事件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+>```ruby
+>pod 'SDWebImage'                         # https://github.com/SDWebImage/SDWebImage          ❤️
+>```
+>
+>```swift
+>import SDWebImage
+>```
 
-#### 28.1、封装在`UIControl` 层的点击事件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+* 直接取，不处理失败兜底
+
+  ```swift
+  /// UIImageView字符串网络图@SDWebImage
+  private lazy var asyncImgViewSD: UIImageView = {
+      let imageView = UIImageView()
+          .byContentMode(.scaleAspectFill)
+          .byClipsToBounds()
+          .byAddTo(scrollView) { [unowned self] make in
+              make.top.equalTo(asyncImgView.snp.bottom).offset(20)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
+              make.height.equalTo(180)
+          }
+      Task {
+          do {
+              imageView.byImage(try await "https://picsum.photos/400/300".sdLoadImage())
+              print("✅ 加载成功 (SD async)")
+          } catch {
+              print("❌ 加载失败 (SD async)：\(error)")
+          }
+      }
+      return imageView
+  }()
+  ```
+
+* 失败兜底处理
+
+  ```swift
+  /// UIImageView网络图（失败兜底图）@SDWebImage
+  private lazy var wrapperImgViewSD: UIImageView = {
+      UIImageView()
+          .byContentMode(.scaleAspectFill)
+          .byClipsToBounds()
+          .sd_setImage(from: "https://picsum.photos/200", placeholder: "Ani".img)
+          .byAddTo(scrollView) { [unowned self] make in
+              make.top.equalTo(wrapperImgView.snp.bottom).offset(20)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
+              make.height.equalTo(180)
+          }
+  }()
+  ```
+
+### 29、点击事件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 29.1、封装在`UIControl` 层的点击事件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
   private lazy var toggle: UISwitch = {
@@ -3271,7 +3552,7 @@ localImageView.image = "Ani".img
   }()
   ```
 
-#### 28.2、[**封装在`UIButton` 层的点击事件**](#UIButton) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 29.2、[**封装在`UIButton` 层的点击事件**](#UIButton) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 let button = UIButton(type: .system)
@@ -3281,7 +3562,7 @@ let button = UIButton(type: .system)
     }
 ```
 
-### 29、启动检测 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 30、启动检测 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 AppLaunchManager.handleLaunch(
@@ -3297,9 +3578,9 @@ AppLaunchManager.handleLaunch(
 )
 ```
 
-### 30、🍡 字符串 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 31、🍡 字符串 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 30.1、🍡 通用格式的转换  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 31.1、🍡 通用格式的转换  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **`String`** → **`Int`**
 
@@ -3380,9 +3661,9 @@ AppLaunchManager.handleLaunch(
   // 📘 说明：附加字体与颜色属性
   ```
 
-#### 30.2、[**字符串加载图片资源**](#字符串加载图片资源) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 31.2、[**字符串加载图片资源**](#字符串加载图片资源) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 30.3、字符串打开 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 31.3、字符串打开 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 打开网站 / **`Scheme`**（带参）
 
@@ -3422,7 +3703,7 @@ AppLaunchManager.handleLaunch(
   }
   ```
 
-### 31、⏰ 计时器（按钮）的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 32、⏰ 计时器（按钮）的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ 将 iOS系统内置的4大基本计时器（`NSTimer`/`GCD`/`DisplayLink`/`RunLoop`）以协议的方式进行统一封装：开始、暂停、重启、停止、销毁
 >
@@ -3432,7 +3713,7 @@ AppLaunchManager.handleLaunch(
 >
 > 4️⃣ 纯链式调用，代码块，方便调试
 
-#### 31.1、⏰（`NSTimer`/`GCD`/`DisplayLink`/`RunLoop`）统一协议方便调用  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 32.1、⏰（`NSTimer`/`GCD`/`DisplayLink`/`RunLoop`）统一协议方便调用  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > ```swift
 > public protocol JobsTimerProtocol: AnyObject {
@@ -3459,7 +3740,7 @@ AppLaunchManager.handleLaunch(
 > public enum TimerState { case idle, running, paused, stopped }
 > ```
 
-#### 31.2、⏰ <font color=red id=计数按钮>**计数按钮**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 32.2、⏰ <font color=red id=计数按钮>**计数按钮**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ⏰ 计时器开始
 
@@ -3516,7 +3797,7 @@ AppLaunchManager.handleLaunch(
   self?.countdownButton.stopTimer()
   ```
 
-##### 31.2.1、⏰ 正计时计数按钮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 32.2.1、⏰ 正计时计数按钮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 // MARK: - 开始按钮（正计时：不传 total；按钮标题自动显示 elapsed）
@@ -3557,7 +3838,7 @@ private lazy var startButton: UIButton = {
 }()
 ```
 
-##### 31.2.2、⏰ 倒计时计数按钮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 32.2.2、⏰ 倒计时计数按钮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 // MARK: - 倒计时演示按钮（同一套 API：传 total => 倒计时）
@@ -3600,15 +3881,15 @@ private lazy var countdownButton: UIButton = {
 }()
 ```
 
-### 32、跑马灯+轮播图 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 33、跑马灯+轮播图 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 
 ```
 
-### 33、条件编译 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 34、条件编译 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 33.1、`DEBUG` 模式下才允许做的事 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 34.1、`DEBUG` 模式下才允许做的事 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 定义
 
@@ -3635,7 +3916,7 @@ private lazy var countdownButton: UIButton = {
   }
   ```
 
-#### 33.2、代码启用（当引入某第三方后）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 34.2、代码启用（当引入某第三方后）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 #if canImport(Kingfisher)

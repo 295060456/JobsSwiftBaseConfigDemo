@@ -10,30 +10,14 @@ import UIKit
 @available(iOS 15.0, tvOS 15.0, *)
 public extension UIButton.Configuration {
     // ---------- 便捷风格切换 ----------
-    @discardableResult func byPlain() -> Self {
-        var c = self; c = .plain(); return c
-    }
-    @discardableResult func byGray() -> Self {
-        var c = self; c = .gray(); return c
-    }
-    @discardableResult func byTinted() -> Self {
-        var c = self; c = .tinted(); return c
-    }
-    @discardableResult func byFilled() -> Self {
-        var c = self; c = .filled(); return c
-    }
-    @discardableResult func byBorderless() -> Self {
-        var c = self; c = .borderless(); return c
-    }
-    @discardableResult func byBordered() -> Self {
-        var c = self; c = .bordered(); return c
-    }
-    @discardableResult func byBorderedTinted() -> Self {
-        var c = self; c = .borderedTinted(); return c
-    }
-    @discardableResult func byBorderedProminent() -> Self {
-        var c = self; c = .borderedProminent(); return c
-    }
+    @discardableResult func byPlain() -> Self { .plain() }
+    @discardableResult func byGray() -> Self { .gray() }
+    @discardableResult func byTinted() -> Self { .tinted() }
+    @discardableResult func byFilled() -> Self { .filled() }
+    @discardableResult func byBorderless() -> Self { .borderless() }
+    @discardableResult func byBordered() -> Self { .bordered() }
+    @discardableResult func byBorderedTinted() -> Self { .borderedTinted() }
+    @discardableResult func byBorderedProminent() -> Self { .borderedProminent() }
 
     // ---------- 标题 / 副标题 ----------
     @discardableResult func byTitle(_ title: String?) -> Self {
@@ -73,6 +57,7 @@ public extension UIButton.Configuration {
     @discardableResult func byPreferredSymbolConfig(_ cfg: UIImage.SymbolConfiguration?) -> Self {
         var c = self; c.preferredSymbolConfigurationForImage = cfg; return c
     }
+    /// 注意：类型是 NSDirectionalRectEdge（不是 UIButton.Configuration.ImagePlacement）
     @discardableResult func byImagePlacement(_ placement: NSDirectionalRectEdge) -> Self {
         var c = self; c.imagePlacement = placement; return c
     }
@@ -102,7 +87,7 @@ public extension UIButton.Configuration {
         var c = self; c.showsActivityIndicator = show; return c
     }
 
-    // ---------- iOS 16+ 指示器 ----------
+    // ---------- iOS 16.0 + 指示器 ----------
     @available(iOS 16.0, tvOS 16.0, *)
     @discardableResult func byIndicator(_ indicator: UIButton.Configuration.Indicator) -> Self {
         var c = self; c.indicator = indicator; return c
@@ -112,7 +97,7 @@ public extension UIButton.Configuration {
         var c = self; c.indicatorColorTransformer = transformer; return c
     }
 
-    // ---------- iOS 26+ 符号转场（Xcode 16 / iOS 18+ 可能会看到） ----------
+    // ---------- iOS 26.0 + 符号转场 ----------
     @available(iOS 26.0, tvOS 26.0, *)
     @discardableResult func bySymbolContentTransition(_ t: UISymbolContentTransition?) -> Self {
         var c = self; c.symbolContentTransition = t; return c

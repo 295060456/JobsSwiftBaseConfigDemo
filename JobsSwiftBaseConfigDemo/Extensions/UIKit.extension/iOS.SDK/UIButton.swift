@@ -39,6 +39,7 @@ extension UIButton {
         if #available(iOS 15.0, *), var cfg = self.configuration {
             if state == .normal { cfg.title = title }
             self.configuration = cfg
+            byUpdateConfig()
         }
         return self
     }
@@ -60,6 +61,7 @@ extension UIButton {
                 return attrs
             }
             self.configuration = cfg
+            byUpdateConfig()
         }
         return self
     }
@@ -71,6 +73,7 @@ extension UIButton {
             if state == .normal {
                 cfg.baseForegroundColor = color
                 self.configuration = cfg
+                byUpdateConfig()
             }
         }
         return self
@@ -105,6 +108,15 @@ extension UIButton {
     @discardableResult
     func byTintColor(_ color: UIColor) -> Self {
         self.tintColor = color
+        return self
+    }
+
+    @available(iOS 15.0, *)
+    @discardableResult
+    func byUpdateConfig() -> Self {
+        self.setNeedsUpdateConfiguration()
+        self.updateConfiguration()
+        self.automaticallyUpdatesConfiguration = true
         return self
     }
 }
@@ -145,6 +157,7 @@ extension UIButton {
                 bg.backgroundColor = color
                 cfg.background = bg
                 button.configuration = cfg
+                button.byUpdateConfig()
             } else {
                 button.setBackgroundColor(color, forState: state)
             }
@@ -177,6 +190,7 @@ extension UIButton {
             if cfg.title == nil, let t = self.title(for: .normal), !t.isEmpty { cfg.title = t }
             if cfg.baseForegroundColor == nil, let tc = self.titleColor(for: .normal) { cfg.baseForegroundColor = tc }
             self.configuration = cfg
+            byUpdateConfig()
         } else {
             self.setBgCor(color, forState: state)
         }
@@ -201,6 +215,7 @@ extension UIButton {
             var cfg = configuration ?? .filled()
             cfg.contentInsets = insets
             configuration = cfg
+            byUpdateConfig()
         } else {
             contentEdgeInsets = UIEdgeInsets(top: insets.top, left: insets.leading, bottom: insets.bottom, right: insets.trailing)
         }
@@ -213,6 +228,7 @@ extension UIButton {
             var cfg = configuration ?? .filled()
             cfg.contentInsets = NSDirectionalEdgeInsets(top: insets.top, leading: insets.left, bottom: insets.bottom, trailing: insets.right)
             configuration = cfg
+            byUpdateConfig()
         } else {
             self.contentEdgeInsets = insets
         }
@@ -225,6 +241,7 @@ extension UIButton {
             var cfg = configuration ?? .filled()
             cfg.imagePadding = (insets.left + insets.right) / 2
             configuration = cfg
+            byUpdateConfig()
         } else {
             self.imageEdgeInsets = insets
         }
@@ -237,6 +254,7 @@ extension UIButton {
             var cfg = configuration ?? .filled()
             cfg.contentInsets = NSDirectionalEdgeInsets(top: insets.top, leading: insets.left, bottom: insets.bottom, trailing: insets.right)
             configuration = cfg
+            byUpdateConfig()
         } else {
             self.titleEdgeInsets = insets
         }
@@ -278,6 +296,7 @@ extension UIButton {
             cfg.imagePlacement = placement
             cfg.imagePadding = padding
             configuration = cfg
+            byUpdateConfig()
         } else {
             switch placement {
             case .leading:  semanticContentAttribute = .forceLeftToRight
@@ -293,10 +312,10 @@ extension UIButton {
 
     @available(iOS 15.0, *)
     @discardableResult
-    func byConfiguration(_ mutate: (inout UIButton.Configuration) -> Void) -> Self {
-        var cfg = configuration ?? .filled()
-        mutate(&cfg)
-        configuration = cfg
+    func byConfiguration(_ build: (UIButton.Configuration) -> UIButton.Configuration) -> Self {
+        let current = self.configuration ?? .filled()
+        self.configuration = build(current)
+        byUpdateConfig()
         return self
     }
 }
@@ -635,7 +654,7 @@ public extension UIButton {
         if cfg.title == nil, let t = self.title(for: .normal), !t.isEmpty { cfg.title = t }
         if cfg.baseForegroundColor == nil, let tc = self.titleColor(for: .normal) { cfg.baseForegroundColor = tc }
         self.configuration = cfg
-        self.automaticallyUpdatesConfiguration = true
+        byUpdateConfig()
         return self
     }
 }
@@ -647,6 +666,7 @@ public extension UIButton {
         var c = self.configuration ?? .filled()
         edit(&c)
         self.configuration = c
+        byUpdateConfig()
         return self
     }
 
@@ -692,6 +712,7 @@ public extension UIButton {
             var cfg = self.configuration ?? .plain()
             cfg.attributedTitle = rich.map { AttributedString($0) }
             self.configuration = cfg
+            byUpdateConfig()
         } else {
             _setLegacyRichTitle(rich, for: state); _applyLegacyComposite(for: state)
         }
@@ -704,13 +725,13 @@ public extension UIButton {
             var cfg = self.configuration ?? .plain()
             cfg.attributedSubtitle = rich.map { AttributedString($0) }
             self.configuration = cfg
+            byUpdateConfig()
         } else {
             _setLegacyRichSubTitle(rich, for: state); _applyLegacyComposite(for: state)
         }
         return self
     }
 }
-
 private var _richTitleKey: UInt8 = 0
 private var _richSubKey:   UInt8 = 0
 private extension UIButton {
@@ -1036,6 +1057,7 @@ private extension UIButton {
         if #available(iOS 15.0, *), var cfg = self.configuration {
             cfg.image = image
             self.configuration = cfg
+            byUpdateConfig()
         } else {
             self.setImage(image, for: state)
         }
@@ -1048,6 +1070,7 @@ private extension UIButton {
             bg.image = image
             cfg.background = bg
             self.configuration = cfg
+            byUpdateConfig()
         } else {
             self.setBackgroundImage(image, for: state)
         }

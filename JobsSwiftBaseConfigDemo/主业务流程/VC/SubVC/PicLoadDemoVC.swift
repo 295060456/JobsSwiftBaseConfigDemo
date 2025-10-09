@@ -29,7 +29,7 @@ final class PicLoadDemoVC: BaseVC {
             }
     }()
     // MARK: - UIImageView
-    /// 字符串本地图@UIImageView
+    /// UIImageView@字符串本地图
     private lazy var localImgView: UIImageView = {
         UIImageView()
             .byImage("Ani".img)
@@ -63,7 +63,7 @@ final class PicLoadDemoVC: BaseVC {
         }
         return imageView
     }()
-    /// 字符串网络图@SDWebImage
+    /// UIImageView字符串网络图@SDWebImage
     private lazy var asyncImgViewSD: UIImageView = {
         let imageView = UIImageView()
             .byContentMode(.scaleAspectFill)
@@ -84,7 +84,7 @@ final class PicLoadDemoVC: BaseVC {
         }
         return imageView
     }()
-    /// 网络图（失败兜底图）@Kingfisher
+    /// UIImageView网络图（失败兜底图）@Kingfisher
     private lazy var wrapperImgView: UIImageView = {
         UIImageView()
             .byContentMode(.scaleAspectFill)
@@ -97,7 +97,7 @@ final class PicLoadDemoVC: BaseVC {
                 make.height.equalTo(180)
             }
     }()
-    /// 网络图（失败兜底图）@SDWebImage
+    /// UIImageView网络图（失败兜底图）@SDWebImage
     private lazy var wrapperImgViewSD: UIImageView = {
         UIImageView()
             .byContentMode(.scaleAspectFill)
@@ -113,10 +113,12 @@ final class PicLoadDemoVC: BaseVC {
     // MARK: - UIButton
     /// 按钮网络背景图@SDWebImage
     private lazy var btnBG: UIButton = {
-        let b = UIButton(type: .system)
+        UIButton(type: .system)
             .byCornerRadius(12)
             .byClipsToBounds(true)
-            .sd_imageURL("https://picsum.photos/300/200")
+            .byTitle("我是主标题@SDWebImage")
+            .bySubTitle("我是副标题@SDWebImage")
+            .sd_imageURL("https://picsum.photos/3000/2000")
             .sd_placeholderImage(nil)
             .sd_options([.scaleDownLargeImages, .retryFailed])
             .sd_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
@@ -126,31 +128,17 @@ final class PicLoadDemoVC: BaseVC {
                 make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
                 make.height.equalTo(64)
             }
-        if #available(iOS 15.0, *) {
-            b.byConfiguration { c in
-                c.byTitle("背景图：Base64 / URL")
-                    .byBaseForegroundCor(.white)
-                    .byContentInsets(.init(top: 16, leading: 16, bottom: 16, trailing: 16))
-                    .byCornerStyle(.large)
-                    .byImagePlacement(.trailing)
-                    .byImagePadding(8)
-            }
-        } else {
-            b.byTitle("背景图：Base64 / URL", for: .normal)
-                .byTitleColor(.white, for: .normal)
-                .byContentEdgeInsets(.init(top: 16, left: 16, bottom: 16, right: 16))
-                .byBgColor(.systemBlue)
-        }
-        return b
     }()
     /// 按钮网络前景图@SDWebImage
     private lazy var btnImage: UIButton = {
-        let b = UIButton(type: .system)
+        UIButton(type: .system)
             .byCornerRadius(12)
             .byBorderWidth(1)
             .byBorderColor(UIColor.systemGray3)
             .byClipsToBounds(true)
-            .sd_imageURL("https://i.pinimg.com/736x/26/5b/ef/265bef0c9ee367b30847a85ba0075f14.jpg")
+            .byTitle("我是主标题@SDWebImage")
+            .bySubTitle("我是副标题@SDWebImage")
+            .sd_imageURL("https://picsum.photos/200")
             .sd_placeholderImage(nil)
             .sd_options([.retryFailed, .highPriority, .scaleDownLargeImages])
             .sd_normalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
@@ -160,33 +148,14 @@ final class PicLoadDemoVC: BaseVC {
                 make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
                 make.height.greaterThanOrEqualTo(56)
             }
-        if #available(iOS 15.0, *) {
-            b.byConfiguration { c in
-                c.byTitle("前景图：Button Image")
-                    .byBaseForegroundCor(.label)
-                    .byContentInsets(.init(top: 14, leading: 16, bottom: 14, trailing: 16))
-                    .byCornerStyle(.large)
-                    .byImagePlacement(.leading)
-                    .byImagePadding(10)
-            }
-        } else {
-            b.byTitle("前景图：Button Image", for: .normal)
-                .byTitleColor(.label, for: .normal)
-                .byContentEdgeInsets(.init(top: 14, left: 16, bottom: 14, right: 16))
-        }
-        return b
     }()
     /// 按钮网络背景图@Kingfisher
     private lazy var btnBG_KF: UIButton = {
         UIButton(type: .system)
             .byCornerRadius(12)
             .byClipsToBounds(true)
-            .byConfiguration { c in
-                c.byTitle("背景图：Kingfisher")
-                    .byBaseForegroundCor(.white)
-                    .byCornerStyle(.large)
-                    .byContentInsets(.init(top: 16, leading: 16, bottom: 16, trailing: 16))
-            }
+            .byTitle("我是主标题@Kingfisher")
+            .bySubTitle("我是副标题@Kingfisher")
             .kf_imageURL("https://picsum.photos/300/200")
             .kf_placeholderImage(nil)
             .kf_options([
@@ -211,14 +180,9 @@ final class PicLoadDemoVC: BaseVC {
             .byBorderWidth(1)
             .byBorderColor(UIColor.systemGray3)
             .byClipsToBounds(true)
-            .byConfiguration { c in
-                c.byTitle("前景图：Kingfisher")
-                    .byBaseForegroundCor(.label)
-                    .byContentInsets(.init(top: 14, leading: 16, bottom: 14, trailing: 16))
-                    .byImagePlacement(.leading)
-                    .byImagePadding(10)
-            }
-            .kf_imageURL("https://i.pinimg.com/736x/26/5b/ef/265bef0c9ee367b30847a85ba0075f14.jpg")
+            .byTitle("我是主标题@Kingfisher")
+            .bySubTitle("我是副标题@Kingfisher")
+            .kf_imageURL("https://picsum.photos/200")
             .kf_placeholderImage(nil)
             .kf_options([
                 .processor(DownsamplingImageProcessor(size: CGSize(width: 64, height: 64))),
@@ -239,14 +203,16 @@ final class PicLoadDemoVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        jobsSetupGKNav(title: "PicLoad Demo")
+        jobsSetupGKNav(title: "图片加载 UIImageView/UIButton")
 
         scrollView.byAlpha(1)
+
         localImgView.byAlpha(1)      // UIImageView@字符串本地图
         asyncImgView.byAlpha(1)      // UIImageView字符串网络图@Kingfisher
         asyncImgViewSD.byAlpha(1)    // UIImageView字符串网络图@SDWebImage
         wrapperImgView.byAlpha(1)    // UIImageView网络图（失败兜底图）@Kingfisher
         wrapperImgViewSD.byAlpha(1)  // UIImageView网络图（失败兜底图）@SDWebImage
+
         btnBG.byAlpha(1)             // 按钮网络背景图@SDWebImage
         btnImage.byAlpha(1)          // 按钮网络前景图@SDWebImage
         btnBG_KF.byAlpha(1)          // 按钮网络背景图@Kingfisher

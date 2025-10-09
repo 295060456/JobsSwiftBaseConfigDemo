@@ -13,11 +13,6 @@
     import UIKit
 #endif
 import ObjectiveC
-
-import RxSwift
-import RxCocoa
-import SnapKit
-
 // MARK: 语法糖🍬
 extension UIView {
     @discardableResult
@@ -994,6 +989,9 @@ public extension UIView {
     }
 }
 // MARK: - UIView.keyboardHeight (Observable<CGFloat>)
+#if canImport(RxSwift) && canImport(RxCocoa)
+import RxSwift
+import RxCocoa
 private var kKeyboardHeightKey: UInt8 = 0
 public extension UIView {
     /// 监听当前视图所处界面的键盘可见高度（单位：pt）
@@ -1056,7 +1054,10 @@ public extension UIView {
         return stream
     }
 }
+#endif
 /// 对 SnapKit 的封装
+#if canImport(SnapKit)
+import SnapKit
 public extension UIView {
     // MARK: - 添加到父视图
     @discardableResult
@@ -1093,3 +1094,4 @@ public extension UIView {
         return self
     }
 }
+#endif
