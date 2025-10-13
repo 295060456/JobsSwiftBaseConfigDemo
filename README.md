@@ -6099,6 +6099,400 @@ public func legacyKeyWindowPreiOS13() -> UIWindow? {
 #endif
 ```
 
+### 27、<font color=red>**guard** 🆚 **if**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 1️⃣ `guard` 后面需要的是**布尔条件**或**可选绑定**，而不是对象本身；
+>
+> 2️⃣ `guard ... else { ... }` 的 `else` 分支里**必须提前退出当前作用域**（`return/throw/continue/break`），不能在里头“赋个默认值然后继续”。
+
+#### 27.1、参入校验 + 早退出 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+func pay(_ amount: Decimal?) {
+    guard let amount, amount > 0 else {
+        showToast("金额非法")
+        return
+    }
+    doPay(amount)
+}
+```
+
+```objective-c
+- (void)pay:(NSDecimalNumber *)amount {
+    if (!amount || [amount compare:@0] != NSOrderedDescending) {
+        [self showToast:@"金额非法"];
+        return;
+    }
+    [self doPay:amount];
+}
+```
+
+#### 27.2、Optional 绑定 🆚 判空取值 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+guard let user = user else { return }
+print(user.name)
+```
+
+```objective-c
+if (!user) return;
+NSLog(@"%@", user.name);
+```
+
+#### 27.3、多条件拍平（减少嵌套）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+func submit(token: String?, payload: Data?) {
+    guard let token, !token.isEmpty else { return }
+    guard let payload, !payload.isEmpty else { return }
+    send(token: token, payload: payload)
+}
+```
+
+```objective-c
+- (void)submitWithToken:(NSString *)token payload:(NSData *)payload {
+    if (!token.length) return;
+    if (!payload.length) return;
+    [self sendWithToken:token payload:payload];
+}
+```
+
+#### 27.4、循环中过滤（continue/break）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+for item in items {
+    guard item.isValid else { continue }
+    process(item)
+}
+```
+
+```objective-c
+for (Item *item in items) {
+    if (!item.isValid) { continue; }
+    [self process:item];
+}
+```
+
+#### 27.5、有则用传入、无则默认 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+let request = withdraw ?? JXWalletWithdrawRequest()
+```
+
+```objective-c
+JXWalletWithdrawRequest *request = withdraw ?: [JXWalletWithdrawRequest new]; // GNU 扩展
+// 或标准三目：withdraw ? withdraw : [JXWalletWithdrawRequest new];
+```
+
+#### 27.6、抛错/失败即退出 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+func load(path: String?) throws -> Data {
+    guard let path, !path.isEmpty else { throw LoadError.missingPath }
+    return try Data(contentsOf: URL(fileURLWithPath: path))
+}
+```
+
+```objective-c
+- (NSData *)load:(NSString *)path error:(NSError **)error {
+    if (!path.length) {
+        if (error) *error = [NSError errorWithDomain:@"Load" code:1 userInfo:nil];
+        return nil;
+    }
+    return [NSData dataWithContentsOfFile:path];
+}
+```
+
+#### 27.7、 初始化流程中的“守卫” <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+init?(config: Config?) {
+    guard let c = config, c.isValid else { return nil }
+    self.config = c
+}
+```
+
+```objective-c
+- (instancetype)initWithConfig:(Config *)config {
+    if (self = [super init]) {
+        if (!config || !config.isValid) return nil;
+        _config = config;
+    }
+    return self;
+}
+```
+
+#### 27.8、清理/收尾（<font color=red>**`defer`**</font> 对比） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+func work() {
+    open()
+    defer { close() }              // 无论中间 guard 提前 return 与否都会执行
+    guard ready else { return }
+    run()
+}
+```
+
+```objective-c
+- (void)work {
+    [self open];
+    @try {
+        if (!self.ready) return;
+        [self run];
+    }
+    @finally {
+        [self close];
+    }
+}
+```
+
+### 28、<font color=red>**`as`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 28.1、<font color=red>**`as`**</font> 👉 编译期**上转型/桥接/字面量定型** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **上转型**（子 → 父/协议）：总是安全、无需运行时检查。
+
+  ```swift
+  let btn: UIButton = UIButton()
+  let view: UIView = btn as UIView        // 子类到父类
+  let p: UIAppearance = btn as UIAppearance // 遵循的协议
+  ```
+
+* **桥接到 ObjC/Foundation 类型**：
+
+  ```swift
+  let s: String = "hi"
+  let ns: NSString = s as NSString        // Swift ↔︎ ObjC 桥接
+  ```
+
+* **把字面量/泛型值定型**：
+
+  ```swift
+  let x = 1 as Double                     // 指定字面量类型
+  let any: Any = btn as Any
+  ```
+
+#### 28.2、<font color=red>**`as?`**</font> 👉 **可选向下转型**，失败返回 `nil` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+let v: UIView = UIButton()
+let b1 = v as? UIButton                 // Optional<UIButton>
+let b2 = v as? UILabel                  // nil
+if let button = b1 { button.setTitle("OK", for: .normal) }
+```
+
+#### 28.3、<font color=red>**`as!`**</font> 👉 **强制向下转型**，失败崩溃 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 只有在你**百分百**确定类型时才用；否则用 <font color=red>**`as?`**</font>：
+
+```swift
+let v: UIView = UIButton()
+let b = v as! UIButton                  // 若不是 UIButton 会崩溃
+```
+
+### 29、<font color=red>**`defer`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> <font color=red>**`defer`**</font> 不是必须写在 `try` 里，它放在“当前作用域”里的任何位置，都会在**离开这个作用域时**必定执行（除非进程被杀/`fatalError` 之类）
+
+* **触发时机**：离开“当前作用域”（函数/`init`/`deinit`/`do` 块/循环体）时执行。
+
+* **无论路径**：正常走到结尾、`return`、`throw`、`break/continue` 都会执行。
+
+* **执行顺序**：**后注册先执行**（LIFO）
+
+  * <font color=red>**`defer`**</font> 绑定的是它所在的最内层作用域：
+
+    ```swift
+    /// 输出顺序：B → A（后注册先执行 + 内层先退出）
+    func f() {
+        defer { print("A") }       // 退出 f 时执行
+    
+        do {
+            defer { print("B") }   // 退出 do 块时执行（早于 A）
+            if cond { return }     // return 前会先打印 B，再打印 A
+        }
+    }
+    ```
+
+    ```swift
+    /// defer 可以放在 async 函数里；可以调用 await 的收尾方法（只要所在函数是 async）。
+    /// 常见模式：任务取消、句柄关闭、HUD 收起。
+    /// 注意：defer 本身不能 async/throws，但可以在里面写 try? 或调用返回 Void/Never 的 API。
+    func work() async {
+        let t = Task { await poll() }
+        defer { t.cancel() }            // 离开作用域一定取消子任务
+        await use()
+    }
+    ```
+
+  * 捕获时机 & 快照
+
+    ```swift
+    /// defer 里读取外部变量是执行时取值，不是注册时。
+    /// 需要“快照”就先 let 一下：
+    var path = "/a"
+    let snapshot = path
+    defer { print(snapshot) }   // 打印 /a（快照）
+    path = "/b"
+    defer { print(path) }       // 打印 /b（执行时值）
+    ```
+
+* <font color=red>**注意事项**</font>：
+
+  * <font color=red>**`defer`**</font> 本身不能 `async`/`throws`，但可以在里面写 `try?` 或调用返回 `Void`/`Never` 的 API
+
+  * 不要把重活放<font color=red>**`defer`**</font>里(尾延迟)
+
+  * **真正不会执行**：程序被杀、`fatalError()`/`preconditionFailure()`/`abort()` 这类**不会返回**的终止，**不会**回到栈清理阶段，<font color=red>**`defer`**</font> 无法执行。
+
+    ```swift
+    func crash() {
+        defer { print("❌ 不会看到这行") }
+        fatalError("boom")
+    }
+    ```
+
+  * 闭包里不会自动触发外层的 <font color=red>**`defer`**</font>
+
+    > 逃逸闭包的**生命周期独立**于外层函数，**不会**触发外层的 <font color=red>**`defer`**</font>
+
+    * ```swift
+      /// 错误做法
+      func fetch() {
+          let conn = Connection()
+          defer { conn.close() }            // 将在 fetch() 结束时执行
+      
+          URLSession.shared.dataTask(with: url) { _,_,_ in
+              // ⛔️ 这个闭包可能在 fetch() 返回很久之后才执行
+              // 外层的 defer 早就跑了，conn 早就 close 了
+              // 你以为 defer 会等这里？不会
+              use(conn)                      // ← 可能已关闭，风险！
+          }.resume()
+      } // ← 退出函数，defer 触发，conn.close() 被调用
+      /// 正确做法：把资源管理绑定到闭包/异步任务的作用域里；
+      func fetchBetter() async throws -> Data {
+          let conn = Connection()
+          defer { conn.close() }            // ✅ 作用域与 async 函数绑定
+          return try await conn.request()
+      }
+      /// 正确做法：闭包内自己 defer：
+      func fetchWithClosure() {
+          URLSession.shared.dataTask(with: url) { _,_,_ in
+              let conn = Connection()
+              defer { conn.close() }        // ✅ 绑定到闭包的生命周期
+              // ...
+          }.resume()
+      }
+      ```
+
+    * ```swift
+      /// 错误做法
+      func doWork(_ block: @escaping () -> Void) {
+          let lock = NSLock()
+          lock.lock()
+          defer { lock.unlock() }           // ← 只在 doWork 退出时解锁
+      
+          DispatchQueue.global().async {
+              // ⛔️ 这里会在 doWork 返回后才执行
+              // 若想在 block 执行期间持有锁，你做不到
+              block()
+          }
+      } // ← 此处已 unlock，block 执行时没有锁保护
+      /// 正确做法：不逃逸（@noescape/默认闭包），在当前作用域执行；
+      func doWork(_ block: () -> Void) {           // 默认 non-escaping
+          lock.lock()
+          defer { lock.unlock() }
+          block()
+      }
+      /// 正确做法：✅ 把锁放到闭包内部作用域：
+      DispatchQueue.global().async {
+          let lock = NSLock()
+          lock.lock()
+          defer { lock.unlock() }
+          block()
+      }
+      /// 正确做法：用串行队列替代锁（更稳）
+      final class Worker {
+          private let q = DispatchQueue(label: "work.serial")
+      
+          func doWork(_ block: @escaping () -> Void) {
+              q.async { block() }                // 同一队列上的任务串行执行
+          }
+      
+          // 若要“提交并等待完成”
+          func doWorkSync(_ block: () -> Void) {
+              q.sync { block() }                 // 同步执行，直到 block 完成
+          }
+      }
+      /// 正确做法：Swift Concurrency 的 actor（从根上消灭数据竞争）
+      /// 把共享状态放进 actor，所有访问都通过 await，无需手动锁。
+      actor SafeBox {
+          private var value = 0
+          func mutate(_ f: (inout Int) -> Void) { f(&value) }
+          func get() -> Int { value }
+      }
+      // 用法
+      let box = SafeBox()
+      await box.mutate { $0 += 1 }
+      let v = await box.get()
+      /// 正确做法：with 风格工具，强制“同一作用域执行”
+      @discardableResult
+      func withLock<T>(_ lock: NSLock, _ body: () -> T) -> T {
+          lock.lock(); defer { lock.unlock() }
+          return body()
+      }
+      
+      withLock(lock) {
+          // 在锁内，确保作用域结束才释放
+      }
+      ```
+
+  * 热路径里每次都注册很多 <font color=red>**`defer`**</font> ⇒ **微成本叠加**
+
+    ```swift
+    /// defer 本身很轻，但在超高频场景（小循环、内层 tight path）反复进出作用域，栈操作/捕获开销会积累：
+    @inline(__always)
+    func hot(_ xs: [Int]) -> Int {
+        var s = 0
+        for x in xs {
+            // ❌ 每次迭代都注册 3 个 defer，热到发烫
+            defer { _ = 0 }
+            defer { _ = 0 }
+            defer { _ = 0 }
+            s &+= x
+        }
+        return s
+    }
+    
+    /// 替代策略：把需配对的逻辑拉出循环，或缩小作用域：
+    func hotBetter(_ xs: [Int]) -> Int {
+        // ✅ 一次性资源，外层配对
+        setup()
+        defer { teardown() }
+    
+        var s = 0
+        for x in xs {
+            // ✅ 循环内部“对称写法”，不用 defer
+            fastOpen()
+            // ... do work ...
+            fastClose()
+            s &+= x
+        }
+        return s
+    }
+    
+    /// 替代策略：或用更细粒度作用域代替多重 defer：
+    for x in xs {
+        do {                  // 小作用域 + 1 个 defer
+            acquire()
+            defer { release() }
+            work(x)
+        }
+    }
+    ```
+
+    
+
 ## 五、<font color=red>**F**</font><font color=green>**A**</font><font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、[**Swift**](https://developer.apple.com/swift/) 纯类 🆚 `NSObject` 子类 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>

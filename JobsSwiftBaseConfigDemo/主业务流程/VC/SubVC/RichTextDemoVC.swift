@@ -15,10 +15,12 @@ import SnapKit              // 约束用 SnapKit
 private extension NSAttributedString.Key {
     static let jobsAction = NSAttributedString.Key("jobsAction")
 }
+
 // MARK: - 仅两个 cell：1) Delegate 方案  2) RAC 方案
 //  - “专属客服”使用系统默认蓝色（.link）
 //  - “400-123-4567” 可点击拨号，样式=红字+蓝色下划线（自定义）
 //  - 在卡片里追加一个“图标附件”示例（回形针 + 文本）
+//  - 新增第三行 rightAligned：演示富文本整体右对齐（文本与附件都右对齐）
 final class RichTextDemoVC: BaseVC, HasDisposeBag {
 
     private let customerText = "专属客服"
@@ -47,7 +49,7 @@ final class RichTextDemoVC: BaseVC, HasDisposeBag {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         jobsSetupGKNav(
-            title: "富文本演示（Delegate & RAC）"
+            title: "富文本演示（Delegate & RAC & RightAligned）"
         )
         tableView.byAlpha(1)
     }
@@ -55,52 +57,114 @@ final class RichTextDemoVC: BaseVC, HasDisposeBag {
 
 // MARK: - DataSource / Delegate
 extension RichTextDemoVC: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { 2 }
+
+    // 从 2 → 3：第三项是右对齐示例
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { 3 }
+
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let mode: LinkCell.Mode = (indexPath.row == 0) ? .delegate : .rac
+
+        let mode: LinkCell.Mode = {
+            switch indexPath.row {
+            case 0: return .delegate
+            case 1: return .rac
+            default: return .rightAligned
+            }
+        }()
+
         let cell = tableView.dequeueReusableCell(withIdentifier: LinkCell.reuseID,
                                                  for: indexPath) as! LinkCell
-        // 主文案：两个可点击片段
-        // ① “专属客服” → 用 .link，走系统默认蓝色
-        // ② “电话”     → 不用 .link；先按红字+蓝线渲染，稍后在 cell 内打 .jobsAction 标记
-        cell.configure(
-            title: (mode == .delegate)
-            ? "Delegate 方案（专属客服默认样式 + 电话红字蓝线）"
-            : "RAC 方案（专属客服默认样式 + 电话红字蓝线）",
-            runs: [
-                JobsRichRun(.text("如需帮助，请联系 "))
-                    .font(.systemFont(ofSize: 16))
-                    .color(.label),
 
-                JobsRichRun(.text(customerText))        // 系统默认蓝色
-                    .font(.systemFont(ofSize: 16))
-                    .link(customerURL),
+        if mode == .rightAligned {
+            // ====================== 右对齐示例 ======================
+            let rightPS = jobsMakeParagraphStyle {
+                $0.alignment = .right
+                $0.lineSpacing = 4
+            }
+            let rightAttachmentPS = jobsMakeParagraphStyle {
+                $0.alignment = .right
+                $0.lineSpacing = 2
+            }
+            cell.configure(
+                title: "右对齐示例（文本与附件均右对齐）",
+                runs: [
+                    JobsRichRun(.text("右对齐：如需帮助请联系 "))
+                        .font(.systemFont(ofSize: 16))
+                        .color(.label),
 
-                JobsRichRun(.text(" ")),                // 空格分隔
+                    // 保留「专属客服」可点击（系统 link 样式）
+                    JobsRichRun(.text(customerText))
+                        .font(.systemFont(ofSize: 16))
+                        .link(customerURL),
 
-                JobsRichRun(.text(phoneText))           // 红字 + 蓝线（自定义动作，非系统 link）
-                    .font(.systemFont(ofSize: 16))
-                    .color(.red)
-                    .underline(.single, color: .blue)
-            ],
-            paragraphStyle: jobsMakeParagraphStyle { $0.alignment = .center; $0.lineSpacing = 4 },
-            // “电话”的自定义点击与样式将在 cell 内补充（.jobsAction）
-            phoneText: phoneText,
-            phoneURL: phoneURL,
-            // 附件示例
-            attachmentRuns: [
-                JobsRichRun(.attachment(NSTextAttachment().byImage(UIImage(systemName: "paperclip",
-                                                                           withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .medium))!),
-                                        CGSize(width: 16, height: 16))),
-                JobsRichRun(.text("  附件说明"))
-                    .font(.systemFont(ofSize: 15))
-                    .color(.secondaryLabel)
-            ],
-            attachmentParagraphStyle: jobsMakeParagraphStyle { $0.alignment = .center; $0.lineSpacing = 2 },
-            mode: mode,
-            vc: self
-        )
+                    JobsRichRun(.text("  ")), // 间隔
+
+                    // 保留“电话”的自定义样式（红字+蓝线）
+                    JobsRichRun(.text(phoneText))
+                        .font(.systemFont(ofSize: 16))
+                        .color(.red)
+                        .underline(.single, color: .blue)
+                ],
+                paragraphStyle: rightPS,
+                phoneText: phoneText,
+                phoneURL: phoneURL,
+                attachmentRuns: [
+                    JobsRichRun(.attachment(
+                        NSTextAttachment().byImage(
+                            UIImage(systemName: "paperclip",
+                                    withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .medium))!
+                        ),
+                        CGSize(width: 16, height: 16)
+                    )),
+                    JobsRichRun(.text("  右侧说明文本"))
+                        .font(.systemFont(ofSize: 15))
+                        .color(.secondaryLabel)
+                ],
+                attachmentParagraphStyle: rightAttachmentPS,
+                mode: mode,
+                vc: self
+            )
+        } else {
+            // ====================== 原有两行：delegate / rac ======================
+            cell.configure(
+                title: (mode == .delegate)
+                ? "Delegate 方案（专属客服默认样式 + 电话红字蓝线）"
+                : "RAC 方案（专属客服默认样式 + 电话红字蓝线）",
+                runs: [
+                    JobsRichRun(.text("如需帮助，请联系 "))
+                        .font(.systemFont(ofSize: 16))
+                        .color(.label),
+
+                    JobsRichRun(.text(customerText))        // 系统默认蓝色
+                        .font(.systemFont(ofSize: 16))
+                        .link(customerURL),
+
+                    JobsRichRun(.text(" ")),                // 空格分隔
+
+                    JobsRichRun(.text(phoneText))           // 红字 + 蓝线（自定义动作，非系统 link）
+                        .font(.systemFont(ofSize: 16))
+                        .color(.red)
+                        .underline(.single, color: .blue)
+                ],
+                paragraphStyle: jobsMakeParagraphStyle { $0.alignment = .center; $0.lineSpacing = 4 },
+                // “电话”的自定义点击与样式将在 cell 内补充（.jobsAction）
+                phoneText: phoneText,
+                phoneURL: phoneURL,
+                // 附件示例
+                attachmentRuns: [
+                    JobsRichRun(.attachment(NSTextAttachment().byImage(UIImage(systemName: "paperclip",
+                                                                               withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .medium))!),
+                                            CGSize(width: 16, height: 16))),
+                    JobsRichRun(.text("  附件说明"))
+                        .font(.systemFont(ofSize: 15))
+                        .color(.secondaryLabel)
+                ],
+                attachmentParagraphStyle: jobsMakeParagraphStyle { $0.alignment = .center; $0.lineSpacing = 2 },
+                mode: mode,
+                vc: self
+            )
+        }
+
         return cell
     }
 }
@@ -150,10 +214,11 @@ extension RichTextDemoVC: UITextViewDelegate {
         }
     }
 }
-// MARK: - 单一 Cell（支持 Delegate / RAC）
+
+// MARK: - 单一 Cell（支持 Delegate / RAC / RightAligned）
 final class LinkCell: UITableViewCell, HasDisposeBag {
 
-    enum Mode { case delegate, rac }
+    enum Mode { case delegate, rac, rightAligned }   // ← 新增 rightAligned
     static let reuseID = "LinkCell"
 
     // ============================== UI（懒加载：内部完成 add + 约束） ==============================
@@ -218,6 +283,7 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
     // ============================== 配置入口 ==============================
     func configure(title: String,
                    runs: [JobsRichRun],
@@ -237,12 +303,12 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
         // 复用安全：清理旧状态
         textView.byDelegate(nil)
             .byDataDetectorTypes([])
-            .bySelectable(mode == .delegate)
+            .bySelectable(mode == .delegate || mode == .rightAligned) // rightAligned 也保留系统 link 的可交互能力
 
         // 主富文本
         textView.richTextBy(runs, paragraphStyle: paragraphStyle)
 
-        // 给“电话”片段打 .jobsAction + 颜色/下划线
+        // 给“电话”片段打 .jobsAction + 颜色/下划线（无论哪种模式都打标，命中时按 preferJobsAction 优先）
         if let ms = textView.attributedText?.mutableCopy() as? NSMutableAttributedString {
             let full = ms.string as NSString
             let range = full.range(of: phoneText)
@@ -276,7 +342,7 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
         case .delegate:
             // 仅处理自定义“电话”；系统 link（专属客服）交给 UITextViewDelegate
             tap!.event
-                .subscribe(onNext: { [weak self, weak vc] (gr: UITapGestureRecognizer) in   // 👈 显式标注类型
+                .subscribe(onNext: { [weak self, weak vc] (gr: UITapGestureRecognizer) in
                     guard let self, let vc else { return }
                     if let url = self.urlAtTap(in: self.textView, gesture: gr, preferJobsAction: true) {
                         self.handle(url: url, on: vc)
@@ -284,18 +350,31 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
                 })
                 .disposed(by: disposeBag)
             textView.byDelegate(vc)
+
         case .rac:
             // 自管“专属客服”+“电话”
             tap!.event
-                .subscribe(onNext: { [weak self, weak vc] (gr: UITapGestureRecognizer) in   // 👈 显式标注类型
+                .subscribe(onNext: { [weak self, weak vc] (gr: UITapGestureRecognizer) in
                     guard let self, let vc else { return }
                     guard let url = self.urlAtTap(in: self.textView, gesture: gr, preferJobsAction: true) else { return }
                     self.handle(url: url, on: vc, racCustomerAlert: true)
                 })
                 .disposed(by: disposeBag)
-        }
 
+        case .rightAligned:
+            // 和 delegate 一致：系统 link 仍走 UITextViewDelegate；自定义电话走手势
+            tap!.event
+                .subscribe(onNext: { [weak self, weak vc] (gr: UITapGestureRecognizer) in
+                    guard let self, let vc else { return }
+                    if let url = self.urlAtTap(in: self.textView, gesture: gr, preferJobsAction: true) {
+                        self.handle(url: url, on: vc)
+                    }
+                })
+                .disposed(by: disposeBag)
+            textView.byDelegate(vc)
+        }
     }
+
     // ============================== 命中算法（优先 .jobsAction） ==============================
     private func urlAtTap(in textView: UITextView,
                           gesture: UITapGestureRecognizer,
@@ -327,6 +406,7 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
         if let s = attrs[.link] as? String, let url = URL(string: s) { return url }
         return nil
     }
+
     // ============================== URL 处理 ==============================
     private func handle(url: URL,
                         on vc: UIViewController,
