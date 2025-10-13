@@ -411,3 +411,18 @@ func debugOnly(_ work: @escaping @MainActor () -> Void) {
     Task { @MainActor in work() }
     #endif
 }
+// MARK: - 主线程
+@inline(__always)
+func onMain(_ block: @escaping @MainActor () -> Void) {
+    Task { @MainActor in
+        block()
+    }
+}
+// MARK: - 同步拿返回值
+@discardableResult
+func onMainSync<T>(_ work: () -> T) -> T {
+    if Thread.isMainThread { return work() }
+    var result: T!
+    DispatchQueue.main.sync { result = work() }
+    return result
+}

@@ -42,7 +42,6 @@
 		0459211E2E85588C008C8D6A /* DS-DIGIB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0459211C2E85588C008C8D6A /* DS-DIGIB.ttf */; };
 		0459211F2E85588C008C8D6A /* fonteditor.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0459211B2E85588C008C8D6A /* fonteditor.ttf */; };
 		045921202E85588C008C8D6A /* DIN-Black-2.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0459211A2E85588C008C8D6A /* DIN-Black-2.otf */; };
-		046CF9732E966359005A88B4 /* MarqueeUsageDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046CF9722E966357005A88B4 /* MarqueeUsageDemoVC.swift */; };
 		046CF9752E9667C9005A88B4 /* UIButtonConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046CF9742E9667C8005A88B4 /* UIButtonConfiguration.swift */; };
 		046CF9772E967E6C005A88B4 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046CF9762E967E6B005A88B4 /* URL.swift */; };
 		0477D96D2E8B83D6002C6427 /* JobsSafeTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D96C2E8B83CA002C6427 /* JobsSafeTransitions.swift */; };
@@ -56,6 +55,7 @@
 		0477D9832E8BE9FC002C6427 /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9822E8BE9FB002C6427 /* KeyboardObserver.swift */; };
 		0477D9852E8BEACB002C6427 /* Reactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9842E8BEACA002C6427 /* Reactive.swift */; };
 		0477D9872E8BEF64002C6427 /* KeyboardDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9862E8BEF62002C6427 /* KeyboardDemoVC.swift */; };
+		048314002E9A08510009A44B /* JobsMarqueeDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048313FF2E9A08500009A44B /* JobsMarqueeDemoVC.swift */; };
 		0487AADA2E840CB200B5D307 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0487AAD92E840CB200B5D307 /* UIColor.swift */; };
 		0487AADC2E840EE300B5D307 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0487AADB2E840EE300B5D307 /* libc++.tbd */; };
 		048E37702E87997A004C3A41 /* UIGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048E376F2E879978004C3A41 /* UIGestureRecognizer.swift */; };
@@ -65,6 +65,8 @@
 		04AC74C52E86682E004B8305 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AC74C42E86682D004B8305 /* Notification.swift */; };
 		04AD628F2E9120C500E18984 /* JobsTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AD628E2E9120C000E18984 /* JobsTimer.swift */; };
 		04AD62912E91230000E18984 /* TimerDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AD62902E9122FC00E18984 /* TimerDemoVC.swift */; };
+		04C2F0312E98C9D000BA05A9 /* MVVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C2F0302E98C9CA00BA05A9 /* MVVM.swift */; };
+		04C2F0332E98C9E000BA05A9 /* VIPER.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C2F0322E98C9DF00BA05A9 /* VIPER.swift */; };
 		04CF028C2E8808540083ACF0 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028B2E8808500083ACF0 /* UIButton.swift */; };
 		04CF028E2E8A37BB0083ACF0 /* TextInputStrategies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */; };
 		04CF02902E8A3A160083ACF0 /* UITextViewDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028F2E8A3A0F0083ACF0 /* UITextViewDemoVC.swift */; };
@@ -191,7 +193,6 @@
 		0459211A2E85588C008C8D6A /* DIN-Black-2.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DIN-Black-2.otf"; sourceTree = "<group>"; };
 		0459211B2E85588C008C8D6A /* fonteditor.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = fonteditor.ttf; sourceTree = "<group>"; };
 		0459211C2E85588C008C8D6A /* DS-DIGIB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DS-DIGIB.ttf"; sourceTree = "<group>"; };
-		046CF9722E966357005A88B4 /* MarqueeUsageDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarqueeUsageDemoVC.swift; sourceTree = "<group>"; };
 		046CF9742E9667C8005A88B4 /* UIButtonConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonConfiguration.swift; sourceTree = "<group>"; };
 		046CF9762E967E6B005A88B4 /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		0477D96C2E8B83CA002C6427 /* JobsSafeTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsSafeTransitions.swift; sourceTree = "<group>"; };
@@ -205,6 +206,7 @@
 		0477D9822E8BE9FB002C6427 /* KeyboardObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardObserver.swift; sourceTree = "<group>"; };
 		0477D9842E8BEACA002C6427 /* Reactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reactive.swift; sourceTree = "<group>"; };
 		0477D9862E8BEF62002C6427 /* KeyboardDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDemoVC.swift; sourceTree = "<group>"; };
+		048313FF2E9A08500009A44B /* JobsMarqueeDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsMarqueeDemoVC.swift; sourceTree = "<group>"; };
 		0487AAD92E840CB200B5D307 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		0487AADB2E840EE300B5D307 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		048E376F2E879978004C3A41 /* UIGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIGestureRecognizer.swift; sourceTree = "<group>"; };
@@ -214,6 +216,8 @@
 		04AC74C42E86682D004B8305 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		04AD628E2E9120C000E18984 /* JobsTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsTimer.swift; sourceTree = "<group>"; };
 		04AD62902E9122FC00E18984 /* TimerDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerDemoVC.swift; sourceTree = "<group>"; };
+		04C2F0302E98C9CA00BA05A9 /* MVVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MVVM.swift; sourceTree = "<group>"; };
+		04C2F0322E98C9DF00BA05A9 /* VIPER.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VIPER.swift; sourceTree = "<group>"; };
 		04CF028B2E8808500083ACF0 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputStrategies.swift; sourceTree = "<group>"; };
 		04CF028F2E8A3A0F0083ACF0 /* UITextViewDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextViewDemoVC.swift; sourceTree = "<group>"; };
@@ -347,7 +351,6 @@
 		045920EF2E854C8E008C8D6A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				045920F02E854CA0008C8D6A /* SwiftStandardLibrary.extension */,
 				C564FEEA2E0AAC2B0079B5C1 /* UIKit.extension */,
 			);
 			path = Extensions;
@@ -439,7 +442,9 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
-				046CF9722E966357005A88B4 /* MarqueeUsageDemoVC.swift */,
+				048313FF2E9A08500009A44B /* JobsMarqueeDemoVC.swift */,
+				04C2F0322E98C9DF00BA05A9 /* VIPER.swift */,
+				04C2F0302E98C9CA00BA05A9 /* MVVM.swift */,
 				04D842282E96377A001E8C90 /* JobsOpenDemoVC.swift */,
 				04AD62902E9122FC00E18984 /* TimerDemoVC.swift */,
 				0401DD072E91182900D572AD /* ToastDemoVC.swift */,
@@ -678,6 +683,7 @@
 			children = (
 				04D0C9802E8D19FC00580020 /* iOS.SDK */,
 				04D0C97F2E8D19DE00580020 /* 3rd */,
+				045920F02E854CA0008C8D6A /* SwiftStandardLibrary.extension */,
 			);
 			path = UIKit.extension;
 			sourceTree = "<group>";
@@ -865,7 +871,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		7B3A39613349068F02F6EC3B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -940,8 +947,12 @@
 			);
 			inputFileListPaths = (
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1017,6 +1028,7 @@
 				C564FC9F2E0959640079B5C1 /* UISearchBar.swift in Sources */,
 				0401DCFC2E9102BC00D572AD /* UserDefaults.swift in Sources */,
 				0459210A2E854FFB008C8D6A /* Float16.swift in Sources */,
+				048314002E9A08510009A44B /* JobsMarqueeDemoVC.swift in Sources */,
 				0477D9872E8BEF64002C6427 /* KeyboardDemoVC.swift in Sources */,
 				C564FC932E0959640079B5C1 /* UIToolbarAppearance.swift in Sources */,
 				04CF028C2E8808540083ACF0 /* UIButton.swift in Sources */,
@@ -1025,7 +1037,6 @@
 				045921122E855769008C8D6A /* JobsPaddedLabel.swift in Sources */,
 				0459210C2E855004008C8D6A /* Float80.swift in Sources */,
 				04D0C96E2E8CD14B00580020 /* UIControl.swift in Sources */,
-				046CF9732E966359005A88B4 /* MarqueeUsageDemoVC.swift in Sources */,
 				0477D9712E8B897D002C6427 /* SafetyPushDemoVC.swift in Sources */,
 				C564FCAC2E09597C0079B5C1 /* ViewController.swift in Sources */,
 				C564FC962E0959640079B5C1 /* Inlines.swift in Sources */,
@@ -1039,6 +1050,7 @@
 				C564FC622E0959510079B5C1 /* BaseEnumDefs.swift in Sources */,
 				C564FC972E0959640079B5C1 /* UIActivityIndicatorView.swift in Sources */,
 				C564FCA22E0959640079B5C1 /* UITableView.swift in Sources */,
+				04C2F0332E98C9E000BA05A9 /* VIPER.swift in Sources */,
 				048E37702E87997A004C3A41 /* UIGestureRecognizer.swift in Sources */,
 				C564FC8E2E0959640079B5C1 /* UITabBarController.swift in Sources */,
 				04CF02902E8A3A160083ACF0 /* UITextViewDemoVC.swift in Sources */,
@@ -1051,6 +1063,7 @@
 				04A8C54E2E8AA9F900381701 /* RootListVC.swift in Sources */,
 				C564FC9B2E0959640079B5C1 /* UIStackView.swift in Sources */,
 				043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */,
+				04C2F0312E98C9D000BA05A9 /* MVVM.swift in Sources */,
 				0401DD082E91183000D572AD /* ToastDemoVC.swift in Sources */,
 				04CF03192E8A80CE0083ACF0 /* AppTools.swift in Sources */,
 				04D0C9822E8D1CF400580020 /* Optional.swift in Sources */,

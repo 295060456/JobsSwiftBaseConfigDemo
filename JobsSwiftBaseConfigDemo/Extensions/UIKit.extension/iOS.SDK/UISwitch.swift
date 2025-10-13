@@ -37,10 +37,4 @@ extension UISwitch {
         self.thumbTintColor = color
         return self
     }
-
-    @discardableResult
-    func byEnabled(_ enabled: Bool) -> Self {
-        self.isEnabled = enabled
-        return self
-    }
 }

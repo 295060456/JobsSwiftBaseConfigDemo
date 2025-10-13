@@ -154,10 +154,10 @@ final class PicLoadDemoVC: BaseVC {
         UIButton(type: .system)
             .byCornerRadius(12)
             .byClipsToBounds(true)
-            .byTitle("我是主标题@Kingfisher")
-            .bySubTitle("我是副标题@Kingfisher")
+            .byTitle("我是主标题@Kingfisher").byTitleColor(.red)
+            .bySubTitle("我是副标题@Kingfisher").bySubTitleColor(.yellow)
             .kf_imageURL("https://picsum.photos/300/200")
-            .kf_placeholderImage(nil)
+            .kf_placeholderImage("唐老鸭".img)
             .kf_options([
                 .processor(DownsamplingImageProcessor(size: CGSize(width: 500, height: 200))),
                 .scaleFactor(UIScreen.main.scale),

@@ -26,8 +26,6 @@ public extension UIApplication {
     /// - Parameter preferMainScreen: 是否优先主屏幕（避免拿到外接屏/CarPlay 的 window）
     static func jobsKeyWindow(in scene: UIScene? = nil,
                               preferMainScreen: Bool = true) -> UIWindow? {
-        ensureMainThread()
-
         if #available(iOS 13.0, *) {
             // 选择最合适的 windowScene
             let ws = (scene as? UIWindowScene) ?? bestWindowScene()
@@ -38,7 +36,6 @@ public extension UIApplication {
             return UIApplication.shared.keyWindow
         }
     }
-
     /// ② 顶层“可见 VC”（支持 Nav/Tab/Split/Page/Presented；可选忽略 Alert）
     /// - Parameters:
     ///   - root: 指定起点 VC；默认自动取 rootVC
@@ -49,8 +46,6 @@ public extension UIApplication {
         in scene: UIScene? = nil,
         ignoreAlert: Bool = false
     ) -> UIViewController? {
-        ensureMainThread()
-
         // 1) 确定起点 rootVC
         let rootVC: UIViewController? = {
             if let root { return root }
@@ -96,7 +91,6 @@ public extension UIApplication {
     }
     /// ③ 全局安全区 Insets（不依赖当前 VC）
     static var jobsSafeAreaInsets: UIEdgeInsets {
-        ensureMainThread()
         return jobsKeyWindow()?.safeAreaInsets ?? .zero
     }
     /// ④ 四个边的便捷访问
@@ -151,14 +145,5 @@ private extension UIApplication {
     /// 从 windowScene 取 rootVC（统一入口，供 jobsTopMostVC 使用）
     static func bestRootViewController(in ws: UIWindowScene) -> UIViewController? {
         bestWindow(in: ws, preferMainScreen: true)?.rootViewController
-    }
-}
-// MARK: - 通用小工具
-private extension UIApplication {
-    /// 保证在主线程调用（若不在，则同步切回）
-    static func ensureMainThread() {
-        if !Thread.isMainThread {
-            DispatchQueue.main.sync { }
-        }
     }
 }

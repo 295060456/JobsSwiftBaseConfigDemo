@@ -13,21 +13,21 @@ final class RootListVC: BaseVC {
 
     private let demos: [(title: String, vcType: UIViewController.Type)] = [
         ("ViewController", ViewController.self),
-        ("UITextField Demo", UITextFieldDemoVC.self),
-        ("UITextView Demo", UITextViewDemoVC.self),
-        ("RichText Demo", RichTextDemoVC.self),
-        ("UIButton Demo", UIButtonDemoVC.self),
-        ("SafetyPush Demo", SafetyPushDemoVC.self),
-        ("SafetyPresent Demo", SafetyPresentDemoVC.self),
-        ("JobsCountdown Demo", JobsCountdownDemoVC.self),
-        ("Keyboard Demo", KeyboardDemoVC.self),
-        ("ControlEvents Demo", JobsControlEventsDemoVC.self),
-        ("图片加载Demo", PicLoadDemoVC.self),
-        ("中国大陆公民身份证号码校验 Demo", CNIDDemoVC.self),
-        ("Toast Demo", ToastDemoVC.self),
-        ("Timer Demo", TimerDemoVC.self),
-        ("JobsOpen Demo", JobsOpenDemoVC.self),
-        ("MarqueeUsage Demo", MarqueeUsageDemoVC.self)
+        ("✍️ UITextField Demo", UITextFieldDemoVC.self),
+        ("✍️ UITextView Demo", UITextViewDemoVC.self),
+        ("🌋 RichText Demo", RichTextDemoVC.self),
+        ("🔘 按钮 Demo", UIButtonDemoVC.self),
+        ("⛑️ SafetyPush Demo", SafetyPushDemoVC.self),
+        ("⛑️ SafetyPresent Demo", SafetyPresentDemoVC.self),
+        ("🐎 跑马灯/🛞 轮播图 Demo", JobsMarqueeDemoVC.self),
+        ("💥 JobsCountdown Demo", JobsCountdownDemoVC.self),
+        ("⌨️ 键盘 Demo", KeyboardDemoVC.self),
+        ("🕹️ ControlEvents Demo", JobsControlEventsDemoVC.self),
+        ("🏞️ 图片加载Demo", PicLoadDemoVC.self),
+        ("👮 中国大陆公民身份证号码校验 Demo", CNIDDemoVC.self),
+        ("🏷️ Toast Demo", ToastDemoVC.self),
+        ("⏰ Timer Demo", TimerDemoVC.self),
+        ("🚀 JobsOpen Demo", JobsOpenDemoVC.self)
     ]
 
     private lazy var tableView: UITableView = {

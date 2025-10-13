@@ -47,10 +47,10 @@ final class KeyboardDemoVC: BaseVC {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .systemBackground
         jobsSetupGKNav(
             title: "Keyboard Height Demo"
         )
-        view.backgroundColor = .systemBackground
         textField.byAlpha(1)
         bottomBar.byAlpha(1)
         label.byAlpha(1)

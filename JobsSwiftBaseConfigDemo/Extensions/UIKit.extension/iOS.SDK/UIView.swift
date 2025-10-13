@@ -21,9 +21,29 @@ extension UIView {
         return self
     }
     // MARK: 设置圆角
+    /// 统一圆角：按钮走 UIButton.Configuration 方案，其他视图保持原始 layer 逻辑
     @discardableResult
     func byCornerRadius(_ radius: CGFloat) -> Self {
-        self.layer.cornerRadius = radius
+        let r = max(0, radius)
+        // === 按钮：套用 byBtnCornerRadius 的实现（maskedCorners=nil, isContinuous=true） ===
+        if let btn = self as? UIButton {
+            if #available(iOS 15.0, *), var cfg = btn.configuration {
+                cfg.cornerStyle = .fixed
+                var bg = cfg.background
+                bg.cornerRadius = r
+                cfg.background = bg
+                btn.configuration = cfg
+            }
+            btn.layer.cornerRadius = r
+            if #available(iOS 13.0, *) {
+                btn.layer.cornerCurve = .continuous
+            }
+            // maskedCorners 默认不传（等同 nil），因此这里不改 maskedCorners
+            btn.clipsToBounds = (r > 0)
+            return self
+        }
+        // === 非按钮 ===
+        self.layer.cornerRadius = r
         return self
     }
     // MARK: 裁剪超出边界
@@ -132,6 +152,97 @@ extension UIView {
     @discardableResult
     func byExclusiveTouch(_ enabled: Bool) -> Self {
         self.isExclusiveTouch = enabled
+        return self
+    }
+}
+
+public extension UIView {
+    // ================================== 尺寸（绝对设置） ==================================
+    @discardableResult
+    func bySize(_ size: CGSize) -> Self {
+        frame.size = size
+        return self
+    }
+
+    @discardableResult
+    func bySize(width: CGFloat, height: CGFloat) -> Self {
+        frame.size = CGSize(width: width, height: height)
+        return self
+    }
+
+    @discardableResult
+    func byWidth(_ width: CGFloat) -> Self {
+        var f = frame; f.size.width = width; frame = f
+        return self
+    }
+
+    @discardableResult
+    func byHeight(_ height: CGFloat) -> Self {
+        var f = frame; f.size.height = height; frame = f
+        return self
+    }
+    // ================================== 尺寸（相对偏移叠加） ==================================
+    /// 在当前宽度基础上叠加偏移（正负皆可）
+    @discardableResult
+    func byWidthOffset(_ delta: CGFloat) -> Self {
+        var f = frame; f.size.width += delta; frame = f
+        return self
+    }
+    /// 在当前高度基础上叠加偏移（正负皆可）
+    @discardableResult
+    func byHeightOffset(_ delta: CGFloat) -> Self {
+        var f = frame; f.size.height += delta; frame = f
+        return self
+    }
+    /// 同时对宽高做偏移（正负皆可）
+    @discardableResult
+    func bySizeOffset(width dw: CGFloat = 0, height dh: CGFloat = 0) -> Self {
+        var f = frame; f.size.width += dw; f.size.height += dh; frame = f
+        return self
+    }
+    // ================================== Frame（绝对设置） ==================================
+    @discardableResult
+    func byFrame(x: CGFloat? = nil, y: CGFloat? = nil, width: CGFloat? = nil, height: CGFloat? = nil) -> Self {
+        var f = frame
+        if let x = x { f.origin.x = x }
+        if let y = y { f.origin.y = y }
+        if let w = width { f.size.width = w }
+        if let h = height { f.size.height = h }
+        self.frame = f
+        return self
+    }
+    // ================================== Frame（相对偏移叠加） ==================================
+    /// 在当前 x/y 基础上叠加偏移
+    @discardableResult
+    func byOriginOffset(dx: CGFloat = 0, dy: CGFloat = 0) -> Self {
+        var f = frame; f.origin.x += dx; f.origin.y += dy; frame = f
+        return self
+    }
+    /// 在当前 frame 基础上整体偏移（位置 + 尺寸）
+    @discardableResult
+    func byFrameOffset(dx: CGFloat = 0, dy: CGFloat = 0, dw: CGFloat = 0, dh: CGFloat = 0) -> Self {
+        var f = frame
+        f.origin.x += dx; f.origin.y += dy
+        f.size.width += dw; f.size.height += dh
+        frame = f
+        return self
+    }
+    // ================================== 位置 ==================================
+    @discardableResult
+    func byOrigin(_ point: CGPoint) -> Self {
+        frame.origin = point
+        return self
+    }
+    /// 在当前中心点基础上叠加偏移
+    @discardableResult
+    func byCenterOffset(dx: CGFloat = 0, dy: CGFloat = 0) -> Self {
+        center = CGPoint(x: center.x + dx, y: center.y + dy)
+        return self
+    }
+    // ================================== 外观/其他 ==================================
+    @discardableResult
+    func byBgColor(_ color: UIColor?) -> Self {
+        backgroundColor = color
         return self
     }
 }
