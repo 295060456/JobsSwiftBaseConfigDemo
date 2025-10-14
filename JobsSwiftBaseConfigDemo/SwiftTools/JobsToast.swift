@@ -110,16 +110,19 @@ public extension JobsToast {
     @discardableResult
     static func show(
         text: String,
-        in window: UIWindow? = nil,      // ⚠️ 不用默认参数取 .wd，避免 actor 警告
+        in window: UIWindow? = nil,            // ⚠️ 不用默认取 .wd，避免 actor 警告
         config: Config = .init(),
         tap: ((UIButton) -> Void)? = nil,
-        completion: Completion? = nil
+        completion: Completion? = nil,
+        showDuration: TimeInterval = 0.18,     // ⬅️ 入场动画时长（默认 0.18）
+        showDelay: TimeInterval = 0,
+        showOptions: UIView.AnimationOptions = [.curveEaseOut]
     ) -> JobsToast {
         // 在主线程里安全获取 window
         let targetWindow = window ?? UIWindow.wd
         // 每窗只保留一个
         removeExistingToast(from: targetWindow)
-        // ✅ 这里用链式把原来的两行赋值替换掉，并顺带套用 config & 文案
+        // 构建并上屏
         let toast = JobsToast()
             .byCompletion(completion)
             .byTap(tap)
@@ -127,21 +130,19 @@ public extension JobsToast {
             .byText(text)
             .byAlpha(0)
             .byTransform(CGAffineTransform(scaleX: 0.96, y: 0.96))
-            // 添加到 window。位置：底部安全区上方、居中；限制最大宽
             .byAddTo(targetWindow) { make in
-//                make.centerX.equalToSuperview()
-//                make.bottom.equalTo(targetWindow.safeAreaLayoutGuide.snp.bottom).offset(-config.bottomOffset)
+                // 你当前是居中展示
                 make.center.equalToSuperview()
                 make.width.lessThanOrEqualTo(targetWindow.bounds.width - 40)
             }
-        // 动画显示
-        UIView.animate(withDuration: 0.18, delay: 0, options: [.curveEaseOut]) {
+        // 入场动画（使用参数化时长/延迟/曲线）
+        UIView.animate(withDuration: showDuration, delay: showDelay, options: showOptions) {
             toast.byAlpha(1)
             toast.byTransform(.identity)
         }
-        // 记录（每窗只保留一个）
+        // 记录引用：每窗只保留一个
         objc_setAssociatedObject(targetWindow, &currentToastKey, toast, .OBJC_ASSOCIATION_ASSIGN)
-        // 定时消失
+        // 定时消失（仍用 config.duration 控制停留时长）
         DispatchQueue.main.asyncAfter(deadline: .now() + max(0.15, config.duration)) { [weak toast, weak targetWindow] in
             guard let toast, let targetWindow else { return }
             toast.dismiss(from: targetWindow)

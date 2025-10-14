@@ -9,8 +9,7 @@ import UIKit
 import SnapKit
 
 final class UIAlertDemoVC: BaseVC {
-    // MARK: - Buttons (lazy)
-    /// 1) 最简单的 Alert：OK/Cancel（只要 action 回调）
+    // MARK: 最简单的 Alert：主/副标题 + 取消_确定@按钮行为监听 + 中间弹出 + 点击空白区域不可取消
     private lazy var simpleAlertBtn: UIButton = { [unowned self] in
         UIButton(type: .system)
             .byTitle("① 简单 Alert")
@@ -25,7 +24,7 @@ final class UIAlertDemoVC: BaseVC {
                     .byAddOK { _ in
                         print("OK")
                     }
-                    .byPresent(self)                                 // 注意：byPresent(_ vc:)
+                    .byPresent(self)
             }
             .byAddTo(view) {[unowned self] make in
                 make.top.equalTo(gk_navigationBar.snp.bottom).offset(10) // 占满
@@ -33,7 +32,7 @@ final class UIAlertDemoVC: BaseVC {
                 make.height.equalTo(44)
             }
     }()
-    /// 2) 带输入框的 Alert：用 withAlert 直接拿到 alert 读 textField
+    // MARK: 主/副标题 + 设置背景图（本地/网络）+ 输入框@监听（输入_删除）回调 + 取消_确定@按钮行为监听 + 中间弹出 + 点击空白区域不可取消
     private lazy var textFieldAlertBtn: UIButton = { [unowned self] in
         UIButton(type: .system)
             .byTitle("② 输入框 Alert（读取文本）")
@@ -74,7 +73,7 @@ final class UIAlertDemoVC: BaseVC {
                 make.left.right.height.equalTo(simpleAlertBtn)
             }
     }()
-    /// 3) ActionSheet：自动处理 sheet / iPad（anchor = .auto）
+    // MARK: 主标题 + 相机_相册_取消@按钮行为监听 + 屏幕底部弹出 + 点击空白区域可取消
     private lazy var actionSheetAutoBtn: UIButton = { [unowned self] in
         UIButton(type: .system)
             .byTitle("③ ActionSheet（自动锚点）")
@@ -99,7 +98,7 @@ final class UIAlertDemoVC: BaseVC {
                 make.left.right.height.equalTo(textFieldAlertBtn)
             }
     }()
-    /// 4) ActionSheet：从按钮自身位置弹（明确锚点 .view）
+    // MARK: 主标题 + 删除_取消@按钮行为监听 + 从按钮自身位置（锚点）弹出 + 点击空白区域可取消
     private lazy var actionSheetFromButtonBtn: UIButton = { [unowned self] in
         UIButton(type: .system)
             .byTitle("④ 从当前按钮处弹出")
@@ -138,7 +137,6 @@ final class UIAlertDemoVC: BaseVC {
                         .byAddCancel { _ in
                             print("Cancel tapped")
                         }
-                        .byPreferredActionTitle("删库跑路")
                         .byPresent(self)
                 } else {
                     UIAlertController

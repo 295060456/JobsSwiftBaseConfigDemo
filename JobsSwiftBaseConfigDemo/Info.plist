@@ -2,24 +2,145 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIApplicationSceneManifest</key>
-	<dict>
-		<key>UIApplicationSupportsMultipleScenes</key>
-		<false/>
-		<key>UISceneConfigurations</key>
-		<dict>
-			<key>UIWindowSceneSessionRoleApplication</key>
-			<array>
-				<dict>
-					<key>UISceneConfigurationName</key>
-					<string>Default Configuration</string>
-					<key>UISceneDelegateClassName</key>
-					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
-					<key>UISceneStoryboardFile</key>
-					<string>Main</string>
-				</dict>
-			</array>
-		</dict>
-	</dict>
+
+    <key>UIApplicationSceneManifest</key>
+    <dict>
+        <key>UIApplicationSupportsMultipleScenes</key>
+        <false/>
+        <key>UISceneConfigurations</key>
+        <dict>
+            <key>UIWindowSceneSessionRoleApplication</key>
+            <array>
+                <dict>
+                    <key>UISceneConfigurationName</key>
+                    <string>Default Configuration</string>
+                    <key>UISceneDelegateClassName</key>
+                    <string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+                    <key>UISceneStoryboardFile</key>
+                    <string>Main</string>
+                </dict>
+            </array>
+        </dict>
+    </dict>
+
+    <!-- ====== 相机 / 麦克风 / 相册 ====== -->
+    <key>NSCameraUsageDescription</key>
+    <string>需要访问相机用于拍摄照片或视频。</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>需要访问麦克风用于录音或视频录制。</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>需要访问相册以选择和读取您的照片与视频。</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>需要写入相册以保存您拍摄或编辑的图片/视频。</string>
+
+    <!-- ====== 定位（使用期间 / 始终 / 临时精确） ====== -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>为提供与位置相关的服务，需要在您使用 App 期间访问位置信息。</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>为实现持续定位（导航/地理围栏等），需要在前台与后台访问位置信息。</string>
+    <!-- 兼容旧系统 -->
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>需要在前台与后台访问位置信息以提供完整定位服务。</string>
+    <!-- iOS 14+ 临时“精确定位”用途声明 -->
+    <key>NSLocationTemporaryUsageDescriptionDictionary</key>
+    <dict>
+        <key>NavigationPrecise</key>
+        <string>用于精确导航与路线规划。</string>
+        <key>NearbySearch</key>
+        <string>用于查找附近的服务与设备。</string>
+        <key>ARAnchors</key>
+        <string>用于增强现实场景的精确定位与锚点。</string>
+    </dict>
+
+    <!-- ====== 蓝牙（旧/新） ====== -->
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>需要使用蓝牙以连接或管理附近的设备。</string>
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>需要使用蓝牙以发现、连接或与周边设备通信。</string>
+
+    <!-- ====== 通讯录 / 日历 / 提醒事项 ====== -->
+    <key>NSContactsUsageDescription</key>
+    <string>需要访问通讯录以选择联系人或自动填充信息。</string>
+
+    <!-- iOS 17+：日历完全访问 / 仅写入（与旧键并存以兼容） -->
+    <key>NSCalendarsUsageDescription</key>
+    <string>需要访问日历以读取或写入您的日程。</string>
+    <key>NSCalendarsFullAccessUsageDescription</key>
+    <string>需要完整访问您的日历以读取、创建与修改日程。</string>
+    <key>NSCalendarsWriteOnlyAccessUsageDescription</key>
+    <string>需要向您的日历添加事件（仅写入，不读取已有事件）。</string>
+
+    <!-- iOS 17+：提醒事项完全访问 / 仅写入（与旧键并存以兼容） -->
+    <key>NSRemindersUsageDescription</key>
+    <string>需要访问提醒事项以读取或创建待办。</string>
+    <key>NSRemindersFullAccessUsageDescription</key>
+    <string>需要完整访问提醒事项以读取、创建与修改待办。</string>
+    <key>NSRemindersWriteOnlyAccessUsageDescription</key>
+    <string>需要向提醒事项添加待办（仅写入，不读取已有待办）。</string>
+
+    <!-- ====== 健康 / 运动与健身（HealthKit） ====== -->
+    <key>NSHealthShareUsageDescription</key>
+    <string>需要读取健康数据以提供健康相关功能与分析。</string>
+    <key>NSHealthUpdateUsageDescription</key>
+    <string>需要写入健康数据以记录您的运动或体征。</string>
+    <!-- 临床健康档案（Health Records），需要额外能力 -->
+    <key>NSHealthClinicalHealthRecordsShareUsageDescription</key>
+    <string>需要读取您的临床健康记录以提供相关服务与建议。</string>
+    <key>NSMotionUsageDescription</key>
+    <string>需要访问运动与健身数据（加速度计/步数）以统计与分析活动。</string>
+
+    <!-- ====== 语音 / Siri / Face ID ====== -->
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>需要进行语音识别以将您的语音转换为文本。</string>
+    <key>NSSiriUsageDescription</key>
+    <string>需要使用 Siri 以执行语音指令或快捷操作。</string>
+    <key>NSFaceIDUsageDescription</key>
+    <string>需要使用 Face ID 以快速完成安全验证。</string>
+
+    <!-- ====== 家庭(HomeKit) / 本地网络 / Bonjour ====== -->
+    <key>NSHomeKitUsageDescription</key>
+    <string>需要访问家庭数据以控制或管理您的家庭设备。</string>
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>需要访问本地网络以发现和连接局域网中的设备或服务。</string>
+    <key>NSBonjourServices</key>
+    <array>
+        <!-- 按需添加你真实使用的服务类型；下面是示例 -->
+        <string>_http._tcp.</string>
+        <string>_airplay._tcp.</string>
+        <string>_yourservice._tcp.</string>
+    </array>
+
+    <!-- ====== NFC ====== -->
+    <key>NFCReaderUsageDescription</key>
+    <string>需要使用 NFC 以读取或交互支持的近场标签/设备。</string>
+
+    <!-- ====== Apple Music / 媒体库 ====== -->
+    <key>NSAppleMusicUsageDescription</key>
+    <string>需要访问您的媒体库以读取或播放音乐。</string>
+
+    <!-- ====== 广告跟踪（ATT） ====== -->
+    <key>NSUserTrackingUsageDescription</key>
+    <string>为提供更个性化的内容与广告体验，需要请求跟踪权限；我们不会滥用您的隐私。</string>
+
+    <!-- ====== Nearby Interaction（U1/超宽带） ====== -->
+    <key>NSNearbyInteractionUsageDescription</key>
+    <string>需要使用近距离交互以实现超近距定位与设备交互。</string>
+
+    <!-- ====== TV Provider（视频订阅账户） ====== -->
+    <key>NSVideoSubscriberAccountUsageDescription</key>
+    <string>需要访问您的电视供应商账户以验证订阅并播放内容。</string>
+
+    <!-- ====== 关键提醒（Critical Alerts，需要特权能力） ====== -->
+    <key>NSCriticalAlertsUsageDescription</key>
+    <string>需要发送关键提醒以在静音或勿扰模式下也能通知重要事件。</string>
+
+    <!-- ====== 专注状态共享（Focus Status） ====== -->
+    <key>NSFocusStatusUsageDescription</key>
+    <string>需要读取您的专注状态以在合适的时机发送通知或消息。</string>
+
+    <!-- ====== 暴露通知（Exposure Notification，需要特权能力） ====== -->
+    <key>NSExposureNotificationUsageDescription</key>
+    <string>需要使用暴露通知以提醒可能的接触风险（仅在获得授权的地区与用途下启用）。</string>
+
 </dict>
 </plist>

@@ -1,5 +1,5 @@
 //
-//  UIAlertController+BG.swift
+//  UIAlertController.swift
 //  JobsSwiftBaseConfigDemo
 //
 //  Created by Jobs on 2025/6/16.
@@ -97,13 +97,22 @@ public extension UIAlertController {
     @discardableResult
     func byAddCancel(_ title: String = "取消",
                      _ handler: ((UIAlertAction) -> Void)? = nil) -> Self {
-        byAddAction(title: title, style: .cancel, handler: handler)
+        let action = UIAlertAction(title: title, style: _effectiveCancelStyle, handler: handler)
+        self.addAction(action)
+        if _effectiveCancelStyle == .cancel { self.preferredAction = action }
+        return self
     }
 
     @discardableResult
     func byAddCancel(_ title: String = "取消",
                      _ handler: @escaping (_ alert: UIAlertController, _ action: UIAlertAction) -> Void) -> Self {
-        byAddAction(title: title, style: .cancel, byActionBlock: handler)
+        let action = UIAlertAction(title: title, style: _effectiveCancelStyle) { [weak self] act in
+            guard let alert = self else { return }
+            handler(alert, act)
+        }
+        self.addAction(action)
+        if _effectiveCancelStyle == .cancel { self.preferredAction = action }
+        return self
     }
 
     @discardableResult
@@ -661,5 +670,17 @@ public extension UIAlertController {
             p = cur.superview
         }
         return nil
+    }
+}
+
+private extension UIAlertController {
+    var _isPopoverActionSheet: Bool {
+        return preferredStyle == .actionSheet
+        && (traitCollection.userInterfaceIdiom == .pad
+            || popoverPresentationController != nil)
+    }
+    var _effectiveCancelStyle: UIAlertAction.Style {
+        // 在 iPad 的 actionSheet(popover) 中，.cancel 会被系统隐藏：降级为 .default
+        return _isPopoverActionSheet ? .default : .cancel
     }
 }

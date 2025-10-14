@@ -1342,7 +1342,158 @@ tableView.es.addInfiniteScrolling {
     ```
   
 
-### 3、其他 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 5、💥<font id=Info.plist>火力全开配置`Info.plist`</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  
+    <key>UIApplicationSceneManifest</key>
+    <dict>
+        <key>UIApplicationSupportsMultipleScenes</key>
+        <false/>
+        <key>UISceneConfigurations</key>
+        <dict>
+            <key>UIWindowSceneSessionRoleApplication</key>
+            <array>
+                <dict>
+                    <key>UISceneConfigurationName</key>
+                    <string>Default Configuration</string>
+                    <key>UISceneDelegateClassName</key>
+                    <string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+                    <key>UISceneStoryboardFile</key>
+                    <string>Main</string>
+                </dict>
+            </array>
+        </dict>
+    </dict>
+
+    <!-- ====== 相机 / 麦克风 / 相册 ====== -->
+    <key>NSCameraUsageDescription</key>
+    <string>需要访问相机用于拍摄照片或视频。</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>需要访问麦克风用于录音或视频录制。</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>需要访问相册以选择和读取您的照片与视频。</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>需要写入相册以保存您拍摄或编辑的图片/视频。</string>
+
+    <!-- ====== 定位（使用期间 / 始终 / 临时精确） ====== -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>为提供与位置相关的服务，需要在您使用 App 期间访问位置信息。</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>为实现持续定位（导航/地理围栏等），需要在前台与后台访问位置信息。</string>
+    <!-- 兼容旧系统 -->
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>需要在前台与后台访问位置信息以提供完整定位服务。</string>
+    <!-- iOS 14+ 临时“精确定位”用途声明 -->
+    <key>NSLocationTemporaryUsageDescriptionDictionary</key>
+    <dict>
+        <key>NavigationPrecise</key>
+        <string>用于精确导航与路线规划。</string>
+        <key>NearbySearch</key>
+        <string>用于查找附近的服务与设备。</string>
+        <key>ARAnchors</key>
+        <string>用于增强现实场景的精确定位与锚点。</string>
+    </dict>
+
+    <!-- ====== 蓝牙（旧/新） ====== -->
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>需要使用蓝牙以连接或管理附近的设备。</string>
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>需要使用蓝牙以发现、连接或与周边设备通信。</string>
+
+    <!-- ====== 通讯录 / 日历 / 提醒事项 ====== -->
+    <key>NSContactsUsageDescription</key>
+    <string>需要访问通讯录以选择联系人或自动填充信息。</string>
+
+    <!-- iOS 17+：日历完全访问 / 仅写入（与旧键并存以兼容） -->
+    <key>NSCalendarsUsageDescription</key>
+    <string>需要访问日历以读取或写入您的日程。</string>
+    <key>NSCalendarsFullAccessUsageDescription</key>
+    <string>需要完整访问您的日历以读取、创建与修改日程。</string>
+    <key>NSCalendarsWriteOnlyAccessUsageDescription</key>
+    <string>需要向您的日历添加事件（仅写入，不读取已有事件）。</string>
+
+    <!-- iOS 17+：提醒事项完全访问 / 仅写入（与旧键并存以兼容） -->
+    <key>NSRemindersUsageDescription</key>
+    <string>需要访问提醒事项以读取或创建待办。</string>
+    <key>NSRemindersFullAccessUsageDescription</key>
+    <string>需要完整访问提醒事项以读取、创建与修改待办。</string>
+    <key>NSRemindersWriteOnlyAccessUsageDescription</key>
+    <string>需要向提醒事项添加待办（仅写入，不读取已有待办）。</string>
+
+    <!-- ====== 健康 / 运动与健身（HealthKit） ====== -->
+    <key>NSHealthShareUsageDescription</key>
+    <string>需要读取健康数据以提供健康相关功能与分析。</string>
+    <key>NSHealthUpdateUsageDescription</key>
+    <string>需要写入健康数据以记录您的运动或体征。</string>
+    <!-- 临床健康档案（Health Records），需要额外能力 -->
+    <key>NSHealthClinicalHealthRecordsShareUsageDescription</key>
+    <string>需要读取您的临床健康记录以提供相关服务与建议。</string>
+    <key>NSMotionUsageDescription</key>
+    <string>需要访问运动与健身数据（加速度计/步数）以统计与分析活动。</string>
+
+    <!-- ====== 语音 / Siri / Face ID ====== -->
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>需要进行语音识别以将您的语音转换为文本。</string>
+    <key>NSSiriUsageDescription</key>
+    <string>需要使用 Siri 以执行语音指令或快捷操作。</string>
+    <key>NSFaceIDUsageDescription</key>
+    <string>需要使用 Face ID 以快速完成安全验证。</string>
+
+    <!-- ====== 家庭(HomeKit) / 本地网络 / Bonjour ====== -->
+    <key>NSHomeKitUsageDescription</key>
+    <string>需要访问家庭数据以控制或管理您的家庭设备。</string>
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>需要访问本地网络以发现和连接局域网中的设备或服务。</string>
+    <key>NSBonjourServices</key>
+    <array>
+        <!-- 按需添加你真实使用的服务类型；下面是示例 -->
+        <string>_http._tcp.</string>
+        <string>_airplay._tcp.</string>
+        <string>_yourservice._tcp.</string>
+    </array>
+
+    <!-- ====== NFC ====== -->
+    <key>NFCReaderUsageDescription</key>
+    <string>需要使用 NFC 以读取或交互支持的近场标签/设备。</string>
+
+    <!-- ====== Apple Music / 媒体库 ====== -->
+    <key>NSAppleMusicUsageDescription</key>
+    <string>需要访问您的媒体库以读取或播放音乐。</string>
+
+    <!-- ====== 广告跟踪（ATT） ====== -->
+    <key>NSUserTrackingUsageDescription</key>
+    <string>为提供更个性化的内容与广告体验，需要请求跟踪权限；我们不会滥用您的隐私。</string>
+
+    <!-- ====== Nearby Interaction（U1/超宽带） ====== -->
+    <key>NSNearbyInteractionUsageDescription</key>
+    <string>需要使用近距离交互以实现超近距定位与设备交互。</string>
+
+    <!-- ====== TV Provider（视频订阅账户） ====== -->
+    <key>NSVideoSubscriberAccountUsageDescription</key>
+    <string>需要访问您的电视供应商账户以验证订阅并播放内容。</string>
+
+    <!-- ====== 关键提醒（Critical Alerts，需要特权能力） ====== -->
+    <key>NSCriticalAlertsUsageDescription</key>
+    <string>需要发送关键提醒以在静音或勿扰模式下也能通知重要事件。</string>
+
+    <!-- ====== 专注状态共享（Focus Status） ====== -->
+    <key>NSFocusStatusUsageDescription</key>
+    <string>需要读取您的专注状态以在合适的时机发送通知或消息。</string>
+
+    <!-- ====== 暴露通知（Exposure Notification，需要特权能力） ====== -->
+    <key>NSExposureNotificationUsageDescription</key>
+    <string>需要使用暴露通知以提醒可能的接触风险（仅在获得授权的地区与用途下启用）。</string>
+
+</dict>
+</plist>
+```
+
+### 6、其他 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 👉 [**Swift**](https://developer.apple.com/swift/) 的<u>API 展望（提前声明未来能力）</u>这种机制，**在Objc世界几乎不存在**
 
@@ -1968,8 +2119,6 @@ private lazy var exampleButton: UIButton = {
   ```swift
   sender.disableAfterClick(interval: 2)
   ```
-
-
 
 ### 9、`UIScrollView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -3228,7 +3377,7 @@ private lazy var passwordAccessory: UIToolbar = {
   label.textAlignment = .center
   ```
 
-### 23、对[**SnapKit**]()的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 23、对[**SnapKit**](https://github.com/SnapKit/SnapKit)的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 集成
 
@@ -3902,9 +4051,191 @@ private lazy var countdownButton: UIButton = {
   }
   ```
 
-### 35、条件编译 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 35、弹出窗 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 35.1、`DEBUG` 模式下才允许做的事 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 35.1、**`JobsToast`** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 自定义持续动画时间
+
+  ```swift
+  JobsToast.show(
+      text: "当前控制器销毁成功",
+      config: JobsToast.Config()
+          .byBgColor(.systemGreen.withAlphaComponent(0.9))
+          .byCornerRadius(12)
+          .duration = 2.5       // ⬅️ 停留 2.5s
+  )
+  ```
+
+* 自定义入场动画时间
+
+  ```swift
+  JobsToast.show(
+      text: "已保存",
+      showDuration: 0.30   // ⬅️ 入场动画 0.30s（默认 0.18）
+  )
+  ```
+
+* 自定义事件
+
+  ```swift
+  JobsToast.show(
+      text: "点我重试",
+      tap: { btn in
+          print("用户点击了 Toast 按钮：\(btn)")
+          /// TODO
+      }
+  )
+  ```
+
+#### 35.2、`UIAlertController` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 最简单的 Alert：主/副标题 + 取消_确定@按钮行为监听 + 中间弹出 + 点击空白区域不可取消
+
+  ```swift
+  private lazy var simpleAlert: UIAlertController = {
+      UIAlertController
+          .makeAlert("提示", "这是一条简单提示")
+          .byAddCancel { [weak self] _ in
+              guard let self else { return }
+              print("Cancel")
+              // TODO: 这里写你的取消逻辑
+          }
+          .byAddOK { [weak self] _ in
+              guard let self else { return }
+              print("OK")
+              // TODO: 这里写你的确认逻辑
+          }
+  }()
+  ```
+
+* 最简单的 Alert：主/副标题 + 取消_确定@按钮行为监听 + 中间弹出 + 点击空白区域不可取消
+
+  ```swift
+  private lazy var simpleAlert: UIAlertController = {
+      UIAlertController
+          .makeAlert("重命名", "请输入新的名称")
+  //        .bySDBgImageView("https://picsum.photos/800/600",
+  //                         image: "唐老鸭".img,
+  //                         hideSystemBackdrop: true)
+  //        .byKFBgImageView("https://picsum.photos/800/600",
+  //                         image: "唐老鸭".img,
+  //                         hideSystemBackdrop: true)
+          .byBgImage("唐老鸭".img)                      // 本地图背景（同步阶段，无动画）
+          .byCardBorder(width: 1, color: .systemBlue)   // 外层卡片描边
+          .byAddTextField(placeholder: "新名称",
+                          borderWidth: nil,             // ← 不给 tf 自身描边
+                          borderColor: nil,
+                          cornerRadius: 8) { alert, tf, input, oldText, isDeleting in
+              let ok = alert.actions.first { $0.title == "确定" }
+              ok?.isEnabled = !(tf.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+          }
+          .byTextFieldOuterBorder(at: 0, width: 1, color: .systemBlue, cornerRadius: 10, insets: .init(top: 6, left: 12, bottom: 6, right: 12)) // ← 给灰色容器描边
+          .byAddCancel { _ in                          // ✅ 一个回调（只给 action）
+              print("Cancel tapped")
+          }
+          .byAddOK{ alert, _ in                 // 需要 alert + action 的回调
+              let name = alert.textField(at: 0)?.text ?? ""
+              print("new name =", name)
+          }
+          .byTintColor(.systemBlue)
+          .byPresent(self)
+  }()
+  ```
+
+* 主标题 + 相机/相册/取消@按钮行为监听 + 屏幕底部弹出 + 点击空白区域可取消
+
+  ```swift
+  private lazy var simpleAlert: UIAlertController = {
+      UIAlertController
+          .makeActionSheet("选择来源", nil)
+          .byAddAction(title: "相机") { _ in
+              print("camera")
+          }
+          .byAddAction(title: "相册") { _ in
+              print("photos")
+          }
+          .byAddCancel { _ in
+              print("Cancel tapped")
+          }
+          .byPresent(self)
+  }()
+  ```
+
+* 主标题 + 删除_取消@按钮行为监听 + 从按钮自身位置（锚点）弹出 + 点击空白区域可取消
+
+  ```swift
+  private lazy var simpleAlert: UIAlertController = {
+      UIAlertController
+          .makeActionSheet("操作", nil)
+          .byAddDestructive("删除") { _ in
+              print("delete")
+          }
+          .byAddCancel { _ in
+              print("Cancel tapped")
+          }
+          .byPresent(self, anchor: .view(sender, sender.bounds)) // 指定锚点
+  }()
+  ```
+
+### 36、调用系统设备（内部有鉴权@需配置[**`Info.plist`**](#Info.plist) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 36.1、调用iOS系统相机@照相 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+#if targetEnvironment(simulator)
+  showToast("模拟器无法使用相机"); return
+  #else
+  guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+      showToast("此设备不支持相机"); return
+  }
+  pickFromCamera(allowsEditing: false) { [weak self] img in
+      guard let self else { return }
+      showToast("已拍照 1 张")
+      self.showCameraImage(img)
+  }
+#endif
+```
+
+#### 36.2、调用iOS系统相机@录像 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+#if targetEnvironment(simulator)
+showToast("模拟器无法录制视频"); return
+#else
+MediaPickerService.recordVideo(from: self, maxDuration: 30, quality: .typeHigh) { [weak self] url in
+    guard let self else { return }
+    showToast("已录制 1 段视频")
+    self.showCameraVideo(url)
+}
+#endif
+```
+
+#### 36.3、调用iOS系统相册@选照片 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+/// maxSelection:最大可选
+pickFromPhotoLibrary(maxSelection: imageMaxSelection, imagesOnly: true) { [weak self] imgs in
+    guard let self else { return }
+    showToast(imgs.isEmpty ? "未选择图片" : "已选择 \(imgs.count) 张")
+    self.showAlbumImages(imgs)
+}
+```
+
+#### 36.4、调用iOS系统相册@选视频 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+/// maxSelection:最大可选
+pickVideosFromLibrary(maxSelection: 1) { [weak self] urls in
+    guard let self, let u = urls.first else { return }
+    showToast("已选择 1 个视频")
+    self.showCameraVideo(u)
+}
+```
+
+### 37、条件编译 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 37.1、`DEBUG` 模式下才允许做的事 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 定义
 
@@ -3931,7 +4262,7 @@ private lazy var countdownButton: UIButton = {
   }
   ```
 
-#### 35.2、代码启用（当引入某第三方后）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 37.2、代码启用（当引入某第三方后）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 #if canImport(Kingfisher)

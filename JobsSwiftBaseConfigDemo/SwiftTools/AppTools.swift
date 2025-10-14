@@ -73,3 +73,12 @@ public struct AppLaunchManager {
         return kind
     }
 }
+@MainActor
+ public func showToast(_ text: String) {
+     JobsToast.show(
+         text: text,
+         config: JobsToast.Config()
+             .byBgColor(.systemGreen.withAlphaComponent(0.9))
+             .byCornerRadius(12)
+     )
+}

@@ -21,6 +21,9 @@
 		044272852E8146130084B25C /* JXScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044272842E8146130084B25C /* JXScale.swift */; };
 		04468E102E9CB43E00677000 /* UIAlertAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04468E0F2E9CB43D00677000 /* UIAlertAction.swift */; };
 		04468F8C2E9CFD7700677000 /* UIAlertDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04468F8B2E9CFD6800677000 /* UIAlertDemo.swift */; };
+		04468F8E2E9E4B6300677000 /* PhotoAlbumDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04468F8D2E9E4B5700677000 /* PhotoAlbumDemoVC.swift */; };
+		04468F902E9E4D7000677000 /* PermissionCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04468F8F2E9E4D7000677000 /* PermissionCenter.swift */; };
+		04468F922E9E5A5900677000 /* MediaPickerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04468F912E9E5A5700677000 /* MediaPickerService.swift */; };
 		045920E42E84EC73008C8D6A /* SwiftTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E32E84EC72008C8D6A /* SwiftTools.swift */; };
 		045920E62E84F389008C8D6A /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E52E84F386008C8D6A /* CALayer.swift */; };
 		045920EA2E84FD82008C8D6A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E92E84FD77008C8D6A /* String.swift */; };
@@ -174,6 +177,9 @@
 		044272842E8146130084B25C /* JXScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXScale.swift; sourceTree = "<group>"; };
 		04468E0F2E9CB43D00677000 /* UIAlertAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertAction.swift; sourceTree = "<group>"; };
 		04468F8B2E9CFD6800677000 /* UIAlertDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertDemo.swift; sourceTree = "<group>"; };
+		04468F8D2E9E4B5700677000 /* PhotoAlbumDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumDemoVC.swift; sourceTree = "<group>"; };
+		04468F8F2E9E4D7000677000 /* PermissionCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionCenter.swift; sourceTree = "<group>"; };
+		04468F912E9E5A5700677000 /* MediaPickerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPickerService.swift; sourceTree = "<group>"; };
 		045920E32E84EC72008C8D6A /* SwiftTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTools.swift; sourceTree = "<group>"; };
 		045920E52E84F386008C8D6A /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
 		045920E92E84FD77008C8D6A /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -338,6 +344,8 @@
 		045920E22E84EC64008C8D6A /* SwiftTools */ = {
 			isa = PBXGroup;
 			children = (
+				04468F8F2E9E4D7000677000 /* PermissionCenter.swift */,
+				04468F912E9E5A5700677000 /* MediaPickerService.swift */,
 				04D8422A2E965BA0001E8C90 /* JobsMarqueeView.swift */,
 				04AD628E2E9120C000E18984 /* JobsTimer.swift */,
 				0401DD052E9115CD00D572AD /* JobsToast.swift */,
@@ -446,6 +454,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				04468F8D2E9E4B5700677000 /* PhotoAlbumDemoVC.swift */,
 				04468F8B2E9CFD6800677000 /* UIAlertDemo.swift */,
 				048313FF2E9A08500009A44B /* JobsMarqueeDemoVC.swift */,
 				04C2F0322E98C9DF00BA05A9 /* VIPER.swift */,
@@ -1014,8 +1023,10 @@
 				04D0C9722E8CD39300580020 /* JobsControlEventsDemoVC.swift in Sources */,
 				C564FC8A2E0959640079B5C1 /* UISegmentedControl.swift in Sources */,
 				04D842292E96377B001E8C90 /* JobsOpenDemoVC.swift in Sources */,
+				04468F8E2E9E4B6300677000 /* PhotoAlbumDemoVC.swift in Sources */,
 				0477D9772E8B9381002C6427 /* UIResponder.swift in Sources */,
 				0401DCFA2E90D91900D572AD /* UIWindow.swift in Sources */,
+				04468F922E9E5A5900677000 /* MediaPickerService.swift in Sources */,
 				04E8D5BB2E8E5AD000E85CDA /* CNIDDemoVC.swift in Sources */,
 				C564FC892E0959640079B5C1 /* UICollectionView.swift in Sources */,
 				C564FCB32E0959990079B5C1 /* CustomCell.swift in Sources */,
@@ -1046,6 +1057,7 @@
 				0477D9712E8B897D002C6427 /* SafetyPushDemoVC.swift in Sources */,
 				C564FCAC2E09597C0079B5C1 /* ViewController.swift in Sources */,
 				C564FC962E0959640079B5C1 /* Inlines.swift in Sources */,
+				04468F902E9E4D7000677000 /* PermissionCenter.swift in Sources */,
 				042B67CE2E95085A000A2970 /* NSTextAttachment.swift in Sources */,
 				045920EE2E854BE7008C8D6A /* Double.swift in Sources */,
 				C564FC982E0959640079B5C1 /* NSObject.swift in Sources */,
