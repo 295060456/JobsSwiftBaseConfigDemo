@@ -80,11 +80,24 @@ final class UITextViewDemoVC: BaseVC, HasDisposeBag {
             .bySelectable(true)
             .byTextContainerInset(UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10))
             .byRoundedBorder(color: .systemGray4, width: 1, radius: 8)
+            .onChange { tv, input, old, isDeleting in
+                let new = tv.text ?? ""
+                print("✏️ input='\(input)' old='\(old)' new='\(new)' deleting=\(isDeleting)")
+
+                // 示例：长度 6~20 视为“有效”，边框变绿，否则红
+                let ok = (6...20).contains(new.count)
+                tv.layer.borderWidth = 1
+                tv.layer.borderColor = (ok ? UIColor.systemGreen : UIColor.systemRed).cgColor
+                tv.layer.masksToBounds = true
+                if #available(iOS 13.0, *) { tv.layer.cornerCurve = .continuous }
+            }
+            .onBackspace { tv in
+                print("👈 backspace: len=\(tv.text?.count ?? 0)")
+            }
 
         stack.addArrangedSubview(tv)
         tv.snp.makeConstraints { $0.height.equalTo(100) }
     }
-
     // MARK: - 2️⃣ 金额输入演示
     private func demo_RxTextInput() {
         addSectionTitle("2️⃣ 金额输入（formatter + validator + maxLength）")
@@ -113,7 +126,6 @@ final class UITextViewDemoVC: BaseVC, HasDisposeBag {
         })
         .disposed(by: rx.disposeBag)
     }
-
     // MARK: - 3️⃣ 手机号输入演示
     private func demo_PhoneInput() {
         addSectionTitle("3️⃣ 手机号输入（3-4-4 分组 + 11 位校验）")
@@ -144,22 +156,20 @@ final class UITextViewDemoVC: BaseVC, HasDisposeBag {
     // MARK: - 4️⃣ 富文本 + 链接样式 + DataDetector（改红色）
     private func demo_AttrAndLink() {
         addSectionTitle("4️⃣ 富文本 + 链接样式 + DataDetector（上：默认蓝｜下：自定义红）")
-        // ===== ① 默认蓝色（不设置 linkTextAttributes）=====
-        let attrBlue = NSMutableAttributedString(
-            string: "🔗 默认蓝色链接（系统样式）：",
-            attributes: [.font: UIFont.systemFont(ofSize: 15),
-                         .foregroundColor: UIColor.secondaryLabel]
-        ).add(NSAttributedString(
-            string: " Apple 官网",
-            attributes: [.link: URL(string: "https://www.apple.com")!,
-                         .font: UIFont.boldSystemFont(ofSize: 16)]
-        )).add(NSAttributedString(
-            string: "\n客服电话：400-123-4567",
-            attributes: [.font: UIFont.systemFont(ofSize: 15)]
-        ))
-
         let tvBlue = UITextView()
-            .byAttributedText(attrBlue)
+            // ===== ① 默认蓝色（不设置 linkTextAttributes）=====
+            .byAttributedText(NSMutableAttributedString(
+                string: "🔗 默认蓝色链接（系统样式）：",
+                attributes: [.font: UIFont.systemFont(ofSize: 15),
+                             .foregroundColor: UIColor.secondaryLabel]
+            ).add(NSAttributedString(
+                string: " Apple 官网",
+                attributes: [.link: URL(string: "https://www.apple.com")!,
+                             .font: UIFont.boldSystemFont(ofSize: 16)]
+            )).add(NSAttributedString(
+                string: "\n客服电话：400-123-4567",
+                attributes: [.font: UIFont.systemFont(ofSize: 15)]
+            )))
             .byEditable(false)
             .bySelectable(true)
             .byDataDetectorTypes([.link, .phoneNumber])          // 链接/电话自动识别
@@ -168,22 +178,20 @@ final class UITextViewDemoVC: BaseVC, HasDisposeBag {
         stack.addArrangedSubview(tvBlue)
         tvBlue.snp.makeConstraints { $0.height.equalTo(110) }
 
-        // ===== ② 自定义红色（用 linkTextAttributes 统一改红）=====
-        let attrRed = NSMutableAttributedString(
-            string: "🔴 自定义红色链接：",
-            attributes: [.font: UIFont.systemFont(ofSize: 15),
-                         .foregroundColor: UIColor.secondaryLabel]
-        ).add(NSAttributedString(
-            string: " Jobs 官网",
-            attributes: [.link: URL(string: "https://www.google.com")!,
-                         .font: UIFont.boldSystemFont(ofSize: 16)]
-        )).add(NSAttributedString(
-            string: "\n客服电话：400-123-4567",
-            attributes: [.font: UIFont.systemFont(ofSize: 15)]
-        ))
-
         let tvRed = UITextView()
-            .byAttributedText(attrRed)
+        // ===== ② 自定义红色（用 linkTextAttributes 统一改红）=====
+            .byAttributedText(NSMutableAttributedString(
+                string: "🔴 自定义红色链接：",
+                attributes: [.font: UIFont.systemFont(ofSize: 15),
+                             .foregroundColor: UIColor.secondaryLabel]
+            ).add(NSAttributedString(
+                string: " Jobs 官网",
+                attributes: [.link: URL(string: "https://www.google.com")!,
+                             .font: UIFont.boldSystemFont(ofSize: 16)]
+            )).add(NSAttributedString(
+                string: "\n客服电话：400-123-4567",
+                attributes: [.font: UIFont.systemFont(ofSize: 15)]
+            )))
             .byEditable(false)
             .bySelectable(true)
             .byDataDetectorTypes([.link, .phoneNumber])

@@ -13,10 +13,11 @@
     import UIKit
 #endif
 
-import RxSwift
-import RxCocoa
 import ObjectiveC
 
+import RxSwift
+import RxCocoa
+import NSObject_Rx
 // MARK: 键盘按键行为监听
 public extension Reactive where Base: UITextField {
     /// 每次按下删除键都会触发（空文本时也会触发）

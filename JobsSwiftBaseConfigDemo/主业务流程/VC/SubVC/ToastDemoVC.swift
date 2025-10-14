@@ -39,7 +39,7 @@ final class ToastDemoVC: BaseVC {
                     if let last {
                         make.top.equalTo(last.snp.bottom).offset(vSpacing)
                     } else {
-                        make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(24)
+                        make.top.equalTo(gk_navigationBar.snp.bottom).offset(10) // 占满
                     }
                     make.left.right.equalToSuperview().inset(sideInset)
                     make.height.equalTo(btnHeight)

@@ -35,6 +35,16 @@ extension Then where Self: AnyObject {
         block(self); return self
     }
 }
+
+public extension UIAccessibilityIdentification where Self: AnyObject {
+    /// 链式设置 `accessibilityIdentifier`
+    @MainActor
+    @discardableResult
+    func byAccessibilityIdentifier(_ id: String?) -> Self {
+        self.accessibilityIdentifier = id
+        return self
+    }
+}
 // MARK: - 延迟执行
 public protocol JobsAsyncable: AnyObject {}
 public extension JobsAsyncable {

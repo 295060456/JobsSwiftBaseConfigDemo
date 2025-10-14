@@ -9,6 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import SnapKit
+import NSObject_Rx
 
 final class KeyboardDemoVC: BaseVC {
 

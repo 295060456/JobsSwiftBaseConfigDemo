@@ -13,9 +13,7 @@ import AppKit
 import UIKit
 #endif
 
-import GKNavigationBarSwift
 import ObjectiveC
-
 // ================================== UIViewController 链式扩展 ==================================
 @MainActor
 public extension UIViewController {
@@ -32,7 +30,6 @@ public extension UIViewController {
         self.view.backgroundColor = color
         return self
     }
-
     // ================================== Segue ==================================
     @discardableResult
     func byPerformSegue(_ identifier: String, sender: Any? = nil) -> Self {
@@ -66,7 +63,6 @@ public extension UIViewController {
         return self
     }
     */
-
     /// 统一语义化 dismiss
     @discardableResult
     func byDismiss(animated: Bool = true,
@@ -74,7 +70,6 @@ public extension UIViewController {
         self.dismiss(animated: animated, completion: completion)
         return self
     }
-
     // ================================== Modal 属性 ==================================
     @discardableResult
     func byModalPresentationStyle(_ style: UIModalPresentationStyle) -> Self {
@@ -101,7 +96,6 @@ public extension UIViewController {
         self.transitioningDelegate = delegate
         return self
     }
-
     // ================================== Content Size / Layout ==================================
     @discardableResult
     func byPreferredContentSize(_ size: CGSize) -> Self {
@@ -134,7 +128,6 @@ public extension UIViewController {
         }
         return self
     }
-
     // ================================== show / showDetail（安全命名） ==================================
     @discardableResult
     func byShow(_ vc: UIViewController, sender: Any? = nil) -> Self {
@@ -147,7 +140,6 @@ public extension UIViewController {
         self.showDetailViewController(vc, sender: sender)
         return self
     }
-
     // ================================== 状态栏 / 外观 ==================================
     @discardableResult
     func byOverrideUserInterfaceStyle(_ style: UIUserInterfaceStyle) -> Self {
@@ -166,7 +158,6 @@ public extension UIViewController {
         assertionFailure("请在子类中 override preferredStatusBarStyle 实现此功能")
         return self
     }
-
     // ================================== 子控制器管理 ==================================
     @discardableResult
     func addChildVC(_ child: UIViewController,
@@ -199,7 +190,6 @@ public extension UIViewController {
     }
 
     var jobs_hasParent: Bool { self.parent != nil }
-
     // ================================== 滚动联动（iOS15+） ==================================
     @available(iOS 15.0, *)
     @discardableResult
@@ -212,7 +202,6 @@ public extension UIViewController {
     var jobs_contentScrollViewTop: UIScrollView? {
         self.contentScrollView(for: .top)
     }
-
     // ================================== 焦点 / 交互追踪（TV / iOS 15+） ==================================
     @available(iOS 15.0, *)
     @discardableResult
@@ -227,7 +216,6 @@ public extension UIViewController {
         self.interactionActivityTrackingBaseName = name
         return self
     }
-
     // ================================== iOS 26+ 属性更新批 ==================================
     @available(iOS 26.0, *)
     @discardableResult
@@ -243,8 +231,9 @@ public extension UIViewController {
         return self
     }
 }
-
 // ================================== GKNavigationBarSwift 包装 ==================================
+#if canImport(GKNavigationBarSwift)
+import GKNavigationBarSwift
 public extension UIViewController {
     func jobsSetupGKNav(
         title: String,
@@ -307,7 +296,7 @@ public extension UIViewController {
             }
     }
 }
-
+#endif
 // ================================== 数据传递 + 出现完成回调 ==================================
 private enum JobsAssocKey {
     static var inputData: UInt8 = 0
@@ -351,7 +340,6 @@ public extension UIViewController {
         else { dismiss(animated: animated) }
         return self
     }
-
     // ✅ 出现完成（push/present 结束）的一次性回调
     @discardableResult
     func byCompletion(_ block: @escaping () -> Void) -> Self {
@@ -378,10 +366,8 @@ public extension UIViewController {
         // print("✅ [JobsAppearCompletion] fired by \(reason) for \(self)")
     }
 }
-
 // `viewDidAppear` swizzle：出现完成时机
 private enum _JobsAppearSwizzleOnceToken { static var done = false }
-
 private extension UIViewController {
     final class _JobsAppearSwizzler {
         static func installIfNeeded() {
@@ -401,7 +387,6 @@ private extension UIViewController {
         self.jobs_fireAppearCompletionIfNeeded(reason: "viewDidAppear")
     }
 }
-
 // ================================== 链式导航（去重） ==================================
 public enum JobsPresentPolicy {
     case ignoreIfBusy
@@ -428,7 +413,6 @@ public extension UIViewController {
             }
             return self
         }
-
         // 没导航 → 包一层 present
         guard self.parent == nil else { return self }
         if host.transitionCoordinator != nil || host.presentedViewController != nil { return self }
@@ -450,20 +434,17 @@ public extension UIViewController {
                    policy: JobsPresentPolicy = .ignoreIfBusy,
                    completion: (() -> Void)? = nil) -> Self {
         assert(Thread.isMainThread, "byPresent must be called on main thread")
-
         // 目标不能已挂载 / 正在展示
         guard self.parent == nil, self.presentingViewController == nil else {
             assertionFailure("❌ Trying to present a VC already mounted/presented: \(self)")
             return self
         }
-
         // 宿主选择
         guard var host = from?.jobsNearestVC() ?? UIWindow.wd.rootViewController else {
             assertionFailure("❌ byPresent: no host VC"); return self
         }
         if let top = UIApplication.jobsTopMostVC(from: host, ignoreAlert: true) { host = top }
         guard host.viewIfLoaded?.window != nil, host.isBeingDismissed == false else { return self }
-
         // 策略
         switch policy {
         case .ignoreIfBusy:
@@ -475,12 +456,10 @@ public extension UIViewController {
             while let top = UIApplication.jobsTopMostVC(from: host, ignoreAlert: true),
                   top.isBeingDismissed == false, top !== host { host = top }
         }
-
         // 防自己 present 自己
         guard host !== self else {
             assertionFailure("❌ Don't present self on self"); return self
         }
-
         // 系统 present；完成时触发一次（与 viewDidAppear 幂等）
         host.present(self, animated: animated) { [weak self] in
             completion?()
@@ -489,3 +468,70 @@ public extension UIViewController {
         return self
     }
 }
+#if canImport(SnapKit)
+import SnapKit
+/// 利用SnapKit 给 UIViewController 加背景图（UIImageView）
+public extension UIViewController {
+    // MARK: - AO Key（UInt8 哨兵）
+    private struct _JobsAssocKeys {
+        static var imageView: UInt8 = 0
+    }
+    // MARK: - 懒载 imageView（挂在 VC 上）
+    var jobsImageView: UIImageView {
+        if let iv = objc_getAssociatedObject(self, &_JobsAssocKeys.imageView) as? UIImageView {
+            return iv
+        }
+        let iv = UIImageView().byUserInteractionEnabled(false).byClipsToBounds(true).byContentMode(.scaleAspectFill)
+        objc_setAssociatedObject(self, &_JobsAssocKeys.imageView, iv, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        return iv
+    }
+    // MARK: - 安装并约束（默认铺满 Safe Area）
+    @discardableResult
+    func bgImageView(
+        to container: UIView? = nil,
+        contentMode: UIView.ContentMode = .scaleAspectFill,
+        backgroundColor: UIColor? = nil,
+        remakeConstraints: Bool = true,
+        layout: ((ConstraintMaker) -> Void)? = nil
+    ) -> UIImageView {
+        let holder = container ?? view
+        let iv = jobsImageView
+        if iv.superview !== holder {
+            iv.removeFromSuperview()
+            holder?.addSubview(iv)
+        }
+
+        iv.contentMode = contentMode
+        if let bg = backgroundColor { iv.backgroundColor = bg }
+
+        if let layout = layout {
+            if remakeConstraints { iv.snp.remakeConstraints(layout) }
+            else { iv.snp.makeConstraints(layout) }
+        } else {
+            if remakeConstraints {
+                iv.snp.remakeConstraints { make in
+                    if let holder = holder {
+                        make.edges.equalTo(holder.safeAreaLayoutGuide)
+                    } else {
+                        make.edges.equalToSuperview()
+                    }
+                }
+            } else {
+                iv.snp.makeConstraints { make in
+                    if let holder = holder {
+                        make.edges.equalTo(holder.safeAreaLayoutGuide)
+                    } else {
+                        make.edges.equalToSuperview()
+                    }
+                }
+            }
+        }
+        view.sendSubviewToBack(iv)
+        return iv
+    }
+    // MARK: - 卸载
+    func removeJobsImageView() {
+        jobsImageView.removeFromSuperview()
+    }
+}
+#endif

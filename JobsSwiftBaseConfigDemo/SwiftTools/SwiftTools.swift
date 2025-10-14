@@ -6,6 +6,13 @@
 //
 
 import Foundation
+
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
+import UIKit
+#endif
+
 // MARK: - 扩展 Int 与 JXAuthCode 的比较
 public func ==(lhs: Int?, rhs: JXAuthCode) -> Bool {
     guard let lhs = lhs else { return false }
@@ -391,7 +398,7 @@ public enum JobsLog {
 }
 // MARK: - 全局函数（免前缀）
 @inline(__always)
-public func log(_ items: Any...,
+public func log(_ items: Any?...,
                 level: JobsLog.Level = .plain,
                 mode: JobsLog.Mode = .auto,
                 prettyJSON: Bool = true,
@@ -425,4 +432,17 @@ func onMainSync<T>(_ work: () -> T) -> T {
     var result: T!
     DispatchQueue.main.sync { result = work() }
     return result
+}
+// MARK: - 私有：蓝色占位图（1x1）
+// 统一的纯色占位（1×1）；需要更大就改 size
+ func jobsSolidBlue(
+    color: UIColor = .systemBlue,
+    size: CGSize = .init(width: 1, height: 1),
+    scale: CGFloat = 0
+) -> UIImage {
+    let fmt = UIGraphicsImageRendererFormat.default(); fmt.scale = scale
+    return UIGraphicsImageRenderer(size: size, format: fmt).image { ctx in
+        color.setFill()
+        ctx.fill(CGRect(origin: .zero, size: size))
+    }
 }

@@ -153,7 +153,10 @@ public extension UILongPressGestureRecognizer {
 
 public extension UIPanGestureRecognizer {
     @discardableResult func byMinTouches(_ n: Int) -> Self { minimumNumberOfTouches = n; return self }
-    @discardableResult func byMaxTouches(_ n: Int) -> Self { maximumNumberOfTouches = n; return self }
+    @discardableResult func byMaxTouches(_ n: Int) -> Self {
+        if maximumNumberOfTouches != Int.max {maximumNumberOfTouches = n;}
+        return self
+    }
 }
 
 public extension UISwipeGestureRecognizer {

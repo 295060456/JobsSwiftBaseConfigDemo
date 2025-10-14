@@ -6,9 +6,10 @@
 //
 
 import UIKit
+import ObjectiveC
 import RxSwift
 import RxCocoa
-import ObjectiveC
+import NSObject_Rx
 
 final class KeyboardObserver {
     static let shared = KeyboardObserver()

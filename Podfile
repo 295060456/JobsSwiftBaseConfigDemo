@@ -70,6 +70,7 @@ def swiftAppCommon
   pod 'RxRelay'                            # https://cocoapods.org/pods/RxRelay                ❤️ 安全替代 Variable，常用于 ViewModel
   pod 'NSObject+Rx'                        # https://github.com/RxSwiftCommunity/NSObject-Rx   ❤️
   pod 'ESPullToRefresh'                    # https://github.com/eggswift/pull-to-refresh       ❤️ Swift平台上的MJRefresh平替
+  pod 'JXBanner'                           # https://github.com/Coder-TanJX/JXBanner           ❤️ Swift平台上的轮播图
 end
 
 # 调试框架

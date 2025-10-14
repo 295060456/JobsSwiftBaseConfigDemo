@@ -19,6 +19,8 @@
 		043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */; };
 		0442717B2E8139CF0084B25C /* ColorAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0442717A2E8139CF0084B25C /* ColorAssets.xcassets */; };
 		044272852E8146130084B25C /* JXScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044272842E8146130084B25C /* JXScale.swift */; };
+		04468E102E9CB43E00677000 /* UIAlertAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04468E0F2E9CB43D00677000 /* UIAlertAction.swift */; };
+		04468F8C2E9CFD7700677000 /* UIAlertDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04468F8B2E9CFD6800677000 /* UIAlertDemo.swift */; };
 		045920E42E84EC73008C8D6A /* SwiftTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E32E84EC72008C8D6A /* SwiftTools.swift */; };
 		045920E62E84F389008C8D6A /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E52E84F386008C8D6A /* CALayer.swift */; };
 		045920EA2E84FD82008C8D6A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E92E84FD77008C8D6A /* String.swift */; };
@@ -170,6 +172,8 @@
 		043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProtocolDefs.swift; sourceTree = "<group>"; };
 		0442717A2E8139CF0084B25C /* ColorAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ColorAssets.xcassets; sourceTree = "<group>"; };
 		044272842E8146130084B25C /* JXScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXScale.swift; sourceTree = "<group>"; };
+		04468E0F2E9CB43D00677000 /* UIAlertAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertAction.swift; sourceTree = "<group>"; };
+		04468F8B2E9CFD6800677000 /* UIAlertDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertDemo.swift; sourceTree = "<group>"; };
 		045920E32E84EC72008C8D6A /* SwiftTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTools.swift; sourceTree = "<group>"; };
 		045920E52E84F386008C8D6A /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
 		045920E92E84FD77008C8D6A /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -442,6 +446,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				04468F8B2E9CFD6800677000 /* UIAlertDemo.swift */,
 				048313FF2E9A08500009A44B /* JobsMarqueeDemoVC.swift */,
 				04C2F0322E98C9DF00BA05A9 /* VIPER.swift */,
 				04C2F0302E98C9CA00BA05A9 /* MVVM.swift */,
@@ -487,6 +492,7 @@
 		04D0C9802E8D19FC00580020 /* iOS.SDK */ = {
 			isa = PBXGroup;
 			children = (
+				04468E0F2E9CB43D00677000 /* UIAlertAction.swift */,
 				046CF9762E967E6B005A88B4 /* URL.swift */,
 				046CF9742E9667C8005A88B4 /* UIButtonConfiguration.swift */,
 				042B67CD2E950858000A2970 /* NSTextAttachment.swift */,
@@ -1047,12 +1053,14 @@
 				045920E42E84EC73008C8D6A /* SwiftTools.swift in Sources */,
 				045920EA2E84FD82008C8D6A /* String.swift in Sources */,
 				045920F82E854F91008C8D6A /* Int32.swift in Sources */,
+				04468F8C2E9CFD7700677000 /* UIAlertDemo.swift in Sources */,
 				C564FC622E0959510079B5C1 /* BaseEnumDefs.swift in Sources */,
 				C564FC972E0959640079B5C1 /* UIActivityIndicatorView.swift in Sources */,
 				C564FCA22E0959640079B5C1 /* UITableView.swift in Sources */,
 				04C2F0332E98C9E000BA05A9 /* VIPER.swift in Sources */,
 				048E37702E87997A004C3A41 /* UIGestureRecognizer.swift in Sources */,
 				C564FC8E2E0959640079B5C1 /* UITabBarController.swift in Sources */,
+				04468E102E9CB43E00677000 /* UIAlertAction.swift in Sources */,
 				04CF02902E8A3A160083ACF0 /* UITextViewDemoVC.swift in Sources */,
 				045921022E854FDA008C8D6A /* UInt16.swift in Sources */,
 				C564FCAB2E09597C0079B5C1 /* VC2.swift in Sources */,

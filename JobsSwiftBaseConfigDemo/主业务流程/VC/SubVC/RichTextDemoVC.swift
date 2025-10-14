@@ -413,9 +413,28 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
                         racCustomerAlert: Bool = false) {
         if url.scheme == "click", url.host == "customer" {
             if racCustomerAlert {
-                let ac = UIAlertController(title: "RAC 点击", message: "点了：专属客服", preferredStyle: .alert)
-                ac.addAction(UIAlertAction(title: "确定", style: .default))
-                vc.present(ac, animated: true)
+                UIAlertController
+                    .makeAlert("重命名", "请输入新的名称")
+                    .byAddTextField(placeholder: "新名称") { alert, tf, input, oldText, isDeleting in
+                        log("━━━━━━━━━━━━━━━━━━━━")
+                        log("旧文本 = ",oldText)
+                        log("新文本 = ",tf.text)
+                        log("本次输入 = ",input)
+                        log("是否删除  = ",isDeleting)
+
+                        let ok = alert.actions.first { $0.title == "确定" }
+                        ok?.isEnabled = !tf.text!.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    }
+                    .byAddCancel { _ in                          // ✅ 一个回调（只给 action）
+                        print("Cancel tapped")
+                    }                                 // 可省略回调
+                    .byAddOK{ alert, _ in                   // 需要拿到 alert 时用 withAlert
+                        let name = alert.textField(at: 0)?.text ?? ""
+                        print("new name =", name)
+                    }
+                    .byTintColor(.systemBlue)
+                    .byPresent(vc)
+
             }
             return
         }

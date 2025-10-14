@@ -15,12 +15,24 @@
 import ObjectiveC
 // MARK: 语法糖🍬
 extension UIView {
+    // MARK: 设置UI
     @discardableResult
-    func byBgColor(_ color: UIColor) -> Self {
-        self.backgroundColor = color
+    func byBgColor(_ color: UIColor?) -> Self {
+        backgroundColor = color
         return self
     }
-    // MARK: 设置圆角
+
+    @discardableResult
+    func byHidden(_ hidden: Bool) -> Self {
+        isHidden = hidden
+        return self
+    }
+
+    @discardableResult
+    func byAlpha(_ a: CGFloat) -> Self {
+        alpha = a
+        return self
+    }
     /// 统一圆角：按钮走 UIButton.Configuration 方案，其他视图保持原始 layer 逻辑
     @discardableResult
     func byCornerRadius(_ radius: CGFloat) -> Self {
@@ -46,118 +58,90 @@ extension UIView {
         self.layer.cornerRadius = r
         return self
     }
-    // MARK: 裁剪超出边界
+    // MARK: 设置Layer
+    /// 裁剪超出边界
     @discardableResult
     func byClipsToBounds(_ enabled: Bool = true) -> Self {
-        self.clipsToBounds = enabled
+        clipsToBounds = enabled
         return self
     }
 
     @discardableResult
     func byMasksToBounds(_ masksToBounds: Bool) -> Self {
-        self.layer.masksToBounds = masksToBounds
+        layer.masksToBounds = masksToBounds
         return self
     }
 
     @discardableResult
     func byBorderColor(_ color: UIColor) -> Self {
-        self.layer.borderColor = color.cgColor
+        layer.borderColor = color.cgColor
         return self
     }
 
     @discardableResult
     func byBorderWidth(_ width: CGFloat) -> Self {
-        self.layer.borderWidth = width
+        layer.borderWidth = width
         return self
     }
-
-    @discardableResult
-    func byHidden(_ hidden: Bool) -> Self {
-        self.isHidden = hidden
-        return self
-    }
-
-    @discardableResult
-    func byAlpha(_ alpha: CGFloat) -> Self {
-        self.alpha = alpha
-        return self
-    }
-
-    @discardableResult
-    func byTag(_ tag: Int) -> Self {
-        self.tag = tag
-        return self
-    }
-
-    @discardableResult
-    func byUserInteractionEnabled(_ enabled: Bool) -> Self {
-        self.isUserInteractionEnabled = enabled
-        return self
-    }
-}
-// MARK: - UIView · Geometry / Transform / Scale / Touch
-extension UIView {
+    // MARK: - UIView · Geometry / Transform / Scale / Touch
     /// 几何
     @discardableResult
-    func byFrame(_ frame: CGRect) -> Self {
-        self.frame = frame
+    func byFrame(_ f: CGRect) -> Self {
+        frame = f
         return self
     }
 
     @discardableResult
-    func byBounds(_ bounds: CGRect) -> Self {
-        self.bounds = bounds
+    func byBounds(_ b: CGRect) -> Self {
+        bounds = b
         return self
     }
 
     @discardableResult
-    func byCenter(_ center: CGPoint) -> Self {
-        self.center = center
+    func byCenter(_ c: CGPoint) -> Self {
+        center = c
         return self
     }
     /// 2D/3D 变换
     @discardableResult
-    func byTransform(_ transform: CGAffineTransform) -> Self {
-        self.transform = transform
+    func byTransform(_ transf: CGAffineTransform) -> Self {
+        transform = transf
         return self
     }
 
     @available(iOS 13.0, *)
     @discardableResult
     func byTransform3D(_ t3d: CATransform3D) -> Self {
-        self.transform3D = t3d
+        transform3D = t3d
         return self
     }
     /// 缩放因子（渲染分辨率）
     @available(iOS 4.0, *)
     @discardableResult
     func byContentScaleFactor(_ scale: CGFloat) -> Self {
-        self.contentScaleFactor = scale
+        contentScaleFactor = scale
         return self
     }
     /// 锚点（注意：会影响 frame，需要配合 position/center 调整）
     @available(iOS 16.0, *)
     @discardableResult
     func byAnchorPoint(_ anchor: CGPoint) -> Self {
-        self.anchorPoint = anchor
+        anchorPoint = anchor
         return self
     }
     /// 触摸行为
     @discardableResult
     func byMultipleTouchEnabled(_ enabled: Bool) -> Self {
-        self.isMultipleTouchEnabled = enabled
+        isMultipleTouchEnabled = enabled
         return self
     }
 
     @discardableResult
     func byExclusiveTouch(_ enabled: Bool) -> Self {
-        self.isExclusiveTouch = enabled
+        isExclusiveTouch = enabled
         return self
     }
-}
-
-public extension UIView {
-    // ================================== 尺寸（绝对设置） ==================================
+    // MARK: 尺寸@绝对设置
     @discardableResult
     func bySize(_ size: CGSize) -> Self {
         frame.size = size
@@ -181,7 +165,7 @@ public extension UIView {
         var f = frame; f.size.height = height; frame = f
         return self
     }
-    // ================================== 尺寸（相对偏移叠加） ==================================
+    // MARK: 尺寸@相对偏移叠加
     /// 在当前宽度基础上叠加偏移（正负皆可）
     @discardableResult
     func byWidthOffset(_ delta: CGFloat) -> Self {
@@ -200,7 +184,7 @@ public extension UIView {
         var f = frame; f.size.width += dw; f.size.height += dh; frame = f
         return self
     }
-    // ================================== Frame（绝对设置） ==================================
+    // MARK: Frame@绝对设置
     @discardableResult
     func byFrame(x: CGFloat? = nil, y: CGFloat? = nil, width: CGFloat? = nil, height: CGFloat? = nil) -> Self {
         var f = frame
@@ -208,10 +192,10 @@ public extension UIView {
         if let y = y { f.origin.y = y }
         if let w = width { f.size.width = w }
         if let h = height { f.size.height = h }
-        self.frame = f
+        frame = f
         return self
     }
-    // ================================== Frame（相对偏移叠加） ==================================
+    // MARK: Frame@相对偏移叠加
     /// 在当前 x/y 基础上叠加偏移
     @discardableResult
     func byOriginOffset(dx: CGFloat = 0, dy: CGFloat = 0) -> Self {
@@ -227,7 +211,7 @@ public extension UIView {
         frame = f
         return self
     }
-    // ================================== 位置 ==================================
+    // MARK: 位置
     @discardableResult
     func byOrigin(_ point: CGPoint) -> Self {
         frame.origin = point
@@ -239,15 +223,7 @@ public extension UIView {
         center = CGPoint(x: center.x + dx, y: center.y + dy)
         return self
     }
-    // ================================== 外观/其他 ==================================
-    @discardableResult
-    func byBgColor(_ color: UIColor?) -> Self {
-        backgroundColor = color
-        return self
-    }
-}
-// MARK: - UIView · Subview Hierarchy
-extension UIView {
+    // MARK: - UIView · Subview Hierarchy
     /// 添加子视图（链式）✅ 返回调用者（父视图）
     @discardableResult
     func byAddSubviewRetSuper(_ view: UIView) -> Self {
@@ -338,52 +314,48 @@ extension UIView {
         subviews.forEach { $0.removeFromSuperview() }
         return self
     }
-}
-// MARK: - UIView · Autoresizing / Layout Margins / Safe Area
-extension UIView {
+    // MARK: - UIView · Autoresizing / Layout Margins / Safe Area
     /// 是否对子视图做 autoresize
     @discardableResult
     func byAutoresizesSubviews(_ enabled: Bool) -> Self {
-        self.autoresizesSubviews = enabled
+        autoresizesSubviews = enabled
         return self
     }
     /// 自伸缩掩码
     @discardableResult
     func byAutoresizingMask(_ mask: UIView.AutoresizingMask) -> Self {
-        self.autoresizingMask = mask
+        autoresizingMask = mask
         return self
     }
     /// 传统 layoutMargins
     @available(iOS 8.0, *)
     @discardableResult
     func byLayoutMargins(_ insets: UIEdgeInsets) -> Self {
-        self.layoutMargins = insets
+        layoutMargins = insets
         return self
     }
     /// 方向化的 layoutMargins（更现代）
     @available(iOS 11.0, *)
     @discardableResult
     func byDirectionalLayoutMargins(_ insets: NSDirectionalEdgeInsets) -> Self {
-        self.directionalLayoutMargins = insets
+        directionalLayoutMargins = insets
         return self
     }
     /// 是否继承父视图的 layoutMargins
     @available(iOS 8.0, *)
     @discardableResult
     func byPreservesSuperviewLayoutMargins(_ enabled: Bool) -> Self {
-        self.preservesSuperviewLayoutMargins = enabled
+        preservesSuperviewLayoutMargins = enabled
         return self
     }
     /// 是否将 safeArea 纳入 layoutMargins 计算
     @available(iOS 11.0, *)
     @discardableResult
     func byInsetsLayoutMarginsFromSafeArea(_ enabled: Bool) -> Self {
-        self.insetsLayoutMarginsFromSafeArea = enabled
+        insetsLayoutMarginsFromSafeArea = enabled
         return self
     }
-}
-// MARK: - UIView · Layout Triggers
-extension UIView {
+    // MARK: - UIView · Layout Triggers
     /// 标记需要布局
     @discardableResult
     func bySetNeedsLayout() -> Self {
@@ -408,20 +380,38 @@ extension UIView {
         sizeToFit()
         return self
     }
-}
-// MARK: - 手势封装：添加手势以后返回这个手势本身（常用于链式调用）
-extension UIView {
+    // MARK: 其他
+    @discardableResult
+    func byContentMode(_ mode: UIView.ContentMode) -> Self {
+        contentMode = mode;
+        return self
+    }
+
+    @discardableResult
+    func byTag(_ T: Int) -> Self {
+        tag = T
+        return self
+    }
+
+    @discardableResult
+    func byUserInteractionEnabled(_ enabled: Bool) -> Self {
+        isUserInteractionEnabled = enabled
+        return self
+    }
+    /// 手势封装：添加手势以后返回这个手势本身@常用于链式调用
     @discardableResult
     func jobs_addGesture<T: UIGestureRecognizer>(_ gesture: T?) -> T? {
         guard let gesture = gesture else { return nil }
-        self.addGestureRecognizer(gesture)
+        addGestureRecognizer(gesture)
         return gesture
     }
-}
-// MARK: - 手势通用闭包盒子
-private final class _GestureActionBox {
-    let action: (UIGestureRecognizer) -> Void
-    init(_ action: @escaping (UIGestureRecognizer) -> Void) { self.action = action }
+    /// 刷新UI
+    @discardableResult
+    func refresh()-> Self{
+        setNeedsLayout()
+        layoutIfNeeded()
+        return self
+    }
 }
 /**
  // MARK: - 点击 Tap
@@ -577,6 +567,11 @@ public extension UIView {
         static var pinchKey: UInt8 = 0
         static var rotateKey: UInt8 = 0
     }
+    // MARK: - 手势通用闭包盒子
+    private final class _GestureActionBox {
+        let action: (UIGestureRecognizer) -> Void
+        init(_ action: @escaping (UIGestureRecognizer) -> Void) { self.action = action }
+    }
     // MARK: - Tap（点击）
     /// 新接口：带 gesture；兼容链式配置
     @discardableResult
@@ -592,13 +587,18 @@ public extension UIView {
             removeGestureRecognizer(old)
         }
 
-        let tap = UITapGestureRecognizer(target: self, action: #selector(_gestureHandleTap(_:)))
-        tap.numberOfTapsRequired = taps
-        tap.cancelsTouchesInView = cancelsTouchesInView
-        if #available(iOS 9.2, *) {
-            tap.requiresExclusiveTouchType = requiresExclusiveTouchType
-        }
-        addGestureRecognizer(tap)
+        let tap = jobs_addGesture(
+            UITapGestureRecognizer
+                .byConfig { gr in
+                    (objc_getAssociatedObject(gr, &GestureKeys.tapKey) as? _GestureActionBox)?.action(gr)
+                    print("Tap 触发 on: \(String(describing: gr.view))")
+                }
+                .byTaps(taps)                       // 双击
+                .byTouches(1)                       // 单指
+                .byCancelsTouchesInView(cancelsTouchesInView)
+                .byRequiresExclusiveTouchType(requiresExclusiveTouchType)
+                .byEnabled(true)
+                .byName("customTap"))!
 
         objc_setAssociatedObject(self, &GestureKeys.tapKey, tap, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         objc_setAssociatedObject(tap, &GestureKeys.tapKey, _GestureActionBox(action), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -608,9 +608,6 @@ public extension UIView {
     @discardableResult
     func addTapAction(_ action: @escaping () -> Void) -> Self {
         addTapAction { _ in action() }
-    }
-    @objc private func _gestureHandleTap(_ sender: UITapGestureRecognizer) {
-        (objc_getAssociatedObject(sender, &GestureKeys.tapKey) as? _GestureActionBox)?.action(sender)
     }
     func removeTapAction() {
         if let g = objc_getAssociatedObject(self, &GestureKeys.tapKey) as? UITapGestureRecognizer {
@@ -632,11 +629,14 @@ public extension UIView {
             removeGestureRecognizer(old)
         }
 
-        let long = UILongPressGestureRecognizer(target: self, action: #selector(_gestureHandleLong(_:)))
-        long.minimumPressDuration = minimumPressDuration
-        long.allowableMovement = allowableMovement
-        long.numberOfTouchesRequired = numberOfTouchesRequired
-        addGestureRecognizer(long)
+        let long = jobs_addGesture(UILongPressGestureRecognizer
+            .byConfig { gr in
+                (objc_getAssociatedObject(gr, &GestureKeys.longKey) as? _GestureActionBox)?.action(gr)
+            }
+            .byMinDuration(minimumPressDuration)              // 最小按压时长
+            .byMovement(allowableMovement)                    // 允许移动距离
+            .byTouches(numberOfTouchesRequired)               // 单指
+        )!
 
         objc_setAssociatedObject(self, &GestureKeys.longKey, long, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         objc_setAssociatedObject(long, &GestureKeys.longKey, _GestureActionBox(action), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -646,9 +646,6 @@ public extension UIView {
     @discardableResult
     func addLongPressAction(_ action: @escaping () -> Void) -> Self {
         addLongPressAction { _ in action() }
-    }
-    @objc private func _gestureHandleLong(_ sender: UILongPressGestureRecognizer) {
-        (objc_getAssociatedObject(sender, &GestureKeys.longKey) as? _GestureActionBox)?.action(sender)
     }
     func removeLongPressAction() {
         if let g = objc_getAssociatedObject(self, &GestureKeys.longKey) as? UILongPressGestureRecognizer {
@@ -669,10 +666,13 @@ public extension UIView {
             removeGestureRecognizer(old)
         }
 
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(_gestureHandlePan(_:)))
-        pan.minimumNumberOfTouches = minimumNumberOfTouches
-        if maximumNumberOfTouches != Int.max { pan.maximumNumberOfTouches = maximumNumberOfTouches }
-        addGestureRecognizer(pan)
+        let pan = jobs_addGesture(UIPanGestureRecognizer
+            .byConfig { sender in
+                (objc_getAssociatedObject(sender, &GestureKeys.panKey) as? _GestureActionBox)?.action(sender)
+            }
+            .byMinTouches(minimumNumberOfTouches)
+            .byMaxTouches(maximumNumberOfTouches)
+            .byCancelsTouchesInView(true))!
 
         objc_setAssociatedObject(self, &GestureKeys.panKey, pan, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         objc_setAssociatedObject(pan, &GestureKeys.panKey, _GestureActionBox(action), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -682,9 +682,6 @@ public extension UIView {
     @discardableResult
     func addPanAction(_ action: @escaping () -> Void) -> Self {
         addPanAction { _ in action() }
-    }
-    @objc private func _gestureHandlePan(_ sender: UIPanGestureRecognizer) {
-        (objc_getAssociatedObject(sender, &GestureKeys.panKey) as? _GestureActionBox)?.action(sender)
     }
     func removePanAction() {
         if let g = objc_getAssociatedObject(self, &GestureKeys.panKey) as? UIPanGestureRecognizer {
@@ -705,10 +702,13 @@ public extension UIView {
             removeGestureRecognizer(old)
         }
 
-        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(_gestureHandleSwipe(_:)))
-        swipe.direction = direction
-        swipe.numberOfTouchesRequired = numberOfTouchesRequired
-        addGestureRecognizer(swipe)
+        let swipe = jobs_addGesture(UISwipeGestureRecognizer
+            .byConfig { sender in
+                print("👉 右滑触发")
+                (objc_getAssociatedObject(sender, &GestureKeys.swipeKey) as? _GestureActionBox)?.action(sender)
+            }
+            .byDirection(direction)
+            .byTouches(numberOfTouchesRequired))!
 
         objc_setAssociatedObject(self, &GestureKeys.swipeKey, swipe, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         objc_setAssociatedObject(swipe, &GestureKeys.swipeKey, _GestureActionBox(action), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -718,9 +718,6 @@ public extension UIView {
     @discardableResult
     func addSwipeAction(_ action: @escaping () -> Void) -> Self {
         addSwipeAction { _ in action() }
-    }
-    @objc private func _gestureHandleSwipe(_ sender: UISwipeGestureRecognizer) {
-        (objc_getAssociatedObject(sender, &GestureKeys.swipeKey) as? _GestureActionBox)?.action(sender)
     }
     func removeSwipeAction() {
         if let g = objc_getAssociatedObject(self, &GestureKeys.swipeKey) as? UISwipeGestureRecognizer {
@@ -737,8 +734,12 @@ public extension UIView {
             removeGestureRecognizer(old)
         }
 
-        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(_gestureHandlePinch(_:)))
-        addGestureRecognizer(pinch)
+        let pinch = jobs_addGesture(UIPinchGestureRecognizer
+            .byConfig { _ in }
+            .byOnScaleChange { sender, scale in
+                (objc_getAssociatedObject(sender, &GestureKeys.pinchKey) as? _GestureActionBox)?.action(sender)
+            }
+        )!
 
         objc_setAssociatedObject(self, &GestureKeys.pinchKey, pinch, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         objc_setAssociatedObject(pinch, &GestureKeys.pinchKey, _GestureActionBox(action), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -748,9 +749,6 @@ public extension UIView {
     @discardableResult
     func addPinchAction(_ action: @escaping () -> Void) -> Self {
         addPinchAction { _ in action() }
-    }
-    @objc private func _gestureHandlePinch(_ sender: UIPinchGestureRecognizer) {
-        (objc_getAssociatedObject(sender, &GestureKeys.pinchKey) as? _GestureActionBox)?.action(sender)
     }
     func removePinchAction() {
         if let g = objc_getAssociatedObject(self, &GestureKeys.pinchKey) as? UIPinchGestureRecognizer {
@@ -767,8 +765,11 @@ public extension UIView {
             removeGestureRecognizer(old)
         }
 
-        let rotate = UIRotationGestureRecognizer(target: self, action: #selector(_gestureHandleRotate(_:)))
-        addGestureRecognizer(rotate)
+        let rotate = jobs_addGesture(UIRotationGestureRecognizer
+            .byConfig { _ in }
+            .byOnRotationChange { sender, r in
+                (objc_getAssociatedObject(sender, &GestureKeys.rotateKey) as? _GestureActionBox)?.action(sender)
+            })!
 
         objc_setAssociatedObject(self, &GestureKeys.rotateKey, rotate, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         objc_setAssociatedObject(rotate, &GestureKeys.rotateKey, _GestureActionBox(action), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -847,13 +848,18 @@ public extension UIView {
         var map = _grMap(for: &GestureMultiKeys.tapMap)
         // 如果同 id 已存在，先移除再覆盖
         if let old = map[id] as? UITapGestureRecognizer { removeGestureRecognizer(old) }
-
-        let gr = UITapGestureRecognizer(target: self, action: #selector(_gestureHandleTap(_:)))
-        gr.numberOfTapsRequired = taps
-        gr.cancelsTouchesInView = cancelsTouchesInView
-        if #available(iOS 9.2, *) { gr.requiresExclusiveTouchType = requiresExclusiveTouchType }
-        addGestureRecognizer(gr)
-
+        let gr = jobs_addGesture(
+            UITapGestureRecognizer
+                .byConfig { gr in
+                    (objc_getAssociatedObject(gr, &GestureKeys.tapKey) as? _GestureActionBox)?.action(gr)
+                    print("Tap 触发 on: \(String(describing: gr.view))")
+                }
+                .byTaps(taps)                       // 双击
+                .byTouches(1)                       // 单指
+                .byCancelsTouchesInView(cancelsTouchesInView)
+                .byRequiresExclusiveTouchType(requiresExclusiveTouchType)
+                .byEnabled(true)
+                .byName("customTap"))!
         // 复用单实例版里“gesture -> box”的关联键（每个 recognizer 独立存一份）
         objc_setAssociatedObject(gr, &GestureKeys.tapKey, _GestureActionBox(action), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
 
@@ -902,11 +908,14 @@ public extension UIView {
         var map = _grMap(for: &GestureMultiKeys.longMap)
         if let old = map[id] as? UILongPressGestureRecognizer { removeGestureRecognizer(old) }
 
-        let gr = UILongPressGestureRecognizer(target: self, action: #selector(_gestureHandleLong(_:)))
-        gr.minimumPressDuration = minimumPressDuration
-        gr.allowableMovement = allowableMovement
-        gr.numberOfTouchesRequired = numberOfTouchesRequired
-        addGestureRecognizer(gr)
+        let gr = jobs_addGesture(UILongPressGestureRecognizer
+            .byConfig { gr in
+                (objc_getAssociatedObject(gr, &GestureKeys.longKey) as? _GestureActionBox)?.action(gr)
+            }
+            .byMinDuration(minimumPressDuration)              // 最小按压时长
+            .byMovement(allowableMovement)                    // 允许移动距离
+            .byTouches(numberOfTouchesRequired)               // 单指
+        )!
 
         objc_setAssociatedObject(gr, &GestureKeys.longKey, _GestureActionBox(action), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         map[id] = gr
@@ -921,7 +930,11 @@ public extension UIView {
         numberOfTouchesRequired: Int = 1,
         _ action: @escaping (UIGestureRecognizer) -> Void
     ) -> Self {
-        _ = addLongPressActionMulti(id: id, minimumPressDuration: minimumPressDuration, allowableMovement: allowableMovement, numberOfTouchesRequired: numberOfTouchesRequired, action)
+        _ = addLongPressActionMulti(id: id,
+                                    minimumPressDuration: minimumPressDuration,
+                                    allowableMovement: allowableMovement,
+                                    numberOfTouchesRequired: numberOfTouchesRequired,
+                                    action)
         return self
     }
     func removeLongPressActionMulti(id: String) {
@@ -949,10 +962,13 @@ public extension UIView {
         var map = _grMap(for: &GestureMultiKeys.panMap)
         if let old = map[id] as? UIPanGestureRecognizer { removeGestureRecognizer(old) }
 
-        let gr = UIPanGestureRecognizer(target: self, action: #selector(_gestureHandlePan(_:)))
-        gr.minimumNumberOfTouches = minimumNumberOfTouches
-        if maximumNumberOfTouches != Int.max { gr.maximumNumberOfTouches = maximumNumberOfTouches }
-        addGestureRecognizer(gr)
+        let gr = jobs_addGesture(UIPanGestureRecognizer
+            .byConfig { sender in
+                (objc_getAssociatedObject(sender, &GestureKeys.panKey) as? _GestureActionBox)?.action(sender)
+            }
+            .byMinTouches(minimumNumberOfTouches)
+            .byMaxTouches(maximumNumberOfTouches)
+            .byCancelsTouchesInView(true))!
 
         objc_setAssociatedObject(gr, &GestureKeys.panKey, _GestureActionBox(action), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         map[id] = gr
@@ -966,7 +982,10 @@ public extension UIView {
         maximumNumberOfTouches: Int = Int.max,
         _ action: @escaping (UIGestureRecognizer) -> Void
     ) -> Self {
-        _ = addPanActionMulti(id: id, minimumNumberOfTouches: minimumNumberOfTouches, maximumNumberOfTouches: maximumNumberOfTouches, action)
+        _ = addPanActionMulti(id: id,
+                              minimumNumberOfTouches: minimumNumberOfTouches,
+                              maximumNumberOfTouches: maximumNumberOfTouches,
+                              action)
         return self
     }
     func removePanActionMulti(id: String) {
@@ -994,10 +1013,13 @@ public extension UIView {
         var map = _grMap(for: &GestureMultiKeys.swipeMap)
         if let old = map[id] as? UISwipeGestureRecognizer { removeGestureRecognizer(old) }
 
-        let gr = UISwipeGestureRecognizer(target: self, action: #selector(_gestureHandleSwipe(_:)))
-        gr.direction = direction
-        gr.numberOfTouchesRequired = numberOfTouchesRequired
-        addGestureRecognizer(gr)
+        let gr = jobs_addGesture(UISwipeGestureRecognizer
+            .byConfig { sender in
+                print("👉 右滑触发")
+                (objc_getAssociatedObject(sender, &GestureKeys.swipeKey) as? _GestureActionBox)?.action(sender)
+            }
+            .byDirection(direction)
+            .byTouches(numberOfTouchesRequired))!
 
         objc_setAssociatedObject(gr, &GestureKeys.swipeKey, _GestureActionBox(action), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         map[id] = gr
@@ -1037,8 +1059,12 @@ public extension UIView {
         var map = _grMap(for: &GestureMultiKeys.pinchMap)
         if let old = map[id] as? UIPinchGestureRecognizer { removeGestureRecognizer(old) }
 
-        let gr = UIPinchGestureRecognizer(target: self, action: #selector(_gestureHandlePinch(_:)))
-        addGestureRecognizer(gr)
+        let gr = jobs_addGesture(UIPinchGestureRecognizer
+            .byConfig { _ in }
+            .byOnScaleChange { sender, scale in
+                (objc_getAssociatedObject(sender, &GestureKeys.pinchKey) as? _GestureActionBox)?.action(sender)
+            }
+        )!
 
         objc_setAssociatedObject(gr, &GestureKeys.pinchKey, _GestureActionBox(action), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         map[id] = gr
@@ -1097,6 +1123,33 @@ public extension UIView {
         var map = _grMap(for: &GestureMultiKeys.rotateMap)
         map.values.forEach { removeGestureRecognizer($0) }
         map.removeAll(); _setGrMap(map, for: &GestureMultiKeys.rotateMap)
+    }
+}
+
+public extension UIView {
+    func _allSubviews() -> [UIView] { subviews + subviews.flatMap { $0._allSubviews() } }
+    func _firstSubview<T: UIView>(of type: T.Type) -> T? {
+        if let s = self as? T { return s }
+        for v in subviews { if let hit = v._firstSubview(of: type) { return hit } }
+        return nil
+    }
+    /// 递归收集指定类型的所有子视图（避免与已有 `_allSubviews()` 重名）
+    func _recursiveSubviews<T: UIView>(of type: T.Type) -> [T] {
+        var result: [T] = []
+        for sub in subviews {
+            if let t = sub as? T { result.append(t) }
+            result.append(contentsOf: sub._recursiveSubviews(of: type))
+        }
+        return result
+    }
+    /// 向上寻找满足条件的祖先
+    func _firstAncestor(where predicate: (UIView) -> Bool) -> UIView? {
+        var p = superview
+        while let v = p {
+            if predicate(v) { return v }
+            p = v.superview
+        }
+        return nil
     }
 }
 // MARK: - UIView.keyboardHeight (Observable<CGFloat>)

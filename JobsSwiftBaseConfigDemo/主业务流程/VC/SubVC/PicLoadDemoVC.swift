@@ -44,7 +44,8 @@ final class PicLoadDemoVC: BaseVC {
     }()
     /// UIImageView字符串网络图@Kingfisher
     private lazy var asyncImgView: UIImageView = {
-        let imageView = UIImageView()
+        UIImageView()
+            .byAsyncImageKF("https://picsum.photos/200/300", fallback: "唐老鸭".img)
             .byContentMode(.scaleAspectFill)
             .byClipsToBounds()
             .byAddTo(scrollView) { [unowned self] make in
@@ -53,19 +54,11 @@ final class PicLoadDemoVC: BaseVC {
                 make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
                 make.height.equalTo(180)
             }
-        Task {
-            do {
-                imageView.byImage(try await "https://picsum.photos/200/300".kfLoadImage())
-                print("✅ 加载成功 (KF async)")
-            } catch {
-                print("❌ 加载失败 (KF async)：\(error)")
-            }
-        }
-        return imageView
     }()
     /// UIImageView字符串网络图@SDWebImage
     private lazy var asyncImgViewSD: UIImageView = {
-        let imageView = UIImageView()
+        UIImageView()
+            .byAsyncImageSD("https://picsum.photos/400/300", fallback: "唐老鸭".img)
             .byContentMode(.scaleAspectFill)
             .byClipsToBounds()
             .byAddTo(scrollView) { [unowned self] make in
@@ -74,15 +67,6 @@ final class PicLoadDemoVC: BaseVC {
                 make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
                 make.height.equalTo(180)
             }
-        Task {
-            do {
-                imageView.byImage(try await "https://picsum.photos/400/300".sdLoadImage())
-                print("✅ 加载成功 (SD async)")
-            } catch {
-                print("❌ 加载失败 (SD async)：\(error)")
-            }
-        }
-        return imageView
     }()
     /// UIImageView网络图（失败兜底图）@Kingfisher
     private lazy var wrapperImgView: UIImageView = {

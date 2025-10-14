@@ -16,6 +16,7 @@
 import ObjectiveC
 import RxSwift
 import RxCocoa
+import RxRelay
 // MARK:  让返回值可继续接 Rx 操作符
 public struct TextInputStream: ObservableConvertibleType {
     public typealias Element = String
@@ -54,13 +55,13 @@ public extension UITextView {
         equals: ((String, String) -> Bool)? = nil   // 自定义去重比较（可选）
     ) -> TextInputStream {
 
-        var stream = self.rx.text.orEmpty
+        var stream = rx.text.orEmpty
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
             .map { [weak self] raw -> String in
                 guard let self else { return raw }
 
                 // 组合输入阶段（中文/日文等 IME）不要强行改 text，避免光标跳动
-                if self.markedTextRange != nil { return raw }
+                if markedTextRange != nil { return raw }
 
                 var formatted = formatter?(raw) ?? raw
 
@@ -68,10 +69,10 @@ public extension UITextView {
                     formatted = String(formatted.prefix(max))
                 }
 
-                if self.text != formatted {
-                    let sel = self.selectedRange
-                    self.text = formatted
-                    self.selectedRange = sel
+                if text != formatted {
+                    let sel = selectedRange
+                    text = formatted
+                    selectedRange = sel
                 }
                 return formatted
             }
@@ -90,139 +91,140 @@ public extension UITextView {
 public extension UITextView {
     // MARK:  文本基础属性
     @discardableResult
-    func byText(_ text: String?) -> Self {
-        self.text = text
+    func byText(_ string: String?) -> Self {
+        text = string
         return self
     }
 
     @discardableResult
     func byTextColor(_ color: UIColor) -> Self {
-        self.textColor = color
+        textColor = color
         return self
     }
 
     @discardableResult
-    func byFont(_ font: UIFont) -> Self {
-        self.font = font
+    func byFont(_ f: UIFont) -> Self {
+        font = f
         return self
     }
 
     @discardableResult
     func byTextAlignment(_ alignment: NSTextAlignment) -> Self {
-        self.textAlignment = alignment
+        textAlignment = alignment
         return self
     }
 
     @discardableResult
     func byAttributedText(_ attrText: NSAttributedString) -> Self {
-        self.attributedText = attrText
+        attributedText = attrText
         return self
     }
 
     @discardableResult
     func byTypingAttributes(_ attrs: [NSAttributedString.Key: Any]) -> Self {
-        self.typingAttributes = attrs
+        typingAttributes = attrs
         return self
     }
     // MARK: 可编辑与交互
     @discardableResult
     func byEditable(_ editable: Bool) -> Self {
-        self.isEditable = editable
+        isEditable = editable
         return self
     }
 
     @discardableResult
     func bySelectable(_ selectable: Bool) -> Self {
-        self.isSelectable = selectable
+        isSelectable = selectable
         return self
     }
 
     @discardableResult
     func byDataDetectorTypes(_ types: UIDataDetectorTypes) -> Self {
-        self.dataDetectorTypes = types
+        dataDetectorTypes = types
         return self
     }
 
     @discardableResult
     func byAllowsEditingTextAttributes(_ allow: Bool) -> Self {
-        self.allowsEditingTextAttributes = allow
+        allowsEditingTextAttributes = allow
         return self
     }
     // MARK: 输入相关
     @discardableResult
     func byKeyboardType(_ type: UIKeyboardType) -> Self {
-        self.keyboardType = type
+        keyboardType = type
         return self
     }
 
     @discardableResult
     func byInputView(_ view: UIView?) -> Self {
-        self.inputView = view
+        inputView = view
         return self
     }
 
     @discardableResult
     func byInputAccessoryView(_ view: UIView?) -> Self {
-        self.inputAccessoryView = view
+        inputAccessoryView = view
         return self
     }
 
     @discardableResult
     func byClearsOnInsertion(_ clear: Bool) -> Self {
-        self.clearsOnInsertion = clear
+        clearsOnInsertion = clear
         return self
     }
     // MARK: 富文本与链接样式
     @discardableResult
     func byLinkTextAttributes(_ attrs: [NSAttributedString.Key: Any]) -> Self {
-        self.linkTextAttributes = attrs
+        linkTextAttributes = attrs
         return self
     }
 
     @discardableResult
     @available(iOS 13.0, *)
     func byUsesStandardTextScaling(_ enable: Bool) -> Self {
-        self.usesStandardTextScaling = enable
+        usesStandardTextScaling = enable
         return self
     }
     // MARK: 布局与内边距
     @discardableResult
     func byTextContainerInset(_ inset: UIEdgeInsets) -> Self {
-        self.textContainerInset = inset
+        textContainerInset = inset
         return self
     }
     // MARK: 滚动与范围
     @discardableResult
     func byScrollToVisible(range: NSRange) -> Self {
-        self.scrollRangeToVisible(range)
+        scrollRangeToVisible(range)
         return self
     }
     // MARK: 查找功能 (iOS 16+)
     @available(iOS 16.0, *)
     @discardableResult
     func byFindInteractionEnabled(_ enable: Bool) -> Self {
-        self.isFindInteractionEnabled = enable
+        isFindInteractionEnabled = enable
         return self
     }
     // MARK: 边框样式 (iOS 17+)
     @available(iOS 17.0, *)
     @discardableResult
     func byBorderStyle(_ style: UITextView.BorderStyle) -> Self {
-        self.borderStyle = style
+        borderStyle = style
         return self
     }
     // MARK: 高亮显示 (iOS 18+)
     @available(iOS 18.0, *)
     @discardableResult
     func byTextHighlightAttributes(_ attrs: [NSAttributedString.Key: Any]) -> Self {
-        self.textHighlightAttributes = attrs
+        textHighlightAttributes = attrs
         return self
     }
+
     // MARK:  Writing Tools (iOS 18+)
     @available(iOS 18.0, *)
     @discardableResult
     func byWritingToolsBehavior(_ behavior: UIWritingToolsBehavior) -> Self {
-        self.writingToolsBehavior = behavior
+        writingToolsBehavior = behavior
         return self
     }
 
@@ -234,20 +236,20 @@ public extension UITextView {
         safe.remove(.table)
         // safe.remove(.list) // 如果遇到崩溃，再打开这一行
 
-        self.allowedWritingToolsResultOptions = safe
+        allowedWritingToolsResultOptions = safe
         return self
     }
     // MARK: 富文本格式配置 (iOS 18+)
     @available(iOS 18.0, *)
     @discardableResult
     func byTextFormattingConfiguration(_ config: UITextFormattingViewController.Configuration) -> Self {
-        self.textFormattingConfiguration = config
+        textFormattingConfiguration = config
         return self
     }
     // MARK: 代理设置
     @discardableResult
-    func byDelegate(_ delegate: UITextViewDelegate?) -> Self {
-        self.delegate = delegate
+    func byDelegate(_ textViewDelegate: UITextViewDelegate?) -> Self {
+        delegate = textViewDelegate
         return self
     }
 }
@@ -261,11 +263,11 @@ public extension UITextView {
         radius: CGFloat = 8,
         background: UIColor? = nil
     ) -> Self {
-        layer.borderColor = color.cgColor
-        layer.borderWidth = width
-        layer.cornerRadius = radius
-        layer.masksToBounds = true
-        if let bg = background { self.backgroundColor = bg }
+        layer.byBorderColor(color)
+            .byBorderWidth(width)
+            .byCornerRadius(radius)
+            .byMasksToBounds(true)
+        if let bg = background { backgroundColor = bg }
         return self
     }
     // MARK: 类似“bezel”的外观（简易版）
@@ -273,18 +275,17 @@ public extension UITextView {
     func byBezelLike(
         radius: CGFloat = 8
     ) -> Self {
-        layer.borderColor = UIColor.separator.cgColor
-        layer.borderWidth = 1
-        layer.cornerRadius = radius
-        layer.masksToBounds = true
-        backgroundColor = .secondarySystemBackground
+        layer.byBorderColor(.separator)
+            .byBorderWidth(1)
+            .byCornerRadius(radius)
+            .byMasksToBounds(true)
+        byBgColor(.secondarySystemBackground)
         return self
     }
 }
 // MARK: ⚙️ deleteBackward 广播（UITextView）
 public extension UITextView {
     static let didPressDeleteNotification = Notification.Name("UITextView.didPressDelete")
-
     private static let _swizzleOnce: Void = {
         let cls: AnyClass = UITextView.self
         let originalSel = #selector(UITextView.deleteBackward)
@@ -297,15 +298,14 @@ public extension UITextView {
     }()
     /// 在 App 启动时调用一次（与 UITextField 的启用相互独立）
     static func enableDeleteBackwardBroadcast() {
-        _ = self._swizzleOnce
+        _ = _swizzleOnce
     }
 
     @objc private func _jobs_swizzled_deleteBackward() {
-        self._jobs_swizzled_deleteBackward()
+        _jobs_swizzled_deleteBackward()
         NotificationCenter.default.post(name: UITextView.didPressDeleteNotification, object: self)
     }
 }
-
 // MARK: - Rx 快捷桥接（去掉 .rx,给 UITextView 直接用）
 public extension UITextView {
     // MARK: 通用输入绑定：带格式化 / 校验 / 最大长度 / 去重
@@ -316,12 +316,12 @@ public extension UITextView {
         distinct: Bool = true
     ) -> Observable<String> {
         // 1) 基础流：去首尾空白、格式化、截断并回写 UI
-        var stream = self.rx.text.orEmpty
+        var stream = rx.text.orEmpty
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
             .map { [weak self] raw -> String in
                 guard let self else { return raw }
                 // IME 组合输入期间（中文/日文拼写）不要强行改 text，避免光标跳动
-                if self.markedTextRange != nil { return raw }
+                if markedTextRange != nil { return raw }
 
                 var formatted = formatter?(raw) ?? raw
 
@@ -329,11 +329,11 @@ public extension UITextView {
                     formatted = String(formatted.prefix(max))
                 }
 
-                if self.text != formatted {
+                if text != formatted {
                     // 保留光标位置的写法（尽量减少跳动）
-                    let selected = self.selectedRange
-                    self.text = formatted
-                    self.selectedRange = selected
+                    let selected = selectedRange
+                    text = formatted
+                    selectedRange = selected
                 }
                 return formatted
             }
@@ -352,23 +352,24 @@ public extension UITextView {
         // 初始同步
         switch initial {
         case .fromRelay:
-            if self.text != relay.value { self.text = relay.value }
+            if text != relay.value { text = relay.value }
         case .fromView:
-            relay.accept(self.text ?? "")
+            relay.accept(text ?? "")
         }
 
         // View → Relay
-        let d1 = self.rx.text.orEmpty
+        let d1 = rx.text.orEmpty
             .distinctUntilChanged()
             .bind(onNext: { relay.accept($0) })
 
         // Relay → View
         let d2 = relay.asDriver()
             .distinctUntilChanged()
-            .drive(self.rx.text)
+            .drive(rx.text)
 
         return Disposables.create(d1, d2)
     }
+
     var didPressDelete: Observable<Void> {
         rx.didPressDelete.asObservable()
     }
@@ -376,37 +377,32 @@ public extension UITextView {
 // MARK: 设置富文本
 public extension UITextView {
     func richTextBy(_ runs: [JobsRichRun], paragraphStyle: NSMutableParagraphStyle? = nil) {
-        self.attributedText = JobsRichText.make(runs, paragraphStyle: paragraphStyle)
-        self.isEditable = false
-        self.isScrollEnabled = false
-        self.dataDetectorTypes = [] // 仅走自定义 link
+        attributedText = JobsRichText.make(runs, paragraphStyle: paragraphStyle)
+        isEditable = false
+        isScrollEnabled = false
+        dataDetectorTypes = [] // 仅走自定义 link
     }
 }
 // MARK: - 私有代理（手势 + 命中计算）
 public final class _LinkTapProxy: NSObject, UIGestureRecognizerDelegate {
     let relay = PublishRelay<URL>()
-
     @objc func handleTap(_ gr: UITapGestureRecognizer) {
         guard let tv = gr.view as? UITextView else { return }
-
         // 1) 将点击点转换到 textContainer 坐标，并考虑 inset
         let lm  = tv.layoutManager
         let tc  = tv.textContainer
         var pt  = gr.location(in: tv)
         pt.x   -= tv.textContainerInset.left
         pt.y   -= tv.textContainerInset.top
-
         // 2) glyph → char index
         let glyphIndex = lm.glyphIndex(for: pt, in: tc)
         let charIndex  = lm.characterIndexForGlyph(at: glyphIndex)
         guard charIndex < tv.attributedText.length else { return }
-
         // 3) 命中检测：点击必须落在该 glyph 的有效 rect 内（避免空白区域误触）
         var usedRect = lm.lineFragmentUsedRect(forGlyphAt: glyphIndex, effectiveRange: nil, withoutAdditionalLayout: true)
         usedRect.origin.x += tv.textContainerInset.left
         usedRect.origin.y += tv.textContainerInset.top
         guard usedRect.contains(gr.location(in: tv)) else { return }
-
         // 4) 取属性（支持 URL 或 String）
         var eff = NSRange(location: 0, length: 0)
         let attrs = tv.attributedText.attributes(at: charIndex, effectiveRange: &eff)
@@ -424,5 +420,149 @@ public final class _LinkTapProxy: NSObject, UIGestureRecognizerDelegate {
 }
 // MARK: - 语义扩展：tv.linkTap（省略 .rx）
 public extension UITextView {
-    var linkTap: Observable<URL> { self.rx.linkTap.asObservable() }
+    var linkTap: Observable<URL> { rx.linkTap.asObservable() }
+}
+// ===========================================================
+// 🎯 重点：UITextView.onChange（RAC 版本，挂在 UITextView 上）
+// ===========================================================
+public extension UITextView {
+    typealias TVOnChange = (_ tv: UITextView, _ input: String, _ old: String, _ isDeleting: Bool) -> Void
+    /// 监听文本变化（Rx 方案）
+    /// - Parameters:
+    ///   - emitDuringComposition: 是否在 IME 合成期（markedTextRange != nil）也回调，默认 false
+    ///   - distinct: 文本相同是否去重
+    ///   - handler: (tv, inputDiff, oldText, isDeleting)
+    @discardableResult
+    func onChange(
+        emitDuringComposition: Bool = false,
+        distinct: Bool = true,
+        _ handler: @escaping TVOnChange
+    ) -> Self {
+        // 安装 deleteBackward 广播（一次）
+        UITextView.enableDeleteBackwardBroadcast()
+        // 重绑时先清理
+        _tv_onChangeBag = DisposeBag()
+        // 是否合成期过滤
+        let baseStream = rx.text.orEmpty
+            .filter { [weak self] _ in
+                guard let self else { return true }
+                return emitDuringComposition || self.markedTextRange == nil
+            }
+
+        let textChanged = (distinct ? baseStream.distinctUntilChanged() : baseStream)
+            .share(replay: 1, scope: .whileConnected)
+        // old/new 配对：old = 初始 + 之前的 new
+        let oldText = Observable.just(text ?? "").concat(textChanged)
+        let pair: Observable<(String, String)> = Observable.zip(oldText, textChanged) // (old, new)
+        // 回调（不要在参数列表里做 (old, new) 解构，编译器在这里经常跪）
+        pair
+            .withUnretained(self)
+            .subscribe(onNext: { tv, pair in
+                let (old, new) = pair
+                let isDeleting = new.count < old.count
+                let input = new._jobs_insertedSubstring(comparedTo: old)
+                handler(tv, input, old, isDeleting)
+            })
+            .disposed(by: _tv_onChangeBag)
+
+        return self
+    }
+}
+// ===========================================================
+// 私有：AO & 工具
+// ===========================================================
+private enum JobsTVKeys {
+    static var onChangeBag: UInt8 = 0
+    static var linkTapProxy: UInt8 = 0
+    static var backspaceBag: UInt8 = 0
+}
+
+private extension UITextView {
+    var _tv_backspaceBag: DisposeBag {
+        get { _tv_getOrSetAssociated(key: &JobsTVKeys.backspaceBag) { _ in DisposeBag() } }
+        set { objc_setAssociatedObject(self, &JobsTVKeys.backspaceBag, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
+    var _tv_onChangeBag: DisposeBag {
+        get { _tv_getOrSetAssociated(key: &JobsTVKeys.onChangeBag) { _ in DisposeBag() } }
+        set { objc_setAssociatedObject(self, &JobsTVKeys.onChangeBag, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
+    @inline(__always)
+    func _tv_getOrSetAssociated<T>(key: UnsafeRawPointer, _ make: (UITextView) -> T) -> T {
+        if let v = objc_getAssociatedObject(self, key) as? T { return v }
+        let v = make(self)
+        objc_setAssociatedObject(self, key, v, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        return v
+    }
+}
+// 计算 new 相比 old “插入的子串”，在中间插入/替换场景也能尽量正确
+private extension String {
+    func _jobs_insertedSubstring(comparedTo old: String) -> String {
+        if self == old { return "" }
+        let a = Array(self)
+        let b = Array(old)
+        // 前缀对齐
+        var i = 0
+        while i < min(a.count, b.count), a[i] == b[i] { i += 1 }
+        // 后缀对齐
+        var j = 0
+        while j < min(a.count - i, b.count - i),
+              a[a.count - 1 - j] == b[b.count - 1 - j] { j += 1 }
+        if self.count >= old.count, i <= a.count - j {
+            return String(a[i..<(a.count - j)])
+        } else {
+            return "" // 删除或替换导致整体变短时，这里返回空串
+        }
+    }
+}
+// ===========================================================
+// 🎯 API：链式退格回调（返回 Self）
+// ===========================================================
+import RxRelay // 你文件里已用到 PublishRelay/BehaviorRelay，确保有这行
+
+public extension UITextView {
+    typealias TVOnBackspace = (_ tv: UITextView) -> Void
+
+    /// 监听退格键：点语法 + 可选节流
+    /// - Parameters:
+    ///   - throttle: 可选节流间隔（例如 .milliseconds(120)），默认 nil 不节流
+    ///   - scheduler: 调度器，默认 MainScheduler.instance
+    ///   - handler: 回调 (tv)
+    @discardableResult
+    func onBackspace(
+        throttle: RxTimeInterval? = nil,
+        scheduler: SchedulerType = MainScheduler.instance,
+        _ handler: @escaping TVOnBackspace
+    ) -> Self {
+
+        // 保证 deleteBackward 广播生效
+        UITextView.enableDeleteBackwardBroadcast()
+
+        // 重绑先清理旧订阅
+        _tv_backspaceBag = DisposeBag()
+
+        var src = self.didPressDelete
+        if let interval = throttle {
+            // 避免长按连续触发过于频繁
+            src = src.throttle(interval, latest: true, scheduler: scheduler)
+        }
+
+        src
+            .withUnretained(self)
+            .subscribe(onNext: { tv, _ in
+                handler(tv)
+            })
+            .disposed(by: _tv_backspaceBag)
+
+        return self
+    }
+
+    /// 语义别名：onDelete == onBackspace
+    @discardableResult
+    func onDelete(
+        throttle: RxTimeInterval? = nil,
+        scheduler: SchedulerType = MainScheduler.instance,
+        _ handler: @escaping TVOnBackspace
+    ) -> Self {
+        onBackspace(throttle: throttle, scheduler: scheduler, handler)
+    }
 }

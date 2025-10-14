@@ -14,13 +14,19 @@
 #endif
 
 import ObjectiveC
+import ObjectiveC.runtime
+
 import RxSwift
 import RxCocoa
-import ObjectiveC.runtime
+import NSObject_Rx
 
 public enum JobsTFKeys {
     static var limitBag = UInt8(0)
     static var textInputActive = UInt8(0)
+    // ↓↓↓ 新增 3 个 AO Key
+    static var onChangeBlock = UInt8(0)
+    static var onChangeIncludeMarked = UInt8(0)
+    static var previousText = UInt8(0)
 }
 // MARK: 🧱组件模型：RxTextInput：一个输入框的“响应式视图模型”，把常用流打包给
 public struct RxTextInput {
@@ -55,13 +61,13 @@ public extension UITextField {
     }
 
     @discardableResult
-    func byTextColor(_ color: UIColor) -> Self {
+    func byTextColor(_ color: UIColor?) -> Self {
         self.textColor = color
         return self
     }
 
     @discardableResult
-    func byFont(_ font: UIFont) -> Self {
+    func byFont(_ font: UIFont?) -> Self {
         self.font = font
         return self
     }
@@ -226,7 +232,7 @@ public extension UITextField {
     }
     // MARK: 🔠 内容类型 / 密码规则
     @discardableResult
-    func byTextContentType(_ type: UITextContentType) -> Self {
+    func byTextContentType(_ type: UITextContentType?) -> Self {
         self.textContentType = type
         return self
     }
@@ -314,22 +320,18 @@ public extension UITextField {
             return self
         }
 
-        let iv = UIImageView(image: tint == nil ? image : image.withRenderingMode(.alwaysTemplate))
-        iv.tintColor = tint
-        iv.contentMode = .scaleAspectFit
-        iv.frame = CGRect(origin: .zero, size: size)
-
         let containerW = leading + size.width + spacing
         let containerH = max(24, size.height)    // 高度随便给，系统会垂直居中
         let container = UIView(frame: CGRect(x: 0, y: 0, width: containerW, height: containerH))
 
-        // 把图标放到带 leading 的位置
-        iv.center = CGPoint(x: leading + size.width / 2, y: container.bounds.midY)
-        iv.autoresizingMask = [.flexibleTopMargin, .flexibleBottomMargin]
-        container.addSubview(iv)
+        self.byLeftView(container.byAddSubviewRetSuper(UIImageView().byImage(tint == nil ? image : image.withRenderingMode(.alwaysTemplate))
+            .byTintColor(tint)
+            .byContentMode(.scaleAspectFit)
+            .byFrame(CGRect(origin: .zero, size: size))
+             // 把图标放到带 leading 的位置
+            .byCenter(CGPoint(x: leading + size.width / 2, y: container.bounds.midY))
+            .byAutoresizingMask([.flexibleTopMargin, .flexibleBottomMargin])),mode:.always)
 
-        leftView = container
-        leftViewMode = .always
         return self
     }
     /// 仅设置左侧留白（没有图标），常用于单纯增加文本左内边距
@@ -485,5 +487,70 @@ public extension UITextField {
 public extension UITextField {
     func richTextBy(_ runs: [JobsRichRun], paragraphStyle: NSMutableParagraphStyle? = nil) {
         self.attributedText = JobsRichText.make(runs, paragraphStyle: paragraphStyle)
+    }
+}
+// MARK: - 🔔 Block 监听（挂在 UITextField）
+public typealias UITextFieldOnChange = (_ tf: UITextField,
+                                        _ input: String,
+                                        _ oldText: String,
+                                        _ isDeleting: Bool) -> Void
+
+private extension UITextField {
+    var _jobs_onChangeBlock: UITextFieldOnChange? {
+        get { objc_getAssociatedObject(self, &JobsTFKeys.onChangeBlock) as? UITextFieldOnChange }
+        set { objc_setAssociatedObject(self, &JobsTFKeys.onChangeBlock, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC) }
+    }
+    var _jobs_includeMarked: Bool {
+        get { (objc_getAssociatedObject(self, &JobsTFKeys.onChangeIncludeMarked) as? NSNumber)?.boolValue ?? false }
+        set { objc_setAssociatedObject(self, &JobsTFKeys.onChangeIncludeMarked, NSNumber(value: newValue), .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
+    var _jobs_previousText: String {
+        get { (objc_getAssociatedObject(self, &JobsTFKeys.previousText) as? String) ?? (self.text ?? "") }
+        set { objc_setAssociatedObject(self, &JobsTFKeys.previousText, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC) }
+    }
+
+    @objc func _jobs_handleEditingChanged() {
+        // 中文/日文等 IME 组字阶段默认忽略（可通过 includeMarked 开启）
+        if !_jobs_includeMarked, self.markedTextRange != nil { return }
+
+        let old = _jobs_previousText
+        let cur = self.text ?? ""
+        let isDeleting = cur.count < old.count
+
+        let input: String
+        if isDeleting {
+            input = ""
+        } else if cur.hasPrefix(old) {
+            input = String(cur.dropFirst(old.count))
+        } else {
+            // 粘贴/替换整段等情况，直接视为整段输入
+            input = cur
+        }
+
+        _jobs_onChangeBlock?(self, input, old, isDeleting)
+        _jobs_previousText = cur
+    }
+}
+
+public extension UITextField {
+    /// 链式注册：与 Alert 版回调语义保持一致 (input/old/isDeleting)
+    /// - includeMarked: 是否包含 IME 组字过程（默认 false 更稳）
+    @discardableResult
+    func onChange(includeMarked: Bool = false,
+                  _ handler: @escaping UITextFieldOnChange) -> Self {
+        _jobs_onChangeBlock = handler
+        _jobs_includeMarked = includeMarked
+        _jobs_previousText = self.text ?? ""
+        // 重复调用会复用同一个 selector；iOS 会去重，不会叠加多次触发
+        addTarget(self, action: #selector(_jobs_handleEditingChanged), for: .editingChanged)
+        return self
+    }
+
+    /// 取消监听（可选）
+    @discardableResult
+    func removeOnChange() -> Self {
+        removeTarget(self, action: #selector(_jobs_handleEditingChanged), for: .editingChanged)
+        _jobs_onChangeBlock = nil
+        return self
     }
 }

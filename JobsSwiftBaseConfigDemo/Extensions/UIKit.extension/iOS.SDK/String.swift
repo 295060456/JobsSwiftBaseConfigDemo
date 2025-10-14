@@ -151,6 +151,15 @@ public extension String {
             throw KFError.notFound
         }
     }
+    /// A) 允许传 nil：nil -> 蓝色兜底
+    func kfLoadImage(fallbackImage: @autoclosure () -> UIImage?) async -> UIImage {
+        do { return try await self.kfLoadImage() }         // 你已有的 throws 版本
+        catch { return fallbackImage() ?? jobsSolidBlue() }
+    }
+    /// B) 非可选便捷版
+    func kfLoadImage(fallback: UIImage) async -> UIImage {
+        await kfLoadImage(fallbackImage: fallback)
+    }
 #endif
 
 #if canImport(SDWebImage)
@@ -188,6 +197,14 @@ public extension String {
             }
             throw NSError(domain: "SDWebImage", code: -1002,
                           userInfo: [NSLocalizedDescriptionKey: "Local image not found: \(name)"])
+        }
+    }
+    /// 不抛错：加载失败则返回 fallbackImage()；若其为 nil，则返回蓝色占位图
+    func sdLoadImage(fallbackImage: @autoclosure () -> UIImage?) async -> UIImage {
+        do {
+            return try await self.sdLoadImage()   // 你已有的 throws 版本
+        } catch {
+            return fallbackImage() ?? jobsSolidBlue()
         }
     }
 #endif

@@ -159,6 +159,17 @@ final class UITextFieldDemoVC: BaseVC,
                          }, mode: .always)
             .byInputView(datePicker) // 演示自定义 inputView：点密码框弹日期（纯展示，不建议真实项目这么用）
             .byLimitLength(5)
+            .onChange { tf, input, old, isDeleting in
+                let new = tf.text ?? ""
+                print("✏️ input='\(input)' old='\(old)' new='\(new)' deleting=\(isDeleting)")
+
+                // 示例：6~20 位有效态样式
+                let ok = (6...20).contains(new.count)
+                tf.layer.borderWidth = 1
+                tf.layer.borderColor = (ok ? UIColor.systemGreen : UIColor.systemRed).cgColor
+                tf.layer.masksToBounds = true
+                if #available(iOS 13.0, *) { tf.layer.cornerCurve = .continuous }
+            }
             .byAddTo(view) { [unowned self] make in
                 make.top.equalTo(emailTF.snp.bottom).offset(16)
                 make.left.right.height.equalTo(emailTF)

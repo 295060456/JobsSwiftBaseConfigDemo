@@ -77,6 +77,17 @@ final class CNIDDemoVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+
+        bgImageView().byImage("唐老鸭".img)
+//
+        Task { @MainActor in
+            bgImageView().byImage(await "https://picsum.photos/400/300".kfLoadImage(fallbackImage: "唐老鸭".img))
+        }
+
+        Task { @MainActor in
+            bgImageView().byImage(await "https://picsum.photos/400/300".sdLoadImage(fallbackImage: "唐老鸭".img))
+        }
+
         jobsSetupGKNav(
             title: "身份证校验 Demo"
         )

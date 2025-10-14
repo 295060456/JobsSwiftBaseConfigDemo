@@ -51,7 +51,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                 .byImage(UIImage(systemName: "bolt.horizontal.circle.fill"))
             ])
             .byAddTo(view) { [unowned self] make in
-                make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(12)
+                make.top.equalTo(gk_navigationBar.snp.bottom).offset(10) // 占满
                 make.left.right.equalToSuperview()
                 make.height.equalTo(64)
             }

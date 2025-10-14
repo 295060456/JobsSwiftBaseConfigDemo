@@ -178,6 +178,14 @@
 
 * [**Sip**](https://sipapp.io/)：取色器
 
+* [**帮小忙@腾讯QQ浏览器在线工具箱**](https://tool.browser.qq.com/)
+
+* [**Mac破解软件**](https://mac.macxz.com/)
+
+* [**波测**](https://www.boce.com/)
+
+* [**uuwallet@虚拟卡**](https://www.uuwallet.com/)
+
 * [**UI界面调试工具**](https://lookin.work/)（必须是有线连接，并且**`Lookin.app`**要先于项目文件启动）
 
   > ```ruby
@@ -2091,6 +2099,17 @@ private lazy var tableView: UITableView = {
                       tint: .secondaryLabel,
                       size: .init(width: 18, height: 18),
                       leading: 12, spacing: 8)
+          .onChange { tf, input, old, isDeleting in
+              let new = tf.text ?? ""
+              print("✏️ input='\(input)' old='\(old)' new='\(new)' deleting=\(isDeleting)")
+  
+              // 示例：6~20 位有效态样式
+              let ok = (6...20).contains(new.count)
+              tf.layer.borderWidth = 1
+              tf.layer.borderColor = (ok ? UIColor.systemGreen : UIColor.systemRed).cgColor
+              tf.layer.masksToBounds = true
+              if #available(iOS 13.0, *) { tf.layer.cornerCurve = .continuous }
+          }
           .byAddTo(view) { [unowned self] make in
               make.top.equalTo(textField.snp.bottom).offset(12)
               make.centerX.equalToSuperview()
@@ -2210,6 +2229,17 @@ private lazy var tableView: UITableView = {
                        }, mode: .always)
           .byInputView(datePicker) // 演示自定义 inputView：点密码框弹日期（纯展示，不建议真实项目这么用）
           .byLimitLength(5)
+          .onChange { tf, input, old, isDeleting in
+              let new = tf.text ?? ""
+              print("✏️ input='\(input)' old='\(old)' new='\(new)' deleting=\(isDeleting)")
+  
+              // 示例：6~20 位有效态样式
+              let ok = (6...20).contains(new.count)
+              tf.layer.borderWidth = 1
+              tf.layer.borderColor = (ok ? UIColor.systemGreen : UIColor.systemRed).cgColor
+              tf.layer.masksToBounds = true
+              if #available(iOS 13.0, *) { tf.layer.cornerCurve = .continuous }
+          }
           .byAddTo(view) { [unowned self] make in
               make.top.equalTo(textField.snp.bottom).offset(12)
               make.centerX.equalToSuperview()
@@ -2248,9 +2278,7 @@ private lazy var tableView: UITableView = {
 #### 13.1、基础样式 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
-private func demo_ChainedStyling() {
-    addSectionTitle("1️⃣ 基础链式样式示例")
-
+private lazy var tv: UITextView = { [unowned self] in
     UITextView()
         .byText("这里展示基础链式调用：字体、颜色、边框、内边距等。")
         .byFont(.systemFont(ofSize: 16))
@@ -2260,16 +2288,26 @@ private func demo_ChainedStyling() {
         .bySelectable(true)
         .byTextContainerInset(UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10))
         .byRoundedBorder(color: .systemGray4, width: 1, radius: 8)
-        .byAddTo(view) { [unowned self] make in
-                      make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(40)
-                      make.left.right.equalToSuperview().inset(24)
-                      make.height.equalTo(44)
-                  }
-          }()
+        .onChange { tv, input, old, isDeleting in
+            let new = tv.text ?? ""
+            print("✏️ input='\(input)' old='\(old)' new='\(new)' deleting=\(isDeleting)")
 
-    stack.addArrangedSubview(tv)
-    tv.snp.makeConstraints { $0.height.equalTo(100) }
-}
+            // 6~20 有效：绿边，否则红边
+            let ok = (6...20).contains(new.count)
+            tv.layer.borderWidth = 1
+            tv.layer.borderColor = (ok ? UIColor.systemGreen : UIColor.systemRed).cgColor
+            tv.layer.masksToBounds = true
+            if #available(iOS 13.0, *) { tv.layer.cornerCurve = .continuous }
+        }
+        .onBackspace { tv in
+            print("👈 backspace: len=\(tv.text?.count ?? 0)")
+        }
+        .byAddTo(self.view) { [unowned self] make in
+            make.top.equalTo(self.textField.snp.bottom).offset(12)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(36)
+        }
+}()
 ```
 
 #### 13.2、**金额输入（只限定数字）** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -2338,64 +2376,35 @@ private func demo_PhoneInput() {
 #### 13.4、**富文本**展示 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
-private func demo_AttrAndLink() {
-    addSectionTitle("4️⃣ 富文本 + 链接样式 + DataDetector（上：默认蓝｜下：自定义红）")
-    // ===== ① 默认蓝色（不设置 linkTextAttributes）=====
-    let attrBlue = NSMutableAttributedString(
-        string: "🔗 默认蓝色链接（系统样式）：",
-        attributes: [.font: UIFont.systemFont(ofSize: 15),
-                     .foregroundColor: UIColor.secondaryLabel]
-    )
-    attrBlue.append(NSAttributedString(
-        string: " Apple 官网",
-        attributes: [.link: URL(string: "https://www.apple.com")!,
-                     .font: UIFont.boldSystemFont(ofSize: 16)]
-    ))
-    attrBlue.append(NSAttributedString(
-        string: "\n客服电话：400-123-4567",
-        attributes: [.font: UIFont.systemFont(ofSize: 15)]
-    ))
-
-    let tvBlue = UITextView()
-        .byAttributedText(attrBlue)
+private lazy var tvBlue: UITextView = { [unowned self] in
+    return UITextView()
+        .byAttributedText(NSMutableAttributedString(
+            string: "🔗 默认蓝色链接（系统样式）：",
+            attributes: [
+                .font: UIFont.systemFont(ofSize: 15),
+                .foregroundColor: UIColor.secondaryLabel
+            ])
+            .add(NSAttributedString(
+                string: " Apple 官网",
+                attributes: [
+                    .link: URL(string: "https://www.apple.com")!,
+                    .font: UIFont.boldSystemFont(ofSize: 16)
+                ]))
+            .add(NSAttributedString(
+                string: "\n客服电话：400-123-4567",
+                attributes: [.font: UIFont.systemFont(ofSize: 15)]
+            )))
         .byEditable(false)
         .bySelectable(true)
-        .byDataDetectorTypes([.link, .phoneNumber])          // 链接/电话自动识别
+        .byDataDetectorTypes([.link, .phoneNumber])   // 系统自动识别
         .byTextContainerInset(UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10))
         .byRoundedBorder(color: .systemGray4, width: 1, radius: 8)
-    stack.addArrangedSubview(tvBlue)
-    tvBlue.snp.makeConstraints { $0.height.equalTo(110) }
-
-    // ===== ② 自定义红色（用 linkTextAttributes 统一改红）=====
-    let attrRed = NSMutableAttributedString(
-        string: "🔴 自定义红色链接：",
-        attributes: [.font: UIFont.systemFont(ofSize: 15),
-                     .foregroundColor: UIColor.secondaryLabel]
-    )
-    attrRed.append(NSAttributedString(
-        string: " Jobs 官网",
-        attributes: [.link: URL(string: "https://www.google.com")!,
-                     .font: UIFont.boldSystemFont(ofSize: 16)]
-    ))
-    attrRed.append(NSAttributedString(
-        string: "\n客服电话：400-123-4567",
-        attributes: [.font: UIFont.systemFont(ofSize: 15)]
-    ))
-
-    let tvRed = UITextView()
-        .byAttributedText(attrRed)
-        .byEditable(false)
-        .bySelectable(true)
-        .byDataDetectorTypes([.link, .phoneNumber])
-        .byLinkTextAttributes([                               // 这一段统一改红
-            .foregroundColor: UIColor.systemRed,
-            .underlineStyle: NSUnderlineStyle.single.rawValue
-        ])
-        .byTextContainerInset(UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10))
-        .byRoundedBorder(color: .systemGray4, width: 1, radius: 8)
-    stack.addArrangedSubview(tvRed)
-    tvRed.snp.makeConstraints { $0.height.equalTo(110) }
-}
+        .byAddTo(self.view) { [unowned self] make in
+            make.top.equalTo(self.tv.snp.bottom).offset(12)   // 紧跟在 tv 下面
+            make.centerX.equalToSuperview()
+            make.height.equalTo(36)
+        }
+}()
 ```
 
 #### 13.5、查找高亮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -2596,7 +2605,8 @@ private lazy var passwordAccessory: UIToolbar = {
   ```swift
   /// UIImageView字符串网络图@Kingfisher
   private lazy var asyncImgView: UIImageView = {
-      let imageView = UIImageView()
+      UIImageView()
+          .byAsyncImageKF("https://picsum.photos/200/300", fallback: "唐老鸭".img)
           .byContentMode(.scaleAspectFill)
           .byClipsToBounds()
           .byAddTo(scrollView) { [unowned self] make in
@@ -2605,18 +2615,9 @@ private lazy var passwordAccessory: UIToolbar = {
               make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
               make.height.equalTo(180)
           }
-      Task {
-          do {
-              imageView.byImage(try await "https://picsum.photos/200/300".kfLoadImage())
-              print("✅ 加载成功 (KF async)")
-          } catch {
-              print("❌ 加载失败 (KF async)：\(error)")
-          }
-      }
-      return imageView
   }()
   ```
-
+  
   ```swift
   /// UIImageView网络图（失败兜底图）@Kingfisher
   private lazy var wrapperImgView: UIImageView = {
@@ -2632,13 +2633,14 @@ private lazy var passwordAccessory: UIToolbar = {
           }
   }()
   ```
-
+  
 * [**SDWebImage**](https://github.com/SDWebImage/SDWebImage)
 
   ```swift
   /// UIImageView字符串网络图@SDWebImage
   private lazy var asyncImgViewSD: UIImageView = {
-      let imageView = UIImageView()
+      UIImageView()
+          .byAsyncImageSD("https://picsum.photos/400/300", fallback: "唐老鸭".img)
           .byContentMode(.scaleAspectFill)
           .byClipsToBounds()
           .byAddTo(scrollView) { [unowned self] make in
@@ -2647,18 +2649,9 @@ private lazy var passwordAccessory: UIToolbar = {
               make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
               make.height.equalTo(180)
           }
-      Task {
-          do {
-              imageView.byImage(try await "https://picsum.photos/400/300".sdLoadImage())
-              print("✅ 加载成功 (SD async)")
-          } catch {
-              print("❌ 加载失败 (SD async)：\(error)")
-          }
-      }
-      return imageView
   }()
   ```
-
+  
   ```swift
   /// UIImageView网络图（失败兜底图）@SDWebImage
   private lazy var wrapperImgViewSD: UIImageView = {
@@ -2687,7 +2680,7 @@ private lazy var passwordAccessory: UIToolbar = {
 
       ```swift
       // MARK: - 点击 Tap
-      UIView().addGestureRecognizer(
+      UIView().jobs_addGesture(
           UITapGestureRecognizer
               .byConfig { gr in
                   print("Tap 触发 on: \(String(describing: gr.view))")
@@ -2706,7 +2699,7 @@ private lazy var passwordAccessory: UIToolbar = {
               super.init(frame: frame)
       
               isUserInteractionEnabled = true
-              addGestureRecognizer(
+              jobs_addGesture(
                   UITapGestureRecognizer
                       .byConfig { gr in
                           DemoDetailVC()
@@ -2748,7 +2741,7 @@ private lazy var passwordAccessory: UIToolbar = {
 
       ```swift
       // MARK: - 拖拽 Pan
-      UIView().addGestureRecognizer(
+      UIView().jobs_addGesture(
           UIPanGestureRecognizer
               .byConfig { gr in
                   let p = (gr as! UIPanGestureRecognizer).translation(in: gr.view)
@@ -2768,7 +2761,7 @@ private lazy var passwordAccessory: UIToolbar = {
 
       ```swift
       // MARK: - 轻扫 Swipe（单方向）
-      UIView().addGestureRecognizer(
+      UIView().jobs_addGesture(
           UISwipeGestureRecognizer
               .byConfig { _ in
                   print("👉 右滑触发")
@@ -2783,22 +2776,22 @@ private lazy var passwordAccessory: UIToolbar = {
       ```swift
       // MARK: - 轻扫 Swipe（多方向）
       let swipeContainer = UIView()
-      swipeContainer.addGestureRecognizer(
+      swipeContainer.jobs_addGesture(
           UISwipeGestureRecognizer
               .byConfig { _ in print("← 左滑") }
               .byDirection(.left)
       )
-      swipeContainer.addGestureRecognizer(
+      swipeContainer.jobs_addGesture(
           UISwipeGestureRecognizer
               .byConfig { _ in print("→ 右滑") }
               .byDirection(.right)
       )
-      swipeContainer.addGestureRecognizer(
+      swipeContainer.jobs_addGesture(
           UISwipeGestureRecognizer
               .byConfig { _ in print("↑ 上滑") }
               .byDirection(.up)
       )
-      swipeContainer.addGestureRecognizer(
+      swipeContainer.jobs_addGesture(
           UISwipeGestureRecognizer
               .byConfig { _ in print("↓ 下滑") }
               .byDirection(.down)
@@ -2809,7 +2802,7 @@ private lazy var passwordAccessory: UIToolbar = {
 
       ```swift
       // MARK: - 捏合 Pinch
-      UIView().addGestureRecognizer(
+      UIView().jobs_addGesture(
           UIPinchGestureRecognizer
               .byConfig { _ in }
               .byOnScaleChange { gr, scale in
@@ -2825,7 +2818,7 @@ private lazy var passwordAccessory: UIToolbar = {
 
       ```swift
       // MARK: - 旋转 Rotate
-      UIView().addGestureRecognizer(
+      UIView().jobs_addGesture(
           UIRotationGestureRecognizer
               .byConfig { _ in }
               .byOnRotationChange { gr, r in
@@ -2864,7 +2857,7 @@ private lazy var passwordAccessory: UIToolbar = {
 * <font color=red>在已有的手势触发事件里面新增手势行为：`byAction`</font>
 
   ```swift
-  UIView().addGestureRecognizer(UISwipeGestureRecognizer()
+  UIView().jobs_addGesture(UISwipeGestureRecognizer()
       .byDirection(.left)
       .byAction { gr in print("左滑 \(gr.view!)") })
   ```
@@ -3887,9 +3880,31 @@ private lazy var countdownButton: UIButton = {
 
 ```
 
-### 34、条件编译 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 34、控制器添加背景图 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 34.1、`DEBUG` 模式下才允许做的事 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+* 本地背景图
+
+  ```swift
+  bgImageView().byImage("唐老鸭".img)
+  ```
+
+* 网络背景图
+
+  ```swift
+  Task { @MainActor in
+      bgImageView().byImage(await "https://picsum.photos/400/300".sdLoadImage(fallbackImage: "唐老鸭".img))
+  }
+  ```
+
+  ```swift
+  Task { @MainActor in
+      bgImageView().byImage(await "https://picsum.photos/400/300".kfLoadImage(fallbackImage: "唐老鸭".img))
+  }
+  ```
+
+### 35、条件编译 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 35.1、`DEBUG` 模式下才允许做的事 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 定义
 
@@ -3916,7 +3931,7 @@ private lazy var countdownButton: UIButton = {
   }
   ```
 
-#### 34.2、代码启用（当引入某第三方后）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 35.2、代码启用（当引入某第三方后）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 #if canImport(Kingfisher)
@@ -6491,7 +6506,28 @@ let b = v as! UIButton                  // 若不是 UIButton 会崩溃
     }
     ```
 
-    
+
+### 30、`UIAlertController` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* `UIAlertController`内置输入框
+
+  ```swift
+  @available(iOS 8.0, *)
+  @MainActor open class UIAlertController : UIViewController {
+      public convenience init(title: String?, message: String?, preferredStyle: UIAlertController.Style)
+      open func addAction(_ action: UIAlertAction)
+      open var actions: [UIAlertAction] { get }
+      @available(iOS 9.0, *)
+      open var preferredAction: UIAlertAction?
+      open func addTextField(configurationHandler: ((UITextField) -> Void)? = nil) // ✅
+      open var textFields: [UITextField]? { get } // ✅
+      open var title: String?
+      open var message: String?
+      open var preferredStyle: UIAlertController.Style { get }
+      @available(iOS 16.0, *)
+      open var severity: UIAlertControllerSeverity
+  }
+  ```
 
 ## 五、<font color=red>**F**</font><font color=green>**A**</font><font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
