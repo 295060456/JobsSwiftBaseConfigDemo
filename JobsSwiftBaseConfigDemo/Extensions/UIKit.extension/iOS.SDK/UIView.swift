@@ -412,6 +412,18 @@ extension UIView {
         layoutIfNeeded()
         return self
     }
+
+    @discardableResult
+    public func byActivate() -> Self {
+        // 下一帧：让父视图先布局，再让自己重建，避免首帧 bounds==0 的问题
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            superview?.setNeedsLayout()
+            superview?.layoutIfNeeded()
+            setNeedsLayout()
+        }
+        return self
+    }
 }
 /**
  // MARK: - 点击 Tap

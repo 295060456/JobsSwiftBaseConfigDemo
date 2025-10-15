@@ -19,33 +19,54 @@ import Kingfisher
 public enum MarqueeDirection { case left, right, up, down }
 
 public enum MarqueeMode: Equatable {
-    /// 连续滚动：按像素速率持续匀速移动（单位：pt/s）
     case continuous(speed: CGFloat)
-    /// 间隔滚动：每隔 interval 跳到下一页（动画时长 duration，步长 step；若 step=nil，则按视口尺寸）
     case intervalOnce(interval: TimeInterval, duration: TimeInterval, step: CGFloat? = nil)
 }
 
 // MARK: - Item 主轴长度策略
 public enum ItemMainAxisLength {
-    case autoMeasure           // 按内容测量
-    case fixed(CGFloat)        // 固定主轴长度
-    case fillViewport          // ✅ 每个 item = JobsMarqueeView.bounds
+    case autoMeasure
+    case fixed(CGFloat)
+    case fillViewport
+}
+
+// MARK: - PageControl 外观
+public struct PageIndicatorAppearance {
+    public var currentColor: UIColor?
+    public var inactiveColor: UIColor?
+    public var currentImage: UIImage?
+    public var inactiveImage: UIImage?
+
+    public init(currentColor: UIColor? = nil,
+                inactiveColor: UIColor? = nil,
+                currentImage: UIImage? = nil,
+                inactiveImage: UIImage? = nil) {
+        self.currentColor = currentColor
+        self.inactiveColor = inactiveColor
+        self.currentImage = currentImage
+        self.inactiveImage = inactiveImage
+    }
 }
 
 // MARK: - JobsMarqueeView
 public final class JobsMarqueeView: UIView, UIScrollViewDelegate {
+
     // =========================
-    // MARK: - 链式配置
+    // MARK: - 链式配置（公开）
     // =========================
     @discardableResult
     public func setButtons(_ buttons: [UIButton]) -> Self {
         baseButtons = buttons
+        currentPageIndex = 0
         requestRebuild()
         return self
     }
     @discardableResult
     public func byDirection(_ d: MarqueeDirection) -> Self {
-        direction = d; requestRebuild(); return self
+        direction = d
+        updatePageControlVisibility()
+        requestRebuild()
+        return self
     }
     @discardableResult
     public func byMode(_ m: MarqueeMode) -> Self {
@@ -54,6 +75,7 @@ public final class JobsMarqueeView: UIView, UIScrollViewDelegate {
         case .continuous: timerKind = .displayLink
         case .intervalOnce: timerKind = .gcd
         }
+        updatePageControlVisibility()
         restartTimerIfRunning()
         return self
     }
@@ -78,24 +100,57 @@ public final class JobsMarqueeView: UIView, UIScrollViewDelegate {
     @discardableResult
     public func byResumeAfterDragDelay(_ delay: TimeInterval?) -> Self { resumeAfterDragDelay = delay; return self }
     @discardableResult
-    public func byItemSpacing(_ spacing: CGFloat) -> Self { itemSpacing = max(0, spacing); requestRebuild(); return self }
+    public func byItemSpacing(_ spacing: CGFloat) -> Self { itemSpacing = max(0, spacing); requestRebuild(); updatePageControlVisibility(); return self }
     @discardableResult
-    public func byItemMainAxisLength(_ s: ItemMainAxisLength) -> Self { itemMainAxisLength = s; requestRebuild(); return self }
+    public func byItemMainAxisLength(_ s: ItemMainAxisLength) -> Self { itemMainAxisLength = s; requestRebuild(); updatePageControlVisibility(); return self }
     @discardableResult
     public func bySnapOnDragEnd(_ on: Bool) -> Self { snapOnDragEnd = on; return self }
     @discardableResult
     public func bySnapSpring(damping: CGFloat, initialVelocity: CGFloat) -> Self {
-        snapSpringDamping = max(0.05, min(1.0, damping)); snapSpringVelocity = max(0, initialVelocity); return self
+        snapSpringDamping = max(0.05, min(1.0, damping))
+        snapSpringVelocity = max(0, initialVelocity)
+        return self
     }
     @discardableResult
     public func byOnItemTap(_ handler: @escaping (_ index: Int, _ button: UIButton) -> Void) -> Self { onItemTap = handler; return self }
     public var onItemTap: ((_ index: Int, _ button: UIButton) -> Void)?
 
-    /// 外部完成约束并 `superview.layoutIfNeeded()` 后调用（确保尺寸确定后重建）
-    public func refreshAfterConstraints() -> Self{
+    /// ✅ 固有高度兜底（在外部没约束高度时避免塌到 0）
+    @discardableResult
+    public func byPreferredHeight(_ h: CGFloat) -> Self {
+        preferredHeight = max(1, h)
+        invalidateIntrinsicContentSize()
+        setNeedsLayout()
+        return self
+    }
+
+    /// 外部完成约束后调用（确保尺寸确定后重建）
+    @discardableResult
+    public func refreshAfterConstraints() -> Self {
         pendingRebuild = true
         needsRebuildOnLayout = true
         DispatchQueue.main.async { [weak self] in self?.setNeedsLayout() }
+        return self
+    }
+
+    // ---------- PageControl 相关（链式） ----------
+    @discardableResult
+    public func byPageControlEnabled(_ on: Bool) -> Self {
+        pageControlEnabled = on
+        updatePageControlVisibility()
+        setNeedsLayout()
+        return self
+    }
+    @discardableResult
+    public func byPageIndicatorAppearance(_ appearance: PageIndicatorAppearance) -> Self {
+        pageAppearance = appearance
+        applyPageAppearance()
+        return self
+    }
+    @discardableResult
+    public func byPageControlInsets(_ insets: UIEdgeInsets) -> Self {
+        pageControlInsets = insets
+        setNeedsLayout()
         return self
     }
 
@@ -105,28 +160,53 @@ public final class JobsMarqueeView: UIView, UIScrollViewDelegate {
     public override init(frame: CGRect) { super.init(frame: frame); setup() }
     public required init?(coder: NSCoder) { super.init(coder: coder); setup() }
 
+    public override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        installBootstrapHeightIfNeeded()   // ✅ 自举高度（低优先级）
+        setNeedsLayout()
+        invalidateIntrinsicContentSize()
+    }
+
+    public override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if window != nil {
+            installBootstrapHeightIfNeeded()
+            setNeedsLayout()
+        } else {
+            stop()
+        }
+    }
+
+    public override func safeAreaInsetsDidChange() {
+        super.safeAreaInsetsDidChange()
+        setNeedsLayout()
+    }
+
     public override func layoutSubviews() {
         super.layoutSubviews()
-        guard bounds.width > 0, bounds.height > 0 else {
+
+        let hadSize = bounds.width > 0 && bounds.height > 0
+        if !hadSize {
             needsRebuildOnLayout = true
             return
         }
+
+        // ✅ 一旦拿到非 0 高度，卸载自举高度约束
+        if bounds.height > 0, bootstrapHeight?.isActive == true {
+            bootstrapHeight?.isActive = false
+            bootstrapHeight = nil
+        }
+
         let sizeChanged = lastSize != bounds.size
         if sizeChanged {
             lastSize = bounds.size
             scrollView.frame = bounds
             container.frame = scrollView.bounds
         }
-        if needsRebuildOnLayout || sizeChanged { rebuildContent() }
-    }
 
-    public override func didMoveToWindow() {
-        super.didMoveToWindow()
-        if window != nil {
-            setNeedsLayout()
-        } else {
-            stop()
-        }
+        if needsRebuildOnLayout || sizeChanged { rebuildContent() }
+
+        layoutPageControl()
     }
 
     deinit { stop() }
@@ -151,7 +231,7 @@ public final class JobsMarqueeView: UIView, UIScrollViewDelegate {
         s.clipsToBounds = true
         return s
     }()
-    private var container = UIView()            // ✅ 容器与视口一致
+    private var container = UIView()
     private var baseButtons: [UIButton] = []
     private var clones: [UIButton] = []
 
@@ -170,22 +250,33 @@ public final class JobsMarqueeView: UIView, UIScrollViewDelegate {
     private var itemSpacing: CGFloat = 0
     private var itemMainAxisLength: ItemMainAxisLength = .autoMeasure
 
-    // 弹簧吸附
     private var snapOnDragEnd = true
     private var snapSpringDamping: CGFloat = 0.82
     private var snapSpringVelocity: CGFloat = 0.5
 
-    // 布局/回中
-    private var baseLength: CGFloat = 0      // 一份数据（未复制）的主轴长度
+    private var baseLength: CGFloat = 0
     private var copies: Int = 0
     private var midpointOffset: CGFloat = 0
     private var needsRebuildOnLayout = true
     private var pendingRebuild = false
     private var lastSize: CGSize = .zero
 
+    /// ✅ 固有高度兜底；0 表示不声明固有高度（完全交给外部约束）
+    private var preferredHeight: CGFloat = 0
+
+    /// ✅ 低优先级自举高度（只在没有其它高度约束时兜底）
+    private var bootstrapHeight: NSLayoutConstraint?
+
     #if canImport(SDWebImage) || canImport(Kingfisher)
-    private var firstCloneRequestedIndex = Set<Int>() // “每个原始 index 仅首个克隆允许触网”
+    private var firstCloneRequestedIndex = Set<Int>()
     #endif
+
+    // ---------- PageControl 内部状态 ----------
+    private let pageControl = UIPageControl()
+    private var pageControlEnabled: Bool = false
+    private var pageAppearance: PageIndicatorAppearance = .init(currentColor: .white, inactiveColor: .systemGray)
+    private var pageControlInsets: UIEdgeInsets = .init(top: 0, left: 8, bottom: 8, right: 8)
+    private var currentPageIndex: Int = 0
 
     private func setup() {
         addSubview(scrollView)
@@ -197,14 +288,30 @@ public final class JobsMarqueeView: UIView, UIScrollViewDelegate {
         container.frame = scrollView.bounds
         container.clipsToBounds = false
 
+        setContentCompressionResistancePriority(.required, for: .vertical)
         scrollView.panGestureRecognizer.addTarget(self, action: #selector(_onPanChanged(_:)))
     }
 
-    /// 只做标记，等下一次有效 layout 再重建（避免尺寸未定时强制 layoutIfNeeded）
+    /// ✅ 安装低优先级“自举高度”，保证首帧也不是 0 高
+    private func installBootstrapHeightIfNeeded() {
+        guard bootstrapHeight == nil else { return }
+        translatesAutoresizingMaskIntoConstraints = false // SnapKit 会设成 false，这里重复无害
+        let h = preferredHeight > 0 ? preferredHeight : 64
+        let c = heightAnchor.constraint(greaterThanOrEqualToConstant: h)
+        c.priority = UILayoutPriority(250) // 低优先级，不抢外部约束
+        c.isActive = true
+        bootstrapHeight = c
+    }
+
     private func requestRebuild() {
         pendingRebuild = true
         needsRebuildOnLayout = true
         setNeedsLayout()
+    }
+
+    public override var intrinsicContentSize: CGSize {
+        CGSize(width: UIView.noIntrinsicMetric,
+               height: preferredHeight > 0 ? preferredHeight : UIView.noIntrinsicMetric)
     }
 
     // =========================
@@ -213,16 +320,13 @@ public final class JobsMarqueeView: UIView, UIScrollViewDelegate {
     private func rebuildContent() {
         needsRebuildOnLayout = false
 
-        // 1) 尺寸必须已确定
         guard bounds.width > 0, bounds.height > 0 else {
             needsRebuildOnLayout = true
             return
         }
-        // 若没有标记，且已有克隆，就不重复重建
-        guard pendingRebuild || clones.isEmpty else { return }
+        guard pendingRebuild || clones.isEmpty || lastSize != bounds.size else { return }
         pendingRebuild = false
 
-        // 2) 清理旧内容
         clones.forEach { $0.removeFromSuperview() }
         clones.removeAll()
         #if canImport(SDWebImage) || canImport(Kingfisher)
@@ -232,23 +336,21 @@ public final class JobsMarqueeView: UIView, UIScrollViewDelegate {
         guard baseButtons.count > 0 else {
             scrollView.contentSize = .zero
             container.frame = scrollView.bounds
+            updatePageControlVisibility()
             return
         }
 
-        // 3) 计算“一份数据”的主轴长度（含 itemSpacing）
         baseLength = measureBaseLengthConsideringStrategy(axisIsHorizontal: isHorizontal)
 
-        // 4) 计算复制份数（为连贯滚动准备足量拷贝）
         let viewport = mainAxisLength(of: bounds.size)
         let epsilon: CGFloat = 1
         if contentWrapEnabled {
             let need = max(1, Int(ceil((viewport + epsilon) / max(1, baseLength))))
-            copies = max(3, need + 2)   // 至少 3 份，首尾各多一份做回中
+            copies = max(3, need + 2)
         } else {
             copies = 1
         }
 
-        // 5) 克隆并排布；关键：首屏可见的克隆允许走网（在“回中前”的临时首屏）
         var cursor: CGFloat = 0
         for _ in 0..<copies {
             for (idx, src) in baseButtons.enumerated() {
@@ -267,9 +369,7 @@ public final class JobsMarqueeView: UIView, UIScrollViewDelegate {
 
                 cursor += (isHorizontal ? size.width : size.height) + itemSpacing
 
-                // ---- 远程图克隆：临时可见的 clone 允许走网（注意：这一步是“回中前”的可见性）----
                 let initiallyVisible = frame.intersects(self.container.bounds)
-
                 #if canImport(SDWebImage)
                 let allowNet_SD = initiallyVisible || firstCloneRequestedIndex.insert(idx).inserted
                 src.sd_cloneBackground(to: btn, for: .normal, allowNetworkIfMissing: allowNet_SD)
@@ -280,14 +380,12 @@ public final class JobsMarqueeView: UIView, UIScrollViewDelegate {
             }
         }
 
-        // 6) contentSize；容器永远等于视口（便于后面以容器坐标判断）
         let totalLen = max(0, cursor - itemSpacing)
         scrollView.contentSize = isHorizontal
             ? CGSize(width: totalLen, height: bounds.height)
             : CGSize(width: bounds.width, height: totalLen)
         container.frame = scrollView.bounds
 
-        // 7) 回到中点，便于无缝循环
         if contentWrapEnabled && copies >= 3 {
             let oneCopyLen = baseLength
             let mid = oneCopyLen * CGFloat(copies / 2)
@@ -298,109 +396,79 @@ public final class JobsMarqueeView: UIView, UIScrollViewDelegate {
             scrollView.contentOffset = .zero
         }
 
-        // ✅ 新增：等回中完成后，把“当前真正可见”的克隆统一允许走网（首帧就能拉到网图）
-        DispatchQueue.main.async { [weak self] in
-            self?._allowNetForVisibleClones()
-        }
+        DispatchQueue.main.async { [weak self] in self?._allowNetForVisibleClones() }
 
-        // 8) 自动启动
         if autoStartEnabled, timer == nil, !isRunning { start() }
 
-        // ✅ 9) 统一预热并回填真正的网络图（第一次进入也能立即替换掉占位）
         _preheatBackgroundsKFIfNeeded()
 
+        updatePageControlVisibility()
+        rebuildPageControlModel(resetToFirstPage: true)
     }
 
 #if canImport(Kingfisher)
-private func _preheatBackgroundsKFIfNeeded() {
-    // 收集每个“源按钮”的 URL / 占位 / 选项
-    struct Item {
-        let url: URL
-        let placeholder: UIImage?
-        let options: KingfisherOptionsInfo
-        let index: Int                 // 源按钮的 idx（用于匹配克隆的 tag）
-    }
-
-    var items: [Item] = []
-    for (idx, src) in baseButtons.enumerated() {
-        // URL 优先用我们记录的 kf_bgURL，其次 _kf_config.url（两者你已有）
-        guard let url = src.kf_bgURL ?? src._kf_config.url else { continue }
-
-        // 选项：去掉过渡，避免滚动闪；补一发后台解码
-        var opts = src._kf_config.options
-        opts.removeAll { if case .transition = $0 { return true } else { return false } }
-        if !opts.contains(where: { if case .backgroundDecode = $0 { return true } else { return false } }) {
-            opts.append(.backgroundDecode)
+    private func _preheatBackgroundsKFIfNeeded() {
+        struct Item { let url: URL; let placeholder: UIImage?; var options: KingfisherOptionsInfo; let index: Int }
+        var items: [Item] = []
+        for (idx, src) in baseButtons.enumerated() {
+            guard let url = src.kf_bgURL ?? src._kf_config.url else { continue }
+            var opts = src._kf_config.options
+            opts.removeAll { if case .transition = $0 { return true } else { return false } }
+            if !opts.contains(where: { if case .backgroundDecode = $0 { return true } else { return false } }) {
+                opts.append(.backgroundDecode)
+            }
+            if src._kf_config.placeholder != nil {
+                opts.removeAll { if case .keepCurrentImageWhileLoading = $0 { return true } else { return false } }
+            }
+            items.append(Item(url: url, placeholder: src._kf_config.placeholder, options: opts, index: idx))
         }
-        // 防止“占位卡死”：有占位就别 keepCurrentImageWhileLoading
-        if src._kf_config.placeholder != nil {
-            opts.removeAll { if case .keepCurrentImageWhileLoading = $0 { return true } else { return false } }
-        }
-
-        items.append(Item(url: url,
-                          placeholder: src._kf_config.placeholder,
-                          options: opts,
-                          index: idx))
-    }
-
-    guard !items.isEmpty else { return }
-
-    // 逐个预热；成功后批量回填所有 tag == index 的克隆
-    for it in items {
-        KingfisherManager.shared.retrieveImage(with: it.url, options: it.options) { [weak self] result in
-            guard let self else { return }
-            switch result {
-            case .success(let r):
-                let img = r.image
-                DispatchQueue.main.async {
-                    // 回填到所有克隆（tag 在 cloneButton 里等于源 idx）
-                    self.clones.filter { $0.tag == it.index }.forEach { clone in
-                        // 关掉自动配置更新，确保不会被 configuration 覆盖
-                        if #available(iOS 15.0, *) { clone.automaticallyUpdatesConfiguration = false }
-                        clone.setBackgroundImage(img, for: .normal)   // 只走 legacy，稳定
-                        clone.setNeedsLayout()
-                    }
-                }
-            case .failure:
-                if let ph = it.placeholder {
+        guard !items.isEmpty else { return }
+        for it in items {
+            KingfisherManager.shared.retrieveImage(with: it.url, options: it.options) { [weak self] result in
+                guard let self else { return }
+                switch result {
+                case .success(let r):
+                    let img = r.image
                     DispatchQueue.main.async {
                         self.clones.filter { $0.tag == it.index }.forEach { clone in
                             if #available(iOS 15.0, *) { clone.automaticallyUpdatesConfiguration = false }
-                            clone.setBackgroundImage(ph, for: .normal)
+                            clone.setBackgroundImage(img, for: .normal)
                             clone.setNeedsLayout()
+                        }
+                    }
+                case .failure:
+                    if let ph = it.placeholder {
+                        DispatchQueue.main.async {
+                            self.clones.filter { $0.tag == it.index }.forEach { clone in
+                                if #available(iOS 15.0, *) { clone.automaticallyUpdatesConfiguration = false }
+                                clone.setBackgroundImage(ph, for: .normal)
+                                clone.setNeedsLayout()
+                            }
                         }
                     }
                 }
             }
         }
     }
-}
+#else
+    private func _preheatBackgroundsKFIfNeeded() {}
 #endif
-
 
     private func _allowNetForVisibleClones() {
         guard !clones.isEmpty else { return }
-        // scrollView 的可见区域（内容坐标系）
         let visible = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
-
-        for btn in clones {
-            // 仅处理当前真正“在屏”的克隆
-            guard btn.frame.intersects(visible) else { continue }
+        for btn in clones where btn.frame.intersects(visible) {
             let idx = btn.tag
             guard baseButtons.indices.contains(idx) else { continue }
             let src = baseButtons[idx]
-
             #if canImport(Kingfisher)
-            // 允许走网，把网图灌进这个克隆
             src.kf_cloneBackground(to: btn, for: .normal, allowNetworkIfMissing: true)
             #endif
-
             #if canImport(SDWebImage)
             src.sd_cloneBackground(to: btn, for: .normal, allowNetworkIfMissing: true)
             #endif
         }
     }
-
 
     // =========================
     // MARK: - 尺寸与测量
@@ -409,27 +477,42 @@ private func _preheatBackgroundsKFIfNeeded() {
     private func mainAxisLength(of size: CGSize) -> CGFloat { isHorizontal ? size.width : size.height }
 
     private func sizeForItem(from btn: UIButton) -> CGSize {
+        func measured(_ b: UIButton) -> CGSize {
+            let fitting = b.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+            if fitting != .zero { return fitting }
+            let intrinsic = b.intrinsicContentSize
+            if intrinsic != .zero { return intrinsic }
+            b.sizeToFit()
+            return b.bounds.size
+        }
+
+        let m = measured(btn)
+        let vw = bounds.width
+        let vh = bounds.height
+        let hasViewport = (vw > 0 && vh > 0)
+
         switch itemMainAxisLength {
         case .fillViewport:
-            return bounds.size
+            return hasViewport ? bounds.size : CGSize(width: max(1, m.width), height: max(1, m.height))
         case .fixed(let L):
-            return isHorizontal ? CGSize(width: L, height: bounds.height)
-                                : CGSize(width: bounds.width, height: L)
+            if isHorizontal {
+                let h = hasViewport ? max(1, vh) : max(1, m.height)
+                return CGSize(width: max(1, L), height: h)
+            } else {
+                let w = hasViewport ? max(1, vw) : max(1, m.width)
+                return CGSize(width: w, height: max(1, L))
+            }
         case .autoMeasure:
-            let fitting = btn.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-            if fitting != .zero { return isHorizontal ? CGSize(width: fitting.width, height: bounds.height)
-                                                      : CGSize(width: bounds.width, height: fitting.height) }
-            let intrinsic = btn.intrinsicContentSize
-            if intrinsic != .zero { return isHorizontal ? CGSize(width: intrinsic.width, height: bounds.height)
-                                                        : CGSize(width: bounds.width, height: intrinsic.height) }
-            btn.sizeToFit()
-            let sz = btn.bounds.size
-            return isHorizontal ? CGSize(width: sz.width, height: bounds.height)
-                                : CGSize(width: bounds.width, height: sz.height)
+            if isHorizontal {
+                let h = hasViewport ? max(1, vh) : max(1, m.height)
+                return CGSize(width: max(1, m.width), height: h)
+            } else {
+                let w = hasViewport ? max(1, vw) : max(1, m.width)
+                return CGSize(width: w, height: max(1, m.height))
+            }
         }
     }
 
-    /// 按策略正确计算“一份数据”的主轴总长度（含间距）
     private func measureBaseLengthConsideringStrategy(axisIsHorizontal: Bool) -> CGFloat {
         let n = CGFloat(baseButtons.count)
         let spacingSum = itemSpacing * max(0, n - 1)
@@ -459,9 +542,8 @@ private func _preheatBackgroundsKFIfNeeded() {
         b.isEnabled = src.isEnabled
         if #available(iOS 15.0, *), let cfg = src.configuration {
             b.configuration = cfg
-            b.automaticallyUpdatesConfiguration = false   // ✅ 防止自动重建干扰背景图
+            b.automaticallyUpdatesConfiguration = false
         } else {
-            // legacy 同步...
             for st in [UIControl.State.normal, .highlighted, .selected, .disabled] {
                 b.setTitle(src.title(for: st), for: st)
                 b.setAttributedTitle(src.attributedTitle(for: st), for: st)
@@ -476,7 +558,6 @@ private func _preheatBackgroundsKFIfNeeded() {
         }
         return b
     }
-
 
     // =========================
     // MARK: - 定时器
@@ -505,7 +586,13 @@ private func _preheatBackgroundsKFIfNeeded() {
             recenterIfNeeded()
         case .intervalOnce(_, let dur, let stepOpt):
             let step = stepOpt ?? mainAxisLength(of: bounds.size)
-            animateStep(step * sign, duration: dur)
+            animateStep(step * sign, duration: dur) { [weak self] in
+                guard let self else { return }
+                if self.isCarouselForPageControl {
+                    let delta = (self.sign >= 0) ? 1 : -1
+                    self.advanceCurrentPage(by: delta)
+                }
+            }
         }
     }
 
@@ -521,7 +608,7 @@ private func _preheatBackgroundsKFIfNeeded() {
         }
     }
 
-    private func animateStep(_ delta: CGFloat, duration: TimeInterval) {
+    private func animateStep(_ delta: CGFloat, duration: TimeInterval, completion: (() -> Void)? = nil) {
         let target = isHorizontal
             ? CGPoint(x: scrollView.contentOffset.x + delta, y: 0)
             : CGPoint(x: 0, y: scrollView.contentOffset.y + delta)
@@ -531,6 +618,7 @@ private func _preheatBackgroundsKFIfNeeded() {
             self.scrollView.setContentOffset(target, animated: false)
         } completion: { _ in
             self.recenterIfNeeded()
+            completion?()
         }
     }
 
@@ -558,54 +646,184 @@ private func _preheatBackgroundsKFIfNeeded() {
     @objc private func _onPanChanged(_ gr: UIPanGestureRecognizer) {
         guard pauseOnUserDrag else { return }
         switch gr.state {
-        case .began: pause()
+        case .began:
+            pause()
         case .ended, .cancelled, .failed:
             if snapOnDragEnd { snapToNearestAndResume() }
             else if let d = resumeAfterDragDelay {
                 DispatchQueue.main.asyncAfter(deadline: .now() + d) { [weak self] in self?.resume() }
             }
-        default: break
+        default:
+            break
         }
     }
 
+    /// ✅ 吸附到最近 item 的起点，然后按策略恢复滚动，并同步 PageControl（若适用）
     private func snapToNearestAndResume() {
         let cur = isHorizontal ? scrollView.contentOffset.x : scrollView.contentOffset.y
         var best = cur, dist = CGFloat.greatestFiniteMagnitude
+        var bestView: UIView?
+
         for v in clones {
             let start = isHorizontal ? v.frame.minX : v.frame.minY
             let d = abs(start - cur)
-            if d < dist { dist = d; best = start }
-        }
-        if abs(best - cur) < 0.5 {
-            if let d = resumeAfterDragDelay {
-                DispatchQueue.main.asyncAfter(deadline: .now() + d) { [weak self] in self?.resume() }
+            if d < dist {
+                dist = d
+                best = start
+                bestView = v
             }
-            return
         }
+
+        let same = abs(best - cur) < 0.5
         let target = isHorizontal ? CGPoint(x: best, y: 0) : CGPoint(x: 0, y: best)
-        UIView.animate(withDuration: 0.6, delay: 0,
-                       usingSpringWithDamping: snapSpringDamping,
-                       initialSpringVelocity: snapSpringVelocity,
-                       options: [.allowUserInteraction, .beginFromCurrentState]) {
-            self.scrollView.setContentOffset(target, animated: false)
-        } completion: { _ in
+
+        let applyResume = { [weak self] in
+            guard let self else { return }
             self.recenterIfNeeded()
+            // 拖拽吸附后，同步 PageControl 当前页（仅轮播+间隔模式）
+            if self.isCarouselForPageControl, let btn = bestView as? UIButton {
+                self.setCurrentPage(btn.tag)
+            }
             if let d = self.resumeAfterDragDelay {
                 DispatchQueue.main.asyncAfter(deadline: .now() + d) { [weak self] in self?.resume() }
             }
         }
+
+        if same {
+            applyResume()
+        } else {
+            UIView.animate(withDuration: 0.6,
+                           delay: 0,
+                           usingSpringWithDamping: snapSpringDamping,
+                           initialSpringVelocity: snapSpringVelocity,
+                           options: [.allowUserInteraction, .beginFromCurrentState]) {
+                self.scrollView.setContentOffset(target, animated: false)
+            } completion: { _ in
+                applyResume()
+            }
+        }
     }
 
     // =========================
-    // MARK: - UIScrollViewDelegate（如需硬轴锁，可在这里处理）
+    // MARK: - UIScrollViewDelegate
     // =========================
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         if hardAxisLock {
-            if isHorizontal {
-                scrollView.panGestureRecognizer.setTranslation(.zero, in: scrollView)
-            } else {
-                scrollView.panGestureRecognizer.setTranslation(.zero, in: scrollView)
+            // 预留扩展
+        }
+    }
+
+    // =========================
+    // MARK: - PageControl 逻辑
+    // =========================
+    private var isCarouselForPageControl: Bool {
+        guard isHorizontal else { return false }
+        guard baseButtons.count > 1 else { return false }
+        guard itemSpacing == 0 else { return false }
+        guard case .fillViewport = itemMainAxisLength else { return false }
+        guard case .intervalOnce(_, _, let stepOpt) = mode else { return false }
+        let viewport = mainAxisLength(of: bounds.size)
+        if let s = stepOpt, abs(s - viewport) > 0.5 { return false }
+        return true
+    }
+
+    private func updatePageControlVisibility() {
+        let shouldShow = pageControlEnabled && isCarouselForPageControl
+        if shouldShow {
+            if pageControl.superview == nil { addSubview(pageControl) }
+            pageControl.isHidden = false
+        } else {
+            pageControl.isHidden = true
+        }
+    }
+
+    private func rebuildPageControlModel(resetToFirstPage: Bool) {
+        guard pageControl.superview != nil else { return }
+        pageControl.numberOfPages = max(0, baseButtons.count)
+        pageControl.hidesForSinglePage = true
+        if resetToFirstPage { currentPageIndex = 0 }
+        pageControl.currentPage = min(currentPageIndex, max(0, pageControl.numberOfPages - 1))
+        applyPageAppearance(forceResetPerPageImages: true)
+        setNeedsLayout()
+    }
+
+    private func setCurrentPage(_ idx: Int) {
+        guard pageControl.superview != nil else { return }
+        let total = max(0, pageControl.numberOfPages)
+        guard total > 0 else { return }
+        let normalized = (idx % total + total) % total
+        currentPageIndex = normalized
+        pageControl.currentPage = normalized
+        applyPageAppearance(forceResetPerPageImages: true)
+    }
+
+    private func advanceCurrentPage(by delta: Int) { setCurrentPage(currentPageIndex + delta) }
+
+    private func applyPageAppearance(forceResetPerPageImages: Bool = false) {
+        guard pageControl.superview != nil else { return }
+        let ap = pageAppearance
+
+        if #available(iOS 14.0, *), let inactiveImg = ap.inactiveImage, let currentImg = ap.currentImage {
+            pageControl.preferredIndicatorImage = inactiveImg
+            if forceResetPerPageImages {
+                for i in 0..<pageControl.numberOfPages { pageControl.setIndicatorImage(inactiveImg, forPage: i) }
+            }
+            if pageControl.numberOfPages > 0 { pageControl.setIndicatorImage(currentImg, forPage: pageControl.currentPage) }
+            pageControl.pageIndicatorTintColor = .clear
+            pageControl.currentPageIndicatorTintColor = .clear
+        } else {
+            pageControl.pageIndicatorTintColor = ap.inactiveColor ?? .systemGray
+            pageControl.currentPageIndicatorTintColor = ap.currentColor ?? .white
+            if #available(iOS 14.0, *) {
+                pageControl.preferredIndicatorImage = nil
+                if forceResetPerPageImages {
+                    for i in 0..<pageControl.numberOfPages { pageControl.setIndicatorImage(nil, forPage: i) }
+                }
             }
         }
+    }
+
+    private func layoutPageControl() {
+        guard pageControl.superview != nil, !pageControl.isHidden else { return }
+        let total = pageControl.numberOfPages
+        guard total > 1 else { pageControl.isHidden = true; return }
+
+        let intrinsic = pageControl.size(forNumberOfPages: total)
+        let maxWidth = bounds.width - pageControlInsets.left - pageControlInsets.right
+        let w = min(intrinsic.width, maxWidth)
+        let h = intrinsic.height
+        let x = (bounds.width - w) * 0.5
+        let y = bounds.height - h - pageControlInsets.bottom
+        pageControl.frame = CGRect(x: max(0, x), y: max(0, y), width: max(0, w), height: max(0, h))
+    }
+}
+
+// MARK: - 协议：支持“约束生效后重建”
+public protocol JobsRefreshableAfterConstraints {
+    @discardableResult
+    func refreshAfterConstraints() -> Self
+}
+extension JobsMarqueeView: JobsRefreshableAfterConstraints {}
+
+// MARK: - UIView 层“启动开关”
+public extension UIView {
+    @discardableResult
+    func byActivateAfterAdd() -> Self {
+        func perform(_ v: UIView) {
+            v.superview?.setNeedsLayout()
+            v.superview?.layoutIfNeeded()
+            (v as? JobsRefreshableAfterConstraints)?.refreshAfterConstraints()
+            v.setNeedsLayout()
+            v.layoutIfNeeded()
+        }
+        if self.window != nil {
+            DispatchQueue.main.async { [weak self] in self.map(perform) }
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                guard let s = self else { return }
+                DispatchQueue.main.async { perform(s) }
+            }
+        }
+        return self
     }
 }

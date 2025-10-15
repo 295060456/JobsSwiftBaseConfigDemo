@@ -35,32 +35,37 @@ final class JobsMarqueeDemoVC: BaseVC {
             .byPauseOnUserDrag(true)
             .byResumeAfterDragDelay(0.8)
             .byItemSpacing(8)
+            .byItemMainAxisLength(.fillViewport)
             .byOnItemTap { idx, btn in
                 print("TEXT tap idx=\(idx), title=\(btn.title(for: .normal) ?? "-")")
             }
-            .setButtons([UIButton(type: .system)
-                .byTitle("跑马灯 · 主标题")
-                .byTitleFont(.systemFont(ofSize: 17, weight: .semibold))
-                .byTitleColor(.white)
-                .bySubTitle("副标题：普通文本")
-                .bySubTitleFont(.systemFont(ofSize: 11))
-                .bySubTitleColor(UIColor.white.withAlphaComponent(0.85))
-                .byNormalBgColor(.systemIndigo)
-                .byContentEdgeInsets(.init(top: 8, left: 12, bottom: 8, right: 12))
-                .byImagePlacement(.leading, padding: 8)
-                .byImage(UIImage(systemName: "bolt.horizontal.circle.fill"))
+            .setButtons([
+                UIButton(type: .system)
+                    .byTitle("跑马灯 · 主标题")
+                    .byTitleFont(.systemFont(ofSize: 17, weight: .semibold))
+                    .byTitleColor(.white)
+                    .bySubTitle("副标题：普通文本")
+                    .bySubTitleFont(.systemFont(ofSize: 11))
+                    .bySubTitleColor(UIColor.white.withAlphaComponent(0.85))
+                    .byNormalBgColor(.systemIndigo)
+                    .byContentEdgeInsets(.init(top: 8, left: 12, bottom: 8, right: 12))
+                    .byImagePlacement(.leading, padding: 8)
+                    .byImage(UIImage(systemName: "bolt.horizontal.circle.fill"))
             ])
             .byAddTo(view) { [unowned self] make in
-                make.top.equalTo(gk_navigationBar.snp.bottom).offset(10) // 占满
+                make.top.equalTo(gk_navigationBar.snp.bottom).offset(10)
                 make.left.right.equalToSuperview()
                 make.height.equalTo(64)
             }
+//            // ✅ UIView 层启动开关：父视图先布局 → 若是 Marquee 再重建 → 内部自动 start
+            .byActivateAfterAdd()
     }()
+
     // ================================== 2) 文本（富文本：JobsRichText） ==================================
     private lazy var marqueeRich: JobsMarqueeView = {
         return JobsMarqueeView()
             .byDirection(.left)
-            .byMode(.continuous(speed: 40))
+            .byMode(.continuous(speed: 40))                // 跑马灯：连续模式 → 不显示 PageControl
             .byContentWrapEnabled(true)
             .byLoopEnabled(true)
             .byGestureScrollEnabled(true)
@@ -97,11 +102,13 @@ final class JobsMarqueeDemoVC: BaseVC {
                 make.height.equalTo(64)
             }
     }()
-    // ================================== 3) 轮播图（本地图） ==================================
+
+    // ================================== 3) 轮播图（本地图，开启 PageControl：默认灰/白） ==================================
     private lazy var marqueeLocal: JobsMarqueeView = {
         JobsMarqueeView()
-            .byDirection(.left)
-            .byMode(.continuous(speed: 40))
+            .byItemMainAxisLength(.fillViewport)          // ✅ 轮播：每页=视口
+            .byDirection(.left)                            // ✅ 横向
+            .byMode(.intervalOnce(interval: 2.0, duration: 0.30, step: nil)) // ✅ 间隔模式（PageControl 允许出现）
             .byContentWrapEnabled(true)
             .byLoopEnabled(true)
             .byGestureScrollEnabled(true)
@@ -111,16 +118,29 @@ final class JobsMarqueeDemoVC: BaseVC {
             .byPauseOnUserDrag(true)
             .byResumeAfterDragDelay(0.8)
             .byItemSpacing(0)
+            .byPageControlEnabled(true)                   // ✅ 开启 PageControl
+            // .byPageIndicatorAppearance(.init(            // 如需自定义为“图片”，解注释传图
+            //     currentImage: UIImage(named: "dot_active"),
+            //     inactiveImage: UIImage(named: "dot_inactive")
+            // ))
             .byOnItemTap { idx, _ in
                 print("LOCAL tap idx=\(idx)")
             }
-            .setButtons([UIButton(type: .custom)
-                .byContentEdgeInsets(.zero)
-                .byClipsToBounds(true)
-                .byBackgroundImage("唐老鸭".img)
-                .byNormalBgColor(.tertiarySystemFill)
-                .byTitle("本地封面").byTitleFont(.systemFont(ofSize: 12)).byTitleColor(.secondaryLabel)
-                .byCornerRadius(0)
+            .setButtons([
+                UIButton(type: .custom)
+                    .byContentEdgeInsets(.zero)
+                    .byClipsToBounds(true)
+                    .byBackgroundImage("唐老鸭".img)
+                    .byNormalBgColor(.tertiarySystemFill)
+                    .byTitle("本地封面①").byTitleFont(.systemFont(ofSize: 12)).byTitleColor(.secondaryLabel)
+                    .byCornerRadius(0),
+                UIButton(type: .custom)
+                    .byContentEdgeInsets(.zero)
+                    .byClipsToBounds(true)
+                    .byBackgroundImage("唐老鸭".img)
+                    .byNormalBgColor(.tertiarySystemFill)
+                    .byTitle("本地封面②").byTitleFont(.systemFont(ofSize: 12)).byTitleColor(.secondaryLabel)
+                    .byCornerRadius(0)
             ])
             .byAddTo(view) { [unowned self] make in
                 make.top.equalTo(self.marqueeRich.snp.bottom).offset(8)
@@ -128,12 +148,13 @@ final class JobsMarqueeDemoVC: BaseVC {
                 make.height.equalTo(96)
             }
     }()
-    // ================================== 4) 轮播图（网络：SDWebImage） ==================================
+
+    // ================================== 4) 轮播图（网络：SDWebImage，开启 PageControl：自定义颜色） ==================================
     private lazy var marqueeRemoteSD: JobsMarqueeView = {
         return JobsMarqueeView()
             .byItemMainAxisLength(.fillViewport)
             .byDirection(.left)
-            .byMode(.continuous(speed: 40))
+            .byMode(.intervalOnce(interval: 2.5, duration: 0.30, step: nil)) // 改为间隔模式
             .byContentWrapEnabled(true)
             .byLoopEnabled(true)
             .byGestureScrollEnabled(true)
@@ -143,18 +164,36 @@ final class JobsMarqueeDemoVC: BaseVC {
             .byPauseOnUserDrag(true)
             .byResumeAfterDragDelay(0.8)
             .byItemSpacing(0)
-            .setButtons([UIButton(type: .custom)
-                .byContentEdgeInsets(.zero)
-                .byClipsToBounds(true)
-                .byNormalBgColor(.tertiarySystemFill)
-                .byBackgroundImageContentMode(.scaleAspectFill)
-                .byCornerRadius(0)
-                .byTitle("网络封面 (SD)").byTitleFont(.systemFont(ofSize: 12)).byTitleColor(.secondaryLabel)
-                .sd_imageURL("https://picsum.photos/760/320")
-                .sd_placeholderImage("唐老鸭".img)
-                .sd_options([.scaleDownLargeImages, .retryFailed])
-                .sd_context([.imageScaleFactor: UIScreen.main.scale])
-                .sd_bgNormalLoad()
+            .byPageControlEnabled(true)
+            .byPageIndicatorAppearance(.init(
+                currentColor: .white,
+                inactiveColor: UIColor.white.withAlphaComponent(0.35)
+            ))
+            .setButtons([
+                UIButton(type: .custom)
+                    .byContentEdgeInsets(.zero)
+                    .byClipsToBounds(true)
+                    .byNormalBgColor(.tertiarySystemFill)
+                    .byBackgroundImageContentMode(.scaleAspectFill)
+                    .byCornerRadius(0)
+                    .byTitle("网络封面 (SD) A").byTitleFont(.systemFont(ofSize: 12)).byTitleColor(.secondaryLabel)
+                    .sd_imageURL("https://picsum.photos/760/320?random=101")
+                    .sd_placeholderImage("唐老鸭".img)
+                    .sd_options([.scaleDownLargeImages, .retryFailed])
+                    .sd_context([.imageScaleFactor: UIScreen.main.scale])
+                    .sd_bgNormalLoad(),
+                UIButton(type: .custom)
+                    .byContentEdgeInsets(.zero)
+                    .byClipsToBounds(true)
+                    .byNormalBgColor(.tertiarySystemFill)
+                    .byBackgroundImageContentMode(.scaleAspectFill)
+                    .byCornerRadius(0)
+                    .byTitle("网络封面 (SD) B").byTitleFont(.systemFont(ofSize: 12)).byTitleColor(.secondaryLabel)
+                    .sd_imageURL("https://picsum.photos/760/320?random=102")
+                    .sd_placeholderImage("唐老鸭".img)
+                    .sd_options([.scaleDownLargeImages, .retryFailed])
+                    .sd_context([.imageScaleFactor: UIScreen.main.scale])
+                    .sd_bgNormalLoad()
             ])
             .byAddTo(view) { [unowned self] make in
                 make.top.equalTo(self.marqueeLocal.snp.bottom).offset(8)
@@ -162,38 +201,54 @@ final class JobsMarqueeDemoVC: BaseVC {
                 make.height.equalTo(120)
             }
     }()
-    // ================================== 5) 轮播图（网络：Kingfisher） ==================================
+
+    // ================================== 5) 轮播图（网络：Kingfisher，开启 PageControl） ==================================
     private lazy var marqueeRemoteKF: JobsMarqueeView = {
         JobsMarqueeView()
             .byItemMainAxisLength(.fillViewport)
             .byDirection(.left)
-            .byMode(.continuous(speed: 40))
+            .byMode(.intervalOnce(interval: 2.2, duration: 0.30, step: nil)) // 改为间隔模式
             .byContentWrapEnabled(true)
-            .byLoopEnabled(true)//true
+            .byLoopEnabled(true)
             .byGestureScrollEnabled(true)
             .byDirectionalLockEnabled(true)
-//            .byAutoStartEnabled(false)// 不自动滚动
             .byHardAxisLock(true)
             .byDecelerationRate(.fast)
             .byPauseOnUserDrag(true)
             .byResumeAfterDragDelay(0.8)
             .byItemSpacing(0)
+            .byPageControlEnabled(true)
             .setButtons([
                 UIButton(type: .system)
                     .byCornerRadius(12)
                     .byClipsToBounds(true)
                     .byTitle("我是主标题@Kingfisher").byTitleColor(.red)
                     .bySubTitle("我是副标题@Kingfisher").bySubTitleColor(.yellow)
-                    .kf_imageURL("https://picsum.photos/300/200")
+                    .kf_imageURL("https://picsum.photos/760/320?random=201")
                     .kf_placeholderImage("唐老鸭".img)
                     .kf_options([
-                        .processor(DownsamplingImageProcessor(size: CGSize(width: 500, height: 200))),
+                        .processor(DownsamplingImageProcessor(size: CGSize(width: 760, height: 320))),
                         .scaleFactor(UIScreen.main.scale),
                         .cacheOriginalImage,
                         .transition(.fade(0.25)),
                         .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
                     ])
-                    .kf_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
+                    .kf_bgNormalLoad(),
+                UIButton(type: .system)
+                    .byCornerRadius(12)
+                    .byClipsToBounds(true)
+                    .byTitle("KF 第二页").byTitleColor(.white)
+                    .bySubTitle("副标题").bySubTitleColor(.white)
+                    .kf_imageURL("https://picsum.photos/760/320?random=202")
+                    .kf_placeholderImage("唐老鸭".img)
+                    .kf_options([
+                        .processor(DownsamplingImageProcessor(size: CGSize(width: 760, height: 320))),
+                        .scaleFactor(UIScreen.main.scale),
+                        .cacheOriginalImage,
+                        .transition(.fade(0.25)),
+                        .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
+                    ])
+                    .kf_bgNormalLoad()
             ])
             .byAddTo(view) { [unowned self] make in
                 make.top.equalTo(self.marqueeRemoteSD.snp.bottom).offset(8)
@@ -202,8 +257,8 @@ final class JobsMarqueeDemoVC: BaseVC {
             }
             .refreshAfterConstraints()   // 约束/布局确定后触发重建
     }()
-    // ================================== 控制按钮（直接在懒加载中布局） ==================================
-    // 第一排：开始 / 暂停 / 继续 / 停止 / 一次
+
+    // ================================== 控制按钮（与原来一致） ==================================
     private lazy var btnStart: UIButton = {
         UIButton(type: .system)
             .byTitle("开始")
@@ -279,6 +334,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                 make.width.equalTo(self.btnStart)
             }
     }()
+
     // 第二排：方向（左/右/上/下）
     private lazy var btnDirLeft: UIButton = {
         UIButton(type: .system)
@@ -328,6 +384,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                 make.width.equalTo(self.btnDirLeft)
             }
     }()
+
     // 第三排：模式（连续 / 间隔）
     private lazy var btnModeContinuous: UIButton = {
         UIButton(type: .system)
@@ -353,20 +410,14 @@ final class JobsMarqueeDemoVC: BaseVC {
                 make.width.equalTo(self.btnModeContinuous)
             }
     }()
+
     // ================================== 控制状态逻辑 ==================================
-    /// 根据 started/paused/fireOnce 状态更新控制按钮可用性与视觉表现
     private func updateControlButtonStates() {
-        // ✅ “开始”仅在停止时可用
         btnStart.isEnabled  = !started
-        // ✅ “暂停”仅在运行中可用
         btnPause.isEnabled  = started && !paused
-        // ✅ “继续”仅在暂停时可用
         btnResume.isEnabled = paused
-        // ✅ “停止”在运行或暂停时可用
         btnStop.isEnabled   = started || paused
-        // ✅ “一次”按钮状态与“停止”保持一致，只要能点停止，就能点一次
         btnFire.isEnabled   = btnStop.isEnabled
-        // 颜色/透明度视觉区分
         let active   = UIColor.systemBlue
         let inactive = UIColor.systemGray3
         [btnStart, btnPause, btnResume, btnStop, btnFire].forEach {
@@ -374,8 +425,10 @@ final class JobsMarqueeDemoVC: BaseVC {
             $0.alpha = $0.isEnabled ? 1.0 : 0.6
         }
     }
+
     // ================================== 控制状态字段 ==================================
     private var fireOnceTriggered = false
+
     // ================================== 统一控制封装 ==================================
     private func startAll() {
         guard !started else { return }
@@ -384,7 +437,6 @@ final class JobsMarqueeDemoVC: BaseVC {
         marqueeLocal.start()
         marqueeRemoteSD.start()
         marqueeRemoteKF.start()
-
         started = true
         paused = false
         fireOnceTriggered = false
@@ -428,63 +480,43 @@ final class JobsMarqueeDemoVC: BaseVC {
 
     private func fireOnceAll() {
         guard btnFire.isEnabled else { return }
-        // ✅ 单次执行
         marqueeText.fireOnce()
         marqueeRich.fireOnce()
         marqueeLocal.fireOnce()
         marqueeRemoteSD.fireOnce()
         marqueeRemoteKF.fireOnce()
-
-        // ✅ 点击后视为“单次播放完毕 → 停止状态”，只保留“开始”按钮可用
         started = false
         paused = false
         fireOnceTriggered = true
         updateControlButtonStates()
     }
+
     // ================================== 生命周期 ==================================
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        jobsSetupGKNav(title: "跑马灯/轮播图")
+        jobsSetupGKNav(title: "跑马灯/轮播图 + PageControl")
+
         // 触发懒加载（组件会自动 start）
-        marqueeText.byAlpha(1)
-        marqueeRich.byAlpha(1)
-        marqueeLocal.byAlpha(1)
-        marqueeRemoteSD.byAlpha(1)
-        marqueeRemoteKF.byAlpha(1)
+        [marqueeText, marqueeRich, marqueeLocal, marqueeRemoteSD, marqueeRemoteKF].forEach { _ = $0.byAlpha(1) }
+        [btnStart, btnPause, btnResume, btnStop, btnFire,
+         btnDirLeft, btnDirRight, btnDirUp, btnDirDown,
+         btnModeContinuous, btnModeInterval].forEach { _ = $0.byAlpha(1) }
 
-        btnStart.byAlpha(1)
-        btnPause.byAlpha(1)
-        btnResume.byAlpha(1)
-        btnStop.byAlpha(1)
-        btnFire.byAlpha(1)
-
-        btnDirLeft.byAlpha(1)
-        btnDirRight.byAlpha(1)
-        btnDirUp.byAlpha(1)
-        btnDirDown.byAlpha(1)
-
-        btnModeContinuous.byAlpha(1)
-        btnModeInterval.byAlpha(1)
-        // ✅ 初始自动运行状态
         started = true
         paused = false
         fireOnceTriggered = true
         updateControlButtonStates()
     }
-    // ================================== 私有方法：应用方向 & 模式 ==================================
+
+    // ================================== 私有方法：应用方向 & 模式（同时影响 PageControl 是否可见） ==================================
     private func applyDirection(_ d: MarqueeDirection) {
         guard currentDirection != d else { return }
         currentDirection = d
-        marqueeText.byDirection(d)
-        marqueeRich.byDirection(d)
-        marqueeLocal.byDirection(d)
-        marqueeRemoteSD.byDirection(d)
-        marqueeRemoteKF.byDirection(d)
+        [marqueeText, marqueeRich, marqueeLocal, marqueeRemoteSD, marqueeRemoteKF].forEach { _ = $0.byDirection(d) }
     }
 
     private func applyMode(_ m: MarqueeMode) {
-        // 切到同类型模式时，避免不必要重启；但若参数不同允许覆盖
         switch (currentMode, m) {
         case (.continuous(let s1), .continuous(let s2)) where s1 == s2: return
         case (.intervalOnce(let i1, let d1, let st1), .intervalOnce(let i2, let d2, let st2))
@@ -492,10 +524,6 @@ final class JobsMarqueeDemoVC: BaseVC {
         default: break
         }
         currentMode = m
-        marqueeText.byMode(m)
-        marqueeRich.byMode(m)
-        marqueeLocal.byMode(m)
-        marqueeRemoteSD.byMode(m)
-        marqueeRemoteKF.byMode(m)
+        [marqueeText, marqueeRich, marqueeLocal, marqueeRemoteSD, marqueeRemoteKF].forEach { _ = $0.byMode(m) }
     }
 }
