@@ -36,6 +36,7 @@ final class JobsMarqueeDemoVC: BaseVC {
             .byResumeAfterDragDelay(0.8)
             .byItemSpacing(8)
             .byItemMainAxisLength(.fillViewport)
+            .byPreferredHeight(64)
             .byOnItemTap { idx, btn in
                 print("TEXT tap idx=\(idx), title=\(btn.title(for: .normal) ?? "-")")
             }
@@ -59,6 +60,7 @@ final class JobsMarqueeDemoVC: BaseVC {
             }
 //            // ✅ UIView 层启动开关：父视图先布局 → 若是 Marquee 再重建 → 内部自动 start
             .byActivateAfterAdd()
+            .refreshAfterConstraints()
     }()
 
     // ================================== 2) 文本（富文本：JobsRichText） ==================================
