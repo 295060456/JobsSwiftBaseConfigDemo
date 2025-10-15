@@ -57,8 +57,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                 make.left.right.equalToSuperview()
                 make.height.equalTo(64)
             }
-//            // ✅ UIView 层启动开关：父视图先布局 → 若是 Marquee 再重建 → 内部自动 start
-            .byActivateAfterAdd()
+            .refreshAfterConstraints()   // 约束完成后刷新，避免初始高度塌为 0
     }()
 
     // ================================== 2) 文本（富文本：JobsRichText） ==================================
