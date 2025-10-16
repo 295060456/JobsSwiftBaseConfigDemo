@@ -202,6 +202,16 @@ extension UIView {
         var f = frame; f.origin.x += dx; f.origin.y += dy; frame = f
         return self
     }
+    @discardableResult
+    func byOriginXOffset(_ dx: CGFloat = 0) -> Self {
+        var f = frame; f.origin.x += dx; frame = f
+        return self
+    }
+    @discardableResult
+    func byOriginYOffset(_ dy: CGFloat = 0) -> Self {
+        var f = frame; f.origin.y += dy; frame = f
+        return self
+    }
     /// 在当前 frame 基础上整体偏移（位置 + 尺寸）
     @discardableResult
     func byFrameOffset(dx: CGFloat = 0, dy: CGFloat = 0, dw: CGFloat = 0, dh: CGFloat = 0) -> Self {

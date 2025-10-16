@@ -17,6 +17,7 @@ final class RootListVC: BaseVC {
         ("✍️ UITextView Demo", UITextViewDemoVC.self),
         ("⚠️ 系统的弹出框", UIAlertDemoVC.self),
         ("🌋 富文本 Demo", RichTextDemoVC.self),
+        ("🌍 JobsTabBarCtrl Demo", TabBarDemoVC.self),
         ("📷 鉴权后调用相机/相册 Demo", PhotoAlbumDemoVC.self),
         ("🛢️ 解码 Demo", SafeCodableDemoVC.self),
         ("🔘 按钮 Demo", UIButtonDemoVC.self),

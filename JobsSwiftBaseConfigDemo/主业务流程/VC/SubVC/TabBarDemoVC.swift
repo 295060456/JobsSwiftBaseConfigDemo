@@ -1,0 +1,253 @@
+//
+//  TabBarDemoVC.swift
+//  JobsSwiftBaseConfigDemo
+//
+//  Created by Jobs on 10/16/25.
+//
+
+import UIKit
+import SnapKit
+
+// MARK: - Demo：多按钮（>5）以便直观看 ScrollView 横向滑动
+final class TabBarDemoVC: BaseVC {
+    // MARK: JobsTabBarCtrl（链式点语法 + 中间按钮凸起 + 横竖屏自适应）
+    private lazy var tabCtrl: JobsTabBarCtrl = {
+        JobsTabBarCtrl()
+            .bySwipeEnabled(true)
+            .byHorizontalOnly(true)                // ✅ 只允许横向
+            .bySuppressChildVerticalScrolls(true)  // ✅（可选）禁子 VC 内纵向滚动
+            .byBarBackgroundColor(.secondarySystemBackground)
+            .byCustomBarHeight(nil)              // 默认：49 + 安全区
+            .byBarBottomOffset(0)                // 贴底
+            .byBarBackgroundImage(nil)
+            // 布局策略（1 居中；2~5 等分；>5 继续按“5 等分”的单元宽/间距去排，超出横滑）
+            .byContentInset(.init(top: 6, left: 12, bottom: 6, right: 12))
+            .byEqualSpacing(10)
+            .byEqualVisibleRange(2...5)
+            .byLockUnitToMaxEqualCount(true)
+            .byAutoRelayoutForBoundsChange(true)
+            // 首次构建回调（此处无需处理）
+            .onButtonsBuilt { _ in }
+            // 每次布局后：做“中间按钮凸起”（横竖屏都会回调）
+            .onButtonsLayoutedWeakOwner { owner, btns in
+                guard !btns.isEmpty else { return }
+                btns[2].byHeightOffset(0)
+                    .byOriginYOffset(-24)
+                    .byCornerRadius(14)
+            }.byDataSource(
+                buttons: [
+                    /// 普通按钮（无副标题、不配置事件、无富文本）
+                    UIButton(type: .system)
+                        .byNormalBgColor(.clear)
+                        .byTitle("首页", for: .normal)
+                        .byTitleColor(.label, for: .normal)
+                        .byTitleColor(.systemRed, for: .selected)
+                        .byTitleFont(.systemFont(ofSize: 12, weight: .semibold))
+                        .byImage(UIImage(systemName: "house"), for: .normal)
+                        .byImage(UIImage(systemName: "house.fill"), for: .selected)
+                        .byImagePlacement(.top)
+                        .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10)),
+                    /// 普通按钮（配置事件）
+                    UIButton(type: .system)
+                        .byNormalBgColor(.clear)
+                        .byTitle("优惠", for: .normal)
+                        .byTitleColor(.label, for: .normal)
+                        .byTitleColor(.systemRed, for: .selected)
+                        .byTitleFont(.systemFont(ofSize: 12, weight: .medium))
+                        .byImage(UIImage(systemName: "tag"), for: .normal)
+                        .byImage(UIImage(systemName: "tag.fill"), for: .selected)
+                        .byImagePlacement(.top)
+                        .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10))
+                        /// 事件触发@点按
+                        .onTap { [weak self] sender in
+                            JobsToast.show(
+                                text: "优惠@点按事件",
+                                config: JobsToast.Config()
+                                    .byBgColor(.systemGreen.withAlphaComponent(0.9))
+                                    .byCornerRadius(12)
+                            )
+                        }
+                        /// 事件触发@长按
+                        .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+                             if gr.state == .began {
+                                 btn.alpha = 0.6
+                                 print("长按开始 on \(btn)")
+                                 JobsToast.show(
+                                     text: "优惠@长按事件",
+                                     config: JobsToast.Config()
+                                         .byBgColor(.systemGreen.withAlphaComponent(0.9))
+                                         .byCornerRadius(12)
+                                 )
+                             } else if gr.state == .ended || gr.state == .cancelled {
+                                 btn.alpha = 1.0
+                                 print("长按结束")
+                             }
+                         },
+                    /// 普通按钮（富文本）
+                    UIButton(type: .system)
+                        .byNormalBgColor(.clear)
+                        .byRichTitle(JobsRichText.make([
+                            JobsRichRun(.text("¥99")).font(.systemFont(ofSize: 10, weight: .semibold)).color(.systemRed),
+                            JobsRichRun(.text(" /月")).font(.systemFont(ofSize: 12)).color(.green)
+                        ]))         // ✅ 主标题富文本：一个入参
+                        .byRichSubTitle(JobsRichText.make([
+                            JobsRichRun(.text("原价 ")).font(.systemFont(ofSize: 10)).color(.blue.withAlphaComponent(0.8)),
+                            JobsRichRun(.text("¥199")).font(.systemFont(ofSize: 12, weight: .medium)).color(.systemYellow)
+                        ]))        // ✅ 副标题富文本：一个入参
+                        .byImage(UIImage(systemName: "creditcard"), for: .normal)
+                        .byImage(UIImage(systemName: "creditcard.fill"), for: .selected)
+                        .byImagePlacement(.top)
+                        .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10)),
+                    UIButton(type: .system)
+                        .byNormalBgColor(.clear)
+                        .byTitle("好友", for: .normal)
+                        .byTitleColor(.label, for: .normal)
+                        .byTitleColor(.systemRed, for: .selected)
+                        .byTitleFont(.systemFont(ofSize: 12, weight: .medium))
+                        .byImage(UIImage(systemName: "person.2"), for: .normal)
+                        .byImage(UIImage(systemName: "person.2.fill"), for: .selected)
+                        .byImagePlacement(.top)
+                        .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10)),
+                    /// 倒计时按钮（点击触发）
+                    UIButton(type: .system)
+                        .byTitle("活动", for: .normal)
+                        .byTitleColor(.label, for: .normal)
+                        .byTitleColor(.systemRed, for: .selected)
+                        .byTitleFont(.systemFont(ofSize: 12, weight: .regular))
+                        .bySubTitle("倒计时", for: .normal)
+                        .bySubTitleColor(.label, for: .normal)
+                        .bySubTitleColor(.systemRed, for: .selected)
+                        .bySubTitleFont(.systemFont(ofSize: 12, weight: .regular))
+                        .byImage(UIImage(systemName: "sparkles"), for: .normal)
+                        .byImage(UIImage(systemName: "sparkles"), for: .selected)
+                        .byImagePlacement(.top)
+                        .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10))
+                        .onCountdownTick { [weak self] btn, remain, total, kind in
+                            guard let self else { return }
+                            print("⏱️ [\(kind.jobs_displayName)] \(remain)/\(total)")
+                            btn.byTitle("还剩 \(remain)s", for: .normal)
+                        }
+                        .onCountdownFinish { _, kind in
+                            print("✅ [\(kind.jobs_displayName)] 倒计时完成")
+                        }
+                        .onTap { [weak self] btn in
+                            guard let self else { return }
+                            /// 点击以后倒计时
+                            btn.startTimer(
+                                total: 300, // ❤️ 传 total => 倒计时
+                                interval: 1.0,
+                                kind: .gcd
+                            )
+                            // 关键：等 startTimer 把 "10s" 设好后再加前缀，避免被覆盖
+                            DispatchQueue.main.async {
+                                let cur = btn.title(for: .normal) ?? "\(300)s"
+                                if !cur.hasPrefix("还剩 ") {
+                                    btn.bySubTitle("还剩 \(cur)", for: .normal)
+                                }
+                            }
+                        },
+                    UIButton(type: .system)
+                        .byNormalBgColor(.clear)
+                        .byTitle("客服", for: .normal)
+                        .byTitleColor(.label, for: .normal)
+                        .byTitleColor(.systemRed, for: .selected)
+                        .byTitleFont(.systemFont(ofSize: 12, weight: .medium))
+                        .byImage(UIImage(systemName: "message"), for: .normal)
+                        .byImage(UIImage(systemName: "message.fill"), for: .selected)
+                        .byImagePlacement(.top)
+                        .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10)),
+                    /// 普通按钮（展示副标题）
+                    UIButton(type: .system)
+                        .byNormalBgColor(.clear)
+                        .byTitle("我的", for: .normal)
+                        .byTitleColor(.label, for: .normal)
+                        .byTitleColor(.systemRed, for: .selected)
+                        .byTitleFont(.systemFont(ofSize: 12, weight: .semibold))
+                        .bySubTitle("未登录", for: .normal)
+                        .bySubTitleColor(.label, for: .normal)
+                        .bySubTitleColor(.systemRed, for: .selected)
+                        .bySubTitleFont(.systemFont(ofSize: 10, weight: .semibold))
+                        .byImage(UIImage(systemName: "person.crop.circle"), for: .normal)
+                        .byImage(UIImage(systemName: "person.crop.circle.fill"), for: .selected)
+                        .byImagePlacement(.top)
+                        .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10))],
+                controllers: [
+                    HomeVC(),
+                    DiscountVC(),
+                    WalletVC(),
+                    FriendsVC(),
+                    ActivityVC(),
+                    ServiceVC()
+                ]
+            )
+    }()
+    // MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemBackground
+        jobsSetupGKNav(title: "JobsTabBarCtrl@横滑 Demo（>5 个按钮）")
+
+        addChild(tabCtrl)
+        view.addSubview(tabCtrl.view)
+        tabCtrl.view.snp.makeConstraints { $0.edges.equalToSuperview() }
+        tabCtrl.didMove(toParent: self)
+    }
+}
+// MARK: - 示例子页（简化）
+final class HomeVC: BaseVC {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemBackground
+        jobsSetupGKNav(title: "首页")
+    }
+}
+
+final class DiscountVC: BaseVC {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemMint
+        jobsSetupGKNav(title: "优惠")
+    }
+}
+
+final class WalletVC: BaseVC {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemYellow
+        jobsSetupGKNav(title: "钱包")
+    }
+}
+
+final class FriendsVC: BaseVC {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemTeal
+        jobsSetupGKNav(title: "好友")
+
+//        DemoDetailVC()
+//            .byData(DemoModel(id: 7, title: "详情"))
+//            .onResult { id in
+//                print("回来了 id=\(id)")
+//            }
+//            .byPush(self)           // 自带防重入，连点不重复
+//            .byCompletion{
+//                print("❤️结束❤️")
+//            }
+    }
+}
+
+final class ActivityVC: BaseVC {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemPurple
+        jobsSetupGKNav(title: "活动")
+    }
+}
+
+final class ServiceVC: BaseVC {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemOrange
+        jobsSetupGKNav(title: "客服")
+    }
+}

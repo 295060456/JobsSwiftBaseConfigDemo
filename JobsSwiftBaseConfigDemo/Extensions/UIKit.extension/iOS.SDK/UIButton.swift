@@ -57,11 +57,9 @@ public extension UIButton {
         set { objc_setAssociatedObject(self, &_jobsIsCloneKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
 }
-
 // ======================================================
 // MARK: - 基础链式（保留）
 // ======================================================
-
 extension UIButton {
     @discardableResult
     func byTitle(_ title: String?, for state: UIControl.State = .normal) -> Self {
@@ -500,6 +498,7 @@ private extension UIButton {
 }
 
 public extension UIButton {
+    @discardableResult
     func bySubTitle(_ text: String?, for state: UIControl.State = .normal) -> Self {
         if #available(iOS 15.0, *) {
             var p = _subPack_noAttr(for: state); p.text = text ?? ""; _setSubPack_noAttr(p, for: state)
@@ -510,7 +509,7 @@ public extension UIButton {
         }
         return self
     }
-
+    @discardableResult
     func bySubTitleFont(_ font: UIFont, for state: UIControl.State = .normal) -> Self {
         if #available(iOS 15.0, *) {
             var p = _subPack_noAttr(for: state); p.font = font; _setSubPack_noAttr(p, for: state)
@@ -518,7 +517,7 @@ public extension UIButton {
         }
         return self
     }
-
+    @discardableResult
     func bySubTitleColor(_ color: UIColor, for state: UIControl.State = .normal) -> Self {
         if #available(iOS 15.0, *) {
             var p = _subPack_noAttr(for: state); p.color = color; _setSubPack_noAttr(p, for: state)
