@@ -4289,9 +4289,69 @@ pickVideosFromLibrary(maxSelection: 1) { [weak self] urls in
 }
 ```
 
-### 37、条件编译 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 37、[📖](https://sdwebimage.github.io/documentation/sdwebimage/) [**`SDWebImage`**](https://github.com/SDWebImage/SDWebImage) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 37.1、`DEBUG` 模式下才允许做的事 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 37.1、`SDAnimatedImage` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **SDAnimatedImage 是 [`SDWebImage`](https://github.com/SDWebImage/SDWebImage) 提供的“可播放的动态图像对象”**（继承自 `UIImage`），搭配 **`SDAnimatedImageView`** 来播放。它解决了 `UIImage.animatedImage…` 一次性把所有帧解码进内存、容易内存暴涨/掉帧的问题
+  
+  * **按需解码**：不是把 **GIF**/**APNG**/**WebP** 全部帧一次性放进内存，而是“边播边解码 + 帧缓存策略”，显著降低峰值内存
+  * **多格式动画**：不仅是 **GIF**，还支持 **APNG**、**WebP**、**HEIC**/**HEIF**、**AVIF** 等（通过对应 coder 插件）
+  * **可控缓存**：有最大缓冲区、帧复用等策略，平衡 **CPU 解码** 🆚 **内存占用**
+  * **即插即用**：API 形态跟 `UIImage` 相近；只要把 `SDAnimatedImage` 赋给 `SDAnimatedImageView.image` 就能平滑播放
+  * **更顺滑**：基于 `CADisplayLink` 的驱动，按每帧的真实 duration 播放，不容易掉帧或节奏不对
+  
+* 和系统 `UIImage.animatedImage…` 的差异
+
+  | 点       | `UIImage.animatedImage` | `SDAnimatedImage`                                     |
+  | -------- | ----------------------- | ----------------------------------------------------- |
+  | 解码策略 | 预解所有帧              | 按需解码 + 帧缓存                                     |
+  | 内存峰值 | 高（帧数×分辨率×通道）  | 低很多                                                |
+  | 支持格式 | 主要 **GIF**            | **GIF**/**APNG**/**WebP**/**HEIC**/**AVIF**（配插件） |
+  | 播放视图 | `UIImageView`           | `SDAnimatedImageView`（更顺滑、控件化）               |
+
+* 使用方式
+
+  * 基本用法
+
+    ```swift
+    import SDWebImage
+    import SDWebImageWebPCoder // 如果需要 WebP 动画
+    
+    // 1) 可选：注册额外的 coder（一次性）
+    SDImageCodersManager.shared.addCoder(SDImageWebPCoder.shared)
+    
+    // 2) 构造动态图像对象
+    let data: Data = /* 来自网络或本地 */
+    let animated = SDAnimatedImage(data: data)   // 也可 SDAnimatedImage(named: "xxx.gif")
+    
+    // 3) 用 SDAnimatedImageView 播放
+    let imageView = SDAnimatedImageView(frame: .zero)
+    imageView.contentMode = .scaleAspectFit
+    imageView.image = animated                   // 关键：不是 UIImageView
+    imageView.startAnimating()                   // 可省略：设置 image 后会自动播放
+    
+    // 常见控制
+    // imageView.stopAnimating()
+    // imageView.animationRepeatCount = 0 // 0 = 无限循环（和 UIImageView 一致）
+    ```
+
+  * 从 URL 加载（最常见）
+
+    ```swift
+    let iv = SDAnimatedImageView()
+    iv.sd_setImage(with: URL(string: "https://example.com/a.webp")) // 自动识别动图并按需解码
+    ```
+
+* 特别注意
+
+  * **一定用 `SDAnimatedImageView`** 来播 `SDAnimatedImage`，不要用系统 `UIImageView`。
+  * 需要 **WebP**/**AVIF** 等，**别忘装对应 coder 插件并注册**。
+  * 超大、超长动图仍会吃 CPU，必要时**限制尺寸/帧率或懒加载**。
+
+### 38、条件编译 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 38.1、`DEBUG` 模式下才允许做的事 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 定义
 
@@ -4318,7 +4378,7 @@ pickVideosFromLibrary(maxSelection: 1) { [weak self] urls in
   }
   ```
 
-#### 37.2、代码启用（当引入某第三方后）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 38.2、代码启用（当引入某第三方后）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 #if canImport(Kingfisher)
@@ -6894,7 +6954,7 @@ let b = v as! UIButton                  // 若不是 UIButton 会崩溃
     ```
 
 
-### 30、`UIAlertController` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 30、**`UIAlertController`** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * `UIAlertController`内置输入框
 
@@ -6915,6 +6975,38 @@ let b = v as! UIButton                  // 若不是 UIButton 会崩溃
       open var severity: UIAlertControllerSeverity
   }
   ```
+
+### 31、**Foundation**.<font color=red>**`Decimal`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> **十进制高精度** 的数值类型，用来避免 `Double/Float` 的二进制浮点误差，**非常适合金额/财务**等需要精确小数的场景。
+
+#### 31.1、为啥不用 `Double`？<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* `Double/Float` 是二进制浮点，像 0.1、0.2 在二进制里是无限小数，会有误差：
+
+  ```swift
+  print(0.1 + 0.2 == 0.3) // false
+  ```
+
+* `Decimal` 用十进制存小数，**不损精度**，能达到预期：
+
+  ```swift
+  import Foundation
+  
+  let a = Decimal(string: "0.1")!
+  let b = Decimal(string: "0.2")!
+  print(a + b == Decimal(string: "0.3")!) // true
+  ```
+
+#### 31.2、与 `NSDecimalNumber` 的关系 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* `NSDecimalNumber` 是 `Decimal` 的 `Objective-C` 包装类，功能相近；在需要 `NSNumber`/`ObjC` 互操作时会用到。
+* 在纯 [**Swift**](https://developer.apple.com/swift/) 里，优先用 `Decimal` + 运算符重载，简洁。
+
+#### 31.3、<font color=red>**实战建议**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 金额/汇率、发票税：**用 `Decimal`**，别用 `Double`
+* 与后端交互：**用字符串传小数**（如 `"123.45"`），[**Swift**](https://developer.apple.com/swift/) 端 `Decimal(string:)` 解析，零损失
 
 ## 五、<font color=red>**F**</font><font color=green>**A**</font><font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
