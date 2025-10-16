@@ -20,6 +20,7 @@ final class RootListVC: BaseVC {
         ("📷 鉴权后调用相机/相册 Demo", PhotoAlbumDemoVC.self),
         ("🛢️ 解码 Demo", SafeCodableDemoVC.self),
         ("🔘 按钮 Demo", UIButtonDemoVC.self),
+        ("🧧 TraitChange Demo", TraitChangeDemoVC.self),
         ("⛑️ SafetyPush Demo", SafetyPushDemoVC.self),
         ("⛑️ SafetyPresent Demo", SafetyPresentDemoVC.self),
         ("🐎 跑马灯/🛞 轮播图 Demo", JobsMarqueeDemoVC.self),

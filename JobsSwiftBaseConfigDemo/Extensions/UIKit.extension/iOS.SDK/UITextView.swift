@@ -219,7 +219,6 @@ public extension UITextView {
         textHighlightAttributes = attrs
         return self
     }
-
     // MARK:  Writing Tools (iOS 18+)
     @available(iOS 18.0, *)
     @discardableResult
@@ -250,6 +249,13 @@ public extension UITextView {
     @discardableResult
     func byDelegate(_ textViewDelegate: UITextViewDelegate?) -> Self {
         delegate = textViewDelegate
+        return self
+    }
+    @available(iOS 10.0, *)
+    @discardableResult
+    func byDynamicTextStyle(_ style: UIFont.TextStyle) -> Self {
+        self.font = .preferredFont(forTextStyle: style)
+        self.adjustsFontForContentSizeCategory = true
         return self
     }
 }

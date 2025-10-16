@@ -45,6 +45,16 @@ public extension UIAccessibilityIdentification where Self: AnyObject {
         return self
     }
 }
+
+@available(iOS 10.0, *)
+public extension UIContentSizeCategoryAdjusting where Self: AnyObject {
+    /// 开/关 Dynamic Type 自动缩放（默认开），返回 Self 以便链式调用
+    @discardableResult
+    func byAdjustsFontForContentSizeCategory(_ flag: Bool = true) -> Self {
+        self.adjustsFontForContentSizeCategory = flag
+        return self
+    }
+}
 // MARK: - 延迟执行
 public protocol JobsAsyncable: AnyObject {}
 public extension JobsAsyncable {

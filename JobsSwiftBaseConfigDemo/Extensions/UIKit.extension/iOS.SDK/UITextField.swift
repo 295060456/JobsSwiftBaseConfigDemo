@@ -302,6 +302,14 @@ public extension UITextField {
         self.delegate = delegate
         return self
     }
+
+    @available(iOS 10.0, *)
+    @discardableResult
+    func byDynamicTextStyle(_ style: UIFont.TextStyle) -> Self {
+        self.font = .preferredFont(forTextStyle: style)
+        self.adjustsFontForContentSizeCategory = true
+        return self
+    }
 }
 // MARK: - 左侧图标 & 纯留白
 public extension UITextField {
@@ -545,7 +553,6 @@ public extension UITextField {
         addTarget(self, action: #selector(_jobs_handleEditingChanged), for: .editingChanged)
         return self
     }
-
     /// 取消监听（可选）
     @discardableResult
     func removeOnChange() -> Self {

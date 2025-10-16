@@ -179,6 +179,14 @@ extension UILabel {
         textColor = .clear // 只显示 layer 的文字
         return self
     }
+    /// 一次性设置文本样式 + 开启 Dynamic Type
+    @available(iOS 10.0, *)
+    @discardableResult
+    func byDynamicTextStyle(_ style: UIFont.TextStyle) -> Self {
+        self.font = .preferredFont(forTextStyle: style)
+        self.adjustsFontForContentSizeCategory = true
+        return self
+    }
 }
 /// 一些功能性的
 extension UILabel {
