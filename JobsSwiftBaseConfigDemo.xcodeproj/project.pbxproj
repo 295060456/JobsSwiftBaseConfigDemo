@@ -223,6 +223,7 @@
 		0477D9822E8BE9FB002C6427 /* KeyboardObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardObserver.swift; sourceTree = "<group>"; };
 		0477D9842E8BEACA002C6427 /* Reactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reactive.swift; sourceTree = "<group>"; };
 		0477D9862E8BEF62002C6427 /* KeyboardDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDemoVC.swift; sourceTree = "<group>"; };
+		047CC3422EA254A200E84122 /* 心愿单.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "心愿单.md"; sourceTree = "<group>"; };
 		048313FF2E9A08500009A44B /* JobsMarqueeDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsMarqueeDemoVC.swift; sourceTree = "<group>"; };
 		0487AAD92E840CB200B5D307 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		0487AADB2E840EE300B5D307 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
@@ -612,6 +613,7 @@
 		C564FBD22E09580A0079B5C1 = {
 			isa = PBXGroup;
 			children = (
+				047CC3422EA254A200E84122 /* 心愿单.md */,
 				C564FBDD2E09580B0079B5C1 /* JobsSwiftBaseConfigDemo */,
 				C564FBF72E09580D0079B5C1 /* JobsSwiftBaseConfigDemoTests */,
 				C564FC012E09580E0079B5C1 /* JobsSwiftBaseConfigDemoUITests */,

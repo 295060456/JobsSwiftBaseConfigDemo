@@ -2164,6 +2164,69 @@ private lazy var exampleButton: UIButton = {
 
 ##### 8.1.3、🔘 创建[**计数按钮**](#计数按钮) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
+##### 8.1.4、🔘 创建悬浮按钮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+private lazy var suspendBtn: UIButton = {
+    UIButton(type: .system)
+        .byTitle("开始", for: .normal)
+        .byTitleFont(.systemFont(ofSize: 22, weight: .bold))
+        .byTitleColor(.white, for: .normal)
+        .byBackgroundColor(.systemBlue, for: .normal)
+        .byCornerRadius(10)
+        .byMasksToBounds(true)
+        .startTimer(total: nil,
+                    interval: 1.0,
+                    kind: .gcd)
+        // 每 tick：更新时间 & 最近触发时间
+        .onTimerTick { [weak self] btn, elapsed, _, kind in
+            guard let self else { return }
+            if btn.title(for: .normal) != "VIP" {
+                btn.byTitle("VIP", for: .normal)
+            }
+            btn.bySubTitle(nowClock(), for: .normal)
+            btn.bySetNeedsUpdateConfiguration()
+        }
+        .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+//                if gr.state == .began { btn.alpha = 0.6 }
+//                else if gr.state == .ended || gr.state == .cancelled { btn.alpha = 1.0 }
+            JobsToast.show(
+                text: "长按了悬浮按钮",
+                config: JobsToast.Config()
+                    .byBgColor(.systemGreen.withAlphaComponent(0.9))
+                    .byCornerRadius(12)
+            )
+        }
+        // 点击开始：不传 total => 正计时
+        .onTap { [weak self] btn in
+            guard let self else { return }
+            JobsToast.show(
+                text: "点击了悬浮按钮",
+                config: JobsToast.Config()
+                    .byBgColor(.systemGreen.withAlphaComponent(0.9))
+                    .byCornerRadius(12)
+            )
+//                btn.startTimer(total: nil,
+//                               interval: 1.0,
+//                               kind: .gcd)
+        }
+        .bySuspend { cfg in
+            cfg
+                .byContainer(view)
+                .byFallbackSize(CGSize(width: 88, height: 44))
+                .byDocking(.nearestEdge)
+                .byInsets(UIEdgeInsets(top: 20, left: 16, bottom: 34, right: 16))
+                .byHapticOnDock(true)
+        }
+}()
+```
+
+##### 8.1.5、🔘 创建旋转按钮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+/// TODO
+```
+
 #### 8.2、按钮功能拓展 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **按钮选中/非选中**
@@ -4353,7 +4416,27 @@ pickVideosFromLibrary(maxSelection: 1) { [weak self] urls in
 
 ### 38、悬浮视图 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-
+* ```swift
+  UIView().bySuspend { cfg in
+      cfg
+          .byContainer(view)
+          .byFallbackSize(CGSize(width: 88, height: 44))
+          .byDocking(.nearestEdge)
+          .byInsets(UIEdgeInsets(top: 20, left: 16, bottom: 34, right: 16))
+          .byHapticOnDock(true)
+  }
+  
+  /// 或
+  
+  UIView().suspend(
+      .default
+          .byContainer(view)
+          .byFallbackSize(CGSize(width: 88, height: 44))
+          .byDocking(.nearestEdge)
+          .byInsets(UIEdgeInsets(top: 20, left: 16, bottom: 34, right: 16))
+          .byHapticOnDock(true)
+  )
+  ```
 
 ### 39、条件编译 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 

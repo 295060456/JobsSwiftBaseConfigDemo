@@ -108,7 +108,7 @@ final class RootListVC: BaseVC {
                     .byFallbackSize(CGSize(width: 88, height: 44))
                     .byDocking(.nearestEdge)
                     .byInsets(UIEdgeInsets(top: 20, left: 16, bottom: 34, right: 16))
-                    .byHapticOnDock(.true)
+                    .byHapticOnDock(true)
             }
     }()
 
