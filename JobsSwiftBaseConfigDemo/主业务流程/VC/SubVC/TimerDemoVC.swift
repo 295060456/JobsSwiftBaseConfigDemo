@@ -98,7 +98,7 @@ final class TimerDemoVC: BaseVC {
             .onTimerTick { [weak self] btn, elapsed, _, kind in
                 guard let self else { return }
                 // 正计时：elapsed（秒）已由按钮内部自动设置为标题，这里只补充 lastFireLabel
-                self.lastFireLabel.text = "Last: " + Self.fmt(Date())
+                self.lastFireLabel.text = "Last: " + fmt(Date())
             }
             // 状态变化：驱动控制键（暂停/继续/Fire/停止）的可用与配色
             .onTimerStateChange { [weak self] button, oldState, newState in
@@ -180,7 +180,7 @@ final class TimerDemoVC: BaseVC {
             .onCountdownTick { [weak self] btn, remain, total, kind in
                 guard let self else { return }
                 print("⏱️ [\(kind.jobs_displayName)] \(remain)/\(total)")
-                self.lastFireLabel.text = "Last: " + Self.fmt(Date())
+                self.lastFireLabel.text = "Last: " + fmt(Date())
                 btn.byTitle("还剩 \(remain)s", for: .normal)
             }
             .onCountdownFinish { _, kind in
@@ -354,9 +354,5 @@ final class TimerDemoVC: BaseVC {
     private func parseCountdownTotal(_ time : Int) -> Int {
         let v = (countdownField.text ?? "").trimmingCharacters(in: .whitespaces)
         return max(1, Int(v) ?? time)
-    }
-
-    private static func fmt(_ d: Date) -> String {
-        DateFormatter().byDateFormat("HH:mm:ss.SSS").string(from: d)
     }
 }

@@ -24,7 +24,6 @@ class BaseVC: UIViewController {
     /// 手势返回
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
         guard let nav = navigationController else { return }
         // 只有当栈深 > 1 时才允许侧滑
         let canPop = nav.viewControllers.count > 1

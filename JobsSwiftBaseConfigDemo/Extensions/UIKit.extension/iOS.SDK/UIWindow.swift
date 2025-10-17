@@ -142,7 +142,7 @@ public extension UIWindow {
             return nil
         } else {
             // 仅给老系统兜底（新项目通常不走这里）
-            return UIApplication.shared.keyWindow ?? UIApplication.shared.windows.first
+            return legacyKeyWindowPreiOS13()
         }
     }
     /// 新建并附着到“最合适”的前台 scene（iOS 26+ 不要再用 init(frame:)）

@@ -4351,9 +4351,13 @@ pickVideosFromLibrary(maxSelection: 1) { [weak self] urls in
   * 需要 **WebP**/**AVIF** 等，**别忘装对应 coder 插件并注册**。
   * 超大、超长动图仍会吃 CPU，必要时**限制尺寸/帧率或懒加载**。
 
-### 38、条件编译 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 38、悬浮视图 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 38.1、`DEBUG` 模式下才允许做的事 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+
+### 39、条件编译 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 39.1、`DEBUG` 模式下才允许做的事 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 定义
 
@@ -4380,7 +4384,7 @@ pickVideosFromLibrary(maxSelection: 1) { [weak self] urls in
   }
   ```
 
-#### 38.2、代码启用（当引入某第三方后）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 39.2、代码启用（当引入某第三方后）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 #if canImport(Kingfisher)

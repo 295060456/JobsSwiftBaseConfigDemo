@@ -82,3 +82,15 @@ public struct AppLaunchManager {
              .byCornerRadius(12)
      )
 }
+// MARK: - 关于时间格式化
+public func nowClock() -> String {
+    DateFormatter()
+        .byLocale(.autoupdatingCurrent)
+        .byTimeZone(.autoupdatingCurrent)
+        .byDateFormat("HH:mm:ss")
+        .string(from: Date())
+}
+
+public func fmt(_ d: Date) -> String {
+    DateFormatter().byDateFormat("HH:mm:ss.SSS").string(from: d)
+}

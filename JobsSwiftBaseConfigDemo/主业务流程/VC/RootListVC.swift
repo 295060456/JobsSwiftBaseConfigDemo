@@ -11,11 +11,14 @@ import ESPullToRefresh   // 由扩展内部使用
 
 final class RootListVC: BaseVC {
 
+    deinit {
+        suspendBtn.stopTimer()
+    }
+
     private let demos: [(title: String, vcType: UIViewController.Type)] = [
         ("ViewController", ViewController.self),
         ("✍️ UITextField Demo", UITextFieldDemoVC.self),
         ("✍️ UITextView Demo", UITextViewDemoVC.self),
-        ("⚠️ 系统的弹出框", UIAlertDemoVC.self),
         ("🌋 富文本 Demo", RichTextDemoVC.self),
         ("🌍 JobsTabBarCtrl Demo", TabBarDemoVC.self),
         ("📷 鉴权后调用相机/相册 Demo", PhotoAlbumDemoVC.self),
@@ -26,14 +29,88 @@ final class RootListVC: BaseVC {
         ("⛑️ SafetyPresent Demo", SafetyPresentDemoVC.self),
         ("🐎 跑马灯/🛞 轮播图 Demo", JobsMarqueeDemoVC.self),
         ("💥 JobsCountdown Demo", JobsCountdownDemoVC.self),
+        ("⏰ Timer Demo", TimerDemoVC.self),
         ("⌨️ 键盘 Demo", KeyboardDemoVC.self),
         ("🕹️ ControlEvents Demo", JobsControlEventsDemoVC.self),
         ("🏞️ 图片加载Demo", PicLoadDemoVC.self),
         ("👮 中国大陆公民身份证号码校验 Demo", CNIDDemoVC.self),
         ("🏷️ Toast Demo", ToastDemoVC.self),
-        ("⏰ Timer Demo", TimerDemoVC.self),
+        ("⚠️ 系统的弹出框", UIAlertDemoVC.self),
         ("🚀 JobsOpen Demo", JobsOpenDemoVC.self)
     ]
+
+    private lazy var suspendLab: UILabel = {
+        UILabel()
+            .byText("VIP")
+            .byTextColor(.yellow)
+            .byFont(.boldSystemFont(ofSize: 14))
+            .byTextAlignment(.center)
+            .byBgCor(.systemRed)
+            .byCornerRadius(12)
+            .byMasksToBounds(true)
+            .byUserInteractionEnabled(true)
+            .suspend(
+                .default
+                    .byContainer(view)
+                    .byFallbackSize(CGSize(width: 88, height: 44))
+                    .byDocking(.nearestEdge)
+                    .byInsets(UIEdgeInsets(top: 20, left: 16, bottom: 34, right: 16))
+                    .byHapticOnDock(true)
+            )
+    }()
+
+    private lazy var suspendBtn: UIButton = {
+        UIButton(type: .system)
+            .byTitle("开始", for: .normal)
+            .byTitleFont(.systemFont(ofSize: 22, weight: .bold))
+            .byTitleColor(.white, for: .normal)
+            .byBackgroundColor(.systemBlue, for: .normal)
+            .byCornerRadius(10)
+            .byMasksToBounds(true)
+            .startTimer(total: nil,
+                        interval: 1.0,
+                        kind: .gcd)
+            // 每 tick：更新时间 & 最近触发时间
+            .onTimerTick { [weak self] btn, elapsed, _, kind in
+                guard let self else { return }
+                if btn.title(for: .normal) != "VIP" {
+                    btn.byTitle("VIP", for: .normal)
+                }
+                btn.bySubTitle(nowClock(), for: .normal)
+                btn.bySetNeedsUpdateConfiguration()
+            }
+            .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+//                if gr.state == .began { btn.alpha = 0.6 }
+//                else if gr.state == .ended || gr.state == .cancelled { btn.alpha = 1.0 }
+                JobsToast.show(
+                    text: "长按了悬浮按钮",
+                    config: JobsToast.Config()
+                        .byBgColor(.systemGreen.withAlphaComponent(0.9))
+                        .byCornerRadius(12)
+                )
+            }
+            // 点击开始：不传 total => 正计时
+            .onTap { [weak self] btn in
+                guard let self else { return }
+                JobsToast.show(
+                    text: "点击了悬浮按钮",
+                    config: JobsToast.Config()
+                        .byBgColor(.systemGreen.withAlphaComponent(0.9))
+                        .byCornerRadius(12)
+                )
+//                btn.startTimer(total: nil,
+//                               interval: 1.0,
+//                               kind: .gcd)
+            }
+            .bySuspend { cfg in
+                cfg
+                    .byContainer(view)
+                    .byFallbackSize(CGSize(width: 88, height: 44))
+                    .byDocking(.nearestEdge)
+                    .byInsets(UIEdgeInsets(top: 20, left: 16, bottom: 34, right: 16))
+                    .byHapticOnDock(.true)
+            }
+    }()
 
     private lazy var tableView: UITableView = {
         UITableView(frame: .zero, style: .insetGrouped)
@@ -110,6 +187,8 @@ final class RootListVC: BaseVC {
         )
         tableView.byAlpha(1)
         updateFooterAvailability()
+//        suspendLab.byAlpha(1)
+        suspendBtn.byAlpha(1)
     }
     // MARK: - Footer 自动显隐逻辑
     private func updateFooterAvailability() {

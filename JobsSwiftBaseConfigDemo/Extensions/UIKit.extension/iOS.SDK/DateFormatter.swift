@@ -12,9 +12,6 @@ public extension DateFormatter {
     @discardableResult
     func byDateFormat(_ format: String) -> Self {
         self.dateFormat = format
-        // 明确禁用 style，避免和 format 互相干扰
-        self.dateStyle = .none
-        self.timeStyle = .none
         return self
     }
     // MARK: - iOS 会按本地化模板生成 format（适合“年/月/日/时区/星期”之类可本地化展示）
@@ -30,8 +27,10 @@ public extension DateFormatter {
                   time: DateFormatter.Style = .none) -> Self {
         self.dateStyle = date
         self.timeStyle = time
-        // 使用 style 时，通常不再设置自定义 format
-        self.dateFormat = nil
+        // ⚠️ 只有启用样式时才清掉自定义 format
+        if date != .none || time != .none {
+            self.dateFormat = nil
+        }
         return self
     }
 
