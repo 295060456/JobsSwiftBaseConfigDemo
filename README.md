@@ -2011,6 +2011,8 @@ private lazy var exampleButton: UIButton = {
         .byImage(UIImage(systemName: "eye"), for: .selected)                    // 选中图标
         .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))// 图文内边距
         .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6)) // 图标与文字间距
+        /// 点击@播放声音
+        .byTapSound("Sounddd.wav")    
         /// 事件触发@点按
         .onTap { [weak self] sender in
             guard let self else { return }

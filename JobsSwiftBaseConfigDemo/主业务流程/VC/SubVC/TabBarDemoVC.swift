@@ -36,7 +36,7 @@ final class TabBarDemoVC: BaseVC {
                     .byCornerRadius(14)
             }.byDataSource(
                 buttons: [
-                    /// 普通按钮（无副标题、不配置事件、无富文本）
+                    /// 普通按钮@（无副标题、不配置事件、无富文本）
                     UIButton(type: .system)
                         .byNormalBgColor(.clear)
                         .byTitle("首页", for: .normal)
@@ -46,8 +46,9 @@ final class TabBarDemoVC: BaseVC {
                         .byImage(UIImage(systemName: "house"), for: .normal)
                         .byImage(UIImage(systemName: "house.fill"), for: .selected)
                         .byImagePlacement(.top)
+                        .byTapSound("Sound.wav")
                         .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10)),
-                    /// 普通按钮（配置事件）
+                    /// 普通按钮@（配置事件）
                     UIButton(type: .system)
                         .byNormalBgColor(.clear)
                         .byTitle("优惠", for: .normal)
@@ -57,6 +58,7 @@ final class TabBarDemoVC: BaseVC {
                         .byImage(UIImage(systemName: "tag"), for: .normal)
                         .byImage(UIImage(systemName: "tag.fill"), for: .selected)
                         .byImagePlacement(.top)
+                        .byTapSound("Sounddd.wav")
                         .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10))
                         /// 事件触发@点按
                         .onTap { [weak self] sender in
@@ -83,7 +85,7 @@ final class TabBarDemoVC: BaseVC {
                                  print("长按结束")
                              }
                          },
-                    /// 普通按钮（富文本）
+                    /// 普通按钮@（富文本）
                     UIButton(type: .system)
                         .byNormalBgColor(.clear)
                         .byRichTitle(JobsRichText.make([
@@ -108,16 +110,16 @@ final class TabBarDemoVC: BaseVC {
                         .byImage(UIImage(systemName: "person.2.fill"), for: .selected)
                         .byImagePlacement(.top)
                         .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10)),
-                    /// 倒计时按钮（点击触发）
+                    /// 倒计时按钮@（点击触发）
                     UIButton(type: .system)
                         .byTitle("活动", for: .normal)
                         .byTitleColor(.label, for: .normal)
                         .byTitleColor(.systemRed, for: .selected)
-                        .byTitleFont(.systemFont(ofSize: 12, weight: .regular))
+                        .byTitleFont(.systemFont(ofSize: 12, weight: .medium))
                         .bySubTitle("倒计时", for: .normal)
                         .bySubTitleColor(.label, for: .normal)
                         .bySubTitleColor(.systemRed, for: .selected)
-                        .bySubTitleFont(.systemFont(ofSize: 12, weight: .regular))
+                        .bySubTitleFont(.systemFont(ofSize: 12, weight: .medium))
                         .byImage(UIImage(systemName: "sparkles"), for: .normal)
                         .byImage(UIImage(systemName: "sparkles"), for: .selected)
                         .byImagePlacement(.top)
@@ -125,7 +127,10 @@ final class TabBarDemoVC: BaseVC {
                         .onCountdownTick { [weak self] btn, remain, total, kind in
                             guard let self else { return }
                             print("⏱️ [\(kind.jobs_displayName)] \(remain)/\(total)")
-                            btn.byTitle("还剩 \(remain)s", for: .normal)
+                            btn.byTitle("还剩", for: .normal)
+                                .byTitle("还剩", for: .selected)
+                                .bySubTitle("\(remain)s", for: .normal)
+                                .bySubTitle("\(remain)s", for: .selected)
                         }
                         .onCountdownFinish { _, kind in
                             print("✅ [\(kind.jobs_displayName)] 倒计时完成")
@@ -140,10 +145,10 @@ final class TabBarDemoVC: BaseVC {
                             )
                             // 关键：等 startTimer 把 "10s" 设好后再加前缀，避免被覆盖
                             DispatchQueue.main.async {
-                                let cur = btn.title(for: .normal) ?? "\(300)s"
-                                if !cur.hasPrefix("还剩 ") {
-                                    btn.bySubTitle("还剩 \(cur)", for: .normal)
-                                }
+                                btn.byTitle("还剩", for: .normal)
+                                    .byTitle("还剩", for: .selected)
+                                    .bySubTitle("\(300)s", for: .normal)
+                                    .bySubTitle("\(300)s", for: .selected)
                             }
                         },
                     UIButton(type: .system)
@@ -156,7 +161,7 @@ final class TabBarDemoVC: BaseVC {
                         .byImage(UIImage(systemName: "message.fill"), for: .selected)
                         .byImagePlacement(.top)
                         .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10)),
-                    /// 普通按钮（展示副标题）
+                    /// 普通按钮@（展示副标题）
                     UIButton(type: .system)
                         .byNormalBgColor(.clear)
                         .byTitle("我的", for: .normal)
@@ -219,20 +224,40 @@ final class WalletVC: BaseVC {
 }
 
 final class FriendsVC: BaseVC {
+    private lazy var exampleButton: UIButton = {
+        UIButton(type: .system)
+            /// 普通字符串@设置主标题
+            .byTitle("显示", for: .normal)
+            .byTitle("隐藏", for: .selected)
+            .byTitleColor(.systemBlue, for: .normal)
+            .byTitleColor(.systemRed, for: .selected)
+            .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+            /// 事件触发@点按
+            .onTap { [weak self] sender in
+                guard let self else { return }
+                DemoDetailVC()
+                    .byData(DemoModel(id: 7, title: "详情"))
+                    .onResult { id in
+                        print("回来了 id=\(id)")
+                    }
+                    .byPush(self)           // 自带防重入，连点不重复
+                    .byCompletion{
+                        print("❤️结束❤️")
+                    }
+            }
+            .byAddTo(view) { [unowned self] make in
+                make.top.equalTo(gk_navigationBar.snp.bottom).offset(10)
+                make.center.equalToSuperview()
+                make.height.equalTo(44)
+                make.width.equalTo(44)
+            }
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemTeal
         jobsSetupGKNav(title: "好友")
-
-//        DemoDetailVC()
-//            .byData(DemoModel(id: 7, title: "详情"))
-//            .onResult { id in
-//                print("回来了 id=\(id)")
-//            }
-//            .byPush(self)           // 自带防重入，连点不重复
-//            .byCompletion{
-//                print("❤️结束❤️")
-//            }
+        exampleButton.byAlpha(1)
     }
 }
 

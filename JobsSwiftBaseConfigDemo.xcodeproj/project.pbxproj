@@ -93,6 +93,7 @@
 		04D0C9822E8D1CF400580020 /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D0C9812E8D1CF300580020 /* Optional.swift */; };
 		04D842292E96377B001E8C90 /* JobsOpenDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D842282E96377A001E8C90 /* JobsOpenDemoVC.swift */; };
 		04D8422B2E965BA1001E8C90 /* JobsMarqueeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D8422A2E965BA0001E8C90 /* JobsMarqueeView.swift */; };
+		04DBEE0B2EA1E305000E52D3 /* Sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 04DBEE0A2EA1E305000E52D3 /* Sound.wav */; };
 		04E8D5B92E8E550200E85CDA /* BaseStructDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D5B82E8E54FF00E85CDA /* BaseStructDefs.swift */; };
 		04E8D5BB2E8E5AD000E85CDA /* CNIDDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D5BA2E8E5ACF00E85CDA /* CNIDDemoVC.swift */; };
 		04E8D6172E8E6E7F00E85CDA /* UIBarButtonItemAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D6162E8E6E7E00E85CDA /* UIBarButtonItemAppearance.swift */; };
@@ -255,6 +256,7 @@
 		04D0C9812E8D1CF300580020 /* Optional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
 		04D842282E96377A001E8C90 /* JobsOpenDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsOpenDemoVC.swift; sourceTree = "<group>"; };
 		04D8422A2E965BA0001E8C90 /* JobsMarqueeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsMarqueeView.swift; sourceTree = "<group>"; };
+		04DBEE0A2EA1E305000E52D3 /* Sound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Sound.wav; sourceTree = "<group>"; };
 		04E8D5B82E8E54FF00E85CDA /* BaseStructDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseStructDefs.swift; sourceTree = "<group>"; };
 		04E8D5BA2E8E5ACF00E85CDA /* CNIDDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNIDDemoVC.swift; sourceTree = "<group>"; };
 		04E8D6162E8E6E7E00E85CDA /* UIBarButtonItemAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBarButtonItemAppearance.swift; sourceTree = "<group>"; };
@@ -578,6 +580,14 @@
 			path = iOS.SDK;
 			sourceTree = "<group>";
 		};
+		04DBEE092EA1E2F9000E52D3 /* 声音 */ = {
+			isa = PBXGroup;
+			children = (
+				04DBEE0A2EA1E305000E52D3 /* Sound.wav */,
+			);
+			path = "声音";
+			sourceTree = "<group>";
+		};
 		04E8D61D2E8E882000E85CDA /* UIViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -676,6 +686,7 @@
 		C564FC372E0959120079B5C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				04DBEE092EA1E2F9000E52D3 /* 声音 */,
 				045921182E855875008C8D6A /* 字体 */,
 				045921172E85584C008C8D6A /* storyboard */,
 				045921162E855831008C8D6A /* xcassets */,
@@ -869,6 +880,7 @@
 				C564FBEB2E09580D0079B5C1 /* Assets.xcassets in Resources */,
 				0442717B2E8139CF0084B25C /* ColorAssets.xcassets in Resources */,
 				C564FBE62E09580B0079B5C1 /* Main.storyboard in Resources */,
+				04DBEE0B2EA1E305000E52D3 /* Sound.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
