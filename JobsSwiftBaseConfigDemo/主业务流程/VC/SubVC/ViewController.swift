@@ -79,7 +79,7 @@ class ViewController: UIViewController {
         )
 
         let obj = NSObject()
-        obj.name = "Jobs"
+        obj.nickname = "Jobs"
         obj.greet() // 输出: 👋 Hello, my name is Jobs
 
         setupUI()

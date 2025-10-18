@@ -61,6 +61,9 @@
 		0477D9832E8BE9FC002C6427 /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9822E8BE9FB002C6427 /* KeyboardObserver.swift */; };
 		0477D9852E8BEACB002C6427 /* Reactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9842E8BEACA002C6427 /* Reactive.swift */; };
 		0477D9872E8BEF64002C6427 /* KeyboardDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9862E8BEF62002C6427 /* KeyboardDemoVC.swift */; };
+		0482A5E82EA380EB004176A4 /* BaseWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0482A5E72EA380E1004176A4 /* BaseWebView.swift */; };
+		0482A5EA2EA383B2004176A4 /* BaseWebViewDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0482A5E92EA38392004176A4 /* BaseWebViewDemoVC.swift */; };
+		0482A5F22EA3A3A2004176A4 /* BaseWebViewDemo.html in Resources */ = {isa = PBXBuildFile; fileRef = 0482A5F12EA3A3A2004176A4 /* BaseWebViewDemo.html */; };
 		048314002E9A08510009A44B /* JobsMarqueeDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048313FF2E9A08500009A44B /* JobsMarqueeDemoVC.swift */; };
 		0487AADA2E840CB200B5D307 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0487AAD92E840CB200B5D307 /* UIColor.swift */; };
 		0487AADC2E840EE300B5D307 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0487AADB2E840EE300B5D307 /* libc++.tbd */; };
@@ -226,6 +229,9 @@
 		0477D9842E8BEACA002C6427 /* Reactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reactive.swift; sourceTree = "<group>"; };
 		0477D9862E8BEF62002C6427 /* KeyboardDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDemoVC.swift; sourceTree = "<group>"; };
 		047CC3422EA254A200E84122 /* 心愿单.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "心愿单.md"; sourceTree = "<group>"; };
+		0482A5E72EA380E1004176A4 /* BaseWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWebView.swift; sourceTree = "<group>"; };
+		0482A5E92EA38392004176A4 /* BaseWebViewDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWebViewDemoVC.swift; sourceTree = "<group>"; };
+		0482A5F12EA3A3A2004176A4 /* BaseWebViewDemo.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = BaseWebViewDemo.html; sourceTree = "<group>"; };
 		048313FF2E9A08500009A44B /* JobsMarqueeDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsMarqueeDemoVC.swift; sourceTree = "<group>"; };
 		0487AAD92E840CB200B5D307 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		0487AADB2E840EE300B5D307 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
@@ -427,6 +433,7 @@
 		0459210F2E85572C008C8D6A /* Inheritance */ = {
 			isa = PBXGroup;
 			children = (
+				0482A5E62EA380CE004176A4 /* UIWebView */,
 				04E8D61D2E8E882000E85CDA /* UIViewController */,
 				045921102E855750008C8D6A /* UILabel */,
 			);
@@ -470,9 +477,26 @@
 			path = "字体";
 			sourceTree = "<group>";
 		};
+		0482A5E62EA380CE004176A4 /* UIWebView */ = {
+			isa = PBXGroup;
+			children = (
+				0482A5E72EA380E1004176A4 /* BaseWebView.swift */,
+			);
+			path = UIWebView;
+			sourceTree = "<group>";
+		};
+		0482A5EC2EA39DF8004176A4 /* HTML */ = {
+			isa = PBXGroup;
+			children = (
+				0482A5F12EA3A3A2004176A4 /* BaseWebViewDemo.html */,
+			);
+			path = HTML;
+			sourceTree = "<group>";
+		};
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				0482A5E92EA38392004176A4 /* BaseWebViewDemoVC.swift */,
 				0448B1832EA3707700CFC755 /* QRCodeDemoVC.swift */,
 				049A65722EA0E6D70006B185 /* TabBarDemoVC.swift */,
 				049A656E2EA0D51B0006B185 /* TraitChangeDemoVC.swift */,
@@ -691,6 +715,7 @@
 		C564FC372E0959120079B5C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0482A5EC2EA39DF8004176A4 /* HTML */,
 				04DBEE092EA1E2F9000E52D3 /* 声音 */,
 				045921182E855875008C8D6A /* 字体 */,
 				045921172E85584C008C8D6A /* storyboard */,
@@ -881,6 +906,7 @@
 				0459211E2E85588C008C8D6A /* DS-DIGIB.ttf in Resources */,
 				0459211F2E85588C008C8D6A /* fonteditor.ttf in Resources */,
 				045921202E85588C008C8D6A /* DIN-Black-2.otf in Resources */,
+				0482A5F22EA3A3A2004176A4 /* BaseWebViewDemo.html in Resources */,
 				C564FBEE2E09580D0079B5C1 /* LaunchScreen.storyboard in Resources */,
 				C564FBEB2E09580D0079B5C1 /* Assets.xcassets in Resources */,
 				0442717B2E8139CF0084B25C /* ColorAssets.xcassets in Resources */,
@@ -1035,6 +1061,7 @@
 				C564FC942E0959640079B5C1 /* UIPageViewController.swift in Sources */,
 				045920E62E84F389008C8D6A /* CALayer.swift in Sources */,
 				049A65712EA0E6BB0006B185 /* JobsTabBarCtrl.swift in Sources */,
+				0482A5E82EA380EB004176A4 /* BaseWebView.swift in Sources */,
 				04E8D5B92E8E550200E85CDA /* BaseStructDefs.swift in Sources */,
 				0487AADA2E840CB200B5D307 /* UIColor.swift in Sources */,
 				04E8D6232E8E884500E85CDA /* BaseVC.swift in Sources */,
@@ -1067,6 +1094,7 @@
 				0477D9772E8B9381002C6427 /* UIResponder.swift in Sources */,
 				0401DCFA2E90D91900D572AD /* UIWindow.swift in Sources */,
 				04468F922E9E5A5900677000 /* MediaPickerService.swift in Sources */,
+				0482A5EA2EA383B2004176A4 /* BaseWebViewDemoVC.swift in Sources */,
 				04E8D5BB2E8E5AD000E85CDA /* CNIDDemoVC.swift in Sources */,
 				C564FC892E0959640079B5C1 /* UICollectionView.swift in Sources */,
 				C564FCB32E0959990079B5C1 /* CustomCell.swift in Sources */,

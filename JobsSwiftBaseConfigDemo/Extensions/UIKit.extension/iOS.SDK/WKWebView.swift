@@ -40,3 +40,35 @@ extension WKWebView {
         return self
     }
 }
+
+@MainActor
+public extension WKWebView {
+    /// fire-and-forget：不关心回调
+    func jobsEval(_ js: String) {
+        if #available(iOS 15.0, *) {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                _ = try? await self.evaluateJavaScript(js)
+            }
+        } else {
+            self.evaluateJavaScript(js, completionHandler: nil)
+        }
+    }
+    /// 带回调（@Sendable 友好）
+    func jobsEval(_ js: String,
+                  completion: (@MainActor @Sendable (Any?, Error?) -> Void)?) {
+        if #available(iOS 15.0, *) {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                do {
+                    let result = try await self.evaluateJavaScript(js)
+                    completion?(result, nil)
+                } catch {
+                    completion?(nil, error)
+                }
+            }
+        } else {
+            self.evaluateJavaScript(js, completionHandler: completion)
+        }
+    }
+}

@@ -29,6 +29,7 @@ final class RootListVC: BaseVC {
         ("⛑️ SafetyPresent Demo", SafetyPresentDemoVC.self),
         ("🐎 跑马灯/🛞 轮播图 Demo", JobsMarqueeDemoVC.self),
         ("🐎 二维码/条形码 Demo", QRCodeDemoVC.self),
+        ("🌞 BaseWebView Demo", BaseWebViewDemoVC.self),
         ("💥 JobsCountdown Demo", JobsCountdownDemoVC.self),
         ("⏰ Timer Demo", TimerDemoVC.self),
         ("⌨️ 键盘 Demo", KeyboardDemoVC.self),

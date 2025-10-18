@@ -4485,9 +4485,131 @@ pickVideosFromLibrary(maxSelection: 1) { [weak self] urls in
       }
   ```
 
-### 40、条件编译 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 40、自定义`WebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 40.1、`DEBUG` 模式下才允许做的事 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 40.1、创建 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+private lazy var web: BaseWebView = { [unowned self] in
+    let w = BaseWebView()
+        .byBgColor(.clear)
+        .byAllowedHosts([])                     // 例：["example.com"]，空=不限制
+        .byOpenBlankInPlace(true)               // target=_blank 在当前 Web 打开
+        .byDisableSelectionAndCallout(false)    // 是否禁用选中/长按菜单
+        .byInjectDarkStylePatch(false)          // 简单深色补丁（按需 true）
+        .byCustomUserAgentSuffix("JobsApp/1.0")
+        .byAddTo(view) {[unowned self] make in
+            make.top.equalTo(gk_navigationBar.snp.bottom).offset(10) // 占满
+            make.left.right.bottom.equalToSuperview()
+        }
+    // 注册 JS→Native 方法
+    installHandlers(on: w)
+    // Native → JS：页面就绪广播
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak w] in
+        w?.emitEvent("nativeReady", payload: [
+            "msg": "Native is ready ✔︎",
+            "ts": Date().timeIntervalSince1970
+        ])
+    }
+    return w
+}()
+```
+
+#### 40.2、加载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 加载一个具体的网页
+
+  ```swift
+  web.loadBy(URL(string: "https://sina.cn/")!)
+  ```
+
+* 加载本地**HTML**代码
+
+  ```swift
+  web.loadHTMLBy(Self.demoHTML, baseURL: nil)
+  ```
+
+  > ```swift
+  > extension BaseWebViewDemoVC {
+  >     static let demoHTML = """
+  > <!doctype html>
+  > <html>
+  > <head>
+  >   <meta charset="utf-8">
+  >   <title>BaseWebView Usage Demo</title>
+  >   <meta name="viewport" content="width=device-width, initial-scale=1">
+  >   <style>
+  >     html,body { margin:0; padding:0; font-family:-apple-system,Helvetica; }
+  >     header { position:sticky; top:0; background:#111; color:#fff; padding:12px 16px; font-weight:600; }
+  >     main { padding:16px; }
+  >     button { padding:10px 14px; margin:6px 6px 6px 0; border-radius:8px; border:1px solid #ccc; background:#fafafa; }
+  >     pre { background:#f6f8fa; padding:10px; border-radius:6px; white-space:pre-wrap; word-break:break-word; max-height:40vh; overflow:auto; }
+  >     .row { display:flex; gap:8px; flex-wrap:wrap; }
+  >     a { color:#0a84ff; }
+  >   </style>
+  > </head>
+  > <body>
+  >   <header>BaseWebView · JS ↔︎ Native</header>
+  >   <main>
+  >     <div class="row">
+  >       <button id="btnPing">JS→Native ping()</button>
+  >       <button id="btnAlert">JS→Native openAlert()</button>
+  >       <button id="btnDisableSel">禁用选择 ON</button>
+  >       <button id="btnEnableSel">禁用选择 OFF</button>
+  >     </div>
+  > 
+  >     <p>外链/下载：</p>
+  >     <div class="row">
+  >       <a href="mailto:test@example.com">mailto</a>
+  >       <a href="https://example.com" target="_blank">_blank 打开 example.com</a>
+  >       <a href="data:text/plain,hello" download="hello.txt">下载 data: 文本</a>
+  >     </div>
+  > 
+  >     <p>日志：</p>
+  >     <pre id="log"></pre>
+  >   </main>
+  > 
+  >   <script>
+  >     const logEl = document.getElementById('log');
+  >     function log(){ const line=[...arguments].map(a=>typeof a==='string'?a:JSON.stringify(a)).join(' ');
+  >       console.log(line); logEl.textContent=(line+"\\n"+logEl.textContent).slice(0, 10000); }
+  > 
+  >     document.addEventListener('nativeReady', e => log('[event] nativeReady:', e.detail));
+  > 
+  >     document.getElementById('btnPing').addEventListener('click', async () => {
+  >       const res = await Native.call('ping', { msg:'hello from JS', rnd: Math.random() });
+  >       log('[reply] ping =>', res);
+  >     });
+  > 
+  >     document.getElementById('btnAlert').addEventListener('click', async () => {
+  >       const res = await Native.call('openAlert', { message:'JS 请求原生 Alert' });
+  >       log('[reply] openAlert =>', res);
+  >     });
+  > 
+  >     document.getElementById('btnDisableSel').addEventListener('click', async () => {
+  >       const res = await Native.call('toggleSelection', { disabled:true });
+  >       log('[reply] toggleSelection =>', res);
+  >     });
+  >     document.getElementById('btnEnableSel').addEventListener('click', async () => {
+  >       const res = await Native.call('toggleSelection', { disabled:false });
+  >       log('[reply] toggleSelection =>', res);
+  >     });
+  >   </script>
+  > </body>
+  > </html>
+  > """
+  > }
+  > ```
+
+* 加载本地`*.html`文件（前提是该文件被包含进**Bundle**）
+
+  ```swift
+  web.loadBundleHTMLBy(named: "BaseWebViewDemo")
+  ```
+
+### 41、条件编译 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 41.1、`DEBUG` 模式下才允许做的事 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 定义
 
@@ -4514,7 +4636,7 @@ pickVideosFromLibrary(maxSelection: 1) { [weak self] urls in
   }
   ```
 
-#### 40.2、代码启用（当引入某第三方后）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 41.2、代码启用（当引入某第三方后）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 #if canImport(Kingfisher)
@@ -4524,6 +4646,21 @@ import ObjectiveC.runtime
 /// TODO
 #endif
 ```
+
+### 43、💼 <font color=green id=bundle>**Bundle**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 打印当前**Bundle**的路径
+
+  ```swift
+  print("Bundle:", Bundle.main.bundlePath)
+  ```
+
+* 查找当前的**Bundle**包里面是否存在后缀名为**html**的文件
+
+  ```swift
+  let all = Bundle.main.urls(forResourcesWithExtension: "html", subdirectory: nil) ?? []
+  print("SomeThing in bundle:", all.map { $0.lastPathComponent })
+  ```
 
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 

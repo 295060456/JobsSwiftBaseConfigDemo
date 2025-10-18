@@ -18,7 +18,7 @@ extension NSObject: Then {}
 // MARK: -
 private var nameKey: UInt8 = 0
 extension NSObject {
-    var name: String {
+    var nickname: String {
         get {
             return objc_getAssociatedObject(self, &nameKey) as? String ?? ""
         }
@@ -27,7 +27,7 @@ extension NSObject {
         }
     }
     func greet() {
-        print("👋 Hello, my name is \(name)")
+        print("👋 Hello, my name is \(nickname)")
     }
 }
 // MARK: -
