@@ -4438,9 +4438,56 @@ pickVideosFromLibrary(maxSelection: 1) { [weak self] urls in
   )
   ```
 
-### 39、条件编译 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 39、角标提示@右上角提示文案 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 39.1、`DEBUG` 模式下才允许做的事 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+* 展示
+
+  * 右上角自定义文字
+
+    ```swift
+    UIView().byCornerBadgeText("NEW") { cfg in
+                cfg.byOffset(.init(horizontal: -6, vertical: 6))
+                    .byInset(.init(top: 2, left: 6, bottom: 2, right: 6))
+                    .byBgColor(.systemRed)
+                    .byFont(.systemFont(ofSize: 11, weight: .bold))
+                    .byShadow(color: UIColor.black.withAlphaComponent(0.25),
+                              radius: 2,
+                              opacity: 0.6,
+                              offset: .init(width: 0, height: 1))
+            }
+    ```
+
+  * 右上角小红点
+
+    ```swift
+    UIView().byCornerDot(diameter: 10, offset: .init(horizontal: -4, vertical: 4))// 红点
+    ```
+
+* 关闭
+
+  ```swift
+  UIButton(type: .system)
+      /// 事件触发@点按
+      .onTap { [weak self] sender in
+          guard let self else { return }
+          sender.isSelected.toggle()
+          if sender.isSelected {
+              sender.byCornerDot(diameter: 10, offset: .init(horizontal: -4, vertical: 4))
+          } else {
+              sender.removeCornerBadge()
+          }
+          JobsToast.show(
+              text: "优惠@点按事件",
+              config: JobsToast.Config()
+                  .byBgColor(.systemGreen.withAlphaComponent(0.9))
+                  .byCornerRadius(12)
+          )
+      }
+  ```
+
+### 40、条件编译 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 40.1、`DEBUG` 模式下才允许做的事 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 定义
 
@@ -4467,7 +4514,7 @@ pickVideosFromLibrary(maxSelection: 1) { [weak self] urls in
   }
   ```
 
-#### 39.2、代码启用（当引入某第三方后）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 40.2、代码启用（当引入某第三方后）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 #if canImport(Kingfisher)

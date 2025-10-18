@@ -47,7 +47,17 @@ final class TabBarDemoVC: BaseVC {
                         .byImage(UIImage(systemName: "house.fill"), for: .selected)
                         .byImagePlacement(.top)
                         .byTapSound("Sound.wav")
-                        .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10)),
+                        .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10))
+                        .byCornerBadgeText("NEW") { cfg in
+                            cfg.byOffset(.init(horizontal: -6, vertical: 6))
+                                .byInset(.init(top: 2, left: 6, bottom: 2, right: 6))
+                                .byBgColor(.systemRed)
+                                .byFont(.systemFont(ofSize: 11, weight: .bold))
+                                .byShadow(color: UIColor.black.withAlphaComponent(0.25),
+                                          radius: 2,
+                                          opacity: 0.6,
+                                          offset: .init(width: 0, height: 1))
+                        },
                     /// 普通按钮@（配置事件）
                     UIButton(type: .system)
                         .byNormalBgColor(.clear)
@@ -58,10 +68,18 @@ final class TabBarDemoVC: BaseVC {
                         .byImage(UIImage(systemName: "tag"), for: .normal)
                         .byImage(UIImage(systemName: "tag.fill"), for: .selected)
                         .byImagePlacement(.top)
-                        .byTapSound("Sounddd.wav")
+                        .byTapSound("Sound.wav")
                         .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10))
+                        .byCornerDot(diameter: 10, offset: .init(horizontal: -4, vertical: 4))// 红点
                         /// 事件触发@点按
                         .onTap { [weak self] sender in
+                            guard let self else { return }
+                            sender.isSelected.toggle()
+                            if sender.isSelected {
+                                sender.byCornerDot(diameter: 10, offset: .init(horizontal: -4, vertical: 4))
+                            } else {
+                                sender.removeCornerBadge()
+                            }
                             JobsToast.show(
                                 text: "优惠@点按事件",
                                 config: JobsToast.Config()
