@@ -24,6 +24,7 @@
 		04468F8E2E9E4B6300677000 /* PhotoAlbumDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04468F8D2E9E4B5700677000 /* PhotoAlbumDemoVC.swift */; };
 		04468F902E9E4D7000677000 /* PermissionCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04468F8F2E9E4D7000677000 /* PermissionCenter.swift */; };
 		04468F922E9E5A5900677000 /* MediaPickerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04468F912E9E5A5700677000 /* MediaPickerService.swift */; };
+		0448B1842EA3707E00CFC755 /* QRCodeDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0448B1832EA3707700CFC755 /* QRCodeDemoVC.swift */; };
 		045920E42E84EC73008C8D6A /* SwiftTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E32E84EC72008C8D6A /* SwiftTools.swift */; };
 		045920E62E84F389008C8D6A /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E52E84F386008C8D6A /* CALayer.swift */; };
 		045920EA2E84FD82008C8D6A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E92E84FD77008C8D6A /* String.swift */; };
@@ -187,6 +188,7 @@
 		04468F8D2E9E4B5700677000 /* PhotoAlbumDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumDemoVC.swift; sourceTree = "<group>"; };
 		04468F8F2E9E4D7000677000 /* PermissionCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionCenter.swift; sourceTree = "<group>"; };
 		04468F912E9E5A5700677000 /* MediaPickerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPickerService.swift; sourceTree = "<group>"; };
+		0448B1832EA3707700CFC755 /* QRCodeDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeDemoVC.swift; sourceTree = "<group>"; };
 		045920E32E84EC72008C8D6A /* SwiftTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTools.swift; sourceTree = "<group>"; };
 		045920E52E84F386008C8D6A /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
 		045920E92E84FD77008C8D6A /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -471,6 +473,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				0448B1832EA3707700CFC755 /* QRCodeDemoVC.swift */,
 				049A65722EA0E6D70006B185 /* TabBarDemoVC.swift */,
 				049A656E2EA0D51B0006B185 /* TraitChangeDemoVC.swift */,
 				049A656C2EA0CB790006B185 /* SafeCodableDemoVC.swift */,
@@ -1054,6 +1057,7 @@
 				04E8D6172E8E6E7F00E85CDA /* UIBarButtonItemAppearance.swift in Sources */,
 				04AD62912E91230000E18984 /* TimerDemoVC.swift in Sources */,
 				C564FC862E0959640079B5C1 /* WKWebView.swift in Sources */,
+				0448B1842EA3707E00CFC755 /* QRCodeDemoVC.swift in Sources */,
 				0477D97D2E8BDB95002C6427 /* JobsCountdownButton.swift in Sources */,
 				04AC74C52E86682E004B8305 /* Notification.swift in Sources */,
 				04D0C9722E8CD39300580020 /* JobsControlEventsDemoVC.swift in Sources */,
