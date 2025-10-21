@@ -12,7 +12,7 @@ import WebKit
 final class BaseWebViewDemoVC: BaseVC {
     // MARK: - 懒加载 Web（全通用，无业务常量）
     private lazy var web: BaseWebView = { [unowned self] in
-        let w = BaseWebView()
+        return BaseWebView()
             .byBgColor(.clear)
             .byAllowedHosts([])                  // 不限域
             .byOpenBlankInPlace(true)
@@ -22,6 +22,10 @@ final class BaseWebViewDemoVC: BaseVC {
                 // 需要区分页面时在此 return "YourApp/1.0"
                 return nil
             }
+//            .byNormalizeMToWWW(false)               // ❗️关闭 m→www
+//            .byForceHTTPSUpgrade(false)             // ❗️关闭 http→https
+//            .bySafariFallbackOnHTTP(false)          // ❗️关闭 Safari 兜底
+//            .byInjectRedirectSanitizerJS(false)     // 可关，避免干涉 H5 自己跳转
             /// URL 重写策略（默认不重写；这里保持关闭）
             .byURLRewriter { _ in
                 // 例如要做 http→https 升级：检测 url.scheme == "http" 再返回新 URL
@@ -63,44 +67,32 @@ final class BaseWebViewDemoVC: BaseVC {
                     make.edges.equalToSuperview()
                 }
             }
-        w.useMobileBridge()
-            .useMobileBridgeBy { cfg in
-                cfg
-                    .byTokenProvider { [weak self] in
-                        _ = self
-                        return "dsw"  // 返回 nil = 未登录
-                    }
-                    .byShowToast { text in
-                        JobsToast.show(text: text)
-                    }
-                    .byNavigateLogin { [weak self] in
-                        guard let self else { return }
-                        JobsToast.show(text: "请接入原生登录页 onNavigateLogin")
-                    }
-                    .byNavigateHome { [weak self] in
-                        guard let self else { return }
-                        self.closeByResult("")
-                    }
-                    .byCloseWebView { [weak self] in
-                        guard let self else { return }
-                        self.closeByResult("")
-                    }
-                // .byNavigateDeposit { ... }
-                // .byUnknownAction { action, body in ... }
+             /// 以下是依据前端暴露的自定义方法进行的JS交互
+            .registerMobileAction("navigateToHome") { [weak self] dict in
+                /// 跳转到首页
+                self!.closeByResult("")
             }
-            .registerMobileAction("openVIP") { dict in
-                let vipId = dict["vipId"] as? String ?? ""
-                print("openVIP:", vipId)
-                // 在这里打开你原生的 VIP 页面
-        }
-        installHandlers(on: w)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak w] in
-            w?.emitEvent("nativeReady", payload: [
-                "msg": "Native is ready ✔︎",
-                "ts": Date().timeIntervalSince1970
-            ])
-        }
-        return w
+            .registerMobileAction("getToken") { [weak self] dict in
+
+            }
+            .registerMobileAction("navigateToLogin") { [weak self] dict in
+                /// 跳转到登录页
+            }
+            .registerMobileAction("navigateToDeposit") { [weak self] dict in
+                /// 跳转到充值页
+            }
+            .registerMobileAction("closeWebView") { [weak self] dict in
+                /// 关闭WebView
+            }
+            .registerMobileAction("showToast") { [weak self] dict in
+                /// 显示Toast
+                JobsToast.show(
+                    text: dict.stringValue(for: "message") ?? "",
+                    config: JobsToast.Config()
+                        .byBgColor(.systemGreen.withAlphaComponent(0.9))
+                        .byCornerRadius(12)
+                )
+            }
     }()
     // MARK: - 生命周期
     override func viewDidLoad() {
@@ -113,34 +105,6 @@ final class BaseWebViewDemoVC: BaseVC {
         // web.loadHTMLBy(Self.demoHTML, baseURL: nil)
         /// 3️⃣ 加载本地 HTML 文件
         // web.loadBundleHTMLBy(named: "BaseWebViewDemo")
-    }
-    // MARK: - 现有的 bridge 注册
-    private func installHandlers(on web: BaseWebView) {
-        web.on("ping") { payload, reply in
-            let device: [String: String] = [
-                "name": UIDevice.current.name,
-                "system": "\(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
-            ]
-            reply([
-                "ok": true,
-                "echo": payload ?? NSNull(),
-                "device": device,
-                "ts": Date().timeIntervalSince1970
-            ])
-        }
-        web.on("openAlert") { payload, reply in
-            JobsToast.show(
-                text: (payload as? [String: Any])?["message"] as? String ?? "No message",
-                config: JobsToast.Config()
-                    .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                    .byCornerRadius(12)
-            )
-        }
-        web.on("toggleSelection") { payload, reply in
-            let disabled = ((payload as? [String: Any])?["disabled"] as? Bool) ?? false
-            web.setSelectionDisabled(disabled)
-            reply(["disabled": disabled])
-        }
     }
     // MARK: - 验证用 HTML（按钮覆盖 ping / alert / selection / _blank / 外链 / 下载）
     static let demoHTML = """

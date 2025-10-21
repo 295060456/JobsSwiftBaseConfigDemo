@@ -67,6 +67,7 @@
 		0482A5F82EA5F309004176A4 /* JobsNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0482A5F72EA5F308004176A4 /* JobsNavBar.swift */; };
 		0482A5FA2EA63440004176A4 /* WKWebViewConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0482A5F92EA6343F004176A4 /* WKWebViewConfiguration.swift */; };
 		0482A5FC2EA63527004176A4 /* WKUserContentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0482A5FB2EA63526004176A4 /* WKUserContentController.swift */; };
+		0482A67C2EA7883F004176A4 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0482A67B2EA7883E004176A4 /* Dictionary.swift */; };
 		048314002E9A08510009A44B /* Demo@跑马灯轮播图.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048313FF2E9A08500009A44B /* Demo@跑马灯轮播图.swift */; };
 		0487AADA2E840CB200B5D307 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0487AAD92E840CB200B5D307 /* UIColor.swift */; };
 		0487AADC2E840EE300B5D307 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0487AADB2E840EE300B5D307 /* libc++.tbd */; };
@@ -238,6 +239,7 @@
 		0482A5F72EA5F308004176A4 /* JobsNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsNavBar.swift; sourceTree = "<group>"; };
 		0482A5F92EA6343F004176A4 /* WKWebViewConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKWebViewConfiguration.swift; sourceTree = "<group>"; };
 		0482A5FB2EA63526004176A4 /* WKUserContentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKUserContentController.swift; sourceTree = "<group>"; };
+		0482A67B2EA7883E004176A4 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		048313FF2E9A08500009A44B /* Demo@跑马灯轮播图.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@跑马灯轮播图.swift"; sourceTree = "<group>"; };
 		0487AAD92E840CB200B5D307 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		0487AADB2E840EE300B5D307 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
@@ -521,7 +523,6 @@
 				04D0C9712E8CD39200580020 /* Demo@控制层回调.swift */,
 				0477D9862E8BEF62002C6427 /* Demo@键盘.swift */,
 				0477D97E2E8BDBB7002C6427 /* Demo@倒计时.swift */,
-				0477D9782E8BADB1002C6427 /* Demo@被Push或者Present的次级页面.swift */,
 				0477D9742E8B9141002C6427 /* Demo@安全Present.swift */,
 				0477D9702E8B896A002C6427 /* Demo@安全Push.swift */,
 				04A8C54B2E8AA94B00381701 /* Demo@按钮.swift */,
@@ -555,6 +556,7 @@
 		04D0C9802E8D19FC00580020 /* iOS.SDK */ = {
 			isa = PBXGroup;
 			children = (
+				0482A67B2EA7883E004176A4 /* Dictionary.swift */,
 				0482A5FB2EA63526004176A4 /* WKUserContentController.swift */,
 				0482A5F92EA6343F004176A4 /* WKWebViewConfiguration.swift */,
 				049A65682EA0AAB70006B185 /* Decimal.swift */,
@@ -738,6 +740,7 @@
 			isa = PBXGroup;
 			children = (
 				04A8C54D2E8AA9F800381701 /* Demo@功能列表根目录.swift */,
+				0477D9782E8BADB1002C6427 /* Demo@被Push或者Present的次级页面.swift */,
 				04A8C54F2E8AA9FF00381701 /* SubVC */,
 			);
 			path = VC;
@@ -1122,6 +1125,7 @@
 				C564FC912E0959640079B5C1 /* UIScrollView.swift in Sources */,
 				049A656D2EA0CB7F0006B185 /* Demo@解码.swift in Sources */,
 				C564FC8F2E0959640079B5C1 /* UIProgressView.swift in Sources */,
+				0482A67C2EA7883F004176A4 /* Dictionary.swift in Sources */,
 				0401DCFE2E91069F00D572AD /* DateFormatter.swift in Sources */,
 				C564FC9F2E0959640079B5C1 /* UISearchBar.swift in Sources */,
 				0401DCFC2E9102BC00D572AD /* UserDefaults.swift in Sources */,

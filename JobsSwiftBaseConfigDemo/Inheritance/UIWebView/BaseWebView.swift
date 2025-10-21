@@ -10,7 +10,6 @@ import WebKit
 import UniformTypeIdentifiers
 import SafariServices
 import SnapKit
-
 /**
  在 Info.plist 添加👇（更通用的 ATS 配置，避免为某域名单独开洞）
      <key>NSAppTransportSecurity</key>
@@ -19,7 +18,6 @@ import SnapKit
        <key>NSAllowsArbitraryLoadsInWebContent</key><true/>
      </dict>
  */
-
 public typealias NativeHandler = (_ payload: Any?, _ reply: @escaping (Any?) -> Void) -> Void
 /// 任意 JSON 解码容器（备用）
 public struct AnyDecodable: Decodable {
@@ -372,7 +370,6 @@ public final class BaseWebView: UIView {
     @discardableResult
     public func useMobileBridge(_ cfg: MobileBridgeConfig = .defaults()) -> Self {
         self.mobileConfig = cfg
-        registerMobileCoreActionsIfNeeded()
         if cfg.injectShim { injectMinimalMobileShim() }
         return self
     }
@@ -492,7 +489,6 @@ extension BaseWebView {
             return WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: false)
         }
     }
-
     /// 通用重定向修补脚本：仅升级 http→https，不做任何域名改写
     static func makeSanitizeUserScript() -> WKUserScript {
         let js = """
@@ -596,7 +592,6 @@ extension BaseWebView {
         throw NSError(domain: "BaseWebView", code: -3,
                       userInfo: [NSLocalizedDescriptionKey: "Cannot decode JS result to \(T.self) – raw: \(String(describing: value))"])
     }
-
     // MARK: - Dark CSS 注入（用于 injectDarkStylePatch）
     private func injectDarkCSS() {
         let css = """
@@ -635,7 +630,9 @@ extension BaseWebView: WKScriptMessageHandlerWithReply {
 }
 // ===== 统一消息处理 =====
 private extension BaseWebView {
-    func handleScriptMessage(channel: String, body: Any, reply: @escaping (Any?, String?) -> Void) {
+    func handleScriptMessage(channel: String,
+                             body: Any,
+                             reply: @escaping (Any?, String?) -> Void) {
         // 1) 先拦截 H5 的 iOSBridge（{action,message?,callback?}）
         if channel == mobileBridgeName {
             handleIOSBridgeMessage(body)
@@ -650,7 +647,7 @@ private extension BaseWebView {
             }
             return
         }
-        // 3) 你原有的 bridge
+        // 3) 原有的 bridge
         guard channel == bridgeName else { return }
 
         let dictBody: [String: Any]
@@ -700,69 +697,6 @@ private extension BaseWebView {
         } else {
             mobileConfig.onUnknownAction?(action, dict)
             print("iOSBridge unhandled action:", action, dict)
-        }
-    }
-    // === 注册内置默认动作（可随时覆盖）===
-    func registerMobileCoreActionsIfNeeded() {
-        if mobileActionHandlers["getToken"] == nil {
-            mobileActionHandlers["getToken"] = { [weak self] dict in
-                guard let self else { return }
-                let callback = (dict["callback"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-                Task { @MainActor in
-                    let token = await self.mobileConfig.tokenProvider?() ?? nil
-                    if !callback.isEmpty {
-                        let js = "\(callback)(\(BaseWebView.toJSONLiteral(token)));"
-                        self.webView.jobsEval(js)
-                    }
-                }
-            }
-        }
-        if mobileActionHandlers["navigateToHome"] == nil {
-            mobileActionHandlers["navigateToHome"] = { [weak self] _ in
-                guard let self else { return }
-                if let f = self.mobileConfig.onNavigateHome { f(); return }
-                if let nav = self.presenter() as? UINavigationController { nav.popToRootViewController(animated: true) }
-                else { self.presenter()?.dismiss(animated: true) }
-            }
-        }
-        if mobileActionHandlers["navigateToLogin"] == nil {
-            mobileActionHandlers["navigateToLogin"] = { [weak self] _ in
-                guard let self else { return }
-                if let f = self.mobileConfig.onNavigateLogin { f(); return }
-                let alert = UIAlertController.makeAlert("跳转", "请实现 onNavigateLogin 来进入原生登录页").byAddOK()
-                alert.byPresent(self.presenter())
-            }
-        }
-        if mobileActionHandlers["navigateToDeposit"] == nil {
-            mobileActionHandlers["navigateToDeposit"] = { [weak self] _ in
-                guard let self else { return }
-                if let f = self.mobileConfig.onNavigateDeposit { f(); return }
-                let alert = UIAlertController.makeAlert("跳转", "请实现 onNavigateDeposit 来进入原生充值页").byAddOK()
-                alert.byPresent(self.presenter())
-            }
-        }
-        if mobileActionHandlers["closeWebView"] == nil {
-            mobileActionHandlers["closeWebView"] = { [weak self] _ in
-                guard let self else { return }
-                if let f = self.mobileConfig.onCloseWebView { f(); return }
-                if let nav = self.presenter() as? UINavigationController, nav.viewControllers.count > 1 {
-                    nav.popViewController(animated: true)
-                } else {
-                    self.presenter()?.dismiss(animated: true)
-                }
-            }
-        }
-        if mobileActionHandlers["showToast"] == nil {
-            mobileActionHandlers["showToast"] = { [weak self] dict in
-                guard let self else { return }
-                let text = (dict["message"] as? String).flatMap { $0.isEmpty ? nil : $0 } ?? " "
-                if let f = self.mobileConfig.onShowToast { f(text); return }
-                if NSClassFromString("JobsToast") != nil {
-                    JobsToast.show(text: text)
-                } else {
-                    UIAlertController.makeAlert("提示", text).byAddOK().byPresent(self.presenter())
-                }
-            }
         }
     }
     // === 极简 JS shim：前端没注入时兜底 ===
@@ -816,7 +750,6 @@ extension BaseWebView: WKNavigationDelegate {
                 "title": webView.title ?? ""
             ])
         }
-
         // 如果外部在当前视图上装了 NavBar 且未自定义标题，则默认绑定 webView.title
         if let nb = self.jobsNavBar, nb.titleProvider == nil {
             nb.bind(webView: webView)
@@ -825,7 +758,6 @@ extension BaseWebView: WKNavigationDelegate {
     }
 
     public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) { webView.reload() }
-
     public func webView(_ webView: WKWebView,
                         decidePolicyFor action: WKNavigationAction,
                         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
