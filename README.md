@@ -166,6 +166,10 @@
 
 * [**CocoaPods**](https://cocoapods.org/)
 
+* [**创建自定义模版**](https://juejin.cn/post/6974702344021737485)
+
+* [**苹果开发者账户续费**](https://account.apple.com/account/manage/section/payment)
+
 * [**配置SourceTree脚本**](https://github.com/295060456/SourceTree.sh)
 
 * [**代码块**](https://github.com/295060456/JobsCodeSnippets)
@@ -3402,46 +3406,103 @@ private lazy var passwordAccessory: UIToolbar = {
   > NotificationCenter.default.post(name: .userDidLogin, object: nil)
   > ```
 
-### 20、回调主线程（三大手段）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 20、<font id=回调主线程>回调主线程（2大手段）</font><a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* **C.GCD**
+> 若调用点本身在主线程：**立即**执行（不延迟）。若调用点不在主线程/不在主 Actor：需要一次**actor hop**，通常要求 `await` 才能调用。
+>
+> ```swift
+> /// 这个函数必须在主线程运行
+> /// 主线程隔离的声明
+> @MainActor
+> func updateUI() {
+>     // UI 更新
+> }
+> ```
 
-  > 1️⃣ **GCD 的底层实现** → 在 **`libdispatch`** 里（C 语言库），属于 **Darwin** 系统的一部分。
-  >
-  > 2️⃣ **在 iOS / macOS 上** → GCD 是 **系统级 API**，不是 `Foundation` 提供的。
-  >
-  > 3️⃣ **[Swift](https://developer.apple.com/swift/) 里使用 `DispatchQueue`** → 其实是 Apple 在 `Dispatch` 模块里给 GCD 做的 [**Swift**](https://developer.apple.com/swift/) 封装。
-  >
-  > 4️⃣ 底层调度框架，性能好、粒度细，API 偏底层
+#### 20.1、**C.GCD系列**@传统轻量 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-  ``` swift
+> 1️⃣ **GCD 的底层实现** → 在 **`libdispatch`** 里（C 语言库），属于 **Darwin** 系统的一部分
+>
+> 2️⃣ **在 iOS / macOS 上** → GCD 是 **系统级 API**，不是 `Foundation` 提供的
+>
+> 3️⃣ **[Swift](https://developer.apple.com/swift/) 里使用 `DispatchQueue`** → 其实是 Apple 在 `Dispatch` 模块里给 GCD 做的 [**Swift**](https://developer.apple.com/swift/) 封装
+>
+> 4️⃣ 底层调度框架，性能好、粒度细，API 偏底层
+>
+> 5️⃣ 特点：**只管时机与排队**，不提供并发隔离
+
+* ```swift
+  /// 强制下一帧（哪怕当前已在主线程，也要等一等）：
+  // ⚠️ 别在主线程用 main.sync，会死锁
   DispatchQueue.main.async {
       // UI 更新
   }
   ```
 
+  * ⚠️ 别在主线程用 **`main.sync`**，会死锁🔒
+
+    ```swift
+    ❌ 错误示例1
+    final class DeadlockVC: UIViewController {
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            // 🚨 当前就在主线程执行
+            DispatchQueue.main.sync {
+                // 这个 block 会排到主队列，但调用方“同步等待”它完成
+                // 主队列又被当前这行代码占着 -> 永远轮不到执行 -> 死锁卡死
+                self.view.backgroundColor = .systemRed
+            }
+        }
+    }
+    ❌ 错误示例2
+    @IBAction func onTap(_ sender: UIButton) {
+        print("A")
+        // 🚨 UI 事件回调在主线程
+        DispatchQueue.main.sync {
+            print("B") // 永远到不了这里 -> 死锁
+        }
+        print("C")
+    }
+    ```
+
 * **`Foundation`.OperationQueue**
 
-  > 高层封装（基于**Objc**/[**Swift**](https://developer.apple.com/swift/)），内部默认还是用 **GCD** 调度。
+  > 高层封装（基于**Objc**/[**Swift**](https://developer.apple.com/swift/)），内部默认还是用 **GCD** 调度
 
   ```swift
+  /// 封装在 GCD 之上，多了依赖/取消/QoS/暂停
   OperationQueue.main.addOperation {
       // UI 更新
   }
   ```
 
-* **[Swift](https://developer.apple.com/swift/) Concurrency** <font color=red>**现代推荐方式**</font>
+* 遗留 API
 
   ```swift
-  @MainActor
-  func updateUI() {
-      // UI 更新
-  }
-  /// 调用
-  Task {
-      await updateUI()
-  }
+  performSelector(onMainThread:)
   ```
+
+#### 20.2、**[Swift](https://developer.apple.com/swift/).Concurrency.MainActor（执行器层）**@<font color=red>**现代推荐方式**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 立刻切主线程并等结果
+
+  ```swift
+  let value = await MainActor.run { /* UI 读写 */ }
+  ```
+
+* 异步，下一轮再跑
+
+  * ```swift
+    Task {
+        await updateUI()
+    }
+    ```
+
+  * ```swift
+    Task { @MainActor in
+        /// UI 更新
+    }
+    ```
 
 ### 21、`Block/闭包` 的安全调用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -3521,7 +3582,9 @@ private lazy var passwordAccessory: UIToolbar = {
   }()
   ```
 
-### 24、[**导航栏@GKNavigationBarSwift**](https://github.com/QuintGao/GKNavigationBarSwift)的二次封装和使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 24、🧭 导航栏 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 24.1、[**基于控制器层的自定义导航栏@GKNavigationBarSwift**](https://github.com/QuintGao/GKNavigationBarSwift)的二次封装和使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 集成
 
@@ -3547,6 +3610,42 @@ private lazy var passwordAccessory: UIToolbar = {
   		)
   }
   ```
+
+#### 24.2、基于视图层的自定义导航栏 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+// 🔽 一键开导航栏（默认标题=webView.title，默认有返回键）
+UIView().byNavBarEnabled(true)
+    .byNavBarStyle { s in
+        s.byHairlineHidden(false)
+            .byBackgroundColor(.systemBackground)
+            .byTitleAlignmentCenter(true)
+    }
+    // 自定义返回键（想隐藏就：.byNavBarBackButtonProvider { nil }）
+    .byNavBarBackButtonProvider {
+        UIButton(type: .system)
+            .byBackgroundColor(.clear)
+            .byImage(UIImage(systemName: "chevron.left"), for: .normal)
+            .byTitle("返回", for: .normal)
+            .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+            .byTitleColor(.label, for: .normal)
+            .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10))
+            .byTapSound("Sound.wav")
+    }
+    // 返回行为：优先后退，否则 pop
+    .byNavBarOnBack { [weak self] in
+        guard let self else { return }
+        closeByResult("") /// 系统的通用返回
+    }
+    .byAddTo(view) { [unowned self] make in
+        if view.jobs_hasVisibleTopBar() {
+            make.top.equalTo(self.gk_navigationBar.snp.bottom).offset(10) // 若你确信此时已存在，才去取
+            make.left.right.bottom.equalToSuperview()
+        } else {
+            make.edges.equalToSuperview()
+        }
+    }
+```
 
 ### 25、获取高频系统关键量 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -4660,6 +4759,121 @@ import ObjectiveC.runtime
   ```swift
   let all = Bundle.main.urls(forResourcesWithExtension: "html", subdirectory: nil) ?? []
   print("SomeThing in bundle:", all.map { $0.lastPathComponent })
+  ```
+
+### 44、创建 `WebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 44.1、创建 `WKWebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+import WebKit
+
+private lazy var webView: WKWebView = {
+    WKWebView(frame: .zero, configuration: WKWebViewConfiguration()
+        .byWebsiteDataStore(.default())
+        .byAllowsInlineMediaPlayback(true)
+        .byUserContentController(WKUserContentController().byAddUserScript(Self.makeBridgeUserScript()))
+        .byDefaultWebpagePreferences { wp in
+            wp.allowsContentJavaScript = true
+        }
+    )
+    .byAddTo(view) { [unowned self] make in
+        make.top.equalTo(textField.snp.bottom).offset(12)
+        make.centerX.equalToSuperview()
+        make.height.equalTo(36)
+    }
+}()
+```
+
+#### 44.2、创建 `BaseWebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 在` Info.plist `添加👇（更通用的 **ATS** 配置，避免为某域名单独开洞）
+>
+> ```xml
+> <key>NSAppTransportSecurity</key>
+> <dict>
+>  <!-- 仅放开 Web 内容，其他网络请求仍受 ATS 约束 -->
+>  <key>NSAllowsArbitraryLoadsInWebContent</key><true/>
+> </dict>
+> ```
+
+```swift
+private lazy var web: BaseWebView = { [unowned self] in
+    let w = BaseWebView()
+        .byBgColor(.clear)
+        .byAllowedHosts([])                  // 不限域
+        .byOpenBlankInPlace(true)
+        .byDisableSelectionAndCallout(false)
+        .byUserAgentSuffixProvider { req in
+//          guard let host = req.url?.host?.lowercased() else { return nil }
+//          if host == "m.bwsit.cc" { return nil }               // 该域名走系统默认 UA（避免奇怪分流）
+//          if req.url?.absoluteString.contains("/activity/") == true { return "JobsApp/1.0" }
+            return nil                                           // 其它页面默认 UA
+        }
+        .byNormalizeMToWWW(false)               // ❗️关闭 m→www
+        .byForceHTTPSUpgrade(false)             // ❗️关闭 http→https
+        .bySafariFallbackOnHTTP(false)          // ❗️关闭 Safari 兜底
+        .byInjectRedirectSanitizerJS(false)     // 可关，避免干涉 H5 自己跳转
+
+        // 🔽 一键开导航栏（默认标题=webView.title，默认有返回键）
+        .byNavBarEnabled(true)
+        .byNavBarStyle { s in
+            s.hairlineHidden = false
+            s.backgroundColor = .systemBackground
+            s.titleAlignmentCenter = true
+        }
+        // 自定义返回键（想隐藏就：.byNavBarBackButtonProvider { nil }）
+        .byNavBarBackButtonProvider {
+            UIButton(type: .system)
+                .byImage(UIImage(systemName: "chevron.left"), for: .normal)
+                .byTitle("返回", for: .normal)
+                .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+                .byTitleColor(.label, for: .normal)
+                .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10))
+                .byTapSound("Sound.wav")
+        }
+        // 返回行为：优先后退，否则 pop
+        .byNavBarOnBack { [weak self] in
+            guard let self else { return }
+//                if self.web.webView.canGoBack { self.web.webView.goBack() }
+//                else { self.navigationController?.popViewController(animated: true) }
+        }
+
+        .byAddTo(view) { [unowned self] make in
+            make.top.equalTo(gk_navigationBar.snp.bottom).offset(10)
+            make.left.right.bottom.equalToSuperview()
+        }
+    /// 注册 JS→Native 方法
+    installHandlers(on: w)
+    /// Native → JS：页面就绪广播（延迟仅示例）
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak w] in
+        w?.emitEvent("nativeReady", payload: [
+            "msg": "Native is ready ✔︎",
+            "ts": Date().timeIntervalSince1970
+        ])
+    }
+    return w
+}()
+```
+
+*  加载线上 URL
+
+  ```swift
+  web.loadBy("https://www.baidu.com")
+  /// 或者
+  web.loadBy(URL(string: "https://www.baidu.com")!)
+  ```
+
+* 加载[**内置的HTML代码**](#内置的HTML代码)
+
+  ```swift
+  web.loadHTMLBy(Self.demoHTML, baseURL: nil)
+  ```
+
+* 加载本地**`*.HTML`**文件@[**bundle**](#bundle)
+
+  ```swift
+  web.loadBundleHTMLBy(named: "BaseWebViewDemo")
   ```
 
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -8225,7 +8439,41 @@ Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS
 | **可变容器但希望拷贝隔离**       | <font color=red>**`struct`**</font> + `mutating`         |
 | **全局单例或引用共享**           | <font color=red>**`class`**</font> + `static let shared` |
 
-### 21、普通字符串（大量转义）🆚 原始字符串（一眼看懂）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 21、**`DispatchQueue.main.async`** 🆚 <font color=red>**@MainActor**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 21.1、核心对比 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **`DispatchQueue.main.async`**
+  * 本质：**GCD** 把闭包**异步入队**到主队列@[**回调主线程**](#回调主线程)
+  * 作用：保证**稍后**在主线程执行（通常是**当前调用返回之后**，多半是下一轮 runloop；<font color=red>**不是立刻**</font>）
+  * 用途：从后台切回 UI 线程；**刻意“下一帧再做”**；把重活拆出去避免阻塞当前调用
+  * 语义：**时序**（when），不提供编译器隔离检查
+
+* <font color=red>**@MainActor**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+  > ```swift
+  > /// 这个函数必须在主线程运行
+  > /// 主线程隔离的声明
+  > @MainActor
+  > func updateUI() {
+  >     // UI 更新
+  > }
+  > ```
+
+  * 本质：[**Swift**](https://developer.apple.com/swift/).**Concurrency** 的**Actor 隔离**，把函数/属性/类型绑定到“主 Actor”（= 主线程执行器）
+  * 作用：编译器/运行时**强制**在主线程上访问；从非主 Actor 调用会**hop**到主 Actor（需要 `await` 或异步调度）
+  * 用途：声明“这玩意儿必须在主线程用”（UI 类型/方法，状态容器等）
+  * 语义：**归属**（where/which executor），不承诺“下一帧”，可能**立刻**在主线程执行
+
+#### 21.2、组合关系 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 在主线程里调用 <font color=red>**@MainActor**</font>的**同步**函数：**立即**运行（没有“下一帧”一说）
+* 在主线程里 **`DispatchQueue.main.async`**：**排队**到当前调用返回之后再跑（通常下一轮 runloop）
+* 想既保证**在主线程**，又想**下一帧再做**：**用 `DispatchQueue.main.async`（或 `Task { @MainActor in … }`）**，两者都会**异步排队 + 主线程**
+
+#### 21.3、典型写法对照 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+### 22、普通字符串（大量转义）🆚 原始字符串（一眼看懂）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 单行
 
@@ -8271,7 +8519,7 @@ Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS
   let ok     = ##"真的插值：\##(id)"##  // 两个 #，插值也用两 # 匹配
   ```
 
-### 22、<font color=red id=COW>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite（先共享，写的时候才真正拷贝）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 23、<font color=red id=COW>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite（先共享，写的时候才真正拷贝）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > * **定义**：当你复制一个值类型的时候，[**Swift**](https://developer.apple.com/swift/) 不会立即复制它的底层存储，而是让两个变量共享同一块内存
 > * **触发拷贝的时机**：一旦其中一个变量尝试 **写入（修改）** 数据，[**Swift**](https://developer.apple.com/swift/) 才会真正复制一份新的内存，以保证<u>值语义</u>的正确性
@@ -8367,9 +8615,79 @@ Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS
         RC -- 否 --> InPlace["独占缓冲<br/>原地修改"]
         RC -- 是 --> Copy["分配新缓冲<br/>拷贝后写入"]
     ```
-  
-  * 
 
+## 六、📎 附件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
+### 1、<font color=red id=内置的HTML代码>**内置的HTML代码**</font>
+
+```swift
+static let demoHTML = """
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>BaseWebView Usage Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html,body { margin:0; padding:0; font-family:-apple-system,Helvetica; }
+    header { position:sticky; top:0; background:#111; color:#fff; padding:12px 16px; font-weight:600; }
+    main { padding:16px; }
+    button { padding:10px 14px; margin:6px 6px 6px 0; border-radius:8px; border:1px solid #ccc; background:#fafafa; }
+    pre { background:#f6f8fa; padding:10px; border-radius:6px; white-space:pre-wrap; word-break:break-word; max-height:40vh; overflow:auto; }
+    .row { display:flex; gap:8px; flex-wrap:wrap; }
+    a { color:#0a84ff; }
+  </style>
+</head>
+<body>
+  <header>BaseWebView · JS ↔︎ Native</header>
+  <main>
+    <div class="row">
+      <button id="btnPing">JS→Native ping()</button>
+      <button id="btnAlert">JS→Native openAlert()</button>
+      <button id="btnDisableSel">禁用选择 ON</button>
+      <button id="btnEnableSel">禁用选择 OFF</button>
+    </div>
+
+    <p>外链/下载：</p>
+    <div class="row">
+      <a href="mailto:test@example.com">mailto</a>
+      <a href="https://example.com" target="_blank">_blank 打开 example.com</a>
+      <a href="data:text/plain,hello" download="hello.txt">下载 data: 文本</a>
+    </div>
+
+    <p>日志：</p>
+    <pre id="log"></pre>
+  </main>
+
+  <script>
+    const logEl = document.getElementById('log');
+    function log(){ const line=[...arguments].map(a=>typeof a==='string'?a:JSON.stringify(a)).join(' ');
+      console.log(line); logEl.textContent=(line+"\\n"+logEl.textContent).slice(0, 10000); }
+
+    document.addEventListener('nativeReady', e => log('[event] nativeReady:', e.detail));
+
+    document.getElementById('btnPing').addEventListener('click', async () => {
+      const res = await Native.call('ping', { msg:'hello from JS', rnd: Math.random() });
+      log('[reply] ping =>', res);
+    });
+
+    document.getElementById('btnAlert').addEventListener('click', async () => {
+      const res = await Native.call('openAlert', { message:'JS 请求原生 Alert' });
+      log('[reply] openAlert =>', res);
+    });
+
+    document.getElementById('btnDisableSel').addEventListener('click', async () => {
+      const res = await Native.call('toggleSelection', { disabled:true });
+      log('[reply] toggleSelection =>', res);
+    });
+    document.getElementById('btnEnableSel').addEventListener('click', async () => {
+      const res = await Native.call('toggleSelection', { disabled:false });
+      log('[reply] toggleSelection =>', res);
+    });
+  </script>
+</body>
+</html>
+"""
+```
 
 <a id="🔚" href="#前言" style="font-size:17px; color:green; font-weight:bold;">我是有底线的👉点我回到首页</a>

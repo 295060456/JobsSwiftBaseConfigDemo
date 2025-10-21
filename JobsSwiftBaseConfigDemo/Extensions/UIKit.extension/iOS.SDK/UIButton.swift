@@ -1,5 +1,5 @@
 //
-//  UIButton+Jobs.swift
+//  UIButton.swift
 //  JobsSwiftBaseConfigDemo
 //
 //  Created by Jobs on 2025/6/16.
@@ -676,7 +676,6 @@ extension UIButton {
 // ======================================================
 // MARK: - 防止快速连点（保留）
 // ======================================================
-
 extension UIButton {
     func disableAfterClick(interval: TimeInterval = 1.0) {
         self.isUserInteractionEnabled = false
@@ -685,11 +684,9 @@ extension UIButton {
         }
     }
 }
-
 // ======================================================
 // MARK: - 闭包回调（低版本兜底）（保留）
 // ======================================================
-
 private var actionKey: Void?
 extension UIButton {
     @discardableResult

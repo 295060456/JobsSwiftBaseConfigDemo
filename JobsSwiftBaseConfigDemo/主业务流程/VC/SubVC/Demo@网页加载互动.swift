@@ -14,18 +14,58 @@ final class BaseWebViewDemoVC: BaseVC {
     private lazy var web: BaseWebView = { [unowned self] in
         let w = BaseWebView()
             .byBgColor(.clear)
-            .byAllowedHosts([])                     // 例：["example.com"]，空=不限制
-            .byOpenBlankInPlace(true)               // target=_blank 在当前 Web 打开
-            .byDisableSelectionAndCallout(false)    // 是否禁用选中/长按菜单
-            .byInjectDarkStylePatch(false)          // 简单深色补丁（按需 true）
-            .byCustomUserAgentSuffix("JobsApp/1.0")
-            .byAddTo(view) {[unowned self] make in
-                make.top.equalTo(gk_navigationBar.snp.bottom).offset(10) // 占满
-                make.left.right.bottom.equalToSuperview()
+            .byAllowedHosts([])                  // 不限域
+            .byOpenBlankInPlace(true)
+            .byDisableSelectionAndCallout(false)
+            .byUserAgentSuffixProvider { req in
+    //          guard let host = req.url?.host?.lowercased() else { return nil }
+    //          if host == "m.bwsit.cc" { return nil }               // 该域名走系统默认 UA（避免奇怪分流）
+    //          if req.url?.absoluteString.contains("/activity/") == true { return "JobsApp/1.0" }
+                return nil                                           // 其它页面默认 UA
             }
-        // 注册 JS→Native 方法
+            .byNormalizeMToWWW(false)               // ❗️关闭 m→www
+            .byForceHTTPSUpgrade(false)             // ❗️关闭 http→https
+            .bySafariFallbackOnHTTP(false)          // ❗️关闭 Safari 兜底
+            .byInjectRedirectSanitizerJS(false)     // 可关，避免干涉 H5 自己跳转
+
+            // 🔽 一键开导航栏（默认标题=webView.title，默认有返回键）
+            .byNavBarEnabled(true)
+            .byNavBarStyle { s in
+                s.byHairlineHidden(false)
+                    .byBackgroundColor(.systemBackground)
+                    .byTitleAlignmentCenter(true)
+            }
+            // 自定义返回键（想隐藏就：.byNavBarBackButtonProvider { nil }）
+            .byNavBarBackButtonProvider {
+                UIButton(type: .system)
+                    .byBackgroundColor(.clear)
+                    .byImage(UIImage(systemName: "chevron.left"), for: .normal)
+                    .byTitle("返回", for: .normal)
+                    .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+                    .byTitleColor(.label, for: .normal)
+                    .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10))
+                    .byTapSound("Sound.wav")
+            }
+//            .byNavBarBackButtonLayout { bar, btn, make in
+//                make.left.equalToSuperview().offset(0)
+//                make.centerY.equalToSuperview()
+//            }
+            // 返回行为：优先后退，否则 pop
+            .byNavBarOnBack { [weak self] in
+                guard let self else { return }
+                closeByResult("")
+            }
+            .byAddTo(view) { [unowned self] make in
+                if view.jobs_hasVisibleTopBar() {
+                    make.top.equalTo(self.gk_navigationBar.snp.bottom).offset(10) // 若确信此时已存在，才去取
+                    make.left.right.bottom.equalToSuperview()
+                } else {
+                    make.edges.equalToSuperview()
+                }
+            }
+        /// 注册 JS→Native 方法
         installHandlers(on: w)
-        // Native → JS：页面就绪广播
+        /// Native → JS：页面就绪广播（延迟仅示例）
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak w] in
             w?.emitEvent("nativeReady", payload: [
                 "msg": "Native is ready ✔︎",
@@ -38,16 +78,19 @@ final class BaseWebViewDemoVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.byBgColor(.systemBackground)
-        jobsSetupGKNav(title: "BaseWebView · 用法示例")
-        // ① 加载线上 URL（任选其一）
-//         web.loadBy(URL(string: "https://sina.cn/")!)
-        // ② 加载内置 HTML（包含 JS↔︎Native 验证按钮）
-//        web.loadHTMLBy(Self.demoHTML, baseURL: nil)
 
-        print("Bundle:", Bundle.main.bundlePath)
-        let all = Bundle.main.urls(forResourcesWithExtension: "html", subdirectory: nil) ?? []
-        print("SomeThing in bundle:", all.map { $0.lastPathComponent })
-        web.loadBundleHTMLBy(named: "BaseWebViewDemo")
+//        jobsSetupGKNav(title: "BaseWebView · 用法示例")
+        // 1️⃣ 加载线上 URL（任选其一）
+//        web.loadBy("https://www.baidu.com")
+         web.loadBy("https://www.bwsit.cc/activity/list/FIRST_DEPOSIT_V2/441138552531886080")
+//        web.loadBy(URL(string: "https://www.bwsit.cc/activity/list/FIRST_DEPOSIT_V2/441138552531886080")!)
+        // 2️⃣ 加载内置 HTML（包含 JS↔︎Native 验证按钮）
+//        web.loadHTMLBy(Self.demoHTML, baseURL: nil)
+        // 3️⃣ 加载本地HTML文件
+//        print("Bundle:", Bundle.main.bundlePath)
+//        let all = Bundle.main.urls(forResourcesWithExtension: "html", subdirectory: nil) ?? []
+//        print("SomeThing in bundle:", all.map { $0.lastPathComponent })
+//        web.loadBundleHTMLBy(named: "BaseWebViewDemo")
     }
     // MARK: - JS→Native 事件注册
     private func installHandlers(on web: BaseWebView) {
@@ -80,9 +123,7 @@ final class BaseWebViewDemoVC: BaseVC {
             reply(["disabled": disabled])
         }
     }
-}
-// MARK: - 验证用 HTML（按钮覆盖 ping / alert / selection / _blank / 外链 / 下载）
-extension BaseWebViewDemoVC {
+    // MARK: - 验证用 HTML（按钮覆盖 ping / alert / selection / _blank / 外链 / 下载）
     static let demoHTML = """
 <!doctype html>
 <html>

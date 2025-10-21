@@ -138,11 +138,18 @@ public extension UIAlertController {
         if let hit = actions.first(where: { $0.title == title }) { self.preferredAction = hit }
         return self
     }
-
     // MARK: TextFields（基础）
     func textField(at index: Int) -> UITextField? {
         guard let tfs = self.textFields, (0..<tfs.count).contains(index) else { return nil }
         return tfs[index]
+    }
+
+    @discardableResult
+    func byAddTextField(_ configure: ((UITextField) -> Void)? = nil) -> Self {
+        self.addTextField { tf in
+            configure?(tf)
+        }
+        return self
     }
 }
 

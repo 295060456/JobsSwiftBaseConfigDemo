@@ -23,6 +23,12 @@
         </dict>
     </dict>
 
+    <key>NSAppTransportSecurity</key>
+    <dict>
+      <!-- 仅放开 Web 内容，其他网络请求仍受 ATS 约束 -->
+      <key>NSAllowsArbitraryLoadsInWebContent</key><true/>
+    </dict>
+
     <!-- ====== 相机 / 麦克风 / 相册 ====== -->
     <key>NSCameraUsageDescription</key>
     <string>需要访问相机用于拍摄照片或视频。</string>

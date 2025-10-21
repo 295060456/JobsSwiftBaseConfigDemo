@@ -107,7 +107,7 @@ final class RootListVC: BaseVC {
             .bySuspend { cfg in
                 cfg
                     .byContainer(view)
-                    .byFallbackSize(CGSize(width: 88, height: 44))
+                    .byFallbackSize(CGSize(width: 90, height: 50))
                     .byDocking(.nearestEdge)
                     .byInsets(UIEdgeInsets(top: 20, left: 16, bottom: 34, right: 16))
                     .byHapticOnDock(true)
@@ -206,7 +206,6 @@ final class RootListVC: BaseVC {
             tableView.pullUpStop()
         }
     }
-
     // MARK: - 按钮动作
     private func toggleTheme() {
         guard let ws = UIApplication.shared.connectedScenes.first as? UIWindowScene,

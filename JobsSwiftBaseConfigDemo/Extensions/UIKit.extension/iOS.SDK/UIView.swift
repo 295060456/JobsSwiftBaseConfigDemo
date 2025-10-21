@@ -13,6 +13,7 @@
     import UIKit
 #endif
 import ObjectiveC
+import ObjectiveC.runtime
 // MARK: 语法糖🍬
 extension UIView {
     // MARK: 设置UI
@@ -31,6 +32,14 @@ extension UIView {
     @discardableResult
     func byAlpha(_ a: CGFloat) -> Self {
         alpha = a
+        return self
+    }
+    /// 是否可见：true 显示；false 隐藏（折叠布局）
+    @MainActor
+    @discardableResult
+    func byVisible(_ visible: Bool) -> Self {
+        self.byHidden(!visible)
+        self.byAlpha(visible ? 1 : 0)
         return self
     }
     /// 统一圆角：按钮走 UIButton.Configuration 方案，其他视图保持原始 layer 逻辑
@@ -446,11 +455,26 @@ extension UIView {
         addGestureRecognizer(gesture)
         return gesture
     }
-    /// 刷新UI
+    /// 刷新UI@标记即可（让系统合帧处理）：适合大多数情况
+    @MainActor
     @discardableResult
     func refresh()-> Self{
-        setNeedsLayout()
-        layoutIfNeeded()
+        setNeedsLayout()  // 下帧再布局
+        layoutIfNeeded()  // 立刻完成布局（当前 runloop）
+        return self
+    }
+    /// 刷新UI@标记即可（让系统合帧处理）：适合大多数情况
+    @MainActor
+    @discardableResult
+    func refreshNow() -> Self {
+        setNeedsLayout()     // 下帧再布局
+        /// 最后同步布局会改变尺寸/路径，应在布局完成后再决定要画什么
+        /// 所以把 setNeedsDisplay() 放到 layoutIfNeeded() 之后 更合理
+        layoutIfNeeded()     // 立刻完成布局（当前 runloop）
+        /// 只当确实重写了 draw(_:) /或者 使用自定义 layerClass 自绘时才需要 setNeedsDisplay()
+        setNeedsDisplay()    // 标记（下帧）需要重绘（基于新布局），不是布局
+        // 如必须同步把图也画出来（少用，重）：
+        // layer.displayIfNeeded()
         return self
     }
 
@@ -1221,7 +1245,6 @@ public extension UIView {
         if let cached = objc_getAssociatedObject(self, &kKeyboardHeightKey) as? Observable<CGFloat> {
             return cached
         }
-
         // 通知源
         let willShow  = NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification)
         let willHide  = NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification)
@@ -1249,7 +1272,6 @@ public extension UIView {
             let adjusted = max(0, overlap - self.safeAreaInsets.bottom)
             return adjusted.rounded(.towardZero) // 避免细微浮点波动
         }
-
         // 三类事件合并：
         // - show / changeFrame：计算高度
         // - hide：高度归零
@@ -1272,9 +1294,10 @@ public extension UIView {
     }
 }
 #endif
-/// 对 SnapKit 的封装
+// MARK: - SnapKit
 #if canImport(SnapKit)
 import SnapKit
+/// SnapKit 语法糖🍬
 public extension UIView {
     // MARK: - 添加约束
     @discardableResult
@@ -1317,15 +1340,20 @@ public extension UIView {
         return self
     }
 }
-#endif
-
-//  功能：给任意 UIView 增加悬浮能力（可拖拽、吸附、尊重安全区），默认挂在活动窗口。
-//  风格：链式 DSL（.suspend / .bySuspend），主线程 API 使用 @MainActor 保障。
-//  注意：悬浮 view 使用 frame 驱动，勿再对其添加 AutoLayout 约束。
-//  依赖：UIKit + ObjectiveC 运行时
-//
-
-// ================================== 悬浮配置 ==================================
+// MARK: - 给任意 UIView 增加悬浮能力（可拖拽、吸附、尊重安全区），默认挂在活动窗口。
+// 风格：链式 DSL（.suspend / .bySuspend），主线程 API 使用 @MainActor 保障。
+// 注意：悬浮 view 使用 frame 驱动，勿再对其添加 AutoLayout 约束。
+// 依赖：UIKit + ObjectiveC 运行时
+/**【用法示例】
+     /// 悬浮（可按需指定 container）
+     UIView().bySuspend { cfg in
+         cfg.fallbackSize = CGSize(width: 88, height: 44)   // 给标题/副标题更宽松的空间
+         cfg.docking = .nearestEdge
+         cfg.insets = UIEdgeInsets(top: 20, left: 16, bottom: 34, right: 16)
+         cfg.hapticOnDock = true
+     }
+ */
+// MARK: - 悬浮视图@配置
 public extension UIView {
     /// 吸附策略
     enum SuspendDocking {
@@ -1363,13 +1391,13 @@ public extension UIView {
 }
 
 public extension UIView.SuspendConfig {
-    // 工厂：链式外建
+    /// 工厂：链式外建
     static func dsl(_ build: (inout Self) -> Void) -> Self {
         var cfg = Self.default
         build(&cfg)
         return cfg
     }
-    // Non-mutating：返回新副本，适合链式
+    /// Non-mutating：返回新副本，适合链式
     @discardableResult func byContainer(_ v: UIView?) -> Self { var c = self; c.container = v; return c }
     @discardableResult func byFallbackSize(_ v: CGSize) -> Self { var c = self; c.fallbackSize = v; return c }
     @discardableResult func byDocking(_ v: UIView.SuspendDocking) -> Self { var c = self; c.docking = v; return c }
@@ -1392,6 +1420,12 @@ public extension UIView.SuspendConfig {
     @discardableResult func byConfineInContainer(_ v: Bool) -> Self { var c = self; c.confineInContainer = v; return c }
 }
 
+private enum SuspendKeys {
+    /// 使用 UInt8 哨兵地址，避免字符串 Key 冲突
+    static var configKey: UInt8 = 0
+    static var panKey: UInt8 = 0
+    static var suspendedKey: UInt8 = 0
+}
 public extension UIView {
     /// 是否已经悬浮（关联对象标记）
     var isSuspended: Bool {
@@ -1404,8 +1438,8 @@ public extension UIView {
         if let pan = objc_getAssociatedObject(self, &SuspendKeys.panKey) as? UIPanGestureRecognizer {
             removeGestureRecognizer(pan)
         }
-        objc_setAssociatedObject(self, &SuspendKeys.panKey, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         objc_setAssociatedObject(self, &SuspendKeys.configKey, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        objc_setAssociatedObject(self, &SuspendKeys.panKey, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         objc_setAssociatedObject(self, &SuspendKeys.suspendedKey, false, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         removeFromSuperview()
     }
@@ -1415,19 +1449,19 @@ public extension UIView {
     @discardableResult
     @MainActor
     func suspend(_ config: SuspendConfig = .default) -> Self {
-        // 1) 保存配置
+        /// 保存配置
         objc_setAssociatedObject(self, &SuspendKeys.configKey, config, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        // 2) 选择容器
+        /// 选择容器
         let container: UIView = config.container ?? (UIApplication.jobsKeyWindow() ?? Self._fallbackWindow())
-        // 3) 如果当前无父视图 -> 挂到容器
+        /// 如果当前无父视图 -> 挂到容器
         if superview == nil {
             container.addSubview(self)
         }
-        // 4) 尺寸兜底
+        /// 尺寸兜底
         if bounds.size == .zero {
             frame.size = config.fallbackSize
         }
-        // 5) 初始位置
+        /// 初始位置
         if let origin = config.initialOrigin {
             frame.origin = origin
         } else if frame.origin == .zero {
@@ -1435,11 +1469,11 @@ public extension UIView {
             let b = Self._availableBounds(in: container, extraInsets: config.insets)
             frame.origin = CGPoint(x: b.maxX - frame.width, y: b.maxY - frame.height)
         }
-        // 6) 约束在容器可用范围内
+        /// 约束在容器可用范围内
         if config.confineInContainer {
             _clampFrameWithinContainer()
         }
-        // 7) 拖拽手势
+        /// 拖拽手势
         if config.draggable {
             let pan: UIPanGestureRecognizer
             if let old = objc_getAssociatedObject(self, &SuspendKeys.panKey) as? UIPanGestureRecognizer {
@@ -1461,7 +1495,7 @@ public extension UIView {
         suspend(build(.default))
     }
 }
-// =============================== 手势 & 算法实现 ===============================
+// MARK: - 悬浮视图@手势算法实现
 private extension UIView {
     @objc func _onPan(_ pan: UIPanGestureRecognizer) {
         guard
@@ -1472,14 +1506,14 @@ private extension UIView {
 
         let translation = pan.translation(in: container)
         pan.setTranslation(.zero, in: container)
-        // 拖动更新 frame
+        /// 拖动更新 frame
         frame.origin.x += translation.x
         frame.origin.y += translation.y
 
         if config.confineInContainer {
             _clampFrameWithinContainer()
         }
-        // 结束时吸附
+        /// 结束时吸附
         if pan.state == .ended || pan.state == .cancelled || pan.state == .failed {
             switch config.docking {
             case .none:
@@ -1555,7 +1589,7 @@ private extension UIView {
         g.impactOccurred()
     }
 }
-// ================================ 窗口 & 几何 ================================
+// MARK: - 悬浮视图@窗口几何
 private extension UIView {
     /// 构造一个兜底窗口（极少会走到这里）
     static func _fallbackWindow() -> UIWindow {
@@ -1564,17 +1598,17 @@ private extension UIView {
                 .compactMap({ $0 as? UIWindowScene })
                 .first {
             let win = UIWindow(windowScene: scene)
-            win.frame = scene.coordinateSpace.bounds
-            win.windowLevel = .alert + 1
-            win.isHidden = false
+                .byFrame(scene.coordinateSpace.bounds)
+                .byWindowLevel(.alert + 1)
+                .byHidden(false)
             if win.rootViewController == nil {
                 win.rootViewController = UIViewController()
             }
             return win
         } else {
             let win = UIWindow(frame: UIScreen.main.bounds)
-            win.windowLevel = .alert + 1
-            win.isHidden = false
+                .byWindowLevel(.alert + 1)
+                .byHidden(false)
             if win.rootViewController == nil {
                 win.rootViewController = UIViewController()
             }
@@ -1593,18 +1627,7 @@ private extension UIView {
         return container.bounds.inset(by: ins)
     }
 }
-
-private enum SuspendKeys {
-    /// 使用 UInt8 哨兵地址，避免字符串 Key 冲突
-    static var configKey: UInt8 = 0
-    static var panKey: UInt8 = 0
-    static var suspendedKey: UInt8 = 0
-}
-
-
-import SnapKit
-import ObjectiveC.runtime
-// MARK: - 公共类型（右上角专用）
+// MARK: - 公共类型@右上角角标
 public enum RTBadgeContent {
     case text(String)
     case attributed(NSAttributedString)
@@ -1661,9 +1684,7 @@ public extension UIView {
     @discardableResult
     func byCornerBadge(_ content: RTBadgeContent,
                        build: ((RTBadgeConfig) -> RTBadgeConfig)? = nil) -> Self {
-        
         assert(Thread.isMainThread, "UI must be updated on main thread")
-
         var cfg = RTBadgeConfig()
         if let build = build { cfg = build(cfg) }
 
@@ -1685,13 +1706,13 @@ public extension UIView {
         } else {
             container.byShadowOpacity(cfg.shadowOpacity)
         }
-        // 内容
+        /// 内容
         install(content, into: container, config: cfg)
-        // 右上角定位（SnapKit）
+        /// 右上角定位（SnapKit）
         installRTBadgeConstraints(container: container,
                                   offset: cfg.offset,
                                   maxWidth: cfg.maxWidth)
-        // 圆角
+        /// 圆角
         if let r = cfg.cornerRadius {
             container.autoCapsule = false
             container.byShadowRadius(r)
@@ -1745,7 +1766,7 @@ public extension UIView {
         return self
     }
 }
-// MARK: - 内部实现（SnapKit）
+
 private final class _BadgeContainerView: UIView {
     var autoCapsule: Bool = true
     override func layoutSubviews() {
@@ -1757,22 +1778,67 @@ private final class _BadgeContainerView: UIView {
 }
 
 private final class _InsetLabel: UILabel {
+    /// 文本内容的内边距（默认为 .zero）
     var contentInsets: UIEdgeInsets = .zero {
-        didSet { invalidateIntrinsicContentSize(); setNeedsLayout() }
+        didSet {
+            guard oldValue != contentInsets else { return }
+            invalidateIntrinsicContentSize()
+            refresh()
+            setNeedsLayout()
+            setNeedsDisplay()
+        }
     }
+    /// 实际绘制：直接在缩减后的区域画
     override func drawText(in rect: CGRect) {
         super.drawText(in: rect.inset(by: contentInsets))
     }
+    /// 参与 Auto Layout 的固有尺寸：加上内边距
     override var intrinsicContentSize: CGSize {
         let s = super.intrinsicContentSize
         return CGSize(width: s.width + contentInsets.left + contentInsets.right,
                       height: s.height + contentInsets.top + contentInsets.bottom)
     }
+    /// 计算文本绘制矩形：先缩进，再把结果外扩回去（系统要求）
+    override func textRect(forBounds bounds: CGRect, limitedToNumberOfLines numberOfLines: Int) -> CGRect {
+        /// 先将可用区域减去内边距
+        let insetBounds = bounds.inset(by: contentInsets)
+        /// 让父类在缩减后的区域中排版
+        let textRect = super.textRect(forBounds: insetBounds, limitedToNumberOfLines: numberOfLines)
+        /// 再把结果外扩回原坐标系（相当于“反向”内边距）
+        let out = UIEdgeInsets(top: -contentInsets.top, left: -contentInsets.left,
+                               bottom: -contentInsets.bottom, right: -contentInsets.right)
+        return textRect.inset(by: out)
+    }
 }
-
+// MARK: - 链式 DSL
+private extension _InsetLabel {
+    /// 直接设置 UIEdgeInsets
+    @discardableResult
+    func byContentInsets(_ insets: UIEdgeInsets) -> Self {
+        self.contentInsets = insets
+        return self
+    }
+    /// 上下左右等距
+    @discardableResult
+    func byContentInsets(_ all: CGFloat) -> Self {
+        self.contentInsets = UIEdgeInsets(top: all, left: all, bottom: all, right: all)
+        return self
+    }
+    /// 垂直/水平 分量设置（例如 vertical=6, horizontal=10）
+    @discardableResult
+    func byContentInsets(vertical v: CGFloat, horizontal h: CGFloat) -> Self {
+        self.contentInsets = UIEdgeInsets(top: v, left: h, bottom: v, right: h)
+        return self
+    }
+    /// 分别指定四边
+    @discardableResult
+    func byContentInsets(top: CGFloat, left: CGFloat, bottom: CGFloat, right: CGFloat) -> Self {
+        self.contentInsets = UIEdgeInsets(top: top, left: left, bottom: bottom, right: right)
+        return self
+    }
+}
 // 仅一个 key（右上角）
 private enum _RTBadgeKey { static var tr: UInt8 = 0 }
-
 private extension UIView {
 
     func ensureRTBadgeContainer() -> _BadgeContainerView {
@@ -1797,11 +1863,11 @@ private extension UIView {
         switch content {
         case .text(let s):
             let label = _InsetLabel()
-            label.text = s
-            label.textColor = config.textColor
-            label.font = config.font
-            label.numberOfLines = 1
-            label.contentInsets = config.insets
+                .byText(s)
+                .byTextColor(config.textColor)
+                .byFont(config.font)
+                .byNumberOfLines(1)
+                .byContentInsets(config.insets)
             container.addSubview(label)
             label.setContentCompressionResistancePriority(.required, for: .horizontal)
             label.setContentHuggingPriority(.required, for: .horizontal)
@@ -1809,11 +1875,11 @@ private extension UIView {
 
         case .attributed(let attr):
             let label = _InsetLabel()
-            label.attributedText = attr
-            label.textColor = config.textColor
-            label.font = config.font
-            label.numberOfLines = 1
-            label.contentInsets = config.insets
+                .byAttributedString(attr)
+                .byTextColor(config.textColor)
+                .byFont(config.font)
+                .byNumberOfLines(1)
+                .byContentInsets(config.insets)
             container.addSubview(label)
             label.setContentCompressionResistancePriority(.required, for: .horizontal)
             label.setContentHuggingPriority(.required, for: .horizontal)
@@ -1824,7 +1890,6 @@ private extension UIView {
             view.snp.makeConstraints { $0.edges.equalToSuperview().inset(config.insets) }
         }
     }
-
     /// 右上角定位（统一 remake，避免重复约束）
     func installRTBadgeConstraints(container: UIView,
                                    offset: UIOffset,
@@ -1841,14 +1906,203 @@ private extension UIView {
         container.setContentHuggingPriority(.required, for: .horizontal)
     }
 }
+// MARK: - 回调协议：任何宿主视图（含 BaseWebView）都可感知 NavBar 显隐变化并自行调整内部布局
+@MainActor
+public protocol JobsNavBarHost: AnyObject {
+    /// enabled: true=已安装；false=已移除
+    func jobsNavBarDidToggle(enabled: Bool, navBar: JobsNavBar)
+}
+// MARK: - 关联对象 Key（用 UInt8 的地址唯一标识）
+private enum _JobsNavBarAO {
+    static var bar:  UInt8 = 0
+    static var conf: UInt8 = 0
+}
+// MARK: - 配置体（挂在 UIView 上，而不是某个具体子类）
+public extension UIView {
+    struct JobsNavBarConfig {
+        public var enabled: Bool = false
+        public var style: JobsNavBar.Style = .init()
+        public var titleProvider: JobsNavBar.TitleProvider? = nil          // nil -> 隐藏标题；不设=由宿主决定
+        public var backButtonProvider: JobsNavBar.BackButtonProvider? = nil// nil -> 隐藏返回键
+        public var onBack: JobsNavBar.BackHandler? = nil                   // 未设置则由宿主兜底
+        public var layout: ((JobsNavBar, ConstraintMaker, UIView) -> Void)? = nil // 自定义布局
+        public var backButtonLayout: ((JobsNavBar, UIButton, ConstraintMaker) -> Void)? = nil
+        public init() {}
+    }
+}
+// MARK: - 公开：取到当前视图身上的 NavBar（只读）
+public extension UIView {
+    var jobsNavBar: JobsNavBar? {
+        objc_getAssociatedObject(self, &_JobsNavBarAO.bar) as? JobsNavBar
+    }
+}
+// MARK: - 私有：配置读写 + 应用
+@MainActor
+private extension UIView {
+    var _jobsNavBarConfig: JobsNavBarConfig {
+        get { (objc_getAssociatedObject(self, &_JobsNavBarAO.conf) as? JobsNavBarConfig) ?? .init() }
+        set { objc_setAssociatedObject(self, &_JobsNavBarAO.conf, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
 
+    func _setJobsNavBar(_ bar: JobsNavBar?) {
+        objc_setAssociatedObject(self, &_JobsNavBarAO.bar, bar, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+    }
 
-/** 用法示例
-     // 悬浮（可按需指定 container）
-     UIView().bySuspend { cfg in
-         cfg.fallbackSize = CGSize(width: 88, height: 44)   // 给标题/副标题更宽松的空间
-         cfg.docking = .nearestEdge
-         cfg.insets = UIEdgeInsets(top: 20, left: 16, bottom: 34, right: 16)
-         cfg.hapticOnDock = true
-     }
- */
+    func _applyNavBarConfig() {
+        let cfg = _jobsNavBarConfig
+        if cfg.enabled {
+            let bar: JobsNavBar
+            if let b = jobsNavBar {
+                bar = b
+                bar.style = cfg.style
+            } else {
+                bar = JobsNavBar(style: cfg.style)
+                addSubview(bar)
+                _setJobsNavBar(bar)
+            }
+
+            // 提供器（返回 nil -> 隐藏）
+            bar.titleProvider = cfg.titleProvider
+            bar.backButtonProvider = cfg.backButtonProvider
+
+            // ✅ 透传外层 backButtonLayout（触发 didSet -> 只重排约束，不重复 add）
+            bar.backButtonLayout = cfg.backButtonLayout
+
+            // 返回行为
+            if let onBack = cfg.onBack { bar.onBack = onBack }
+
+            // 布局 NavBar 本体（与返回键无关）
+            bar.snp.remakeConstraints { make in
+                if let L = cfg.layout {
+                    L(bar, make, self)
+                } else {
+                    make.top.equalTo(self.safeAreaLayoutGuide.snp.top)
+                    make.left.right.equalToSuperview()
+                }
+            }
+
+            // ❌ 不再调用 bar.jobsNavBarRefresh()，避免重复重建
+            // 属性 didSet 已经触发必要的重排
+            (self as? JobsNavBarHost)?.jobsNavBarDidToggle(enabled: true, navBar: bar)
+        } else {
+            if let bar = jobsNavBar {
+                bar.removeFromSuperview()
+                _setJobsNavBar(nil)
+                (self as? JobsNavBarHost)?.jobsNavBarDidToggle(enabled: false, navBar: bar)
+            }
+        }
+    }
+}
+
+@MainActor
+public extension UIView {
+    func firstSubview<T: UIView>(of type: T.Type) -> T? {
+        // 只查一层足够；要递归可以展开
+        return subviews.first { $0 is T } as? T
+    }
+}
+// MARK: - UIView 链式 DSL（任何 UIView 均可使用）
+@MainActor
+public extension UIView {
+    @discardableResult
+    func byNavBarEnabled(_ on: Bool = true) -> Self {
+        var c = _jobsNavBarConfig
+        c.enabled = on
+        _jobsNavBarConfig = c
+        _applyNavBarConfig()
+        return self
+    }
+
+    @discardableResult
+    func byNavBarStyle(_ edit: (inout JobsNavBar.Style) -> Void) -> Self {
+        var c = _jobsNavBarConfig
+        edit(&c.style)
+        _jobsNavBarConfig = c
+        _applyNavBarConfig()
+        return self
+    }
+    /// 自定义标题（返回 nil -> 隐藏；不设置则留给宿主绑定，例如绑定到 webView.title）
+    @discardableResult
+    func byNavBarTitleProvider(_ p: @escaping JobsNavBar.TitleProvider) -> Self {
+        var c = _jobsNavBarConfig
+        c.titleProvider = p
+        _jobsNavBarConfig = c
+        _applyNavBarConfig()
+        return self
+    }
+    /// 自定义返回键（返回 nil -> 隐藏）
+    @discardableResult
+    func byNavBarBackButtonProvider(_ p: @escaping JobsNavBar.BackButtonProvider) -> Self {
+        var c = _jobsNavBarConfig
+        c.backButtonProvider = p
+        _jobsNavBarConfig = c
+        _applyNavBarConfig()
+        return self
+    }
+    /// 自定义返回键@约束
+    @discardableResult
+    func byNavBarBackButtonLayout(_ layout: @escaping JobsNavBar.BackButtonLayout) -> Self {
+        var c = _jobsNavBarConfig
+        c.backButtonLayout = layout
+        _jobsNavBarConfig = c
+        _applyNavBarConfig()
+        return self
+    }
+    /// 返回行为（比如“优先 webView.goBack，否则 pop”）
+    @discardableResult
+    func byNavBarOnBack(_ h: @escaping JobsNavBar.BackHandler) -> Self {
+        var c = _jobsNavBarConfig
+        c.onBack = h
+        _jobsNavBarConfig = c
+        _applyNavBarConfig()
+        return self
+    }
+    /// 覆盖默认布局（默认：贴宿主 safeArea 顶，左右铺满）
+    @discardableResult
+    func byNavBarLayout(_ layout: @escaping (JobsNavBar, ConstraintMaker, UIView) -> Void) -> Self {
+        var c = _jobsNavBarConfig
+        c.layout = layout
+        _jobsNavBarConfig = c
+        _applyNavBarConfig()
+        return self
+    }
+}
+#endif
+
+#if canImport(GKNavigationBarSwift) && canImport(SnapKit)
+import GKNavigationBarSwift
+@MainActor
+public extension UIView {
+    /// 是否存在可见的“导航栏类视图”（优先 GKNavigationBar，其次 UINavigationBar）
+    /// - Parameter deep: 是否递归遍历整棵子树（默认 true）
+    func jobs_hasVisibleTopBar(deep: Bool = true) -> Bool {
+        return jobs_existingTopBar(deep: deep) != nil
+    }
+    /// 返回已存在的“导航栏类视图”（不触发懒加载），找不到返回 nil。
+    /// 类型统一用 UIView?，外部无需依赖 GKNavigationBar 的符号。
+    func jobs_existingTopBar(deep: Bool = true) -> UIView? {
+        #if canImport(GKNavigationBarSwift)
+        if let nb = jobs_firstSubview(of: GKNavigationBar.self, deep: deep),
+           !nb.isHidden, nb.alpha > 0.001 {
+            return nb
+        }
+        #endif
+        if let nb = jobs_firstSubview(of: UINavigationBar.self, deep: deep),
+           !nb.isHidden, nb.alpha > 0.001 {
+            return nb
+        }
+        return nil
+    }
+    // MARK: - 私有工具：按类型查找已存在的子视图（不会触发任何懒创建）
+    private func jobs_firstSubview<T: UIView>(of type: T.Type, deep: Bool) -> T? {
+        // 先一层
+        if let hit = subviews.first(where: { $0 is T }) as? T { return hit }
+        // 需要递归则继续
+        guard deep else { return nil }
+        for v in subviews {
+            if let hit: T = v.jobs_firstSubview(of: type, deep: true) { return hit }
+        }
+        return nil
+    }
+}
+#endif
