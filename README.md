@@ -3858,7 +3858,7 @@ localImageView.image = "Ani".img
   }()
   ```
 
-### 29、点击事件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 29、点击事件的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 #### 29.1、封装在`UIControl` 层的点击事件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -4761,9 +4761,17 @@ import ObjectiveC.runtime
   print("SomeThing in bundle:", all.map { $0.lastPathComponent })
   ```
 
-### 44、创建 `WebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 44、返回到上一页 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 44.1、创建 `WKWebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+* [**定义在控制器层的返回功能**](#关闭页面的逻辑)
+
+  ```swift
+  closeByResult("")
+  ```
+
+### 45、创建 `WebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 45.1、创建 `WKWebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 import WebKit
@@ -4785,7 +4793,7 @@ private lazy var webView: WKWebView = {
 }()
 ```
 
-#### 44.2、创建 `BaseWebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 45.2、创建 `BaseWebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 在` Info.plist `添加👇（更通用的 **ATS** 配置，避免为某域名单独开洞）
 >
@@ -8618,7 +8626,21 @@ Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS
 
 ## 六、📎 附件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-### 1、<font color=red id=内置的HTML代码>**内置的HTML代码**</font>
+### 1、<font id=关闭页面的逻辑>关闭页面的逻辑</font>
+
+```swift
+/// 因为呈现页面除了push就是present，但是push是需要有导航控制器作支撑的。
+/// 那么就先判断是否存在导航控制器push呈现的，没有就是present呈现的
+@discardableResult
+func closeByResult(_ result: Any?, animated: Bool = true) -> Self {
+    if let r = result { sendResult(r) }
+    if let nav = navigationController { nav.popViewController(animated: animated) }
+    else { dismiss(animated: animated) }
+    return self
+}
+```
+
+### 2、<font color=red id=内置的HTML代码>**内置的HTML代码**</font>
 
 ```swift
 static let demoHTML = """

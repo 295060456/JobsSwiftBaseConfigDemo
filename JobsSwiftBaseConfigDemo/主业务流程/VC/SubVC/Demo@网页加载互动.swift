@@ -8,34 +8,38 @@
 import UIKit
 import SnapKit
 import WebKit
-/// 用法示例：懒加载 + 你的链式 DSL + SnapKit 约束
+/// 用法示例：懒加载 + 你的链式 DSL + SnapKit 约束（基于最新版 BaseWebView.swift）
 final class BaseWebViewDemoVC: BaseVC {
-    // MARK: - 懒加载 Web
+    // MARK: - 懒加载 Web（全通用，无业务常量）
     private lazy var web: BaseWebView = { [unowned self] in
         let w = BaseWebView()
             .byBgColor(.clear)
             .byAllowedHosts([])                  // 不限域
             .byOpenBlankInPlace(true)
             .byDisableSelectionAndCallout(false)
-            .byUserAgentSuffixProvider { req in
-    //          guard let host = req.url?.host?.lowercased() else { return nil }
-    //          if host == "m.bwsit.cc" { return nil }               // 该域名走系统默认 UA（避免奇怪分流）
-    //          if req.url?.absoluteString.contains("/activity/") == true { return "JobsApp/1.0" }
-                return nil                                           // 其它页面默认 UA
+            .byUserAgentSuffixProvider { _ in
+                // 按请求动态追加 UA 后缀；nil = 使用系统默认 UA。
+                // 需要区分页面时在此 return "YourApp/1.0"
+                return nil
             }
-            .byNormalizeMToWWW(false)               // ❗️关闭 m→www
-            .byForceHTTPSUpgrade(false)             // ❗️关闭 http→https
-            .bySafariFallbackOnHTTP(false)          // ❗️关闭 Safari 兜底
-            .byInjectRedirectSanitizerJS(false)     // 可关，避免干涉 H5 自己跳转
-
-            // 🔽 一键开导航栏（默认标题=webView.title，默认有返回键）
+            /// URL 重写策略（默认不重写；这里保持关闭）
+            .byURLRewriter { _ in
+                // 例如要做 http→https 升级：检测 url.scheme == "http" 再返回新 URL
+                // 现在返回 nil 表示不改写
+                return nil
+            }
+            /// Safari 兜底（默认不开）；返回 true 即交给 Safari 打开
+            .bySafariFallbackRule { _ in
+                return false
+            }
+            /// 一键开导航栏（默认标题=webView.title，默认有返回键）
             .byNavBarEnabled(true)
             .byNavBarStyle { s in
                 s.byHairlineHidden(false)
-                    .byBackgroundColor(.systemBackground)
-                    .byTitleAlignmentCenter(true)
+                 .byBackgroundColor(.systemBackground)
+                 .byTitleAlignmentCenter(true)
             }
-            // 自定义返回键（想隐藏就：.byNavBarBackButtonProvider { nil }）
+            /// 自定义返回键（想隐藏就：.byNavBarBackButtonProvider { nil }）
             .byNavBarBackButtonProvider {
                 UIButton(type: .system)
                     .byBackgroundColor(.clear)
@@ -46,26 +50,50 @@ final class BaseWebViewDemoVC: BaseVC {
                     .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10))
                     .byTapSound("Sound.wav")
             }
-//            .byNavBarBackButtonLayout { bar, btn, make in
-//                make.left.equalToSuperview().offset(0)
-//                make.centerY.equalToSuperview()
-//            }
-            // 返回行为：优先后退，否则 pop
+            /// 返回行为：优先后退，否则关闭当前控制器
             .byNavBarOnBack { [weak self] in
                 guard let self else { return }
                 closeByResult("")
             }
             .byAddTo(view) { [unowned self] make in
                 if view.jobs_hasVisibleTopBar() {
-                    make.top.equalTo(self.gk_navigationBar.snp.bottom).offset(10) // 若确信此时已存在，才去取
+                    make.top.equalTo(self.gk_navigationBar.snp.bottom).offset(10)
                     make.left.right.bottom.equalToSuperview()
                 } else {
                     make.edges.equalToSuperview()
                 }
             }
-        /// 注册 JS→Native 方法
+        w.useMobileBridge()
+            .useMobileBridgeBy { cfg in
+                cfg
+                    .byTokenProvider { [weak self] in
+                        _ = self
+                        return "dsw"  // 返回 nil = 未登录
+                    }
+                    .byShowToast { text in
+                        JobsToast.show(text: text)
+                    }
+                    .byNavigateLogin { [weak self] in
+                        guard let self else { return }
+                        JobsToast.show(text: "请接入原生登录页 onNavigateLogin")
+                    }
+                    .byNavigateHome { [weak self] in
+                        guard let self else { return }
+                        self.closeByResult("")
+                    }
+                    .byCloseWebView { [weak self] in
+                        guard let self else { return }
+                        self.closeByResult("")
+                    }
+                // .byNavigateDeposit { ... }
+                // .byUnknownAction { action, body in ... }
+            }
+            .registerMobileAction("openVIP") { dict in
+                let vipId = dict["vipId"] as? String ?? ""
+                print("openVIP:", vipId)
+                // 在这里打开你原生的 VIP 页面
+        }
         installHandlers(on: w)
-        /// Native → JS：页面就绪广播（延迟仅示例）
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak w] in
             w?.emitEvent("nativeReady", payload: [
                 "msg": "Native is ready ✔︎",
@@ -78,23 +106,16 @@ final class BaseWebViewDemoVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.byBgColor(.systemBackground)
-
-//        jobsSetupGKNav(title: "BaseWebView · 用法示例")
-        // 1️⃣ 加载线上 URL（任选其一）
-//        web.loadBy("https://www.baidu.com")
-         web.loadBy("https://www.bwsit.cc/activity/list/FIRST_DEPOSIT_V2/441138552531886080")
-//        web.loadBy(URL(string: "https://www.bwsit.cc/activity/list/FIRST_DEPOSIT_V2/441138552531886080")!)
-        // 2️⃣ 加载内置 HTML（包含 JS↔︎Native 验证按钮）
-//        web.loadHTMLBy(Self.demoHTML, baseURL: nil)
-        // 3️⃣ 加载本地HTML文件
-//        print("Bundle:", Bundle.main.bundlePath)
-//        let all = Bundle.main.urls(forResourcesWithExtension: "html", subdirectory: nil) ?? []
-//        print("SomeThing in bundle:", all.map { $0.lastPathComponent })
-//        web.loadBundleHTMLBy(named: "BaseWebViewDemo")
+        /// 1️⃣ 加载线上 URL（任选其一）
+        web.loadBy("https://www.bwsit.cc/activity/list/FIRST_DEPOSIT_V2/441138552531886080")
+        // web.loadBy("https://www.baidu.com")
+        /// 2️⃣ 加载内置 HTML（包含 JS↔︎Native 验证按钮）
+        // web.loadHTMLBy(Self.demoHTML, baseURL: nil)
+        /// 3️⃣ 加载本地 HTML 文件
+        // web.loadBundleHTMLBy(named: "BaseWebViewDemo")
     }
-    // MARK: - JS→Native 事件注册
+    // MARK: - 现有的 bridge 注册
     private func installHandlers(on web: BaseWebView) {
-        // ping：回包设备信息（device 显式类型，避免 'name' 歧义）
         web.on("ping") { payload, reply in
             let device: [String: String] = [
                 "name": UIDevice.current.name,
@@ -107,16 +128,14 @@ final class BaseWebViewDemoVC: BaseVC {
                 "ts": Date().timeIntervalSince1970
             ])
         }
-        // openAlert：用你自家的 UIAlertController DSL
         web.on("openAlert") { payload, reply in
-            let msg = (payload as? [String: Any])?["message"] as? String ?? "No message"
-            let ac = UIAlertController
-                .makeAlert("提示", msg)
-                .byAddCancel { _ in reply(["shown": false]) }
-                .byAddOK     { _ in reply(["shown": true]) }
-            self.present(ac, animated: true)
+            JobsToast.show(
+                text: (payload as? [String: Any])?["message"] as? String ?? "No message",
+                config: JobsToast.Config()
+                    .byBgColor(.systemGreen.withAlphaComponent(0.9))
+                    .byCornerRadius(12)
+            )
         }
-        // toggleSelection：切换是否禁用选中/长按
         web.on("toggleSelection") { payload, reply in
             let disabled = ((payload as? [String: Any])?["disabled"] as? Bool) ?? false
             web.setSelectionDisabled(disabled)

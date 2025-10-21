@@ -19,6 +19,7 @@ import SnapKit
        <key>NSAllowsArbitraryLoadsInWebContent</key><true/>
      </dict>
  */
+
 public typealias NativeHandler = (_ payload: Any?, _ reply: @escaping (Any?) -> Void) -> Void
 /// 任意 JSON 解码容器（备用）
 public struct AnyDecodable: Decodable {
@@ -49,7 +50,7 @@ private extension WKSM { var jobsChannel: String { self[keyPath: \WKSM.name] } }
 /// 主线程隔离，所有 WebKit/UIKit 访问都自然安全
 @MainActor
 public final class BaseWebView: UIView {
-    /// 基础配置项
+    // ===== 基础配置项（完全通用，无业务常量） =====
     public var allowedHosts: Set<String> = []                         // 空 = 不限制
     public var externalSchemes: Set<String> = [
         "tel","mailto","sms","facetime","itms-apps","maps",
@@ -58,30 +59,43 @@ public final class BaseWebView: UIView {
     public var openBlankInPlace: Bool = true
     public var disableSelectionAndCallout: Bool = false
     public var injectDarkStylePatch: Bool = false
-    @available(*, deprecated, message: "请使用 byUserAgentSuffixProvider(_:) 回调按页面配置 UA 后缀")
-    public var customUserAgentSuffix: String?
     public var isInspectableEnabled: Bool = true
     /// 单页 UA 后缀提供器（返回 nil 表示使用系统默认 UA；非空则作为 applicationNameForUserAgent 追加）
     public typealias UASuffixProvider = (URLRequest) -> String?
     private var uaSuffixProvider: UASuffixProvider?
-    private var lastAppliedUASuffix: String?   // 当前实例上一次已生效的后缀（nil 代表系统默认）
+    private var lastAppliedUASuffix: String?
 
     private func normalizeSuffix(_ s: String?) -> String? {
         guard let t = s?.trimmingCharacters(in: .whitespacesAndNewlines), !t.isEmpty else { return nil }
         return t
     }
-    /// 导航规范化与兜底（可按需改）
-    public var normalizeMToWWW: Bool = true           // m.bwsit.cc → www.bwsit.cc（强制 HTTPS）
-    public var forceHTTPSUpgrade: Bool = true         // http:// → https://
-    public var injectRedirectSanitizerJS: Bool = false// 注入前端重定向修补脚本
-    public var safariFallbackOnHTTP: Bool = true      // 命中 http://m.bwsit.cc 或重写风暴 → Safari 兜底
-    public var safariFallbackHosts: Set<String> = ["m.bwsit.cc"]
-    /// 循环重写保护（短时间重写过多直接兜底）
+    /// URL 重写器：返回新的 URL 表示重写；返回 nil 表示不重写（默认 nil）
+    public var urlRewriter: ((URL) -> URL?)?
+    /// Safari 兜底规则：返回 true 时交给 Safari 打开（默认 nil）
+    public var safariFallbackRule: ((URL) -> Bool)?
+    /// 循环重写保护
     public var rewriteBurstWindow: TimeInterval = 3
     public var rewriteBurstLimit: Int = 3
     private var rewriteCount = 0
     private var lastRewriteAt = Date.distantPast
-    private var didFallbackToSafari = false
+    // ===== 通用 MobileBridge（H5 的 iOSBridge 约定）=====
+    public struct MobileBridgeConfig {
+        public var injectShim: Bool = true                             // 无前端桥时的兜底
+        public var tokenProvider: (@Sendable () async -> String?)?     // 异步 token
+        public var onNavigateHome:    (() -> Void)? = nil
+        public var onNavigateLogin:   (() -> Void)? = nil
+        public var onNavigateDeposit: (() -> Void)? = nil
+        public var onCloseWebView:    (() -> Void)? = nil
+        public var onShowToast:       ((String) -> Void)? = nil
+        public var onUnknownAction: ((String, [String: Any]) -> Void)? = nil
+        public init() {}
+        public static func defaults() -> Self { .init() }
+    }
+    private let mobileBridgeName = "iOSBridge"
+    /// 公开给外部使用的 Handler 类型（避免可见性冲突）
+    public typealias MobileActionHandler = @MainActor (_ body: [String: Any]) -> Void
+    private var mobileActionHandlers: [String: MobileActionHandler] = [:]
+    private var mobileConfig: MobileBridgeConfig = .defaults()
     /// 宿主 VC 获取（用于弹窗/Safari 兜底）
     public var presenter: () -> UIViewController? = {
         var base = UIApplication.shared.connectedScenes
@@ -113,15 +127,15 @@ public final class BaseWebView: UIView {
 
     private lazy var refresher: UIRefreshControl = {
         let r = UIRefreshControl()
-        // ✅ 使用你的 UIControl API（而非 addTarget/selector）
         r.onJobsChange { [weak self] (_: UIRefreshControl) in
-            self?.reload()
+            guard let self = self else { return }
+            self.handlePullToRefresh()
         }
         return r
     }()
     /// 强引用 DocumentPicker 代理，避免立刻释放
     private var docPickerDelegate: DocumentPickerDelegateProxy?
-    /// 初始化
+    // ===== 初始化 =====
     public override init(frame: CGRect) {
         super.init(frame: frame)
         webView.byVisible(true)
@@ -129,12 +143,13 @@ public final class BaseWebView: UIView {
         setupUI()
         setupKVO()
         applyRuntimeToggles()
+        // 默认启用通用 MobileBridge（零配置可用）
+        _ = useMobileBridge()
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     deinit {
-        // ✅ 显式回到主演员做清理
         Task { @MainActor [weak self] in
             guard let self else { return }
             self.webView.navigationDelegate = nil
@@ -143,6 +158,7 @@ public final class BaseWebView: UIView {
             ucc.removeAllUserScripts()
             ucc.removeScriptMessageHandler(forName: self.bridgeName)
             ucc.removeScriptMessageHandler(forName: self.consoleName)
+            ucc.removeScriptMessageHandler(forName: self.mobileBridgeName)
             self.kvoEstimatedProgress?.invalidate()
             self.kvoTitle?.invalidate()
         }
@@ -153,9 +169,11 @@ public final class BaseWebView: UIView {
         if #available(iOS 14.0, *) {
             ucc.addScriptMessageHandler(self, contentWorld: .page, name: bridgeName)
             ucc.addScriptMessageHandler(self, contentWorld: .page, name: consoleName)
+            ucc.addScriptMessageHandler(self, contentWorld: .page, name: mobileBridgeName)
         } else {
             ucc.add(WeakScriptMessageHandler(target: self), name: bridgeName)
             ucc.add(WeakScriptMessageHandler(target: self), name: consoleName)
+            ucc.add(WeakScriptMessageHandler(target: self), name: mobileBridgeName)
         }
     }
 
@@ -165,7 +183,6 @@ public final class BaseWebView: UIView {
         addSubview(progressView)
         addSubview(webView)
 
-        // 进度条默认贴宿主顶部；若外部装了 JobsNavBar，会通过回调把它改到 NavBar 下方
         progressView.snp.makeConstraints { make in
             progressTopConstraint = make.top.equalToSuperview().constraint
             make.leading.trailing.equalToSuperview()
@@ -182,14 +199,9 @@ public final class BaseWebView: UIView {
         webView.scrollView.refreshControl = refresher
 
         if #available(iOS 16.4, *), isInspectableEnabled { webView.isInspectable = true }
-        // UA 初始为系统默认；实际按页面在导航阶段动态切换
         webView.customUserAgent = nil
         webView.configuration.applicationNameForUserAgent = nil
         lastAppliedUASuffix = nil
-        // （可选）注入重定向修补 JS
-        if injectRedirectSanitizerJS {
-            webView.configuration.userContentController.addUserScript(Self.makeSanitizeUserScript())
-        }
     }
 
     private func setupKVO() {
@@ -200,7 +212,7 @@ public final class BaseWebView: UIView {
                 self.progressView.isHidden = p >= 1.0
                 self.progressView.setProgress(Float(p), animated: true)
                 if p >= 1.0 {
-                    try? await Task.sleep(nanoseconds: 250_000_000) // 0.25s
+                    try? await Task.sleep(nanoseconds: 250_000_000)
                     self.progressView.progress = 0
                 }
             }
@@ -300,7 +312,6 @@ public final class BaseWebView: UIView {
                     throw NSError(domain: "BaseWebView", code: -10,
                                   userInfo: [NSLocalizedDescriptionKey: "deallocated"])
                 }
-
                 if #available(iOS 15.0, *) {
                     return try await webView.evaluateJavaScript(js)
                 } else {
@@ -319,13 +330,11 @@ public final class BaseWebView: UIView {
                     }
                 }
             }
-            // 超时保护
             group.addTask {
                 try await Task.sleep(nanoseconds: UInt64(timeout * 1e9))
                 throw NSError(domain: "BaseWebView", code: -1,
                               userInfo: [NSLocalizedDescriptionKey: "JS eval timeout"])
             }
-
             let v = try await group.next()!!
             group.cancelAll()
             return v
@@ -359,29 +368,70 @@ public final class BaseWebView: UIView {
         """
         webView.jobsEval(js)
     }
-    // MARK: - Dark CSS 注入
-    private func injectDarkCSS() {
-        let css = """
-        @media (prefers-color-scheme: dark) {
-          html, body { background:#000 !important; color:#eee !important; }
-        }
-        """
-        let js = "var s=document.createElement('style');s.innerHTML=\(BaseWebView.quote(css));document.head&&document.head.appendChild(s);"
-        let script: WKUserScript
-        if #available(iOS 14.0, *) {
-            script = WKUserScript(source: js, injectionTime: .atDocumentEnd, forMainFrameOnly: false, in: .page)
-        } else {
-            script = WKUserScript(source: js, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
-        }
-        webView.configuration.userContentController.addUserScript(script)
+    // ===== MobileBridge：对外 API =====
+    @discardableResult
+    public func useMobileBridge(_ cfg: MobileBridgeConfig = .defaults()) -> Self {
+        self.mobileConfig = cfg
+        registerMobileCoreActionsIfNeeded()
+        if cfg.injectShim { injectMinimalMobileShim() }
+        return self
     }
-    // MARK: - Pull to refresh
-    @objc private func reload() {
-        webView.reload()
-        Task {
-            try? await Task.sleep(nanoseconds: 600_000_000) // 0.6s
-            refresher.endRefreshing()
-        }
+
+    @discardableResult
+    public func registerMobileAction(_ name: String, _ handler: @escaping MobileActionHandler) -> Self {
+        mobileActionHandlers[name] = handler
+        return self
+    }
+
+    @discardableResult
+    public func unregisterMobileAction(_ name: String) -> Self {
+        mobileActionHandlers.removeValue(forKey: name)
+        return self
+    }
+}
+// MARK: - MobileBridgeConfig · 链式 DSL
+public extension BaseWebView.MobileBridgeConfig {
+    @discardableResult
+    func byInjectShim(_ on: Bool = true) -> Self {
+        var c = self; c.injectShim = on; return c
+    }
+    @discardableResult
+    func byTokenProvider(_ f: (@Sendable () async -> String?)?) -> Self {
+        var c = self; c.tokenProvider = f; return c
+    }
+    @discardableResult
+    func byShowToast(_ f: @escaping (String) -> Void) -> Self {
+        var c = self; c.onShowToast = f; return c
+    }
+    @discardableResult
+    func byNavigateHome(_ f: @escaping () -> Void) -> Self {
+        var c = self; c.onNavigateHome = f; return c
+    }
+    @discardableResult
+    func byNavigateLogin(_ f: @escaping () -> Void) -> Self {
+        var c = self; c.onNavigateLogin = f; return c
+    }
+    @discardableResult
+    func byNavigateDeposit(_ f: @escaping () -> Void) -> Self {
+        var c = self; c.onNavigateDeposit = f; return c
+    }
+    @discardableResult
+    func byCloseWebView(_ f: @escaping () -> Void) -> Self {
+        var c = self; c.onCloseWebView = f; return c
+    }
+    @discardableResult
+    func byUnknownAction(_ f: @escaping (String, [String: Any]) -> Void) -> Self {
+        var c = self; c.onUnknownAction = f; return c
+    }
+}
+// MARK: - useMobileBridge · 闭包构造重载（纯 DSL）
+@MainActor
+public extension BaseWebView {
+    /// 允许：web.useMobileBridge { $0.byTokenProvider{...}.byShowToast{...} }
+    @discardableResult
+    func useMobileBridgeBy(_ build: (MobileBridgeConfig) -> MobileBridgeConfig) -> Self {
+        let cfg = build(.defaults())
+        return useMobileBridge(cfg)
     }
 }
 // ===== WK Script Bridge =====
@@ -443,14 +493,14 @@ extension BaseWebView {
         }
     }
 
-    private static func makeSanitizeUserScript() -> WKUserScript {
+    /// 通用重定向修补脚本：仅升级 http→https，不做任何域名改写
+    static func makeSanitizeUserScript() -> WKUserScript {
         let js = """
         (function(){
           function sanitize(u){
             try{
               var x = new URL(u, location.href);
               if (x.protocol === 'http:') x.protocol = 'https:';
-              if (x.host === 'm.bwsit.cc') x.host = 'www.bwsit.cc';
               return x.href;
             }catch(e){ return u; }
           }
@@ -515,7 +565,7 @@ extension BaseWebView {
             return quote("\(value)")
         }
     }
-    // 将 evaluateJavaScript 的返回值（Any?）解码为 Decodable
+
     static func decodeJSResult<T: Decodable>(_ value: Any?, as type: T.Type, decoder: JSONDecoder) throws -> T {
         if T.self == String.self, let v = value as? String { return v as! T }
         if T.self == Bool.self,   let v = value as? Bool   { return v as! T }
@@ -546,15 +596,32 @@ extension BaseWebView {
         throw NSError(domain: "BaseWebView", code: -3,
                       userInfo: [NSLocalizedDescriptionKey: "Cannot decode JS result to \(T.self) – raw: \(String(describing: value))"])
     }
+
+    // MARK: - Dark CSS 注入（用于 injectDarkStylePatch）
+    private func injectDarkCSS() {
+        let css = """
+        @media (prefers-color-scheme: dark) {
+          html, body { background:#000 !important; color:#eee !important; }
+        }
+        """
+        let js = "var s=document.createElement('style');s.innerHTML=\(BaseWebView.quote(css));document.head&&document.head.appendChild(s);"
+        let script: WKUserScript
+        if #available(iOS 14.0, *) {
+            script = WKUserScript(source: js, injectionTime: .atDocumentEnd, forMainFrameOnly: false, in: .page)
+        } else {
+            script = WKUserScript(source: js, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
+        }
+        webView.configuration.userContentController.addUserScript(script)
+    }
 }
-// ===== ScriptMessageHandler（iOS < 14） =====
+// ===== ScriptMessageHandler（iOS < 14）=====
 extension BaseWebView: WKScriptMessageHandler {
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         let channel = message.jobsChannel
         handleScriptMessage(channel: channel, body: message.body, reply: { _, _ in })
     }
 }
-// ===== WithReply（iOS 14+） =====
+// ===== WithReply（iOS 14+）=====
 @available(iOS 14.0, *)
 extension BaseWebView: WKScriptMessageHandlerWithReply {
     public func userContentController(_ userContentController: WKUserContentController,
@@ -569,6 +636,12 @@ extension BaseWebView: WKScriptMessageHandlerWithReply {
 // ===== 统一消息处理 =====
 private extension BaseWebView {
     func handleScriptMessage(channel: String, body: Any, reply: @escaping (Any?, String?) -> Void) {
+        // 1) 先拦截 H5 的 iOSBridge（{action,message?,callback?}）
+        if channel == mobileBridgeName {
+            handleIOSBridgeMessage(body)
+            return
+        }
+        // 2) 前端 console 透传
         if channel == consoleName {
             if let dict = body as? [String: Any],
                let level = dict["level"] as? String,
@@ -577,6 +650,7 @@ private extension BaseWebView {
             }
             return
         }
+        // 3) 你原有的 bridge
         guard channel == bridgeName else { return }
 
         let dictBody: [String: Any]
@@ -613,6 +687,118 @@ private extension BaseWebView {
         let js = "window.__nativeReturn && window.__nativeReturn(\(id), \(Self.toJSONLiteral(value)));"
         webView.jobsEval(js)
     }
+    // === H5 MobileBridge 兼容处理（零配置默认行为）===
+    func handleIOSBridgeMessage(_ body: Any) {
+        guard let dict = body as? [String: Any] else {
+            print("iOSBridge invalid body:", body); return
+        }
+        let action = (dict["action"] as? String ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !action.isEmpty else { return }
+
+        if let handler = mobileActionHandlers[action] {
+            handler(dict)
+        } else {
+            mobileConfig.onUnknownAction?(action, dict)
+            print("iOSBridge unhandled action:", action, dict)
+        }
+    }
+    // === 注册内置默认动作（可随时覆盖）===
+    func registerMobileCoreActionsIfNeeded() {
+        if mobileActionHandlers["getToken"] == nil {
+            mobileActionHandlers["getToken"] = { [weak self] dict in
+                guard let self else { return }
+                let callback = (dict["callback"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                Task { @MainActor in
+                    let token = await self.mobileConfig.tokenProvider?() ?? nil
+                    if !callback.isEmpty {
+                        let js = "\(callback)(\(BaseWebView.toJSONLiteral(token)));"
+                        self.webView.jobsEval(js)
+                    }
+                }
+            }
+        }
+        if mobileActionHandlers["navigateToHome"] == nil {
+            mobileActionHandlers["navigateToHome"] = { [weak self] _ in
+                guard let self else { return }
+                if let f = self.mobileConfig.onNavigateHome { f(); return }
+                if let nav = self.presenter() as? UINavigationController { nav.popToRootViewController(animated: true) }
+                else { self.presenter()?.dismiss(animated: true) }
+            }
+        }
+        if mobileActionHandlers["navigateToLogin"] == nil {
+            mobileActionHandlers["navigateToLogin"] = { [weak self] _ in
+                guard let self else { return }
+                if let f = self.mobileConfig.onNavigateLogin { f(); return }
+                let alert = UIAlertController.makeAlert("跳转", "请实现 onNavigateLogin 来进入原生登录页").byAddOK()
+                alert.byPresent(self.presenter())
+            }
+        }
+        if mobileActionHandlers["navigateToDeposit"] == nil {
+            mobileActionHandlers["navigateToDeposit"] = { [weak self] _ in
+                guard let self else { return }
+                if let f = self.mobileConfig.onNavigateDeposit { f(); return }
+                let alert = UIAlertController.makeAlert("跳转", "请实现 onNavigateDeposit 来进入原生充值页").byAddOK()
+                alert.byPresent(self.presenter())
+            }
+        }
+        if mobileActionHandlers["closeWebView"] == nil {
+            mobileActionHandlers["closeWebView"] = { [weak self] _ in
+                guard let self else { return }
+                if let f = self.mobileConfig.onCloseWebView { f(); return }
+                if let nav = self.presenter() as? UINavigationController, nav.viewControllers.count > 1 {
+                    nav.popViewController(animated: true)
+                } else {
+                    self.presenter()?.dismiss(animated: true)
+                }
+            }
+        }
+        if mobileActionHandlers["showToast"] == nil {
+            mobileActionHandlers["showToast"] = { [weak self] dict in
+                guard let self else { return }
+                let text = (dict["message"] as? String).flatMap { $0.isEmpty ? nil : $0 } ?? " "
+                if let f = self.mobileConfig.onShowToast { f(text); return }
+                if NSClassFromString("JobsToast") != nil {
+                    JobsToast.show(text: text)
+                } else {
+                    UIAlertController.makeAlert("提示", text).byAddOK().byPresent(self.presenter())
+                }
+            }
+        }
+    }
+    // === 极简 JS shim：前端没注入时兜底 ===
+    func injectMinimalMobileShim() {
+        let js = """
+        (function(){
+          if (window.MobileBridge) return;
+          function post(msg){
+            try { window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.iOSBridge.postMessage(msg); }
+            catch(e){ console && console.error('iOSBridge.post failed', e); }
+          }
+          window.MobileBridge = {
+            showToast: function(message){ post({action:'showToast', message: String(message||'')}); },
+            navigateToDeposit: function(){ post({action:'navigateToDeposit'}); },
+            navigateToLogin: function(){ post({action:'navigateToLogin'}); },
+            navigateToHome: function(){ post({action:'navigateToHome'}); },
+            closeWebView: function(){ post({action:'closeWebView'}); },
+            getToken: function(){
+              return new Promise(function(resolve){
+                var cb='__onToken_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+                window[cb]=function(t){ try{ resolve(t||null); } finally{ try{ delete window[cb]; }catch(_){}} };
+                post({action:'getToken', callback: cb});
+              });
+            }
+          };
+          try { console.log('[iOS shim] MobileBridge installed'); } catch(_){}
+        })();
+        """
+        let script: WKUserScript
+        if #available(iOS 14.0, *) {
+            script = WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: false, in: .page)
+        } else {
+            script = WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: false)
+        }
+        webView.configuration.userContentController.addUserScript(script)
+    }
 }
 // ===== Navigation =====
 extension BaseWebView: WKNavigationDelegate {
@@ -639,66 +825,38 @@ extension BaseWebView: WKNavigationDelegate {
     }
 
     public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) { webView.reload() }
+
     public func webView(_ webView: WKWebView,
                         decidePolicyFor action: WKNavigationAction,
                         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
 
         guard let url = action.request.url else { decisionHandler(.cancel); return }
         let scheme = (url.scheme ?? "").lowercased()
-        let host = (url.host ?? "").lowercased()
         let isMain = (action.targetFrame?.isMainFrame == true)
-
-        // ===== 0) 外部 scheme（weixin:// 等）=====
+        // 0) 外部 scheme（weixin:// 等）
         let standardSchemes: Set<String> = ["http","https","file","about","data","javascript"]
         if !standardSchemes.contains(scheme) || externalSchemes.contains(scheme) {
-            if UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            }
-            decisionHandler(.cancel)
-            return
+            if UIApplication.shared.canOpenURL(url) { UIApplication.shared.open(url, options: [:], completionHandler: nil) }
+            decisionHandler(.cancel); return
         }
-        // ===== 1) Safari 兜底：命中 http:// + 指定 host 或发生重写风暴 =====
-        if safariFallbackOnHTTP, isMain, scheme == "http", safariFallbackHosts.contains(host) {
+        // 1) Safari 兜底（通用规则）
+        if isMain, let rule = safariFallbackRule, rule(url) {
             decisionHandler(.cancel)
-            presentSafari(with: url)
-            return
+            presentSafari(with: url); return
         }
-        // ===== 2) 主文档：域名/协议规范化（避免 ATS/白板）=====
-        if isMain {
-            var rewritten: URL? = nil
-
-            if normalizeMToWWW, host == "m.bwsit.cc" {
-                if var comps = URLComponents(url: url, resolvingAgainstBaseURL: false) {
-                    comps.scheme = "https"
-                    comps.host   = "www.bwsit.cc"
-                    rewritten = comps.url
-                }
-            } else if forceHTTPSUpgrade, scheme == "http" {
-                if var comps = URLComponents(url: url, resolvingAgainstBaseURL: false) {
-                    comps.scheme = "https"
-                    rewritten = comps.url
-                }
-            }
-
-            if let newURL = rewritten, newURL != url {
-                let now = Date()
-                if now.timeIntervalSince(lastRewriteAt) > rewriteBurstWindow { rewriteCount = 0 }
-                rewriteCount += 1
-                lastRewriteAt = now
-
-                if safariFallbackOnHTTP, rewriteCount > rewriteBurstLimit, !didFallbackToSafari {
-                    didFallbackToSafari = true
-                    decisionHandler(.cancel)
-                    presentSafari(with: url) // 直接把原始 URL 丢给 Safari
-                    return
-                }
-
+        // 2) 主文档：可选 URL 重写
+        if isMain, let newURL = urlRewriter?(url), newURL != url {
+            let now = Date()
+            if now.timeIntervalSince(lastRewriteAt) > rewriteBurstWindow { rewriteCount = 0 }
+            rewriteCount += 1
+            lastRewriteAt = now
+            if rewriteCount <= rewriteBurstLimit {
                 decisionHandler(.cancel)
                 webView.load(URLRequest(url: newURL))
                 return
             }
         }
-        // ===== 3) UA 动态切换（仅主文档）=====
+        // 3) UA 动态切换（仅主文档）
         if isMain {
             let desired = normalizeSuffix(uaSuffixProvider?(action.request))
             if desired != lastAppliedUASuffix {
@@ -710,13 +868,13 @@ extension BaseWebView: WKNavigationDelegate {
                 return
             }
         }
-        // ===== 4) target=_blank 的 in-place 处理 =====
+        // 4) target=_blank 的 in-place 处理
         if action.targetFrame == nil {
             if openBlankInPlace { webView.load(action.request) }
             else { UIApplication.shared.open(url, options: [:], completionHandler: nil) }
             decisionHandler(.cancel); return
         }
-        // ===== 5) Host 白名单 =====
+        // 5) Host 白名单
         if !allowedHosts.isEmpty {
             if let h = url.host?.lowercased(), !allowedHosts.contains(h) {
                 decisionHandler(.cancel); return
@@ -751,14 +909,10 @@ extension BaseWebView: WKNavigationDelegate {
         guard let vc = presenter() else { return }
         SFSafariViewController(url: url)
             .byModalPresentationStyle(.pageSheet)
-            .byData(3.14)// 基本数据类型
-            .onResult { name in
-                print("回来了 \(name)")
-            }
+            .byData(3.14)
+            .onResult { name in print("回来了 \(name)") }
             .byPresent(vc)
-            .byCompletion{
-                print("结束")
-            }
+            .byCompletion{ print("结束") }
     }
 }
 // ===== WKUIDelegate =====
@@ -769,13 +923,9 @@ extension BaseWebView: WKUIDelegate {
                         completionHandler: @escaping () -> Void) {
         UIAlertController
             .makeAlert("提示", message)
-            .byAddOK { _ in
-                completionHandler()
-            }
-            .byData("Jobs")// 字符串
-            .onResult { name in
-                print("回来了 \(name)")
-            }
+            .byAddOK { _ in completionHandler() }
+            .byData("Jobs")
+            .onResult { name in print("回来了 \(name)") }
             .byPresent(presenter())
     }
 
@@ -785,16 +935,10 @@ extension BaseWebView: WKUIDelegate {
                         completionHandler: @escaping (Bool) -> Void) {
         UIAlertController
             .makeAlert("确认", message)
-            .byAddCancel { _ in
-                completionHandler(false)
-            }
-            .byAddOK { _ in
-                completionHandler(true)
-            }
-            .byData("Jobs")// 字符串
-            .onResult { name in
-                print("回来了 \(name)")
-            }
+            .byAddCancel { _ in completionHandler(false) }
+            .byAddOK     { _ in completionHandler(true)  }
+            .byData("Jobs")
+            .onResult { name in print("回来了 \(name)") }
             .byPresent(presenter())
     }
 
@@ -807,16 +951,10 @@ extension BaseWebView: WKUIDelegate {
             .makeAlert("确认", prompt).byAddTextField { tf in
                 tf.text = defaultText
             }
-            .byAddCancel { _ in
-                completionHandler(nil)
-            }
-            .byAddOK { _ in
-                completionHandler(nil)
-            }
-            .byData("Jobs")// 字符串
-            .onResult { name in
-                print("回来了 \(name)")
-            }
+            .byAddCancel { _ in completionHandler(nil) }
+            .byAddOK     { _ in completionHandler(nil) }
+            .byData("Jobs")
+            .onResult { name in print("回来了 \(name)") }
             .byPresent(presenter())
     }
     /// iOS 18.4+ 自定义文件选择
@@ -841,7 +979,7 @@ extension BaseWebView: WKUIDelegate {
         presenter()?.present(picker, animated: true)
     }
 }
-// ===== 下载（iOS 14.5+） =====
+// ===== 下载（iOS 14.5+）=====
 @available(iOS 14.5, *)
 extension BaseWebView: WKDownloadDelegate {
     public func download(_ download: WKDownload,
@@ -858,14 +996,14 @@ extension BaseWebView: WKDownloadDelegate {
         emitEvent("downloadError", payload: ["message": error.localizedDescription])
     }
 }
-// ===== 文档选择器代理（强引用由外层保持） =====
+// ===== 文档选择器代理（强引用由外层保持）=====
 private final class DocumentPickerDelegateProxy: NSObject, UIDocumentPickerDelegate {
     private let onFinish: ([URL]?) -> Void
     init(_ onFinish: @escaping ([URL]?) -> Void) { self.onFinish = onFinish }
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) { onFinish(urls) }
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) { onFinish(nil) }
 }
-// ===== BaseWebView 专属：Web 配置 DSL（NavBar 相关已移到 UIView 扩展） =====
+// ===== BaseWebView 专属：Web 配置 DSL（NavBar 相关已移到 UIView 扩展）=====
 @MainActor
 public extension BaseWebView {
     @discardableResult
@@ -902,24 +1040,16 @@ public extension BaseWebView {
         self.uaSuffixProvider = provider
         return self
     }
-
+    /// 自定义 URL 重写规则
     @discardableResult
-    func byNormalizeMToWWW(_ on: Bool = true) -> Self { self.normalizeMToWWW = on; return self }
-
-    @discardableResult
-    func byForceHTTPSUpgrade(_ on: Bool = true) -> Self { self.forceHTTPSUpgrade = on; return self }
-
-    @discardableResult
-    func bySafariFallbackOnHTTP(_ on: Bool = true, hosts: [String]? = nil) -> Self {
-        self.safariFallbackOnHTTP = on
-        if let hs = hosts { self.safariFallbackHosts = Set(hs.map { $0.lowercased() }) }
+    func byURLRewriter(_ rewriter: @escaping (URL) -> URL?) -> Self {
+        self.urlRewriter = rewriter
         return self
     }
-
+    /// 自定义 Safari 兜底规则
     @discardableResult
-    func byInjectRedirectSanitizerJS(_ on: Bool = true) -> Self {
-        self.injectRedirectSanitizerJS = on
-        if on { self.webView.configuration.userContentController.addUserScript(BaseWebView.makeSanitizeUserScript()) }
+    func bySafariFallbackRule(_ rule: @escaping (URL) -> Bool) -> Self {
+        self.safariFallbackRule = rule
         return self
     }
 
@@ -939,7 +1069,6 @@ public extension BaseWebView {
 // ===== BaseWebView 作为 NavBar 宿主：根据显隐重排内部约束 =====
 extension BaseWebView: JobsNavBarHost {
     public func jobsNavBarDidToggle(enabled: Bool, navBar: JobsNavBar) {
-        // 进度条：顶到 NavBar 底部（或无 NavBar 时顶到宿主顶部）
         progressView.snp.remakeConstraints { make in
             if enabled {
                 make.top.equalTo(navBar.snp.bottom)
@@ -948,11 +1077,20 @@ extension BaseWebView: JobsNavBarHost {
             }
             make.left.right.equalToSuperview()
         }
-        // webView 仍旧跟随 progressView 底部
         webView.snp.remakeConstraints { make in
             make.top.equalTo(progressView.snp.bottom)
             make.left.right.bottom.equalToSuperview()
         }
         layoutIfNeeded()
+    }
+}
+// ===== 私有：下拉刷新处理（避免与外部 reload 命名冲突）=====
+private extension BaseWebView {
+    @objc func handlePullToRefresh() {
+        webView.reload()
+        Task {
+            try? await Task.sleep(nanoseconds: 600_000_000) // 0.6s
+            refresher.endRefreshing()
+        }
     }
 }
