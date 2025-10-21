@@ -1897,8 +1897,6 @@ private extension UIView {
         // ② installRTBadgeConstraints(container:offset:maxWidth:)
         container.snp.remakeConstraints { make in
             make.top.equalToSuperview().offset(offset.vertical)
-            // ❌ 原来：make.right.equalToSuperview().offset(-offset.horizontal)
-            // ✅ 应该：
             make.right.equalToSuperview().offset(offset.horizontal)
             make.width.lessThanOrEqualTo(maxWidth)
         }
@@ -1960,17 +1958,13 @@ private extension UIView {
                 addSubview(bar)
                 _setJobsNavBar(bar)
             }
-
             // 提供器（返回 nil -> 隐藏）
             bar.titleProvider = cfg.titleProvider
             bar.backButtonProvider = cfg.backButtonProvider
-
             // ✅ 透传外层 backButtonLayout（触发 didSet -> 只重排约束，不重复 add）
             bar.backButtonLayout = cfg.backButtonLayout
-
             // 返回行为
             if let onBack = cfg.onBack { bar.onBack = onBack }
-
             // 布局 NavBar 本体（与返回键无关）
             bar.snp.remakeConstraints { make in
                 if let L = cfg.layout {
@@ -1980,9 +1974,6 @@ private extension UIView {
                     make.left.right.equalToSuperview()
                 }
             }
-
-            // ❌ 不再调用 bar.jobsNavBarRefresh()，避免重复重建
-            // 属性 didSet 已经触发必要的重排
             (self as? JobsNavBarHost)?.jobsNavBarDidToggle(enabled: true, navBar: bar)
         } else {
             if let bar = jobsNavBar {

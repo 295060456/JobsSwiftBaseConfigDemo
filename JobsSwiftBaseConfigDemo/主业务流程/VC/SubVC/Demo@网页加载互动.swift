@@ -67,7 +67,7 @@ final class BaseWebViewDemoVC: BaseVC {
                     make.edges.equalToSuperview()
                 }
             }
-             /// 以下是依据前端暴露的自定义方法进行的JS交互
+            /// 以下是依据前端暴露的自定义方法进行的JS交互
             .registerMobileAction("navigateToHome") { [weak self] dict in
                 /// 跳转到首页
                 self!.closeByResult("")

@@ -25,6 +25,8 @@ public class JobsNavBar: UIView {
     public typealias BackButtonProvider = () -> UIButton?         // 返回 nil 隐藏
     public typealias BackHandler = () -> Void                     // 未配置 -> Debug Toast
     public typealias BackButtonLayout = (JobsNavBar, UIButton, ConstraintMaker) -> Void
+    /// 占位标题（默认“加载中…”）
+    private var placeholderTitleAttr: NSAttributedString = JobsNavBar._jobsMakeTitleAttr(JobsNavBar.loadingTitle)
     /// 外部可自定义返回键布局
     public var backButtonLayout: BackButtonLayout? {
         didSet {
@@ -36,9 +38,9 @@ public class JobsNavBar: UIView {
 
     @MainActor
     public func showLoadingTitle(_ text: String = "加载中…") {
-        // 给 titleProvider 一个默认实现；外部/后续 bind 会覆盖它
-        self.titleProvider = { Self._jobsMakeTitleAttr(text) }
-        refreshTitle()
+        placeholderTitleAttr = Self._jobsMakeTitleAttr(text)
+        // 直接把占位画到 UI 上；保持 titleProvider 仍然是 nil，后续 bind 才会生效
+        titleLabel.byAttributedString(placeholderTitleAttr)
     }
 
     public var style: Style {
@@ -62,7 +64,6 @@ public class JobsNavBar: UIView {
     }
 
     public var onBack: BackHandler?
-
     // ===== 懒加载子视图（外部可直接链式修改，比如 navBar.hairline.byVisible(true））=====
     public private(set) lazy var backgroundView: UIView = {
         UIView()
@@ -188,19 +189,15 @@ public class JobsNavBar: UIView {
     }
 
     @MainActor
-//    private func refreshTitle() {
-//        titleLabel.byAttributedString(Self._jobsMakeTitleAttr(Self.loadingTitle))
-//    }
-
     private func refreshTitle() {
-        if let attr = titleProvider?() {
-            titleLabel.byAttributedString(attr).byVisible(true)
+        if let attr = titleProvider?(),
+           !attr.string.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            titleLabel.byAttributedString(attr)
         } else {
-            titleLabel.byAttributedString(nil).byVisible(false)
+            titleLabel.byAttributedString(placeholderTitleAttr)
         }
     }
-
-    // ④ 标题改为参照 leftContainer 的“内容区”对齐（避免对整个 NavBar 对齐）
+    /// ④ 标题改为参照 leftContainer 的“内容区”对齐（避免对整个 NavBar 对齐）
     @MainActor
     private func relayoutTitleConstraints() {
         titleLabel.snp.remakeConstraints { make in
