@@ -13,6 +13,7 @@
     import UIKit
 #endif
 import MessageUI
+import CoreImage
 
 #if canImport(Kingfisher)
 import Kingfisher
@@ -22,7 +23,6 @@ import Kingfisher
 import SDWebImage
 #endif
 
-import CoreImage
 /// 字符串相关格式的（通用）转换
 extension String {
     // MARK: - String 转 Int

@@ -84,6 +84,9 @@ final class BaseWebViewDemoVC: BaseVC {
             .registerMobileAction("closeWebView") { [weak self] dict in
                 /// 关闭WebView
             }
+            .registerMobileAction("navigateToSecurityCenter") { [weak self] dict in
+                /// 跳转福利中心
+            }
             .registerMobileAction("showToast") { [weak self] dict in
                 /// 显示Toast
                 JobsToast.show(

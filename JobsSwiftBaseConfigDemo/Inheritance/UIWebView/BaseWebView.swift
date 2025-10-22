@@ -95,15 +95,7 @@ public final class BaseWebView: UIView {
     private var mobileActionHandlers: [String: MobileActionHandler] = [:]
     private var mobileConfig: MobileBridgeConfig = .defaults()
     /// 宿主 VC 获取（用于弹窗/Safari 兜底）
-    public var presenter: () -> UIViewController? = {
-        var base = UIApplication.shared.connectedScenes
-            .compactMap { ($0 as? UIWindowScene)?.keyWindow }
-            .first?.rootViewController
-        while let p = base?.presentedViewController { base = p }
-        if let nav = base as? UINavigationController { return nav.visibleViewController }
-        if let tab = base as? UITabBarController { return tab.selectedViewController }
-        return base
-    }
+    public var presenter = UIApplication.jobsTopMostVC()
     /// UI / 状态
     private lazy var webView: WKWebView = {
         WKWebView(frame: .zero, configuration: WKWebViewConfiguration()
@@ -838,12 +830,11 @@ extension BaseWebView: WKNavigationDelegate {
     }
     // Safari 兜底
     private func presentSafari(with url: URL) {
-        guard let vc = presenter() else { return }
         SFSafariViewController(url: url)
             .byModalPresentationStyle(.pageSheet)
             .byData(3.14)
             .onResult { name in print("回来了 \(name)") }
-            .byPresent(vc)
+            .byPresent(presenter)
             .byCompletion{ print("结束") }
     }
 }
@@ -858,7 +849,7 @@ extension BaseWebView: WKUIDelegate {
             .byAddOK { _ in completionHandler() }
             .byData("Jobs")
             .onResult { name in print("回来了 \(name)") }
-            .byPresent(presenter())
+            .byPresent(presenter)
     }
 
     public func webView(_ webView: WKWebView,
@@ -871,7 +862,7 @@ extension BaseWebView: WKUIDelegate {
             .byAddOK     { _ in completionHandler(true)  }
             .byData("Jobs")
             .onResult { name in print("回来了 \(name)") }
-            .byPresent(presenter())
+            .byPresent(presenter)
     }
 
     public func webView(_ webView: WKWebView,
@@ -887,7 +878,7 @@ extension BaseWebView: WKUIDelegate {
             .byAddOK     { _ in completionHandler(nil) }
             .byData("Jobs")
             .onResult { name in print("回来了 \(name)") }
-            .byPresent(presenter())
+            .byPresent(presenter)
     }
     /// iOS 18.4+ 自定义文件选择
     @available(iOS 18.4, *)
@@ -908,7 +899,7 @@ extension BaseWebView: WKUIDelegate {
         self.docPickerDelegate = proxy
         picker.delegate = proxy
         picker.modalPresentationStyle = .formSheet
-        presenter()?.present(picker, animated: true)
+        presenter?.present(picker, animated: true)
     }
 }
 // ===== 下载（iOS 14.5+）=====

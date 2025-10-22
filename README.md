@@ -190,7 +190,7 @@
 
 * [**uuwallet@虚拟卡**](https://www.uuwallet.com/)
 
-* [**UI界面调试工具**](https://lookin.work/)（必须是有线连接，并且**`Lookin.app`**要先于项目文件启动）
+* [<font id=UI界面调试工具>**UI界面调试工具**</font>](https://lookin.work/)（必须是有线连接，并且**`Lookin.app`**要先于项目文件启动）
 
   > ```ruby
   > pod 'LookinServer', :subspecs => ['Swift'], :configurations => ['Debug']
@@ -1345,6 +1345,13 @@ tableView.es.addInfiniteScrolling {
     evt.asSignal()          // 给 UI 绑定
     ```
   
+
+#### 4.8、注入调试 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 同时支持 [**Swift**](https://developer.apple.com/swift/), **Objc**& **C++ **的代码热重载工具！
+  * [**InjectionIII**](https://github.com/johnno1962/InjectionIII)
+  * [**InjectionNext**](https://github.com/johnno1962/InjectionNext)
+* [**UI界面调试工具**](#UI界面调试工具)
 
 ### 5、💥<font id=Info.plist>火力全开配置`Info.plist`</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 

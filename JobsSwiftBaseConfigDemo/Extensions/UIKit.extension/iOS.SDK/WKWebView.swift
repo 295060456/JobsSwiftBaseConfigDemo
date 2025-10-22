@@ -39,6 +39,16 @@ extension WKWebView {
         self.allowsBackForwardNavigationGestures = enabled
         return self
     }
+    /// 统一开关：iOS14+ 走 allowsContentJavaScript；更低版本回落到 preferences.javaScriptEnabled
+    @discardableResult
+    func byAllowsJavaScript(_ enabled: Bool) -> Self {
+        if #available(iOS 14.0, *) {
+            configuration.defaultWebpagePreferences.allowsContentJavaScript = enabled
+        } else {
+            configuration.preferences.javaScriptEnabled = enabled
+        }
+        return self
+    }
 }
 
 @MainActor
