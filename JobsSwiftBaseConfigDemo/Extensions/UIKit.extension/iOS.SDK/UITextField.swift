@@ -437,8 +437,7 @@ public extension UITextField {
         }
 
         // 为当前 textField 挂一个专用 DisposeBag（重复调用会覆盖旧的）
-        let bag = DisposeBag()
-        objc_setAssociatedObject(self, &JobsTFKeys.limitBag, bag, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        objc_setAssociatedObject(self, &JobsTFKeys.limitBag, disposeBag, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
 
         // 基于 Character 截断（避免拆 emoji/合成字符）
         rx.text.orEmpty
@@ -450,7 +449,7 @@ public extension UITextField {
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
             .bind(to: rx.text)
-            .disposed(by: bag)
+            .disposed(by: disposeBag)
 
         return self
     }

@@ -494,12 +494,12 @@
 			path = UIWebView;
 			sourceTree = "<group>";
 		};
-		0482A5EC2EA39DF8004176A4 /* HTML */ = {
+		0482A5EC2EA39DF8004176A4 /* 网页 */ = {
 			isa = PBXGroup;
 			children = (
 				0482A5F12EA3A3A2004176A4 /* BaseWebViewDemo.html */,
 			);
-			path = HTML;
+			path = "网页";
 			sourceTree = "<group>";
 		};
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
@@ -726,7 +726,7 @@
 		C564FC372E0959120079B5C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				0482A5EC2EA39DF8004176A4 /* HTML */,
+				0482A5EC2EA39DF8004176A4 /* 网页 */,
 				04DBEE092EA1E2F9000E52D3 /* 声音 */,
 				045921182E855875008C8D6A /* 字体 */,
 				045921172E85584C008C8D6A /* storyboard */,
