@@ -137,8 +137,7 @@ extension VC2: UICollectionViewDelegate, UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionCell", for: indexPath) as! CollectionCell
-        let title = data[indexPath.item]
-        cell.config(title: title, image: UIImage(systemName: "photo")!)
+        cell.config(title: data[indexPath.item], image: "photo".sysImg)
         return cell
     }
 

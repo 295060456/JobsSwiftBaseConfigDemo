@@ -39,7 +39,7 @@ final class PhotoAlbumDemoVC: BaseVC, UICollectionViewDataSource, UICollectionVi
             .byTitle("调用相机照相", for: .normal)
             .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
             .byTitleColor(.white, for: .normal)
-            .byImage(UIImage(systemName: "camera.fill"), for: .normal)
+            .byImage("camera.fill".sysImg, for: .normal)
             .byContentEdgeInsets(.init(top: 12, left: 16, bottom: 12, right: 16))
             .byCornerRadius(12)
             .byBgColor(.systemBlue)
@@ -69,7 +69,7 @@ final class PhotoAlbumDemoVC: BaseVC, UICollectionViewDataSource, UICollectionVi
                     .byBaseForegroundCor(.white)
                     .byContentInsets(.init(top: 12, leading: 16, bottom: 12, trailing: 16))
                     .byCornerStyle(.large)
-                    .byImage(UIImage(systemName: "camera.fill"))
+                    .byImage("camera.fill".sysImg)
                     .byImagePlacement(.leading)
                     .byImagePadding(8)
             }
@@ -82,7 +82,7 @@ final class PhotoAlbumDemoVC: BaseVC, UICollectionViewDataSource, UICollectionVi
             .byTitle(albumImageButtonTitle(), for: .normal)
             .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
             .byTitleColor(.white, for: .normal)
-            .byImage(UIImage(systemName: "photo.on.rectangle"), for: .normal)
+            .byImage("photo.on.rectangle".sysImg, for: .normal)
             .byContentEdgeInsets(.init(top: 12, left: 16, bottom: 12, right: 16))
             .byCornerRadius(12)
             .byBgColor(.systemGreen)
@@ -104,7 +104,7 @@ final class PhotoAlbumDemoVC: BaseVC, UICollectionViewDataSource, UICollectionVi
                     .byBaseForegroundCor(.white)
                     .byContentInsets(.init(top: 12, leading: 16, bottom: 12, trailing: 16))
                     .byCornerStyle(.large)
-                    .byImage(UIImage(systemName: "photo.on.rectangle"))
+                    .byImage("photo.on.rectangle".sysImg)
                     .byImagePlacement(.leading)
                     .byImagePadding(8)
             }
@@ -117,7 +117,7 @@ final class PhotoAlbumDemoVC: BaseVC, UICollectionViewDataSource, UICollectionVi
             .byTitle("录制视频", for: .normal)
             .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
             .byTitleColor(.white, for: .normal)
-            .byImage(UIImage(systemName: "video.fill"), for: .normal)
+            .byImage("video.fill".sysImg, for: .normal)
             .byContentEdgeInsets(.init(top: 12, left: 16, bottom: 12, right: 16))
             .byCornerRadius(12)
             .byBgColor(.systemPink)
@@ -143,7 +143,7 @@ final class PhotoAlbumDemoVC: BaseVC, UICollectionViewDataSource, UICollectionVi
                     .byBaseForegroundCor(.white)
                     .byContentInsets(.init(top: 12, leading: 16, bottom: 12, trailing: 16))
                     .byCornerStyle(.large)
-                    .byImage(UIImage(systemName: "video.fill"))
+                    .byImage("video.fill".sysImg)
                     .byImagePlacement(.leading)
                     .byImagePadding(8)
             }
@@ -156,7 +156,7 @@ final class PhotoAlbumDemoVC: BaseVC, UICollectionViewDataSource, UICollectionVi
             .byTitle("选择一个视频", for: .normal)
             .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
             .byTitleColor(.white, for: .normal)
-            .byImage(UIImage(systemName: "film"), for: .normal)
+            .byImage("film".sysImg, for: .normal)
             .byContentEdgeInsets(.init(top: 12, left: 16, bottom: 12, right: 16))
             .byCornerRadius(12)
             .byBgColor(.systemIndigo)
@@ -178,7 +178,7 @@ final class PhotoAlbumDemoVC: BaseVC, UICollectionViewDataSource, UICollectionVi
                     .byBaseForegroundCor(.white)
                     .byContentInsets(.init(top: 12, leading: 16, bottom: 12, trailing: 16))
                     .byCornerStyle(.large)
-                    .byImage(UIImage(systemName: "film"))
+                    .byImage("film".sysImg)
                     .byImagePlacement(.leading)
                     .byImagePadding(8)
             }
@@ -191,7 +191,7 @@ final class PhotoAlbumDemoVC: BaseVC, UICollectionViewDataSource, UICollectionVi
             .byTitle(albumVideoButtonTitle(), for: .normal)
             .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
             .byTitleColor(.white, for: .normal)
-            .byImage(UIImage(systemName: "film.stack"), for: .normal)
+            .byImage("film.stack".sysImg, for: .normal)
             .byContentEdgeInsets(.init(top: 12, left: 16, bottom: 12, right: 16))
             .byCornerRadius(12)
             .byBgColor(.systemTeal)
@@ -214,7 +214,7 @@ final class PhotoAlbumDemoVC: BaseVC, UICollectionViewDataSource, UICollectionVi
                     .byBaseForegroundCor(.white)
                     .byContentInsets(.init(top: 12, leading: 16, bottom: 12, trailing: 16))
                     .byCornerStyle(.large)
-                    .byImage(UIImage(systemName: "film.stack"))
+                    .byImage("film.stack".sysImg)
                     .byImagePlacement(.leading)
                     .byImagePadding(8)
             }
@@ -511,7 +511,7 @@ private final class VideoCell: UICollectionViewCell {
 private final class VideoThumbCell: UICollectionViewCell {
     static let reuseId = "VideoThumbCell"
     private let iv = UIImageView()
-    private let playBadge = UIImageView(image: UIImage(systemName: "play.circle.fill"))
+    private let playBadge = UIImageView(image: "play.circle.fill".sysImg)
 
     override init(frame: CGRect) {
         super.init(frame: frame)

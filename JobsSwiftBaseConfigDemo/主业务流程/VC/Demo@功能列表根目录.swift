@@ -17,28 +17,31 @@ final class RootListVC: BaseVC {
 
     private let demos: [(title: String, vcType: UIViewController.Type)] = [
         ("ViewController", ViewController.self),
-        ("✍️ UITextField Demo", UITextFieldDemoVC.self),
-        ("✍️ UITextView Demo", UITextViewDemoVC.self),
-        ("🌋 富文本 Demo", RichTextDemoVC.self),
-        ("🌍 JobsTabBarCtrl Demo", TabBarDemoVC.self),
-        ("📷 鉴权后调用相机/相册 Demo", PhotoAlbumDemoVC.self),
-        ("🛢️ 解码 Demo", SafeCodableDemoVC.self),
-        ("🔘 按钮 Demo", UIButtonDemoVC.self),
-        ("🧧 TraitChange Demo", TraitChangeDemoVC.self),
-        ("⛑️ SafetyPush Demo", SafetyPushDemoVC.self),
-        ("⛑️ SafetyPresent Demo", SafetyPresentDemoVC.self),
-        ("🐎 跑马灯/🛞 轮播图 Demo", JobsMarqueeDemoVC.self),
-        ("🐎 二维码/条形码 Demo", QRCodeDemoVC.self),
-        ("🌞 BaseWebView Demo", BaseWebViewDemoVC.self),
-        ("💥 JobsCountdown Demo", JobsCountdownDemoVC.self),
-        ("⏰ Timer Demo", TimerDemoVC.self),
-        ("⌨️ 键盘 Demo", KeyboardDemoVC.self),
-        ("🕹️ ControlEvents Demo", JobsControlEventsDemoVC.self),
-        ("🏞️ 图片加载Demo", PicLoadDemoVC.self),
-        ("👮 中国大陆公民身份证号码校验 Demo", CNIDDemoVC.self),
-        ("🏷️ Toast Demo", ToastDemoVC.self),
+        ("✍️ UITextField", UITextFieldDemoVC.self),
+        ("✍️ UITextView", UITextViewDemoVC.self),
+        ("🌋 富文本", RichTextDemoVC.self),
+        ("🌋 普通文本和富文本的融合数据类型", JobsTextDemoVC.self),
+        ("🌍 JobsTabBarCtrl", TabBarDemoVC.self),
+        ("📷 鉴权后调用相机/相册", PhotoAlbumDemoVC.self),
+        ("🛢️ 解码", SafeCodableDemoVC.self),
+        ("🔘 按钮", UIButtonDemoVC.self),
+        ("🧧 TraitChange", TraitChangeDemoVC.self),
+        ("⛑️ SafetyPush", SafetyPushDemoVC.self),
+        ("⛑️ SafetyPresent", SafetyPresentDemoVC.self),
+        ("🗄️ UITableView", EmptyTableViewDemoVC.self),
+        ("🗄️ UICollectionView", EmptyCollectionViewDemoVC.self),
+        ("🐎 跑马灯/🛞 轮播图", JobsMarqueeDemoVC.self),
+        ("🐎 二维码/条形码", QRCodeDemoVC.self),
+        ("🌞 BaseWebView", BaseWebViewDemoVC.self),
+        ("💥 JobsCountdown", JobsCountdownDemoVC.self),
+        ("⏰ Timer", TimerDemoVC.self),
+        ("⌨️ 键盘", KeyboardDemoVC.self),
+        ("🕹️ ControlEvents", JobsControlEventsDemoVC.self),
+        ("🏞️ 图片加载", PicLoadDemoVC.self),
+        ("👮 中国大陆公民身份证号码校验", CNIDDemoVC.self),
+        ("🏷️ Toast", ToastDemoVC.self),
         ("⚠️ 系统的弹出框", UIAlertDemoVC.self),
-        ("🚀 JobsOpen Demo", JobsOpenDemoVC.self)
+        ("🚀 JobsOpen", JobsOpenDemoVC.self)
     ]
 
     private lazy var suspendLab: UILabel = {
@@ -142,10 +145,11 @@ final class RootListVC: BaseVC {
                     print("✅ 下拉刷新完成")
                 }
             }, config: { animator in
-                animator.idleDescription = "Jobs@下拉刷新"
-                animator.releaseToRefreshDescription = "Jobs@松开立即刷新"
-                animator.loadingDescription = "Jobs@正在刷新中..."
-                animator.noMoreDataDescription = "Jobs@已经是最新数据"
+                animator
+                    .byIdleDescription("Jobs@下拉刷新")
+                    .byReleaseToRefreshDescription("Jobs@松开立即刷新")
+                    .byLoadingDescription("Jobs@正在刷新中...")
+                    .byNoMoreDataDescription("Jobs@已经是最新数据")
             })
             // 上拉加载（自定义 JobsFooterAnimator）
             .pullUpWithJobsAnimator({ [weak self] in
@@ -160,10 +164,11 @@ final class RootListVC: BaseVC {
                     print("✅ 上拉加载完成")
                 }
             }, config: { animator in
-                animator.idleDescription = "Jobs@上拉加载更多"
-                animator.releaseToRefreshDescription = "Jobs@松开立即加载"
-                animator.loadingMoreDescription = "Jobs@加载中..."
-                animator.noMoreDataDescription = "Jobs@已经到底了～"
+                animator
+                    .byIdleDescription("Jobs@上拉加载更多")
+                    .byReleaseToRefreshDescription("Jobs@松开立即加载")
+                    .byLoadingMoreDescription("Jobs@加载中…")
+                    .byNoMoreDataDescription("Jobs@没有更多数据")
             })
             .byAddTo(view) { make in
                 make.edges.equalToSuperview()
@@ -180,11 +185,73 @@ final class RootListVC: BaseVC {
         view.backgroundColor = .systemBackground
         jobsSetupGKNav(
             title: "Demo 列表",
-            leftSymbol: "list.bullet",
+            leftButton:UIButton.sys()
+                .byFrame(CGRect(x: 0, y: 0, width: 32.w, height: 32.h))
+                /// 按钮图片@图文关系
+                .byImage("list.bullet".sysImg, for: .normal)
+                .byImage("list.bullet".sysImg, for: .selected)
+                /// 事件触发@点按
+                .onTap { [weak self] sender in
+                    guard let self else { return }
+                    sender.isSelected.toggle()
+                    debugOnly {  // 仅 Debug 执行
+                        JobsToast.show(
+                            text: "点按了列表按钮",
+                            config: JobsToast.Config()
+                                .byBgColor(.systemGreen.withAlphaComponent(0.9))
+                                .byCornerRadius(12)
+                        )
+                    }
+                }
+                /// 事件触发@长按
+                .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+                     if gr.state == .began {
+                         btn.alpha = 0.6
+                         print("长按开始 on \(btn)")
+                     } else if gr.state == .ended || gr.state == .cancelled {
+                         btn.alpha = 1.0
+                         print("长按结束")
+                     }
+                },
             rightButtons: [
-                ("moon.circle.fill", .systemIndigo, { [weak self] in self?.toggleTheme() }),
-                ("globe", .systemGreen, { [weak self] in self?.toggleLanguage() }),
-                ("stop.circle.fill", .systemRed, { [weak self] in self?.stopRefreshing() })
+                UIButton.sys()
+                    /// 按钮图片@图文关系
+                    .byImage("moon.circle.fill".sysImg, for: .normal)
+                    .byImage("moon.circle.fill".sysImg, for: .selected)
+                    /// 事件触发@点按
+                    .onTap { [weak self] sender in
+                        guard let self else { return }
+                        sender.isSelected.toggle()
+                        guard let ws = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                              let win = ws.windows.first else { return }
+                        win.overrideUserInterfaceStyle =
+                            (win.overrideUserInterfaceStyle == .dark) ? .light : .dark
+                        print("🌓 主题已切换 -> \(win.overrideUserInterfaceStyle == .dark ? "Dark" : "Light")")
+                    },
+                UIButton.sys()
+                    /// 按钮图片@图文关系
+                    .byImage("globe".sysImg, for: .normal)
+                    .byImage("globe".sysImg, for: .selected)
+                    /// 事件触发@点按
+                    .onTap { [weak self] sender in
+                        guard let self else { return }
+                        sender.isSelected.toggle()
+                        print("🌐 切换语言 tapped（占位）")
+                    },
+                UIButton.sys()
+                    /// 按钮图片@图文关系
+                    .byImage("stop.circle.fill".sysImg, for: .normal)
+                    .byImage("stop.circle.fill".sysImg, for: .selected)
+                    /// 事件触发@点按
+                    .onTap { [weak self] sender in
+                        guard let self else { return }
+                        sender.isSelected.toggle()
+                        print("🛑 手动停止刷新")
+                        isPullRefreshing = false
+                        isLoadingMore    = false
+                        tableView.pullDownStop()
+                        tableView.pullUpStop()
+                    }
             ]
         )
         tableView.byAlpha(1)
@@ -206,35 +273,17 @@ final class RootListVC: BaseVC {
             tableView.pullUpStop()
         }
     }
-    // MARK: - 按钮动作
-    private func toggleTheme() {
-        guard let ws = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let win = ws.windows.first else { return }
-        win.overrideUserInterfaceStyle =
-            (win.overrideUserInterfaceStyle == .dark) ? .light : .dark
-        print("🌓 主题已切换 -> \(win.overrideUserInterfaceStyle == .dark ? "Dark" : "Light")")
-    }
-
-    private func toggleLanguage() {
-        print("🌐 切换语言 tapped（占位）")
-    }
-
-    private func stopRefreshing() {
-        print("🛑 手动停止刷新")
-        isPullRefreshing = false
-        isLoadingMore    = false
-        tableView.pullDownStop()
-        tableView.pullUpStop()
-    }
 }
 // MARK: - DataSource & Delegate
 extension RootListVC: UITableViewDataSource, UITableViewDelegate {
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView,
+                   numberOfRowsInSection section: Int) -> Int {
         demos.count
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView,
+                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: UITableViewCell.self), for: indexPath)
         var content = cell.defaultContentConfiguration()
         content.text = demos[indexPath.row].title
@@ -243,7 +292,8 @@ extension RootListVC: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView,
+                   didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         demos[indexPath.row].vcType.init().byPush(self)
     }

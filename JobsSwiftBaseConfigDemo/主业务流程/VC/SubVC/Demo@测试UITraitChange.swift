@@ -91,14 +91,20 @@ final class TraitChangeDemoVC: BaseVC {
         jobsSetupGKNav(
             title: "Traits (iOS 17+)",
             rightButtons: [
-                ("moon.circle.fill", .systemIndigo, { [weak self] in
-                    guard let self = self else { return }
-                    self.forceDark.toggle()
-                    // 触发外观相关 trait 变化 —— 注意前缀 self.
-                    self.overrideUserInterfaceStyle = self.forceDark ? .dark : .unspecified
-                    // 保底刷新（即使 trait 回调还没到）
-                    self.updateColors()
-                })
+                UIButton(type: .system)
+                    /// 按钮图片@图文关系
+                    .byImage("moon.circle.fill".sysImg, for: .normal)
+                    .byImage("moon.circle.fill".sysImg, for: .selected)
+                    /// 事件触发@点按
+                    .onTap { [weak self] sender in
+                        guard let self else { return }
+                        sender.isSelected.toggle()
+                        self.forceDark.toggle()
+                        // 触发外观相关 trait 变化 —— 注意前缀 self.
+                        self.overrideUserInterfaceStyle = self.forceDark ? .dark : .unspecified
+                        // 保底刷新（即使 trait 回调还没到）
+                        self.updateColors()
+                    }
             ]
         )
         // 组装 UI

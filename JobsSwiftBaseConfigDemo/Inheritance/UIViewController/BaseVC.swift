@@ -21,6 +21,10 @@ class BaseVC: UIViewController {
             )
         }
     }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        jobsSetupGKNav(title: "定义当前的标题")
+    }
     /// 手势返回
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)

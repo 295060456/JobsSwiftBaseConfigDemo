@@ -84,6 +84,13 @@
 		04AC74C52E86682E004B8305 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AC74C42E86682D004B8305 /* Notification.swift */; };
 		04AD628F2E9120C500E18984 /* JobsTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AD628E2E9120C000E18984 /* JobsTimer.swift */; };
 		04AD62912E91230000E18984 /* Demo@时间.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AD62902E9122FC00E18984 /* Demo@时间.swift */; };
+		04BCDC2A2EA9DB0C00382DE0 /* JobsText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BCDC292EA9DB0B00382DE0 /* JobsText.swift */; };
+		04BCDC2C2EA9DB7E00382DE0 /* Demo@JobsText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BCDC2B2EA9DB7D00382DE0 /* Demo@JobsText.swift */; };
+		04BCDC2E2EA9E85800382DE0 /* UITextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BCDC2D2EA9E85600382DE0 /* UITextViewCell.swift */; };
+		04BCDC302EA9E86600382DE0 /* UICollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BCDC2F2EA9E86400382DE0 /* UICollectionViewCell.swift */; };
+		04BCDC322EA9EAB000382DE0 /* UICollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BCDC312EA9EAAF00382DE0 /* UICollectionViewFlowLayout.swift */; };
+		04BD5B3F2EA8E5070056DA62 /* Demo@UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BD5B3E2EA8E5030056DA62 /* Demo@UICollectionView.swift */; };
+		04BD5B412EA8E51C0056DA62 /* Demo@UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BD5B402EA8E5170056DA62 /* Demo@UITableView.swift */; };
 		04C2F0312E98C9D000BA05A9 /* Demo@设计模式MVVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C2F0302E98C9CA00BA05A9 /* Demo@设计模式MVVM.swift */; };
 		04C2F0332E98C9E000BA05A9 /* Demo@设计模式VIPER.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C2F0322E98C9DF00BA05A9 /* Demo@设计模式VIPER.swift */; };
 		04CF028C2E8808540083ACF0 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028B2E8808500083ACF0 /* UIButton.swift */; };
@@ -256,6 +263,13 @@
 		04AC74C42E86682D004B8305 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		04AD628E2E9120C000E18984 /* JobsTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsTimer.swift; sourceTree = "<group>"; };
 		04AD62902E9122FC00E18984 /* Demo@时间.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@时间.swift"; sourceTree = "<group>"; };
+		04BCDC292EA9DB0B00382DE0 /* JobsText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsText.swift; sourceTree = "<group>"; };
+		04BCDC2B2EA9DB7D00382DE0 /* Demo@JobsText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@JobsText.swift"; sourceTree = "<group>"; };
+		04BCDC2D2EA9E85600382DE0 /* UITextViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextViewCell.swift; sourceTree = "<group>"; };
+		04BCDC2F2EA9E86400382DE0 /* UICollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewCell.swift; sourceTree = "<group>"; };
+		04BCDC312EA9EAAF00382DE0 /* UICollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewFlowLayout.swift; sourceTree = "<group>"; };
+		04BD5B3E2EA8E5030056DA62 /* Demo@UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@UICollectionView.swift"; sourceTree = "<group>"; };
+		04BD5B402EA8E5170056DA62 /* Demo@UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@UITableView.swift"; sourceTree = "<group>"; };
 		04C2F0302E98C9CA00BA05A9 /* Demo@设计模式MVVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@设计模式MVVM.swift"; sourceTree = "<group>"; };
 		04C2F0322E98C9DF00BA05A9 /* Demo@设计模式VIPER.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@设计模式VIPER.swift"; sourceTree = "<group>"; };
 		04CF028B2E8808500083ACF0 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
@@ -375,6 +389,7 @@
 		045920E22E84EC64008C8D6A /* SwiftTools */ = {
 			isa = PBXGroup;
 			children = (
+				04BCDC292EA9DB0B00382DE0 /* JobsText.swift */,
 				0482A5F72EA5F308004176A4 /* JobsNavBar.swift */,
 				049A65702EA0E6BA0006B185 /* JobsTabBarCtrl.swift */,
 				049A65662EA09C6A0006B185 /* SafeCodable.swift */,
@@ -505,6 +520,9 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				04BCDC2B2EA9DB7D00382DE0 /* Demo@JobsText.swift */,
+				04BD5B402EA8E5170056DA62 /* Demo@UITableView.swift */,
+				04BD5B3E2EA8E5030056DA62 /* Demo@UICollectionView.swift */,
 				0482A5E92EA38392004176A4 /* Demo@网页加载互动.swift */,
 				0448B1832EA3707700CFC755 /* Demo@生成二维码和条形码.swift */,
 				049A65722EA0E6D70006B185 /* Demo@自定义TabBar.swift */,
@@ -556,6 +574,7 @@
 		04D0C9802E8D19FC00580020 /* iOS.SDK */ = {
 			isa = PBXGroup;
 			children = (
+				04BCDC312EA9EAAF00382DE0 /* UICollectionViewFlowLayout.swift */,
 				0482A67B2EA7883E004176A4 /* Dictionary.swift */,
 				0482A5FB2EA63526004176A4 /* WKUserContentController.swift */,
 				0482A5F92EA6343F004176A4 /* WKWebViewConfiguration.swift */,
@@ -588,6 +607,7 @@
 				C564FC6B2E0959610079B5C1 /* UIBarButtonItem.swift */,
 				04CF028B2E8808500083ACF0 /* UIButton.swift */,
 				C564FC672E0959600079B5C1 /* UICollectionView.swift */,
+				04BCDC2F2EA9E86400382DE0 /* UICollectionViewCell.swift */,
 				C564FC7B2E0959630079B5C1 /* UIDatePicker.swift */,
 				C564FC692E0959610079B5C1 /* UIImageView.swift */,
 				C564FC6E2E0959610079B5C1 /* UILabel.swift */,
@@ -610,6 +630,7 @@
 				C564FC802E0959630079B5C1 /* UITableView.swift */,
 				C564FC822E0959640079B5C1 /* UITextField.swift */,
 				C564FC782E0959620079B5C1 /* UITextView.swift */,
+				04BCDC2D2EA9E85600382DE0 /* UITextViewCell.swift */,
 				04E8D6182E8E6EBF00E85CDA /* UIToolbar.swift */,
 				C564FC712E0959620079B5C1 /* UIToolbarAppearance.swift */,
 				C564FC732E0959620079B5C1 /* UIView.swift */,
@@ -1076,6 +1097,7 @@
 				045920E62E84F389008C8D6A /* CALayer.swift in Sources */,
 				049A65712EA0E6BB0006B185 /* JobsTabBarCtrl.swift in Sources */,
 				0482A5E82EA380EB004176A4 /* BaseWebView.swift in Sources */,
+				04BCDC302EA9E86600382DE0 /* UICollectionViewCell.swift in Sources */,
 				04E8D5B92E8E550200E85CDA /* BaseStructDefs.swift in Sources */,
 				0487AADA2E840CB200B5D307 /* UIColor.swift in Sources */,
 				04E8D6232E8E884500E85CDA /* BaseVC.swift in Sources */,
@@ -1117,6 +1139,7 @@
 				0482A5FC2EA63527004176A4 /* WKUserContentController.swift in Sources */,
 				041F5B012E87B51800984EEB /* Demo@输入框.swift in Sources */,
 				C564FC902E0959640079B5C1 /* UILabel.swift in Sources */,
+				04BD5B412EA8E51C0056DA62 /* Demo@UITableView.swift in Sources */,
 				C564FC9E2E0959640079B5C1 /* UINavigationController.swift in Sources */,
 				0401DD062E9115CE00D572AD /* JobsToast.swift in Sources */,
 				0477D9792E8BADB2002C6427 /* Demo@被Push或者Present的次级页面.swift in Sources */,
@@ -1137,10 +1160,13 @@
 				C564FCA12E0959640079B5C1 /* UIPageControl.swift in Sources */,
 				04A18E4D2E86533B004BB9DC /* UIImage.swift in Sources */,
 				045921122E855769008C8D6A /* JobsPaddedLabel.swift in Sources */,
+				04BCDC322EA9EAB000382DE0 /* UICollectionViewFlowLayout.swift in Sources */,
 				0459210C2E855004008C8D6A /* Float80.swift in Sources */,
 				04D0C96E2E8CD14B00580020 /* UIControl.swift in Sources */,
+				04BCDC2C2EA9DB7E00382DE0 /* Demo@JobsText.swift in Sources */,
 				0477D9712E8B897D002C6427 /* Demo@安全Push.swift in Sources */,
 				C564FCAC2E09597C0079B5C1 /* ViewController.swift in Sources */,
+				04BD5B3F2EA8E5070056DA62 /* Demo@UICollectionView.swift in Sources */,
 				C564FC962E0959640079B5C1 /* Inlines.swift in Sources */,
 				04468F902E9E4D7000677000 /* PermissionCenter.swift in Sources */,
 				042B67CE2E95085A000A2970 /* NSTextAttachment.swift in Sources */,
@@ -1163,6 +1189,7 @@
 				C564FCAB2E09597C0079B5C1 /* VC2.swift in Sources */,
 				0477D97F2E8BDBBC002C6427 /* Demo@倒计时.swift in Sources */,
 				04D8422B2E965BA1001E8C90 /* JobsMarqueeView.swift in Sources */,
+				04BCDC2A2EA9DB0C00382DE0 /* JobsText.swift in Sources */,
 				C564FC8C2E0959640079B5C1 /* UIAlertController.swift in Sources */,
 				04CF028E2E8A37BB0083ACF0 /* TextInputStrategies.swift in Sources */,
 				04A8C54E2E8AA9F900381701 /* Demo@功能列表根目录.swift in Sources */,
@@ -1187,6 +1214,7 @@
 				04AD628F2E9120C500E18984 /* JobsTimer.swift in Sources */,
 				C564FC2C2E0958D50079B5C1 /* SceneDelegate.swift in Sources */,
 				C564FC922E0959640079B5C1 /* UISwitch.swift in Sources */,
+				04BCDC2E2EA9E85800382DE0 /* UITextViewCell.swift in Sources */,
 				049A65732EA0E6E40006B185 /* Demo@自定义TabBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

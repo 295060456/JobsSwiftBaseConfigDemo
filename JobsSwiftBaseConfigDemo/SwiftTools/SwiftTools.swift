@@ -475,3 +475,5 @@ func onMainSync<T>(_ work: () -> T) -> T {
         ctx.fill(CGRect(origin: .zero, size: size))
     }
 }
+public let YES = true
+public let NO  = false

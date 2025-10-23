@@ -235,67 +235,49 @@ public extension UIViewController {
 #if canImport(GKNavigationBarSwift)
 import GKNavigationBarSwift
 public extension UIViewController {
+    /// 统一配置 GKNav
+    /// - Parameters:
+    ///   - title: JobsText（支持纯文本/富文本，这里取 rawString 写到 gk_navTitle）
+    ///   - leftButton: 左侧按钮（UIButton）。nil → 使用默认“< 返回”
+    ///   - rightButtons: 右侧按钮组（[UIButton]）。nil 或空 → 不创建
     func jobsSetupGKNav(
-        title: String,
-        leftSymbol: String? = nil,
-        rightButtons: [(String, UIColor, (() -> Void)?)] = []
+        title: JobsText,
+        leftButton: UIButton? = nil,
+        rightButtons: [UIButton]? = nil
     ) {
-        gk_navTitle = title
-        if let symbol = leftSymbol {
-            gk_navLeftBarButtonItem = UIBarButtonItem(
-                customView: makeNavButton(symbol: symbol, tint: .white) {
-                    print("👈 自定义左按钮 tapped")
-                }
-            )
+        // 标题（GK 只吃 String）
+        gk_navTitle = title.rawString
+
+        // 左侧按钮：nil → 默认返回；否则用传入的 UIButton
+        if let btn = leftButton {
+            gk_navLeftBarButtonItem = UIBarButtonItem(customView: btn)
         } else {
             gk_navLeftBarButtonItem = UIBarButtonItem(
-                customView: makeNavButton(symbol: "chevron.left", tint: .white) { [weak self] in
-                    guard let self else { return }
-                    self.jobsSmartBack()
-                }
+                customView: makeDefaultBackButton()
             )
         }
-        if !rightButtons.isEmpty {
-            gk_navRightBarButtonItems = rightButtons.map { symbol, color, action in
-                UIBarButtonItem(customView: makeNavButton(symbol: symbol, tint: color, action: action))
-            }
+        // 右侧按钮：只有在非空时才创建
+        if let items = rightButtons, !items.isEmpty {
+            gk_navRightBarButtonItems = items.map { UIBarButtonItem(customView: $0) }
+        } else {
+            gk_navRightBarButtonItems = nil
         }
     }
-
-    private func jobsSmartBack() {
-        if let nav = navigationController, nav.viewControllers.first != self {
-            nav.popViewController(animated: true); print("⬅️ Pop 返回上一层"); return
-        }
-        if presentingViewController != nil {
-            dismiss(animated: true); print("⬇️ Dismiss 关闭当前模态页"); return
-        }
-        print("⚠️ [JobsNav] 当前 VC 无法返回（既非 push 也非 present）")
-    }
-
-    private func makeNavButton(
-        symbol: String,
-        tint: UIColor,
-        action: (() -> Void)? = nil
-    ) -> UIButton {
+    // MARK: - 内置：默认“< 返回”按钮（SF Symbol: chevron.left）
+    private func makeDefaultBackButton() -> UIButton {
         UIButton(type: .system)
             .byFrame(CGRect(x: 0, y: 0, width: 32.w, height: 32.h))
-            .byTintColor(tint)
-            .byTitleColor(.systemBlue, for: .normal)
-            .byTitleColor(.systemRed, for: .selected)
-            .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
-            .byImage(UIImage(systemName: symbol), for: .normal)
-            .byImage(UIImage(systemName: symbol), for: .selected)
-            .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
-            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
-            .onTap { sender in
-                sender.isSelected.toggle()
-                guard let action else {
-                    print("⚠️ [JobsNav] 未设置 action（symbol: \(symbol)）"); return
-                }
-                action()
+            .byTintColor(.white)
+            .byImage("chevron.left".sysImg, for: .normal)
+            .byContentEdgeInsets(.zero)
+            .byTitleEdgeInsets(.zero)
+            .onTap { [weak self] _ in
+                guard let self else { return }
+                closeByResult("") // 系统通用返回
             }
     }
 }
+
 #endif
 // ================================== 数据传递 + 出现完成回调 ==================================
 private enum JobsAssocKey {
@@ -535,3 +517,23 @@ public extension UIViewController {
     }
 }
 #endif
+@MainActor
+public extension UIViewController {
+    /// 1) 拿来就能放到任何位置：如果已有导航 -> 返回 self；否则 -> 返回 UINavigationController(root: self)
+    ///    用在 window.rootViewController / present 时最省心
+    var jobsNav: UIViewController {
+        if self is UINavigationController { return self }
+        if self.navigationController != nil { return self }
+        return UINavigationController(rootViewController: self)
+    }
+    /// 2) 需要顺便拿到“新建的导航”做点配置（只有在新包裹时才会回调）
+    ///    仍然返回“可直接用”的 UIViewController（可能是 self，也可能是 nav）
+    @discardableResult
+    func jobsNav(_ onWrap: (UINavigationController) -> Void) -> UIViewController {
+        if let nav = self as? UINavigationController { return nav }
+        if let nav = self.navigationController { return nav }
+        let nav = UINavigationController(rootViewController: self)
+        onWrap(nav)
+        return nav
+    }
+}

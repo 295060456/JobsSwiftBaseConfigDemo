@@ -140,6 +140,10 @@ public extension String {
             return UIImage(named: name) ?? UIImage()
         }
     }
+
+    var sysImg: UIImage {
+        UIImage(systemName: self) ?? jobsSolidBlue()
+    }
 #if canImport(Kingfisher)
     /// 远程：通过 KF 异步下载后返回；本地：直接返回
     func kfLoadImage() async throws -> UIImage {

@@ -47,7 +47,7 @@ final class BaseWebViewDemoVC: BaseVC {
             .byNavBarBackButtonProvider {
                 UIButton(type: .system)
                     .byBackgroundColor(.clear)
-                    .byImage(UIImage(systemName: "chevron.left"), for: .normal)
+                    .byImage("chevron.left".sysImg, for: .normal)
                     .byTitle("返回", for: .normal)
                     .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
                     .byTitleColor(.label, for: .normal)

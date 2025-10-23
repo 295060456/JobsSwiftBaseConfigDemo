@@ -43,8 +43,8 @@ final class TabBarDemoVC: BaseVC {
                         .byTitleColor(.label, for: .normal)
                         .byTitleColor(.systemRed, for: .selected)
                         .byTitleFont(.systemFont(ofSize: 12, weight: .semibold))
-                        .byImage(UIImage(systemName: "house"), for: .normal)
-                        .byImage(UIImage(systemName: "house.fill"), for: .selected)
+                        .byImage("house".sysImg, for: .normal)
+                        .byImage("house.fill".sysImg, for: .selected)
                         .byImagePlacement(.top)
                         .byTapSound("Sound.wav")
                         .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10))
@@ -65,8 +65,8 @@ final class TabBarDemoVC: BaseVC {
                         .byTitleColor(.label, for: .normal)
                         .byTitleColor(.systemRed, for: .selected)
                         .byTitleFont(.systemFont(ofSize: 12, weight: .medium))
-                        .byImage(UIImage(systemName: "tag"), for: .normal)
-                        .byImage(UIImage(systemName: "tag.fill"), for: .selected)
+                        .byImage("tag".sysImg, for: .normal)
+                        .byImage("tag.fill".sysImg, for: .selected)
                         .byImagePlacement(.top)
                         .byTapSound("Sound.wav")
                         .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10))
@@ -114,8 +114,8 @@ final class TabBarDemoVC: BaseVC {
                             JobsRichRun(.text("原价 ")).font(.systemFont(ofSize: 10)).color(.blue.withAlphaComponent(0.8)),
                             JobsRichRun(.text("¥199")).font(.systemFont(ofSize: 12, weight: .medium)).color(.systemYellow)
                         ]))        // ✅ 副标题富文本：一个入参
-                        .byImage(UIImage(systemName: "creditcard"), for: .normal)
-                        .byImage(UIImage(systemName: "creditcard.fill"), for: .selected)
+                        .byImage("creditcard".sysImg, for: .normal)
+                        .byImage("creditcard.fill".sysImg, for: .selected)
                         .byImagePlacement(.top)
                         .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10)),
                     UIButton(type: .system)
@@ -124,8 +124,8 @@ final class TabBarDemoVC: BaseVC {
                         .byTitleColor(.label, for: .normal)
                         .byTitleColor(.systemRed, for: .selected)
                         .byTitleFont(.systemFont(ofSize: 12, weight: .medium))
-                        .byImage(UIImage(systemName: "person.2"), for: .normal)
-                        .byImage(UIImage(systemName: "person.2.fill"), for: .selected)
+                        .byImage("person.2".sysImg, for: .normal)
+                        .byImage("person.2.fill".sysImg, for: .selected)
                         .byImagePlacement(.top)
                         .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10)),
                     /// 倒计时按钮@（点击触发）
@@ -138,8 +138,8 @@ final class TabBarDemoVC: BaseVC {
                         .bySubTitleColor(.label, for: .normal)
                         .bySubTitleColor(.systemRed, for: .selected)
                         .bySubTitleFont(.systemFont(ofSize: 12, weight: .medium))
-                        .byImage(UIImage(systemName: "sparkles"), for: .normal)
-                        .byImage(UIImage(systemName: "sparkles"), for: .selected)
+                        .byImage("sparkles".sysImg, for: .normal)
+                        .byImage("sparkles".sysImg, for: .selected)
                         .byImagePlacement(.top)
                         .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10))
                         .onCountdownTick { [weak self] btn, remain, total, kind in
@@ -175,8 +175,8 @@ final class TabBarDemoVC: BaseVC {
                         .byTitleColor(.label, for: .normal)
                         .byTitleColor(.systemRed, for: .selected)
                         .byTitleFont(.systemFont(ofSize: 12, weight: .medium))
-                        .byImage(UIImage(systemName: "message"), for: .normal)
-                        .byImage(UIImage(systemName: "message.fill"), for: .selected)
+                        .byImage("message".sysImg, for: .normal)
+                        .byImage("message.fill".sysImg, for: .selected)
                         .byImagePlacement(.top)
                         .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10)),
                     /// 普通按钮@（展示副标题）
@@ -190,8 +190,8 @@ final class TabBarDemoVC: BaseVC {
                         .bySubTitleColor(.label, for: .normal)
                         .bySubTitleColor(.systemRed, for: .selected)
                         .bySubTitleFont(.systemFont(ofSize: 10, weight: .semibold))
-                        .byImage(UIImage(systemName: "person.crop.circle"), for: .normal)
-                        .byImage(UIImage(systemName: "person.crop.circle.fill"), for: .selected)
+                        .byImage("person.crop.circle".sysImg, for: .normal)
+                        .byImage("person.crop.circle.fill".sysImg, for: .selected)
                         .byImagePlacement(.top)
                         .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10))],
                 controllers: [

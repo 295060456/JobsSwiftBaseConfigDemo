@@ -32,14 +32,40 @@ import UIKit
 import Foundation
 import ObjectiveC
 
-// ======================================================
-// MARK: - 通用：克隆友好 · 背景图元数据（UInt8 AO Key）
-// ======================================================
+public extension UIButton {
+    @available(iOS 7.0, *)
+    static func sys() -> UIButton {
+        UIButton(type: .system).byBackgroundColor(.clear)
+    }
+    @available(iOS 13.0, *)
+    static func close() -> UIButton {
+        UIButton(type: .close).byBackgroundColor(.clear)
+    }
+
+    static func custom() -> UIButton {
+        UIButton(type: .custom).byBackgroundColor(.clear)
+    }
+
+    static func detailDisclosure() -> UIButton {
+        UIButton(type: .detailDisclosure).byBackgroundColor(.clear)
+    }
+
+    static func infoLight() -> UIButton {
+        UIButton(type: .infoLight).byBackgroundColor(.clear)
+    }
+
+    static func infoDark() -> UIButton {
+        UIButton(type: .infoDark).byBackgroundColor(.clear)
+    }
+
+    static func contactAdd() -> UIButton {
+        UIButton(type: .contactAdd).byBackgroundColor(.clear)
+    }
+}
 
 private var _jobsBGURLKey:   UInt8 = 0   // URL?
 private var _jobsBGStateKey: UInt8 = 0   // UIControl.State.RawValue
 private var _jobsIsCloneKey: UInt8 = 0   // Bool
-
 public extension UIButton {
     /// 最近一次设置“背景图”的 URL（供克隆或复用）
     var jobs_bgURL: URL? {
@@ -236,11 +262,9 @@ extension UIButton {
 
     func `for`(_ state: UIControl.State) -> StateProxy { StateProxy(button: self, state: state) }
 }
-
 // ======================================================
 // MARK: - 布局 / 外观（保留）
 // ======================================================
-
 extension UIButton {
     @discardableResult
     func byBackgroundColor(_ color: UIColor, for state: UIControl.State = .normal) -> Self {
@@ -1579,7 +1603,6 @@ public extension UIButton {
     @discardableResult func kf_options(_ opts: KingfisherOptionsInfo) -> Self { _kf_setOptions(opts) }
     @discardableResult func kf_progress(_ block: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)?) -> Self { _kf_setProgress(block) }
     @discardableResult func kf_completed(_ block: KFCompleted?) -> Self { _kf_setCompleted(block) }
-
     // MARK: - 前景图加载
     @discardableResult func kf_normalLoad() -> Self {
         _kf_loadImage(for: .normal)
@@ -1717,8 +1740,6 @@ public extension UIButton {
             }
         }
     }
-
-
 }
 
 public extension UIButton {
@@ -1956,3 +1977,71 @@ public extension UIButton {
         }
     }
 }
+// MARK: 按钮背景图加载（UIImage / Base64 / URL）
+public enum JobsImageSource: Equatable {
+    case image(UIImage)
+    case base64(String)      // 纯 Base64（不含 "data:" 前缀）
+    case url(URL)            // 远端 URL
+}
+
+private final class _JobsImageCache {
+    static let shared = _JobsImageCache()
+    let cache = NSCache<NSString, UIImage>()
+    private init() {}
+}
+
+public extension UIButton {
+    @discardableResult
+    func byBackgroundImage(_ source: JobsImageSource?, for state: UIControl.State = .normal) -> Self {
+        guard let source else {
+            self.setBackgroundImage(nil, for: state)
+            return self
+        }
+        switch source {
+        case .image(let img):
+            self.setBackgroundImage(img, for: state)
+
+        case .base64(let b64):
+            if let data = Data(base64Encoded: b64, options: .ignoreUnknownCharacters),
+               let img = UIImage(data: data) {
+                self.setBackgroundImage(img, for: state)
+            } else {
+                self.setBackgroundImage(nil, for: state)
+            }
+
+        case .url(let url):
+            let key = url.absoluteString as NSString
+            if let cached = _JobsImageCache.shared.cache.object(forKey: key) {
+                self.setBackgroundImage(cached, for: state)
+            } else {
+                URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+                    guard let self, let data, let img = UIImage(data: data) else { return }
+                    _JobsImageCache.shared.cache.setObject(img, forKey: key)
+                    DispatchQueue.main.async {
+                        self.setBackgroundImage(img, for: state)
+                    }
+                }.resume()
+            }
+        }
+        return self
+    }
+}
+#if canImport(SnapKit)
+// MARK: 为空态按钮附加自定义布局闭包
+import SnapKit
+private var _jobsEmptyLayoutKey: UInt8 = 0
+public extension UIButton {
+    typealias JobsEmptyLayout = (_ btn: UIButton, _ make: ConstraintMaker, _ host: UIScrollView) -> Void
+    /// 内部读取：UIScrollView._jobs_attachEmptyButton 会使用
+    var _jobsEmptyLayout: JobsEmptyLayout? {
+        get { objc_getAssociatedObject(self, &_jobsEmptyLayoutKey) as? JobsEmptyLayout }
+        set { objc_setAssociatedObject(self, &_jobsEmptyLayoutKey, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC) }
+    }
+    /// 链式：设置空态按钮的自定义布局
+    @discardableResult
+    func jobs_setEmptyLayout(_ layout: @escaping JobsEmptyLayout) -> Self {
+        self._jobsEmptyLayout = layout
+        return self
+    }
+}
+#endif

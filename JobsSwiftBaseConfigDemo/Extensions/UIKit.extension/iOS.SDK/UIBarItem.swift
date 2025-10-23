@@ -39,7 +39,7 @@ public extension UIBarItem {
         if let cfg = configuration {
             self.image = UIImage(systemName: systemName, withConfiguration: cfg)
         } else {
-            self.image = UIImage(systemName: systemName)
+            self.image = systemName.sysImg
         }
         return self
     }

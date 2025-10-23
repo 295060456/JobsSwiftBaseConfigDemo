@@ -394,37 +394,25 @@ extension UICollectionView {
         return self
     }
 }
-// MARK: - UICollectionView Empty View
-private var collectionEmptyViewKey: Void?
+// MARK: - UICollectionView@空数据源占位图
+/// 被交换的方法实现（调用原方法后自动评估空态）
 extension UICollectionView {
-    private var jobs_emptyView: UIView? {
-        get { objc_getAssociatedObject(self, &collectionEmptyViewKey) as? UIView }
-        set {
-            jobs_emptyView?.removeFromSuperview()
-            if let view = newValue {
-                addSubview(view)
-                bringSubviewToFront(view)
-                view.translatesAutoresizingMaskIntoConstraints = false
-                NSLayoutConstraint.activate([
-                    view.centerXAnchor.constraint(equalTo: centerXAnchor),
-                    view.centerYAnchor.constraint(equalTo: centerYAnchor),
-                    view.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 0.9)
-                ])
-            }
-            objc_setAssociatedObject(self, &collectionEmptyViewKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+    @objc dynamic func jobs_swizzled_reloadData() {
+        self.jobs_swizzled_reloadData()        // 原始实现
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            (self as UIScrollView)._jobs_autoEnsureEmptyButtonThenEval()
         }
     }
 
-    @discardableResult
-    func jobs_setEmptyView(_ view: UIView?) -> Self {
-        self.jobs_emptyView = view
-        return self
-    }
-
-    @discardableResult
-    func jobs_reloadEmptyView(itemCount: Int, sectionCount: Int = 1) -> Self {
-        let isEmpty = itemCount == 0 || sectionCount == 0
-        self.jobs_emptyView?.isHidden = !isEmpty
-        return self
+    @objc dynamic func jobs_swizzled_performBatchUpdates(_ updates: (() -> Void)?,
+                                                         completion: ((Bool) -> Void)?) {
+        self.jobs_swizzled_performBatchUpdates(updates) { [weak self] finished in
+            completion?(finished)
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                (self as UIScrollView)._jobs_autoEnsureEmptyButtonThenEval()
+            }
+        }
     }
 }

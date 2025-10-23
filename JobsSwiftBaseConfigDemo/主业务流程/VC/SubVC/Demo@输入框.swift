@@ -73,7 +73,7 @@ final class UITextFieldDemoVC: BaseVC,
             .byTypingAttributes([.foregroundColor: UIColor.label])
             // 左/右视图
             //.byLeftView(makeIcon("envelope"), mode: .always)
-            .byLeftIcon(UIImage(systemName: "envelope"),
+            .byLeftIcon("envelope".sysImg,
                         tint: .secondaryLabel,
                         size: .init(width: 18, height: 18),
                         leading: 12, spacing: 8)
@@ -127,36 +127,38 @@ final class UITextFieldDemoVC: BaseVC,
             .byTextContentType(.password)
             .byPasswordRules(nil) // 也可自定义
         //            .byLeftView(Self.makeIcon("lock"), mode: .always)
-            .byLeftIcon(UIImage(systemName: "lock"),
+            .byLeftIcon("lock".sysImg,
                         tint: .secondaryLabel,
                         size: .init(width: 18, height: 18),
                         leading: 12, spacing: 8)
-            .byRightView(UIButton(type: .system)
-                         // 普通文字：未选中状态标题
-                         .byTitle("显示", for: .normal)
-                         // 选中状态标题
-                         .byTitle("隐藏", for: .selected)
-                         // 文字颜色：区分状态
-                         .byTitleColor(.systemBlue, for: .normal)
-                         .byTitleColor(.systemRed, for: .selected)
-                         // 字体统一
-                         .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
-                         // 图标（SF Symbol）
-                         .byImage(UIImage(systemName: "eye.slash"), for: .normal)   // 未选中图标
-                         .byImage(UIImage(systemName: "eye"), for: .selected)       // 选中图标
-                         // 图文内边距
-                         .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
-                         // 图标与文字间距
-                         .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
-                         // 点按事件（统一入口）
-                         .onTap { [weak self] sender in
-                             guard let self else { return }
-                             sender.isSelected.toggle()
-                             // 文字与图标自动切换
-                             self.passwordTF.isSecureTextEntry.toggle()
-                             self.passwordTF.togglePasswordVisibility()
-                             print("👁 当前状态：\(sender.isSelected ? "隐藏密码" : "显示密码")")
-                         }, mode: .always)
+            .byRightView(
+                UIButton(type: .system)
+                    // 普通文字：未选中状态标题
+                    .byTitle("显示", for: .normal)
+                    // 选中状态标题
+                    .byTitle("隐藏", for: .selected)
+                    // 文字颜色：区分状态
+                    .byTitleColor(.systemBlue, for: .normal)
+                    .byTitleColor(.systemRed, for: .selected)
+                    // 字体统一
+                    .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+                    // 图标（SF Symbol）
+                    .byImage("eye.slash".sysImg, for: .normal)   // 未选中图标
+                    .byImage("eye".sysImg, for: .selected)       // 选中图标
+                    // 图文内边距
+                    .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+                    // 图标与文字间距
+                    .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+                    // 点按事件（统一入口）
+                    .onTap { [weak self] sender in
+                        guard let self else { return }
+                        sender.isSelected.toggle()
+                        // 文字与图标自动切换
+                        self.passwordTF.isSecureTextEntry.toggle()
+                        self.passwordTF.togglePasswordVisibility()
+                        print("👁 当前状态：\(sender.isSelected ? "隐藏密码" : "显示密码")")
+                    }, mode: .always
+            )
             .byInputView(datePicker) // 演示自定义 inputView：点密码框弹日期（纯展示，不建议真实项目这么用）
             .byLimitLength(5)
             .onChange { tf, input, old, isDeleting in
@@ -190,10 +192,10 @@ final class UITextFieldDemoVC: BaseVC,
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .systemBackground
         jobsSetupGKNav(
             title: "UITextField 全量演示"
         )
-        view.backgroundColor = .systemBackground
         emailTF.byAlpha(1)
         // MARK: Rx 绑定 —— 删除键广播
         emailTF.didPressDelete

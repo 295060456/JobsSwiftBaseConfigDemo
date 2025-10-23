@@ -110,8 +110,7 @@ extension RichTextDemoVC: UITableViewDataSource, UITableViewDelegate {
                 attachmentRuns: [
                     JobsRichRun(.attachment(
                         NSTextAttachment().byImage(
-                            UIImage(systemName: "paperclip",
-                                    withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .medium))!
+                            UIImage(systemName: "paperclip", withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .medium))!
                         ),
                         CGSize(width: 16, height: 16)
                     )),
@@ -151,8 +150,7 @@ extension RichTextDemoVC: UITableViewDataSource, UITableViewDelegate {
                 phoneURL: phoneURL,
                 // 附件示例
                 attachmentRuns: [
-                    JobsRichRun(.attachment(NSTextAttachment().byImage(UIImage(systemName: "paperclip",
-                                                                               withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .medium))!),
+                    JobsRichRun(.attachment(NSTextAttachment().byImage(UIImage(systemName: "paperclip", withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .medium))!),
                                             CGSize(width: 16, height: 16))),
                     JobsRichRun(.text("  附件说明"))
                         .font(.systemFont(ofSize: 15))

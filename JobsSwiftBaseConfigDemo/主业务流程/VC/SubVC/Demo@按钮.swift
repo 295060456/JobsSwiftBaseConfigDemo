@@ -68,10 +68,10 @@ final class UIButtonDemoVC: BaseVC {
                 .onTap { _ in print("基础链式 tapped") }
 
             if #available(iOS 13.0, *) {
-                let img = UIImage(systemName: "bolt.fill")
-                _ = btnBasic.byImage(img, for: .normal)
+                _ = btnBasic.byImage("bolt.fill".sysImg, for: .normal)
                     .byTintColor(.white)
-                    .for(.normal).preferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold))
+                    .for(.normal)
+                    .preferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold))
             }
 
             stack.addArrangedSubview(btnBasic)
@@ -128,7 +128,7 @@ final class UIButtonDemoVC: BaseVC {
                 .byContentEdgeInsets(UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12))
 
             if #available(iOS 13.0, *) {
-                _ = btnPlacement.byImage(UIImage(systemName: "arrow.right.circle.fill"), for: .normal)
+                _ = btnPlacement.byImage("arrow.right.circle.fill".sysImg, for: .normal)
                     .byTintColor(.white)
             }
             _ = btnPlacement.byImagePlacement(.trailing, padding: 8)
@@ -158,9 +158,9 @@ final class UIButtonDemoVC: BaseVC {
 
             if #available(iOS 14.0, *) {
                 let items: [UIAction] = [
-                    UIAction(title: "复制", image: UIImage(systemName: "doc.on.doc")) { _ in print("复制") },
-                    UIAction(title: "分享", image: UIImage(systemName: "square.and.arrow.up")) { _ in print("分享") },
-                    UIAction(title: "删除", image: UIImage(systemName: "trash"), attributes: .destructive) { _ in print("删除") }
+                    UIAction(title: "复制", image: "doc.on.doc".sysImg) { _ in print("复制") },
+                    UIAction(title: "分享", image: "square.and.arrow.up".sysImg) { _ in print("分享") },
+                    UIAction(title: "删除", image: "trash".sysImg, attributes: .destructive) { _ in print("删除") }
                 ]
                 _ = btnMenu.byMenu(UIMenu(title: "操作", children: items))
                     .byShowsMenuAsPrimaryAction(true)
@@ -252,7 +252,7 @@ final class UIButtonDemoVC: BaseVC {
                 }
 
             if #available(iOS 13.0, *) {
-                _ = btnRotate.byImage(UIImage(systemName: "arrow.2.circlepath.circle.fill"), for: .normal)
+                _ = btnRotate.byImage("arrow.2.circlepath.circle.fill".sysImg, for: .normal)
                     .byTintColor(.white)
             }
             stack.addArrangedSubview(btnRotate)
@@ -292,7 +292,7 @@ final class UIButtonDemoVC: BaseVC {
                 .byContentEdgeInsets(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
 
             if #available(iOS 13.0, *) {
-                _ = btnSymbol.byImage(UIImage(systemName: "star.fill"), for: .normal)
+                _ = btnSymbol.byImage("star.fill".sysImg, for: .normal)
                     .byTintColor(.white)
                     .for(.normal).preferredSymbolConfiguration(.init(pointSize: 16, weight: .regular))
                     .for(.highlighted).preferredSymbolConfiguration(.init(pointSize: 20, weight: .bold))

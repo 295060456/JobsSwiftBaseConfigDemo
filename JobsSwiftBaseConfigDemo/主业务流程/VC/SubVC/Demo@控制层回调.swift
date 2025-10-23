@@ -91,29 +91,30 @@ final class JobsControlEventsDemoVC: BaseVC {
     // MARK: - 26.2 在 UIButton 层的演示（保留原有 onTap）
     private func demo_Button_onTap() {
         addSectionTitle("26.2 🔘 UIButton：onTap（UIButton 专属 UIAction）")
-        stack.addArrangedSubview(UIButton(type: .system)
-                                 // 普通文字：未选中状态标题
-                                 .byTitle("显示", for: .normal)
-                                 // 选中状态标题
-                                 .byTitle("隐藏", for: .selected)
-                                 // 文字颜色：区分状态
-                                 .byTitleColor(.systemBlue, for: .normal)
-                                 .byTitleColor(.systemRed, for: .selected)
-                                 // 字体统一
-                                 .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
-                                 // 图标（SF Symbol）
-                                 .byImage(UIImage(systemName: "eye.slash"), for: .normal)   // 未选中图标
-                                 .byImage(UIImage(systemName: "eye"), for: .selected)       // 选中图标
-                                 // 图文内边距
-                                 .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
-                                 // 图标与文字间距
-                                 .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
-                                 // 点按事件（统一入口）
-                                 .onTap { [weak self] btn in
-                                     guard let self else { return }
-                                     btn.isSelected.toggle()                  // 切换选中状态
-                                     print("👁")
-                                 })
+        stack.addArrangedSubview(
+            UIButton(type: .system)
+                // 普通文字：未选中状态标题
+                .byTitle("显示", for: .normal)
+                // 选中状态标题
+                .byTitle("隐藏", for: .selected)
+                // 文字颜色：区分状态
+                .byTitleColor(.systemBlue, for: .normal)
+                .byTitleColor(.systemRed, for: .selected)
+                // 字体统一
+                .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+                // 图标（SF Symbol）
+                .byImage("eye.slash".sysImg, for: .normal)   // 未选中图标
+                .byImage("eye".sysImg, for: .selected)       // 选中图标
+                // 图文内边距
+                .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+                // 图标与文字间距
+                .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+                // 点按事件（统一入口）
+                .onTap { [weak self] btn in
+                    guard let self else { return }
+                    btn.isSelected.toggle()                  // 切换选中状态
+                    print("👁")
+                })
     }
     // MARK: - Helpers
     private func addSectionTitle(_ text: String) {

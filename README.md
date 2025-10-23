@@ -1994,7 +1994,7 @@ required init?(coder: NSCoder) {
 
 ```swift
 private lazy var exampleButton: UIButton = {
-    UIButton(type: .system)
+    UIButton.sys()
         /// 普通字符串@设置主标题
         .byTitle("显示", for: .normal)
         .byTitle("隐藏", for: .selected)
@@ -2074,7 +2074,7 @@ private lazy var exampleButton: UIButton = {
   ```swift
   /// 按钮网络背景图@SDWebImage
   private lazy var btnBG: UIButton = {
-      UIButton(type: .system)
+      UIButton.sys()
           .byCornerRadius(12)
           .byClipsToBounds(true)
           .byTitle("我是主标题@SDWebImage")
@@ -2095,7 +2095,7 @@ private lazy var exampleButton: UIButton = {
   ```swift
   /// 按钮网络前景图@SDWebImage
   private lazy var btnImage: UIButton = {
-      UIButton(type: .system)
+      UIButton.sys()
           .byCornerRadius(12)
           .byBorderWidth(1)
           .byBorderColor(UIColor.systemGray3)
@@ -2120,7 +2120,7 @@ private lazy var exampleButton: UIButton = {
   ```swift
   /// 按钮网络背景图@Kingfisher
   private lazy var btnBG_KF: UIButton = {
-      UIButton(type: .system)
+      UIButton.sys()
           .byCornerRadius(12)
           .byClipsToBounds(true)
           .byTitle("我是主标题@Kingfisher")
@@ -2147,7 +2147,7 @@ private lazy var exampleButton: UIButton = {
   ```swift
   /// 按钮网络前景图@Kingfisher
   private lazy var btnImage_KF: UIButton = {
-      UIButton(type: .system)
+      UIButton.sys()
           .byCornerRadius(12)
           .byBorderWidth(1)
           .byBorderColor(UIColor.systemGray3)
@@ -2179,7 +2179,7 @@ private lazy var exampleButton: UIButton = {
 
 ```swift
 private lazy var suspendBtn: UIButton = {
-    UIButton(type: .system)
+    UIButton.sys()
         .byTitle("开始", for: .normal)
         .byTitleFont(.systemFont(ofSize: 22, weight: .bold))
         .byTitleColor(.white, for: .normal)
@@ -2292,10 +2292,11 @@ private lazy var tableView: UITableView = {
                 print("✅ 下拉刷新完成")
             }
         }, config: { animator in
-            animator.idleDescription = "下拉刷新"
-            animator.releaseToRefreshDescription = "松开立即刷新"
-            animator.loadingDescription = "正在刷新中..."
-            animator.noMoreDataDescription = "已经是最新数据"
+            animator
+                .byIdleDescription("Jobs@下拉刷新")
+                .byReleaseToRefreshDescription("Jobs@松开立即刷新")
+                .byLoadingDescription("Jobs@正在刷新中...")
+                .byNoMoreDataDescription("Jobs@已经是最新数据")
         })
         // 上拉加载（自定义 JobsFooterAnimator）
         .pullUpWithJobsAnimator({ [weak self] in
@@ -2310,10 +2311,11 @@ private lazy var tableView: UITableView = {
                 print("✅ 上拉加载完成")
             }
         }, config: { animator in
-            animator.idleDescription = "上拉加载更多"
-            animator.releaseToRefreshDescription = "松开立即加载"
-            animator.loadingMoreDescription = "加载中..."
-            animator.noMoreDataDescription = "已经到底了～"
+            animator
+                .byIdleDescription("Jobs@上拉加载更多")
+                .byReleaseToRefreshDescription("Jobs@松开立即加载")
+                .byLoadingMoreDescription("Jobs@加载中…")
+                .byNoMoreDataDescription("Jobs@没有更多数据")
         })
         .byAddTo(view) { make in
             make.edges.equalToSuperview()
@@ -2323,9 +2325,172 @@ private lazy var tableView: UITableView = {
 
 ### 11、`UICollectionView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-```swift
-/// TODO
-```
+* **`UICollectionViewFlowLayout`**
+
+  ```swift
+  private lazy var flowLayout: UICollectionViewFlowLayout = {
+      UICollectionViewFlowLayout()
+          .byScrollDirection(.vertical)
+          .byMinimumLineSpacing(10)
+          .byMinimumInteritemSpacing(10)
+          .bySectionInset(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
+  }()
+  ```
+
+* **`UICollectionView`**
+
+  ```swift
+  private lazy var collectionView: UICollectionView = {
+      UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+          .byDataSource(self)
+          .byDelegate(self)
+          .registerCell(UICollectionViewCell.self)
+          .byBackgroundView(nil)
+          .byDragInteractionEnabled(false)
+  
+          // 空态按钮（与 UITableView Demo 一致）
+          .jobs_emptyButtonProvider { [unowned self] in
+              UIButton.sys()
+                  .byTitle("暂无数据", for: .normal)
+                  .bySubTitle("点我填充示例数据", for: .normal)
+                  .byImage(UIImage(systemName: "square.grid.2x2"), for: .normal)
+                  .byImagePlacement(.top)
+                  .onTap { [weak self] _ in
+                      guard let self else { return }
+                      self.items = (1...12).map { "Item \($0)" }
+                      self.collectionView.byReloadData()        // ✅ reload 后自动评估空态
+                  }
+                  // 可选：自定义空态按钮布局
+                  .jobs_setEmptyLayout { btn, make, host in
+                      make.centerX.equalTo(host)
+                      make.centerY.equalTo(host).offset(-40)
+                      make.leading.greaterThanOrEqualTo(host).offset(16)
+                      make.trailing.lessThanOrEqualTo(host).inset(16)
+                      make.width.lessThanOrEqualTo(host).multipliedBy(0.9)
+                  }
+          }
+  
+          // 下拉刷新（JobsHeaderAnimator）
+          .pullDownWithJobsAnimator({ [weak self] in
+              guard let self = self, !self.isPullRefreshing else { return }
+              self.isPullRefreshing = true
+              print("⬇️ 下拉刷新触发")
+  
+              DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                  if self.items.isEmpty {
+                      self.items = (1...12).map { "Item \($0)" }
+                  } else {
+                      self.items.shuffle()
+                  }
+                  self.isPullRefreshing = false
+                  self.collectionView.byReloadData()
+                  self.collectionView.pullDownStop()
+                  self.updateFooterAvailability()
+                  self.collectionView.jobs_reloadEmptyViewAuto()
+                  print("✅ 下拉刷新完成")
+              }
+          }, config: { animator in
+              animator
+                  .byIdleDescription("Jobs@下拉刷新")
+                  .byReleaseToRefreshDescription("Jobs@松开立即刷新")
+                  .byLoadingDescription("Jobs@正在刷新中…")
+                  .byNoMoreDataDescription("Jobs@已经是最新数据")
+          })
+  
+          // 上拉加载（JobsFooterAnimator）
+          .pullUpWithJobsAnimator({ [weak self] in
+              guard let self = self, !self.isLoadingMore else { return }
+              self.isLoadingMore = true
+              print("⬆️ 上拉加载触发")
+  
+              DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                  let base = self.items.count
+                  self.items += (1...8).map { "Item \(base + $0)" }
+  
+                  self.isLoadingMore = false
+                  self.collectionView.byReloadData()
+                  self.collectionView.pullUpStop()
+                  self.updateFooterAvailability()
+                  self.collectionView.jobs_reloadEmptyViewAuto()
+                  print("✅ 上拉加载完成")
+              }
+          }, config: { animator in
+              animator
+                  .byIdleDescription("Jobs@上拉加载更多")
+                  .byReleaseToRefreshDescription("Jobs@松开立即加载")
+                  .byLoadingMoreDescription("Jobs@加载中…")
+                  .byNoMoreDataDescription("Jobs@没有更多数据")
+          })
+  
+          .byAddTo(view) { [unowned self] make in
+              if view.jobs_hasVisibleTopBar() {
+                  make.top.equalTo(self.gk_navigationBar.snp.bottom).offset(10)
+                  make.left.right.bottom.equalToSuperview()
+              } else {
+                  make.edges.equalToSuperview()
+              }
+          }
+  }()
+  ```
+
+* 协议：**`UICollectionViewDataSource`**、**`UICollectionViewDelegate`**、**`UICollectionViewDelegateFlowLayout`**
+
+  ```swift
+  // ============================== UICollectionViewDataSource ==============================
+  func numberOfSections(in collectionView: UICollectionView) -> Int { 1 }
+  
+  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+      items.count
+  }
+  
+  func collectionView(_ collectionView: UICollectionView,
+                      cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+      let cell: UICollectionViewCell = collectionView.dequeueCell(UICollectionViewCell.self, for: indexPath)
+      let label: UILabel
+      if let exist = cell.contentView.viewWithTag(1001) as? UILabel {
+          label = exist
+      } else {
+          label = UILabel()
+              .byNumberOfLines(1)
+              .byTextAlignment(.center)
+              .byFont(.systemFont(ofSize: 16, weight: .medium))
+              .byTextColor(.label)
+              .byTag(1001)
+              .byAddTo(cell.contentView) { make in     // ✅ 加到 contentView
+                  make.edges.equalToSuperview().inset(8)
+              }
+  
+          // 背景 & 圆角（只需设一次）
+          cell.contentView.byBgColor(.secondarySystemBackground)
+              .byCornerRadius(10)
+              .byMasksToBounds(true)
+      }
+  
+      label.text = items[indexPath.item]
+      return cell
+  }
+  // ============================== UICollectionViewDelegate ==============================
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+      print("✅ didSelect Item: \(indexPath.item)")
+      collectionView.deselectItem(at: indexPath, animated: true)
+  }
+  
+  // ============================== UICollectionViewDelegateFlowLayout ==============================
+  func collectionView(_ collectionView: UICollectionView,
+                      layout collectionViewLayout: UICollectionViewLayout,
+                      sizeForItemAt indexPath: IndexPath) -> CGSize {
+      // 计算 2 列卡片宽度（考虑 sectionInset / interItemSpacing）
+      guard let layout = collectionViewLayout as? UICollectionViewFlowLayout else {
+          return CGSize(width: 100, height: 60)
+      }
+      let inset = layout.sectionInset
+      let spacing = layout.minimumInteritemSpacing
+      let columns: CGFloat = 2
+      let totalH = inset.left + inset.right + (columns - 1) * spacing
+      let w = floor((collectionView.bounds.width - totalH) / columns)
+      return CGSize(width: w, height: 64)
+  }
+  ```
 
 ### 12、✍️`UITextField` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -3606,15 +3771,69 @@ private lazy var passwordAccessory: UIToolbar = {
   
   override func viewDidLoad() {
       super.viewDidLoad()
-      jobsSetupGKNav(
-  				title: "Demo 列表",
-  				leftSymbol: "list.bullet",
-  				rightButtons: [
-  						("moon.circle.fill", .systemIndigo, { [weak self] in self?.toggleTheme() }),
-  						("globe", .systemGreen, { [weak self] in self?.toggleLanguage() }),
-  						("stop.circle.fill", .systemRed, { [weak self] in self?.stopRefreshing() })
-  				]
-  		)
+          jobsSetupGKNav(
+              title: "Demo 列表",
+              leftButton:UIButton.sys()
+                  .byFrame(CGRect(x: 0, y: 0, width: 32.w, height: 32.h))
+                  /// 按钮图片@图文关系
+                  .byImage(UIImage(systemName: "list.bullet"), for: .normal)
+                  .byImage(UIImage(systemName: "list.bullet"), for: .selected)
+                  /// 事件触发@点按
+                  .onTap { [weak self] sender in
+                      guard let self else { return }
+                      sender.isSelected.toggle()
+                      debugOnly {  // 仅 Debug 执行
+                          JobsToast.show(
+                              text: "点按了列表按钮",
+                              config: JobsToast.Config()
+                                  .byBgColor(.systemGreen.withAlphaComponent(0.9))
+                                  .byCornerRadius(12)
+                          )
+                      }
+                  }
+                  /// 事件触发@长按
+                  .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+                       if gr.state == .began {
+                           btn.alpha = 0.6
+                           print("长按开始 on \(btn)")
+                       } else if gr.state == .ended || gr.state == .cancelled {
+                           btn.alpha = 1.0
+                           print("长按结束")
+                       }
+                  },
+              rightButtons: [
+                  UIButton.sys()
+                      /// 按钮图片@图文关系
+                      .byImage(UIImage(systemName: "moon.circle.fill"), for: .normal)
+                      .byImage(UIImage(systemName: "moon.circle.fill"), for: .selected)
+                      /// 事件触发@点按
+                      .onTap { [weak self] sender in
+                          guard let self else { return }
+                          sender.isSelected.toggle()
+                          print("🌓 主题已切换 -> \(win.overrideUserInterfaceStyle == .dark ? "Dark" : "Light")")
+                      },
+                  UIButton.sys()
+                      /// 按钮图片@图文关系
+                      .byImage(UIImage(systemName: "globe"), for: .normal)
+                      .byImage(UIImage(systemName: "globe"), for: .selected)
+                      /// 事件触发@点按
+                      .onTap { [weak self] sender in
+                          guard let self else { return }
+                          sender.isSelected.toggle()
+                          print("🌐 切换语言 tapped（占位）")
+                      },
+                  UIButton.sys()
+                      /// 按钮图片@图文关系
+                      .byImage(UIImage(systemName: "stop.circle.fill"), for: .normal)
+                      .byImage(UIImage(systemName: "stop.circle.fill"), for: .selected)
+                      /// 事件触发@点按
+                      .onTap { [weak self] sender in
+                          guard let self else { return }
+                          sender.isSelected.toggle()
+                          print("🛑 手动停止刷新")
+                      }
+              ]
+          )
   }
   ```
 
@@ -3931,7 +4150,7 @@ let button = UIButton(type: .system)
     }
 ```
 
-### 30、启动检测 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 30、🌡️ 启动检测 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 AppLaunchManager.handleLaunch(
@@ -4030,9 +4249,9 @@ AppLaunchManager.handleLaunch(
   // 📘 说明：附加字体与颜色属性
   ```
 
-#### 31.2、[**字符串加载图片资源**](#字符串加载图片资源) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 31.2、🍡 [**字符串加载图片资源**](#字符串加载图片资源) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 31.3、字符串打开 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 31.3、🍡 字符串打开 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 打开网站 / **`Scheme`**（带参）
 
@@ -5634,60 +5853,9 @@ log("Hello")  // 自动变成 { "Hello" }
   let names = [User(name:"A"), User(name:"B")].map(\.name)
   ```
 
-#### 4.4、⛑️ <font>避免循环引用（强持有）</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 4.4、[**避免循环引用**](#避免循环引用) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-> 在 [**Swift**](https://developer.apple.com/swift/)  里，<font color=red>**闭包（block）默认会强引用 `self`**</font>。如果闭包被 `self` 持有，就会形成循环引用
-
-| 写法             | 特点                                                         |
-| ---------------- | ------------------------------------------------------------ |
-| `[weak self]`    | 安全，不会崩溃；需要解包；推荐常用                           |
-| `[unowned self]` | 更简洁，但不安全；适用于生命周期有保证的情况<br>`unowned` 不需要可选解包，比 `weak` 快一点（一般忽略不计） |
-
-```mermaid
-flowchart TD
-  A["是否在闭包中捕获 self"] -->|否| Z["不用处理"]
-  A -->|是| B{"闭包与 self 的生命周期关系"}
-
-  B -->|可能更长| C["用 weak self安全，不会崩溃"]
-  B -->|不更长| D["用 unowned self需确保存在"]
-
-  C --> E{"闭包内是否频繁使用 self"}
-  D --> E
-
-  E -->|需要| F["guard let self = self else return强引用后再用"]
-  E -->|不需要| G["self?.method()可选链调用"]
-
-  C --> H["场景: 网络请求 / GCD / 计时器"]
-  D --> I["场景: 初始化闭包 / UIView.animate"]
-```
-
-*  `self` 弱引用
-
-  👉[**弱引用的等价写法**](#弱引用的等价写法)
-
-  ```swift
-  /// [weak self]：在闭包中捕获 self 的弱引用，不会增加引用计数。
-  /// guard let `self` = self else { return }：解包 self，如果对象已释放则直接退出闭包。
-  /// 闭包内部再用 self，就是解包之后的强引用了，避免了 retain cycle。
-  someAsyncOperation { [weak self] in
-      guard let `self` = self else { return }// 固定写法（推荐）语义清晰
-      self.doSomething()// 或者 self?.doSomething()
-  }
-  ```
-
-*  `self` 无主引用（有时 `self` 的生命周期保证比闭包长，可以用 `[unowned self]`）
-
-  > ❌ 不要滥用 `[unowned self]`，一旦生命周期判断错了，会 **直接崩溃**。
-
-  ```swift
-  /// unowned 不会增加引用计数，也不需要解包。
-  /// 但如果 self 已经释放，再调用就会 野指针崩溃。
-  someAsyncOperation { [unowned self] in
-      self.doSomething()
-  }
-  ```
-
-### 5、[**Swift**](https://developer.apple.com/swift/) 运算符重载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 5、[**Swift**](https://developer.apple.com/swift/) 运算符重载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ 运算符重载本质就是函数调用，性能没有特别损耗
 >
@@ -5912,7 +6080,9 @@ let p: P = S()
 p.foo()   // witness table 派发
 ```
 
-### 8、`joined()` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 8、[**Swift**](https://developer.apple.com/swift/) 高阶函数<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 8.1、`joined()` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 正常拼接
 
@@ -6433,7 +6603,7 @@ class DisplayDriver {
   }
   ```
 
-### 13、`Subscript` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 13、`Subscript`（TODO） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 14、<font color=red>**`inout`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -8561,7 +8731,60 @@ Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS
   let ok     = ##"真的插值：\##(id)"##  // 两个 #，插值也用两 # 匹配
   ```
 
-### 23、<font color=red id=COW>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite（先共享，写的时候才真正拷贝）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 23、⛑️ <font id=避免循环引用>`[weak self]` 🆚 `[unowned self]`</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> **避免循环引用（强持有）**：在 [**Swift**](https://developer.apple.com/swift/)  里，<font color=red>**闭包（block）默认会强引用 `self`**</font>。如果闭包被 `self` 持有，就会形成循环引用
+
+| 写法             | 特点                                                         |
+| ---------------- | ------------------------------------------------------------ |
+| `[weak self]`    | 安全，不会崩溃；需要解包；推荐常用                           |
+| `[unowned self]` | 更简洁，但不安全；适用于生命周期有保证的情况<br>`unowned` 不需要可选解包，比 `weak` 快一点（一般忽略不计） |
+
+```mermaid
+flowchart TD
+  A["是否在闭包中捕获 self"] -->|否| Z["不用处理"]
+  A -->|是| B{"闭包与 self 的生命周期关系"}
+
+  B -->|可能更长| C["用 weak self安全，不会崩溃"]
+  B -->|不更长| D["用 unowned self需确保存在"]
+
+  C --> E{"闭包内是否频繁使用 self"}
+  D --> E
+
+  E -->|需要| F["guard let self = self else return强引用后再用"]
+  E -->|不需要| G["self?.method()可选链调用"]
+
+  C --> H["场景: 网络请求 / GCD / 计时器"]
+  D --> I["场景: 初始化闭包 / UIView.animate"]
+```
+
+* `self` 弱引用
+
+  👉[**弱引用的等价写法**](#弱引用的等价写法)
+
+  ```swift
+  /// [weak self]：在闭包中捕获 self 的弱引用，不会增加引用计数。
+  /// guard let `self` = self else { return }：解包 self，如果对象已释放则直接退出闭包。
+  /// 闭包内部再用 self，就是解包之后的强引用了，避免了 retain cycle。
+  someAsyncOperation { [weak self] in
+      guard let `self` = self else { return }// 固定写法（推荐）语义清晰
+      self.doSomething()// 或者 self?.doSomething()
+  }
+  ```
+
+* `self` 无主引用（有时 `self` 的生命周期保证比闭包长，可以用 `[unowned self]`）
+
+  > ❌ 不要滥用 `[unowned self]`，一旦生命周期判断错了，会 **直接崩溃**。
+
+  ```swift
+  /// unowned 不会增加引用计数，也不需要解包。
+  /// 但如果 self 已经释放，再调用就会 野指针崩溃。
+  someAsyncOperation { [unowned self] in
+      self.doSomething()
+  }
+  ```
+
+### 24、<font color=red id=COW>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite（先共享，写的时候才真正拷贝）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > * **定义**：当你复制一个值类型的时候，[**Swift**](https://developer.apple.com/swift/) 不会立即复制它的底层存储，而是让两个变量共享同一块内存
 > * **触发拷贝的时机**：一旦其中一个变量尝试 **写入（修改）** 数据，[**Swift**](https://developer.apple.com/swift/) 才会真正复制一份新的内存，以保证<u>值语义</u>的正确性

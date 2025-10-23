@@ -12,9 +12,8 @@
 #if os(iOS) || os(tvOS)
     import UIKit
 #endif
+
 import ObjectiveC
-import SnapKit
-import ESPullToRefresh
 // MARK: - 🍬语法糖@注册：UITableViewCell、HeaderFooterView、HeaderFooterView
 extension UITableView {
     @discardableResult
@@ -56,7 +55,7 @@ extension UITableView {
         return self
     }
 }
-// MARK: - 🍬语法糖@数据源
+// MARK: - 🍬语法糖@数据源和代理
 extension UITableView {
     @discardableResult
     public func byDelegate(_ delegate: UITableViewDelegate) -> Self {
@@ -67,6 +66,27 @@ extension UITableView {
     @discardableResult
     public func byDataSource(_ dataSource: UITableViewDataSource) -> Self {
         self.dataSource = dataSource
+        return self
+    }
+    // MARK: - iOS 10.0+ 预取数据源
+    @available(iOS 10.0, *)
+    @discardableResult
+    public func byPrefetchDataSource(_ ds: UITableViewDataSourcePrefetching?) -> Self {
+        self.prefetchDataSource = ds
+        return self
+    }
+    // MARK: - iOS 11.0+ 拖拽代理
+    @available(iOS 11.0, *)
+    @discardableResult
+    public func byDragDelegate(_ delegate: UITableViewDragDelegate?) -> Self {
+        self.dragDelegate = delegate
+        return self
+    }
+    // MARK: - iOS 11.0+ 放置代理
+    @available(iOS 11.0, *)
+    @discardableResult
+    public func byDropDelegate(_ delegate: UITableViewDropDelegate?) -> Self {
+        self.dropDelegate = delegate
         return self
     }
 }
@@ -164,108 +184,7 @@ extension UITableView {
 
         cell.backgroundView = backgroundView
     }
-}
-// MARK: - UITableView@空数据源占位图
-private var tableEmptyViewKey: Void?
-extension UITableView {
-    // MARK: - 关联的空视图
-    private var jobs_emptyView: UIView? {
-        get { objc_getAssociatedObject(self, &tableEmptyViewKey) as? UIView }
-        set {
-            // 移除旧视图
-            (objc_getAssociatedObject(self, &tableEmptyViewKey) as? UIView)?.removeFromSuperview()
-
-            if let view = newValue {
-                addSubview(view)
-                // 先清掉可能遗留的约束，再重建
-                view.snp.removeConstraints()
-                // 居中 + 宽度自适应（<= 父视图 90%），并尽量不贴边
-                view.snp.makeConstraints { make in
-                    make.center.equalToSuperview()
-                    make.width.lessThanOrEqualToSuperview().multipliedBy(0.9)
-                    make.leading.greaterThanOrEqualToSuperview().offset(16)
-                    make.trailing.lessThanOrEqualToSuperview().inset(16)
-                }
-            }
-            objc_setAssociatedObject(self,
-                                     &tableEmptyViewKey,
-                                     newValue,
-                .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    // MARK: - 设置空视图
-    @discardableResult
-    public func jobs_setEmptyView(_ view: UIView?) -> Self {
-        self.jobs_emptyView = view
-        return self
-    }
-    // MARK: - 手动指定计数刷新
-    @discardableResult
-    public func jobs_reloadEmptyView(rowCount: Int, sectionCount: Int = 1) -> Self {
-        let isEmpty = (sectionCount == 0) || (rowCount == 0)
-        self.jobs_emptyView?.isHidden = !isEmpty
-        return self
-    }
-    // MARK: - 自动统计全表数据行数刷新（可选增强）
-    /// 无需手算 rowCount：遍历 dataSource 的所有 section/row 自动判断
-    @discardableResult
-    public func jobs_reloadEmptyViewAuto() -> Self {
-        guard let ds = dataSource else {
-            self.jobs_emptyView?.isHidden = false
-            return self
-        }
-        let sections = ds.numberOfSections?(in: self) ?? 1
-        var totalRows = 0
-        for s in 0..<sections {
-            totalRows += ds.tableView(self, numberOfRowsInSection: s)
-            if totalRows > 0 { break } // 早退出
-        }
-        let isEmpty = (sections == 0) || (totalRows == 0)
-        self.jobs_emptyView?.isHidden = !isEmpty
-        return self
-    }
-}
-// MARK: - DataSource / Delegate Plus
-extension UITableView {
-    // MARK: - iOS 10.0+ 预取数据源
-    @available(iOS 10.0, *)
-    @discardableResult
-    public func byPrefetchDataSource(_ ds: UITableViewDataSourcePrefetching?) -> Self {
-        self.prefetchDataSource = ds
-        return self
-    }
-    // MARK: - iOS 15.0+ 是否启用预取
-    @available(iOS 15.0, *)
-    @discardableResult
-    public func byPrefetchingEnabled(_ enabled: Bool) -> Self {
-        self.isPrefetchingEnabled = enabled
-        return self
-    }
-    // MARK: - iOS 11.0+ 拖拽代理
-    @available(iOS 11.0, *)
-    @discardableResult
-    public func byDragDelegate(_ delegate: UITableViewDragDelegate?) -> Self {
-        self.dragDelegate = delegate
-        return self
-    }
-    // MARK: - iOS 11.0+ 放置代理
-    @available(iOS 11.0, *)
-    @discardableResult
-    public func byDropDelegate(_ delegate: UITableViewDropDelegate?) -> Self {
-        self.dropDelegate = delegate
-        return self
-    }
-    // MARK: - iOS 11.0+ 是否允许拖拽交互
-    @available(iOS 11.0, *)
-    @discardableResult
-    public func byDragInteractionEnabled(_ enabled: Bool) -> Self {
-        self.dragInteractionEnabled = enabled
-        return self
-    }
-}
-// MARK: - Heights & Insets
-extension UITableView {
-
+    // MARK: - Heights & Insets
     @discardableResult
     public func bySectionHeaderHeight(_ h: CGFloat) -> Self {
         self.sectionHeaderHeight = h
@@ -339,28 +258,13 @@ extension UITableView {
         self.insetsContentViewsToSafeArea = enable
         return self
     }
-}
-// MARK: - Background / Context Menu
-extension UITableView {
 
     @discardableResult
     public func byBackgroundView(_ view: UIView?) -> Self {
         self.backgroundView = view
         return self
     }
-    /// iOS 14.0+ 配置 contextMenuInteraction（只读属性，提供配置闭包）
-    @available(iOS 14.0, *)
-    @discardableResult
-    public func byContextMenuInteraction(_ config: (UIContextMenuInteraction) -> Void) -> Self {
-        if let interaction = self.contextMenuInteraction {
-            config(interaction)
-        }
-        return self
-    }
-}
-// MARK: - Separator & Layout Margins
-extension UITableView {
-
+    // MARK: - Separator & Layout Margins
     @discardableResult
     public func bySeparatorColor(_ color: UIColor?) -> Self {
         self.separatorColor = color
@@ -380,10 +284,7 @@ extension UITableView {
         self.cellLayoutMarginsFollowReadableWidth = follow
         return self
     }
-}
-// MARK: - Selection / Focus / Editing
-extension UITableView {
-
+    // MARK: - Selection / Focus / Editing
     @discardableResult
     public func byAllowsSelection(_ allow: Bool) -> Self {
         self.allowsSelection = allow
@@ -481,24 +382,7 @@ extension UITableView {
         self.deselectRow(at: indexPath, animated: animated)
         return self
     }
-}
-// MARK: - Scrolling Helpers
-extension UITableView {
-
-    @discardableResult
-    public func byScrollToRow(_ indexPath: IndexPath, at position: UITableView.ScrollPosition, animated: Bool = true) -> Self {
-        self.scrollToRow(at: indexPath, at: position, animated: animated)
-        return self
-    }
-
-    @discardableResult
-    public func byScrollToNearestSelectedRow(at position: UITableView.ScrollPosition, animated: Bool = true) -> Self {
-        self.scrollToNearestSelectedRow(at: position, animated: animated)
-        return self
-    }
-}
-// MARK: - Batch Updates & Reload APIs
-extension UITableView {
+    // MARK: - Batch Updates & Reload APIs
     /// iOS 11.0+
     @available(iOS 11.0, *)
     @discardableResult
@@ -590,9 +474,6 @@ extension UITableView {
         self.reloadSectionIndexTitles()
         return self
     }
-}
-// MARK: - iOS 18.0+ Content Hugging Elements
-extension UITableView {
     /// iOS 18.0+ 内容 Hugging 策略
     @available(iOS 18.0, *)
     @discardableResult
@@ -601,367 +482,55 @@ extension UITableView {
         return self
     }
 }
-// MARK: - Jobs Refresh Extension
-public extension UITableView {
-    // MARK: - 下拉刷新（Pull Down）
-    /// 安装下拉刷新（默认 ESRefreshHeaderAnimator）
+// MARK: - 🍬语法糖@滚动相关
+extension UITableView {
+
     @discardableResult
-    func pullDown(_ action: @escaping () -> Void,
-                  config: ((ESRefreshHeaderAnimator) -> Void)? = nil) -> Self {
-        if self.header == nil {
-            let animator = ESRefreshHeaderAnimator()
-            config?(animator)
-            let header = ESRefreshHeaderView(frame: .zero, handler: action, animator: animator)
-            let headerH = animator.executeIncremental
-            header.frame = CGRect(x: 0, y: -headerH, width: self.bounds.width, height: headerH)
-            self.addSubview(header)
-            self.header = header
+    public func byScrollToRow(_ indexPath: IndexPath, at position: UITableView.ScrollPosition, animated: Bool = true) -> Self {
+        self.scrollToRow(at: indexPath, at: position, animated: animated)
+        return self
+    }
+
+    @discardableResult
+    public func byScrollToNearestSelectedRow(at position: UITableView.ScrollPosition, animated: Bool = true) -> Self {
+        self.scrollToNearestSelectedRow(at: position, animated: animated)
+        return self
+    }
+}
+// MARK: - 🍬语法糖@其他
+extension UITableView {
+    // MARK: - iOS 15.0+ 是否启用预取
+    @available(iOS 15.0, *)
+    @discardableResult
+    public func byPrefetchingEnabled(_ enabled: Bool) -> Self {
+        self.isPrefetchingEnabled = enabled
+        return self
+    }
+    // MARK: - iOS 11.0+ 是否允许拖拽交互
+    @available(iOS 11.0, *)
+    @discardableResult
+    public func byDragInteractionEnabled(_ enabled: Bool) -> Self {
+        self.dragInteractionEnabled = enabled
+        return self
+    }
+    // MARK: - iOS 14.0+ 配置 contextMenuInteraction（只读属性，提供配置闭包）
+    @available(iOS 14.0, *)
+    @discardableResult
+    public func byContextMenuInteraction(_ config: (UIContextMenuInteraction) -> Void) -> Self {
+        if let interaction = self.contextMenuInteraction {
+            config(interaction)
         }
         return self
     }
-    /// 安装下拉刷新（JobsHeaderAnimator 自定义样式）
-    @discardableResult
-    func pullDownWithJobsAnimator(_ action: @escaping () -> Void,
-                                  config: ((JobsHeaderAnimator) -> Void)? = nil) -> Self {
-        if self.header == nil {
-            let animator = JobsHeaderAnimator()
-            config?(animator)
-            let header = ESRefreshHeaderView(frame: .zero, handler: action, animator: animator)
-            let headerH = animator.executeIncremental
-            header.frame = CGRect(x: 0, y: -headerH, width: self.bounds.width, height: headerH)
-            self.addSubview(header)
-            self.header = header
-        }
-        return self
-    }
-    /// 过期自动刷新
-    @discardableResult
-    func pullDownAutoIfExpired() -> Self {
-        if let key = self.header?.refreshIdentifier, JobsRefreshCache.isExpired(forKey: key) {
-            DispatchQueue.main.async { [weak self] in
-                self?.header?.startRefreshing(isAuto: true)
-            }
-        }
-        return self
-    }
-    /// 停止下拉刷新
-    @discardableResult
-    func pullDownStop(ignoreDate: Bool = false, ignoreFooter: Bool = false) -> Self {
-        self.header?.stopRefreshing()
-        if ignoreDate == false, let key = self.header?.refreshIdentifier {
-            JobsRefreshCache.setDate(Date(), forKey: key) // ✅ 自家缓存
-        }
-        self.footer?.isHidden = ignoreFooter
-        return self
-    }
-    /// 手动触发下拉刷新
-    @discardableResult
-    func pullDownStart(auto: Bool = false) -> Self {
+}
+// MARK: - UITableView@空数据源占位图
+/// 被交换的方法实现（调用原方法后自动评估空态）
+extension UITableView {
+    @objc dynamic func jobs_swizzled_reloadData() {
+        self.jobs_swizzled_reloadData()        // 原始实现
         DispatchQueue.main.async { [weak self] in
-            if auto { self?.header?.startRefreshing(isAuto: true) }
-            else { self?.header?.startRefreshing(isAuto: false) }
+            guard let self else { return }
+            (self as UIScrollView)._jobs_autoEnsureEmptyButtonThenEval()
         }
-        return self
-    }
-    // MARK: - 上拉加载（Pull Up）
-    /// 安装上拉加载（默认 ESRefreshFooterAnimator）
-    @discardableResult
-    func pullUp(_ action: @escaping () -> Void,
-                config: ((ESRefreshFooterAnimator) -> Void)? = nil) -> Self {
-        if self.footer == nil {
-            let animator = ESRefreshFooterAnimator()
-            config?(animator)
-            let footer = ESRefreshFooterView(frame: .zero, handler: action, animator: animator)
-            let footerH = animator.executeIncremental
-            footer.frame = CGRect(
-                x: 0,
-                y: self.contentSize.height + self.contentInset.bottom,
-                width: self.bounds.width,
-                height: footerH
-            )
-            self.addSubview(footer)
-            self.footer = footer
-        }
-        return self
-    }
-    /// 安装上拉加载（JobsFooterAnimator 自定义样式）
-    @discardableResult
-    func pullUpWithJobsAnimator(_ action: @escaping () -> Void,
-                                config: ((JobsFooterAnimator) -> Void)? = nil) -> Self {
-        if self.footer == nil {
-            let animator = JobsFooterAnimator()
-            config?(animator)
-            let footer = ESRefreshFooterView(frame: .zero, handler: action, animator: animator)
-            let footerH = animator.executeIncremental
-            footer.frame = CGRect(
-                x: 0,
-                y: self.contentSize.height + self.contentInset.bottom,
-                width: self.bounds.width,
-                height: footerH
-            )
-            self.addSubview(footer)
-            self.footer = footer
-        }
-        return self
-    }
-    /// 停止上拉加载
-    @discardableResult
-    func pullUpStop() -> Self {
-        self.footer?.stopRefreshing()
-        return self
-    }
-    /// 通知“没有更多数据”
-    @discardableResult
-    func pullUpNoMore() -> Self {
-        self.footer?.stopRefreshing()
-        self.footer?.noMoreData = true
-        return self
-    }
-    /// 重置“没有更多数据”
-    @discardableResult
-    func pullUpReset() -> Self {
-        self.footer?.noMoreData = false
-        return self
-    }
-    // MARK: - 移除所有刷新控件
-    @discardableResult
-    func removeRefreshers() -> Self {
-        self.header?.stopRefreshing()
-        self.header?.removeFromSuperview()
-        self.header = nil
-
-        self.footer?.stopRefreshing()
-        self.footer?.removeFromSuperview()
-        self.footer = nil
-        return self
-    }
-}
-// MARK: - 下拉刷新（Header）
-public final class JobsHeaderAnimator: UIView, ESRefreshProtocol, ESRefreshAnimatorProtocol {
-    public var state: ESRefreshViewState = .pullToRefresh
-
-    public var idleDescription: String = "下拉刷新"
-    public var releaseToRefreshDescription: String = "松开立即刷新"
-    public var loadingDescription: String = "刷新中…"
-    public var noMoreDataDescription: String = "已经是最新数据"
-
-    public var view: UIView { self }
-    public var insets: UIEdgeInsets = .zero
-    public var trigger: CGFloat = 60
-    public var executeIncremental: CGFloat = 60
-
-    // === 内部画布：等屏宽，居中于父视图 ===
-    private lazy var canvas: UIView = {
-        UIView()
-            .byBgColor(.clear)
-            /// 画布：等屏宽、中心对齐到父视图
-            .byAddTo(self) { [unowned self] make in
-                make.centerX.equalToSuperview()                  // ✅ 中心对齐（不从 0,0 起）
-                make.centerY.equalToSuperview()
-                self.canvasWidthConstraint = make.width.equalTo(UIScreen.main.bounds.width).constraint
-                make.height.greaterThanOrEqualTo(executeIncremental)
-            }
-    }()
-
-    private lazy var titleLabel: UILabel = {
-        UILabel()
-            .byFont(.systemFont(ofSize: 14))
-            .byTextColor(.secondaryLabel)
-            .byTextAlignment(.center)
-            .byHugging(.required, axis: .horizontal)
-            .byCompressionResistance(.required, axis: .horizontal)
-            /// 文本：永远居中在“画布”的几何中心
-            .byAddTo(canvas) { [unowned self] make in
-                make.centerX.equalTo(canvas.snp.centerX)         // ✅ 真正中线
-                make.centerY.equalTo(canvas.snp.centerY)
-                make.leading.greaterThanOrEqualTo(canvas.snp.leading).offset(16)
-                make.trailing.lessThanOrEqualTo(canvas.snp.trailing).inset(16)
-            }
-    }()
-
-    private lazy var indicator: UIActivityIndicatorView = {
-        UIActivityIndicatorView(style: .medium)
-            .byHidesWhenStopped(true)
-            .byAddTo(canvas) { [unowned self] make in
-                make.centerY.equalTo(titleLabel)
-                make.trailing.equalTo(titleLabel.snp.leading).offset(-6)
-            }
-    }()
-
-    private var canvasWidthConstraint: Constraint?
-
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        byBgColor(.clear).byUserInteractionEnabled(false)
-        canvas.byAlpha(1)
-    }
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-    // 跟随窗口宽度（适配横竖屏 / iPad 分屏）
-    public override func layoutSubviews() {
-        super.layoutSubviews()
-        let w = (self.window?.bounds.width).map { CGFloat($0) } ?? UIScreen.main.bounds.width
-        canvasWidthConstraint?.update(offset: 0)
-        canvas.snp.updateConstraints { make in
-            make.width.equalTo(w)
-        }
-    }
-    // MARK: - ESRefreshProtocol
-    public func refresh(view: ESRefreshComponent, progressDidChange progress: CGFloat) {}
-
-    public func refresh(view: ESRefreshComponent, stateDidChange state: ESRefreshViewState) {
-        self.state = state
-        switch state {
-        case .pullToRefresh:
-            titleLabel.text = idleDescription
-            indicator.stopAnimating()
-        case .releaseToRefresh:
-            titleLabel.text = releaseToRefreshDescription
-            indicator.stopAnimating()
-        case .refreshing, .autoRefreshing:
-            titleLabel.text = loadingDescription
-            indicator.startAnimating()
-        case .noMoreData:
-            titleLabel.text = noMoreDataDescription
-            indicator.stopAnimating()
-        }
-    }
-
-    public func refreshAnimationBegin(view: ESRefreshComponent) { indicator.startAnimating() }
-    public func refreshAnimationEnd(view: ESRefreshComponent) { indicator.stopAnimating() }
-}
-// MARK: - 上拉加载（Footer）
-public final class JobsFooterAnimator: UIView, ESRefreshProtocol, ESRefreshAnimatorProtocol {
-    public var state: ESRefreshViewState = .pullToRefresh
-
-    public var idleDescription: String = "上拉加载更多"
-    public var releaseToRefreshDescription: String = "松开立即加载"
-    public var loadingMoreDescription: String = "加载中…"
-    public var noMoreDataDescription: String = "没有更多数据"
-
-    public var view: UIView { self }
-    public var insets: UIEdgeInsets = .zero
-    public var trigger: CGFloat = 52
-    public var executeIncremental: CGFloat = 52
-
-    private let canvas = UIView()
-    private let titleLabel = UILabel()
-    private let indicator  = UIActivityIndicatorView(style: .medium)
-
-    private var canvasWidthConstraint: Constraint?
-
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupUI()
-        setupConstraints()
-    }
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
-    private func setupUI() {
-        backgroundColor = .clear
-        isUserInteractionEnabled = false
-
-        canvas.backgroundColor = .clear
-        addSubview(canvas)
-
-        titleLabel.font = .systemFont(ofSize: 14)
-        titleLabel.textColor = .secondaryLabel
-        titleLabel.textAlignment = .center
-        titleLabel.setContentHuggingPriority(.required, for: .horizontal)
-        titleLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
-
-        indicator.hidesWhenStopped = true
-
-        canvas.addSubview(titleLabel)
-        canvas.addSubview(indicator)
-    }
-
-    private func setupConstraints() {
-        canvas.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()                 // ✅ 居中对齐父视图
-            make.centerY.equalToSuperview()
-            self.canvasWidthConstraint = make.width.equalTo(UIScreen.main.bounds.width).constraint
-            make.height.greaterThanOrEqualTo(executeIncremental)
-        }
-
-        titleLabel.snp.makeConstraints { make in
-            make.centerX.equalTo(canvas.snp.centerX)        // ✅ 文本居中于画布
-            make.centerY.equalTo(canvas.snp.centerY)
-            make.leading.greaterThanOrEqualTo(canvas.snp.leading).offset(16)
-            make.trailing.lessThanOrEqualTo(canvas.snp.trailing).inset(16)
-        }
-
-        indicator.snp.makeConstraints { make in
-            make.centerY.equalTo(titleLabel)
-            make.trailing.equalTo(titleLabel.snp.leading).offset(-6)
-        }
-    }
-
-    public override func layoutSubviews() {
-        super.layoutSubviews()
-        let w = (self.window?.bounds.width).map { CGFloat($0) } ?? UIScreen.main.bounds.width
-        canvasWidthConstraint?.update(offset: 0)
-        canvas.snp.updateConstraints { make in
-            make.width.equalTo(w)
-        }
-    }
-
-    // MARK: - ESRefreshProtocol
-    public func refresh(view: ESRefreshComponent, progressDidChange progress: CGFloat) {}
-
-    public func refresh(view: ESRefreshComponent, stateDidChange state: ESRefreshViewState) {
-        self.state = state
-        switch state {
-        case .pullToRefresh:
-            titleLabel.text = idleDescription
-            indicator.stopAnimating()
-        case .releaseToRefresh:
-            titleLabel.text = releaseToRefreshDescription
-            indicator.stopAnimating()
-        case .refreshing, .autoRefreshing:
-            titleLabel.text = loadingMoreDescription
-            indicator.startAnimating()
-        case .noMoreData:
-            titleLabel.text = noMoreDataDescription
-            indicator.stopAnimating()
-        }
-    }
-
-    public func refreshAnimationBegin(view: ESRefreshComponent) { indicator.startAnimating() }
-    public func refreshAnimationEnd(view: ESRefreshComponent) { indicator.stopAnimating() }
-}
-// MARK: - 轻量的“最近刷新时间”缓存，替代 ESRefreshDataManager（避免跨模块 internal 访问问题）
-public enum JobsRefreshCache {
-    private static let prefix = "jobs.refresh."
-    private static let ud = UserDefaults.standard
-
-    @inline(__always)
-    private static func key(_ k: String) -> String { prefix + k }
-
-    public static func setDate(_ date: Date, forKey key: String) {
-        ud.set(date.timeIntervalSince1970, forKey: self.key(key))
-    }
-
-    public static func date(forKey key: String) -> Date? {
-        let ts = ud.double(forKey: self.key(key))
-        return ts > 0 ? Date(timeIntervalSince1970: ts) : nil
-    }
-
-    /// 可选：设置过期时长（秒）
-    public static func setExpiredInterval(_ interval: TimeInterval?, forKey key: String) {
-        let k = self.key(key) + ".expired"
-        if let interval { ud.set(interval, forKey: k) } else { ud.removeObject(forKey: k) }
-    }
-
-    public static func expiredInterval(forKey key: String) -> TimeInterval? {
-        let k = self.key(key) + ".expired"
-        let v = ud.double(forKey: k)
-        return v > 0 ? v : nil
-    }
-
-    /// 可选：是否已过期（模仿 ES 行为）
-    public static func isExpired(forKey key: String) -> Bool {
-        guard let last = date(forKey: key),
-              let interval = expiredInterval(forKey: key) else { return false }
-        return Date().timeIntervalSince(last) >= interval
     }
 }

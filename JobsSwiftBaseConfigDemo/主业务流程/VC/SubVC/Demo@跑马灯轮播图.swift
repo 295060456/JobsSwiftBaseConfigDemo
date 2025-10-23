@@ -50,7 +50,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byNormalBgColor(.systemIndigo)
                     .byContentEdgeInsets(.init(top: 8, left: 12, bottom: 8, right: 12))
                     .byImagePlacement(.leading, padding: 8)
-                    .byImage(UIImage(systemName: "bolt.horizontal.circle.fill"))
+                    .byImage("bolt.horizontal.circle.fill".sysImg)
             ])
             .byAddTo(view) { [unowned self] make in
                 make.top.equalTo(gk_navigationBar.snp.bottom).offset(10)
