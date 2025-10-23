@@ -15,12 +15,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-
-        let window = UIWindow(windowScene: windowScene)
-        let rootVC = RootListVC()
-        let nav = UINavigationController(rootViewController: rootVC)
-        window.rootViewController = nav
-        self.window = window
-        window.makeKeyAndVisible()
+        self.window = UIWindow(windowScene: windowScene)
+            .byRootViewController(RootListVC().jobsNav.jobsNavContainer)
+            .byMakeKeyAndVisible()
     }
 }

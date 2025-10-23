@@ -3754,7 +3754,7 @@ private lazy var passwordAccessory: UIToolbar = {
   }()
   ```
 
-### 24、🧭 导航栏 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 24、🧭 自定义导航栏 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 #### 24.1、[**基于控制器层的自定义导航栏@GKNavigationBarSwift**](https://github.com/QuintGao/GKNavigationBarSwift)的二次封装和使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -4995,9 +4995,27 @@ import ObjectiveC.runtime
   closeByResult("")
   ```
 
-### 45、创建 `WebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 45、给控制器带上导航控制器 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 45.1、创建 `WKWebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+```swift
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    var window: UIWindow?
+    func scene(
+        _ scene: UIScene,
+        willConnectTo session: UISceneSession,
+        options connectionOptions: UIScene.ConnectionOptions
+    ) {
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        self.window = UIWindow(windowScene: windowScene)
+            .byRootViewController(RootListVC().jobsNav.jobsNavContainer)
+            .byMakeKeyAndVisible()
+    }
+}
+```
+
+### 46、创建 `WebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 46.1、创建 `WKWebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 import WebKit
@@ -5019,7 +5037,7 @@ private lazy var webView: WKWebView = {
 }()
 ```
 
-#### 45.2、创建 `BaseWebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 46.2、创建 `BaseWebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 在` Info.plist `添加👇（更通用的 **ATS** 配置，避免为某域名单独开洞）
 >

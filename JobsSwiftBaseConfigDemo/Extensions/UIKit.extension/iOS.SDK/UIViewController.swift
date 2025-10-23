@@ -517,23 +517,38 @@ public extension UIViewController {
     }
 }
 #endif
+
 @MainActor
 public extension UIViewController {
-    /// 1) 拿来就能放到任何位置：如果已有导航 -> 返回 self；否则 -> 返回 UINavigationController(root: self)
-    ///    用在 window.rootViewController / present 时最省心
-    var jobsNav: UIViewController {
-        if self is UINavigationController { return self }
-        if self.navigationController != nil { return self }
-        return UINavigationController(rootViewController: self)
+    private struct _JobsNavKey {
+        // 用地址作为唯一 key
+        static var wrapper: UInt8 = 0
     }
-    /// 2) 需要顺便拿到“新建的导航”做点配置（只有在新包裹时才会回调）
-    ///    仍然返回“可直接用”的 UIViewController（可能是 self，也可能是 nav）
-    @discardableResult
-    func jobsNav(_ onWrap: (UINavigationController) -> Void) -> UIViewController {
+
+    var jobsNavContainer: UINavigationController {
         if let nav = self as? UINavigationController { return nav }
         if let nav = self.navigationController { return nav }
+        if let cached = objc_getAssociatedObject(self, &_JobsNavKey.wrapper) as? UINavigationController {
+            return cached
+        }
         let nav = UINavigationController(rootViewController: self)
-        onWrap(nav)
+        objc_setAssociatedObject(self, &_JobsNavKey.wrapper, nav, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         return nav
+    }
+
+    var jobsNav: Self {
+        _ = jobsNavContainer
+        return self
+    }
+
+    @discardableResult
+    func jobsNav(_ onWrap: (UINavigationController) -> Void) -> Self {
+        let alreadyHad = (self is UINavigationController)
+            || (self.navigationController != nil)
+            || (objc_getAssociatedObject(self, &_JobsNavKey.wrapper) != nil)
+
+        let nav = jobsNavContainer
+        if !alreadyHad { onWrap(nav) }
+        return self
     }
 }
