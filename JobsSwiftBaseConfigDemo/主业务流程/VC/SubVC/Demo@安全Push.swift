@@ -34,8 +34,18 @@ final class SafetyPushDemoVC: BaseVC {
         stack.addArrangedSubview(UIButton(type: .system)
             .byTitle("Push Detail (快速连点试试)")
             .onTap { _ in
-                DemoDetailVC()
-                    .byData(["id": 7, "title": "详情", "price": 9.9])// 字典
+//                DemoDetailVC()
+//                    .byData(["id": 7, "title": "详情", "price": 9.9])// 字典
+//                    .onResult { id in
+//                        print("回来了 id=\(id)")
+//                    }
+//                    .byPush(self)           // 自带防重入，连点不重复
+//                    .byCompletion{
+//                        print("❤️结束❤️")
+//                    }
+
+                BaseWebVC()
+                    .byData("https://www.baidu.com")
                     .onResult { id in
                         print("回来了 id=\(id)")
                     }

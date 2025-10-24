@@ -276,8 +276,28 @@ public extension UIViewController {
                 closeByResult("") // 系统通用返回
             }
     }
+    /// 立即隐藏/显示 GK 的导航栏（并把系统栏同步隐藏，避免双栏）
+    @discardableResult
+    func byGKNavBarHidden(_ hidden: Bool) -> Self {
+        _ = gk_navigationBar                 // 触发创建与挂载
+        gk_navigationBar.isHidden = hidden   // 真实隐藏 GK 的 bar
+        navigationController?.setNavigationBarHidden(hidden, animated: false) // 避免系统栏干扰
+        return self
+    }
+    /// 透明导航/恢复（不移除视图，适合沉浸式）
+    @discardableResult
+    func byGKNavTransparent(_ enable: Bool) -> Self {
+        _ = gk_navigationBar
+        if enable {
+            gk_navBarAlpha = 0
+            gk_navLineHidden = true
+        } else {
+            gk_navBarAlpha = 1
+            gk_navLineHidden = false
+        }
+        return self
+    }
 }
-
 #endif
 // ================================== 数据传递 + 出现完成回调 ==================================
 private enum JobsAssocKey {
@@ -550,5 +570,58 @@ public extension UIViewController {
         let nav = jobsNavContainer
         if !alreadyHad { onWrap(nav) }
         return self
+    }
+}
+
+private var _nbHiddenKey: UInt8 = 0
+private var _nbAnimatedKey: UInt8 = 0
+private var _nbSwizzledKey: UInt8 = 0
+public extension UIViewController {
+    /// 写在 viewDidLoad：进入本页隐藏，离开自动还原
+    @discardableResult
+    func byNavBarHiddenLifecycle(_ hiddenOnAppear: Bool, animated: Bool = true) -> Self {
+        objc_setAssociatedObject(self, &_nbHiddenKey, hiddenOnAppear as NSNumber, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        objc_setAssociatedObject(self, &_nbAnimatedKey, animated as NSNumber, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        Self._nb_swizzleOnce(for: type(of: self))
+        return self
+    }
+    /// 立即切换（链式）
+    @discardableResult
+    func byNavBarHidden(_ hidden: Bool, animated: Bool = false) -> Self {
+        navigationController?.setNavigationBarHidden(hidden, animated: animated)
+        return self
+    }
+    // MARK: - swizzle
+    private static func _nb_swizzleOnce(for cls: UIViewController.Type) {
+        let key = ObjectIdentifier(cls)
+        var done = (objc_getAssociatedObject(cls, &_nbSwizzledKey) as? Set<ObjectIdentifier>) ?? []
+        guard !done.contains(key) else { return }
+        done.insert(key); objc_setAssociatedObject(cls, &_nbSwizzledKey, done, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+
+        func exch(_ c: AnyClass, _ o: Selector, _ n: Selector) {
+            guard let m1 = class_getInstanceMethod(c, o),
+                  let m2 = class_getInstanceMethod(c, n) else { return }
+            method_exchangeImplementations(m1, m2)
+        }
+        exch(cls, #selector(UIViewController.viewWillAppear(_:)),
+                  #selector(UIViewController._nb_viewWillAppear(_:)))
+        exch(cls, #selector(UIViewController.viewWillDisappear(_:)),
+                  #selector(UIViewController._nb_viewWillDisappear(_:)))
+    }
+
+    @objc private func _nb_viewWillAppear(_ animated: Bool) {
+        _nb_viewWillAppear(animated) // 调原实现
+        if let on = (objc_getAssociatedObject(self, &_nbHiddenKey) as? NSNumber)?.boolValue,
+           let anim = (objc_getAssociatedObject(self, &_nbAnimatedKey) as? NSNumber)?.boolValue {
+            navigationController?.setNavigationBarHidden(on, animated: anim)
+        }
+    }
+
+    @objc private func _nb_viewWillDisappear(_ animated: Bool) {
+        _nb_viewWillDisappear(animated) // 调原实现
+        if let _ = objc_getAssociatedObject(self, &_nbHiddenKey) {
+            // 只在你启用了 lifecycle 时还原
+            navigationController?.setNavigationBarHidden(false, animated: true)
+        }
     }
 }

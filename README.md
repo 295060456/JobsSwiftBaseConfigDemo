@@ -5013,9 +5013,61 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 }
 ```
 
-### 46、创建 `WebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 46、**`NavigationBar`**的显隐控制 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 46.1、创建 `WKWebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 46.1、对系统的导航栏 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 官方姿势
+
+  ```swift
+  override func viewWillAppear(_ animated: Bool) {
+      super.viewWillAppear(animated)
+      navigationController?.setNavigationBarHidden(true, animated: animated)
+  }
+  
+  override func viewWillDisappear(_ animated: Bool) {
+      super.viewWillDisappear(animated)
+      navigationController?.setNavigationBarHidden(false, animated: animated)
+  }
+  ```
+
+* 进入本页隐藏；离开自动还原
+
+  ```swift
+  override func viewDidLoad() {
+      super.viewDidLoad()
+      byNavBarHiddenLifecycle(true)   // 进入本页隐藏；离开自动还原
+  }
+  ```
+
+* 随时随地显隐
+
+  ```
+  override func viewDidLoad() {
+      super.viewDidLoad()
+      self.byNavBarHidden(true)
+  }
+  ```
+
+#### 46.2、对[**`GKNavigationBarSwift`**]( https://github.com/QuintGao/GKNavigationBarSwift) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    byGKNavBarHidden(true)          // 彻底隐藏
+    // 或：byGKNavTransparent(true)  // 透明沉浸式
+}
+
+override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+    byGKNavBarHidden(false)         // 还原
+    // 或：byGKNavTransparent(false)
+}
+```
+
+### 47、创建 `WebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 47.1、创建 `WKWebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 import WebKit
@@ -5037,7 +5089,7 @@ private lazy var webView: WKWebView = {
 }()
 ```
 
-#### 46.2、创建 `BaseWebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 47.2、创建 `BaseWebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 在` Info.plist `添加👇（更通用的 **ATS** 配置，避免为某域名单独开洞）
 >
@@ -5051,88 +5103,93 @@ private lazy var webView: WKWebView = {
 
 ```swift
 private lazy var web: BaseWebView = { [unowned self] in
-    return BaseWebView()
-        .byBgColor(.clear)
-        .byAllowedHosts([])                  // 不限域
-        .byOpenBlankInPlace(true)
-        .byDisableSelectionAndCallout(false)
-        .byUserAgentSuffixProvider { _ in
-            // 按请求动态追加 UA 后缀；nil = 使用系统默认 UA。
-            // 需要区分页面时在此 return "YourApp/1.0"
-            return nil
-        }
+        return BaseWebView()
+            .byBgColor(.clear)
+            .byAllowedHosts([])                  // 不限域
+            .byOpenBlankInPlace(true)
+            .byDisableSelectionAndCallout(false)
+            .byUserAgentSuffixProvider { _ in
+                // 按请求动态追加 UA 后缀；nil = 使用系统默认 UA。
+                // 需要区分页面时在此 return "YourApp/1.0"
+                return nil
+            }
 //            .byNormalizeMToWWW(false)               // ❗️关闭 m→www
 //            .byForceHTTPSUpgrade(false)             // ❗️关闭 http→https
 //            .bySafariFallbackOnHTTP(false)          // ❗️关闭 Safari 兜底
 //            .byInjectRedirectSanitizerJS(false)     // 可关，避免干涉 H5 自己跳转
-        /// URL 重写策略（默认不重写；这里保持关闭）
-        .byURLRewriter { _ in
-            // 例如要做 http→https 升级：检测 url.scheme == "http" 再返回新 URL
-            // 现在返回 nil 表示不改写
-            return nil
-        }
-        /// Safari 兜底（默认不开）；返回 true 即交给 Safari 打开
-        .bySafariFallbackRule { _ in
-            return false
-        }
-        /// 一键开导航栏（默认标题=webView.title，默认有返回键）
-        .byNavBarEnabled(true)
-        .byNavBarStyle { s in
-            s.byHairlineHidden(false)
-             .byBackgroundColor(.systemBackground)
-             .byTitleAlignmentCenter(true)
-        }
-        /// 自定义返回键（想隐藏就：.byNavBarBackButtonProvider { nil }）
-        .byNavBarBackButtonProvider {
-            UIButton(type: .system)
-                .byBackgroundColor(.clear)
-                .byImage(UIImage(systemName: "chevron.left"), for: .normal)
-                .byTitle("返回", for: .normal)
-                .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
-                .byTitleColor(.label, for: .normal)
-                .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10))
-                .byTapSound("Sound.wav")
-        }
-        /// 返回行为：优先后退，否则关闭当前控制器
-        .byNavBarOnBack { [weak self] in
-            guard let self else { return }
-            closeByResult("")
-        }
-        .byAddTo(view) { [unowned self] make in
-            if view.jobs_hasVisibleTopBar() {
-                make.top.equalTo(self.gk_navigationBar.snp.bottom).offset(10)
-                make.left.right.bottom.equalToSuperview()
-            } else {
+            /// URL 重写策略（默认不重写；这里保持关闭）
+            .byURLRewriter { _ in
+                // 例如要做 http→https 升级：检测 url.scheme == "http" 再返回新 URL
+                // 现在返回 nil 表示不改写
+                return nil
+            }
+            /// Safari 兜底（默认不开）；返回 true 即交给 Safari 打开
+            .bySafariFallbackRule { _ in
+                return false
+            }
+            /// 一键开导航栏（默认标题=webView.title，默认有返回键）
+            .byNavBarEnabled(true)
+            .byNavBarStyle { s in
+                s.byHairlineHidden(false)
+                 .byBackgroundColor(.systemBackground)
+                 .byTitleAlignmentCenter(true)
+            }
+            /// 自定义返回键（想隐藏就：.byNavBarBackButtonProvider { nil }）
+            .byNavBarBackButtonProvider {
+                UIButton(type: .system)
+                    .byBackgroundColor(.clear)
+                    .byImage(UIImage(systemName: "chevron.left"), for: .normal)
+                    .byTitle("返回", for: .normal)
+                    .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+                    .byTitleColor(.label, for: .normal)
+                    .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10))
+                    .byTapSound("Sound.wav")
+            }
+            /// 返回行为：优先后退，否则关闭当前控制器
+            .byNavBarOnBack { [weak self] in
+                guard let self else { return }
+                closeByResult("")
+            }
+            .byAddTo(view) { [unowned self] make in
                 make.edges.equalToSuperview()
             }
-        }
-         /// 以下是依据前端暴露的自定义方法进行的JS交互
-        .registerMobileAction("navigateToHome") { [weak self] dict in
-            /// 跳转到首页
-            self!.closeByResult("")
-        }
-        .registerMobileAction("getToken") { [weak self] dict in
+            /// 以下是依据前端暴露的自定义方法进行的JS交互
+            .registerMobileAction("navigateToHome") {  [weak self] body, reply in
+                /// 跳转到首页
+                self!.closeByResult("")
+                reply(nil)
+            }
+            .registerMobileAction("getToken") {  [weak self] body, reply in
 
-        }
-        .registerMobileAction("navigateToLogin") { [weak self] dict in
-            /// 跳转到登录页
-        }
-        .registerMobileAction("navigateToDeposit") { [weak self] dict in
-            /// 跳转到充值页
-        }
-        .registerMobileAction("closeWebView") { [weak self] dict in
-            /// 关闭WebView
-        }
-        .registerMobileAction("showToast") { [weak self] dict in
-            /// 显示Toast
-            JobsToast.show(
-                text: dict.stringValue(for: "message") ?? "",
-                config: JobsToast.Config()
-                    .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                    .byCornerRadius(12)
-            )
-        }
-}()
+                reply(nil)
+            }
+            .registerMobileAction("navigateToSecurityCenter") {  [weak self] body, reply in
+                /// 跳转福利中心
+                reply(nil)
+            }
+            .registerMobileAction("navigateToLogin") {  [weak self] body, reply in
+                /// 跳转到登录页
+                reply(nil)
+            }
+            .registerMobileAction("navigateToDeposit") {  [weak self] body, reply in
+                /// 跳转到充值页
+                reply(nil)
+            }
+            .registerMobileAction("closeWebView") {  [weak self] body, reply in
+                /// 关闭WebView
+                reply(nil)
+            }
+            .registerMobileAction("showToast") {  [weak self] body, reply in
+                /// 显示Toast
+                JobsToast.show(
+                    text: body.stringValue(for: "message") ?? "",
+                    config: JobsToast.Config()
+                        .byBgColor(.systemGreen.withAlphaComponent(0.9))
+                        .byCornerRadius(12)
+                )
+                reply(nil)
+            }
+    }()
 ```
 
 *  加载线上 URL

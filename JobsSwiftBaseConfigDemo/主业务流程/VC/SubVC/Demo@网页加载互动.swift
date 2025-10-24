@@ -47,7 +47,7 @@ final class BaseWebViewDemoVC: BaseVC {
             .byNavBarBackButtonProvider {
                 UIButton(type: .system)
                     .byBackgroundColor(.clear)
-                    .byImage("chevron.left".sysImg, for: .normal)
+                    .byImage(UIImage(systemName: "chevron.left"), for: .normal)
                     .byTitle("返回", for: .normal)
                     .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
                     .byTitleColor(.label, for: .normal)
@@ -60,41 +60,43 @@ final class BaseWebViewDemoVC: BaseVC {
                 closeByResult("")
             }
             .byAddTo(view) { [unowned self] make in
-                if view.jobs_hasVisibleTopBar() {
-                    make.top.equalTo(self.gk_navigationBar.snp.bottom).offset(10)
-                    make.left.right.bottom.equalToSuperview()
-                } else {
-                    make.edges.equalToSuperview()
-                }
+                make.edges.equalToSuperview()
             }
             /// 以下是依据前端暴露的自定义方法进行的JS交互
-            .registerMobileAction("navigateToHome") { [weak self] dict in
+            .registerMobileAction("navigateToHome") {  [weak self] body, reply in
                 /// 跳转到首页
                 self!.closeByResult("")
+                reply(nil)
             }
-            .registerMobileAction("getToken") { [weak self] dict in
+            .registerMobileAction("getToken") {  [weak self] body, reply in
 
+                reply(nil)
             }
-            .registerMobileAction("navigateToLogin") { [weak self] dict in
-                /// 跳转到登录页
-            }
-            .registerMobileAction("navigateToDeposit") { [weak self] dict in
-                /// 跳转到充值页
-            }
-            .registerMobileAction("closeWebView") { [weak self] dict in
-                /// 关闭WebView
-            }
-            .registerMobileAction("navigateToSecurityCenter") { [weak self] dict in
+            .registerMobileAction("navigateToSecurityCenter") {  [weak self] body, reply in
                 /// 跳转福利中心
+                reply(nil)
             }
-            .registerMobileAction("showToast") { [weak self] dict in
+            .registerMobileAction("navigateToLogin") {  [weak self] body, reply in
+                /// 跳转到登录页
+                reply(nil)
+            }
+            .registerMobileAction("navigateToDeposit") {  [weak self] body, reply in
+                /// 跳转到充值页
+                reply(nil)
+            }
+            .registerMobileAction("closeWebView") {  [weak self] body, reply in
+                /// 关闭WebView
+                reply(nil)
+            }
+            .registerMobileAction("showToast") {  [weak self] body, reply in
                 /// 显示Toast
                 JobsToast.show(
-                    text: dict.stringValue(for: "message") ?? "",
+                    text: body.stringValue(for: "message") ?? "",
                     config: JobsToast.Config()
                         .byBgColor(.systemGreen.withAlphaComponent(0.9))
                         .byCornerRadius(12)
                 )
+                reply(nil)
             }
     }()
     // MARK: - 生命周期

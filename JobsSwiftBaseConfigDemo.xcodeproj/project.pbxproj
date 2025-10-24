@@ -16,6 +16,8 @@
 		0401DD082E91183000D572AD /* Demo@弹出提示.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DD072E91182900D572AD /* Demo@弹出提示.swift */; };
 		041F5B012E87B51800984EEB /* Demo@输入框.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041F5B002E87B50F00984EEB /* Demo@输入框.swift */; };
 		042B67CE2E95085A000A2970 /* NSTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B67CD2E950858000A2970 /* NSTextAttachment.swift */; };
+		043838A02EAA21AA007BA552 /* JobsRefresher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0438389F2EAA21A9007BA552 /* JobsRefresher.swift */; };
+		043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043838A12EAA4BB3007BA552 /* BaseWebVC.swift */; };
 		043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */; };
 		0442717B2E8139CF0084B25C /* ColorAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0442717A2E8139CF0084B25C /* ColorAssets.xcassets */; };
 		044272852E8146130084B25C /* JXScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044272842E8146130084B25C /* JXScale.swift */; };
@@ -194,6 +196,8 @@
 		0401DD072E91182900D572AD /* Demo@弹出提示.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@弹出提示.swift"; sourceTree = "<group>"; };
 		041F5B002E87B50F00984EEB /* Demo@输入框.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@输入框.swift"; sourceTree = "<group>"; };
 		042B67CD2E950858000A2970 /* NSTextAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTextAttachment.swift; sourceTree = "<group>"; };
+		0438389F2EAA21A9007BA552 /* JobsRefresher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsRefresher.swift; sourceTree = "<group>"; };
+		043838A12EAA4BB3007BA552 /* BaseWebVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWebVC.swift; sourceTree = "<group>"; };
 		043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProtocolDefs.swift; sourceTree = "<group>"; };
 		0442717A2E8139CF0084B25C /* ColorAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ColorAssets.xcassets; sourceTree = "<group>"; };
 		044272842E8146130084B25C /* JXScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXScale.swift; sourceTree = "<group>"; };
@@ -389,6 +393,7 @@
 		045920E22E84EC64008C8D6A /* SwiftTools */ = {
 			isa = PBXGroup;
 			children = (
+				0438389F2EAA21A9007BA552 /* JobsRefresher.swift */,
 				04BCDC292EA9DB0B00382DE0 /* JobsText.swift */,
 				0482A5F72EA5F308004176A4 /* JobsNavBar.swift */,
 				049A65702EA0E6BA0006B185 /* JobsTabBarCtrl.swift */,
@@ -652,6 +657,7 @@
 			isa = PBXGroup;
 			children = (
 				04E8D6222E8E883F00E85CDA /* BaseVC.swift */,
+				043838A12EAA4BB3007BA552 /* BaseWebVC.swift */,
 			);
 			path = UIViewController;
 			sourceTree = "<group>";
@@ -1157,6 +1163,7 @@
 				0477D9872E8BEF64002C6427 /* Demo@键盘.swift in Sources */,
 				C564FC932E0959640079B5C1 /* UIToolbarAppearance.swift in Sources */,
 				04CF028C2E8808540083ACF0 /* UIButton.swift in Sources */,
+				043838A02EAA21AA007BA552 /* JobsRefresher.swift in Sources */,
 				C564FCA12E0959640079B5C1 /* UIPageControl.swift in Sources */,
 				04A18E4D2E86533B004BB9DC /* UIImage.swift in Sources */,
 				045921122E855769008C8D6A /* JobsPaddedLabel.swift in Sources */,
@@ -1196,6 +1203,7 @@
 				C564FC9B2E0959640079B5C1 /* UIStackView.swift in Sources */,
 				043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */,
 				04C2F0312E98C9D000BA05A9 /* Demo@设计模式MVVM.swift in Sources */,
+				043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */,
 				0401DD082E91183000D572AD /* Demo@弹出提示.swift in Sources */,
 				04CF03192E8A80CE0083ACF0 /* AppTools.swift in Sources */,
 				04D0C9822E8D1CF400580020 /* Optional.swift in Sources */,

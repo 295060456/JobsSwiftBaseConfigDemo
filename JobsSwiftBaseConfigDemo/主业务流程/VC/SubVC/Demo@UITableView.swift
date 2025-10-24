@@ -124,7 +124,7 @@ final class EmptyTableViewDemoVC: BaseVC,
         super.viewDidLoad()
         view.backgroundColor = .cyan
         jobsSetupGKNav(
-            title: "UITableView@空态 Demo",
+            title: "UITableView@@空态刷新",
             rightButtons: [
                 UIButton(type: .system)
                     /// 按钮图片@图文关系

@@ -2029,7 +2029,7 @@ public extension UIButton {
 #if canImport(SnapKit)
 // MARK: 为空态按钮附加自定义布局闭包
 import SnapKit
-private var _jobsEmptyLayoutKey: UInt8 = 0
+public var _jobsEmptyLayoutKey: UInt8 = 0
 public extension UIButton {
     typealias JobsEmptyLayout = (_ btn: UIButton, _ make: ConstraintMaker, _ host: UIScrollView) -> Void
     /// 内部读取：UIScrollView._jobs_attachEmptyButton 会使用

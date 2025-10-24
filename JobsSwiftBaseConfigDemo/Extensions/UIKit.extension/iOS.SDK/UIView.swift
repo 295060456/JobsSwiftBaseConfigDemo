@@ -1933,6 +1933,15 @@ public extension UIView {
     var jobsNavBar: JobsNavBar? {
         objc_getAssociatedObject(self, &_JobsNavBarAO.bar) as? JobsNavBar
     }
+    /// 是否存在可见的“导航栏类视图”（优先 GKNavigationBar，其次 UINavigationBar）
+    /// - Parameter deep: 是否递归遍历整棵子树（默认 true）
+    func jobs_hasVisibleTopBar(deep: Bool = true) -> Bool {
+    #if canImport(GKNavigationBarSwift)
+        return jobs_existingTopBar(deep: deep) != nil
+    #else
+        return false
+    #endif
+    }
 }
 // MARK: - 私有：配置读写 + 应用
 @MainActor
@@ -2064,11 +2073,6 @@ public extension UIView {
 import GKNavigationBarSwift
 @MainActor
 public extension UIView {
-    /// 是否存在可见的“导航栏类视图”（优先 GKNavigationBar，其次 UINavigationBar）
-    /// - Parameter deep: 是否递归遍历整棵子树（默认 true）
-    func jobs_hasVisibleTopBar(deep: Bool = true) -> Bool {
-        return jobs_existingTopBar(deep: deep) != nil
-    }
     /// 返回已存在的“导航栏类视图”（不触发懒加载），找不到返回 nil。
     /// 类型统一用 UIView?，外部无需依赖 GKNavigationBar 的符号。
     func jobs_existingTopBar(deep: Bool = true) -> UIView? {

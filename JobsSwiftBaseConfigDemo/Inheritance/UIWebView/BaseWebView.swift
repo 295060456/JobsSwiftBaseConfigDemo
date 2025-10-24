@@ -91,7 +91,7 @@ public final class BaseWebView: UIView {
     }
     private let mobileBridgeName = "iOSBridge"
     /// 公开给外部使用的 Handler 类型（避免可见性冲突）
-    public typealias MobileActionHandler = @MainActor (_ body: [String: Any]) -> Void
+    public typealias MobileActionHandler = @MainActor (_ body: [String: Any], _ reply: (Any?) -> Void) -> Void
     private var mobileActionHandlers: [String: MobileActionHandler] = [:]
     private var mobileConfig: MobileBridgeConfig = .defaults()
     /// 宿主 VC 获取（用于弹窗/Safari 兜底）
@@ -102,9 +102,9 @@ public final class BaseWebView: UIView {
             .byWebsiteDataStore(.default())
             .byAllowsInlineMediaPlayback(true)
             .byUserContentController(WKUserContentController().byAddUserScript(Self.makeBridgeUserScript()))
-            .byDefaultWebpagePreferences { wp in
-                wp.allowsContentJavaScript = true
-            }
+//            .byDefaultWebpagePreferences { wp in
+//                wp.allowsContentJavaScript = true
+//            }
         )
     }()
     public private(set) var progressView = UIProgressView(progressViewStyle: .default)
@@ -678,19 +678,40 @@ private extension BaseWebView {
     }
     // === H5 MobileBridge 兼容处理（零配置默认行为）===
     func handleIOSBridgeMessage(_ body: Any) {
-        guard let dict = body as? [String: Any] else {
-            print("iOSBridge invalid body:", body); return
-        }
-        let action = (dict["action"] as? String ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let dict = body as? [String: Any] else { return }
+
+        let action   = (dict["action"] as? String ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        let callback = (dict["callback"] as? String ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+
         guard !action.isEmpty else { return }
 
+        // 查找注册的处理器
         if let handler = mobileActionHandlers[action] {
-            handler(dict)
-        } else {
-            mobileConfig.onUnknownAction?(action, dict)
-            print("iOSBridge unhandled action:", action, dict)
+            handler(dict) { [weak self] value in
+                guard let self, !callback.isEmpty else { return }
+                let js = """
+                try { (window[\(Self.quote(callback))] || function(){})(\(Self.toJSONLiteral(value)));
+                } catch(e) { console && console.error(e); }
+                """
+                self.webView.jobsEval(js)
+            }
+            return
         }
+
+        // 没有注册时，给默认行为（可选）：比如支持 config.tokenProvider
+        if action == "getToken", let f = mobileConfig.tokenProvider {
+            Task { @MainActor [weak self] in
+                let token = await f() ?? ""
+                guard let self, !callback.isEmpty else { return }
+                let js = "(window[\(Self.quote(callback))]||function(){})(\(Self.toJSONLiteral(token)));"
+                self.webView.jobsEval(js)
+            }
+            return
+        }
+
+        mobileConfig.onUnknownAction?(action, dict)
     }
+
     // === 极简 JS shim：前端没注入时兜底 ===
     func injectMinimalMobileShim() {
         let js = """
@@ -808,12 +829,12 @@ extension BaseWebView: WKNavigationDelegate {
         decisionHandler(.allow)
     }
 
-    @available(iOS 14.5, *)
-    public func webView(_ webView: WKWebView,
-                        decidePolicyFor response: WKNavigationResponse,
-                        decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
-        decisionHandler(response.canShowMIMEType ? .allow : .download)
-    }
+//    @available(iOS 14.5, *)
+//    public func webView(_ webView: WKWebView,
+//                        decidePolicyFor response: WKNavigationResponse,
+//                        decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+//        decisionHandler(response.canShowMIMEType ? .allow : .download)
+//    }
 
     @available(iOS 14.5, *)
     public func webView(_ webView: WKWebView,
