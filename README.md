@@ -5212,6 +5212,40 @@ private lazy var web: BaseWebView = { [unowned self] in
   web.loadBundleHTMLBy(named: "BaseWebViewDemo")
   ```
 
+### 48、动画 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **`UIView`**点击放大动画
+
+  ```swift
+  btn.playTapBounce(haptic: .light)  // 👈 临时放大→回弹（不注册任何手势/事件）
+  ```
+
+* **`UIView`**旋转动画
+
+  * 开始旋转（基于 CALayer，不改 view.transform；与点击放大可叠加）
+    
+    ```swift
+    btn.bySpinStart()
+    ```
+    
+  * 暂停旋转（保持当前角度）
+
+    ```swift
+    btn.bySpinPause()
+    ```
+
+  * 恢复旋转（从暂停角度继续）
+
+    ```swift
+    btn.bySpinResume()
+    ```
+
+  * 停止并移除旋转动画
+
+    ```swift
+    btn.bySpinStop()
+    ```
+
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>

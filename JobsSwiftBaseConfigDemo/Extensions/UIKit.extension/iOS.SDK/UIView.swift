@@ -12,6 +12,7 @@
 #if os(iOS) || os(tvOS)
     import UIKit
 #endif
+import Foundation
 import ObjectiveC
 import ObjectiveC.runtime
 // MARK: 语法糖🍬
@@ -1354,42 +1355,36 @@ public extension UIView {
      }
  */
 // MARK: - 悬浮视图@配置
+public enum Start {
+    case bottomRight, bottomLeft, topRight, topLeft, center
+    case point(CGPoint) // 在“可用区域”(仅 safeArea)坐标系内
+}
+
 public extension UIView {
-    /// 吸附策略
+    // MARK: - 吸附策略
     enum SuspendDocking {
-        /// 不吸附（停在哪算哪）
-        case none
-        /// 吸附最近的左右边
-        case nearestEdge
-        /// 吸附最近的四个角
-        case nearestCorner
+        case none            // 不吸附
+        case nearestEdge     // 吸附最近边
+        case nearestCorner   // 吸附最近角
+        case auto            // 👈 新增：由 start 推导（默认）
     }
-    /// 悬浮行为配置
+    // MARK: - 悬浮行为配置
     struct SuspendConfig {
-        /// 指定容器；默认挂到活动 window（多 scene 兼容）
+        public var start: Start = .bottomRight
         public var container: UIView? = nil
-        /// 初始尺寸；当 view.size == .zero 时生效
-        public var fallbackSize: CGSize = CGSize(width: 56, height: 56)
-        /// 初始位置；nil 则使用右下角（安全区内 + insets）
+        public var fallbackSize: CGSize = .init(width: 56, height: 56)
         public var initialOrigin: CGPoint? = nil
-        /// 是否允许拖拽
         public var draggable: Bool = true
-        /// 吸附策略
-        public var docking: SuspendDocking = .nearestEdge
-        /// 对容器安全区的额外边距（会叠加到 safeAreaInsets 上）
-        public var insets: UIEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        /// 结束吸附是否动画
+        public var docking: SuspendDocking = .auto  // 👈 默认改为 .auto
         public var animated: Bool = true
-        /// 贴边时是否震动反馈
         public var hapticOnDock: Bool = false
-        /// 拖动过程是否限制在容器内
         public var confineInContainer: Bool = true
 
         public init() {}
         public static var `default`: SuspendConfig { .init() }
     }
 }
-
+// MARK: - DSL（Non-mutating 副本风格）
 public extension UIView.SuspendConfig {
     /// 工厂：链式外建
     static func dsl(_ build: (inout Self) -> Void) -> Self {
@@ -1397,35 +1392,23 @@ public extension UIView.SuspendConfig {
         build(&cfg)
         return cfg
     }
-    /// Non-mutating：返回新副本，适合链式
     @discardableResult func byContainer(_ v: UIView?) -> Self { var c = self; c.container = v; return c }
     @discardableResult func byFallbackSize(_ v: CGSize) -> Self { var c = self; c.fallbackSize = v; return c }
     @discardableResult func byDocking(_ v: UIView.SuspendDocking) -> Self { var c = self; c.docking = v; return c }
     @discardableResult func byInitialOrigin(_ v: CGPoint?) -> Self { var c = self; c.initialOrigin = v; return c }
     @discardableResult func byDraggable(_ v: Bool) -> Self { var c = self; c.draggable = v; return c }
-    @discardableResult func byInsets(_ v: UIEdgeInsets) -> Self { var c = self; c.insets = v; return c }
-    @discardableResult func byInsets(top: CGFloat? = nil, left: CGFloat? = nil,
-                                     bottom: CGFloat? = nil, right: CGFloat? = nil) -> Self {
-        var c = self
-        c.insets = UIEdgeInsets(
-            top: top ?? c.insets.top,
-            left: left ?? c.insets.left,
-            bottom: bottom ?? c.insets.bottom,
-            right: right ?? c.insets.right
-        )
-        return c
-    }
     @discardableResult func byAnimated(_ v: Bool) -> Self { var c = self; c.animated = v; return c }
     @discardableResult func byHapticOnDock(_ v: Bool) -> Self { var c = self; c.hapticOnDock = v; return c }
     @discardableResult func byConfineInContainer(_ v: Bool) -> Self { var c = self; c.confineInContainer = v; return c }
+    @discardableResult func byStart(_ v: Start) -> Self { var c = self; c.start = v; return c }
 }
-
+// MARK: - 关联键
 private enum SuspendKeys {
-    /// 使用 UInt8 哨兵地址，避免字符串 Key 冲突
     static var configKey: UInt8 = 0
     static var panKey: UInt8 = 0
     static var suspendedKey: UInt8 = 0
 }
+// MARK: - 主功能
 public extension UIView {
     /// 是否已经悬浮（关联对象标记）
     var isSuspended: Bool {
@@ -1444,36 +1427,28 @@ public extension UIView {
         removeFromSuperview()
     }
     /// 悬浮：挂到活动窗口或指定容器；支持拖拽/吸附/安全区
-    /// - Parameter config: 悬浮配置（有默认值）
-    /// - Returns: Self（链式）
     @discardableResult
     @MainActor
     func suspend(_ config: SuspendConfig = .default) -> Self {
-        /// 保存配置
+        // 1) 保存配置
         objc_setAssociatedObject(self, &SuspendKeys.configKey, config, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        /// 选择容器
+        // 2) 容器
         let container: UIView = config.container ?? (UIApplication.jobsKeyWindow() ?? Self._fallbackWindow())
-        /// 如果当前无父视图 -> 挂到容器
-        if superview == nil {
-            container.addSubview(self)
-        }
-        /// 尺寸兜底
-        if bounds.size == .zero {
-            frame.size = config.fallbackSize
-        }
-        /// 初始位置
+        container.layoutIfNeeded()
+        // 3) 添加
+        if superview == nil { container.addSubview(self) }
+        // 4) 尺寸兜底
+        if bounds.size == .zero { frame.size = config.fallbackSize }
+        // 5) 初始位置：优先 initialOrigin -> start 推导 -> 右下角保底
         if let origin = config.initialOrigin {
             frame.origin = origin
         } else if frame.origin == .zero {
-            // 默认：右下角（安全区 + insets 内）
-            let b = Self._availableBounds(in: container, extraInsets: config.insets)
-            frame.origin = CGPoint(x: b.maxX - frame.width, y: b.maxY - frame.height)
+            let area = Self._availableBounds(in: container) // ✅ 去掉 extraInsets
+            frame.origin = _origin(for: config.start, size: frame.size, in: area)
         }
-        /// 约束在容器可用范围内
-        if config.confineInContainer {
-            _clampFrameWithinContainer()
-        }
-        /// 拖拽手势
+        // 6) 边界夹紧
+        if config.confineInContainer { _clampFrameWithinContainer() }
+        // 7) 拖拽手势
         if config.draggable {
             let pan: UIPanGestureRecognizer
             if let old = objc_getAssociatedObject(self, &SuspendKeys.panKey) as? UIPanGestureRecognizer {
@@ -1484,113 +1459,156 @@ public extension UIView {
                 objc_setAssociatedObject(self, &SuspendKeys.panKey, pan, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             }
         }
-        // 8) 标记已悬浮
+        // 8) 标记
         objc_setAssociatedObject(self, &SuspendKeys.suspendedKey, true, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         return self
     }
-
+    /// Builder 版本
     @discardableResult
     @MainActor
     func bySuspend(_ build: (SuspendConfig) -> SuspendConfig) -> Self {
         suspend(build(.default))
     }
 }
-// MARK: - 悬浮视图@手势算法实现
+// MARK: - 私有实现
 private extension UIView {
-    @objc func _onPan(_ pan: UIPanGestureRecognizer) {
+    /// 根据 start & 可用区域推导初始 origin
+    func _origin(for start: Start, size: CGSize, in bounds: CGRect) -> CGPoint {
+        switch start {
+        case .bottomRight:
+            return CGPoint(x: bounds.maxX - size.width, y: bounds.maxY - size.height)
+        case .bottomLeft:
+            return CGPoint(x: bounds.minX, y: bounds.maxY - size.height)
+        case .topRight:
+            return CGPoint(x: bounds.maxX - size.width, y: bounds.minY)
+        case .topLeft:
+            return CGPoint(x: bounds.minX, y: bounds.minY)
+        case .center:
+            return CGPoint(x: bounds.midX - size.width * 0.5, y: bounds.midY - size.height * 0.5)
+        case .point(let p):
+            // “可用区域”坐标（(0,0) 即 safeArea 左上角）
+            return CGPoint(x: bounds.minX + p.x, y: bounds.minY + p.y)
+        }
+    }
+    /// `.auto` → 用 start 推导实际吸附模式
+    func _effectiveDocking(_ cfg: UIView.SuspendConfig) -> UIView.SuspendDocking {
+        switch cfg.docking {
+        case .auto:
+            switch cfg.start {
+            case .topLeft, .topRight, .bottomLeft, .bottomRight:
+                return .nearestCorner        // 角起步 → 吸角
+            case .center, .point:
+                return .nearestEdge          // 中心/点起步 → 吸边
+            }
+        default:
+            return cfg.docking
+        }
+    }
+
+    /// 计算吸附目标 origin
+    func _snapOrigin(for mode: UIView.SuspendDocking,
+                     in container: UIView,
+                     cfg: UIView.SuspendConfig,
+                     currentFrame f: CGRect) -> CGPoint {
+        let b = Self._availableBounds(in: container) // ✅ 去掉 extraInsets
+        let w = f.width, h = f.height
+        let center = CGPoint(x: f.midX, y: f.midY)
+
+        switch mode {
+        case .none:
+            return _clamped(f.origin, size: f.size, in: b, clamp: cfg.confineInContainer)
+
+        case .nearestEdge:
+            let dLeft   = abs(center.x - b.minX)
+            let dRight  = abs(b.maxX - center.x)
+            let dTop    = abs(center.y - b.minY)
+            let dBottom = abs(b.maxY - center.y)
+            let minD = min(dLeft, dRight, dTop, dBottom)
+            if minD == dLeft   { return CGPoint(x: b.minX,          y: min(max(b.minY, f.origin.y), b.maxY - h)) }
+            if minD == dRight  { return CGPoint(x: b.maxX - w,      y: min(max(b.minY, f.origin.y), b.maxY - h)) }
+            if minD == dTop    { return CGPoint(x: min(max(b.minX, f.origin.x), b.maxX - w), y: b.minY) }
+            /* minD == dBottom */ return CGPoint(x: min(max(b.minX, f.origin.x), b.maxX - w), y: b.maxY - h)
+
+        case .nearestCorner, .auto:
+            let corners: [CGPoint] = [
+                CGPoint(x: b.minX,       y: b.minY),
+                CGPoint(x: b.maxX - w,   y: b.minY),
+                CGPoint(x: b.minX,       y: b.maxY - h),
+                CGPoint(x: b.maxX - w,   y: b.maxY - h)
+            ]
+            var best = corners.first!
+            var bestD = CGFloat.greatestFiniteMagnitude
+            for c in corners {
+                let dx = center.x - (c.x + w * 0.5)
+                let dy = center.y - (c.y + h * 0.5)
+                let d  = dx*dx + dy*dy
+                if d < bestD { bestD = d; best = c }
+            }
+            return best
+        }
+    }
+
+    func _clamped(_ origin: CGPoint,
+                  size: CGSize,
+                  in bounds: CGRect,
+                  clamp: Bool) -> CGPoint {
+        guard clamp else { return origin }
+        let maxX = bounds.maxX - size.width
+        let maxY = bounds.maxY - size.height
+        return CGPoint(x: min(max(bounds.minX, origin.x), maxX),
+                       y: min(max(bounds.minY, origin.y), maxY))
+    }
+
+    func _clampFrameWithinContainer() {
         guard
-            let config = objc_getAssociatedObject(self, &SuspendKeys.configKey) as? UIView.SuspendConfig
+            let cfg = objc_getAssociatedObject(self, &SuspendKeys.configKey) as? UIView.SuspendConfig,
+            let container = self.superview
+        else { return }
+        let b = Self._availableBounds(in: container) // ✅ 去掉 extraInsets
+        frame.origin = _clamped(frame.origin, size: frame.size, in: b, clamp: cfg.confineInContainer)
+    }
+    /// 悬浮视图@手势算法实现
+    @objc func _onPan(_ gr: UIPanGestureRecognizer) {
+        guard
+            let cfg = objc_getAssociatedObject(self, &SuspendKeys.configKey) as? UIView.SuspendConfig,
+            let container = self.superview
         else { return }
 
-        let container: UIView = superview ?? (UIApplication.jobsKeyWindow() ?? UIView._fallbackWindow())
+        switch gr.state {
+        case .changed:
+            let delta = gr.translation(in: container)
+            frame.origin.x += delta.x
+            frame.origin.y += delta.y
+            gr.setTranslation(.zero, in: container)
+            if cfg.confineInContainer { _clampFrameWithinContainer() }
 
-        let translation = pan.translation(in: container)
-        pan.setTranslation(.zero, in: container)
-        /// 拖动更新 frame
-        frame.origin.x += translation.x
-        frame.origin.y += translation.y
-
-        if config.confineInContainer {
-            _clampFrameWithinContainer()
-        }
-        /// 结束时吸附
-        if pan.state == .ended || pan.state == .cancelled || pan.state == .failed {
-            switch config.docking {
-            case .none:
-                break
-            case .nearestEdge:
-                _dockToNearestEdge(animated: config.animated, haptic: config.hapticOnDock)
-            case .nearestCorner:
-                _dockToNearestCorner(animated: config.animated, haptic: config.hapticOnDock)
+        case .ended, .cancelled, .failed:
+            let mode = _effectiveDocking(cfg)
+            let target = _snapOrigin(for: mode, in: container, cfg: cfg, currentFrame: frame)
+            if cfg.animated {
+                UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseOut]) {
+                    self.frame.origin = target
+                } completion: { _ in
+                    if cfg.hapticOnDock {
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                    }
+                }
+            } else {
+                frame.origin = target
+                if cfg.hapticOnDock {
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                }
             }
+        default:
+            break
         }
     }
-    /// 将 frame 限制在容器的可用区域内（含安全区 + 额外 insets）
-    func _clampFrameWithinContainer() {
-        let container = superview ?? (UIApplication.jobsKeyWindow() ?? UIView._fallbackWindow())
-        let insets = (objc_getAssociatedObject(self, &SuspendKeys.configKey) as? UIView.SuspendConfig)?.insets ?? .zero
-        let b = UIView._availableBounds(in: container, extraInsets: insets)
-
-        var x = max(b.minX, min(frame.origin.x, b.maxX - frame.width))
-        var y = max(b.minY, min(frame.origin.y, b.maxY - frame.height))
-        if !x.isFinite { x = b.minX }
-        if !y.isFinite { y = b.minY }
-        frame.origin = CGPoint(x: x, y: y)
+    /// 可用区域（仅叠加 safeAreaInsets）
+    static func _availableBounds(in container: UIView) -> CGRect {
+        let safe = container.safeAreaInsets
+        return container.bounds.inset(by: safe)
     }
-    /// 吸附到最近的左右边
-    func _dockToNearestEdge(animated: Bool, haptic: Bool) {
-        let container = superview ?? (UIApplication.jobsKeyWindow() ?? UIView._fallbackWindow())
-        let insets = (objc_getAssociatedObject(self, &SuspendKeys.configKey) as? UIView.SuspendConfig)?.insets ?? .zero
-        let b = UIView._availableBounds(in: container, extraInsets: insets)
-
-        let centerX = frame.midX
-        let toLeft = (centerX - b.minX) < (b.maxX - centerX)
-        let targetX = toLeft ? b.minX : (b.maxX - frame.width)
-        let targetY = max(b.minY, min(frame.origin.y, b.maxY - frame.height))
-
-        let apply = { self.frame.origin = CGPoint(x: targetX, y: targetY) }
-        if animated {
-            UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseOut], animations: apply)
-        } else {
-            apply()
-        }
-        if haptic { _hapticLight() }
-    }
-    /// 吸附到最近的四角
-    func _dockToNearestCorner(animated: Bool, haptic: Bool) {
-        let container = superview ?? (UIApplication.jobsKeyWindow() ?? UIView._fallbackWindow())
-        let insets = (objc_getAssociatedObject(self, &SuspendKeys.configKey) as? UIView.SuspendConfig)?.insets ?? .zero
-        let b = UIView._availableBounds(in: container, extraInsets: insets)
-
-        let targets: [CGPoint] = [
-            CGPoint(x: b.minX, y: b.minY),                             // 左上
-            CGPoint(x: b.maxX - frame.width, y: b.minY),               // 右上
-            CGPoint(x: b.minX, y: b.maxY - frame.height),              // 左下
-            CGPoint(x: b.maxX - frame.width, y: b.maxY - frame.height) // 右下
-        ]
-
-        let cur = frame.origin
-        let nearest = targets.min { lhs, rhs in
-            hypot(lhs.x - cur.x, lhs.y - cur.y) < hypot(rhs.x - cur.x, rhs.y - cur.y)
-        } ?? cur
-
-        let apply = { self.frame.origin = nearest }
-        if animated {
-            UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseOut], animations: apply)
-        } else {
-            apply()
-        }
-        if haptic { _hapticLight() }
-    }
-
-    func _hapticLight() {
-        let g = UIImpactFeedbackGenerator(style: .light)
-        g.prepare()
-        g.impactOccurred()
-    }
-}
-// MARK: - 悬浮视图@窗口几何
-private extension UIView {
+    /// 悬浮视图@窗口几何
     /// 构造一个兜底窗口（极少会走到这里）
     static func _fallbackWindow() -> UIWindow {
         if #available(iOS 13.0, *),
@@ -1614,17 +1632,6 @@ private extension UIView {
             }
             return win
         }
-    }
-    /// 容器可用区域：安全区 + 额外 insets
-    static func _availableBounds(in container: UIView, extraInsets: UIEdgeInsets) -> CGRect {
-        let safe = container.safeAreaInsets
-        let ins = UIEdgeInsets(
-            top: safe.top + extraInsets.top,
-            left: safe.left + extraInsets.left,
-            bottom: safe.bottom + extraInsets.bottom,
-            right: safe.right + extraInsets.right
-        )
-        return container.bounds.inset(by: ins)
     }
 }
 // MARK: - 公共类型@右上角角标
@@ -1837,7 +1844,7 @@ private extension _InsetLabel {
         return self
     }
 }
-// 仅一个 key（右上角）
+/// 仅一个 key（右上角）
 private enum _RTBadgeKey { static var tr: UInt8 = 0 }
 private extension UIView {
 
@@ -2101,3 +2108,117 @@ public extension UIView {
     }
 }
 #endif
+// MARK: - 动画@旋转
+private var _spinKey: UInt8 = 0   // 动画是否已装
+private var _timeKey: UInt8 = 0   // 暂停时的时间戳
+public extension UIView {
+    /// 是否正在旋转（装了动画且 layer.speed == 1）
+    var jobs_isSpinning: Bool {
+        layer.animation(forKey: "jobs.spin") != nil && layer.speed == 1
+    }
+    /// 是否处于暂停（装了动画但 speed == 0）
+    var jobs_isSpinPaused: Bool {
+        layer.animation(forKey: "jobs.spin") != nil && layer.speed == 0
+    }
+    /// 开始旋转（基于 CALayer，不改 view.transform；与点击放大可叠加）
+    @discardableResult
+    func bySpinStart(revPerSec: Double = 1.0) -> Self {
+        // 已有就别重复装
+        if layer.animation(forKey: "jobs.spin") == nil {
+            let a = CABasicAnimation(keyPath: "transform.rotation.z")
+            a.fromValue = 0
+            a.toValue = Double.pi * 2
+            a.duration = 1.0 / max(0.001, revPerSec)   // 一秒转 revPerSec 圈
+            a.repeatCount = .infinity
+            a.isRemovedOnCompletion = false
+            a.fillMode = .forwards
+            layer.add(a, forKey: "jobs.spin")
+        }
+        // 确保运行态
+        layer.speed = 1
+        layer.timeOffset = 0
+        layer.beginTime = 0
+        return self
+    }
+    /// 暂停旋转（保持当前角度）
+    @discardableResult
+    func bySpinPause() -> Self {
+        guard layer.animation(forKey: "jobs.spin") != nil, layer.speed != 0 else { return self }
+        let paused = layer.convertTime(CACurrentMediaTime(), from: nil)
+        layer.speed = 0
+        layer.timeOffset = paused
+        return self
+    }
+    /// 恢复旋转（从暂停角度继续）
+    @discardableResult
+    func bySpinResume() -> Self {
+        guard layer.animation(forKey: "jobs.spin") != nil, layer.speed == 0 else { return self }
+        let paused = layer.timeOffset
+        layer.speed = 1
+        layer.timeOffset = 0
+        layer.beginTime = 0
+        let sincePause = layer.convertTime(CACurrentMediaTime(), from: nil) - paused
+        layer.beginTime = sincePause
+        return self
+    }
+    /// 停止并移除旋转动画
+    @discardableResult
+    func bySpinStop() -> Self {
+        layer.removeAnimation(forKey: "jobs.spin")
+        layer.speed = 1
+        layer.timeOffset = 0
+        layer.beginTime = 0
+        return self
+    }
+}
+/// 动画@点击放大
+private var _jobs_bounceAnimatingKey: UInt8 = 0
+@MainActor
+public extension UIView {
+    /// 仅执行一轮“放大→回弹”动画（不挂手势/不注册事件）
+    func playTapBounce(
+        scale: CGFloat = 1.08,
+        upDuration: TimeInterval = 0.08,
+        downDuration: TimeInterval = 0.30,
+        damping: CGFloat = 0.66,
+        velocity: CGFloat = 0.9,
+        haptic: UIImpactFeedbackGenerator.FeedbackStyle? = nil
+    ) {
+        // 去抖：正在做上一轮就不叠加
+        if (objc_getAssociatedObject(self, &_jobs_bounceAnimatingKey) as? Bool) == true { return }
+        objc_setAssociatedObject(self, &_jobs_bounceAnimatingKey, true, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+
+        // 以“当前 transform”为基准，避免覆盖你已有的旋转/缩放
+        let original = self.transform
+        if let style = haptic { UIImpactFeedbackGenerator(style: style).impactOccurred() }
+
+        UIView.animate(withDuration: upDuration,
+                       delay: 0,
+                       options: [.beginFromCurrentState, .allowUserInteraction, .curveEaseOut]) { [weak self] in
+            guard let self else { return }
+            self.transform = original.scaledBy(x: max(0.01, scale), y: max(0.01, scale))
+        } completion: { [weak self] _ in
+            guard let self else { return }
+            UIView.animate(withDuration: downDuration,
+                           delay: 0,
+                           usingSpringWithDamping: max(0.05, min(1, damping)),
+                           initialSpringVelocity: max(0, velocity),
+                           options: [.beginFromCurrentState, .allowUserInteraction]) { [weak self] in
+                self?.transform = original
+            } completion: { [weak self] _ in
+                objc_setAssociatedObject(self as Any, &_jobs_bounceAnimatingKey, false, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            }
+        }
+    }
+}
+// MARK: 动画@视图左右晃动
+extension UIView {
+    func shake(duration: CFTimeInterval = 0.5, repeatCount: Float = 1) {
+        let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
+        animation.timingFunction = CAMediaTimingFunction(name: .linear)
+        animation.duration = duration
+        animation.values = [-10, 10, -8, 8, -5, 5, 0] // 左右偏移
+        animation.repeatCount = repeatCount
+        self.layer.add(animation, forKey: "shake")
+    }
+}

@@ -13,6 +13,7 @@ final class RootListVC: BaseVC {
 
     deinit {
         suspendBtn.stopTimer()
+        spinBtn.stopTimer()
     }
 
     private let demos: [(title: String, vcType: UIViewController.Type)] = [
@@ -58,8 +59,7 @@ final class RootListVC: BaseVC {
                 .default
                     .byContainer(view)
                     .byFallbackSize(CGSize(width: 88, height: 44))
-                    .byDocking(.nearestEdge)
-                    .byInsets(UIEdgeInsets(top: 20, left: 16, bottom: 34, right: 16))
+                    .byStart(.point(CGPoint(x: 100, y: 200))) // 起始点
                     .byHapticOnDock(true)
             )
     }()
@@ -110,9 +110,76 @@ final class RootListVC: BaseVC {
             .bySuspend { cfg in
                 cfg
                     .byContainer(view)
+                    .byStart(.point(CGPoint(x: 0, y: 200))) // 起始点（可用区域坐标）
                     .byFallbackSize(CGSize(width: 90, height: 50))
                     .byDocking(.nearestEdge)
-                    .byInsets(UIEdgeInsets(top: 20, left: 16, bottom: 34, right: 16))
+                    .byHapticOnDock(true)
+            }
+    }()
+
+    private lazy var spinBtn: UIButton = {
+        UIButton(type: .system)
+            .byTitle("0", for: .normal) // 中间数字：秒
+            .byTitleFont(.systemFont(ofSize: 22, weight: .bold))
+            .byTitleColor(.white, for: .normal)
+            .byBackgroundColor(.systemOrange, for: .normal)
+            .byCornerRadius(25)
+            .byMasksToBounds(true)
+
+            // 正计时：每秒触发一次
+            .startTimer(total: nil, interval: 1.0, kind: .gcd)
+
+            // 每 tick：更新中心数字
+            .onTimerTick { [weak self] btn, elapsed, _, _ in
+                guard let _ = self else { return }
+                let sec = Int(elapsed)             // 累计秒
+                // 只有变化时才刷新，避免不必要的重绘
+                if btn.title(for: .normal) != "\(sec)" {
+                    btn.byTitle("\(sec)", for: .normal)
+                        .bySetNeedsUpdateConfiguration()
+                }
+            }
+            // 长按：原逻辑
+            .onLongPress(minimumPressDuration: 0.8) { btn, _ in
+                JobsToast.show(
+                    text: "长按了悬浮按钮",
+                    config: JobsToast.Config()
+                        .byBgColor(.systemGreen.withAlphaComponent(0.9))
+                        .byCornerRadius(12)
+                )
+            }
+            // 点击：保持原来的 Toast（不改动计时逻辑）
+            .onTap { [weak self] btn in
+                guard let _ = self else { return }
+                btn.playTapBounce(haptic: .light)  // 👈 临时放大→回弹（不注册任何手势/事件）
+                if btn.jobs_isSpinning {
+                    // 暂停旋转
+                    btn.bySpinPause()
+                    // 暂停计时（保留已累计秒，不重置）
+                    btn.timer?.pause()        // ✅ 推荐：你的统一内核挂在 button.timer 上
+                    // 如果你有封装方法，则用：btn.pauseTimer()
+                    JobsToast.show(
+                        text: "已暂停旋转 & 计时",
+                        config: .init().byBgColor(.systemGreen.withAlphaComponent(0.9)).byCornerRadius(12)
+                    )
+                } else {
+                    // 恢复旋转
+                    btn.bySpinStart()
+                    // 恢复计时（从暂停处继续累加）
+                    btn.timer?.resume()       // ✅ 推荐
+                    // 如果你有封装方法，则用：btn.resumeTimer()
+                    JobsToast.show(
+                        text: "继续旋转 & 计时",
+                        config: .init().byBgColor(.systemGreen.withAlphaComponent(0.9)).byCornerRadius(12)
+                    )
+                }
+            }
+            // 悬浮配置
+            .bySuspend { cfg in
+                cfg
+                    .byContainer(view)
+                    .byStart(.bottomRight)
+                    .byFallbackSize(CGSize(width: 50, height: 50))
                     .byHapticOnDock(true)
             }
     }()
@@ -257,7 +324,8 @@ final class RootListVC: BaseVC {
         tableView.byAlpha(1)
         updateFooterAvailability()
 //        suspendLab.byAlpha(1)
-        suspendBtn.byAlpha(1)
+        spinBtn.bySpinStart()
+        suspendBtn.byVisible(YES)
     }
     // MARK: - Footer 自动显隐逻辑
     private func updateFooterAvailability() {

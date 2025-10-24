@@ -77,34 +77,40 @@ final class BaseWebVC: BaseVC {
                     make.edges.equalToSuperview()
                 }
             }
-            /// 以下是依据前端暴露的自定义方法进行的JS交互
-            .registerMobileAction("navigateToHome") { [weak self] dict in
-                /// 跳转到首页
+            // MARK: - 以下是依据前端暴露的自定义方法进行的JS交互
+            /// 跳转到首页
+            .registerMobileAction("navigateToHome") { [weak self] body, reply in
                 self!.closeByResult("")
+                reply(nil)
             }
-            .registerMobileAction("getToken") { [weak self] dict in
-
+            .registerMobileAction("getToken") { [weak self] body, reply in
+                reply(nil)
             }
-            .registerMobileAction("navigateToLogin") { [weak self] dict in
+            .registerMobileAction("navigateToLogin") { [weak self] body, reply in
                 /// 跳转到登录页
+                reply(nil)
             }
-            .registerMobileAction("navigateToDeposit") { [weak self] dict in
+            .registerMobileAction("navigateToDeposit") { [weak self] body, reply in
                 /// 跳转到充值页
+                reply(nil)
             }
-            .registerMobileAction("closeWebView") { [weak self] dict in
+            .registerMobileAction("closeWebView") { [weak self] body, reply in
                 /// 关闭WebView
+                reply(nil)
             }
-            .registerMobileAction("navigateToSecurityCenter") { [weak self] dict in
+            .registerMobileAction("navigateToSecurityCenter") { [weak self] body, reply in
                 /// 跳转福利中心
+                reply(nil)
             }
-            .registerMobileAction("showToast") { [weak self] dict in
+            .registerMobileAction("showToast") { [weak self] body, reply in
                 /// 显示Toast
                 JobsToast.show(
-                    text: dict.stringValue(for: "message") ?? "",
+                    text: body.stringValue(for: "message") ?? "",
                     config: JobsToast.Config()
                         .byBgColor(.systemGreen.withAlphaComponent(0.9))
                         .byCornerRadius(12)
                 )
+                reply(nil)
             }
     }()
     // MARK: - 生命周期
