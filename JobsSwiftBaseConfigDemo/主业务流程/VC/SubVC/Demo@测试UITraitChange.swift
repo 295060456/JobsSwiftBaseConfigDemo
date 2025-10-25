@@ -11,34 +11,38 @@ import QuartzCore
 // MARK: - Demo VC（iOS 17+ 使用 UITraitChangeObservable + 内置调试按钮）
 final class TraitChangeDemoVC: BaseVC {
     // MARK: UI（全部懒加载，byAddTo + SnapKit）
-    private lazy var titleLabel = UILabel()
-        .byText("UITraitChangeObservable · Demo")
-        .byFont(.boldSystemFont(ofSize: 18))
-        .byTextAlignment(.natural)              // ✅ 新增
-        .byTextColor(.label)
-        .byAddTo(view) { [unowned self] make in
-            make.top.equalTo(gk_navigationBar.snp.bottom).offset(10)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
+    private lazy var titleLabel : UILabel = {
+        UILabel().byText("UITraitChangeObservable · Demo")
+            .byFont(.boldSystemFont(ofSize: 18))
+            .byTextAlignment(.natural)              // ✅ 新增
+            .byTextColor(.label)
+            .byAddTo(view) { [unowned self] make in
+                make.top.equalTo(gk_navigationBar.snp.bottom).offset(10)
+                make.leading.trailing.equalToSuperview().inset(16)
+            }
+    }()
 
-    private lazy var infoLabel = UILabel()
-        .byNumberOfLines(0)
-        .byTextColor(.secondaryLabel)
-        .byFont(.systemFont(ofSize: 13))
-        .byTextAlignment(.natural)              // ✅ 新增
-        .byAddTo(view) { [unowned self] make in
-            make.top.equalTo(self.titleLabel.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
+    private lazy var infoLabel :UILabel = {
+        UILabel()
+            .byNumberOfLines(0)
+            .byTextColor(.secondaryLabel)
+            .byFont(.systemFont(ofSize: 13))
+            .byTextAlignment(.natural)              // ✅ 新增
+            .byAddTo(view) { [unowned self] make in
+                make.top.equalTo(self.titleLabel.snp.bottom).offset(8)
+                make.leading.trailing.equalToSuperview().inset(16)
+            }
+    }()
 
-    private lazy var swatch = UIView()
-        .byCornerRadius(12)
-        .byAddTo(view) { [unowned self] make in
-            make.top.equalTo(self.infoLabel.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview().inset(16)
-            make.height.equalTo(120)
-        }
-
+    private lazy var swatch : UIView = {
+        UIView()
+            .byCornerRadius(12)
+            .byAddTo(view) { [unowned self] make in
+                make.top.equalTo(self.infoLabel.snp.bottom).offset(16)
+                make.leading.trailing.equalToSuperview().inset(16)
+                make.height.equalTo(120)
+            }
+    }()
     /// 演示“不会自动随外观变化”的资源：Layer 需要手动刷新 CGColor
     private let gradientLayer: CAGradientLayer = {
         let g = CAGradientLayer()
@@ -46,31 +50,38 @@ final class TraitChangeDemoVC: BaseVC {
         g.endPoint   = CGPoint(x: 1, y: 0.5)
         return g
     }()
-
     /// 尺寸类切换时改变轴向
-    private lazy var stack = UIStackView()
-        .byAddTo(view) { [unowned self] make in
-            make.top.equalTo(self.swatch.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
+    private lazy var stack : UIStackView = {
+        UIStackView()
+            .byAddTo(view) { [unowned self] make in
+                make.top.equalTo(self.swatch.snp.bottom).offset(16)
+                make.leading.trailing.equalToSuperview().inset(16)
+            }
+    }()
 
-    private lazy var leftBox = UIView()
-        .byCornerRadius(10)
-        .byAddTo(stack) { _ in }
+    private lazy var leftBox : UIView = {
+        UIView()
+            .byCornerRadius(10)
+            .byAddTo(stack) { _ in }
+    }()
 
-    private lazy var rightBox = UIView()
-        .byCornerRadius(10)
-        .byAddTo(stack) { _ in }
+    private lazy var rightBox : UIView = {
+        UIView()
+            .byCornerRadius(10)
+            .byAddTo(stack) { _ in }
+    }()
 
-    private lazy var dynamicText = UILabel()
-        .byText("Dynamic Type 预览")
-        .byTextColor(.label)
-        .byTextAlignment(.natural)              // ✅ 新增
-        .byAddTo(view) { [unowned self] make in
-            make.top.equalTo(self.stack.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview().inset(16)
-            make.bottom.lessThanOrEqualTo(self.view.safeAreaLayoutGuide.snp.bottom).inset(16)
-        }
+    private lazy var dynamicText :UILabel = {
+        UILabel()
+            .byText("Dynamic Type 预览")
+            .byTextColor(.label)
+            .byTextAlignment(.natural)              // ✅ 新增
+            .byAddTo(view) { [unowned self] make in
+                make.top.equalTo(self.stack.snp.bottom).offset(16)
+                make.leading.trailing.equalToSuperview().inset(16)
+                make.bottom.lessThanOrEqualTo(self.view.safeAreaLayoutGuide.snp.bottom).inset(16)
+            }
+    }()
     // MARK: - 调试状态
     private var forceDark = false
     private var forceRTL  = false
@@ -144,6 +155,11 @@ final class TraitChangeDemoVC: BaseVC {
         rightBox.byAlpha(1)
         dynamicText.byAlpha(1)
         stack.byAlpha(1)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        overrideUserInterfaceStyle = .dark
     }
 
     override func viewDidLayoutSubviews() {

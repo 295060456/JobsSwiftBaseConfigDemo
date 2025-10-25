@@ -5212,7 +5212,37 @@ private lazy var web: BaseWebView = { [unowned self] in
   web.loadBundleHTMLBy(named: "BaseWebViewDemo")
   ```
 
-### 48、动画 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 48、修改状态栏颜色@当前控制器页面 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 修改**Info.plist**
+
+  ```xml
+  <!--  默认 UIViewControllerBasedStatusBarAppearance 就是 YES  -->
+  <key>UIViewControllerBasedStatusBarAppearance</key>
+  <true/>
+  ```
+
+* **`UIViewController`**
+
+  ```swift
+  override func viewDidLoad() {
+      super.viewDidLoad()
+      view.backgroundColor = .systemBackground
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
+      super.viewWillAppear(animated)
+      overrideUserInterfaceStyle = .dark
+      setNeedsStatusBarAppearanceUpdate()
+  }
+  
+  override var preferredStatusBarStyle: UIStatusBarStyle {
+      // 深色外观时，常用白字
+      .lightContent   // 浅色外观用 .darkContent
+  }
+  ```
+
+### 49、动画 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **`UIView`**点击放大动画
 
