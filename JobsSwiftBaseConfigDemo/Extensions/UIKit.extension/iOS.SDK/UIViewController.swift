@@ -420,7 +420,7 @@ public extension UIViewController {
         if host.transitionCoordinator != nil || host.presentedViewController != nil { return self }
 
         host.present(
-            UINavigationController(rootViewController: self)
+            self.jobsNavContainer
                 .byNavigationBarHidden(true)
                 .byModalPresentationStyle(.fullScreen),
             animated: animated

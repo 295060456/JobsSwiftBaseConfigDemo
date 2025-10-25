@@ -94,3 +94,12 @@ public func nowClock() -> String {
 public func fmt(_ d: Date) -> String {
     DateFormatter().byDateFormat("HH:mm:ss.SSS").string(from: d)
 }
+
+@inline(__always)
+public func isHttpURL(_ raw: String?) -> Bool {
+    guard let s = raw?.trimmingCharacters(in: .whitespacesAndNewlines),
+          !s.isEmpty
+    else { return false }
+    let p = s.lowercased()
+    return p.hasPrefix("http://") || p.hasPrefix("https://")
+}
