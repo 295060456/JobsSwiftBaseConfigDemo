@@ -9,104 +9,168 @@ import UIKit
 import SnapKit
 
 final class SafetyPushDemoVC: BaseVC {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        jobsSetupGKNav(
-            title: "🚦 Safety Push Demo"
-        )
-        view.backgroundColor = .systemBackground
-        setupUI()
-    }
-    // MARK: - UI
-    private let stack = UIStackView().then {
-        $0.axis = .vertical
-        $0.spacing = 20
-        $0.alignment = .center
-    }
-
-    private func setupUI() {
-        view.addSubview(stack)
-        stack.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-        }
-        // 1️⃣ 普通按钮，测试重复点击防重 push
-        stack.addArrangedSubview(UIButton(type: .system)
-            .byTitle("Push Detail (快速连点试试)")
-            .onTap { _ in
-//                DemoDetailVC()
-//                    .byData(["id": 7, "title": "详情", "price": 9.9])// 字典
-//                    .onResult { id in
-//                        print("回来了 id=\(id)")
-//                    }
-//                    .byPush(self)           // 自带防重入，连点不重复
-//                    .byCompletion{
-//                        print("❤️结束❤️")
-//                    }
-
-                BaseWebVC()
+    // MARK: - Buttons（逐个老老实实创建，链式 + 就地约束）
+    private lazy var topButton: UIButton = {
+        UIButton.sys()
+            .byTitle("从上进入", for: .normal)
+            .byTitle("从上进入 ✓", for: .selected)
+            .byTitleColor(.systemBlue, for: .normal)
+            .byTitleColor(.systemRed,  for: .selected)
+            .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+            .bySubTitle("Push from Top", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 13))
+            .byImage("arrow.down.to.line".sysImg, for: .normal)
+            .byImage("arrow.down.to.line.compact".sysImg, for: .selected)
+            .byContentEdgeInsets(.init(top: 10, left: 12, bottom: 10, right: 12))
+            .byTitleEdgeInsets(.init(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { [unowned self] b in
+                b.isSelected.toggle()
+                DemoDetailVC()
                     .byData("https://www.baidu.com")
-                    .onResult { id in
-                        print("回来了 id=\(id)")
-                    }
-                    .byPush(self)           // 自带防重入，连点不重复
-                    .byCompletion{
-                        print("❤️结束❤️")
-                    }
-            })
-        // 2️⃣ 自定义 View，内部自己调用 pushSafely
-        let customView = DemoInnerView()
-        customView.backgroundColor = .systemBlue.withAlphaComponent(0.2)
-        customView.layer.cornerRadius = 8
-        customView.snp.makeConstraints { make in
-            make.width.equalTo(250)
-            make.height.equalTo(60)
-        }
-        stack.addArrangedSubview(customView)
-
-        // label
-        stack.addArrangedSubview(UILabel()
-            .byText("👆 点上面蓝色 View 看是否能推页面")
-            .byTextColor(.secondaryLabel)
-            .byFont(.systemFont(ofSize: 14)))
-    }
-}
-// MARK: 一个自定义 View，内部点击时也能调用 pushVC
-final class DemoInnerView: UIView {
-
-    private lazy var label: UILabel = {
-        return UILabel().byText("👉 Tap Here (View 内触发 Push)")
-            .byTextAlignment(.center)
-            .byFont(.systemFont(ofSize: 15, weight: .medium))
-            .byTextColor(.systemBlue)
+                    .byDirection(.fromTop)      // 👈 上
+                    .byPush(self)
+                    .byCompletion { print("❤️结束❤️ fromTop") }
+            }
+            .byCornerDot(diameter: 8, offset: .init(horizontal: -4, vertical: 4))
+            .byCornerBadgeText("TOP") { cfg in
+                cfg.byOffset(.init(horizontal: -6, vertical: 6))
+                    .byInset(.init(top: 2, left: 6, bottom: 2, right: 6))
+                    .byBgColor(.systemRed)
+                    .byFont(.systemFont(ofSize: 11, weight: .bold))
+            }
+            .byAddTo(view) { [unowned self] make in
+                make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(40)
+                make.left.right.equalToSuperview().inset(24)
+                make.height.equalTo(44)
+            }
+            .byAlpha(0) // 进来先 0，viewDidLoad 再统一置 1
     }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        addSubview(label)
-        label.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+    private lazy var bottomButton: UIButton = {
+        UIButton.sys()
+            .byTitle("从下进入", for: .normal)
+            .byTitle("从下进入 ✓", for: .selected)
+            .byTitleColor(.systemBlue, for: .normal)
+            .byTitleColor(.systemRed,  for: .selected)
+            .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+            .bySubTitle("Push from Bottom", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 13))
+            .byImage("arrow.up.to.line".sysImg, for: .normal)
+            .byImage("arrow.up.to.line.compact".sysImg, for: .selected)
+            .byContentEdgeInsets(.init(top: 10, left: 12, bottom: 10, right: 12))
+            .byTitleEdgeInsets(.init(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { [unowned self] b in
+                b.isSelected.toggle()
+                DemoDetailVC()
+                    .byData("https://www.baidu.com")
+                    .byDirection(.fromBottom)   // 👈 下
+                    .byPush(self)
+                    .byCompletion { print("❤️结束❤️ fromBottom") }
+            }
+            .byCornerDot(diameter: 8, offset: .init(horizontal: -4, vertical: 4))
+            .byCornerBadgeText("BOTTOM") { cfg in
+                cfg.byOffset(.init(horizontal: -6, vertical: 6))
+                    .byInset(.init(top: 2, left: 6, bottom: 2, right: 6))
+                    .byBgColor(.systemRed)
+                    .byFont(.systemFont(ofSize: 11, weight: .bold))
+            }
+            .byAddTo(view) { [unowned self] make in
+                make.top.equalTo(self.topButton.snp.bottom).offset(16)
+                make.left.right.equalToSuperview().inset(24)
+                make.height.equalTo(44)
+            }
+            .byAlpha(0)
+    }()
 
-        isUserInteractionEnabled = true
-        addGestureRecognizer(
-            UITapGestureRecognizer
-                .byConfig { gr in
-                    DemoDetailVC()
-                        .byData(DemoModel(id: 7, title: "详情"))
-                        .onResult { id in
-                            print("回来了 id=\(id)")
-                        }
-                        .byPush(self)           // 自带防重入，连点不重复
-                        .byCompletion{
-                            print("❤️结束❤️")
-                        }
-                }
-        )
+    private lazy var leftButton: UIButton = {
+        UIButton.sys()
+            .byTitle("从左进入", for: .normal)
+            .byTitle("从左进入 ✓", for: .selected)
+            .byTitleColor(.systemBlue, for: .normal)
+            .byTitleColor(.systemRed,  for: .selected)
+            .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+            .bySubTitle("Push from Left", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 13))
+            .byImage("arrow.right.to.line".sysImg, for: .normal)
+            .byImage("arrow.right.to.line.compact".sysImg, for: .selected)
+            .byContentEdgeInsets(.init(top: 10, left: 12, bottom: 10, right: 12))
+            .byTitleEdgeInsets(.init(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { [unowned self] b in
+                b.isSelected.toggle()
+                DemoDetailVC()
+                    .byData("https://www.baidu.com")
+                    .byDirection(.fromLeft)     // 👈 左
+                    .byPush(self)
+                    .byCompletion { print("❤️结束❤️ fromLeft") }
+            }
+            .byCornerDot(diameter: 8, offset: .init(horizontal: -4, vertical: 4))
+            .byCornerBadgeText("LEFT") { cfg in
+                cfg.byOffset(.init(horizontal: -6, vertical: 6))
+                    .byInset(.init(top: 2, left: 6, bottom: 2, right: 6))
+                    .byBgColor(.systemRed)
+                    .byFont(.systemFont(ofSize: 11, weight: .bold))
+            }
+            .byAddTo(view) { [unowned self] make in
+                make.top.equalTo(self.bottomButton.snp.bottom).offset(16)
+                make.left.right.equalToSuperview().inset(24)
+                make.height.equalTo(44)
+            }
+            .byAlpha(0)
+    }()
 
-    }
+    private lazy var rightButton: UIButton = {
+        UIButton.sys()
+            .byTitle("从右进入（系统默认）", for: .normal)
+            .byTitle("从右进入 ✓", for: .selected)
+            .byTitleColor(.systemBlue, for: .normal)
+            .byTitleColor(.systemRed,  for: .selected)
+            .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+            .bySubTitle("Push from Right", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 13))
+            .byImage("arrow.left.to.line".sysImg, for: .normal)
+            .byImage("arrow.left.to.line.compact".sysImg, for: .selected)
+            .byContentEdgeInsets(.init(top: 10, left: 12, bottom: 10, right: 12))
+            .byTitleEdgeInsets(.init(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { [unowned self] b in
+                b.isSelected.toggle()
+                DemoDetailVC()
+                    .byData("https://www.baidu.com")
+                    .byDirection(.fromRight)    // 👈 右（等同系统默认）
+                    .byPush(self)
+                    .byCompletion { print("❤️结束❤️ fromRight") }
+            }
+            .byCornerDot(diameter: 8, offset: .init(horizontal: -4, vertical: 4))
+            .byCornerBadgeText("RIGHT") { cfg in
+                cfg.byOffset(.init(horizontal: -6, vertical: 6))
+                    .byInset(.init(top: 2, left: 6, bottom: 2, right: 6))
+                    .byBgColor(.systemRed)
+                    .byFont(.systemFont(ofSize: 11, weight: .bold))
+            }
+            .byAddTo(view) { [unowned self] make in
+                make.top.equalTo(self.leftButton.snp.bottom).offset(16)
+                make.left.right.equalToSuperview().inset(24)
+                make.height.equalTo(44)
+            }
+            .byAlpha(0)
+    }()
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    // MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        jobsSetupGKNav(title: "🚦 Safety Push Demo")
+        view.backgroundColor = .systemBackground
+        // 用的时候直接置可见
+        topButton.byVisible(YES)
+        bottomButton.byVisible(YES)
+        leftButton.byVisible(YES)
+        rightButton.byVisible(YES)
     }
 }

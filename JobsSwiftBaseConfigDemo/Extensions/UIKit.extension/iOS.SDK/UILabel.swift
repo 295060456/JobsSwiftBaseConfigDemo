@@ -78,6 +78,13 @@ extension UILabel {
         setContentHuggingPriority(priority, for: axis)
         return self
     }
+    /// 双轴便捷
+    @discardableResult
+    func byHugging(_ horizontal: UILayoutPriority, _ vertical: UILayoutPriority) -> Self {
+        setContentHuggingPriority(horizontal, for: .horizontal)
+        setContentHuggingPriority(vertical, for: .vertical)
+        return self
+    }
 
     @discardableResult
     func byCompressionResistance(_ priority: UILayoutPriority,
@@ -85,6 +92,14 @@ extension UILabel {
         setContentCompressionResistancePriority(priority, for: axis)
         return self
     }
+    /// 双轴便捷
+    @discardableResult
+    func byCompressionResistance(_ horizontal: UILayoutPriority, _ vertical: UILayoutPriority) -> Self {
+        setContentCompressionResistancePriority(horizontal, for: .horizontal)
+        setContentCompressionResistancePriority(vertical, for: .vertical)
+        return self
+    }
+
     // MARK: 背景图 → 平铺色
     @discardableResult
     func bgImage(_ image: UIImage?) -> Self {
@@ -142,7 +157,7 @@ extension UILabel {
         let textLayer = CATextLayer()
         textLayer.name = "JobsTextLayer"
         textLayer.contentsScale = UIScreen.main.scale
-        textLayer.alignmentMode = .fromNSTextAlignment(textAlignment)
+        textLayer.alignmentMode = ._jobs_fromNSTextAlignment(textAlignment)
         textLayer.truncationMode = (lineBreakMode == .byTruncatingHead) ? .start :
                                    (lineBreakMode == .byTruncatingMiddle) ? .middle :
                                    (lineBreakMode == .byTruncatingTail) ? .end : .none
@@ -185,6 +200,112 @@ extension UILabel {
     func byDynamicTextStyle(_ style: UIFont.TextStyle) -> Self {
         self.font = .preferredFont(forTextStyle: style)
         self.adjustsFontForContentSizeCategory = true
+        return self
+    }
+    // ===== 新增：更多 by-DSL 补齐 =====
+
+    // 高亮 / 交互 / 启用
+    @discardableResult
+    func byHighlightedTextColor(_ color: UIColor?) -> Self { self.highlightedTextColor = color; return self }
+
+    @discardableResult
+    func byIsHighlighted(_ v: Bool) -> Self { self.isHighlighted = v; return self }
+
+    @discardableResult
+    func byEnabled(_ v: Bool) -> Self { self.isEnabled = v; return self }
+
+    // 文本压缩/缩放策略
+    @discardableResult
+    func byAdjustsFontSizeToFitWidth(_ v: Bool) -> Self { self.adjustsFontSizeToFitWidth = v; return self }
+
+    @discardableResult
+    func byBaselineAdjustment(_ v: UIBaselineAdjustment) -> Self { self.baselineAdjustment = v; return self }
+
+    @discardableResult
+    func byMinimumScaleFactor(_ v: CGFloat) -> Self { self.minimumScaleFactor = v; return self }
+
+    @discardableResult
+    func byAllowsDefaultTighteningForTruncation(_ v: Bool) -> Self { self.allowsDefaultTighteningForTruncation = v; return self }
+
+    @available(iOS 14.0, *)
+    @discardableResult
+    func byLineBreakStrategy(_ s: NSParagraphStyle.LineBreakStrategy) -> Self { self.lineBreakStrategy = s; return self }
+
+    // AutoLayout
+    @discardableResult
+    func byPreferredMaxLayoutWidth(_ w: CGFloat) -> Self { self.preferredMaxLayoutWidth = w; return self }
+
+    // iOS 17
+    @available(iOS 17.0, *)
+    @discardableResult
+    func byPreferredVibrancy(_ v: UILabelVibrancy) -> Self { self.preferredVibrancy = v; return self }
+
+    @available(iOS 17.0, *)
+    @discardableResult
+    func byShowsExpansionTextWhenTruncated(_ v: Bool) -> Self { self.showsExpansionTextWhenTruncated = v; return self }
+
+    // 段落样式（对 attributedText 生效；若当前是纯文本会自动构造）
+    @discardableResult
+    func byParagraph(
+        lineSpacing: CGFloat? = nil,
+        paragraphSpacing: CGFloat? = nil,
+        alignment: NSTextAlignment? = nil,
+        lineHeightMultiple: CGFloat? = nil,
+        hyphenationFactor: Float? = nil,
+        kerning: Double? = nil
+    ) -> Self {
+        let raw = self.attributedText ?? {
+            NSAttributedString(string: self.text ?? "", attributes: [
+                .font: self.font as Any,
+                .foregroundColor: self.textColor as Any
+            ])
+        }()
+
+        let result = NSMutableAttributedString(attributedString: raw)
+        let full = NSRange(location: 0, length: result.length)
+
+        let p = (result.attribute(.paragraphStyle, at: 0, effectiveRange: nil) as? NSMutableParagraphStyle) ?? {
+            let s = NSMutableParagraphStyle()
+            return s
+        }()
+
+        if let v = lineSpacing { p.lineSpacing = v }
+        if let v = paragraphSpacing { p.paragraphSpacing = v }
+        if let v = alignment { p.alignment = v }
+        if let v = lineHeightMultiple { p.lineHeightMultiple = v }
+        if let v = hyphenationFactor { p.hyphenationFactor = v }
+
+        result.addAttribute(.paragraphStyle, value: p, range: full)
+        if let k = kerning { result.addAttribute(.kern, value: k, range: full) }
+
+        self.attributedText = result
+        return self
+    }
+
+    // 尺寸测量
+    func jobs_height(fittingWidth width: CGFloat) -> CGFloat {
+        let size = CGSize(width: width, height: .greatestFiniteMagnitude)
+        return sizeThatFits(size).height
+    }
+
+    func jobs_width(fittingHeight height: CGFloat) -> CGFloat {
+        let size = CGSize(width: .greatestFiniteMagnitude, height: height)
+        return sizeThatFits(size).width
+    }
+
+    // 轻量 Layer 阴影（UILabel 自带 shadowColor/Offset 太弱）
+    @discardableResult
+    func byLayerShadow(
+        color: UIColor? = UIColor.black.withAlphaComponent(0.25),
+        radius: CGFloat = 3,
+        offset: CGSize = .init(width: 0, height: 2),
+        opacity: Float = 1
+    ) -> Self {
+        layer.masksToBounds = false
+        layer.shadowColor = color?.cgColor
+        layer.shadowRadius = radius
+        layer.shadowOffset = offset
+        layer.shadowOpacity = opacity
         return self
     }
 }
@@ -234,6 +355,95 @@ extension UILabel {
                                           value: color,
                                           range: NSRange(location: 0, length: attributedString.length))
             self.attributedText = attributedString
+        }
+    }
+}
+// MARK: - 文本内边距（不改类，关联对象 + 方法交换）
+private var _jobsInsetsKey: UInt8 = 0
+private var _jobsInsetsInstalledKey: UInt8 = 0
+
+extension UILabel {
+    /// 给 UILabel 增加 contentInsets 能力（无需自定义子类）
+    var jobs_contentInsets: UIEdgeInsets {
+        get { (objc_getAssociatedObject(self, &_jobsInsetsKey) as? NSValue)?.uiEdgeInsetsValue ?? .zero }
+        set {
+            objc_setAssociatedObject(self, &_jobsInsetsKey, NSValue(uiEdgeInsets: newValue), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            _jobs_installInsetsSwizzleIfNeeded()
+            setNeedsDisplay()
+            invalidateIntrinsicContentSize()
+        }
+    }
+    
+    @discardableResult
+    func byLabContentInsets(_ insets: UIEdgeInsets) -> Self {
+        self.jobs_contentInsets = insets
+        return self
+    }
+}
+
+private extension UILabel {
+    static let _once: Void = {
+        let cls = UILabel.self
+        // drawText(in:)
+        _jobs_swizzle(cls, #selector(drawText(in:)), #selector(_jobs_drawText(in:)))
+        // textRect(forBounds:limitedToNumberOfLines:)
+        _jobs_swizzle(cls,
+                      #selector(textRect(forBounds:limitedToNumberOfLines:)),
+                      #selector(_jobs_textRect(forBounds:limitedToNumberOfLines:)))
+        // intrinsicContentSize
+        _jobs_swizzle(cls, #selector(getter: intrinsicContentSize), #selector(getter: _jobs_intrinsicContentSize))
+    }()
+
+    func _jobs_installInsetsSwizzleIfNeeded() {
+        let installed = (objc_getAssociatedObject(UILabel.self, &_jobsInsetsInstalledKey) as? Bool) ?? false
+        if !installed {
+            _ = UILabel._once
+            objc_setAssociatedObject(UILabel.self, &_jobsInsetsInstalledKey, true, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+
+    @objc func _jobs_drawText(in rect: CGRect) {
+        let inset = jobs_contentInsets
+        let r = rect.inset(by: inset)
+        _jobs_drawText(in: r)
+    }
+
+    @objc func _jobs_textRect(forBounds bounds: CGRect, limitedToNumberOfLines numberOfLines: Int) -> CGRect {
+        let inset = jobs_contentInsets
+        let b = bounds.inset(by: inset)
+        let rect = _jobs_textRect(forBounds: b, limitedToNumberOfLines: numberOfLines)
+        // 反向把 inset 加回去，保持 UILabel 外观尺寸一致
+        return CGRect(x: rect.origin.x - inset.left,
+                      y: rect.origin.y - inset.top,
+                      width: rect.width + inset.left + inset.right,
+                      height: rect.height + inset.top + inset.bottom)
+    }
+
+    @objc var _jobs_intrinsicContentSize: CGSize {
+        let base = self._jobs_intrinsicContentSize
+        let inset = jobs_contentInsets
+        return CGSize(width: base.width + inset.left + inset.right,
+                      height: base.height + inset.top + inset.bottom)
+    }
+}
+
+// MARK: - 轻量方法交换
+private func _jobs_swizzle(_ cls: AnyClass, _ orig: Selector, _ repl: Selector) {
+    guard let m1 = class_getInstanceMethod(cls, orig),
+          let m2 = class_getInstanceMethod(cls, repl) else { return }
+    method_exchangeImplementations(m1, m2)
+}
+
+// MARK: - 对齐映射（CATextLayerAlignmentMode ← NSTextAlignment）
+private extension CATextLayerAlignmentMode {
+    static func _jobs_fromNSTextAlignment(_ a: NSTextAlignment) -> CATextLayerAlignmentMode {
+        switch a {
+        case .left: return .left
+        case .right: return .right
+        case .center: return .center
+        case .justified: return .justified
+        case .natural: return .natural
+        @unknown default: return .natural
         }
     }
 }

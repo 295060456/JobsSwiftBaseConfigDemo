@@ -16,10 +16,11 @@
 //
 
 #if os(iOS) || os(tvOS)
-    import UIKit
+import UIKit
 #endif
 import ObjectiveC
 import SnapKit
+
 // MARK: - 公共枚举 / 协议
 public enum JobsRefreshAxis { case vertical, horizontal }
 public enum _JobsRefreshEdge { case top, bottom, leading, trailing }
@@ -36,10 +37,32 @@ private protocol _JobsAnimatorAxisAware: AnyObject {
     var _jobs_isHorizontalContext: Bool { get set }
     var textOrientation: JobsTextOrientationMode { get set }
 }
+
+// MARK: - 统一的“方向解析 + 文案按方向排版”
+extension _JobsAnimatorAxisAware {
+    @inline(__always)
+    fileprivate func _jobs_resolvedOrientation() -> _JobsResolvedOrientation {
+        switch textOrientation {
+        case .horizontal:    return .horizontal
+        case .verticalStack: return .verticalStack
+        case .auto:          return _jobs_isHorizontalContext ? .verticalStack : .horizontal
+        }
+    }
+
+    @inline(__always)
+    fileprivate func _jobs_orientedText(_ s: String) -> String {
+        switch _jobs_resolvedOrientation() {
+        case .horizontal:
+            return s                           // 横排：一行显示
+        case .verticalStack:
+            return s.contains("\n") ? s        // 竖排：逐字加换行
+                                     : s.map { String($0) }.joined(separator: "\n")
+        }
+    }
+}
+
 // MARK: - Header
-public final class JobsHeaderAnimator: UIView,
-                                        JobsRefreshAnimatable,
-                                       _JobsAnimatorAxisAware {
+public final class JobsHeaderAnimator: UIView, JobsRefreshAnimatable, _JobsAnimatorAxisAware {
     public var executeIncremental: CGFloat = 60
     public var idleDescription = "下拉刷新"
     public var releaseToRefreshDescription = "松开立即刷新"
@@ -49,24 +72,21 @@ public final class JobsHeaderAnimator: UIView,
     public var textOrientation: JobsTextOrientationMode = .auto
     internal var _jobs_isHorizontalContext = false
 
-    // ✅ 改成懒加载配置块
+    // 懒加载 label（链式 DSL 由你工程内扩展提供）
     private lazy var titleLabel: UILabel = {
         UILabel()
             .byFont(.systemFont(ofSize: 14))
             .byTextColor(.secondaryLabel)
             .byTextAlignment(.center)
-            .byNumberOfLines(0)
             .byText(idleDescription)
     }()
 
-    private let indicator  = UIActivityIndicatorView(style: .medium)
+    private let indicator = UIActivityIndicatorView(style: .medium)
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
         isUserInteractionEnabled = false
-
-        // titleLabel 的样式已放入 lazy 闭包，这里只做添加
         addSubview(titleLabel)
         indicator.byHidesWhenStopped(true)
         addSubview(indicator)
@@ -75,46 +95,49 @@ public final class JobsHeaderAnimator: UIView,
 
     public override func layoutSubviews() {
         super.layoutSubviews()
-        let vertical = (_currentOrientation() == .verticalStack)
+        let vertical = (_jobs_resolvedOrientation() == .verticalStack)
         let spacing: CGFloat = 6
+
         if vertical {
+            // 竖排：多行
             let maxW = min(bounds.width * 0.75, 60)
+            titleLabel.numberOfLines = 0
+            titleLabel.lineBreakMode = .byWordWrapping
             titleLabel.preferredMaxLayoutWidth = maxW
+
             titleLabel.sizeToFit()
             titleLabel.center = CGPoint(x: bounds.midX, y: bounds.midY - spacing)
+
             indicator.sizeToFit()
-            indicator.center = CGPoint(x: bounds.midX, y: titleLabel.frame.maxY + spacing + indicator.bounds.height/2)
+            indicator.center = CGPoint(x: bounds.midX,
+                                       y: titleLabel.frame.maxY + spacing + indicator.bounds.height / 2)
         } else {
-            titleLabel.sizeToFit(); indicator.sizeToFit()
+            // 横排：单行
+            titleLabel.numberOfLines = 1
+            titleLabel.lineBreakMode = .byTruncatingTail
+            titleLabel.preferredMaxLayoutWidth = 0
+
+            titleLabel.sizeToFit()
+            indicator.sizeToFit()
+
             let totalW = indicator.bounds.width + spacing + titleLabel.bounds.width
-            let startX = bounds.midX - totalW/2
-            indicator.frame.origin = CGPoint(x: startX, y: bounds.midY - indicator.bounds.height/2)
+            let startX = bounds.midX - totalW / 2
+            indicator.frame.origin = CGPoint(x: startX, y: bounds.midY - indicator.bounds.height / 2)
             titleLabel.frame.origin = CGPoint(x: indicator.frame.maxX + spacing,
-                                              y: bounds.midY - titleLabel.bounds.height/2)
+                                              y: bounds.midY - titleLabel.bounds.height / 2)
         }
     }
 
     public func drive(_ state: _JobsRefreshState) {
-        func verticalized(_ s: String) -> String { s.contains("\n") ? s : s.map { String($0) }.joined(separator: "\n") }
-        func oriented(_ s: String) -> String {
-            switch _currentOrientation() {
-            case .horizontal: return s
-            case .verticalStack: return verticalized(s)
-            }
-        }
         switch state {
         case .idle, .pulling:
-            titleLabel.byText(oriented(idleDescription))
-            indicator.stopAnimating()
+            titleLabel.byText(_jobs_orientedText(idleDescription)); indicator.stopAnimating()
         case .ready:
-            titleLabel.byText(oriented(releaseToRefreshDescription))
-            indicator.stopAnimating()
+            titleLabel.byText(_jobs_orientedText(releaseToRefreshDescription)); indicator.stopAnimating()
         case .refreshing:
-            titleLabel.byText(oriented(loadingDescription))
-            indicator.startAnimating()
+            titleLabel.byText(_jobs_orientedText(loadingDescription)); indicator.startAnimating()
         case .noMore:
-            titleLabel.byText(oriented(noMoreDataDescription))
-            indicator.stopAnimating()
+            titleLabel.byText(_jobs_orientedText(noMoreDataDescription)); indicator.stopAnimating()
         }
         setNeedsLayout()
     }
@@ -125,15 +148,8 @@ public final class JobsHeaderAnimator: UIView,
     @discardableResult public func byLoadingDescription(_ t: String) -> Self { loadingDescription = t; return self }
     @discardableResult public func byNoMoreDataDescription(_ t: String) -> Self { noMoreDataDescription = t; return self }
     @discardableResult public func byTextOrientation(_ m: JobsTextOrientationMode) -> Self { textOrientation = m; return self }
-
-    private func _currentOrientation() -> _JobsResolvedOrientation {
-        switch textOrientation {
-        case .horizontal: return .horizontal
-        case .verticalStack: return .verticalStack
-        case .auto: return _jobs_isHorizontalContext ? .verticalStack : .horizontal
-        }
-    }
 }
+
 // MARK: - Footer
 public final class JobsFooterAnimator: UIView, JobsRefreshAnimatable, _JobsAnimatorAxisAware {
     public var executeIncremental: CGFloat = 52
@@ -145,26 +161,22 @@ public final class JobsFooterAnimator: UIView, JobsRefreshAnimatable, _JobsAnima
     public var textOrientation: JobsTextOrientationMode = .auto
     internal var _jobs_isHorizontalContext = false
 
-    // ✅ 懒加载配置块
+    // 懒加载 label
     private lazy var titleLabel: UILabel = {
         UILabel()
             .byFont(.systemFont(ofSize: 14))
             .byTextColor(.secondaryLabel)
             .byTextAlignment(.center)
-            .byNumberOfLines(0)
             .byText(idleDescription)
     }()
 
-    private let indicator  = UIActivityIndicatorView(style: .medium)
+    private let indicator = UIActivityIndicatorView(style: .medium)
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
         isUserInteractionEnabled = false
-
-        // titleLabel 样式已移入 lazy 闭包
         addSubview(titleLabel)
-
         indicator.byHidesWhenStopped(true)
         addSubview(indicator)
     }
@@ -172,46 +184,55 @@ public final class JobsFooterAnimator: UIView, JobsRefreshAnimatable, _JobsAnima
 
     public override func layoutSubviews() {
         super.layoutSubviews()
-        let vertical = (_currentOrientation() == .verticalStack)
+        let vertical = (_jobs_resolvedOrientation() == .verticalStack)
         let spacing: CGFloat = 6
+
         if vertical {
+            // 竖排：多行
             let maxW = min(bounds.width * 0.75, 60)
+            titleLabel.numberOfLines = 0
+            titleLabel.lineBreakMode = .byWordWrapping
             titleLabel.preferredMaxLayoutWidth = maxW
+
             titleLabel.sizeToFit()
             titleLabel.center = CGPoint(x: bounds.midX, y: bounds.midY - spacing)
+
             indicator.sizeToFit()
-            indicator.center = CGPoint(x: bounds.midX, y: titleLabel.frame.maxY + spacing + indicator.bounds.height/2)
+            indicator.center = CGPoint(x: bounds.midX,
+                                       y: titleLabel.frame.maxY + spacing + indicator.bounds.height / 2)
         } else {
-            titleLabel.sizeToFit(); indicator.sizeToFit()
+            // 横排：单行
+            titleLabel.numberOfLines = 1
+            titleLabel.lineBreakMode = .byTruncatingTail
+            titleLabel.preferredMaxLayoutWidth = 0
+
+            titleLabel.sizeToFit()
+            indicator.sizeToFit()
+
             let totalW = indicator.bounds.width + spacing + titleLabel.bounds.width
-            let startX = bounds.midX - totalW/2
-            indicator.frame.origin = CGPoint(x: startX, y: bounds.midY - indicator.bounds.height/2)
+            let startX = bounds.midX - totalW / 2
+            indicator.frame.origin = CGPoint(x: startX, y: bounds.midY - indicator.bounds.height / 2)
             titleLabel.frame.origin = CGPoint(x: indicator.frame.maxX + spacing,
-                                              y: bounds.midY - titleLabel.bounds.height/2)
+                                              y: bounds.midY - titleLabel.bounds.height / 2)
         }
+
+        // DEBUG：打印子视图布局
+        JDBG("Footer.layoutSubviews \(vertical ? "vertical" : "horizontal")", [
+            "self.bounds=\(JSize(bounds.size))",
+            "title=\(JRect(titleLabel.frame)) indicator=\(JRect(indicator.frame))"
+        ])
     }
 
     public func drive(_ state: _JobsRefreshState) {
-        func verticalized(_ s: String) -> String { s.contains("\n") ? s : s.map { String($0) }.joined(separator: "\n") }
-        func oriented(_ s: String) -> String {
-            switch _currentOrientation() {
-            case .horizontal: return s
-            case .verticalStack: return verticalized(s)
-            }
-        }
         switch state {
         case .idle, .pulling:
-            titleLabel.byText(oriented(idleDescription))
-            indicator.stopAnimating()
+            titleLabel.byText(_jobs_orientedText(idleDescription)); indicator.stopAnimating()
         case .ready:
-            titleLabel.byText(oriented(releaseToRefreshDescription))
-            indicator.stopAnimating()
+            titleLabel.byText(_jobs_orientedText(releaseToRefreshDescription)); indicator.stopAnimating()
         case .refreshing:
-            titleLabel.byText(oriented(loadingMoreDescription))
-            indicator.startAnimating()
+            titleLabel.byText(_jobs_orientedText(loadingMoreDescription)); indicator.startAnimating()
         case .noMore:
-            titleLabel.byText(oriented(noMoreDataDescription))
-            indicator.stopAnimating()
+            titleLabel.byText(_jobs_orientedText(noMoreDataDescription)); indicator.stopAnimating()
         }
         setNeedsLayout()
     }
@@ -222,15 +243,8 @@ public final class JobsFooterAnimator: UIView, JobsRefreshAnimatable, _JobsAnima
     @discardableResult public func byLoadingMoreDescription(_ t: String) -> Self { loadingMoreDescription = t; return self }
     @discardableResult public func byNoMoreDataDescription(_ t: String) -> Self { noMoreDataDescription = t; return self }
     @discardableResult public func byTextOrientation(_ m: JobsTextOrientationMode) -> Self { textOrientation = m; return self }
-
-    private func _currentOrientation() -> _JobsResolvedOrientation {
-        switch textOrientation {
-        case .horizontal: return .horizontal
-        case .verticalStack: return .verticalStack
-        case .auto: return _jobs_isHorizontalContext ? .verticalStack : .horizontal
-        }
-    }
 }
+
 // MARK: - 内核
 private final class _JobsSideRefresher {
     weak var scroll: UIScrollView?
@@ -267,7 +281,7 @@ private final class _JobsSideRefresher {
         self.edge = edge
         self.animator = animator
         self.handler = handler
-        // 直接用，不需要任何 cast
+
         animator._jobs_isHorizontalContext = (axis == .horizontal)
         attach()
     }
@@ -277,21 +291,36 @@ private final class _JobsSideRefresher {
     private func attach() {
         guard let s = scroll else { return }
         baseInsets = _adjustedInsets(s)
+
         s.addSubview(animator)
+        #if DEBUG
+        animator.layer.borderWidth = 1
+        animator.layer.borderColor = UIColor.systemPink.cgColor
+        animator.backgroundColor = UIColor.systemPink.withAlphaComponent(0.08)
+        #endif
+
         _installConstraintsIfPossible()
         _layoutIfLegacy()
         animator.drive(state)
 
-        // ★ 防御式开启弹性
+        // 防御式弹性
         s.bounces = true
-        switch axis {
-        case .vertical:
-            s.alwaysBounceVertical = true
-        case .horizontal:
-            s.alwaysBounceHorizontal = true
-        }
+        switch axis { case .vertical: s.alwaysBounceVertical = true
+        case .horizontal: s.alwaysBounceHorizontal = true }
+
+        JDBG("attach begin \(axis)-\(edge)", [
+            "after addSubview -> animator \(JFrame(animator)) hidden=\(animator.isHidden)",
+            "scroll bounds=\(JSize(s.bounds.size)) contentSize=\(JSize(s.contentSize)) inset=\(JInsets(_adjustedInsets(s)))"
+        ])
 
         observe(s)
+
+        // 进页面立即算一次，短内容首屏隐藏 footer
+        onOffsetChanged()
+        JDBG("attach after first onOffsetChanged \(axis)-\(edge)", [
+            "animator \(JFrame(animator)) hidden=\(animator.isHidden)"
+        ])
+
         s.panGestureRecognizer.addTarget(self, action: #selector(panChanged(_:)))
     }
 
@@ -327,6 +356,7 @@ private final class _JobsSideRefresher {
             }
         }
     }
+
     // MARK: - Auto Layout anchoring（iOS 11+）
     private func _installConstraintsIfPossible() {
         guard let s = scroll else { return }
@@ -347,9 +377,9 @@ private final class _JobsSideRefresher {
             animator.snp.remakeConstraints { make in
                 make.leading.equalTo(s.frameLayoutGuide.snp.leading)
                 make.trailing.equalTo(s.frameLayoutGuide.snp.trailing)
-                // 首选：顶边贴内容尾部（内容够长时生效）
+                // 贴内容尾部（高优先）
                 make.top.equalTo(s.contentLayoutGuide.snp.bottom).priority(.high)
-                // 底线：绝不在可视区域底部之上（内容不满一屏时生效）
+                // FIX: ≥  —— 至少在可视区下边缘之外，短内容时顶到 frame 底
                 make.top.greaterThanOrEqualTo(s.frameLayoutGuide.snp.bottom).priority(.required)
                 sizeConstraint = make.height.equalTo(animator.executeIncremental).constraint
             }
@@ -366,12 +396,10 @@ private final class _JobsSideRefresher {
             animator.snp.remakeConstraints { make in
                 make.top.equalTo(s.frameLayoutGuide.snp.top)
                 make.bottom.equalTo(s.frameLayoutGuide.snp.bottom)
-
-                // 首选：左边贴内容右侧（内容够宽时生效）
+                // 贴内容尾部（高优先）
                 make.leading.equalTo(s.contentLayoutGuide.snp.trailing).priority(.high)
-                // 底线：绝不在可视区域右侧之内（内容不满一屏时生效）
+                // FIX: ≥  —— 至少在可视区右边缘之外，短内容时靠到 frame 右
                 make.leading.greaterThanOrEqualTo(s.frameLayoutGuide.snp.trailing).priority(.required)
-
                 sizeConstraint = make.width.equalTo(animator.executeIncremental).constraint
             }
 
@@ -389,21 +417,32 @@ private final class _JobsSideRefresher {
                 s.layoutIfNeeded()
             }
         }
+
+        JDBG("installConstraints \(axis)-\(edge)", [
+            "scroll bounds=\(JSize(s.bounds.size)) contentSize=\(JSize(s.contentSize)) inset=\(JInsets(_adjustedInsets(s)))",
+            "animator \(JFrame(animator)) hidden=\(animator.isHidden)"
+        ])
+
+        DispatchQueue.main.async { [weak self, weak s] in
+            guard let self, let s else { return }
+            JDBG("post-layout (next runloop) \(self.axis)-\(self.edge)", [
+                "animator \(JFrame(self.animator)) hidden=\(self.animator.isHidden)",
+                "scroll bounds=\(JSize(s.bounds.size)) contentSize=\(JSize(s.contentSize))"
+            ])
+        }
     }
 
+
     private func _uninstallConstraints() {
-        // 移除 animator 上由 SnapKit 安装的全部约束
         animator.snp.removeConstraints()
-        // 清掉旧的手动记录（如果你还保留了这套字段）
         installedConstraints.removeAll()
-        // 尺寸约束是单独存的 SnapKit.Constraint，记得关闭并置空
         sizeConstraint?.deactivate()
         sizeConstraint = nil
     }
+
     // iOS 10 及以下：frame 布局（与老实现等价）
     private func _layoutIfLegacy() {
         guard let s = scroll else { return }
-        // iOS 10 及以下：仍用 frame 手工布局
         guard #available(iOS 11.0, *) else {
             let H = animator.executeIncremental
             switch (axis, edge) {
@@ -422,32 +461,55 @@ private final class _JobsSideRefresher {
             }
             return
         }
-        // iOS 11+：用 SnapKit 的尺寸约束更新（height 或 width 都是同一个 sizeConstraint）
+        // iOS 11+：更新尺寸约束（height 或 width）
         if let c = sizeConstraint {
             let newValue = animator.executeIncremental
-            c.update(offset: newValue) // 等价原来 c.constant = newValue
-            // 如需避免频繁无效刷新，可自行加判断，但通常没必要
+            c.update(offset: newValue)
         }
     }
-    // MARK: - 状态机（改良：动态 inset + translation 兜底）
+
+    // MARK: - 状态机（动态 inset + translation 兜底）
     private func onOffsetChanged() {
         guard let s = scroll else { return }
         guard state != .refreshing && state != .noMore else { return }
-        // 每次动态读取（不要依赖缓存的 baseInsets）
+
         @inline(__always)
         func liveInsets(_ s: UIScrollView) -> UIEdgeInsets {
             if #available(iOS 11.0, *) { return s.adjustedContentInset }
             return s.contentInset
         }
-        // 当 contentOffset 被系统“卡死在 -topInset”时，用手势 translation 兜底
+
+        // 顶部兜底（下拉）
         @inline(__always)
         func fallbackPullY(_ s: UIScrollView, topInset: CGFloat) -> CGFloat {
-            // 正常情况下，offset 会 < -topInset；被卡死时，offset ≈ -topInset
             let pull = -(s.contentOffset.y + topInset)
             if pull > 0 { return pull }
-            // 只在拖拽中启用兜底：把“向下的手势位移”视作拉动量
             if s.isDragging {
                 let t = -s.panGestureRecognizer.translation(in: s).y
+                return max(0, t)
+            }
+            return 0
+        }
+
+        // 底部兜底（短内容：offset 卡在 -topInset，靠 translation 取值）
+        @inline(__always)
+        func fallbackPullBottom(_ s: UIScrollView, bottomEdge: CGFloat) -> CGFloat {
+            let beyond = s.contentOffset.y - bottomEdge
+            if beyond > 0 { return beyond }
+            if s.isDragging {
+                let t = -s.panGestureRecognizer.translation(in: s).y  // 上拖为正
+                return max(0, t)
+            }
+            return 0
+        }
+
+        // 右侧兜底（短内容：offset 卡在 -leftInset）
+        @inline(__always)
+        func fallbackPullRight(_ s: UIScrollView, rightEdge: CGFloat) -> CGFloat {
+            let beyond = s.contentOffset.x - rightEdge
+            if beyond > 0 { return beyond }
+            if s.isDragging {
+                let t = -s.panGestureRecognizer.translation(in: s).x  // 向左为正
                 return max(0, t)
             }
             return 0
@@ -463,13 +525,30 @@ private final class _JobsSideRefresher {
 
         case (.vertical, .bottom):
             if noMoreData { state = .noMore; return }
-            let bottomInset = liveInsets(s).bottom
-            let contentH = max(s.contentSize.height, s.bounds.height)
-            let beyond = s.contentOffset.y + s.bounds.height - contentH - bottomInset
-            let pull = max(0, beyond)
+            let insets = liveInsets(s)
+            let topInset = insets.top
+            let bottomInset = insets.bottom
+            let contentH = max(s.contentSize.height, 0)
+            let bottomEdgeOffset = max(-topInset, contentH + bottomInset - s.bounds.height)
+
+            // 兜底：短内容/系统“夹 offset”时仍能得到 pull
+            let pull = fallbackPullBottom(s, bottomEdge: bottomEdgeOffset)
+
+            JDBG("onOffsetChanged .vertical/.bottom", [
+                "offset.y=\(JF(s.contentOffset.y)) bottomEdge=\(JF(bottomEdgeOffset)) pull=\(JF(pull))",
+                "contentH=\(JF(contentH)) boundsH=\(JF(s.bounds.height)) insets=\(JInsets(insets))",
+                "animator \(JFrame(animator)) hidden(before)=\(animator.isHidden)"
+            ])
+
+            animator.isHidden = (pull <= 0)
+
             if pull >= animator.executeIncremental { state = .ready }
             else if pull > 0 { state = .pulling }
             else { state = .idle }
+
+            JDBG("onOffsetChanged .vertical/.bottom(after)", [
+                "state=\(state) hidden(after)=\(animator.isHidden) execute=\(JF(animator.executeIncremental))"
+            ])
 
         case (.horizontal, .leading):
             let leftInset = liveInsets(s).left
@@ -480,13 +559,29 @@ private final class _JobsSideRefresher {
 
         case (.horizontal, .trailing):
             if noMoreData { state = .noMore; return }
-            let rightInset = liveInsets(s).right
-            let contentW = max(s.contentSize.width, s.bounds.width)
-            let beyond = s.contentOffset.x + s.bounds.width - contentW - rightInset
-            let pull = max(0, beyond)
+            let insets = liveInsets(s)
+            let leftInset = insets.left
+            let rightInset = insets.right
+            let contentW = max(s.contentSize.width, 0)
+            let rightEdgeOffset = max(-leftInset, contentW + rightInset - s.bounds.width)
+
+            let pull = fallbackPullRight(s, rightEdge: rightEdgeOffset)
+
+            JDBG("onOffsetChanged .horizontal/.trailing", [
+                "offset.x=\(JF(s.contentOffset.x)) rightEdge=\(JF(rightEdgeOffset)) pull=\(JF(pull))",
+                "contentW=\(JF(contentW)) boundsW=\(JF(s.bounds.width)) insets=\(JInsets(insets))",
+                "animator \(JFrame(animator)) hidden(before)=\(animator.isHidden)"
+            ])
+
+            animator.isHidden = (pull <= 0)
+
             if pull >= animator.executeIncremental { state = .ready }
             else if pull > 0 { state = .pulling }
             else { state = .idle }
+
+            JDBG("onOffsetChanged .horizontal/.trailing(after)", [
+                "state=\(state) hidden(after)=\(animator.isHidden) execute=\(JF(animator.executeIncremental))"
+            ])
 
         default:
             break
@@ -498,13 +593,20 @@ private final class _JobsSideRefresher {
             beginRefreshing()
         }
     }
-    // MARK: - Begin / Stop（这里仍同步 inset + offset；因为视图已锚在内容边缘，不再需要“额外 pin”）
+
+    // MARK: - Begin / Stop（视图锚在内容边缘，不需要额外 pin）
     func beginRefreshing(auto: Bool = false) {
         guard let s = scroll, state != .refreshing else { return }
         if (edge == .trailing || edge == .bottom), noMoreData { return }
 
+        animator.isHidden = false // 开始刷新一定可见
         state = .refreshing
         appliedInset = animator.executeIncremental
+
+        JDBG("beginRefreshing \(axis)-\(edge) (before anim)", [
+            "contentOffset=\(JPoint(s.contentOffset)) inset=\(JInsets(s.contentInset))",
+            "animator \(JFrame(animator)) hidden=\(animator.isHidden)"
+        ])
 
         UIView.animate(withDuration: 0.25, delay: 0,
                        options: [.allowUserInteraction, .beginFromCurrentState]) {
@@ -520,22 +622,28 @@ private final class _JobsSideRefresher {
                 let targetY = contentH + self.baseInsets.bottom + self.appliedInset - s.bounds.height
                 s.setContentOffset(CGPoint(x: s.contentOffset.x, y: targetY), animated: false)
 
-            case (.horizontal, (.leading)):
+            case (.horizontal, .leading):
                 s.contentInset.left += self.appliedInset
                 let targetX = -(self.baseInsets.left + self.appliedInset)
                 s.setContentOffset(CGPoint(x: targetX, y: s.contentOffset.y), animated: false)
 
-            case (.horizontal, (.trailing)):
+            case (.horizontal, .trailing):
                 s.contentInset.right += self.appliedInset
                 let contentW = max(s.contentSize.width, s.bounds.width)
                 let targetX = contentW + self.baseInsets.right + self.appliedInset - s.bounds.width
                 s.setContentOffset(CGPoint(x: targetX, y: s.contentOffset.y), animated: false)
-            // 穷尽
+
             case (.horizontal, .top), (.horizontal, .bottom), (.vertical, .leading), (.vertical, .trailing):
                 break
             }
         } completion: { _ in
             self.handler()
+            if let s = self.scroll {
+                JDBG("beginRefreshing \(self.axis)-\(self.edge) (after anim)", [
+                    "contentOffset=\(JPoint(s.contentOffset)) inset=\(JInsets(s.contentInset))",
+                    "animator \(JFrame(self.animator)) hidden=\(self.animator.isHidden)"
+                ])
+            }
         }
     }
 
@@ -551,35 +659,46 @@ private final class _JobsSideRefresher {
                 s.contentInset.top = max(0, s.contentInset.top - delta)
                 let targetY = -self.baseInsets.top
                 s.setContentOffset(CGPoint(x: s.contentOffset.x, y: targetY), animated: false)
+
             case (.vertical, .bottom):
                 s.contentInset.bottom = max(0, s.contentInset.bottom - delta)
                 let contentH = max(s.contentSize.height, s.bounds.height)
                 let targetY = contentH + self.baseInsets.bottom - s.bounds.height
                 s.setContentOffset(CGPoint(x: s.contentOffset.x, y: targetY), animated: false)
+
             case (.horizontal, .leading):
                 s.contentInset.left = max(0, s.contentInset.left - delta)
                 let targetX = -self.baseInsets.left
                 s.setContentOffset(CGPoint(x: targetX, y: s.contentOffset.y), animated: false)
+
             case (.horizontal, .trailing):
                 s.contentInset.right = max(0, s.contentInset.right - delta)
                 let contentW = max(s.contentSize.width, s.bounds.width)
                 let targetX = contentW + self.baseInsets.right - s.bounds.width
                 s.setContentOffset(CGPoint(x: targetX, y: s.contentOffset.y), animated: false)
-            // 穷尽
+
             case (.horizontal, .top), (.horizontal, .bottom), (.vertical, .leading), (.vertical, .trailing):
                 break
             }
         } completion: { _ in
             self.state = (self.edge == .trailing || self.edge == .bottom) && self.noMoreData ? .noMore : .idle
-            // iOS 11+：因为视图锚在 contentLayoutGuide，不需要额外复位；更新一下基准 inset
-            self.baseInsets = _adjustedInsets(s)
+            if let s = self.scroll {
+                self.baseInsets = _adjustedInsets(s)
+                self.onOffsetChanged() // 结束后根据当前位置/拉动量决定显隐
+                JDBG("stopRefreshing \(self.axis)-\(self.edge) completion", [
+                    "state=\(self.state) contentOffset=\(JPoint(s.contentOffset)) inset=\(JInsets(s.contentInset))",
+                    "animator \(JFrame(self.animator)) hidden=\(self.animator.isHidden)"
+                ])
+            }
         }
     }
 }
+
 // MARK: - UIScrollView API
 private var _jobsRefreshAxisKey: UInt8 = 0
 private var _jobsHeaderRefKey: UInt8   = 0
 private var _jobsFooterRefKey: UInt8   = 0
+
 public extension UIScrollView {
     var jobs_refreshAxis: JobsRefreshAxis {
         get {
@@ -590,11 +709,14 @@ public extension UIScrollView {
             objc_setAssociatedObject(self, &_jobsRefreshAxisKey,
                                      NSNumber(value: (newValue == .vertical ? 0 : 1)),
                                      .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            switch newValue { case .vertical: alwaysBounceVertical = true
-            case .horizontal: alwaysBounceHorizontal = true }
+            switch newValue {
+            case .vertical:   alwaysBounceVertical = true
+            case .horizontal: alwaysBounceHorizontal = true
+            }
         }
     }
     @discardableResult func jobs_refreshAxis(_ axis: JobsRefreshAxis) -> Self { jobs_refreshAxis = axis; return self }
+
     private var _jobs_headerRefresher: _JobsSideRefresher? {
         get { objc_getAssociatedObject(self, &_jobsHeaderRefKey) as? _JobsSideRefresher }
         set { objc_setAssociatedObject(self, &_jobsHeaderRefKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
@@ -603,6 +725,7 @@ public extension UIScrollView {
         get { objc_getAssociatedObject(self, &_jobsFooterRefKey) as? _JobsSideRefresher }
         set { objc_setAssociatedObject(self, &_jobsFooterRefKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
+
     // 安装：下拉(或左拉)
     @discardableResult
     func pullDownWithJobsAnimator(_ action: @escaping () -> Void,
@@ -620,6 +743,7 @@ public extension UIScrollView {
         }
         return self
     }
+
     // 安装：上拉(或右拉)
     @discardableResult
     func pullUpWithJobsAnimator(_ action: @escaping () -> Void,
@@ -655,9 +779,32 @@ public extension UIScrollView {
         return self
     }
 }
+
 // MARK: - Helpers
 @inline(__always)
 private func _adjustedInsets(_ s: UIScrollView) -> UIEdgeInsets {
     if #available(iOS 11.0, *) { return s.adjustedContentInset }
     return s.contentInset
 }
+
+// MARK: - DEBUG 工具（本文件局部，非 UIView 扩展）
+#if DEBUG
+@inline(__always) private func JF(_ v: CGFloat) -> String { String(format: "%.1f", v) }
+@inline(__always) private func JSize(_ s: CGSize) -> String { "(w:\(JF(s.width)), h:\(JF(s.height)))" }
+@inline(__always) private func JPoint(_ p: CGPoint) -> String { "(x:\(JF(p.x)), y:\(JF(p.y)))" }
+@inline(__always) private func JInsets(_ i: UIEdgeInsets) -> String { "(t:\(JF(i.top)), l:\(JF(i.left)), b:\(JF(i.bottom)), r:\(JF(i.right)))" }
+@inline(__always) private func JRect(_ r: CGRect) -> String { "(x:\(JF(r.origin.x)), y:\(JF(r.origin.y)), w:\(JF(r.size.width)), h:\(JF(r.size.height)))" }
+@inline(__always) private func JFrame(_ v: UIView) -> String { JRect(v.frame) }
+@inline(__always) private func JDBG(_ tag: String, _ lines: [String]) {
+    print("🧩 [JobsRefresher] \(tag)")
+    for l in lines { print("   • \(l)") }
+}
+#else
+@inline(__always) private func JF(_ v: CGFloat) -> String { "" }
+@inline(__always) private func JSize(_ s: CGSize) -> String { "" }
+@inline(__always) private func JPoint(_ p: CGPoint) -> String { "" }
+@inline(__always) private func JInsets(_ i: UIEdgeInsets) -> String { "" }
+@inline(__always) private func JRect(_ r: CGRect) -> String { "" }
+@inline(__always) private func JFrame(_ v: UIView) -> String { "" }
+@inline(__always) private func JDBG(_ tag: String, _ lines: [String]) {}
+#endif
