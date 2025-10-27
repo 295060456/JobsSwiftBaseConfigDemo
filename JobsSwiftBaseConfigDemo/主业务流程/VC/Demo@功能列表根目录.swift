@@ -13,7 +13,7 @@ final class RootListVC: BaseVC {
 
     deinit {
         suspendBtn.stopTimer()
-        spinBtn.stopTimer()
+        suspendSpinBtn.stopTimer()
     }
 
     private let demos: [(title: String, vcType: UIViewController.Type)] = [
@@ -110,6 +110,7 @@ final class RootListVC: BaseVC {
             .bySuspend { cfg in
                 cfg
                     .byContainer(view)
+//                    .byStart(.topLeft)
                     .byStart(.point(CGPoint(x: 0, y: 200))) // 起始点（可用区域坐标）
                     .byFallbackSize(CGSize(width: 90, height: 50))
                     .byDocking(.nearestEdge)
@@ -117,7 +118,7 @@ final class RootListVC: BaseVC {
             }
     }()
 
-    private lazy var spinBtn: UIButton = {
+    private lazy var suspendSpinBtn: UIButton = {
         UIButton(type: .system)
             .byTitle("0", for: .normal) // 中间数字：秒
             .byTitleFont(.systemFont(ofSize: 22, weight: .bold))
@@ -178,7 +179,8 @@ final class RootListVC: BaseVC {
             .bySuspend { cfg in
                 cfg
                     .byContainer(view)
-                    .byStart(.bottomRight)
+//                    .byStart(.bottomRight)
+                    .byStart(.point(CGPoint(x: 300.w, y: 500))) // 起始点（可用区域坐标）
                     .byFallbackSize(CGSize(width: 50, height: 50))
                     .byHapticOnDock(true)
             }
@@ -324,7 +326,7 @@ final class RootListVC: BaseVC {
         tableView.byAlpha(1)
         updateFooterAvailability()
 //        suspendLab.byAlpha(1)
-        spinBtn.bySpinStart()
+        suspendSpinBtn.bySpinStart()
         suspendBtn.byVisible(YES)
     }
     // MARK: - Footer 自动显隐逻辑

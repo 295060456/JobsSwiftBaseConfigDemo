@@ -1653,9 +1653,9 @@ tableView.es.addInfiniteScrolling {
 
 ### 2、⛓️链式调用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* `UILabel`
+#### 2.1、🏷️`UILabel` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-  ```swift
+* ```swift
   let label = UILabel()
      .byFont(.systemFont(ofSize: 16))
      .byTextColor(.black)
@@ -1666,332 +1666,28 @@ tableView.es.addInfiniteScrolling {
      .byNextText(" → More")
   ```
 
-* `UIBUtton`
-
-* `UITableView`
-
-* `UICollectionView`
-
-* `UIImageView`
-
-* TODO
-
-### 3、📏全局比例尺 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-* 实现
-
-  ```swift
-  import UIKit
-  
-  // MARK: - 核心比例器
-  public enum JXScale {
-      private static var designW: CGFloat = 375
-      private static var designH: CGFloat = 812
-      private static var useSafeArea: Bool = false
-      
-      public static func setup(designWidth: CGFloat, designHeight: CGFloat, useSafeArea: Bool = false) {
-          self.designW = designWidth
-          self.designH = designHeight
-          self.useSafeArea = useSafeArea
-      }
-      
-      private static var screenSize: CGSize {
-          guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else {
-              return UIScreen.main.bounds.size
-          }
-          if useSafeArea {
-              let insets = window.safeAreaInsets
-              return CGSize(
-                  width: max(0, window.bounds.width - (insets.left + insets.right)),
-                  height: max(0, window.bounds.height - (insets.top + insets.bottom))
-              )
-          } else {
-              return window.bounds.size
-          }
-      }
-      
-      public static var x: CGFloat { screenSize.width / designW }
-      public static var y: CGFloat { screenSize.height / designH }
-  }
-  
-  // MARK: - 扩展 Int / CGFloat
-  public extension BinaryInteger {
-      var w: CGFloat { CGFloat(self) * JXScale.x }
-      var h: CGFloat { CGFloat(self) * JXScale.y }
-      var fz: CGFloat { CGFloat(self) * JXScale.x }   // 字体缩放，默认跟随 X
-  }
-  
-  public extension BinaryFloatingPoint {
-      var w: CGFloat { CGFloat(self) * JXScale.x }
-      var h: CGFloat { CGFloat(self) * JXScale.y }
-      var fz: CGFloat { CGFloat(self) * JXScale.x }
-  }
-  ```
-
-* 入口配置
-
-  ```swift
-  import UIKit
-  
-  @main
-  class AppDelegate: UIResponder, UIApplicationDelegate {
-  
-      func application(
-          _ application: UIApplication,
-          didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-      ) -> Bool {
-          JXScale.setup(designWidth: 375, designHeight: 812, useSafeArea: false)
-          return true
-      }
-  
-      // MARK: UISceneSession Lifecycle
-      func application(
-          _ application: UIApplication,
-          configurationForConnecting connectingSceneSession: UISceneSession,
-          options: UIScene.ConnectionOptions
-      ) -> UISceneConfiguration {
-          return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
-      }
-  }
-  ```
-
-* 调用
-
-  ```swift
-  CGRect(x: 20.w, y: 100.h, width: 200.w, height: 40.h)
-  ```
-
-### 4、🖨️ 日志打印工具的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-> 时间+文件全名+当前的打印触发行数+当前所在方法名+顶层main+具体的打印内容
-
-```swift
-// MARK: - 打印示例
-private func printDemo() {
-    // 1) 普通文本 / 参数混合
-    log("你好，世界", 123, true)
-    // 2) JSON：自动识别 String/Data/字典/数组（默认 pretty + 中文还原）
-    log(#"{"key":"\u7231\u60c5"}"#)                 // String JSON
-    log(["user": "张三", "tags": ["iOS","Swift"]])  // 字典/数组
-    log(DataFromNetwork(
-        statusCode: 200,
-        message: "OK",
-        url: URL(string: "https://api.example.com/users")!,
-        headers: ["Content-Type": "application/json"],
-        body: #"{"user":"\u5f20\u4e09","tags":["iOS","Swift"],"ok":true}"#.data(using: .utf8),
-        receivedAt: Date(),
-        retryable: false
-    ))                            // Data
-    // 3) 对象：自动反射为 JSON（防环、可控深度）
-    struct User { let id: Int; let name: String }
-    let u = User(id: 1, name: "张三")
-    log(u)                      // .auto 下会转对象 JSON
-    log(u, mode: .object)       // 强制对象模式（不走 stringify）
-    // 4) 指定级别（仍是一个入口）
-    log("启动完成", level: .info)
-    log("接口慢",  level: .warn)
-    log(["err": "timeout"], level: .error)
-    log(["arr": ["\\u7231\\u60c5", 1]], level: .debug)
-}
-```
-
-> ```swift
-> 📝 10:16:56 | CNIDDemoVC.swift:97 | printDemo() | main → 你好，世界 123 true
-> 📝 10:16:56 | CNIDDemoVC.swift:99 | printDemo() | main → {
->   "key" : "爱情"
-> }
-> 📝 10:16:56 | CNIDDemoVC.swift:100 | printDemo() | main → {
->   "user" : "张三",
->   "tags" : [
->     "iOS",
->     "Swift"
->   ]
-> }
-> 📝 10:16:56 | CNIDDemoVC.swift:101 | printDemo() | main → {
->   "_type" : "DataFromNetwork",
->   "_props" : {
->     "body" : {
->       "<Data>" : 56
->     },
->     "statusCode" : 200,
->     "headers" : {
->       "Content-Type" : "application\/json"
->     },
->     "url" : "https:\/\/api.example.com\/users",
->     "message" : "OK",
->     "receivedAt" : "2025-10-03T03:16:56Z",
->     "retryable" : false
->   }
-> }
-> 📝 10:16:56 | CNIDDemoVC.swift:113 | printDemo() | main → {
->   "_props" : {
->     "name" : "张三",
->     "id" : 1
->   },
->   "_type" : "User"
-> }
-> 📝 10:16:56 | CNIDDemoVC.swift:114 | printDemo() | main → {
->   "_props" : {
->     "name" : "张三",
->     "id" : 1
->   },
->   "_type" : "User"
-> }
-> ℹ️ 10:16:56 | CNIDDemoVC.swift:116 | printDemo() | main → 启动完成
-> ⚠️ 10:16:56 | CNIDDemoVC.swift:117 | printDemo() | main → 接口慢
-> ❌ 10:16:56 | CNIDDemoVC.swift:118 | printDemo() | main → {
->   "err" : "timeout"
-> }
-> 🐞 10:16:56 | CNIDDemoVC.swift:119 | printDemo() | main → {
->   "arr" : [
->     "爱情",
->     1
->   ]
-> }
-> ```
-
-### 5、避免从 `XIB`/`Storyboard` 初始化 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-```swift
-required init?(coder: NSCoder) {
-    fatalError()
-}
-```
-
-### 6、🖼️ <font color=red>**使用`Color Set`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-* 选中图片以后，跳到第四个选项卡
-
-  ```swift
-  if #available(iOS 11.0, *) {
-      UIColor(named: "TextColor0")
-  }
-  ```
-
-  <p align="center">
-    <img src="./assets/image-20250924174836800.png" width="20%"/>
-    <img src="./assets/image-20250924175446796.png" width="60%"/>
-  </p>
-
-* 支持暗黑模式
-
-  > Dark优先级高一些，如果在Dark里面没有找到对应的图片，会去Any找
-  >
-  > ```swift
-  > self.nameLabel.textColor = .textColor1// 代码里面只对应一个值。但是在textColor1这个资源包里面区分 白天/黑夜
-  > ```
-
-![image-20251001161600357](./assets/image-20251001161600357.png)
-
-### 7、网络鉴权`Code`的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-> - `r0.code` 是 `Int?`
->
-> - `JXAuthCode.tokenEmpty` 是一个 **枚举值 (`JXAuthCode`)**
->
-> - [**Swift**](https://developer.apple.com/swift/) 不允许直接比较 `Int` 和 `JXAuthCode`。
->
->   ```swift
->   if r0.code == JXAuthCode.tokenEmpty.rawValue
->       || r0.code == JXAuthCode.tokenInvalid.rawValue
->       || r0.code == JXAuthCode.loginExpired.rawValue
->       || r0.code == JXAuthCode.authorizationFail.rawValue {
->       print("需要重新登录")
->   }
->   ```
-
-* 定义封装
-
-  ```swift
-  // MARK: -网络鉴权
-  public enum JXAuthCode: UInt {
-      case tokenEmpty        = 10006  // 令牌为空
-      case tokenInvalid      = 10007  // 令牌错误
-      case loginExpired      = 10008  // 登陆过期
-      case authorizationFail = 10014  // 授权失败
-      case success           = 10000  // 成功
-  }
-  ```
-
-  ```swift
-  // MARK: - 扩展 Int 与 JXAuthCode 的比较。避免写rawValue
-  public func ==(lhs: Int?, rhs: JXAuthCode) -> Bool {
-      guard let lhs = lhs else { return false }
-      return lhs == Int(rhs.rawValue)
-  }
-  
-  public func ==(lhs: Int, rhs: JXAuthCode) -> Bool {
-      return lhs == Int(rhs.rawValue)
-  }
-  
-  public func ==(lhs: JXAuthCode, rhs: Int?) -> Bool {
-      guard let rhs = rhs else { return false }
-      return Int(lhs.rawValue) == rhs
-  }
-  
-  public func ==(lhs: JXAuthCode, rhs: Int) -> Bool {
-      return Int(lhs.rawValue) == rhs
-  }
-  
-  // MARK: - 扩展 Int 与 JXAuthCode 的不等于
-  public func !=(lhs: Int?, rhs: JXAuthCode) -> Bool {
-      !(lhs == rhs)
-  }
-  
-  public func !=(lhs: Int, rhs: JXAuthCode) -> Bool {
-      !(lhs == rhs)
-  }
-  
-  public func !=(lhs: JXAuthCode, rhs: Int?) -> Bool {
-      !(lhs == rhs)
-  }
-  
-  public func !=(lhs: JXAuthCode, rhs: Int) -> Bool {
-      !(lhs == rhs)
-  }
-  ```
-
-* 使用
-
-  ```swift
-  if (r0.code == JXAuthCode.tokenEmpty // 令牌为空
-   || r0.code == 10007 // 令牌错误
-   || r0.code == 10008 // 登陆过期
-   || r0.code == 10056
-   || r0.code == 10014)// 授权失败
-  {/*TODO*/}
-  ```
-
-### 7、🏷️`UILabel` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-* 给 `UILabel` 里的文字加 **下划线**，并且可以指定下划线的颜色
+* [给 `UILabel` 里的文字加 **下划线**，并且可以指定下划线的颜色](#给UILabel里的文字加下划线并且可以指定下划线的颜色@实现逻辑)
 
   > ```swift
   > UILabel().underline(color:PYConst.main_color)
   > ```
 
-  ```swift
-  extension UILabel {
-      func underline(color: UIColor) {
-          if let textString = self.text {
-              let attributedString = NSMutableAttributedString(string: textString)
-              attributedString.addAttribute(NSAttributedString.Key.underlineStyle,
-                                            value: NSUnderlineStyle.single.rawValue,
-                                            range: NSRange(location: 0, length: attributedString.length))
-              attributedString.addAttribute(NSAttributedString.Key.underlineColor,
-                                            value: color,
-                                            range: NSRange(location: 0, length: attributedString.length))
-              self.attributedText = attributedString
-          }
-      }
-  }
-  ```
+#### 2.2、🔘`UIBUtton` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-### 8、🔘<font id=UIButton>`UIButton`</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+> * **按钮选中/非选中**
+>
+>   ```swift
+>   sender.isSelected.toggle()
+>   ```
+>
+> * **防止用户快速连续点按钮**
+>
+>   ```swift
+>   sender.disableAfterClick(interval: 2)
+>   ```
+>
 
-#### 8.1、🔘 创建按钮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-##### 8.1.1、🔘 创建普通按钮@懒加载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 2.2.1、🔘普通按钮
 
 ```swift
 private lazy var exampleButton: UIButton = {
@@ -2034,6 +1730,19 @@ private lazy var exampleButton: UIButton = {
             self.passwordTF.togglePasswordVisibility()
             print("👁 当前状态：\(sender.isSelected ? "隐藏密码" : "显示密码")")
         }
+        /// 右上角提示文案@小红点
+        .byCornerDot(diameter: 10, offset: .init(horizontal: -4, vertical: 4))// 红点
+        /// 右上角提示文案@文字
+        .byCornerBadgeText("NEW") { cfg in
+            cfg.byOffset(.init(horizontal: -6, vertical: 6))
+                .byInset(.init(top: 2, left: 6, bottom: 2, right: 6))
+                .byBgColor(.systemRed)
+                .byFont(.systemFont(ofSize: 11, weight: .bold))
+                .byShadow(color: UIColor.black.withAlphaComponent(0.25),
+                          radius: 2,
+                          opacity: 0.6,
+                          offset: .init(width: 0, height: 1))
+        }
         /// 事件触发@长按
         .onLongPress(minimumPressDuration: 0.8) { btn, gr in
              if gr.state == .began {
@@ -2068,7 +1777,149 @@ private lazy var exampleButton: UIButton = {
 }()
 ```
 
-##### 8.1.2、🔘 <font id=创建网络图按钮>**创建网络图按钮**</font>@背景图/前景图 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 2.2.2、⏰ <font color=red id=计数按钮>**计数按钮**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> * ⏰ 计时器开始
+>
+>   * 正计时
+>
+>     ```swift
+>     self?.startButton.startTimer(
+>         total: nil,                 // ❤️ 不传 => 正计时
+>         interval: self.intervalSec,
+>         kind: self.currentKind
+>     )
+>     ```
+>
+>   * 倒计时
+>
+>     ```swift
+>     let total = self.parseCountdownTotal(10)
+>     btn.startTimer(
+>         total: total, // ❤️ 传 total => 倒计时
+>         interval: self.intervalSec,
+>         kind: self.currentKind
+>     )
+>     ```
+>
+> * ⏰ 计时器暂停
+>
+>   ```swift
+>   self?.startButton.pauseTimer()
+>   self?.countdownButton.pauseTimer()
+>   ```
+>
+> * ⏰ 计时器重新开始（恢复计时）
+>
+>   ```swift
+>   self?.startButton.resumeTimer()
+>   self?.countdownButton.resumeTimer()
+>   ```
+>
+> * ⏰ 计时器销毁
+>
+>   > 触发回调后销毁定时器
+>
+>   ```swift
+>   self?.startButton.fireTimerOnce()
+>   self?.countdownButton.fireTimerOnce()
+>   ```
+>
+> * ⏰ 计时器停止 
+>
+>   > 销毁但不触发回调
+>
+>   ```swift
+>   self?.startButton.stopTimer()
+>   self?.countdownButton.stopTimer()
+>   ```
+>
+
+###### 2.2.2.1、⏰ 正计时计数按钮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+// MARK: - 开始按钮（正计时：不传 total；按钮标题自动显示 elapsed）
+private lazy var startButton: UIButton = {
+    UIButton(type: .system)
+        .byTitle("开始", for: .normal)
+        .byTitleFont(.systemFont(ofSize: 22, weight: .bold))
+        .byTitleColor(.white, for: .normal)
+        .byBackgroundColor(.systemBlue, for: .normal)
+        .byCornerRadius(10)
+        .byMasksToBounds(true)
+        // 每 tick：更新时间 & 最近触发时间
+        .onTimerTick { [weak self] btn, elapsed, _, kind in
+            guard let self else { return }
+            // 正计时：elapsed（秒）已由按钮内部自动设置为标题，这里只补充 lastFireLabel
+            self.lastFireLabel.text = "Last: " + Self.fmt(Date())
+        }
+        // 状态变化：驱动控制键（暂停/继续/Fire/停止）的可用与配色
+        .onTimerStateChange { [weak self] _, _, new in
+            self?.updateControlButtons(by: new)
+        }
+        // 点击开始：不传 total => 正计时
+        .onTap { [weak self] btn in
+            guard let self else { return }
+            self.lastFireLabel.text = "Last: -"
+            btn.startTimer(
+                total: nil,                 // ❤️ 不传 => 正计时
+                interval: self.intervalSec,
+                kind: self.currentKind
+            )
+        }
+        .byAddTo(view) { [unowned self] make in
+            make.top.equalTo(countdownField.snp.bottom).offset(14)
+            make.left.equalToSuperview().offset(horizontalInset)
+            make.right.equalToSuperview().inset(horizontalInset)
+            make.height.equalTo(56)
+        }
+}()
+```
+
+###### 2.2.2.2、⏰ 倒计时计数按钮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+// MARK: - 倒计时演示按钮（同一套 API：传 total => 倒计时）
+private lazy var countdownButton: UIButton = {
+    UIButton(type: .system)
+        .byTitle("获取验证码", for: .normal)
+        .byTitleColor(.white, for: .normal)
+        .byBackgroundColor(.systemGreen, for: .normal)
+        .onCountdownTick { [weak self] btn, remain, total, kind in
+            guard let self else { return }
+            print("⏱️ [\(kind.jobs_displayName)] \(remain)/\(total)")
+            self.lastFireLabel.text = "Last: " + Self.fmt(Date())
+            btn.byTitle("还剩 \(remain)s", for: .normal)
+        }
+        .onCountdownFinish { _, kind in
+            print("✅ [\(kind.jobs_displayName)] 倒计时完成")
+        }
+        .onTap { [weak self] btn in
+            guard let self else { return }
+            let total = self.parseCountdownTotal(10)
+            btn.startTimer(
+                total: total, // ❤️ 传 total => 倒计时
+                interval: self.intervalSec,
+                kind: self.currentKind
+            )
+            // 关键：等 startTimer 把 "10s" 设好后再加前缀，避免被覆盖
+            DispatchQueue.main.async {
+                let cur = btn.title(for: .normal) ?? "\(total)s"
+                if !cur.hasPrefix("还剩 ") {
+                    btn.byTitle("还剩 \(cur)", for: .normal)
+                }
+            }
+        }
+        .byAddTo(view) { [unowned self] make in
+            make.top.equalTo(self.hintLabel.snp.bottom).offset(20)
+            make.left.equalToSuperview().offset(horizontalInset)
+            make.right.equalToSuperview().inset(horizontalInset)
+            make.height.equalTo(50)
+        }
+}()
+```
+
+##### 2.2.3、🔘 <font id=网络图按钮>**网络图按钮**</font>@背景图/前景图
 
 * [**SDWebImage**](https://github.com/SDWebImage/SDWebImage)
 
@@ -2174,34 +2025,33 @@ private lazy var exampleButton: UIButton = {
   }()
   ```
 
-##### 8.1.3、🔘 创建[**计数按钮**](#计数按钮) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-##### 8.1.4、🔘 创建悬浮按钮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 2.2.4、🔘 旋转按钮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
-private lazy var suspendBtn: UIButton = {
-    UIButton.sys()
-        .byTitle("开始", for: .normal)
+private lazy var suspendSpinBtn: UIButton = {
+    UIButton(type: .system)
+        .byTitle("0", for: .normal) // 中间数字：秒
         .byTitleFont(.systemFont(ofSize: 22, weight: .bold))
         .byTitleColor(.white, for: .normal)
-        .byBackgroundColor(.systemBlue, for: .normal)
-        .byCornerRadius(10)
+        .byBackgroundColor(.systemOrange, for: .normal)
+        .byCornerRadius(25)
         .byMasksToBounds(true)
-        .startTimer(total: nil,
-                    interval: 1.0,
-                    kind: .gcd)
-        // 每 tick：更新时间 & 最近触发时间
-        .onTimerTick { [weak self] btn, elapsed, _, kind in
-            guard let self else { return }
-            if btn.title(for: .normal) != "VIP" {
-                btn.byTitle("VIP", for: .normal)
+
+        // 正计时：每秒触发一次
+        .startTimer(total: nil, interval: 1.0, kind: .gcd)
+
+        // 每 tick：更新中心数字
+        .onTimerTick { [weak self] btn, elapsed, _, _ in
+            guard let _ = self else { return }
+            let sec = Int(elapsed)             // 累计秒
+            // 只有变化时才刷新，避免不必要的重绘
+            if btn.title(for: .normal) != "\(sec)" {
+                btn.byTitle("\(sec)", for: .normal)
+                    .bySetNeedsUpdateConfiguration()
             }
-            btn.bySubTitle(nowClock(), for: .normal)
-            btn.bySetNeedsUpdateConfiguration()
         }
-        .onLongPress(minimumPressDuration: 0.8) { btn, gr in
-//                if gr.state == .began { btn.alpha = 0.6 }
-//                else if gr.state == .ended || gr.state == .cancelled { btn.alpha = 1.0 }
+        // 长按：原逻辑
+        .onLongPress(minimumPressDuration: 0.8) { btn, _ in
             JobsToast.show(
                 text: "长按了悬浮按钮",
                 config: JobsToast.Config()
@@ -2209,62 +2059,47 @@ private lazy var suspendBtn: UIButton = {
                     .byCornerRadius(12)
             )
         }
-        // 点击开始：不传 total => 正计时
+        // 点击：保持原来的 Toast（不改动计时逻辑）
         .onTap { [weak self] btn in
-            guard let self else { return }
-            JobsToast.show(
-                text: "点击了悬浮按钮",
-                config: JobsToast.Config()
-                    .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                    .byCornerRadius(12)
-            )
-//                btn.startTimer(total: nil,
-//                               interval: 1.0,
-//                               kind: .gcd)
+            guard let _ = self else { return }
+            btn.playTapBounce(haptic: .light)  // 👈 临时放大→回弹（不注册任何手势/事件）
+            if btn.jobs_isSpinning {
+                // 暂停旋转
+                btn.bySpinPause()
+                // 暂停计时（保留已累计秒，不重置）
+                btn.timer?.pause()        // ✅ 推荐：你的统一内核挂在 button.timer 上
+                // 如果你有封装方法，则用：btn.pauseTimer()
+                JobsToast.show(
+                    text: "已暂停旋转 & 计时",
+                    config: .init().byBgColor(.systemGreen.withAlphaComponent(0.9)).byCornerRadius(12)
+                )
+            } else {
+                // 恢复旋转
+                btn.bySpinStart()
+                // 恢复计时（从暂停处继续累加）
+                btn.timer?.resume()       // ✅ 推荐
+                // 如果你有封装方法，则用：btn.resumeTimer()
+                JobsToast.show(
+                    text: "继续旋转 & 计时",
+                    config: .init().byBgColor(.systemGreen.withAlphaComponent(0.9)).byCornerRadius(12)
+                )
+            }
         }
+        // 悬浮配置
         .bySuspend { cfg in
             cfg
                 .byContainer(view)
-                .byFallbackSize(CGSize(width: 88, height: 44))
-                .byDocking(.nearestEdge)
-                .byInsets(UIEdgeInsets(top: 20, left: 16, bottom: 34, right: 16))
+//                    .byStart(.bottomRight)
+                .byStart(.point(CGPoint(x: 300.w, y: 500))) // 起始点（可用区域坐标）
+                .byFallbackSize(CGSize(width: 50, height: 50))
                 .byHapticOnDock(true)
         }
 }()
 ```
 
-##### 8.1.5、🔘 创建旋转按钮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 2.3、`UITableView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
-/// TODO
-```
-
-#### 8.2、按钮功能拓展 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-* **按钮选中/非选中**
-
-  ```swift
-  sender.isSelected.toggle()
-  ```
-
-* **防止用户快速连续点按钮**
-
-  ```swift
-  sender.disableAfterClick(interval: 2)
-  ```
-
-### 9、`UIScrollView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-```swift
-/// TODO
-```
-
-### 10、`UITableView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-```swift
-import SnapKit
-import ESPullToRefresh
-
 private lazy var tableView: UITableView = {
     UITableView(frame: .zero, style: .insetGrouped)
         .byDataSource(self)
@@ -2273,12 +2108,34 @@ private lazy var tableView: UITableView = {
         .byNoContentInsetAdjustment()
         .bySeparatorStyle(.singleLine)
         .byNoSectionHeaderTopPadding()
-        .byContentInset(UIEdgeInsets(
-            top: UIApplication.jobsSafeTopInset + 30,
-            left: 0,
-            bottom: 0,
-            right: 0
-        ))
+    
+        .jobs_emptyButtonProvider { [unowned self] in
+            UIButton(type: .system)
+                .byTitle("暂无数据", for: .normal)
+                .bySubTitle("点我填充示例数据", for: .normal)
+                .byImage("tray".sysImg, for: .normal)
+                .byImagePlacement(.top)
+                .onTap { [weak self] _ in
+                    guard let self else { return }
+                    self.items = (1...10).map { "Row \($0)" }
+                    self.tableView.reloadData()   // ✅ reload 后会自动评估空态，无需你再手动调用
+                }
+                // 可选：不满意默认居中 -> 自定义布局
+                .jobs_setEmptyLayout { btn, make, host in
+                    make.centerX.equalTo(host)
+                    make.centerY.equalTo(host).offset(-40)
+                    make.leading.greaterThanOrEqualTo(host).offset(16)
+                    make.trailing.lessThanOrEqualTo(host).inset(16)
+                    make.width.lessThanOrEqualTo(host).multipliedBy(0.9)
+                }
+        }
+
+//            .byContentInset(UIEdgeInsets(
+//                top: UIApplication.jobsSafeTopInset + 30,
+//                left: 0,
+//                bottom: 0,
+//                right: 0
+//            ))
         // 下拉刷新（自定义 JobsHeaderAnimator）
         .pullDownWithJobsAnimator({ [weak self] in
             guard let self = self, !self.isPullRefreshing else { return }
@@ -2286,10 +2143,17 @@ private lazy var tableView: UITableView = {
             print("⬇️ 下拉刷新触发")
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                // —— 演示：如果当前为空，则填充；否则打乱顺序 —— //
+                if self.items.isEmpty {
+                    self.items = (1...10).map { "Row \($0)" }
+                } else {
+                    self.items.shuffle()
+                }
                 self.isPullRefreshing = false
                 self.tableView.byReloadData()
                 self.tableView.pullDownStop()               // 结束下拉
                 self.updateFooterAvailability()
+                self.tableView.jobs_reloadEmptyViewAuto()   // 刷新空态显隐
                 print("✅ 下拉刷新完成")
             }
         }, config: { animator in
@@ -2306,9 +2170,15 @@ private lazy var tableView: UITableView = {
             print("⬆️ 上拉加载触发")
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                // —— 演示：每次追加 5 条 —— //
+                let base = self.items.count
+                self.items += (1...5).map { "Row \(base + $0)" }
+
                 self.isLoadingMore = false
+                self.tableView.byReloadData()
                 self.tableView.pullUpStop()                 // 结束上拉
                 self.updateFooterAvailability()
+                self.tableView.jobs_reloadEmptyViewAuto()   // 刷新空态显隐
                 print("✅ 上拉加载完成")
             }
         }, config: { animator in
@@ -2318,25 +2188,21 @@ private lazy var tableView: UITableView = {
                 .byLoadingMoreDescription("Jobs@加载中…")
                 .byNoMoreDataDescription("Jobs@没有更多数据")
         })
-        .byAddTo(view) { make in
-            make.edges.equalToSuperview()
+
+        .byAddTo(view) {[unowned self] make in
+            if view.jobs_hasVisibleTopBar() {
+                make.top.equalTo(self.gk_navigationBar.snp.bottom).offset(10)
+                make.left.right.bottom.equalToSuperview()
+            } else {
+                make.edges.equalToSuperview()
+            }
         }
 }()
 ```
 
-### 11、`UICollectionView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 2.4、`UICollectionView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* **`UICollectionViewFlowLayout`**
-
-  ```swift
-  private lazy var flowLayout: UICollectionViewFlowLayout = {
-      UICollectionViewFlowLayout()
-          .byScrollDirection(.vertical)
-          .byMinimumLineSpacing(10)
-          .byMinimumInteritemSpacing(10)
-          .bySectionInset(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
-  }()
-  ```
+* [**`UICollectionViewFlowLayout`**](#UICollectionViewFlowLayout)
 
 * **`UICollectionView`**
 
@@ -2493,17 +2359,294 @@ private lazy var tableView: UITableView = {
   }
   ```
 
-### 12、✍️`UITextField` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 2.5、<font id=UICollectionViewFlowLayout>`UICollectionViewFlowLayout`</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+private lazy var flowLayout: UICollectionViewFlowLayout = {
+    UICollectionViewFlowLayout()
+        .byScrollDirection(.vertical)
+        .byMinimumLineSpacing(10)
+        .byMinimumInteritemSpacing(10)
+        .bySectionInset(UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12))
+}()
+```
+
+#### 2.6、`UIImageView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* [**Kingfisher**](https://github.com/onevcat/Kingfishe)
+
+  ```swift
+  /// UIImageView字符串网络图@Kingfisher
+  private lazy var asyncImgView: UIImageView = {
+      UIImageView()
+          .byAsyncImageKF("https://picsum.photos/200/300", fallback: "唐老鸭".img)
+          .byContentMode(.scaleAspectFill)
+          .byClipsToBounds()
+          .byAddTo(scrollView) { [unowned self] make in
+              make.top.equalTo(localImgView.snp.bottom).offset(20)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
+              make.height.equalTo(180)
+          }
+  }()
+  ```
+
+  ```swift
+  /// UIImageView网络图（失败兜底图）@Kingfisher
+  private lazy var wrapperImgView: UIImageView = {
+      UIImageView()
+          .byContentMode(.scaleAspectFill)
+          .byClipsToBounds()
+          .kf_setImage(from: "https://picsum.photos/200", placeholder: "Ani".img)
+          .byAddTo(scrollView) { [unowned self] make in
+              make.top.equalTo(asyncImgViewSD.snp.bottom).offset(20)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
+              make.height.equalTo(180)
+          }
+  }()
+  ```
+
+* [**SDWebImage**](https://github.com/SDWebImage/SDWebImage)
+
+  ```swift
+  /// UIImageView字符串网络图@SDWebImage
+  private lazy var asyncImgViewSD: UIImageView = {
+      UIImageView()
+          .byAsyncImageSD("https://picsum.photos/400/300", fallback: "唐老鸭".img)
+          .byContentMode(.scaleAspectFill)
+          .byClipsToBounds()
+          .byAddTo(scrollView) { [unowned self] make in
+              make.top.equalTo(asyncImgView.snp.bottom).offset(20)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
+              make.height.equalTo(180)
+          }
+  }()
+  ```
+
+  ```swift
+  /// UIImageView网络图（失败兜底图）@SDWebImage
+  private lazy var wrapperImgViewSD: UIImageView = {
+      UIImageView()
+          .byContentMode(.scaleAspectFill)
+          .byClipsToBounds()
+          .sd_setImage(from: "https://picsum.photos/200", placeholder: "Ani".img)
+          .byAddTo(scrollView) { [unowned self] make in
+              make.top.equalTo(wrapperImgView.snp.bottom).offset(20)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
+              make.height.equalTo(180)
+          }
+  }()
+  ```
+
+#### 2.7、`UIToolbar` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```
+private lazy var passwordAccessory: UIToolbar = {
+    UIToolbar().byItems([
+        UIBarButtonItem()
+            .byTitle("清空")
+            .byTitleFont(.systemFont(ofSize: 15))
+            .byTitleColor(.systemRed)
+            .byStyle(.plain)
+            .onTap { [weak self] _ in
+                guard let self = self else { return }   // ✅ 确保生命周期安全
+                /// TODO
+            },
+        UIBarButtonItem(systemItem: .flexibleSpace),
+        UIBarButtonItem()
+            .byTitle("完成")
+            .byTitleFont(.systemFont(ofSize: 15))
+            .byTitleColor(.systemYellow)
+            .byStyle(.done)
+            .onTap { [weak self] _ in
+                guard let self = self else { return }   // ✅ 确保生命周期安全
+                view.endEditing(true)
+            },
+    ])
+    .bySizeToFit()
+    .byAddTo(view) { [unowned self] make in
+        make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(40)
+        make.left.right.equalToSuperview().inset(24)
+        make.height.equalTo(44)
+    }
+}()
+```
+
+#### 2.8、`UIBarButtonItem`  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+private lazy var barButtonItem: UIBarButtonItem = {
+    UIBarButtonItem()
+        .byTitle("完成")
+        .byTitleFont(.systemFont(ofSize: 15))
+        .byTitleColor(.systemYellow)
+        .byStyle(.done)
+        .onTap { [weak self] _ in
+            guard let self = self else { return }   // ✅ 确保生命周期安全
+            view.endEditing(true)
+    }
+}()
+```
+
+#### 2.9、🌍`WKWebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+import WebKit
+
+private lazy var webView: WKWebView = {
+    WKWebView(frame: .zero, configuration: WKWebViewConfiguration()
+        .byWebsiteDataStore(.default())
+        .byAllowsInlineMediaPlayback(true)
+        .byUserContentController(WKUserContentController().byAddUserScript(Self.makeBridgeUserScript()))
+        .byDefaultWebpagePreferences { wp in
+            wp.allowsContentJavaScript = true
+        }
+    )
+    .byAddTo(view) { [unowned self] make in
+        make.top.equalTo(textField.snp.bottom).offset(12)
+        make.centerX.equalToSuperview()
+        make.height.equalTo(36)
+    }
+}()
+```
+
+#### 2.10、🌍`BaseWebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 在` Info.plist `添加👇（更通用的 **ATS** 配置，避免为某域名单独开洞）
+>
+> ```xml
+> <key>NSAppTransportSecurity</key>
+> <dict>
+> <!-- 仅放开 Web 内容，其他网络请求仍受 ATS 约束 -->
+> <key>NSAllowsArbitraryLoadsInWebContent</key><true/>
+> </dict>
+> ```
+
+```swift
+private lazy var web: BaseWebView = { [unowned self] in
+        return BaseWebView()
+            .byBgColor(.clear)
+            .byAllowedHosts([])                  // 不限域
+            .byOpenBlankInPlace(true)
+            .byDisableSelectionAndCallout(false)
+            .byUserAgentSuffixProvider { _ in
+                // 按请求动态追加 UA 后缀；nil = 使用系统默认 UA。
+                // 需要区分页面时在此 return "YourApp/1.0"
+                return nil
+            }
+//            .byNormalizeMToWWW(false)               // ❗️关闭 m→www
+//            .byForceHTTPSUpgrade(false)             // ❗️关闭 http→https
+//            .bySafariFallbackOnHTTP(false)          // ❗️关闭 Safari 兜底
+//            .byInjectRedirectSanitizerJS(false)     // 可关，避免干涉 H5 自己跳转
+            /// URL 重写策略（默认不重写；这里保持关闭）
+            .byURLRewriter { _ in
+                // 例如要做 http→https 升级：检测 url.scheme == "http" 再返回新 URL
+                // 现在返回 nil 表示不改写
+                return nil
+            }
+            /// Safari 兜底（默认不开）；返回 true 即交给 Safari 打开
+            .bySafariFallbackRule { _ in
+                return false
+            }
+            /// 一键开导航栏（默认标题=webView.title，默认有返回键）
+            .byNavBarEnabled(true)
+            .byNavBarStyle { s in
+                s.byHairlineHidden(false)
+                 .byBackgroundColor(.systemBackground)
+                 .byTitleAlignmentCenter(true)
+            }
+            /// 自定义返回键（想隐藏就：.byNavBarBackButtonProvider { nil }）
+            .byNavBarBackButtonProvider {
+                UIButton(type: .system)
+                    .byBackgroundColor(.clear)
+                    .byImage(UIImage(systemName: "chevron.left"), for: .normal)
+                    .byTitle("返回", for: .normal)
+                    .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+                    .byTitleColor(.label, for: .normal)
+                    .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10))
+                    .byTapSound("Sound.wav")
+            }
+            /// 返回行为：优先后退，否则关闭当前控制器
+            .byNavBarOnBack { [weak self] in
+                guard let self else { return }
+                closeByResult("")
+            }
+            .byAddTo(view) { [unowned self] make in
+                make.edges.equalToSuperview()
+            }
+            /// 以下是依据前端暴露的自定义方法进行的JS交互
+            .registerMobileAction("navigateToHome") {  [weak self] body, reply in
+                /// 跳转到首页
+                self!.closeByResult("")
+                reply(nil)
+            }
+            .registerMobileAction("getToken") {  [weak self] body, reply in
+
+                reply(nil)
+            }
+            .registerMobileAction("navigateToSecurityCenter") {  [weak self] body, reply in
+                /// 跳转福利中心
+                reply(nil)
+            }
+            .registerMobileAction("navigateToLogin") {  [weak self] body, reply in
+                /// 跳转到登录页
+                reply(nil)
+            }
+            .registerMobileAction("navigateToDeposit") {  [weak self] body, reply in
+                /// 跳转到充值页
+                reply(nil)
+            }
+            .registerMobileAction("closeWebView") {  [weak self] body, reply in
+                /// 关闭WebView
+                reply(nil)
+            }
+            .registerMobileAction("showToast") {  [weak self] body, reply in
+                /// 显示Toast
+                JobsToast.show(
+                    text: body.stringValue(for: "message") ?? "",
+                    config: JobsToast.Config()
+                        .byBgColor(.systemGreen.withAlphaComponent(0.9))
+                        .byCornerRadius(12)
+                )
+                reply(nil)
+            }
+    }()
+```
+
+* 加载线上 URL
+
+  ```swift
+  web.loadBy("https://www.baidu.com")
+  /// 或者
+  web.loadBy(URL(string: "https://www.baidu.com")!)
+  ```
+
+* 加载[**内置的HTML代码**](#内置的HTML代码)
+
+  ```swift
+  web.loadHTMLBy(Self.demoHTML, baseURL: nil)
+  ```
+
+* 加载本地**`*.HTML`**文件@[**bundle**](#bundle)
+
+  ```swift
+  web.loadBundleHTMLBy(named: "BaseWebViewDemo")
+  ```
+
+#### 2.11、✍️`UITextField` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > ```swift
 > override func loadView() {
->       super.loadView()
->       // 建议在 App 启动时调用一次
->       UITextField.enableDeleteBackwardBroadcast()
+>    super.loadView()
+>    // 建议在 App 启动时调用一次
+>    UITextField.enableDeleteBackwardBroadcast()
 > }
 > ```
 
-#### 12.1、📮 邮箱输入框 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 2.11.1、📮 邮箱输入框 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 一般性封装 
 
@@ -2575,11 +2718,11 @@ private lazy var tableView: UITableView = {
       		   .byAllowedWritingToolsResultOptions([])
   }
   ```
-  
+
 * 功能性封装
 
   * 删除按键的监听
-  
+
     ```swift
     // MARK: Rx 绑定 —— 删除键广播
     emailTF.didPressDelete
@@ -2589,9 +2732,9 @@ private lazy var tableView: UITableView = {
         })
         .disposed(by: rx.disposeBag)
     ```
-  
+
   * 用`textInput`限定输入字符过滤条件
-  
+
     ```swift
     // MARK: Rx 绑定 —— 邮箱：去空格 + 最长 8 + 简单规则
     emailTF.textInput(
@@ -2603,7 +2746,7 @@ private lazy var tableView: UITableView = {
         .disposed(by: rx.disposeBag)
     ```
 
-#### 12.2、🔒 密码输入框 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 2.11.2、🔒 密码输入框 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 一般性封装（`.byLimitLength(5)// 输入长度限制`）
 
@@ -2698,7 +2841,7 @@ private lazy var tableView: UITableView = {
 * 功能性封装
 
   * 用`textInput`限定输入字符过滤条件（但是没有设置输入长度限制，输入长度限制用`.byLimitLength(5)`）
-  
+
     ```swift
     // MARK: Rx 绑定 —— 密码：不做任何限制，只是监听（不要传 nil，直接用默认）
     passwordTF.textInput(
@@ -2710,9 +2853,9 @@ private lazy var tableView: UITableView = {
     .subscribe(onNext: { print("🔐 password valid:", $0) })
     .disposed(by: rx.disposeBag)
     ```
-  
+
   * 删除按键的监听
-  
+
     ```swift
     // MARK: 监听删除键（无 .rx）
     passwordTF.didPressDelete
@@ -2720,9 +2863,9 @@ private lazy var tableView: UITableView = {
         .disposed(by: rx.disposeBag)
     ```
 
-### 13、✍️`UITextView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 2.12、✍️`UITextView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 13.1、基础样式 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 2.12.1、基础样式 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 private lazy var tv: UITextView = { [unowned self] in
@@ -2757,7 +2900,7 @@ private lazy var tv: UITextView = { [unowned self] in
 }()
 ```
 
-#### 13.2、**金额输入（只限定数字）** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 2.12.2、**金额输入（只限定数字）** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 private func demo_RxTextInput() {
@@ -2789,7 +2932,7 @@ private func demo_RxTextInput() {
 }
 ```
 
-#### 13.3、**手机号输入** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 2.12.3、**手机号输入** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 private func demo_PhoneInput() {
@@ -2820,7 +2963,7 @@ private func demo_PhoneInput() {
 }
 ```
 
-#### 13.4、**富文本**展示 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 2.12.4、**富文本**展示 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 private lazy var tvBlue: UITextView = { [unowned self] in
@@ -2854,7 +2997,7 @@ private lazy var tvBlue: UITextView = { [unowned self] in
 }()
 ```
 
-#### 13.5、查找高亮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 2.12.5、查找高亮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 private func demo_Find_Border_WritingTools() {
@@ -2943,7 +3086,7 @@ private func demo_Find_Border_WritingTools() {
 }
 ```
 
-#### 13.6、数据的双向绑定 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 2.12.6、数据的双向绑定 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 private func demo_TwoWayBinding() {
@@ -2980,7 +3123,7 @@ private func demo_TwoWayBinding() {
 }
 ```
 
-#### 13.7、**删除键监听** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 2.12.7、**删除键监听** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 private func demo_DeleteBackward_Observe() {
@@ -3013,109 +3156,83 @@ private func demo_DeleteBackward_Observe() {
 }
 ```
 
-### 14、`UIToolbar`/`UIBarButtonItem` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 2.13、`GKNavigationBarSwift` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
-private lazy var passwordAccessory: UIToolbar = {
-    let bar = UIToolbar()
-    bar.items = [
-        UIBarButtonItem()
-            .byTitle("清空")
-            .byTitleFont(.systemFont(ofSize: 15))
-            .byTitleColor(.systemRed)
-            .byStyle(.plain)
-            .onTap { [weak self] _ in
-                guard let self = self else { return }   // ✅ 确保生命周期安全
-                self.passwordTF.text = ""
-                // 也可以：self.passwordTF.rx.text.onNext("")
+jobsSetupGKNav(
+    title: "Demo 列表",
+    leftButton:UIButton.sys()
+        .byFrame(CGRect(x: 0, y: 0, width: 32.w, height: 32.h))
+        /// 按钮图片@图文关系
+        .byImage("list.bullet".sysImg, for: .normal)
+        .byImage("list.bullet".sysImg, for: .selected)
+        /// 事件触发@点按
+        .onTap { [weak self] sender in
+            guard let self else { return }
+            sender.isSelected.toggle()
+            debugOnly {  // 仅 Debug 执行
+                JobsToast.show(
+                    text: "点按了列表按钮",
+                    config: JobsToast.Config()
+                        .byBgColor(.systemGreen.withAlphaComponent(0.9))
+                        .byCornerRadius(12)
+                )
+            }
+        }
+        /// 事件触发@长按
+        .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+             if gr.state == .began {
+                 btn.alpha = 0.6
+                 print("长按开始 on \(btn)")
+             } else if gr.state == .ended || gr.state == .cancelled {
+                 btn.alpha = 1.0
+                 print("长按结束")
+             }
+        },
+    rightButtons: [
+        UIButton.sys()
+            /// 按钮图片@图文关系
+            .byImage("moon.circle.fill".sysImg, for: .normal)
+            .byImage("moon.circle.fill".sysImg, for: .selected)
+            /// 事件触发@点按
+            .onTap { [weak self] sender in
+                guard let self else { return }
+                sender.isSelected.toggle()
+                guard let ws = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                      let win = ws.windows.first else { return }
+                win.overrideUserInterfaceStyle =
+                    (win.overrideUserInterfaceStyle == .dark) ? .light : .dark
+                print("🌓 主题已切换 -> \(win.overrideUserInterfaceStyle == .dark ? "Dark" : "Light")")
             },
-        UIBarButtonItem(systemItem: .flexibleSpace),
-        UIBarButtonItem()
-            .byTitle("完成")
-            .byTitleFont(.systemFont(ofSize: 15))
-            .byTitleColor(.systemYellow)
-            .byStyle(.done)
-            .onTap { [weak self] _ in
-                guard let self = self else { return }   // ✅ 确保生命周期安全
-                view.endEditing(true)
+        UIButton.sys()
+            /// 按钮图片@图文关系
+            .byImage("globe".sysImg, for: .normal)
+            .byImage("globe".sysImg, for: .selected)
+            /// 事件触发@点按
+            .onTap { [weak self] sender in
+                guard let self else { return }
+                sender.isSelected.toggle()
+                print("🌐 切换语言 tapped（占位）")
             },
+        UIButton.sys()
+            /// 按钮图片@图文关系
+            .byImage("stop.circle.fill".sysImg, for: .normal)
+            .byImage("stop.circle.fill".sysImg, for: .selected)
+            /// 事件触发@点按
+            .onTap { [weak self] sender in
+                guard let self else { return }
+                sender.isSelected.toggle()
+                print("🛑 手动停止刷新")
+                isPullRefreshing = false
+                isLoadingMore    = false
+                tableView.pullDownStop()
+                tableView.pullUpStop()
+            }
     ]
-    bar.sizeToFit()
-    return bar
-}()
+)
 ```
 
-### 15、`UIImageView`网络图渲染 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-* [**Kingfisher**](https://github.com/onevcat/Kingfishe)
-
-  ```swift
-  /// UIImageView字符串网络图@Kingfisher
-  private lazy var asyncImgView: UIImageView = {
-      UIImageView()
-          .byAsyncImageKF("https://picsum.photos/200/300", fallback: "唐老鸭".img)
-          .byContentMode(.scaleAspectFill)
-          .byClipsToBounds()
-          .byAddTo(scrollView) { [unowned self] make in
-              make.top.equalTo(localImgView.snp.bottom).offset(20)
-              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
-              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
-              make.height.equalTo(180)
-          }
-  }()
-  ```
-  
-  ```swift
-  /// UIImageView网络图（失败兜底图）@Kingfisher
-  private lazy var wrapperImgView: UIImageView = {
-      UIImageView()
-          .byContentMode(.scaleAspectFill)
-          .byClipsToBounds()
-          .kf_setImage(from: "https://picsum.photos/200", placeholder: "Ani".img)
-          .byAddTo(scrollView) { [unowned self] make in
-              make.top.equalTo(asyncImgViewSD.snp.bottom).offset(20)
-              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
-              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
-              make.height.equalTo(180)
-          }
-  }()
-  ```
-  
-* [**SDWebImage**](https://github.com/SDWebImage/SDWebImage)
-
-  ```swift
-  /// UIImageView字符串网络图@SDWebImage
-  private lazy var asyncImgViewSD: UIImageView = {
-      UIImageView()
-          .byAsyncImageSD("https://picsum.photos/400/300", fallback: "唐老鸭".img)
-          .byContentMode(.scaleAspectFill)
-          .byClipsToBounds()
-          .byAddTo(scrollView) { [unowned self] make in
-              make.top.equalTo(asyncImgView.snp.bottom).offset(20)
-              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
-              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
-              make.height.equalTo(180)
-          }
-  }()
-  ```
-  
-  ```swift
-  /// UIImageView网络图（失败兜底图）@SDWebImage
-  private lazy var wrapperImgViewSD: UIImageView = {
-      UIImageView()
-          .byContentMode(.scaleAspectFill)
-          .byClipsToBounds()
-          .sd_setImage(from: "https://picsum.photos/200", placeholder: "Ani".img)
-          .byAddTo(scrollView) { [unowned self] make in
-              make.top.equalTo(wrapperImgView.snp.bottom).offset(20)
-              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
-              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
-              make.height.equalTo(180)
-          }
-  }()
-  ```
-
-### 16、👋 手势的封装（使用）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 2.14、👋 手势的封装（使用）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 因为手势只能添加到**UIView**及其子类上，所以我们对**UIView**进行扩充
 
@@ -3326,10 +3443,352 @@ private lazy var passwordAccessory: UIToolbar = {
   view.removeSwipeActionMulti(id: idL)
   // 或批量移除该类手势
   view.removeAllSwipeActionsMulti()
+  ```
 
-### 17、富文本的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 2.15、<font id=UIAlertController>`UIAlertController`</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 17.1、设置富文本 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+* 最简单的 Alert：主/副标题 + 取消_确定@按钮行为监听 + 中间弹出 + 点击空白区域不可取消
+
+  ```swift
+  // MARK: 最简单的 Alert：主/副标题 + 取消_确定@按钮行为监听 + 中间弹出 + 点击空白区域不可取消
+  private lazy var simpleAlert: UIAlertController = {
+      UIAlertController
+          .makeAlert("提示", "这是一条简单提示")
+          .byAddCancel { [weak self] _ in
+              guard let self else { return }
+              print("Cancel")
+              // TODO: 这里写你的取消逻辑
+          }
+          .byAddOK { [weak self] _ in
+              guard let self else { return }
+              print("OK")
+              // TODO: 这里写你的确认逻辑
+          }
+  }()
+  ```
+
+* 最简单的 Alert：主/副标题 + 取消_确定@按钮行为监听 + 中间弹出 + 点击空白区域不可取消
+
+  ```swift
+  // MARK: 最简单的 Alert：主/副标题 + 取消_确定@按钮行为监听 + 中间弹出 + 点击空白区域不可取消
+  private lazy var simpleAlert: UIAlertController = {
+      UIAlertController
+          .makeAlert("重命名", "请输入新的名称")
+  //        .bySDBgImageView("https://picsum.photos/800/600",
+  //                         image: "唐老鸭".img,
+  //                         hideSystemBackdrop: true)
+  //        .byKFBgImageView("https://picsum.photos/800/600",
+  //                         image: "唐老鸭".img,
+  //                         hideSystemBackdrop: true)
+          .byBgImage("唐老鸭".img)                      // 本地图背景（同步阶段，无动画）
+          .byCardBorder(width: 1, color: .systemBlue)   // 外层卡片描边
+          .byAddTextField(placeholder: "新名称",
+                          borderWidth: nil,             // ← 不给 tf 自身描边
+                          borderColor: nil,
+                          cornerRadius: 8) { alert, tf, input, oldText, isDeleting in
+              let ok = alert.actions.first { $0.title == "确定" }
+              ok?.isEnabled = !(tf.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+          }
+          .byTextFieldOuterBorder(at: 0, width: 1, color: .systemBlue, cornerRadius: 10, insets: .init(top: 6, left: 12, bottom: 6, right: 12)) // ← 给灰色容器描边
+          .byAddCancel { _ in                          // ✅ 一个回调（只给 action）
+              print("Cancel tapped")
+          }
+          .byAddOK{ alert, _ in                 // 需要 alert + action 的回调
+              let name = alert.textField(at: 0)?.text ?? ""
+              print("new name =", name)
+          }
+          .byTintColor(.systemBlue)
+          .byPresent(self)
+  }()
+  ```
+
+* 主标题 + 相机_相册_取消@按钮行为监听 + 屏幕底部弹出 + 点击空白区域可取消
+
+  ```swift
+  // MARK: 主标题 + 相机_相册_取消@按钮行为监听 + 屏幕底部弹出 + 点击空白区域可取消
+  private lazy var simpleAlert: UIAlertController = {
+      UIAlertController
+          .makeActionSheet("选择来源", nil)
+          .byAddAction(title: "相机") { _ in
+              print("camera")
+          }
+          .byAddAction(title: "相册") { _ in
+              print("photos")
+          }
+          .byAddCancel { _ in
+              print("Cancel tapped")
+          }
+          .byPresent(self)
+  }()
+  ```
+
+* 主标题 + 删除_取消@按钮行为监听 + 从按钮自身位置（锚点）弹出 + 点击空白区域可取消
+
+  ```swift
+  // MARK: 主标题 + 删除_取消@按钮行为监听 + 从按钮自身位置（锚点）弹出 + 点击空白区域可取消
+  private lazy var simpleAlert: UIAlertController = {
+      UIAlertController
+          .makeActionSheet("操作", nil)
+          .byAddDestructive("删除") { _ in
+              print("delete")
+          }
+          .byAddCancel { _ in
+              print("Cancel tapped")
+          }
+          .byPresent(self, anchor: .view(sender, sender.bounds)) // 指定锚点
+  }()
+  ```
+
+### 3、📏 设备尺寸相关 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 3.1、📏 [**全局比例尺**](#全局比例尺@实现逻辑) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 入口配置
+
+  ```swift
+  import UIKit
+  
+  @main
+  class AppDelegate: UIResponder, UIApplicationDelegate {
+  
+      func application(
+          _ application: UIApplication,
+          didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+      ) -> Bool {
+          JXScale.setup(designWidth: 375, designHeight: 812, useSafeArea: false)
+          return true
+      }
+  
+      // MARK: UISceneSession Lifecycle
+      func application(
+          _ application: UIApplication,
+          configurationForConnecting connectingSceneSession: UISceneSession,
+          options: UIScene.ConnectionOptions
+      ) -> UISceneConfiguration {
+          return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+      }
+  }
+  ```
+
+* 调用
+
+  ```swift
+  CGRect(x: 20.w, y: 100.h, width: 200.w, height: 40.h)
+  ```
+
+#### 3.2、📏 [屏幕宽高@兼容设备横竖屏](#获取屏幕尺寸@实现逻辑) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+let w = Screen.width
+let h = Screen.height
+```
+
+### 4、🖨️ 日志打印工具的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 时间+文件全名+当前的打印触发行数+当前所在方法名+顶层main+具体的打印内容
+
+```swift
+// MARK: - 打印示例
+private func printDemo() {
+    // 1) 普通文本 / 参数混合
+    log("你好，世界", 123, true)
+    // 2) JSON：自动识别 String/Data/字典/数组（默认 pretty + 中文还原）
+    log(#"{"key":"\u7231\u60c5"}"#)                 // String JSON
+    log(["user": "张三", "tags": ["iOS","Swift"]])  // 字典/数组
+    log(DataFromNetwork(
+        statusCode: 200,
+        message: "OK",
+        url: URL(string: "https://api.example.com/users")!,
+        headers: ["Content-Type": "application/json"],
+        body: #"{"user":"\u5f20\u4e09","tags":["iOS","Swift"],"ok":true}"#.data(using: .utf8),
+        receivedAt: Date(),
+        retryable: false
+    ))                            // Data
+    // 3) 对象：自动反射为 JSON（防环、可控深度）
+    struct User { let id: Int; let name: String }
+    let u = User(id: 1, name: "张三")
+    log(u)                      // .auto 下会转对象 JSON
+    log(u, mode: .object)       // 强制对象模式（不走 stringify）
+    // 4) 指定级别（仍是一个入口）
+    log("启动完成", level: .info)
+    log("接口慢",  level: .warn)
+    log(["err": "timeout"], level: .error)
+    log(["arr": ["\\u7231\\u60c5", 1]], level: .debug)
+}
+```
+
+> ```swift
+> 📝 10:16:56 | CNIDDemoVC.swift:97 | printDemo() | main → 你好，世界 123 true
+> 📝 10:16:56 | CNIDDemoVC.swift:99 | printDemo() | main → {
+>   "key" : "爱情"
+> }
+> 📝 10:16:56 | CNIDDemoVC.swift:100 | printDemo() | main → {
+>   "user" : "张三",
+>   "tags" : [
+>     "iOS",
+>     "Swift"
+>   ]
+> }
+> 📝 10:16:56 | CNIDDemoVC.swift:101 | printDemo() | main → {
+>   "_type" : "DataFromNetwork",
+>   "_props" : {
+>     "body" : {
+>       "<Data>" : 56
+>     },
+>     "statusCode" : 200,
+>     "headers" : {
+>       "Content-Type" : "application\/json"
+>     },
+>     "url" : "https:\/\/api.example.com\/users",
+>     "message" : "OK",
+>     "receivedAt" : "2025-10-03T03:16:56Z",
+>     "retryable" : false
+>   }
+> }
+> 📝 10:16:56 | CNIDDemoVC.swift:113 | printDemo() | main → {
+>   "_props" : {
+>     "name" : "张三",
+>     "id" : 1
+>   },
+>   "_type" : "User"
+> }
+> 📝 10:16:56 | CNIDDemoVC.swift:114 | printDemo() | main → {
+>   "_props" : {
+>     "name" : "张三",
+>     "id" : 1
+>   },
+>   "_type" : "User"
+> }
+> ℹ️ 10:16:56 | CNIDDemoVC.swift:116 | printDemo() | main → 启动完成
+> ⚠️ 10:16:56 | CNIDDemoVC.swift:117 | printDemo() | main → 接口慢
+> ❌ 10:16:56 | CNIDDemoVC.swift:118 | printDemo() | main → {
+>   "err" : "timeout"
+> }
+> 🐞 10:16:56 | CNIDDemoVC.swift:119 | printDemo() | main → {
+>   "arr" : [
+>     "爱情",
+>     1
+>   ]
+> }
+> ```
+
+### 5、避免从 `XIB`/`Storyboard` 初始化 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+required init?(coder: NSCoder) {
+    fatalError()
+}
+```
+
+### 6、🖼️ <font color=red>**使用`Color Set`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 选中图片以后，跳到第四个选项卡
+
+  ```swift
+  if #available(iOS 11.0, *) {
+      UIColor(named: "TextColor0")
+  }
+  ```
+
+  <p align="center">
+    <img src="./assets/image-20250924174836800.png" width="20%"/>
+    <img src="./assets/image-20250924175446796.png" width="60%"/>
+  </p>
+
+* 支持暗黑模式
+
+  > Dark优先级高一些，如果在Dark里面没有找到对应的图片，会去Any找
+  >
+  > ```swift
+  > self.nameLabel.textColor = .textColor1// 代码里面只对应一个值。但是在textColor1这个资源包里面区分 白天/黑夜
+  > ```
+
+![image-20251001161600357](./assets/image-20251001161600357.png)
+
+### 7、网络鉴权`Code`的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> - `r0.code` 是 `Int?`
+>
+> - `JXAuthCode.tokenEmpty` 是一个 **枚举值 (`JXAuthCode`)**
+>
+> - [**Swift**](https://developer.apple.com/swift/) 不允许直接比较 `Int` 和 `JXAuthCode`。
+>
+>   ```swift
+>   if r0.code == JXAuthCode.tokenEmpty.rawValue
+>       || r0.code == JXAuthCode.tokenInvalid.rawValue
+>       || r0.code == JXAuthCode.loginExpired.rawValue
+>       || r0.code == JXAuthCode.authorizationFail.rawValue {
+>       print("需要重新登录")
+>   }
+>   ```
+
+* 定义封装
+
+  ```swift
+  // MARK: -网络鉴权
+  public enum JXAuthCode: UInt {
+      case tokenEmpty        = 10006  // 令牌为空
+      case tokenInvalid      = 10007  // 令牌错误
+      case loginExpired      = 10008  // 登陆过期
+      case authorizationFail = 10014  // 授权失败
+      case success           = 10000  // 成功
+  }
+  ```
+
+  ```swift
+  // MARK: - 扩展 Int 与 JXAuthCode 的比较。避免写rawValue
+  public func ==(lhs: Int?, rhs: JXAuthCode) -> Bool {
+      guard let lhs = lhs else { return false }
+      return lhs == Int(rhs.rawValue)
+  }
+  
+  public func ==(lhs: Int, rhs: JXAuthCode) -> Bool {
+      return lhs == Int(rhs.rawValue)
+  }
+  
+  public func ==(lhs: JXAuthCode, rhs: Int?) -> Bool {
+      guard let rhs = rhs else { return false }
+      return Int(lhs.rawValue) == rhs
+  }
+  
+  public func ==(lhs: JXAuthCode, rhs: Int) -> Bool {
+      return Int(lhs.rawValue) == rhs
+  }
+  
+  // MARK: - 扩展 Int 与 JXAuthCode 的不等于
+  public func !=(lhs: Int?, rhs: JXAuthCode) -> Bool {
+      !(lhs == rhs)
+  }
+  
+  public func !=(lhs: Int, rhs: JXAuthCode) -> Bool {
+      !(lhs == rhs)
+  }
+  
+  public func !=(lhs: JXAuthCode, rhs: Int?) -> Bool {
+      !(lhs == rhs)
+  }
+  
+  public func !=(lhs: JXAuthCode, rhs: Int) -> Bool {
+      !(lhs == rhs)
+  }
+  ```
+
+* 使用
+
+  ```swift
+  if (r0.code == JXAuthCode.tokenEmpty // 令牌为空
+   || r0.code == 10007 // 令牌错误
+   || r0.code == 10008 // 登陆过期
+   || r0.code == 10056
+   || r0.code == 10014)// 授权失败
+  {/*TODO*/}
+  ```
+
+
+
+### 8、富文本的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 8.1、设置富文本 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
   UILabel().richTextBy(runs, paragraphStyle: ps)
@@ -3343,7 +3802,7 @@ private lazy var passwordAccessory: UIToolbar = {
   UITextField().richTextBy(runs, paragraphStyle: ps)
   ```
 
-#### 17.2、富文本形式 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 8.2、富文本形式 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 下划线
 
@@ -3476,7 +3935,7 @@ private lazy var passwordAccessory: UIToolbar = {
   ]
   ```
 
-### 18、<font id=弱引用的等价写法>**弱引用的等价写法**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 9、<font id=弱引用的等价写法>**弱引用的等价写法**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
   guard let `self` = self else { return }
@@ -3543,7 +4002,7 @@ private lazy var passwordAccessory: UIToolbar = {
   }
   ```
 
-### 19、对通知名的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 10、对通知名的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
   import Foundation
@@ -3579,7 +4038,7 @@ private lazy var passwordAccessory: UIToolbar = {
   > NotificationCenter.default.post(name: .userDidLogin, object: nil)
   > ```
 
-### 20、<font id=回调主线程>回调主线程（2大手段）</font><a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 11、<font id=回调主线程>回调主线程（2大手段）</font><a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 若调用点本身在主线程：**立即**执行（不延迟）。若调用点不在主线程/不在主 Actor：需要一次**actor hop**，通常要求 `await` 才能调用。
 >
@@ -3592,7 +4051,7 @@ private lazy var passwordAccessory: UIToolbar = {
 > }
 > ```
 
-#### 20.1、**C.GCD系列**@传统轻量 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 11.1、**C.GCD系列**@传统轻量 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ **GCD 的底层实现** → 在 **`libdispatch`** 里（C 语言库），属于 **Darwin** 系统的一部分
 >
@@ -3655,7 +4114,7 @@ private lazy var passwordAccessory: UIToolbar = {
   performSelector(onMainThread:)
   ```
 
-#### 20.2、**[Swift](https://developer.apple.com/swift/).Concurrency.MainActor（执行器层）**@<font color=red>**现代推荐方式**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 11.2、**[Swift](https://developer.apple.com/swift/).Concurrency.MainActor（执行器层）**@<font color=red>**现代推荐方式**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 立刻切主线程并等结果
 
@@ -3677,7 +4136,7 @@ private lazy var passwordAccessory: UIToolbar = {
     }
     ```
 
-### 21、`Block/闭包` 的安全调用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 12、`Block/闭包` 的安全调用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 以下为等价调用
 
@@ -3701,7 +4160,7 @@ private lazy var passwordAccessory: UIToolbar = {
     success?(true)
     ```
 
-### 22、Then（自定义/使用）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 13、Then（自定义/使用）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 定义
 
@@ -3732,7 +4191,7 @@ private lazy var passwordAccessory: UIToolbar = {
   label.textAlignment = .center
   ```
 
-### 23、对[**SnapKit**](https://github.com/SnapKit/SnapKit)的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 14、对[**SnapKit**](https://github.com/SnapKit/SnapKit)的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 集成
 
@@ -3755,9 +4214,9 @@ private lazy var passwordAccessory: UIToolbar = {
   }()
   ```
 
-### 24、🧭 自定义导航栏 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 15、🧭 自定义导航栏 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 24.1、[**基于控制器层的自定义导航栏@GKNavigationBarSwift**](https://github.com/QuintGao/GKNavigationBarSwift)的二次封装和使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 15.1、[**基于控制器层的自定义导航栏@GKNavigationBarSwift**](https://github.com/QuintGao/GKNavigationBarSwift)的二次封装和使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 集成
 
@@ -3838,7 +4297,7 @@ private lazy var passwordAccessory: UIToolbar = {
   }
   ```
 
-#### 24.2、基于视图层的自定义导航栏 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 15.2、基于视图层的自定义导航栏 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 // 🔽 一键开导航栏（默认标题=webView.title，默认有返回键）
@@ -3874,7 +4333,7 @@ UIView().byNavBarEnabled(true)
     }
 ```
 
-### 25、获取高频系统关键量 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 16、获取高频系统关键量 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * `jobsNearestVC`
 
@@ -3894,7 +4353,7 @@ UIView().byNavBarEnabled(true)
   }
   ```
 
-### 26、<font color=red>推页面@带参数</font>（`push`/`present`）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 17、<font color=red>推页面@带参数</font>（`push`/`present`）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ 封装在`UIResponder`层，能全覆盖：**任意控制器**和**任意视图**
 >
@@ -3958,26 +4417,16 @@ UIView().byNavBarEnabled(true)
         }
     ```
 
-### 27、懒加载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 18、<font id=字符串加载图片资源>依据<font color=red>**字符串**</font>加载图片资源</font>（本地/网络）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-```swift
-private lazy var datePicker: UIDatePicker = {
-    return UIDatePicker()
-        .byPreferredDatePickerStyle(.wheels)
-        .byDatePickerMode(.date)
-}()
-```
-
-### 28、<font id=字符串加载图片资源>依据<font color=red>**字符串**</font>加载图片资源</font>（本地/网络）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-#### 28.1、取本地图片 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 18.1、取本地图片 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 /// 本地图像名（在 Assets 中放一张叫 "Ani" 的图）
 localImageView.image = "Ani".img
 ```
 
-#### 28.2、取网络图片@[**Kingfisher**](https://github.com/onevcat/Kingfisher) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 18.2、取网络图片@[**Kingfisher**](https://github.com/onevcat/Kingfisher) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > ```ruby
 > pod 'Kingfisher'                         # https://github.com/onevcat/Kingfisher             ❤️ Swift平台上的SDWebImage平替
@@ -4031,7 +4480,7 @@ localImageView.image = "Ani".img
   }()
   ```
 
-#### 28.3、取网络图片@[**SDWebImage**](https://github.com/SDWebImage/SDWebImage) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 18.3、取网络图片@[**SDWebImage**](https://github.com/SDWebImage/SDWebImage) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 >```ruby
 >pod 'SDWebImage'                         # https://github.com/SDWebImage/SDWebImage          ❤️
@@ -4085,9 +4534,9 @@ localImageView.image = "Ani".img
   }()
   ```
 
-### 29、点击事件的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 19、点击事件的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 29.1、封装在`UIControl` 层的点击事件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 19.1、封装在`UIControl` 层的点击事件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
   private lazy var toggle: UISwitch = {
@@ -4141,7 +4590,7 @@ localImageView.image = "Ani".img
   }()
   ```
 
-#### 29.2、[**封装在`UIButton` 层的点击事件**](#UIButton) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 19.2、[**封装在`UIButton` 层的点击事件**](#UIButton) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 let button = UIButton(type: .system)
@@ -4151,7 +4600,7 @@ let button = UIButton(type: .system)
     }
 ```
 
-### 30、🌡️ 启动检测 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 20、🌡️ 启动检测 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 AppLaunchManager.handleLaunch(
@@ -4167,9 +4616,9 @@ AppLaunchManager.handleLaunch(
 )
 ```
 
-### 31、🍡 字符串 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 21、🍡 字符串 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 31.1、🍡 通用格式的转换  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 21.1、🍡 通用格式的转换  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **`String`** → **`Int`**
 
@@ -4250,9 +4699,9 @@ AppLaunchManager.handleLaunch(
   // 📘 说明：附加字体与颜色属性
   ```
 
-#### 31.2、🍡 [**字符串加载图片资源**](#字符串加载图片资源) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 21.2、🍡 [**字符串加载图片资源**](#字符串加载图片资源) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 31.3、🍡 字符串打开 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 21.3、🍡 字符串打开 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 打开网站 / **`Scheme`**（带参）
 
@@ -4292,7 +4741,7 @@ AppLaunchManager.handleLaunch(
   }
   ```
 
-### 32、⏰ 计时器（按钮）的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 22、⏰ 计时器（按钮）的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ 将 iOS系统内置的4大基本计时器（`NSTimer`/`GCD`/`DisplayLink`/`RunLoop`）以协议的方式进行统一封装：开始、暂停、重启、停止、销毁
 >
@@ -4302,7 +4751,7 @@ AppLaunchManager.handleLaunch(
 >
 > 4️⃣ 纯链式调用，代码块，方便调试
 
-#### 32.1、⏰（`NSTimer`/`GCD`/`DisplayLink`/`RunLoop`）统一协议方便调用  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 22.1、⏰[（`NSTimer`/`GCD`/`DisplayLink`/`RunLoop`）统一协议方便调用](#定时器) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > ```swift
 > public protocol JobsTimerProtocol: AnyObject {
@@ -4329,154 +4778,15 @@ AppLaunchManager.handleLaunch(
 > public enum TimerState { case idle, running, paused, stopped }
 > ```
 
-#### 32.2、⏰ <font color=red id=计数按钮>**计数按钮**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 22.2、[计数按钮](#计数按钮) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* ⏰ 计时器开始
-
-  * 正计时
-
-    ```swift
-    self?.startButton.startTimer(
-        total: nil,                 // ❤️ 不传 => 正计时
-        interval: self.intervalSec,
-        kind: self.currentKind
-    )
-    ```
-
-  * 倒计时
-
-    ```swift
-    let total = self.parseCountdownTotal(10)
-    btn.startTimer(
-        total: total, // ❤️ 传 total => 倒计时
-        interval: self.intervalSec,
-        kind: self.currentKind
-    )
-    ```
-
-* ⏰ 计时器暂停
-
-  ```swift
-  self?.startButton.pauseTimer()
-  self?.countdownButton.pauseTimer()
-  ```
-
-* ⏰ 计时器重新开始（恢复计时）
-
-  ```swift
-  self?.startButton.resumeTimer()
-  self?.countdownButton.resumeTimer()
-  ```
-
-* ⏰ 计时器销毁
-
-  > 触发回调后销毁定时器
-
-  ```swift
-  self?.startButton.fireTimerOnce()
-  self?.countdownButton.fireTimerOnce()
-  ```
-
-* ⏰ 计时器停止 
-
-  > 销毁但不触发回调
-
-  ```swift
-  self?.startButton.stopTimer()
-  self?.countdownButton.stopTimer()
-  ```
-
-##### 32.2.1、⏰ 正计时计数按钮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 23、跑马灯+轮播图 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
-// MARK: - 开始按钮（正计时：不传 total；按钮标题自动显示 elapsed）
-private lazy var startButton: UIButton = {
-    UIButton(type: .system)
-        .byTitle("开始", for: .normal)
-        .byTitleFont(.systemFont(ofSize: 22, weight: .bold))
-        .byTitleColor(.white, for: .normal)
-        .byBackgroundColor(.systemBlue, for: .normal)
-        .byCornerRadius(10)
-        .byMasksToBounds(true)
-        // 每 tick：更新时间 & 最近触发时间
-        .onTimerTick { [weak self] btn, elapsed, _, kind in
-            guard let self else { return }
-            // 正计时：elapsed（秒）已由按钮内部自动设置为标题，这里只补充 lastFireLabel
-            self.lastFireLabel.text = "Last: " + Self.fmt(Date())
-        }
-        // 状态变化：驱动控制键（暂停/继续/Fire/停止）的可用与配色
-        .onTimerStateChange { [weak self] _, _, new in
-            self?.updateControlButtons(by: new)
-        }
-        // 点击开始：不传 total => 正计时
-        .onTap { [weak self] btn in
-            guard let self else { return }
-            self.lastFireLabel.text = "Last: -"
-            btn.startTimer(
-                total: nil,                 // ❤️ 不传 => 正计时
-                interval: self.intervalSec,
-                kind: self.currentKind
-            )
-        }
-        .byAddTo(view) { [unowned self] make in
-            make.top.equalTo(countdownField.snp.bottom).offset(14)
-            make.left.equalToSuperview().offset(horizontalInset)
-            make.right.equalToSuperview().inset(horizontalInset)
-            make.height.equalTo(56)
-        }
-}()
+/// TODO
 ```
 
-##### 32.2.2、⏰ 倒计时计数按钮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-```swift
-// MARK: - 倒计时演示按钮（同一套 API：传 total => 倒计时）
-private lazy var countdownButton: UIButton = {
-    UIButton(type: .system)
-        .byTitle("获取验证码", for: .normal)
-        .byTitleColor(.white, for: .normal)
-        .byBackgroundColor(.systemGreen, for: .normal)
-        .onCountdownTick { [weak self] btn, remain, total, kind in
-            guard let self else { return }
-            print("⏱️ [\(kind.jobs_displayName)] \(remain)/\(total)")
-            self.lastFireLabel.text = "Last: " + Self.fmt(Date())
-            btn.byTitle("还剩 \(remain)s", for: .normal)
-        }
-        .onCountdownFinish { _, kind in
-            print("✅ [\(kind.jobs_displayName)] 倒计时完成")
-        }
-        .onTap { [weak self] btn in
-            guard let self else { return }
-            let total = self.parseCountdownTotal(10)
-            btn.startTimer(
-                total: total, // ❤️ 传 total => 倒计时
-                interval: self.intervalSec,
-                kind: self.currentKind
-            )
-            // 关键：等 startTimer 把 "10s" 设好后再加前缀，避免被覆盖
-            DispatchQueue.main.async {
-                let cur = btn.title(for: .normal) ?? "\(total)s"
-                if !cur.hasPrefix("还剩 ") {
-                    btn.byTitle("还剩 \(cur)", for: .normal)
-                }
-            }
-        }
-        .byAddTo(view) { [unowned self] make in
-            make.top.equalTo(self.hintLabel.snp.bottom).offset(20)
-            make.left.equalToSuperview().offset(horizontalInset)
-            make.right.equalToSuperview().inset(horizontalInset)
-            make.height.equalTo(50)
-        }
-}()
-```
-
-### 33、跑马灯+轮播图 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-```swift
-
-```
-
-### 34、控制器添加背景图 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 24、控制器添加背景图 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 本地背景图
 
@@ -4498,9 +4808,9 @@ private lazy var countdownButton: UIButton = {
   }
   ```
 
-### 35、弹出窗 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 25、弹出窗 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 35.1、**`JobsToast`** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 25.1、**`JobsToast`** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 自定义持续动画时间
 
@@ -4535,99 +4845,11 @@ private lazy var countdownButton: UIButton = {
   )
   ```
 
-#### 35.2、`UIAlertController` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 25.2、[`UIAlertController`](#UIAlertController) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a> 
 
-* 最简单的 Alert：主/副标题 + 取消_确定@按钮行为监听 + 中间弹出 + 点击空白区域不可取消
+### 26、调用系统设备（内部有鉴权@需配置[**`Info.plist`**](#Info.plist) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-  ```swift
-  private lazy var simpleAlert: UIAlertController = {
-      UIAlertController
-          .makeAlert("提示", "这是一条简单提示")
-          .byAddCancel { [weak self] _ in
-              guard let self else { return }
-              print("Cancel")
-              // TODO: 这里写你的取消逻辑
-          }
-          .byAddOK { [weak self] _ in
-              guard let self else { return }
-              print("OK")
-              // TODO: 这里写你的确认逻辑
-          }
-  }()
-  ```
-
-* 最简单的 Alert：主/副标题 + 取消_确定@按钮行为监听 + 中间弹出 + 点击空白区域不可取消
-
-  ```swift
-  private lazy var simpleAlert: UIAlertController = {
-      UIAlertController
-          .makeAlert("重命名", "请输入新的名称")
-  //        .bySDBgImageView("https://picsum.photos/800/600",
-  //                         image: "唐老鸭".img,
-  //                         hideSystemBackdrop: true)
-  //        .byKFBgImageView("https://picsum.photos/800/600",
-  //                         image: "唐老鸭".img,
-  //                         hideSystemBackdrop: true)
-          .byBgImage("唐老鸭".img)                      // 本地图背景（同步阶段，无动画）
-          .byCardBorder(width: 1, color: .systemBlue)   // 外层卡片描边
-          .byAddTextField(placeholder: "新名称",
-                          borderWidth: nil,             // ← 不给 tf 自身描边
-                          borderColor: nil,
-                          cornerRadius: 8) { alert, tf, input, oldText, isDeleting in
-              let ok = alert.actions.first { $0.title == "确定" }
-              ok?.isEnabled = !(tf.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-          }
-          .byTextFieldOuterBorder(at: 0, width: 1, color: .systemBlue, cornerRadius: 10, insets: .init(top: 6, left: 12, bottom: 6, right: 12)) // ← 给灰色容器描边
-          .byAddCancel { _ in                          // ✅ 一个回调（只给 action）
-              print("Cancel tapped")
-          }
-          .byAddOK{ alert, _ in                 // 需要 alert + action 的回调
-              let name = alert.textField(at: 0)?.text ?? ""
-              print("new name =", name)
-          }
-          .byTintColor(.systemBlue)
-          .byPresent(self)
-  }()
-  ```
-
-* 主标题 + 相机/相册/取消@按钮行为监听 + 屏幕底部弹出 + 点击空白区域可取消
-
-  ```swift
-  private lazy var simpleAlert: UIAlertController = {
-      UIAlertController
-          .makeActionSheet("选择来源", nil)
-          .byAddAction(title: "相机") { _ in
-              print("camera")
-          }
-          .byAddAction(title: "相册") { _ in
-              print("photos")
-          }
-          .byAddCancel { _ in
-              print("Cancel tapped")
-          }
-          .byPresent(self)
-  }()
-  ```
-
-* 主标题 + 删除_取消@按钮行为监听 + 从按钮自身位置（锚点）弹出 + 点击空白区域可取消
-
-  ```swift
-  private lazy var simpleAlert: UIAlertController = {
-      UIAlertController
-          .makeActionSheet("操作", nil)
-          .byAddDestructive("删除") { _ in
-              print("delete")
-          }
-          .byAddCancel { _ in
-              print("Cancel tapped")
-          }
-          .byPresent(self, anchor: .view(sender, sender.bounds)) // 指定锚点
-  }()
-  ```
-
-### 36、调用系统设备（内部有鉴权@需配置[**`Info.plist`**](#Info.plist) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-#### 36.1、调用iOS系统相机@照相 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 26.1、调用iOS系统相机@照相 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 #if targetEnvironment(simulator)
@@ -4644,7 +4866,7 @@ private lazy var countdownButton: UIButton = {
 #endif
 ```
 
-#### 36.2、调用iOS系统相机@录像 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 26.2、调用iOS系统相机@录像 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 #if targetEnvironment(simulator)
@@ -4658,7 +4880,7 @@ MediaPickerService.recordVideo(from: self, maxDuration: 30, quality: .typeHigh) 
 #endif
 ```
 
-#### 36.3、调用iOS系统相册@选照片 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 26.3、调用iOS系统相册@选照片 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 /// maxSelection:最大可选
@@ -4669,7 +4891,7 @@ pickFromPhotoLibrary(maxSelection: imageMaxSelection, imagesOnly: true) { [weak 
 }
 ```
 
-#### 36.4、调用iOS系统相册@选视频 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 26.4、调用iOS系统相册@选视频 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 /// maxSelection:最大可选
@@ -4680,9 +4902,9 @@ pickVideosFromLibrary(maxSelection: 1) { [weak self] urls in
 }
 ```
 
-### 37、[📖](https://sdwebimage.github.io/documentation/sdwebimage/) [**`SDWebImage`**](https://github.com/SDWebImage/SDWebImage) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 27、[📖](https://sdwebimage.github.io/documentation/sdwebimage/) [**`SDWebImage`**](https://github.com/SDWebImage/SDWebImage) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 37.1、`SDAnimatedImage` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 27.1、`SDAnimatedImage` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **SDAnimatedImage 是 [`SDWebImage`](https://github.com/SDWebImage/SDWebImage) 提供的“可播放的动态图像对象”**（继承自 `UIImage`），搭配 **`SDAnimatedImageView`** 来播放。它解决了 `UIImage.animatedImage…` 一次性把所有帧解码进内存、容易内存暴涨/掉帧的问题
   
@@ -4740,31 +4962,61 @@ pickVideosFromLibrary(maxSelection: 1) { [weak self] urls in
   * 需要 **WebP**/**AVIF** 等，**别忘装对应 coder 插件并注册**。
   * 超大、超长动图仍会吃 CPU，必要时**限制尺寸/帧率或懒加载**。
 
-### 38、悬浮视图 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 28、悬浮视图 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* ```swift
-  UIView().bySuspend { cfg in
-      cfg
-          .byContainer(view)
-          .byFallbackSize(CGSize(width: 88, height: 44))
-          .byDocking(.nearestEdge)
-          .byInsets(UIEdgeInsets(top: 20, left: 16, bottom: 34, right: 16))
-          .byHapticOnDock(true)
-  }
-  
-  /// 或
-  
-  UIView().suspend(
-      .default
-          .byContainer(view)
-          .byFallbackSize(CGSize(width: 88, height: 44))
-          .byDocking(.nearestEdge)
-          .byInsets(UIEdgeInsets(top: 20, left: 16, bottom: 34, right: 16))
-          .byHapticOnDock(true)
-  )
-  ```
+```swift
+UIView().bySuspend { cfg in
+    cfg
+        .byContainer(view)
+        .byFallbackSize(CGSize(width: 88, height: 44))
+        .byDocking(.nearestEdge)
+        .byInsets(UIEdgeInsets(top: 20, left: 16, bottom: 34, right: 16))
+        .byHapticOnDock(true)
+}
 
-### 39、角标提示@右上角提示文案 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+/// 或
+
+UIView().suspend(
+    .default
+        .byContainer(view)
+        .byFallbackSize(CGSize(width: 88, height: 44))
+        .byDocking(.nearestEdge)
+        .byInsets(UIEdgeInsets(top: 20, left: 16, bottom: 34, right: 16))
+        .byHapticOnDock(true)
+)
+```
+
+### 29、旋转视图 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+btn.onTap { [weak self] btn in
+			 guard let _ = self else { return }
+       btn.playTapBounce(haptic: .light)  // 👈 临时放大→回弹（不注册任何手势/事件）
+       if btn.jobs_isSpinning {
+           // 暂停旋转
+           btn.bySpinPause()
+           // 暂停计时（保留已累计秒，不重置）
+           btn.timer?.pause()        // ✅ 推荐：你的统一内核挂在 button.timer 上
+           // 如果你有封装方法，则用：btn.pauseTimer()
+           JobsToast.show(
+               text: "已暂停旋转 & 计时",
+               config: .init().byBgColor(.systemGreen.withAlphaComponent(0.9)).byCornerRadius(12)
+           )
+       } else {
+           // 恢复旋转
+           btn.bySpinStart()
+           // 恢复计时（从暂停处继续累加）
+           btn.timer?.resume()       // ✅ 推荐
+           // 如果你有封装方法，则用：btn.resumeTimer()
+           JobsToast.show(
+               text: "继续旋转 & 计时",
+               config: .init().byBgColor(.systemGreen.withAlphaComponent(0.9)).byCornerRadius(12)
+           )
+       }
+}
+```
+
+### 30、角标提示@右上角提示文案 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 展示
 
@@ -4811,131 +5063,9 @@ pickVideosFromLibrary(maxSelection: 1) { [weak self] urls in
       }
   ```
 
-### 40、自定义`WebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 31、条件编译 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 40.1、创建 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-```swift
-private lazy var web: BaseWebView = { [unowned self] in
-    let w = BaseWebView()
-        .byBgColor(.clear)
-        .byAllowedHosts([])                     // 例：["example.com"]，空=不限制
-        .byOpenBlankInPlace(true)               // target=_blank 在当前 Web 打开
-        .byDisableSelectionAndCallout(false)    // 是否禁用选中/长按菜单
-        .byInjectDarkStylePatch(false)          // 简单深色补丁（按需 true）
-        .byCustomUserAgentSuffix("JobsApp/1.0")
-        .byAddTo(view) {[unowned self] make in
-            make.top.equalTo(gk_navigationBar.snp.bottom).offset(10) // 占满
-            make.left.right.bottom.equalToSuperview()
-        }
-    // 注册 JS→Native 方法
-    installHandlers(on: w)
-    // Native → JS：页面就绪广播
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak w] in
-        w?.emitEvent("nativeReady", payload: [
-            "msg": "Native is ready ✔︎",
-            "ts": Date().timeIntervalSince1970
-        ])
-    }
-    return w
-}()
-```
-
-#### 40.2、加载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-* 加载一个具体的网页
-
-  ```swift
-  web.loadBy(URL(string: "https://sina.cn/")!)
-  ```
-
-* 加载本地**HTML**代码
-
-  ```swift
-  web.loadHTMLBy(Self.demoHTML, baseURL: nil)
-  ```
-
-  > ```swift
-  > extension BaseWebViewDemoVC {
-  >     static let demoHTML = """
-  > <!doctype html>
-  > <html>
-  > <head>
-  >   <meta charset="utf-8">
-  >   <title>BaseWebView Usage Demo</title>
-  >   <meta name="viewport" content="width=device-width, initial-scale=1">
-  >   <style>
-  >     html,body { margin:0; padding:0; font-family:-apple-system,Helvetica; }
-  >     header { position:sticky; top:0; background:#111; color:#fff; padding:12px 16px; font-weight:600; }
-  >     main { padding:16px; }
-  >     button { padding:10px 14px; margin:6px 6px 6px 0; border-radius:8px; border:1px solid #ccc; background:#fafafa; }
-  >     pre { background:#f6f8fa; padding:10px; border-radius:6px; white-space:pre-wrap; word-break:break-word; max-height:40vh; overflow:auto; }
-  >     .row { display:flex; gap:8px; flex-wrap:wrap; }
-  >     a { color:#0a84ff; }
-  >   </style>
-  > </head>
-  > <body>
-  >   <header>BaseWebView · JS ↔︎ Native</header>
-  >   <main>
-  >     <div class="row">
-  >       <button id="btnPing">JS→Native ping()</button>
-  >       <button id="btnAlert">JS→Native openAlert()</button>
-  >       <button id="btnDisableSel">禁用选择 ON</button>
-  >       <button id="btnEnableSel">禁用选择 OFF</button>
-  >     </div>
-  > 
-  >     <p>外链/下载：</p>
-  >     <div class="row">
-  >       <a href="mailto:test@example.com">mailto</a>
-  >       <a href="https://example.com" target="_blank">_blank 打开 example.com</a>
-  >       <a href="data:text/plain,hello" download="hello.txt">下载 data: 文本</a>
-  >     </div>
-  > 
-  >     <p>日志：</p>
-  >     <pre id="log"></pre>
-  >   </main>
-  > 
-  >   <script>
-  >     const logEl = document.getElementById('log');
-  >     function log(){ const line=[...arguments].map(a=>typeof a==='string'?a:JSON.stringify(a)).join(' ');
-  >       console.log(line); logEl.textContent=(line+"\\n"+logEl.textContent).slice(0, 10000); }
-  > 
-  >     document.addEventListener('nativeReady', e => log('[event] nativeReady:', e.detail));
-  > 
-  >     document.getElementById('btnPing').addEventListener('click', async () => {
-  >       const res = await Native.call('ping', { msg:'hello from JS', rnd: Math.random() });
-  >       log('[reply] ping =>', res);
-  >     });
-  > 
-  >     document.getElementById('btnAlert').addEventListener('click', async () => {
-  >       const res = await Native.call('openAlert', { message:'JS 请求原生 Alert' });
-  >       log('[reply] openAlert =>', res);
-  >     });
-  > 
-  >     document.getElementById('btnDisableSel').addEventListener('click', async () => {
-  >       const res = await Native.call('toggleSelection', { disabled:true });
-  >       log('[reply] toggleSelection =>', res);
-  >     });
-  >     document.getElementById('btnEnableSel').addEventListener('click', async () => {
-  >       const res = await Native.call('toggleSelection', { disabled:false });
-  >       log('[reply] toggleSelection =>', res);
-  >     });
-  >   </script>
-  > </body>
-  > </html>
-  > """
-  > }
-  > ```
-
-* 加载本地`*.html`文件（前提是该文件被包含进**Bundle**）
-
-  ```swift
-  web.loadBundleHTMLBy(named: "BaseWebViewDemo")
-  ```
-
-### 41、条件编译 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-#### 41.1、`DEBUG` 模式下才允许做的事 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 31.1、`DEBUG` 模式下才允许做的事 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 定义
 
@@ -4962,7 +5092,7 @@ private lazy var web: BaseWebView = { [unowned self] in
   }
   ```
 
-#### 41.2、代码启用（当引入某第三方后）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 31.2、代码启用（当引入某第三方后）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 #if canImport(Kingfisher)
@@ -4973,7 +5103,7 @@ import ObjectiveC.runtime
 #endif
 ```
 
-### 43、💼 <font color=green id=bundle>**Bundle**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 32、💼 <font color=green id=bundle>**Bundle**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 打印当前**Bundle**的路径
 
@@ -4988,15 +5118,15 @@ import ObjectiveC.runtime
   print("SomeThing in bundle:", all.map { $0.lastPathComponent })
   ```
 
-### 44、返回到上一页 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 33、返回到上一页 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* [**定义在控制器层的返回功能**](#关闭页面的逻辑)
+* [**定义在控制器层的返回功能**](#关闭页面实现逻辑)
 
   ```swift
   closeByResult("")
   ```
 
-### 45、给控制器带上导航控制器 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 34、给控制器带上导航控制器 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -5014,9 +5144,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 }
 ```
 
-### 46、**`NavigationBar`**的显隐控制 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 35、**`NavigationBar`**的显隐控制 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 46.1、对系统的导航栏 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 35.1、对系统的导航栏 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 官方姿势
 
@@ -5050,7 +5180,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   }
   ```
 
-#### 46.2、对[**`GKNavigationBarSwift`**]( https://github.com/QuintGao/GKNavigationBarSwift) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 35.2、对[**`GKNavigationBarSwift`**]( https://github.com/QuintGao/GKNavigationBarSwift) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 override func viewWillAppear(_ animated: Bool) {
@@ -5066,154 +5196,7 @@ override func viewWillDisappear(_ animated: Bool) {
 }
 ```
 
-### 47、创建 `WebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-#### 47.1、创建 `WKWebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-```swift
-import WebKit
-
-private lazy var webView: WKWebView = {
-    WKWebView(frame: .zero, configuration: WKWebViewConfiguration()
-        .byWebsiteDataStore(.default())
-        .byAllowsInlineMediaPlayback(true)
-        .byUserContentController(WKUserContentController().byAddUserScript(Self.makeBridgeUserScript()))
-        .byDefaultWebpagePreferences { wp in
-            wp.allowsContentJavaScript = true
-        }
-    )
-    .byAddTo(view) { [unowned self] make in
-        make.top.equalTo(textField.snp.bottom).offset(12)
-        make.centerX.equalToSuperview()
-        make.height.equalTo(36)
-    }
-}()
-```
-
-#### 47.2、创建 `BaseWebView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-> 在` Info.plist `添加👇（更通用的 **ATS** 配置，避免为某域名单独开洞）
->
-> ```xml
-> <key>NSAppTransportSecurity</key>
-> <dict>
->  <!-- 仅放开 Web 内容，其他网络请求仍受 ATS 约束 -->
->  <key>NSAllowsArbitraryLoadsInWebContent</key><true/>
-> </dict>
-> ```
-
-```swift
-private lazy var web: BaseWebView = { [unowned self] in
-        return BaseWebView()
-            .byBgColor(.clear)
-            .byAllowedHosts([])                  // 不限域
-            .byOpenBlankInPlace(true)
-            .byDisableSelectionAndCallout(false)
-            .byUserAgentSuffixProvider { _ in
-                // 按请求动态追加 UA 后缀；nil = 使用系统默认 UA。
-                // 需要区分页面时在此 return "YourApp/1.0"
-                return nil
-            }
-//            .byNormalizeMToWWW(false)               // ❗️关闭 m→www
-//            .byForceHTTPSUpgrade(false)             // ❗️关闭 http→https
-//            .bySafariFallbackOnHTTP(false)          // ❗️关闭 Safari 兜底
-//            .byInjectRedirectSanitizerJS(false)     // 可关，避免干涉 H5 自己跳转
-            /// URL 重写策略（默认不重写；这里保持关闭）
-            .byURLRewriter { _ in
-                // 例如要做 http→https 升级：检测 url.scheme == "http" 再返回新 URL
-                // 现在返回 nil 表示不改写
-                return nil
-            }
-            /// Safari 兜底（默认不开）；返回 true 即交给 Safari 打开
-            .bySafariFallbackRule { _ in
-                return false
-            }
-            /// 一键开导航栏（默认标题=webView.title，默认有返回键）
-            .byNavBarEnabled(true)
-            .byNavBarStyle { s in
-                s.byHairlineHidden(false)
-                 .byBackgroundColor(.systemBackground)
-                 .byTitleAlignmentCenter(true)
-            }
-            /// 自定义返回键（想隐藏就：.byNavBarBackButtonProvider { nil }）
-            .byNavBarBackButtonProvider {
-                UIButton(type: .system)
-                    .byBackgroundColor(.clear)
-                    .byImage(UIImage(systemName: "chevron.left"), for: .normal)
-                    .byTitle("返回", for: .normal)
-                    .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
-                    .byTitleColor(.label, for: .normal)
-                    .byContentEdgeInsets(.init(top: 6, left: 10, bottom: 6, right: 10))
-                    .byTapSound("Sound.wav")
-            }
-            /// 返回行为：优先后退，否则关闭当前控制器
-            .byNavBarOnBack { [weak self] in
-                guard let self else { return }
-                closeByResult("")
-            }
-            .byAddTo(view) { [unowned self] make in
-                make.edges.equalToSuperview()
-            }
-            /// 以下是依据前端暴露的自定义方法进行的JS交互
-            .registerMobileAction("navigateToHome") {  [weak self] body, reply in
-                /// 跳转到首页
-                self!.closeByResult("")
-                reply(nil)
-            }
-            .registerMobileAction("getToken") {  [weak self] body, reply in
-
-                reply(nil)
-            }
-            .registerMobileAction("navigateToSecurityCenter") {  [weak self] body, reply in
-                /// 跳转福利中心
-                reply(nil)
-            }
-            .registerMobileAction("navigateToLogin") {  [weak self] body, reply in
-                /// 跳转到登录页
-                reply(nil)
-            }
-            .registerMobileAction("navigateToDeposit") {  [weak self] body, reply in
-                /// 跳转到充值页
-                reply(nil)
-            }
-            .registerMobileAction("closeWebView") {  [weak self] body, reply in
-                /// 关闭WebView
-                reply(nil)
-            }
-            .registerMobileAction("showToast") {  [weak self] body, reply in
-                /// 显示Toast
-                JobsToast.show(
-                    text: body.stringValue(for: "message") ?? "",
-                    config: JobsToast.Config()
-                        .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                        .byCornerRadius(12)
-                )
-                reply(nil)
-            }
-    }()
-```
-
-*  加载线上 URL
-
-  ```swift
-  web.loadBy("https://www.baidu.com")
-  /// 或者
-  web.loadBy(URL(string: "https://www.baidu.com")!)
-  ```
-
-* 加载[**内置的HTML代码**](#内置的HTML代码)
-
-  ```swift
-  web.loadHTMLBy(Self.demoHTML, baseURL: nil)
-  ```
-
-* 加载本地**`*.HTML`**文件@[**bundle**](#bundle)
-
-  ```swift
-  web.loadBundleHTMLBy(named: "BaseWebViewDemo")
-  ```
-
-### 48、修改状态栏颜色@当前控制器页面 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 36、修改状态栏颜色@当前控制器页面 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 修改**Info.plist**
 
@@ -5243,7 +5226,7 @@ private lazy var web: BaseWebView = { [unowned self] in
   }
   ```
 
-### 49、动画 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 37、动画 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **`UIView`**点击放大动画
 
@@ -6323,7 +6306,7 @@ do {
   }
   ```
 
-### 11、⏰ 定时器 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 11、⏰ <font id=定时器>定时器</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ UI 层、简单重复 → `Timer`（配合 `.common` 模式 & `tolerance`）
 >
@@ -9023,7 +9006,7 @@ flowchart TD
 
 ## 六、📎 附件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-### 1、<font id=关闭页面的逻辑>关闭页面的逻辑</font>
+### 1、<font id=关闭页面@实现逻辑>关闭页面@实现逻辑</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 /// 因为呈现页面除了push就是present，但是push是需要有导航控制器作支撑的。
@@ -9037,7 +9020,106 @@ func closeByResult(_ result: Any?, animated: Bool = true) -> Self {
 }
 ```
 
-### 2、<font color=red id=内置的HTML代码>**内置的HTML代码**</font>
+### 2、<font id=全局比例尺@实现逻辑>全局比例尺@实现逻辑</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+import UIKit
+
+// MARK: - 核心比例器
+public enum JXScale {
+    private static var designW: CGFloat = 375
+    private static var designH: CGFloat = 812
+    private static var useSafeArea: Bool = false
+    
+    public static func setup(designWidth: CGFloat, designHeight: CGFloat, useSafeArea: Bool = false) {
+        self.designW = designWidth
+        self.designH = designHeight
+        self.useSafeArea = useSafeArea
+    }
+    
+    private static var screenSize: CGSize {
+        guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else {
+            return UIScreen.main.bounds.size
+        }
+        if useSafeArea {
+            let insets = window.safeAreaInsets
+            return CGSize(
+                width: max(0, window.bounds.width - (insets.left + insets.right)),
+                height: max(0, window.bounds.height - (insets.top + insets.bottom))
+            )
+        } else {
+            return window.bounds.size
+        }
+    }
+    
+    public static var x: CGFloat { screenSize.width / designW }
+    public static var y: CGFloat { screenSize.height / designH }
+}
+
+// MARK: - 扩展 Int / CGFloat
+public extension BinaryInteger {
+    var w: CGFloat { CGFloat(self) * JXScale.x }
+    var h: CGFloat { CGFloat(self) * JXScale.y }
+    var fz: CGFloat { CGFloat(self) * JXScale.x }   // 字体缩放，默认跟随 X
+}
+
+public extension BinaryFloatingPoint {
+    var w: CGFloat { CGFloat(self) * JXScale.x }
+    var h: CGFloat { CGFloat(self) * JXScale.y }
+    var fz: CGFloat { CGFloat(self) * JXScale.x }
+}
+```
+
+### 3、<font id=获取屏幕尺寸@实现逻辑>获取屏幕尺寸@实现逻辑</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+// MARK: - 屏幕宽高（兼容设备横竖屏）
+public enum Screen {
+    /// 当前界面方向（iOS 13+；拿不到时为 .unknown）
+    private static var orientation: UIInterfaceOrientation {
+        (UIApplication.shared.connectedScenes.first as? UIWindowScene)?
+            .interfaceOrientation ?? .unknown
+    }
+    /// 屏幕尺寸（以点为单位，已按当前横竖屏纠正宽高）
+    public static var size: CGSize {
+        let s = UIScreen.main.bounds.size   // iOS 8+ 始终是竖屏坐标
+        let w = s.width, h = s.height
+        switch orientation {
+        case .landscapeLeft, .landscapeRight:
+            return CGSize(width: max(w, h), height: min(w, h))
+        case .portrait, .portraitUpsideDown:
+            return CGSize(width: min(w, h), height: max(w, h))
+        default:
+            // 拿不到方向时，兜底返回系统给的
+            return s
+        }
+    }
+    /// 便捷：当前屏幕宽 / 高（按横竖屏纠正）
+    public static var width: CGFloat  { size.width }
+    public static var height: CGFloat { size.height }
+}
+```
+
+### 4、<font id=给UILabel里的文字加下划线并且可以指定下划线的颜色@实现逻辑>给 `UILabel` 里的文字加下划线并且可以指定下划线的颜色@实现逻辑</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+extension UILabel {
+    func underline(color: UIColor) {
+        if let textString = self.text {
+            let attributedString = NSMutableAttributedString(string: textString)
+            attributedString.addAttribute(NSAttributedString.Key.underlineStyle,
+                                          value: NSUnderlineStyle.single.rawValue,
+                                          range: NSRange(location: 0, length: attributedString.length))
+            attributedString.addAttribute(NSAttributedString.Key.underlineColor,
+                                          value: color,
+                                          range: NSRange(location: 0, length: attributedString.length))
+            self.attributedText = attributedString
+        }
+    }
+}
+```
+
+### 5、<font color=red id=内置的HTML代码>**内置的HTML代码**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 static let demoHTML = """
