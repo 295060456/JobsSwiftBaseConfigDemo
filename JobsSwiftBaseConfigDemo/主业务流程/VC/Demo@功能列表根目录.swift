@@ -180,7 +180,7 @@ final class RootListVC: BaseVC {
                 cfg
                     .byContainer(view)
 //                    .byStart(.bottomRight)
-                    .byStart(.point(CGPoint(x: 300.w, y: 500))) // 起始点（可用区域坐标）
+                    .byStart(.point(CGPoint(x: Screen.width - 60, y: Screen.height - 100))) // 起始点（可用区域坐标）
                     .byFallbackSize(CGSize(width: 50, height: 50))
                     .byHapticOnDock(true)
             }

@@ -6,7 +6,6 @@
 //
 
 import UIKit
-
 // MARK: - 核心比例器
 public enum JXScale {
     private static var designW: CGFloat = 375
