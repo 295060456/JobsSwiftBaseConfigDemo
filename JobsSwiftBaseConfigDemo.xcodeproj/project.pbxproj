@@ -14,6 +14,18 @@
 		0401DD002E910B3500D572AD /* BaseLet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DCFF2E910B3200D572AD /* BaseLet.swift */; };
 		0401DD062E9115CE00D572AD /* JobsToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DD052E9115CD00D572AD /* JobsToast.swift */; };
 		0401DD082E91183000D572AD /* Demo@弹出提示.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DD072E91182900D572AD /* Demo@弹出提示.swift */; };
+		04124F2A2EB05E9000462BE2 /* Demo@Moya.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F292EB05E8A00462BE2 /* Demo@Moya.swift */; };
+		04124F2D2EB0622E00462BE2 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F2C2EB0622D00462BE2 /* Models.swift */; };
+		04124F2F2EB0623900462BE2 /* DemoAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F2E2EB0623900462BE2 /* DemoAPI.swift */; };
+		04124F312EB0624300462BE2 /* TokenStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F302EB0624300462BE2 /* TokenStore.swift */; };
+		04124F332EB0625300462BE2 /* Plugins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F322EB0625200462BE2 /* Plugins.swift */; };
+		04124F372EB0626900462BE2 /* MoyaProvider+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F362EB0626800462BE2 /* MoyaProvider+Async.swift */; };
+		04124F392EB067F000462BE2 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F382EB067F000462BE2 /* APIService.swift */; };
+		04124F3C2EB075D400462BE2 /* Demo@Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F3B2EB075D100462BE2 /* Demo@Alamofire.swift */; };
+		04124F3E2EB075EA00462BE2 /* AFRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F3D2EB075EA00462BE2 /* AFRoute.swift */; };
+		04124F402EB0760D00462BE2 /* AFLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F3F2EB0760D00462BE2 /* AFLogger.swift */; };
+		04124F422EB0762900462BE2 /* AFStubURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F412EB0762900462BE2 /* AFStubURLProtocol.swift */; };
+		04124F442EB0764200462BE2 /* AFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F432EB0764100462BE2 /* AFService.swift */; };
 		041F5B012E87B51800984EEB /* Demo@输入框.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041F5B002E87B50F00984EEB /* Demo@输入框.swift */; };
 		042B67CE2E95085A000A2970 /* NSTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B67CD2E950858000A2970 /* NSTextAttachment.swift */; };
 		043838A02EAA21AA007BA552 /* JobsRefresher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0438389F2EAA21A9007BA552 /* JobsRefresher.swift */; };
@@ -194,6 +206,18 @@
 		0401DCFF2E910B3200D572AD /* BaseLet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseLet.swift; sourceTree = "<group>"; };
 		0401DD052E9115CD00D572AD /* JobsToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsToast.swift; sourceTree = "<group>"; };
 		0401DD072E91182900D572AD /* Demo@弹出提示.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@弹出提示.swift"; sourceTree = "<group>"; };
+		04124F292EB05E8A00462BE2 /* Demo@Moya.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@Moya.swift"; sourceTree = "<group>"; };
+		04124F2C2EB0622D00462BE2 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		04124F2E2EB0623900462BE2 /* DemoAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoAPI.swift; sourceTree = "<group>"; };
+		04124F302EB0624300462BE2 /* TokenStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenStore.swift; sourceTree = "<group>"; };
+		04124F322EB0625200462BE2 /* Plugins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plugins.swift; sourceTree = "<group>"; };
+		04124F362EB0626800462BE2 /* MoyaProvider+Async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MoyaProvider+Async.swift"; sourceTree = "<group>"; };
+		04124F382EB067F000462BE2 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		04124F3B2EB075D100462BE2 /* Demo@Alamofire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@Alamofire.swift"; sourceTree = "<group>"; };
+		04124F3D2EB075EA00462BE2 /* AFRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFRoute.swift; sourceTree = "<group>"; };
+		04124F3F2EB0760D00462BE2 /* AFLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLogger.swift; sourceTree = "<group>"; };
+		04124F412EB0762900462BE2 /* AFStubURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFStubURLProtocol.swift; sourceTree = "<group>"; };
+		04124F432EB0764100462BE2 /* AFService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFService.swift; sourceTree = "<group>"; };
 		041F5B002E87B50F00984EEB /* Demo@输入框.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@输入框.swift"; sourceTree = "<group>"; };
 		042B67CD2E950858000A2970 /* NSTextAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTextAttachment.swift; sourceTree = "<group>"; };
 		0438389F2EAA21A9007BA552 /* JobsRefresher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsRefresher.swift; sourceTree = "<group>"; };
@@ -390,6 +414,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		04124F2B2EB0621D00462BE2 /* Demo@Moya */ = {
+			isa = PBXGroup;
+			children = (
+				04124F382EB067F000462BE2 /* APIService.swift */,
+				04124F362EB0626800462BE2 /* MoyaProvider+Async.swift */,
+				04124F322EB0625200462BE2 /* Plugins.swift */,
+				04124F302EB0624300462BE2 /* TokenStore.swift */,
+				04124F2E2EB0623900462BE2 /* DemoAPI.swift */,
+				04124F2C2EB0622D00462BE2 /* Models.swift */,
+				04124F292EB05E8A00462BE2 /* Demo@Moya.swift */,
+			);
+			path = "Demo@Moya";
+			sourceTree = "<group>";
+		};
+		04124F3A2EB075C500462BE2 /* Demo@Alamofire */ = {
+			isa = PBXGroup;
+			children = (
+				04124F432EB0764100462BE2 /* AFService.swift */,
+				04124F412EB0762900462BE2 /* AFStubURLProtocol.swift */,
+				04124F3F2EB0760D00462BE2 /* AFLogger.swift */,
+				04124F3D2EB075EA00462BE2 /* AFRoute.swift */,
+				04124F3B2EB075D100462BE2 /* Demo@Alamofire.swift */,
+			);
+			path = "Demo@Alamofire";
+			sourceTree = "<group>";
+		};
 		045920E22E84EC64008C8D6A /* SwiftTools */ = {
 			isa = PBXGroup;
 			children = (
@@ -525,6 +575,8 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				04124F3A2EB075C500462BE2 /* Demo@Alamofire */,
+				04124F2B2EB0621D00462BE2 /* Demo@Moya */,
 				04BCDC2B2EA9DB7D00382DE0 /* Demo@JobsText.swift */,
 				04BD5B402EA8E5170056DA62 /* Demo@UITableView.swift */,
 				04BD5B3E2EA8E5030056DA62 /* Demo@UICollectionView.swift */,
@@ -1087,6 +1139,7 @@
 				C564FC2B2E0958D50079B5C1 /* AppDelegate.swift in Sources */,
 				044272852E8146130084B25C /* JXScale.swift in Sources */,
 				C564FCB22E0959990079B5C1 /* EmptyView.swift in Sources */,
+				04124F332EB0625300462BE2 /* Plugins.swift in Sources */,
 				045920FC2E854FA9008C8D6A /* UInt.swift in Sources */,
 				045920FF2E854FBD008C8D6A /* UInt8.swift in Sources */,
 				04D0C96C2E8CCA7400580020 /* UIBarItem.swift in Sources */,
@@ -1131,6 +1184,7 @@
 				04AC74C52E86682E004B8305 /* Notification.swift in Sources */,
 				04D0C9722E8CD39300580020 /* Demo@控制层回调.swift in Sources */,
 				C564FC8A2E0959640079B5C1 /* UISegmentedControl.swift in Sources */,
+				04124F372EB0626900462BE2 /* MoyaProvider+Async.swift in Sources */,
 				04D842292E96377B001E8C90 /* Demo@打开模块.swift in Sources */,
 				04468F8E2E9E4B6300677000 /* Demo@相册选择.swift in Sources */,
 				0477D9772E8B9381002C6427 /* UIResponder.swift in Sources */,
@@ -1144,6 +1198,7 @@
 				04E8D61B2E8E837D00E85CDA /* NSMutableAttributedString.swift in Sources */,
 				0482A5FC2EA63527004176A4 /* WKUserContentController.swift in Sources */,
 				041F5B012E87B51800984EEB /* Demo@输入框.swift in Sources */,
+				04124F3C2EB075D400462BE2 /* Demo@Alamofire.swift in Sources */,
 				C564FC902E0959640079B5C1 /* UILabel.swift in Sources */,
 				04BD5B412EA8E51C0056DA62 /* Demo@UITableView.swift in Sources */,
 				C564FC9E2E0959640079B5C1 /* UINavigationController.swift in Sources */,
@@ -1165,7 +1220,9 @@
 				04CF028C2E8808540083ACF0 /* UIButton.swift in Sources */,
 				043838A02EAA21AA007BA552 /* JobsRefresher.swift in Sources */,
 				C564FCA12E0959640079B5C1 /* UIPageControl.swift in Sources */,
+				04124F2D2EB0622E00462BE2 /* Models.swift in Sources */,
 				04A18E4D2E86533B004BB9DC /* UIImage.swift in Sources */,
+				04124F2A2EB05E9000462BE2 /* Demo@Moya.swift in Sources */,
 				045921122E855769008C8D6A /* JobsPaddedLabel.swift in Sources */,
 				04BCDC322EA9EAB000382DE0 /* UICollectionViewFlowLayout.swift in Sources */,
 				0459210C2E855004008C8D6A /* Float80.swift in Sources */,
@@ -1180,6 +1237,7 @@
 				045920EE2E854BE7008C8D6A /* Double.swift in Sources */,
 				C564FC982E0959640079B5C1 /* NSObject.swift in Sources */,
 				C564FCB12E0959990079B5C1 /* CollectionCell.swift in Sources */,
+				04124F2F2EB0623900462BE2 /* DemoAPI.swift in Sources */,
 				045920E42E84EC73008C8D6A /* SwiftTools.swift in Sources */,
 				045920EA2E84FD82008C8D6A /* String.swift in Sources */,
 				045920F82E854F91008C8D6A /* Int32.swift in Sources */,
@@ -1191,10 +1249,12 @@
 				048E37702E87997A004C3A41 /* UIGestureRecognizer.swift in Sources */,
 				C564FC8E2E0959640079B5C1 /* UITabBarController.swift in Sources */,
 				04468E102E9CB43E00677000 /* UIAlertAction.swift in Sources */,
+				04124F312EB0624300462BE2 /* TokenStore.swift in Sources */,
 				04CF02902E8A3A160083ACF0 /* Demo@输入文本.swift in Sources */,
 				045921022E854FDA008C8D6A /* UInt16.swift in Sources */,
 				C564FCAB2E09597C0079B5C1 /* VC2.swift in Sources */,
 				0477D97F2E8BDBBC002C6427 /* Demo@倒计时.swift in Sources */,
+				04124F402EB0760D00462BE2 /* AFLogger.swift in Sources */,
 				04D8422B2E965BA1001E8C90 /* JobsMarqueeView.swift in Sources */,
 				04BCDC2A2EA9DB0C00382DE0 /* JobsText.swift in Sources */,
 				C564FC8C2E0959640079B5C1 /* UIAlertController.swift in Sources */,
@@ -1202,11 +1262,14 @@
 				04A8C54E2E8AA9F900381701 /* Demo@功能列表根目录.swift in Sources */,
 				C564FC9B2E0959640079B5C1 /* UIStackView.swift in Sources */,
 				043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */,
+				04124F392EB067F000462BE2 /* APIService.swift in Sources */,
+				04124F422EB0762900462BE2 /* AFStubURLProtocol.swift in Sources */,
 				04C2F0312E98C9D000BA05A9 /* Demo@设计模式MVVM.swift in Sources */,
 				043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */,
 				0401DD082E91183000D572AD /* Demo@弹出提示.swift in Sources */,
 				04CF03192E8A80CE0083ACF0 /* AppTools.swift in Sources */,
 				04D0C9822E8D1CF400580020 /* Optional.swift in Sources */,
+				04124F3E2EB075EA00462BE2 /* AFRoute.swift in Sources */,
 				C564FC952E0959640079B5C1 /* UIView.swift in Sources */,
 				04A8C54C2E8AA94D00381701 /* Demo@按钮.swift in Sources */,
 				046CF9772E967E6C005A88B4 /* URL.swift in Sources */,
@@ -1219,6 +1282,7 @@
 				046CF9752E9667C9005A88B4 /* UIButtonConfiguration.swift in Sources */,
 				045921082E854FF3008C8D6A /* Float.swift in Sources */,
 				C564FCA62E0959640079B5C1 /* UINavigationBar.swift in Sources */,
+				04124F442EB0764200462BE2 /* AFService.swift in Sources */,
 				04AD628F2E9120C500E18984 /* JobsTimer.swift in Sources */,
 				C564FC2C2E0958D50079B5C1 /* SceneDelegate.swift in Sources */,
 				C564FC922E0959640079B5C1 /* UISwitch.swift in Sources */,
