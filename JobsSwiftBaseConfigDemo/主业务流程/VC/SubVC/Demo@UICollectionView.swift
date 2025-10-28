@@ -55,7 +55,7 @@ final class EmptyCollectionViewDemoVC: BaseVC,
             .registerCell(UICollectionViewCell.self)
             .byBackgroundView(nil)
             .byDragInteractionEnabled(false)
-            .jobs_refreshSense(.panFallback)
+            .jobs_refreshSense(.insetFollow)
             // 空态按钮
             .jobs_emptyButtonProvider { [unowned self] in
                 UIButton.sys()
@@ -148,7 +148,7 @@ final class EmptyCollectionViewDemoVC: BaseVC,
             .registerCell(UICollectionViewCell.self)
             .byBackgroundView(nil)
             .byDragInteractionEnabled(false)
-            .jobs_refreshAxis(.horizontal).jobs_refreshSense(.panFallback)
+            .jobs_refreshAxis(.horizontal).jobs_refreshSense(.insetFollow)
             // 空态按钮
             .jobs_emptyButtonProvider { [unowned self] in
                 UIButton.sys()

@@ -241,7 +241,7 @@ private final class _JobsSideRefresher {
 
     // inset 管理
     private var baseInsets: UIEdgeInsets = .zero     // “外界”的 inset，不含交互 & 刷新
-    private var appliedInset: CGFloat = 0            // 进入刷新后我们最终追加的量（不含 liveExtent）
+    private var appliedInset: CGFloat = 0            // 进入刷新后我们追加的量（不含 liveExtent）
 
     // 约束（iOS 11+）
     private var sizeConstraint: Constraint?
@@ -414,11 +414,15 @@ private final class _JobsSideRefresher {
 
         ensureBounceIfNeeded(s)
 
-        // 记录手势基线（避免一按下 translation 非零）
+        // 记录/清理手势基线
         let pan = s.panGestureRecognizer
         if pan.state == .began { panBaseline = pan.translation(in: s) }
+        if pan.state == .ended || pan.state == .cancelled || pan.state == .failed { panBaseline = .zero }
+
         @inline(__always) func dY() -> CGFloat { pan.translation(in: s).y - panBaseline.y }
         @inline(__always) func dX() -> CGFloat { pan.translation(in: s).x - panBaseline.x }
+        @inline(__always) func extraYIfDragging() -> CGFloat { s.isDragging ? max(0, dY() - PAN_EPS) : 0 }
+        @inline(__always) func extraXIfDragging() -> CGFloat { s.isDragging ? max(0, dX() - PAN_EPS) : 0 }
 
         let th = animator.executeIncremental
         let sense = s.jobs_refreshSense
@@ -443,15 +447,13 @@ private final class _JobsSideRefresher {
         // 顶部：下拉
         case (.vertical, .top):
             do {
-                // 只用 baseInsets 计算原始拉动量
                 let raw = max(0, -(s.contentOffset.y + baseInsets.top))
-                let extra = (sense == .panFallback || sense == .insetFollow) ? max(0, dY() - PAN_EPS) : 0
+                let extra = (sense == .panFallback || sense == .insetFollow) ? extraYIfDragging() : 0
                 let pull = max(raw, extra)
 
                 liveExtent = min(th, pull)
                 animator.isHidden = (pull <= 0)
 
-                // .insetFollow：只改 inset；其他模式：transform 兜底
                 if sense == .insetFollow {
                     applyInteractiveInset(liveExtent)
                     animator.transform = .identity
@@ -471,7 +473,7 @@ private final class _JobsSideRefresher {
                 let visibleH = s.bounds.height
                 let bottomEdge = max(-baseInsets.top, contentH + baseInsets.bottom - visibleH)
                 let raw = max(0, s.contentOffset.y - bottomEdge)
-                let extra = (sense == .panFallback || sense == .insetFollow) ? max(0, -dY() - PAN_EPS) : 0
+                let extra = (sense == .panFallback || sense == .insetFollow) ? (s.isDragging ? max(0, -extraYIfDragging()) : 0) : 0
                 let pull = max(raw, extra)
 
                 liveExtent = min(th, pull)
@@ -481,7 +483,8 @@ private final class _JobsSideRefresher {
                     applyInteractiveInset(liveExtent)
                     animator.transform = .identity
                 } else {
-                    animator.transform = (raw > 0) ? .identity : CGAffineTransform(translationX: 0, y: -extra)
+                    let ex = (raw > 0) ? 0 : (s.isDragging ? max(0, -dY() - PAN_EPS) : 0)
+                    animator.transform = (raw > 0) ? .identity : CGAffineTransform(translationX: 0, y: -ex)
                 }
 
                 state = (pull >= th) ? .ready : (pull > HYSTERESIS ? .pulling : .idle)
@@ -492,7 +495,7 @@ private final class _JobsSideRefresher {
         case (.horizontal, .leading):
             do {
                 let raw = max(0, -(s.contentOffset.x + baseInsets.left))
-                let extra = (sense == .panFallback || sense == .insetFollow) ? max(0, dX() - PAN_EPS) : 0
+                let extra = (sense == .panFallback || sense == .insetFollow) ? extraXIfDragging() : 0
                 let pull = max(raw, extra)
 
                 liveExtent = min(th, pull)
@@ -517,7 +520,7 @@ private final class _JobsSideRefresher {
                 let visibleW = s.bounds.width
                 let rightEdge = max(-baseInsets.left, contentW + baseInsets.right - visibleW)
                 let raw = max(0, s.contentOffset.x - rightEdge)
-                let extra = (sense == .panFallback || sense == .insetFollow) ? max(0, -dX() - PAN_EPS) : 0
+                let extra = (sense == .panFallback || sense == .insetFollow) ? (s.isDragging ? max(0, -extraXIfDragging()) : 0) : 0
                 let pull = max(raw, extra)
 
                 liveExtent = min(th, pull)
@@ -527,7 +530,8 @@ private final class _JobsSideRefresher {
                     applyInteractiveInset(liveExtent)
                     animator.transform = .identity
                 } else {
-                    animator.transform = (raw > 0) ? .identity : CGAffineTransform(translationX: -extra, y: 0)
+                    let ex = (raw > 0) ? 0 : (s.isDragging ? max(0, -dX() - PAN_EPS) : 0)
+                    animator.transform = (raw > 0) ? .identity : CGAffineTransform(translationX: -ex, y: 0)
                 }
 
                 state = (pull >= th) ? .ready : (pull > HYSTERESIS ? .pulling : .idle)
@@ -537,7 +541,7 @@ private final class _JobsSideRefresher {
         default: break
         }
 
-        // 拉动中：开松手侦测；否则关
+        // 拖拽中开侦测；其它状态关
         updateReleaseWatch(for: s)
 
         // 有些设备最后一帧不再触发 offset：兜底
@@ -598,7 +602,6 @@ private final class _JobsSideRefresher {
 
     func stopRefreshing() {
         guard let s = scroll, state == .refreshing else { return }
-        let total = animator.executeIncremental   // 结束后收掉全部刷新量
         UIView.animate(withDuration: 0.25, delay: 0,
                        options: [.allowUserInteraction, .beginFromCurrentState]) {
             switch (self.axis, self.edge) {
@@ -644,14 +647,10 @@ private final class _JobsSideRefresher {
         guard state != .refreshing, !s.isDragging, liveExtent > 0 else { return }
         UIView.animate(withDuration: 0.20, delay: 0, options: [.allowUserInteraction, .beginFromCurrentState]) {
             switch (self.axis, self.edge) {
-            case (.vertical, .top):
-                s.contentInset.top = self.baseInsets.top
-            case (.vertical, .bottom):
-                s.contentInset.bottom = self.baseInsets.bottom
-            case (.horizontal, .leading):
-                s.contentInset.left = self.baseInsets.left
-            case (.horizontal, .trailing):
-                s.contentInset.right = self.baseInsets.right
+            case (.vertical, .top):        s.contentInset.top    = self.baseInsets.top
+            case (.vertical, .bottom):     s.contentInset.bottom = self.baseInsets.bottom
+            case (.horizontal, .leading):  s.contentInset.left   = self.baseInsets.left
+            case (.horizontal, .trailing): s.contentInset.right  = self.baseInsets.right
             default: break
             }
         } completion: { _ in
@@ -691,7 +690,6 @@ private final class _JobsSideRefresher {
         guard let s = scroll else { stopReleaseWatch(); return }
         ensureBounceIfNeeded(s)
         if state == .ready && !s.isDragging { beginRefreshing() }
-        // 未达阈值的场景，松手要收回临时 inset
         if state != .refreshing && !s.isDragging { collapseIfNeedWhenReleased() }
         if state != .pulling && state != .ready { stopReleaseWatch() }
     }
