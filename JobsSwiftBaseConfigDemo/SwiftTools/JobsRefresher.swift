@@ -2,13 +2,6 @@
 //  JobsRefresher.swift
 //  JobsSwiftBaseConfigDemo
 //
-//  完全替代第三方；统一支持垂直/水平刷新。
-//  关键：新增 .insetFollow —— 交互期用 contentInset 跟手（不再用 transform）
-//
-//  API：pullDownWithJobsAnimator / pullUpWithJobsAnimator / pullDownStart / pullDownStop
-//       / pullUpStop / pullUpNoMore / pullUpReset / removeRefreshers
-//       / jobs_refreshAxis / jobs_refreshSense
-//
 
 #if os(iOS) || os(tvOS)
 import UIKit
@@ -17,21 +10,17 @@ import ObjectiveC
 import SnapKit
 import QuartzCore
 
-// MARK: - 公共枚举 / 协议
 public enum JobsRefreshAxis { case vertical, horizontal }
 public enum _JobsRefreshEdge { case top, bottom, leading, trailing }
 public enum _JobsRefreshState { case idle, pulling, ready, refreshing, noMore }
 public enum JobsTextOrientationMode { case auto, horizontal, verticalStack }
 public enum _JobsResolvedOrientation { case horizontal, verticalStack }
 
-// 手势/位移取样策略：
-// 1) .pureOffset   —— 仅依赖 contentOffset（短内容橡皮筋时没有进度）
-// 2) .panFallback  —— offset 被“夹住”时，读 pan.translation 兜底（会用 transform 露出）
-// 3) .insetFollow  —— 交互期实时把 contentInset 顶/底/左/右加上 liveExtent（ScrollView 本体被拉动）
+// 手势/位移取样策略
 public enum JobsPullSenseMode { case pureOffset, panFallback, insetFollow }
 
 public protocol JobsRefreshAnimatable: AnyObject {
-    var executeIncremental: CGFloat { get set }      // Header=高度；Footer=高度/宽度
+    var executeIncremental: CGFloat { get set }
     func drive(_ state: _JobsRefreshState)
 }
 
@@ -40,7 +29,6 @@ private protocol _JobsAnimatorAxisAware: AnyObject {
     var textOrientation: JobsTextOrientationMode { get set }
 }
 
-// MARK: - 方向解析 + 文案排版
 extension _JobsAnimatorAxisAware {
     @inline(__always)
     fileprivate func _jobs_resolvedOrientation() -> _JobsResolvedOrientation {
@@ -59,7 +47,7 @@ extension _JobsAnimatorAxisAware {
     }
 }
 
-// MARK: - Header（DEBUG：红）
+// MARK: - Header（红）
 public final class JobsHeaderAnimator: UIView, JobsRefreshAnimatable, _JobsAnimatorAxisAware {
     public var executeIncremental: CGFloat = 60
     public var idleDescription = "下拉刷新"
@@ -132,7 +120,6 @@ public final class JobsHeaderAnimator: UIView, JobsRefreshAnimatable, _JobsAnima
         setNeedsLayout()
     }
 
-    // DSL
     @discardableResult public func byIdleDescription(_ t: String) -> Self { idleDescription = t; return self }
     @discardableResult public func byReleaseToRefreshDescription(_ t: String) -> Self { releaseToRefreshDescription = t; return self }
     @discardableResult public func byLoadingDescription(_ t: String) -> Self { loadingDescription = t; return self }
@@ -140,7 +127,7 @@ public final class JobsHeaderAnimator: UIView, JobsRefreshAnimatable, _JobsAnima
     @discardableResult public func byTextOrientation(_ m: JobsTextOrientationMode) -> Self { textOrientation = m; return self }
 }
 
-// MARK: - Footer（DEBUG：绿）
+// MARK: - Footer（绿）
 public final class JobsFooterAnimator: UIView, JobsRefreshAnimatable, _JobsAnimatorAxisAware {
     public var executeIncremental: CGFloat = 52
     public var idleDescription = "上拉加载更多"
@@ -213,7 +200,6 @@ public final class JobsFooterAnimator: UIView, JobsRefreshAnimatable, _JobsAnima
         setNeedsLayout()
     }
 
-    // DSL
     @discardableResult public func byIdleDescription(_ t: String) -> Self { idleDescription = t; return self }
     @discardableResult public func byReleaseToRefreshDescription(_ t: String) -> Self { releaseToRefreshDescription = t; return self }
     @discardableResult public func byLoadingMoreDescription(_ t: String) -> Self { loadingMoreDescription = t; return self }
@@ -232,29 +218,24 @@ private final class _JobsSideRefresher {
     let animator: (UIView & JobsRefreshAnimatable & _JobsAnimatorAxisAware)
     let handler: () -> Void
 
-    // KVO
     private var contentOffsetObs: NSKeyValueObservation?
     private var contentSizeObs: NSKeyValueObservation?
     private var boundsObs: NSKeyValueObservation?
     private var adjustedInsetObs: NSKeyValueObservation?
     private var contentInsetObs: NSKeyValueObservation?
 
-    // inset 管理
-    private var baseInsets: UIEdgeInsets = .zero     // “外界”的 inset，不含交互 & 刷新
-    private var appliedInset: CGFloat = 0            // 进入刷新后我们追加的量（不含 liveExtent）
+    private var baseInsets: UIEdgeInsets = .zero
+    private var appliedInset: CGFloat = 0
 
-    // 约束（iOS 11+）
     private var sizeConstraint: Constraint?
 
-    // 松手侦测
     private var releaseWatchLink: CADisplayLink?
 
-    // —— 跟手所需 —— //
-    private var panBaseline: CGPoint = .zero         // 手势开始时 translation 基线
-    private let PAN_EPS: CGFloat = 4                 // 4pt 死区
-    private let HYSTERESIS: CGFloat = 2              // 2pt 回差
-    private var liveExtent: CGFloat = 0              // 交互期：可见尺寸 = min(阈值, 拉动量)
-    private var interactiveAdjusting = false         // 交互期正在改 inset：禁止更新 baseInsets
+    private var panBaseline: CGPoint = .zero
+    private let PAN_EPS: CGFloat = 4
+    private let HYSTERESIS: CGFloat = 2
+    private var liveExtent: CGFloat = 0
+    private var interactiveAdjusting = false
 
     init(scroll: UIScrollView,
          axis: JobsRefreshAxis,
@@ -276,23 +257,12 @@ private final class _JobsSideRefresher {
         guard let s = scroll else { return }
         baseInsets = _adjustedInsets(s)
         s.addSubview(animator)
-
-        // DEBUG 颜色：Header=红 / Footer=绿
-        #if DEBUG
-        let isHeader = (edge == .top || edge == .leading)
-        let color = isHeader ? UIColor.systemRed : UIColor.systemGreen
-        animator.layer.borderWidth = 1
-        animator.layer.borderColor = color.cgColor
-        animator.backgroundColor = color.withAlphaComponent(0.08)
-        #endif
-
         _installConstraintsIfPossible()
         _layoutIfLegacy()
         animator.drive(state)
-
         ensureBounceIfNeeded(s)
         observe(s)
-        onOffsetChanged() // 首帧：短内容隐藏 footer/右侧
+        onOffsetChanged()
     }
 
     private func detach() {
@@ -307,8 +277,7 @@ private final class _JobsSideRefresher {
 
     private func observe(_ s: UIScrollView) {
         contentOffsetObs = s.observe(\.contentOffset, options: [.new]) { [weak self] _, _ in
-            self?.onOffsetChanged()
-            self?._layoutIfLegacy()
+            self?.onOffsetChanged(); self?._layoutIfLegacy()
         }
         contentSizeObs = s.observe(\.contentSize, options: [.new]) { [weak self] _, _ in
             self?._layoutIfLegacy()
@@ -319,17 +288,12 @@ private final class _JobsSideRefresher {
         if #available(iOS 11.0, *) {
             adjustedInsetObs = s.observe(\.adjustedContentInset, options: [.new]) { [weak self] s, _ in
                 guard let self else { return }
-                // 仅在“非交互+非刷新”时刷新基线，避免把 liveExtent/刷新量写进基线
-                if !self.interactiveAdjusting && self.state == .idle {
-                    self.baseInsets = s.adjustedContentInset
-                }
+                if !self.interactiveAdjusting && self.state == .idle { self.baseInsets = s.adjustedContentInset }
             }
         } else {
             contentInsetObs = s.observe(\.contentInset, options: [.new]) { [weak self] s, _ in
                 guard let self else { return }
-                if !self.interactiveAdjusting && self.state == .idle {
-                    self.baseInsets = s.contentInset
-                }
+                if !self.interactiveAdjusting && self.state == .idle { self.baseInsets = s.contentInset }
             }
         }
     }
@@ -338,6 +302,7 @@ private final class _JobsSideRefresher {
     private func _installConstraintsIfPossible() {
         guard let s = scroll else { return }
         guard #available(iOS 11.0, *) else { return }
+
         animator.translatesAutoresizingMaskIntoConstraints = false
 
         switch (axis, edge) {
@@ -345,206 +310,204 @@ private final class _JobsSideRefresher {
             animator.snp.remakeConstraints { make in
                 make.leading.equalTo(s.frameLayoutGuide.snp.leading)
                 make.trailing.equalTo(s.frameLayoutGuide.snp.trailing)
-                make.bottom.equalTo(s.contentLayoutGuide.snp.top)
-                sizeConstraint = make.height.equalTo(animator.executeIncremental).constraint
+                make.top.equalTo(s.frameLayoutGuide.snp.top)              // 头部也贴可视区顶
+                sizeConstraint = make.height.equalTo(0).constraint        // 高度由 liveExtent 驱动
             }
+
         case (.vertical, .bottom):
             animator.snp.remakeConstraints { make in
                 make.leading.equalTo(s.frameLayoutGuide.snp.leading)
                 make.trailing.equalTo(s.frameLayoutGuide.snp.trailing)
-                make.top.equalTo(s.contentLayoutGuide.snp.bottom).priority(.high)
-                make.top.greaterThanOrEqualTo(s.frameLayoutGuide.snp.bottom).priority(.required)
-                sizeConstraint = make.height.equalTo(animator.executeIncremental).constraint
+                make.bottom.equalTo(s.frameLayoutGuide.snp.bottom)        // ✅ 关键：贴可视区底
+                sizeConstraint = make.height.equalTo(0).constraint        //   从 0 向上长
             }
+
         case (.horizontal, .leading):
             animator.snp.remakeConstraints { make in
                 make.top.equalTo(s.frameLayoutGuide.snp.top)
                 make.bottom.equalTo(s.frameLayoutGuide.snp.bottom)
-                make.trailing.equalTo(s.contentLayoutGuide.snp.leading)
-                sizeConstraint = make.width.equalTo(animator.executeIncremental).constraint
+                make.leading.equalTo(s.frameLayoutGuide.snp.leading)      // 左侧贴可视区左
+                sizeConstraint = make.width.equalTo(0).constraint         // 宽度由 liveExtent 驱动
             }
+
         case (.horizontal, .trailing):
             animator.snp.remakeConstraints { make in
                 make.top.equalTo(s.frameLayoutGuide.snp.top)
                 make.bottom.equalTo(s.frameLayoutGuide.snp.bottom)
-                make.leading.equalTo(s.contentLayoutGuide.snp.trailing).priority(.high)
-                make.leading.greaterThanOrEqualTo(s.frameLayoutGuide.snp.trailing).priority(.required)
-                sizeConstraint = make.width.equalTo(animator.executeIncremental).constraint
+                make.trailing.equalTo(s.frameLayoutGuide.snp.trailing)    // ✅ 关键：贴可视区右
+                sizeConstraint = make.width.equalTo(0).constraint         //   从 0 向左长
             }
-        default: break
+
+        default:
+            break
         }
 
-        if s.window != nil {
-            s.setNeedsLayout(); s.layoutIfNeeded()
-        } else {
-            DispatchQueue.main.async { [weak s] in
-                s?.setNeedsLayout(); s?.layoutIfNeeded()
-            }
-        }
+        if s.window != nil { s.setNeedsLayout(); s.layoutIfNeeded() }
+        else { DispatchQueue.main.async { [weak s] in s?.setNeedsLayout(); s?.layoutIfNeeded() } }
     }
 
-    // iOS 10−：frame；iOS 11+：更新尺寸约束
+    // iOS 11+：用约束更新高度/宽度；iOS 10-：用 frame 贴可视区
     private func _layoutIfLegacy() {
         guard let s = scroll else { return }
+
         if #available(iOS 11.0, *) {
+            // iOS 11+ 用约束：高度/宽度 = (refreshing ? executeIncremental : liveExtent)
             let desired = (state == .refreshing) ? animator.executeIncremental : liveExtent
             sizeConstraint?.update(offset: max(0, desired))
             return
         }
+
+        // iOS 10 及以下：frame 布局（把 Header/Footer 贴在“当前视口”的边缘，尺寸=liveExtent/execute）
         let H = (state == .refreshing) ? animator.executeIncremental : liveExtent
         switch (axis, edge) {
         case (.vertical, .top):
-            animator.frame = CGRect(x: 0, y: -(H + baseInsets.top), width: s.bounds.width, height: H)
+            // 贴可视区顶，向下长
+            animator.frame = CGRect(x: s.contentOffset.x,
+                                    y: s.contentOffset.y,
+                                    width: s.bounds.width,
+                                    height: H)
+
         case (.vertical, .bottom):
-            let contentH = max(s.contentSize.height, s.bounds.height)
-            animator.frame = CGRect(x: 0, y: contentH + baseInsets.bottom, width: s.bounds.width, height: H)
+            // 贴可视区底，向上长
+            animator.frame = CGRect(x: s.contentOffset.x,
+                                    y: s.contentOffset.y + s.bounds.height - H,
+                                    width: s.bounds.width,
+                                    height: H)
+
         case (.horizontal, .leading):
-            animator.frame = CGRect(x: -(H + baseInsets.left), y: 0, width: H, height: s.bounds.height)
+            // 贴可视区左，向右长
+            animator.frame = CGRect(x: s.contentOffset.x,
+                                    y: s.contentOffset.y,
+                                    width: H,
+                                    height: s.bounds.height)
+
         case (.horizontal, .trailing):
-            let contentW = max(s.contentSize.width, s.bounds.width)
-            animator.frame = CGRect(x: contentW + baseInsets.right, y: 0, width: H, height: s.bounds.height)
-        default: break
+            // 贴可视区右，向左长
+            animator.frame = CGRect(x: s.contentOffset.x + s.bounds.width - H,
+                                    y: s.contentOffset.y,
+                                    width: H,
+                                    height: s.bounds.height)
+
+        default:
+            break
         }
     }
 
-    // MARK: - 状态机（offset 为主；pan 兜底；.insetFollow 改 inset）
+    // MARK: - 状态机（带 .insetFollow 跟手）
     private func onOffsetChanged() {
         guard let s = scroll else { return }
         guard state != .refreshing && state != .noMore else { return }
 
         ensureBounceIfNeeded(s)
 
-        // 记录/清理手势基线
+        // 采样基准：每次拖拽开始记录一次
         let pan = s.panGestureRecognizer
         if pan.state == .began { panBaseline = pan.translation(in: s) }
         if pan.state == .ended || pan.state == .cancelled || pan.state == .failed { panBaseline = .zero }
 
-        @inline(__always) func dY() -> CGFloat { pan.translation(in: s).y - panBaseline.y }
-        @inline(__always) func dX() -> CGFloat { pan.translation(in: s).x - panBaseline.x }
-        @inline(__always) func extraYIfDragging() -> CGFloat { s.isDragging ? max(0, dY() - PAN_EPS) : 0 }
-        @inline(__always) func extraXIfDragging() -> CGFloat { s.isDragging ? max(0, dX() - PAN_EPS) : 0 }
+        @inline(__always) func dY() -> CGFloat { pan.translation(in: s).y - panBaseline.y } // 下拉为正，上推为负
+        @inline(__always) func dX() -> CGFloat { pan.translation(in: s).x - panBaseline.x } // 右拉为正，左推为负
 
-        let th = animator.executeIncremental
+        // 针对四个方向的“额外位移兜底”
+        @inline(__always) func extraDown() -> CGFloat { s.isDragging ? max(0,  dY() - PAN_EPS) : 0 }   // 头部：下拉
+        @inline(__always) func extraUp()   -> CGFloat { s.isDragging ? max(0, -dY() - PAN_EPS) : 0 }   // 尾部：上推
+        @inline(__always) func extraRight() -> CGFloat { s.isDragging ? max(0,  dX() - PAN_EPS) : 0 }  // leading：向右
+        @inline(__always) func extraLeft()  -> CGFloat { s.isDragging ? max(0, -dX() - PAN_EPS) : 0 }  // trailing：向左
+
         let sense = s.jobs_refreshSense
+        let th = animator.executeIncremental
 
+        // 跟手：把 liveExtent 同步到 contentInset
         func applyInteractiveInset(_ extent: CGFloat) {
-            interactiveAdjusting = extent > 0
             guard sense == .insetFollow else { return }
+            interactiveAdjusting = extent > 0
             switch (axis, edge) {
-            case (.vertical, .top):
-                s.contentInset.top = baseInsets.top + extent
-            case (.vertical, .bottom):
-                s.contentInset.bottom = baseInsets.bottom + extent
-            case (.horizontal, .leading):
-                s.contentInset.left = baseInsets.left + extent
-            case (.horizontal, .trailing):
-                s.contentInset.right = baseInsets.right + extent
+            case (.vertical, .top):        s.contentInset.top    = baseInsets.top + extent
+            case (.vertical, .bottom):     s.contentInset.bottom = baseInsets.bottom + extent
+            case (.horizontal, .leading):  s.contentInset.left   = baseInsets.left + extent
+            case (.horizontal, .trailing): s.contentInset.right  = baseInsets.right + extent
             default: break
             }
         }
 
         switch (axis, edge) {
+
         // 顶部：下拉
         case (.vertical, .top):
-            do {
-                let raw = max(0, -(s.contentOffset.y + baseInsets.top))
-                let extra = (sense == .panFallback || sense == .insetFollow) ? extraYIfDragging() : 0
-                let pull = max(raw, extra)
+            let raw   = max(0, -(s.contentOffset.y + baseInsets.top))
+            let extra = (sense == .panFallback || sense == .insetFollow) ? extraDown() : 0
+            let pull  = max(raw, extra)
 
-                liveExtent = min(th, pull)
-                animator.isHidden = (pull <= 0)
+            liveExtent = min(th, pull)
+            animator.isHidden = (pull <= 0)
 
-                if sense == .insetFollow {
-                    applyInteractiveInset(liveExtent)
-                    animator.transform = .identity
-                } else {
-                    animator.transform = (raw > 0) ? .identity : CGAffineTransform(translationX: 0, y: extra)
-                }
+            if sense == .insetFollow { applyInteractiveInset(liveExtent); animator.transform = .identity }
+            else { animator.transform = (raw > 0) ? .identity : CGAffineTransform(translationX: 0, y: extra) }
 
-                state = (pull >= th) ? .ready : (pull > HYSTERESIS ? .pulling : .idle)
-                _layoutIfLegacy()
-            }
+            state = (pull >= th) ? .ready : (pull > HYSTERESIS ? .pulling : .idle)
+            _layoutIfLegacy()
 
-        // 底部：上推
+        // 底部：上推（关键修复：extraUp）
         case (.vertical, .bottom):
-            do {
-                if noMoreData { state = .noMore; return }
-                let contentH = max(s.contentSize.height, 0)
-                let visibleH = s.bounds.height
-                let bottomEdge = max(-baseInsets.top, contentH + baseInsets.bottom - visibleH)
-                let raw = max(0, s.contentOffset.y - bottomEdge)
-                let extra = (sense == .panFallback || sense == .insetFollow) ? (s.isDragging ? max(0, -extraYIfDragging()) : 0) : 0
-                let pull = max(raw, extra)
+            if noMoreData { state = .noMore; return }
+            let contentH  = max(s.contentSize.height, 0)
+            let visibleH  = s.bounds.height
+            let bottomEdge = max(-baseInsets.top, contentH + baseInsets.bottom - visibleH)
 
-                liveExtent = min(th, pull)
-                animator.isHidden = (pull <= 0)
+            let raw   = max(0, s.contentOffset.y - bottomEdge)
+            let extra = (sense == .panFallback || sense == .insetFollow) ? extraUp() : 0    // ✅ 方向修正
+            let pull  = max(raw, extra)
 
-                if sense == .insetFollow {
-                    applyInteractiveInset(liveExtent)
-                    animator.transform = .identity
-                } else {
-                    let ex = (raw > 0) ? 0 : (s.isDragging ? max(0, -dY() - PAN_EPS) : 0)
-                    animator.transform = (raw > 0) ? .identity : CGAffineTransform(translationX: 0, y: -ex)
-                }
+            liveExtent = min(th, pull)
+            animator.isHidden = (pull <= 0)
 
-                state = (pull >= th) ? .ready : (pull > HYSTERESIS ? .pulling : .idle)
-                _layoutIfLegacy()
-            }
+            if sense == .insetFollow { applyInteractiveInset(liveExtent); animator.transform = .identity }
+            else { animator.transform = (raw > 0) ? .identity : CGAffineTransform(translationX: 0, y: -extra) }
 
-        // 左侧：右拉
+            state = (pull >= th) ? .ready : (pull > HYSTERESIS ? .pulling : .idle)
+            _layoutIfLegacy()
+
+        // 左侧（等价“下拉”）：向右拉
         case (.horizontal, .leading):
-            do {
-                let raw = max(0, -(s.contentOffset.x + baseInsets.left))
-                let extra = (sense == .panFallback || sense == .insetFollow) ? extraXIfDragging() : 0
-                let pull = max(raw, extra)
+            let raw   = max(0, -(s.contentOffset.x + baseInsets.left))
+            let extra = (sense == .panFallback || sense == .insetFollow) ? extraRight() : 0
+            let pull  = max(raw, extra)
 
-                liveExtent = min(th, pull)
-                animator.isHidden = (pull <= 0)
+            liveExtent = min(th, pull)
+            animator.isHidden = (pull <= 0)
 
-                if sense == .insetFollow {
-                    applyInteractiveInset(liveExtent)
-                    animator.transform = .identity
-                } else {
-                    animator.transform = (raw > 0) ? .identity : CGAffineTransform(translationX: extra, y: 0)
-                }
+            if sense == .insetFollow { applyInteractiveInset(liveExtent); animator.transform = .identity }
+            else { animator.transform = (raw > 0) ? .identity : CGAffineTransform(translationX: extra, y: 0) }
 
-                state = (pull >= th) ? .ready : (pull > HYSTERESIS ? .pulling : .idle)
-                _layoutIfLegacy()
-            }
+            state = (pull >= th) ? .ready : (pull > HYSTERESIS ? .pulling : .idle)
+            _layoutIfLegacy()
 
-        // 右侧：左拉
+        // 右侧（等价“上拉”）：向左推（关键修复：extraLeft）
         case (.horizontal, .trailing):
-            do {
-                if noMoreData { state = .noMore; return }
-                let contentW = max(s.contentSize.width, 0)
-                let visibleW = s.bounds.width
-                let rightEdge = max(-baseInsets.left, contentW + baseInsets.right - visibleW)
-                let raw = max(0, s.contentOffset.x - rightEdge)
-                let extra = (sense == .panFallback || sense == .insetFollow) ? (s.isDragging ? max(0, -extraXIfDragging()) : 0) : 0
-                let pull = max(raw, extra)
+            if noMoreData { state = .noMore; return }
+            let contentW = max(s.contentSize.width, 0)
+            let visibleW = s.bounds.width
+            let rightEdge = max(-baseInsets.left, contentW + baseInsets.right - visibleW)
 
-                liveExtent = min(th, pull)
-                animator.isHidden = (pull <= 0)
+            let raw   = max(0, s.contentOffset.x - rightEdge)
+            let extra = (sense == .panFallback || sense == .insetFollow) ? extraLeft() : 0   // ✅ 方向修正
+            let pull  = max(raw, extra)
 
-                if sense == .insetFollow {
-                    applyInteractiveInset(liveExtent)
-                    animator.transform = .identity
-                } else {
-                    let ex = (raw > 0) ? 0 : (s.isDragging ? max(0, -dX() - PAN_EPS) : 0)
-                    animator.transform = (raw > 0) ? .identity : CGAffineTransform(translationX: -ex, y: 0)
-                }
+            liveExtent = min(th, pull)
+            animator.isHidden = (pull <= 0)
 
-                state = (pull >= th) ? .ready : (pull > HYSTERESIS ? .pulling : .idle)
-                _layoutIfLegacy()
-            }
+            if sense == .insetFollow { applyInteractiveInset(liveExtent); animator.transform = .identity }
+            else { animator.transform = (raw > 0) ? .identity : CGAffineTransform(translationX: -extra, y: 0) }
 
-        default: break
+            state = (pull >= th) ? .ready : (pull > HYSTERESIS ? .pulling : .idle)
+            _layoutIfLegacy()
+
+        default:
+            break
         }
 
-        // 拖拽中开侦测；其它状态关
+        // 自动触发 & 回弹收拢
         updateReleaseWatch(for: s)
-
-        // 有些设备最后一帧不再触发 offset：兜底
         if state == .ready, !s.isDragging { beginRefreshing() }
     }
 
@@ -556,12 +519,10 @@ private final class _JobsSideRefresher {
         animator.isHidden = false
         state = .refreshing
 
-        // 若使用 .insetFollow，交互期已经加了 liveExtent，这里只补“阈值 - liveExtent”
         let pre = (s.jobs_refreshSense == .insetFollow) ? liveExtent : 0
         let need = max(0, animator.executeIncremental - pre)
         appliedInset = need
 
-        // 进入刷新：尺寸设为阈值、复位 transform
         animator.transform = .identity
         liveExtent = animator.executeIncremental
         sizeConstraint?.update(offset: liveExtent)
@@ -572,26 +533,22 @@ private final class _JobsSideRefresher {
             switch (self.axis, self.edge) {
             case (.vertical, .top):
                 s.contentInset.top = self.baseInsets.top + pre + need
-                let targetY = -(self.baseInsets.top + pre + need)
-                s.setContentOffset(CGPoint(x: s.contentOffset.x, y: targetY), animated: false)
-
+                s.setContentOffset(CGPoint(x: s.contentOffset.x,
+                                           y: -(self.baseInsets.top + pre + need)), animated: false)
             case (.vertical, .bottom):
                 s.contentInset.bottom = self.baseInsets.bottom + pre + need
                 let contentH = max(s.contentSize.height, s.bounds.height)
                 let targetY = contentH + self.baseInsets.bottom + pre + need - s.bounds.height
                 s.setContentOffset(CGPoint(x: s.contentOffset.x, y: targetY), animated: false)
-
             case (.horizontal, .leading):
                 s.contentInset.left = self.baseInsets.left + pre + need
-                let targetX = -(self.baseInsets.left + pre + need)
-                s.setContentOffset(CGPoint(x: targetX, y: s.contentOffset.y), animated: false)
-
+                s.setContentOffset(CGPoint(x: -(self.baseInsets.left + pre + need),
+                                           y: s.contentOffset.y), animated: false)
             case (.horizontal, .trailing):
                 s.contentInset.right = self.baseInsets.right + pre + need
                 let contentW = max(s.contentSize.width, s.bounds.width)
                 let targetX = contentW + self.baseInsets.right + pre + need - s.bounds.width
                 s.setContentOffset(CGPoint(x: targetX, y: s.contentOffset.y), animated: false)
-
             default: break
             }
         } completion: { _ in
@@ -607,26 +564,20 @@ private final class _JobsSideRefresher {
             switch (self.axis, self.edge) {
             case (.vertical, .top):
                 s.contentInset.top = self.baseInsets.top
-                let targetY = -self.baseInsets.top
-                s.setContentOffset(CGPoint(x: s.contentOffset.x, y: targetY), animated: false)
-
+                s.setContentOffset(CGPoint(x: s.contentOffset.x, y: -self.baseInsets.top), animated: false)
             case (.vertical, .bottom):
                 s.contentInset.bottom = self.baseInsets.bottom
                 let contentH = max(s.contentSize.height, s.bounds.height)
                 let targetY = contentH + self.baseInsets.bottom - s.bounds.height
                 s.setContentOffset(CGPoint(x: s.contentOffset.x, y: targetY), animated: false)
-
             case (.horizontal, .leading):
                 s.contentInset.left = self.baseInsets.left
-                let targetX = -self.baseInsets.left
-                s.setContentOffset(CGPoint(x: targetX, y: s.contentOffset.y), animated: false)
-
+                s.setContentOffset(CGPoint(x: -self.baseInsets.left, y: s.contentOffset.y), animated: false)
             case (.horizontal, .trailing):
                 s.contentInset.right = self.baseInsets.right
                 let contentW = max(s.contentSize.width, s.bounds.width)
                 let targetX = contentW + self.baseInsets.right - s.bounds.width
                 s.setContentOffset(CGPoint(x: targetX, y: s.contentOffset.y), animated: false)
-
             default: break
             }
         } completion: { _ in
@@ -634,14 +585,12 @@ private final class _JobsSideRefresher {
             if let s = self.scroll {
                 self.liveExtent = 0
                 self.animator.transform = .identity
-                // 刷新完成后再更新基线
                 self.baseInsets = _adjustedInsets(s)
                 self.onOffsetChanged()
             }
         }
     }
 
-    // 松手但未达阈值：把临时 inset 复原，避免“自己往下拉”
     private func collapseIfNeedWhenReleased() {
         guard let s = scroll else { return }
         guard state != .refreshing, !s.isDragging, liveExtent > 0 else { return }
@@ -662,7 +611,6 @@ private final class _JobsSideRefresher {
         }
     }
 
-    // MARK: - 弹性保障（不触碰手势）
     @inline(__always)
     private func ensureBounceIfNeeded(_ s: UIScrollView) {
         if axis == .vertical {
@@ -673,7 +621,6 @@ private final class _JobsSideRefresher {
         if !s.bounces { s.bounces = true }
     }
 
-    // MARK: - 松手侦测（DisplayLink）
     private func updateReleaseWatch(for s: UIScrollView) {
         if state == .pulling || state == .ready {
             if releaseWatchLink == nil {
@@ -745,7 +692,6 @@ public extension UIScrollView {
         set { objc_setAssociatedObject(self, &_jobsFooterRefKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
 
-    // 安装：下拉(或左拉)
     @discardableResult
     func pullDownWithJobsAnimator(_ action: @escaping () -> Void,
                                   config: ((JobsHeaderAnimator) -> Void)? = nil) -> Self {
@@ -763,7 +709,6 @@ public extension UIScrollView {
         return self
     }
 
-    // 安装：上拉(或右拉)
     @discardableResult
     func pullUpWithJobsAnimator(_ action: @escaping () -> Void,
                                 config: ((JobsFooterAnimator) -> Void)? = nil) -> Self {
@@ -807,7 +752,6 @@ private func _adjustedInsets(_ s: UIScrollView) -> UIEdgeInsets {
     return s.contentInset
 }
 
-// MARK: - DEBUG 工具
 #if DEBUG
 @inline(__always) private func JF(_ v: CGFloat) -> String { String(format: "%.1f", v) }
 @inline(__always) private func JSize(_ s: CGSize) -> String { "(w:\(JF(s.width)), h:\(JF(s.height)))" }
