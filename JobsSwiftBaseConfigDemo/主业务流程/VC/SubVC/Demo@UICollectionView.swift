@@ -55,7 +55,7 @@ final class EmptyCollectionViewDemoVC: BaseVC,
             .registerCell(UICollectionViewCell.self)
             .byBackgroundView(nil)
             .byDragInteractionEnabled(false)
-
+            .jobs_refreshSense(.panFallback)
             // 空态按钮
             .jobs_emptyButtonProvider { [unowned self] in
                 UIButton.sys()
@@ -148,6 +148,7 @@ final class EmptyCollectionViewDemoVC: BaseVC,
             .registerCell(UICollectionViewCell.self)
             .byBackgroundView(nil)
             .byDragInteractionEnabled(false)
+            .jobs_refreshAxis(.horizontal).jobs_refreshSense(.panFallback)
             // 空态按钮
             .jobs_emptyButtonProvider { [unowned self] in
                 UIButton.sys()
@@ -271,8 +272,12 @@ final class EmptyCollectionViewDemoVC: BaseVC,
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        collectionViewV.pullDownStart() // 应该立刻看到“刷新中…”
-        // collectionViewH.pullDownStart() // 横向左拉等价“下拉”，也可测
+         collectionViewV.pullDownStart() // 应该立刻看到“刷新中…”
+         collectionViewH.pullDownStart() // 横向左拉等价“下拉”，也可测
+        // 首屏就演示竖向 footer（上拉加载）
+//        collectionViewV.pullUpStart() // 应该立刻看到“加载中…”
+        // 可选：再演示横向 footer（右→左）
+        // collectionViewH.pullUpStart()
     }
     // ============================== Footer 可用性（示例） ==============================
     private func updateFooterAvailabilityV() {

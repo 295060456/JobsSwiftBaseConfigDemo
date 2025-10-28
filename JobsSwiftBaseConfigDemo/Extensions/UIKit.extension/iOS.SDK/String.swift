@@ -14,6 +14,7 @@
 #endif
 import MessageUI
 import CoreImage
+import Foundation
 
 #if canImport(Kingfisher)
 import Kingfisher
@@ -22,7 +23,6 @@ import Kingfisher
 #if canImport(SDWebImage)
 import SDWebImage
 #endif
-
 /// 字符串相关格式的（通用）转换
 extension String {
     // MARK: - String 转 Int
@@ -114,9 +114,52 @@ extension CATextLayerAlignmentMode {
         }
     }
 }
-// MARK: - 返回 URL（如果是网络图）或 UIImage（如果是本地）
-/// 字符串解析成图
+// MARK: - 字符串转换成资源
 public extension String {
+    // MARK: - 字符串@Bundle
+    /// 在指定 Bundle 查找媒体资源 URL（支持 "name.ext" 或 "name"）。
+    /// - Parameter bundle: 默认 .main
+    /// - Returns: URL?（找不到返回 nil）
+    var bundleMediaURL: URL? {
+        return bundleMediaURL(in: .main)
+    }
+
+    func bundleMediaURL(in bundle: Bundle) -> URL? {
+        let trimmed = self.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+
+        // 既支持 "name.ext" 也支持 "name"
+        let name = (trimmed as NSString).deletingPathExtension
+        let ext  = (trimmed as NSString).pathExtension.isEmpty ? nil : (trimmed as NSString).pathExtension
+
+        return bundle.url(forResource: name, withExtension: ext)
+    }
+    /// 必得版（开发期断言失败直接崩，等价你以前的 `!`）
+    var bundleMediaURLRequire: URL {
+        if let u = self.bundleMediaURL { return u }
+        assertionFailure("❌ Bundle media not found: \(self) (check Target Membership)")
+        fatalError("Bundle media not found: \(self)")
+    }
+    // MARK: - 字符串@URL
+    /// "https://..." → URL?  （仅放行 http/https；自动做轻度编码）
+    var url: URL? {
+        let raw = self.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !raw.isEmpty else { return nil }
+        let s = raw.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed) ?? raw
+        guard let u = URL(string: s) else { return nil }
+        if let scheme = u.scheme?.lowercased(),
+           scheme == "http" || scheme == "https" {
+            return u
+        }
+        return nil
+    }
+    /// "https://..." → URL  （开发期断言必得；等价你原来的 `!` 用法）
+    var urlRequire: URL {
+        if let u = self.url { return u }
+        assertionFailure("❌ Invalid URL string: \(self)")
+        fatalError("Invalid URL: \(self)")
+    }
+    // MARK: - 字符串@图片
     /// 统一解析：字符串 → 图片来源
     var imageSource: ImageSource? {
         // 优先判断 http/https

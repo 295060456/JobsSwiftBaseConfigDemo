@@ -39,6 +39,27 @@
 		04468F902E9E4D7000677000 /* PermissionCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04468F8F2E9E4D7000677000 /* PermissionCenter.swift */; };
 		04468F922E9E5A5900677000 /* MediaPickerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04468F912E9E5A5700677000 /* MediaPickerService.swift */; };
 		0448B1842EA3707E00CFC755 /* Demo@生成二维码和条形码.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0448B1832EA3707700CFC755 /* Demo@生成二维码和条形码.swift */; };
+		0453763D2EB0B41F00133F73 /* 非iph_X.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 0453763A2EB0B41F00133F73 /* 非iph_X.mp4 */; };
+		0453763E2EB0B41F00133F73 /* iph_X.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 0453763B2EB0B41F00133F73 /* iph_X.mp4 */; };
+		0453763F2EB0B41F00133F73 /* welcome_video.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 0453763C2EB0B41F00133F73 /* welcome_video.mp4 */; };
+		0453764C2EB0B43F00133F73 /* IncomeSource.json in Resources */ = {isa = PBXBuildFile; fileRef = 045376412EB0B43F00133F73 /* IncomeSource.json */; };
+		0453764D2EB0B43F00133F73 /* UserData.json in Resources */ = {isa = PBXBuildFile; fileRef = 045376442EB0B43F00133F73 /* UserData.json */; };
+		0453764E2EB0B43F00133F73 /* OccupationList.json in Resources */ = {isa = PBXBuildFile; fileRef = 045376422EB0B43F00133F73 /* OccupationList.json */; };
+		0453764F2EB0B43F00133F73 /* CommentData.json in Resources */ = {isa = PBXBuildFile; fileRef = 045376462EB0B43F00133F73 /* CommentData.json */; };
+		045376502EB0B43F00133F73 /* Countries.json in Resources */ = {isa = PBXBuildFile; fileRef = 045376472EB0B43F00133F73 /* Countries.json */; };
+		045376512EB0B43F00133F73 /* CityList.json in Resources */ = {isa = PBXBuildFile; fileRef = 045376452EB0B43F00133F73 /* CityList.json */; };
+		045376522EB0B43F00133F73 /* data.json in Resources */ = {isa = PBXBuildFile; fileRef = 045376482EB0B43F00133F73 /* data.json */; };
+		045376532EB0B43F00133F73 /* CountryList.json in Resources */ = {isa = PBXBuildFile; fileRef = 045376492EB0B43F00133F73 /* CountryList.json */; };
+		045376542EB0B43F00133F73 /* 假数据.json in Resources */ = {isa = PBXBuildFile; fileRef = 0453764A2EB0B43F00133F73 /* 假数据.json */; };
+		045376552EB0B43F00133F73 /* Philippines.json in Resources */ = {isa = PBXBuildFile; fileRef = 045376432EB0B43F00133F73 /* Philippines.json */; };
+		045376562EB0B43F00133F73 /* IdTypeList.json in Resources */ = {isa = PBXBuildFile; fileRef = 0453764B2EB0B43F00133F73 /* IdTypeList.json */; };
+		0453765B2EB0B57B00133F73 /* Demo@BMPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0453765A2EB0B57800133F73 /* Demo@BMPlayer.swift */; };
+		0453765F2EB0B5A200133F73 /* PlayerLocalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0453765E2EB0B5A100133F73 /* PlayerLocalVC.swift */; };
+		045376612EB0B5B100133F73 /* PlayerRemoteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045376602EB0B5B000133F73 /* PlayerRemoteVC.swift */; };
+		045376632EB0B5BF00133F73 /* FeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045376622EB0B5BE00133F73 /* FeedModel.swift */; };
+		045376652EB0B5D600133F73 /* FeedVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045376642EB0B5D500133F73 /* FeedVideoCell.swift */; };
+		045376672EB0B5E100133F73 /* PlayerCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045376662EB0B5E100133F73 /* PlayerCenter.swift */; };
+		045376692EB0B5EE00133F73 /* DouyinFeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045376682EB0B5ED00133F73 /* DouyinFeedVC.swift */; };
 		045920E42E84EC73008C8D6A /* SwiftTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E32E84EC72008C8D6A /* SwiftTools.swift */; };
 		045920E62E84F389008C8D6A /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E52E84F386008C8D6A /* CALayer.swift */; };
 		045920EA2E84FD82008C8D6A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E92E84FD77008C8D6A /* String.swift */; };
@@ -66,7 +87,7 @@
 		046CF9772E967E6C005A88B4 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046CF9762E967E6B005A88B4 /* URL.swift */; };
 		0477D96D2E8B83D6002C6427 /* JobsSafeTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D96C2E8B83CA002C6427 /* JobsSafeTransitions.swift */; };
 		0477D96F2E8B8479002C6427 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D96E2E8B8478002C6427 /* UIApplication.swift */; };
-		0477D9712E8B897D002C6427 /* Demo@安全Push.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9702E8B896A002C6427 /* Demo@安全Push.swift */; };
+		0477D9712E8B897D002C6427 /* Demo@支持上下左右安全Push和原路返回.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9702E8B896A002C6427 /* Demo@支持上下左右安全Push和原路返回.swift */; };
 		0477D9752E8B9146002C6427 /* Demo@安全Present.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9742E8B9141002C6427 /* Demo@安全Present.swift */; };
 		0477D9772E8B9381002C6427 /* UIResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9762E8B937A002C6427 /* UIResponder.swift */; };
 		0477D9792E8BADB2002C6427 /* Demo@被Push或者Present的次级页面.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9782E8BADB1002C6427 /* Demo@被Push或者Present的次级页面.swift */; };
@@ -129,6 +150,11 @@
 		04E8D6192E8E6EC300E85CDA /* UIToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D6182E8E6EBF00E85CDA /* UIToolbar.swift */; };
 		04E8D61B2E8E837D00E85CDA /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D61A2E8E837C00E85CDA /* NSMutableAttributedString.swift */; };
 		04E8D6232E8E884500E85CDA /* BaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D6222E8E883F00E85CDA /* BaseVC.swift */; };
+		04FC77852EB0BDF100B810BA /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FC77842EB0BDF000B810BA /* ImageLoader.swift */; };
+		04FC77872EB0BE0C00B810BA /* FeedListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FC77862EB0BE0B00B810BA /* FeedListCell.swift */; };
+		04FC77892EB0BE1E00B810BA /* FeedListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FC77882EB0BE1D00B810BA /* FeedListVC.swift */; };
+		04FC778B2EB0BE2F00B810BA /* PlayerDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FC778A2EB0BE2F00B810BA /* PlayerDetailVC.swift */; };
+		04FC77902EB0C89100B810BA /* BMPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FC778F2EB0C88A00B810BA /* BMPlayer.swift */; };
 		28B3B2C7F8E21BC854851508 /* Pods_JobsSwiftBaseConfigDemoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA9261964B37E24BC5754CC1 /* Pods_JobsSwiftBaseConfigDemoUITests.framework */; };
 		39AB45F55599F62A12939F29 /* Pods_JobsSwiftBaseConfigDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE98D9D036CE4AAA3EA72C02 /* Pods_JobsSwiftBaseConfigDemoTests.framework */; };
 		51D5A6F95393861C97CA7D45 /* Pods_JobsSwiftBaseConfigDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3933E8883C7E8B6A888BA7 /* Pods_JobsSwiftBaseConfigDemo.framework */; };
@@ -231,6 +257,27 @@
 		04468F8F2E9E4D7000677000 /* PermissionCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionCenter.swift; sourceTree = "<group>"; };
 		04468F912E9E5A5700677000 /* MediaPickerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPickerService.swift; sourceTree = "<group>"; };
 		0448B1832EA3707700CFC755 /* Demo@生成二维码和条形码.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@生成二维码和条形码.swift"; sourceTree = "<group>"; };
+		0453763A2EB0B41F00133F73 /* 非iph_X.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "非iph_X.mp4"; sourceTree = "<group>"; };
+		0453763B2EB0B41F00133F73 /* iph_X.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = iph_X.mp4; sourceTree = "<group>"; };
+		0453763C2EB0B41F00133F73 /* welcome_video.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = welcome_video.mp4; sourceTree = "<group>"; };
+		045376412EB0B43F00133F73 /* IncomeSource.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = IncomeSource.json; sourceTree = "<group>"; };
+		045376422EB0B43F00133F73 /* OccupationList.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = OccupationList.json; sourceTree = "<group>"; };
+		045376432EB0B43F00133F73 /* Philippines.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Philippines.json; sourceTree = "<group>"; };
+		045376442EB0B43F00133F73 /* UserData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = UserData.json; sourceTree = "<group>"; };
+		045376452EB0B43F00133F73 /* CityList.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CityList.json; sourceTree = "<group>"; };
+		045376462EB0B43F00133F73 /* CommentData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CommentData.json; sourceTree = "<group>"; };
+		045376472EB0B43F00133F73 /* Countries.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Countries.json; sourceTree = "<group>"; };
+		045376482EB0B43F00133F73 /* data.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = data.json; sourceTree = "<group>"; };
+		045376492EB0B43F00133F73 /* CountryList.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CountryList.json; sourceTree = "<group>"; };
+		0453764A2EB0B43F00133F73 /* 假数据.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "假数据.json"; sourceTree = "<group>"; };
+		0453764B2EB0B43F00133F73 /* IdTypeList.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = IdTypeList.json; sourceTree = "<group>"; };
+		0453765A2EB0B57800133F73 /* Demo@BMPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@BMPlayer.swift"; sourceTree = "<group>"; };
+		0453765E2EB0B5A100133F73 /* PlayerLocalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerLocalVC.swift; sourceTree = "<group>"; };
+		045376602EB0B5B000133F73 /* PlayerRemoteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerRemoteVC.swift; sourceTree = "<group>"; };
+		045376622EB0B5BE00133F73 /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
+		045376642EB0B5D500133F73 /* FeedVideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedVideoCell.swift; sourceTree = "<group>"; };
+		045376662EB0B5E100133F73 /* PlayerCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCenter.swift; sourceTree = "<group>"; };
+		045376682EB0B5ED00133F73 /* DouyinFeedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DouyinFeedVC.swift; sourceTree = "<group>"; };
 		045920E32E84EC72008C8D6A /* SwiftTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTools.swift; sourceTree = "<group>"; };
 		045920E52E84F386008C8D6A /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
 		045920E92E84FD77008C8D6A /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -258,7 +305,7 @@
 		046CF9762E967E6B005A88B4 /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		0477D96C2E8B83CA002C6427 /* JobsSafeTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsSafeTransitions.swift; sourceTree = "<group>"; };
 		0477D96E2E8B8478002C6427 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
-		0477D9702E8B896A002C6427 /* Demo@安全Push.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@安全Push.swift"; sourceTree = "<group>"; };
+		0477D9702E8B896A002C6427 /* Demo@支持上下左右安全Push和原路返回.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@支持上下左右安全Push和原路返回.swift"; sourceTree = "<group>"; };
 		0477D9742E8B9141002C6427 /* Demo@安全Present.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@安全Present.swift"; sourceTree = "<group>"; };
 		0477D9762E8B937A002C6427 /* UIResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIResponder.swift; sourceTree = "<group>"; };
 		0477D9782E8BADB1002C6427 /* Demo@被Push或者Present的次级页面.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@被Push或者Present的次级页面.swift"; sourceTree = "<group>"; };
@@ -322,6 +369,11 @@
 		04E8D6182E8E6EBF00E85CDA /* UIToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIToolbar.swift; sourceTree = "<group>"; };
 		04E8D61A2E8E837C00E85CDA /* NSMutableAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedString.swift; sourceTree = "<group>"; };
 		04E8D6222E8E883F00E85CDA /* BaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
+		04FC77842EB0BDF000B810BA /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		04FC77862EB0BE0B00B810BA /* FeedListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedListCell.swift; sourceTree = "<group>"; };
+		04FC77882EB0BE1D00B810BA /* FeedListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedListVC.swift; sourceTree = "<group>"; };
+		04FC778A2EB0BE2F00B810BA /* PlayerDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDetailVC.swift; sourceTree = "<group>"; };
+		04FC778F2EB0C88A00B810BA /* BMPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMPlayer.swift; sourceTree = "<group>"; };
 		1D3933E8883C7E8B6A888BA7 /* Pods_JobsSwiftBaseConfigDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JobsSwiftBaseConfigDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43AC2F32E62C31BD8D0F4D55 /* Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemoTests/Pods-JobsSwiftBaseConfigDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		498373BA0509D1FCFC7035BF /* Pods-JobsSwiftBaseConfigDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemo.release.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemo/Pods-JobsSwiftBaseConfigDemo.release.xcconfig"; sourceTree = "<group>"; };
@@ -438,6 +490,44 @@
 				04124F3B2EB075D100462BE2 /* Demo@Alamofire.swift */,
 			);
 			path = "Demo@Alamofire";
+			sourceTree = "<group>";
+		};
+		045376392EB0B3FE00133F73 /* 视频 */ = {
+			isa = PBXGroup;
+			children = (
+				0453763A2EB0B41F00133F73 /* 非iph_X.mp4 */,
+				0453763B2EB0B41F00133F73 /* iph_X.mp4 */,
+				0453763C2EB0B41F00133F73 /* welcome_video.mp4 */,
+			);
+			path = "视频";
+			sourceTree = "<group>";
+		};
+		045376402EB0B43900133F73 /* Json文件 */ = {
+			isa = PBXGroup;
+			children = (
+				045376412EB0B43F00133F73 /* IncomeSource.json */,
+				045376422EB0B43F00133F73 /* OccupationList.json */,
+				045376432EB0B43F00133F73 /* Philippines.json */,
+				045376442EB0B43F00133F73 /* UserData.json */,
+				045376452EB0B43F00133F73 /* CityList.json */,
+				045376462EB0B43F00133F73 /* CommentData.json */,
+				045376472EB0B43F00133F73 /* Countries.json */,
+				045376482EB0B43F00133F73 /* data.json */,
+				045376492EB0B43F00133F73 /* CountryList.json */,
+				0453764A2EB0B43F00133F73 /* 假数据.json */,
+				0453764B2EB0B43F00133F73 /* IdTypeList.json */,
+			);
+			path = "Json文件";
+			sourceTree = "<group>";
+		};
+		045376572EB0B56500133F73 /* Demo@BMPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				04FC778E2EB0C21600B810BA /* Model */,
+				04FC778D2EB0C1FD00B810BA /* View */,
+				04FC778C2EB0C1EB00B810BA /* VC */,
+			);
+			path = "Demo@BMPlayer";
 			sourceTree = "<group>";
 		};
 		045920E22E84EC64008C8D6A /* SwiftTools */ = {
@@ -575,6 +665,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				045376572EB0B56500133F73 /* Demo@BMPlayer */,
 				04124F3A2EB075C500462BE2 /* Demo@Alamofire */,
 				04124F2B2EB0621D00462BE2 /* Demo@Moya */,
 				04BCDC2B2EA9DB7D00382DE0 /* Demo@JobsText.swift */,
@@ -599,7 +690,7 @@
 				0477D9862E8BEF62002C6427 /* Demo@键盘.swift */,
 				0477D97E2E8BDBB7002C6427 /* Demo@倒计时.swift */,
 				0477D9742E8B9141002C6427 /* Demo@安全Present.swift */,
-				0477D9702E8B896A002C6427 /* Demo@安全Push.swift */,
+				0477D9702E8B896A002C6427 /* Demo@支持上下左右安全Push和原路返回.swift */,
 				04A8C54B2E8AA94B00381701 /* Demo@按钮.swift */,
 				04CF03162E8A76490083ACF0 /* Demo@富文本.swift */,
 				04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */,
@@ -622,6 +713,7 @@
 		04D0C97F2E8D19DE00580020 /* 3rd */ = {
 			isa = PBXGroup;
 			children = (
+				04FC778F2EB0C88A00B810BA /* BMPlayer.swift */,
 				0477D9842E8BEACA002C6427 /* Reactive.swift */,
 				04D0C97C2E8D19AB00580020 /* MJRefresh */,
 			);
@@ -714,6 +806,38 @@
 			path = UIViewController;
 			sourceTree = "<group>";
 		};
+		04FC778C2EB0C1EB00B810BA /* VC */ = {
+			isa = PBXGroup;
+			children = (
+				04FC778A2EB0BE2F00B810BA /* PlayerDetailVC.swift */,
+				04FC77882EB0BE1D00B810BA /* FeedListVC.swift */,
+				045376682EB0B5ED00133F73 /* DouyinFeedVC.swift */,
+				045376602EB0B5B000133F73 /* PlayerRemoteVC.swift */,
+				0453765E2EB0B5A100133F73 /* PlayerLocalVC.swift */,
+				0453765A2EB0B57800133F73 /* Demo@BMPlayer.swift */,
+			);
+			path = VC;
+			sourceTree = "<group>";
+		};
+		04FC778D2EB0C1FD00B810BA /* View */ = {
+			isa = PBXGroup;
+			children = (
+				04FC77862EB0BE0B00B810BA /* FeedListCell.swift */,
+				045376642EB0B5D500133F73 /* FeedVideoCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		04FC778E2EB0C21600B810BA /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				04FC77842EB0BDF000B810BA /* ImageLoader.swift */,
+				045376662EB0B5E100133F73 /* PlayerCenter.swift */,
+				045376622EB0B5BE00133F73 /* FeedModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		B8CEBE2669D72254F6970521 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -753,13 +877,13 @@
 		C564FBDD2E09580B0079B5C1 /* JobsSwiftBaseConfigDemo */ = {
 			isa = PBXGroup;
 			children = (
+				C564FC372E0959120079B5C1 /* Resources */,
 				0459210F2E85572C008C8D6A /* Inheritance */,
 				045920EF2E854C8E008C8D6A /* Extensions */,
 				045920E22E84EC64008C8D6A /* SwiftTools */,
 				C564FEEC2E0AAC900079B5C1 /* SwiftDefines */,
 				C564FEEB2E0AAC5A0079B5C1 /* 主业务流程 */,
 				C564FEE92E0AABE80079B5C1 /* UIBaseModel */,
-				C564FC372E0959120079B5C1 /* Resources */,
 				C564FC282E0958C40079B5C1 /* AppDelegate & SceneDelegate */,
 				C564FBEF2E09580D0079B5C1 /* Info.plist */,
 			);
@@ -805,6 +929,8 @@
 		C564FC372E0959120079B5C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				045376402EB0B43900133F73 /* Json文件 */,
+				045376392EB0B3FE00133F73 /* 视频 */,
 				0482A5EC2EA39DF8004176A4 /* 网页 */,
 				04DBEE092EA1E2F9000E52D3 /* 声音 */,
 				045921182E855875008C8D6A /* 字体 */,
@@ -993,10 +1119,24 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0453763D2EB0B41F00133F73 /* 非iph_X.mp4 in Resources */,
+				0453763E2EB0B41F00133F73 /* iph_X.mp4 in Resources */,
+				0453763F2EB0B41F00133F73 /* welcome_video.mp4 in Resources */,
 				0459211D2E85588C008C8D6A /* DINCond-Bold Regular.otf in Resources */,
 				0459211E2E85588C008C8D6A /* DS-DIGIB.ttf in Resources */,
 				0459211F2E85588C008C8D6A /* fonteditor.ttf in Resources */,
 				045921202E85588C008C8D6A /* DIN-Black-2.otf in Resources */,
+				0453764C2EB0B43F00133F73 /* IncomeSource.json in Resources */,
+				0453764D2EB0B43F00133F73 /* UserData.json in Resources */,
+				0453764E2EB0B43F00133F73 /* OccupationList.json in Resources */,
+				0453764F2EB0B43F00133F73 /* CommentData.json in Resources */,
+				045376502EB0B43F00133F73 /* Countries.json in Resources */,
+				045376512EB0B43F00133F73 /* CityList.json in Resources */,
+				045376522EB0B43F00133F73 /* data.json in Resources */,
+				045376532EB0B43F00133F73 /* CountryList.json in Resources */,
+				045376542EB0B43F00133F73 /* 假数据.json in Resources */,
+				045376552EB0B43F00133F73 /* Philippines.json in Resources */,
+				045376562EB0B43F00133F73 /* IdTypeList.json in Resources */,
 				0482A5F22EA3A3A2004176A4 /* BaseWebViewDemo.html in Resources */,
 				C564FBEE2E09580D0079B5C1 /* LaunchScreen.storyboard in Resources */,
 				C564FBEB2E09580D0079B5C1 /* Assets.xcassets in Resources */,
@@ -1157,6 +1297,7 @@
 				049A65712EA0E6BB0006B185 /* JobsTabBarCtrl.swift in Sources */,
 				0482A5E82EA380EB004176A4 /* BaseWebView.swift in Sources */,
 				04BCDC302EA9E86600382DE0 /* UICollectionViewCell.swift in Sources */,
+				04FC778B2EB0BE2F00B810BA /* PlayerDetailVC.swift in Sources */,
 				04E8D5B92E8E550200E85CDA /* BaseStructDefs.swift in Sources */,
 				0487AADA2E840CB200B5D307 /* UIColor.swift in Sources */,
 				04E8D6232E8E884500E85CDA /* BaseVC.swift in Sources */,
@@ -1180,6 +1321,7 @@
 				04AD62912E91230000E18984 /* Demo@时间.swift in Sources */,
 				C564FC862E0959640079B5C1 /* WKWebView.swift in Sources */,
 				0448B1842EA3707E00CFC755 /* Demo@生成二维码和条形码.swift in Sources */,
+				045376632EB0B5BF00133F73 /* FeedModel.swift in Sources */,
 				0477D97D2E8BDB95002C6427 /* JobsCountdownButton.swift in Sources */,
 				04AC74C52E86682E004B8305 /* Notification.swift in Sources */,
 				04D0C9722E8CD39300580020 /* Demo@控制层回调.swift in Sources */,
@@ -1193,6 +1335,7 @@
 				0482A5EA2EA383B2004176A4 /* Demo@网页加载互动.swift in Sources */,
 				04E8D5BB2E8E5AD000E85CDA /* Demo@中国大陆居民身份证验证.swift in Sources */,
 				C564FC892E0959640079B5C1 /* UICollectionView.swift in Sources */,
+				045376652EB0B5D600133F73 /* FeedVideoCell.swift in Sources */,
 				C564FCB32E0959990079B5C1 /* CustomCell.swift in Sources */,
 				045920FA2E854FA5008C8D6A /* Int64.swift in Sources */,
 				04E8D61B2E8E837D00E85CDA /* NSMutableAttributedString.swift in Sources */,
@@ -1204,15 +1347,20 @@
 				C564FC9E2E0959640079B5C1 /* UINavigationController.swift in Sources */,
 				0401DD062E9115CE00D572AD /* JobsToast.swift in Sources */,
 				0477D9792E8BADB2002C6427 /* Demo@被Push或者Present的次级页面.swift in Sources */,
+				0453765F2EB0B5A200133F73 /* PlayerLocalVC.swift in Sources */,
 				C564FCA52E0959640079B5C1 /* UIPickerView.swift in Sources */,
 				C564FC882E0959640079B5C1 /* UISlider.swift in Sources */,
 				C564FC912E0959640079B5C1 /* UIScrollView.swift in Sources */,
 				049A656D2EA0CB7F0006B185 /* Demo@解码.swift in Sources */,
 				C564FC8F2E0959640079B5C1 /* UIProgressView.swift in Sources */,
 				0482A67C2EA7883F004176A4 /* Dictionary.swift in Sources */,
+				045376692EB0B5EE00133F73 /* DouyinFeedVC.swift in Sources */,
 				0401DCFE2E91069F00D572AD /* DateFormatter.swift in Sources */,
 				C564FC9F2E0959640079B5C1 /* UISearchBar.swift in Sources */,
+				04FC77852EB0BDF100B810BA /* ImageLoader.swift in Sources */,
+				0453765B2EB0B57B00133F73 /* Demo@BMPlayer.swift in Sources */,
 				0401DCFC2E9102BC00D572AD /* UserDefaults.swift in Sources */,
+				04FC77892EB0BE1E00B810BA /* FeedListVC.swift in Sources */,
 				0459210A2E854FFB008C8D6A /* Float16.swift in Sources */,
 				048314002E9A08510009A44B /* Demo@跑马灯轮播图.swift in Sources */,
 				0477D9872E8BEF64002C6427 /* Demo@键盘.swift in Sources */,
@@ -1226,12 +1374,14 @@
 				045921122E855769008C8D6A /* JobsPaddedLabel.swift in Sources */,
 				04BCDC322EA9EAB000382DE0 /* UICollectionViewFlowLayout.swift in Sources */,
 				0459210C2E855004008C8D6A /* Float80.swift in Sources */,
+				045376672EB0B5E100133F73 /* PlayerCenter.swift in Sources */,
 				04D0C96E2E8CD14B00580020 /* UIControl.swift in Sources */,
 				04BCDC2C2EA9DB7E00382DE0 /* Demo@JobsText.swift in Sources */,
-				0477D9712E8B897D002C6427 /* Demo@安全Push.swift in Sources */,
+				0477D9712E8B897D002C6427 /* Demo@支持上下左右安全Push和原路返回.swift in Sources */,
 				C564FCAC2E09597C0079B5C1 /* ViewController.swift in Sources */,
 				04BD5B3F2EA8E5070056DA62 /* Demo@UICollectionView.swift in Sources */,
 				C564FC962E0959640079B5C1 /* Inlines.swift in Sources */,
+				045376612EB0B5B100133F73 /* PlayerRemoteVC.swift in Sources */,
 				04468F902E9E4D7000677000 /* PermissionCenter.swift in Sources */,
 				042B67CE2E95085A000A2970 /* NSTextAttachment.swift in Sources */,
 				045920EE2E854BE7008C8D6A /* Double.swift in Sources */,
@@ -1266,6 +1416,8 @@
 				04124F422EB0762900462BE2 /* AFStubURLProtocol.swift in Sources */,
 				04C2F0312E98C9D000BA05A9 /* Demo@设计模式MVVM.swift in Sources */,
 				043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */,
+				04FC77902EB0C89100B810BA /* BMPlayer.swift in Sources */,
+				04FC77872EB0BE0C00B810BA /* FeedListCell.swift in Sources */,
 				0401DD082E91183000D572AD /* Demo@弹出提示.swift in Sources */,
 				04CF03192E8A80CE0083ACF0 /* AppTools.swift in Sources */,
 				04D0C9822E8D1CF400580020 /* Optional.swift in Sources */,

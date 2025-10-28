@@ -62,7 +62,7 @@ def swiftAppCommon
   pod 'GKNavigationBarSwift'               # https://github.com/QuintGao/GKNavigationBarSwift  ❤️
   pod 'ReactiveSwift'                      # https://github.com/ReactiveCocoa/ReactiveSwift    ❤️ 新版本支持 arm64 模拟器
   pod 'lottie-ios'                         # https://github.com/airbnb/lottie-ios              ❤️ lottie动画框架
-  pod 'SnapKit',                           # https://github.com/SnapKit/SnapKit                ❤️ Swift平台上的Masonry平替@新版本支持arm64模拟器
+  pod 'SnapKit'                            # https://github.com/SnapKit/SnapKit                ❤️ Swift平台上的Masonry平替@新版本支持arm64模拟器
   pod 'JXSegmentedView'                    # https://github.com/pujiaxin33/JXSegmentedView     ❤️ 切换子控制的一个框架
   pod 'KakaJSON'                           # https://github.com/kakaopensource/KakaJSON        ❤️
   pod 'RxSwift'                            # https://github.com/ReactiveX/RxSwift              ❤️ 核心
@@ -71,6 +71,8 @@ def swiftAppCommon
   pod 'NSObject+Rx'                        # https://github.com/RxSwiftCommunity/NSObject-Rx   ❤️
   pod 'ESPullToRefresh'                    # https://github.com/eggswift/pull-to-refresh       ❤️ Swift平台上的MJRefresh平替
   pod 'JXBanner'                           # https://github.com/Coder-TanJX/JXBanner           ❤️ Swift平台上的轮播图
+  pod 'BMPlayer'                           # https://github.com/BrikerMan/BMPlayer             ❤️ Swift平台上播放器@参照ZFPlayer
+
 end
 
 # 调试框架
@@ -81,7 +83,7 @@ def debugPods
 # pod 'FLEX'
 # pod 'JJException'
 # pod 'FBRetainCycleDetector'
- pod 'LookinServer', :subspecs => ['Swift'], :configurations => ['Debug']                      ❤️
+ pod 'LookinServer', :subspecs => ['Swift'], :configurations => ['Debug']
 end
 
 # 基础的公共配置
