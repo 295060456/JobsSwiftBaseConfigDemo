@@ -3,7 +3,7 @@
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
 # iOS 最低系统版本
-platform :ios, '13.0'
+platform :ios, '15.0'
 
 # CocoaPods 源
 source 'https://cdn.cocoapods.org/'

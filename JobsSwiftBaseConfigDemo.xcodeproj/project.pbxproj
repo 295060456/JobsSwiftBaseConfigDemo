@@ -14,6 +14,8 @@
 		0401DD002E910B3500D572AD /* BaseLet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DCFF2E910B3200D572AD /* BaseLet.swift */; };
 		0401DD062E9115CE00D572AD /* JobsToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DD052E9115CD00D572AD /* JobsToast.swift */; };
 		0401DD082E91183000D572AD /* Demo@弹出提示.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DD072E91182900D572AD /* Demo@弹出提示.swift */; };
+		040B31122EB2294100862F75 /* ColorAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0442717A2E8139CF0084B25C /* ColorAssets.xcassets */; };
+		040B31132EB2294500862F75 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C564FBEA2E09580D0079B5C1 /* Assets.xcassets */; };
 		04124F2A2EB05E9000462BE2 /* Demo@Moya.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F292EB05E8A00462BE2 /* Demo@Moya.swift */; };
 		04124F2D2EB0622E00462BE2 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F2C2EB0622D00462BE2 /* Models.swift */; };
 		04124F2F2EB0623900462BE2 /* DemoAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F2E2EB0623900462BE2 /* DemoAPI.swift */; };
@@ -31,7 +33,6 @@
 		043838A02EAA21AA007BA552 /* JobsRefresher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0438389F2EAA21A9007BA552 /* JobsRefresher.swift */; };
 		043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043838A12EAA4BB3007BA552 /* BaseWebVC.swift */; };
 		043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */; };
-		0442717B2E8139CF0084B25C /* ColorAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0442717A2E8139CF0084B25C /* ColorAssets.xcassets */; };
 		044272852E8146130084B25C /* JXScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044272842E8146130084B25C /* JXScale.swift */; };
 		04468E102E9CB43E00677000 /* UIAlertAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04468E0F2E9CB43D00677000 /* UIAlertAction.swift */; };
 		04468F8C2E9CFD7700677000 /* Demo@系统弹出框.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04468F8B2E9CFD6800677000 /* Demo@系统弹出框.swift */; };
@@ -158,7 +159,6 @@
 		51D5A6F95393861C97CA7D45 /* Pods_JobsSwiftBaseConfigDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3933E8883C7E8B6A888BA7 /* Pods_JobsSwiftBaseConfigDemo.framework */; };
 		C564FBE62E09580B0079B5C1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C564FBE42E09580B0079B5C1 /* Main.storyboard */; };
 		C564FBE92E09580B0079B5C1 /* JobsSwiftBaseConfigDemo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C564FBE72E09580B0079B5C1 /* JobsSwiftBaseConfigDemo.xcdatamodeld */; };
-		C564FBEB2E09580D0079B5C1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C564FBEA2E09580D0079B5C1 /* Assets.xcassets */; };
 		C564FBEE2E09580D0079B5C1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C564FBEC2E09580D0079B5C1 /* LaunchScreen.storyboard */; };
 		C564FBF92E09580D0079B5C1 /* JobsSwiftBaseConfigDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FBF82E09580D0079B5C1 /* JobsSwiftBaseConfigDemoTests.swift */; };
 		C564FC032E09580E0079B5C1 /* JobsSwiftBaseConfigDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC022E09580E0079B5C1 /* JobsSwiftBaseConfigDemoUITests.swift */; };
@@ -336,6 +336,7 @@
 		04AC74C42E86682D004B8305 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		04AD628E2E9120C000E18984 /* JobsTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsTimer.swift; sourceTree = "<group>"; };
 		04AD62902E9122FC00E18984 /* Demo@时间.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@时间.swift"; sourceTree = "<group>"; };
+		04B00E472EB21F0800901B1C /* Demo@LiveChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@LiveChat.swift"; sourceTree = "<group>"; };
 		04BCDC292EA9DB0B00382DE0 /* JobsText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsText.swift; sourceTree = "<group>"; };
 		04BCDC2B2EA9DB7D00382DE0 /* Demo@JobsText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@JobsText.swift"; sourceTree = "<group>"; };
 		04BCDC2D2EA9E85600382DE0 /* UITextViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextViewCell.swift; sourceTree = "<group>"; };
@@ -658,6 +659,7 @@
 				045376572EB0B56500133F73 /* Demo@BMPlayer */,
 				04124F3A2EB075C500462BE2 /* Demo@Alamofire */,
 				04124F2B2EB0621D00462BE2 /* Demo@Moya */,
+				04B00E472EB21F0800901B1C /* Demo@LiveChat.swift */,
 				04BCDC2B2EA9DB7D00382DE0 /* Demo@JobsText.swift */,
 				04BD5B402EA8E5170056DA62 /* Demo@UITableView.swift */,
 				04BD5B3E2EA8E5030056DA62 /* Demo@UICollectionView.swift */,
@@ -1102,6 +1104,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0453763D2EB0B41F00133F73 /* 非iph_X.mp4 in Resources */,
+				040B31122EB2294100862F75 /* ColorAssets.xcassets in Resources */,
 				0453763E2EB0B41F00133F73 /* iph_X.mp4 in Resources */,
 				0453763F2EB0B41F00133F73 /* welcome_video.mp4 in Resources */,
 				0459211D2E85588C008C8D6A /* DINCond-Bold Regular.otf in Resources */,
@@ -1121,9 +1124,8 @@
 				045376562EB0B43F00133F73 /* IdTypeList.json in Resources */,
 				0482A5F22EA3A3A2004176A4 /* BaseWebViewDemo.html in Resources */,
 				C564FBEE2E09580D0079B5C1 /* LaunchScreen.storyboard in Resources */,
-				C564FBEB2E09580D0079B5C1 /* Assets.xcassets in Resources */,
-				0442717B2E8139CF0084B25C /* ColorAssets.xcassets in Resources */,
 				C564FBE62E09580B0079B5C1 /* Main.storyboard in Resources */,
+				040B31132EB2294500862F75 /* Assets.xcassets in Resources */,
 				04DBEE0B2EA1E305000E52D3 /* Sound.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1557,7 +1559,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = V45NP54BJP;
+				DEVELOPMENT_TEAM = 8LVJBHA68K;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = JobsSwiftBaseConfigDemo/Info.plist;
@@ -1589,7 +1591,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = V45NP54BJP;
+				DEVELOPMENT_TEAM = 8LVJBHA68K;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = JobsSwiftBaseConfigDemo/Info.plist;

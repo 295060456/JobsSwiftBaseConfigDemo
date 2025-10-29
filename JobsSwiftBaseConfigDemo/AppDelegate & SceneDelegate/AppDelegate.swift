@@ -7,6 +7,7 @@
 
 import UIKit
 import GKNavigationBarSwift
+import LiveChat
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -48,6 +49,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         JobsLog.enabled = false    // Release 关闭日志
         #endif
         JobsLog.showThread = true
+
+        // 你的 LiveChat 许可证 ID（到 LiveChat 后台可查看）
+        LiveChat.licenseId = "YOUR_LICENSE_ID"      // 必填
+        // 可选：减少预聊天表单输入
+        LiveChat.name  = "Jobs"
+        LiveChat.email = "jobs@example.com"
+        // 可选：把用户归到指定客服分组（注意：groupId 必须有效，否则可能加载不出来）
+        LiveChat.groupId = "77"
+        // 可选：自定义变量（用于上下文）
+        LiveChat.setVariable(withKey: "userId", value: "123456")
 
         return true
     }
