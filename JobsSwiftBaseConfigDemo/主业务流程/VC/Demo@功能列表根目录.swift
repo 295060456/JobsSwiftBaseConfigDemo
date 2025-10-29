@@ -32,6 +32,8 @@ final class RootListVC: BaseVC {
         ("⛑️ 支持上下左右安全Push和原路返回", SafetyPushDemoVC.self),
         ("⛑️ 安全Present", SafetyPresentDemoVC.self),
         ("📹 播放器@BMPlayer", DemoMenuVC.self),
+        ("❄️ 雪花算法", SnowDemoVC.self),
+        ("❄️ LiveChat", LiveChatDemoVC.self),
         ("🗄️ UITableView", EmptyTableViewDemoVC.self),
         ("🗄️ UICollectionView", EmptyCollectionViewDemoVC.self),
         ("🐎 跑马灯/🛞 轮播图", JobsMarqueeDemoVC.self),

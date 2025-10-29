@@ -33,6 +33,9 @@
 		043838A02EAA21AA007BA552 /* JobsRefresher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0438389F2EAA21A9007BA552 /* JobsRefresher.swift */; };
 		043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043838A12EAA4BB3007BA552 /* BaseWebVC.swift */; };
 		043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */; };
+		0440B5572EB2370E005DBE91 /* SnowflakeSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */; };
+		0440B5592EB237BE005DBE91 /* Demo@Snow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0440B5582EB237B3005DBE91 /* Demo@Snow.swift */; };
+		0440B55A2EB23846005DBE91 /* Demo@LiveChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B00E472EB21F0800901B1C /* Demo@LiveChat.swift */; };
 		044272852E8146130084B25C /* JXScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044272842E8146130084B25C /* JXScale.swift */; };
 		04468E102E9CB43E00677000 /* UIAlertAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04468E0F2E9CB43D00677000 /* UIAlertAction.swift */; };
 		04468F8C2E9CFD7700677000 /* Demo@系统弹出框.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04468F8B2E9CFD6800677000 /* Demo@系统弹出框.swift */; };
@@ -247,6 +250,8 @@
 		0438389F2EAA21A9007BA552 /* JobsRefresher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsRefresher.swift; sourceTree = "<group>"; };
 		043838A12EAA4BB3007BA552 /* BaseWebVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWebVC.swift; sourceTree = "<group>"; };
 		043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProtocolDefs.swift; sourceTree = "<group>"; };
+		0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnowflakeSwift.swift; sourceTree = "<group>"; };
+		0440B5582EB237B3005DBE91 /* Demo@Snow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@Snow.swift"; sourceTree = "<group>"; };
 		0442717A2E8139CF0084B25C /* ColorAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ColorAssets.xcassets; sourceTree = "<group>"; };
 		044272842E8146130084B25C /* JXScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXScale.swift; sourceTree = "<group>"; };
 		04468E0F2E9CB43D00677000 /* UIAlertAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertAction.swift; sourceTree = "<group>"; };
@@ -541,6 +546,7 @@
 				04CF03142E8A75E70083ACF0 /* JobsRichText.swift */,
 				04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */,
 				045920E32E84EC72008C8D6A /* SwiftTools.swift */,
+				0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */,
 			);
 			path = SwiftTools;
 			sourceTree = "<group>";
@@ -660,6 +666,7 @@
 				04124F3A2EB075C500462BE2 /* Demo@Alamofire */,
 				04124F2B2EB0621D00462BE2 /* Demo@Moya */,
 				04B00E472EB21F0800901B1C /* Demo@LiveChat.swift */,
+				0440B5582EB237B3005DBE91 /* Demo@Snow.swift */,
 				04BCDC2B2EA9DB7D00382DE0 /* Demo@JobsText.swift */,
 				04BD5B402EA8E5170056DA62 /* Demo@UITableView.swift */,
 				04BD5B3E2EA8E5030056DA62 /* Demo@UICollectionView.swift */,
@@ -1259,6 +1266,7 @@
 				04D0C97E2E8D19AB00580020 /* MJRefreshNormalHeader.swift in Sources */,
 				04E8D6172E8E6E7F00E85CDA /* UIBarButtonItemAppearance.swift in Sources */,
 				04AD62912E91230000E18984 /* Demo@时间.swift in Sources */,
+				0440B5572EB2370E005DBE91 /* SnowflakeSwift.swift in Sources */,
 				C564FC862E0959640079B5C1 /* WKWebView.swift in Sources */,
 				0448B1842EA3707E00CFC755 /* Demo@生成二维码和条形码.swift in Sources */,
 				045376632EB0B5BF00133F73 /* FeedModel.swift in Sources */,
@@ -1278,6 +1286,7 @@
 				045376652EB0B5D600133F73 /* FeedVideoCell.swift in Sources */,
 				C564FCB32E0959990079B5C1 /* CustomCell.swift in Sources */,
 				045920FA2E854FA5008C8D6A /* Int64.swift in Sources */,
+				0440B5592EB237BE005DBE91 /* Demo@Snow.swift in Sources */,
 				04E8D61B2E8E837D00E85CDA /* NSMutableAttributedString.swift in Sources */,
 				0482A5FC2EA63527004176A4 /* WKUserContentController.swift in Sources */,
 				041F5B012E87B51800984EEB /* Demo@输入框.swift in Sources */,
@@ -1354,6 +1363,7 @@
 				043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */,
 				04124F392EB067F000462BE2 /* APIService.swift in Sources */,
 				04124F422EB0762900462BE2 /* AFStubURLProtocol.swift in Sources */,
+				0440B55A2EB23846005DBE91 /* Demo@LiveChat.swift in Sources */,
 				04C2F0312E98C9D000BA05A9 /* Demo@设计模式MVVM.swift in Sources */,
 				043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */,
 				04FC77902EB0C89100B810BA /* BMPlayer.swift in Sources */,

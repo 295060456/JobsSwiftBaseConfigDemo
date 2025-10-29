@@ -9,10 +9,10 @@ import UIKit
 import SnapKit
 import LiveChat
 
-final class LiveChatDemoVC: UIViewController, LiveChatDelegate {
+final class LiveChatDemoVC: BaseVC, LiveChatDelegate {
 
     private lazy var btnDefault: UIButton = { [unowned self] in
-        let b = UIButton.sys()
+        UIButton.sys()
             .byTitle("默认展示（presentChat）", for: .normal)
             .byTitleColor(.white, for: .normal)
             .byTitleFont(.systemFont(ofSize: 16, weight: .semibold))
@@ -21,27 +21,15 @@ final class LiveChatDemoVC: UIViewController, LiveChatDelegate {
             .onTap { [weak self] _ in
                 self?.onDefault()    // ✅ 保留你原有触发逻辑
             }
-            .byAddTo(self.view) { make in
-                make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(24)
-                make.left.right.equalToSuperview().inset(24)
-                make.height.equalTo(44)
+            .byAddTo(self.view) { [unowned self] make in
+                make.centerX.equalToSuperview()
+                make.centerY.equalToSuperview().offset(-20)
+                make.width.greaterThanOrEqualTo(260)
             }
-        // 可选：如果你已有 byConfiguration DSL，这里用系统样式做精细化
-        if #available(iOS 15.0, *) {
-            _ = b.byConfiguration { c in
-                // 这里不强依赖你是否有 “byFilled()” 之类方法，
-                // 只做通用属性设置，避免破坏现有实现
-                c.byTitle("默认展示（presentChat）")
-                 .byBaseForegroundColor(.white)
-                 .byContentInsets(.init(top: 12, leading: 16, bottom: 12, trailing: 16))
-                 .byCornerStyle(.large)
-            }
-        }
-        return b
     }()
 
     private lazy var btnCustom: UIButton = { [unowned self] in
-        let b = UIButton.sys()
+        UIButton.sys()
             .byTitle("自定义展示（半屏）", for: .normal)
             .byTitleColor(.label, for: .normal)
             .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
@@ -50,46 +38,21 @@ final class LiveChatDemoVC: UIViewController, LiveChatDelegate {
             .onTap { [weak self] _ in
                 self?.onCustom()     // ✅ 保留你原有触发逻辑
             }
-            .byAddTo(self.view) { make in
-                make.top.equalTo(self.btnDefault.snp.bottom).offset(12)
-                make.left.right.equalToSuperview().inset(24)
-                make.height.equalTo(44)
+            .byAddTo(self.view) {[unowned self] make in
+                make.centerX.equalToSuperview()
+                make.top.equalTo(btnDefault.snp.bottom).offset(16)
+                make.width.equalTo(btnDefault)
             }
-
-        // 可选：iOS 15+ 用你的 byConfiguration 进行细化
-        if #available(iOS 15.0, *) {
-            _ = b.byConfiguration { c in
-                c.byTitle("自定义展示（半屏）")
-                 .byBaseForegroundColor(.label)
-                 .byContentInsets(.init(top: 12, leading: 16, bottom: 12, trailing: 16))
-                 .byCornerStyle(.large)
-                 .byImagePlacement(.trailing)
-                 .byImagePadding(8)
-            }
-        }
-        return b
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         jobsSetupGKNav(title: "LiveChat Demo")
         view.backgroundColor = .systemBackground
+        btnDefault.byVisible(YES)
+        btnCustom.byVisible(YES)
 
-        view.addSubview(btnDefault)
-        view.addSubview(btnCustom)
-
-        btnDefault.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(-20)
-            make.width.greaterThanOrEqualTo(260)
-        }
-        btnCustom.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(btnDefault.snp.bottom).offset(16)
-            make.width.equalTo(btnDefault)
-        }
     }
-
     // MARK: - 默认方式（SDK 自带展示）
     @objc private func onDefault() {
         LiveChat.presentChat() // 一句到位
