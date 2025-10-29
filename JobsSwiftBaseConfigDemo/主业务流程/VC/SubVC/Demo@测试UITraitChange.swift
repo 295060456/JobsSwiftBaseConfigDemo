@@ -86,13 +86,20 @@ final class TraitChangeDemoVC: BaseVC {
     private var forceDark = false
     private var forceRTL  = false
     // MARK: - Tokens（可选：若需要在对象存活时手动停止监听）
+    // 跨版本安全的底层存储（不标 @available）
+    private var _traitTokensBox: Any?
     @available(iOS 17.0, *)
-    private var traitTokens: [UITraitChangeRegistration] = []
+    private var traitTokens: [UITraitChangeRegistration] {
+        get { (_traitTokensBox as? [UITraitChangeRegistration]) ?? [] }
+        set { _traitTokensBox = newValue }
+    }
 
     @available(iOS 17.0, *)
     @discardableResult
     private func store(_ reg: UITraitChangeRegistration) -> UITraitChangeRegistration {
-        traitTokens.append(reg)
+        var arr = traitTokens
+        arr.append(reg)
+        traitTokens = arr
         return reg
     }
     // MARK: - Lifecycle
