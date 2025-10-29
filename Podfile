@@ -1,135 +1,87 @@
-# Uncomment the next line to define a global platform for your project
-# ❤️TARGETS->Build Settings->ENABLE_USER_SCRIPT_SANDBOXING->NO❤️
-platform :ios, '13.0'   # ❤️ 顶层直接设 13.0，和 post_install 保持一致
+# ================================== Podfile ==================================
+# 统一统计开关：关掉 CocoaPods 统计上报
+ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
-## 通过 Bundler 运行 CocoaPods 命令
-## bundle exec pod update
-#begin
-#  require 'bundler/setup'
-#  Bundler.setup(:default)
-#  puts 'Bundler setup completed'
-#  require 'cocoapods-downloader'
-#  puts 'cocoapods-downloader plugin loaded'
-#rescue LoadError => e
-#  puts 'cocoapods-downloader plugin could not be loaded'
-#  puts e.message
-#end
-#puts 'Podfile is being loaded...'
-# 加速 CocoaPods 依赖下载的工具 https://github.com/CocoaPods/cocoapods-downloader
-# 使用前提：gem install cocoapods-downloader
-#plugin 'cocoapods-downloader', {
-#  'https://github.com/CocoaPods/Specs.git' => [
-#    'https://mirrors.aliyun.com/pods/specs.git',
-#    'https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git',
-#    'https://mirrors.cloud.tencent.com/CocoaPods/Specs.git',
-#    'https://mirrors.ustc.edu.cn/CocoaPods/Specs.git'
-#  ]
-#}
+# iOS 最低系统版本
+platform :ios, '13.0'
 
-#plugin 'cocoapods-repo-update'
+# CocoaPods 源
+source 'https://cdn.cocoapods.org/'
 
-## 指明依赖库的来源地址
-#source 'https://cdn.cocoapods.org/'
-#source 'https://github.com/CocoaPods/Specs.git'# 使用官方默认地址（默认）
-#source 'https://github.com/Artsy/Specs.git'# 使用其他来源地址
-
-# 需要特别说明的：在 post_install 时，为了一些版本的兼容，需要遍历所有 target，调整一部分库的版本；但是如果开启了 generate_multiple_pod_projects 的话，由于项目结构的变化，installer.pod_targets 就没办法获得所有 pods 引入的 target 了
-install! 'cocoapods',# install! 只走一次，多次使用只以最后一个标准执行
-  :deterministic_uuids => false,
-  # ❤️ 暂时关掉 generate_multiple_pod_projects，避免 SnapKit 等 Swift-only 库 slice 异常
-  # :generate_multiple_pod_projects => true,
-  :disable_input_output_paths => true
-
-inhibit_all_warnings!
-# 用于指定的 Pod 项目应使用静态库而不是动态库。
-# 这个选项主要用于解决某些与动态库相关的兼容性和性能问题。
+# 统一使用静态库，避免一堆动态库/符号冲突
 use_frameworks! :linkage => :static
 
-# 全局 modular headers（和 use_frameworks! 不能同时使用）
-#use_modular_headers!
+# 压制三方库的编译警告，自己仓库想要严格可以单独开
+inhibit_all_warnings!
 
-# 几乎每个App都会用到的
-def swiftAppCommon
-# OC
-  pod 'SDWebImage'                         # https://github.com/SDWebImage/SDWebImage          ❤️
-  pod 'MJRefresh'                          # https://github.com/CoderMJLee/MJRefresh           ❤️
-  pod 'IQKeyboardManager'                  # https://github.com/hackiftekhar/IQKeyboardManager ❤️
-  pod "HTMLReader"                         # https://github.com/nolanw/HTMLReader              ❤️
-# Swift
-  pod 'Alamofire', '~> 5.9'                # https://github.com/Alamofire/Alamofire            ❤️
-  pod 'Moya', :modular_headers => true     # https://github.com/Moya/Moya                      ❤️
-  pod 'Kingfisher'                         # https://github.com/onevcat/Kingfisher             ❤️ Swift平台上的SDWebImage平替
-  pod 'GKNavigationBarSwift'               # https://github.com/QuintGao/GKNavigationBarSwift  ❤️
-  pod 'ReactiveSwift'                      # https://github.com/ReactiveCocoa/ReactiveSwift    ❤️ 新版本支持 arm64 模拟器
-  pod 'lottie-ios'                         # https://github.com/airbnb/lottie-ios              ❤️ lottie动画框架
-  pod 'SnapKit'                            # https://github.com/SnapKit/SnapKit                ❤️ Swift平台上的Masonry平替@新版本支持arm64模拟器
-  pod 'JXSegmentedView'                    # https://github.com/pujiaxin33/JXSegmentedView     ❤️ 切换子控制的一个框架
-  pod 'KakaJSON'                           # https://github.com/kakaopensource/KakaJSON        ❤️
-  pod 'RxSwift'                            # https://github.com/ReactiveX/RxSwift              ❤️ 核心
-  pod 'RxCocoa'                            # https://github.com/ReactiveX/RxSwift              ❤️ UI 绑定：UIKit、AppKit 的扩展
-  pod 'RxRelay'                            # https://cocoapods.org/pods/RxRelay                ❤️ 安全替代 Variable，常用于 ViewModel
-  pod 'NSObject+Rx'                        # https://github.com/RxSwiftCommunity/NSObject-Rx   ❤️
-  pod 'ESPullToRefresh'                    # https://github.com/eggswift/pull-to-refresh       ❤️ Swift平台上的MJRefresh平替
-  pod 'JXBanner'                           # https://github.com/Coder-TanJX/JXBanner           ❤️ Swift平台上的轮播图
-  pod 'BMPlayer'                           # https://github.com/BrikerMan/BMPlayer             ❤️ Swift平台上播放器@参照ZFPlayer
-
-end
-
-# 调试框架
-def debugPods
-# pod 'Bugly'
-# pod 'DoraemonKit'
-# pod 'CocoaDebug'
-# pod 'FLEX'
-# pod 'JJException'
-# pod 'FBRetainCycleDetector'
- pod 'LookinServer', :subspecs => ['Swift'], :configurations => ['Debug']
-end
-
-# 基础的公共配置
+# ================================== 公共方法区域 ==================================
+# 预留一个钩子，给 Podfile.deps 里的 target 调用
+# 你之前在 Podfile.deps 里写了 cocoPodsConfig；即使它现在是空的，也先声明避免报错
 def cocoPodsConfig
-  target 'JobsSwiftBaseConfigDemoTests' do
-    inherit! :search_paths
-  end
-  target 'JobsSwiftBaseConfigDemoUITests' do
-    inherit! :search_paths
-  end
-
-  pre_install do |installer|
-    # 做一些安装之前的更改
-  end
-
-  post_install do |installer|
-    require 'open3'
-    is_apple_silicon = `uname -m`.strip == 'arm64'
-
-    installer.pods_project.targets.each do |target|
-      puts "!!!! #{target.name}"
-      target.build_configurations.each do |config|
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
-        config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
-        config.build_settings['CODE_SIGNING_REQUIRED'] = 'NO'
-        # ✅ 只有 Apple Silicon 模拟器下才排除 arm64
-        # ❗️改为：不排除（删除可能被其他地方写入的排除项），保证生成 arm64-apple-ios-simulator slice
-        if is_apple_silicon
-          config.build_settings.delete('EXCLUDED_ARCHS[sdk=iphonesimulator*]')  # ❤️ 关键修改
-        end
-      end
-    end
-
-    installer.pods_project.build_configurations.each do |config|
-      config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
-      # ❗️同理：不排除 arm64 模拟器
-      if is_apple_silicon
-        config.build_settings.delete('EXCLUDED_ARCHS[sdk=iphonesimulator*]')    # ❤️ 关键修改
-      end
-    end
-  end
+  # 你可以在这里面后续加：
+  # pod 'xxx'
+  # 或者自定义 script phases 等
 end
 
-# ❤️新工程需要修改这里❤️
-target 'JobsSwiftBaseConfigDemo' do
-  debugPods
-  swiftAppCommon
-  cocoPodsConfig
+# ================================== 加载拆分出来的依赖定义 ==================================
+# 这里我们固定认为你把大块内容（swiftAppCommon、debugPods、target ...）放在同目录下的 Podfile.deps
+deps_path = File.join(__dir__, 'Podfile.deps')
+
+unless File.exist?(deps_path)
+  raise "[Podfile] ❌ 找不到 #{deps_path}，请确认 Podfile.deps 存在于工程根目录"
+end
+
+# 把 Podfile.deps 里的内容直接在当前上下文执行
+# 这样里面的 def swiftAppCommon / def debugPods / target ... 都会生效
+instance_eval(File.read(deps_path), deps_path, 1)
+
+# ================================== post_install 钩子 ==================================
+post_install do |installer|
+  # -------- 1. 宿主 App 工程 build settings 统一修正 --------
+  # aggregate_targets = “宿主工程里每个使用 Pod 的 target 的聚合 target”
+  installer.aggregate_targets.each do |agg|
+    user_project = agg.user_project
+
+    user_project.native_targets.each do |t|
+      t.build_configurations.each do |config|
+        # 统一关闭 ENABLE_USER_SCRIPT_SANDBOXING
+        # 规避运行脚本阶段被沙箱拦截的问题
+        config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
+
+        # 强行统一最低系统版本，别让有的 target 自己掉到 12 / 11
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+      end
+    end
+
+    # 保存宿主工程 .xcodeproj
+    user_project.save
+  end
+
+  # -------- 2. Pods 工程也统一最低版本，避免第三方自己写了更低导致报 deprecated API / 编译警告 --------
+  pods_project = installer.pods_project
+  pods_project.targets.each do |t|
+    t.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+    end
+  end
+
+  # -------- 3. 把 Podfile.deps 显示到 Xcode 的 Pods 分组里，并强制识别成 Ruby --------
+  main_group   = pods_project.main_group
+  deps_relpath = '../Podfile.deps' # 这是相对 Pods.xcodeproj 的路径
+
+  # 3.1 新建或复用文件引用
+  file_ref = main_group.find_file_by_path(deps_relpath)
+  unless file_ref
+    file_ref = main_group.new_file(deps_relpath)
+  end
+
+  # 3.2 关键：告诉 Xcode 这个其实是 Ruby 脚本，不是普通 txt
+  # 这样它会走 Ruby 的语法高亮（关键字变红）
+  if file_ref.respond_to?(:explicit_file_type=)
+    file_ref.explicit_file_type = 'text.script.ruby'
+    # 等价 fileRef.setExplicitFileType_ 在旧 API，下同
+  end
+
+  # 3.3 保存 Pods 工程
+  pods_project.save
 end
