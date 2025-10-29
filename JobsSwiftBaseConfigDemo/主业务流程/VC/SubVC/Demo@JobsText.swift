@@ -21,7 +21,11 @@ final class JobsTextDemoVC: BaseVC {
                 onSourceChanged()
             }
             .byAddTo(view) {[unowned self] make in
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(12)
+                if view.jobs_hasVisibleTopBar() {
+                    make.top.equalTo(self.gk_navigationBar.snp.bottom).offset(10)
+                } else {
+                    make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(12)
+                }
                 make.left.right.equalToSuperview().inset(16)
                 make.height.equalTo(34)
             }
