@@ -71,10 +71,11 @@ final class FeedListCell: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        task?.cancel(); task = nil
-        cover.image = nil
-        nameLabel.text = nil
-        contentLabel.text = nil
+        task?.cancel();
+        task = nil
+        cover.byImage(nil)
+        nameLabel.byText(nil)
+        contentLabel.byText(nil)
     }
 
     func fill(_ item: FeedItem) {

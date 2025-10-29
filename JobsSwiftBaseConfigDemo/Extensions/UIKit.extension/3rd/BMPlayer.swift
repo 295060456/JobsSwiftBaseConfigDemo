@@ -161,24 +161,6 @@ public extension BMPlayer {
         return self
     }
 }
-
-// MARK: - 便捷构造（工厂/静态语义）
-public extension BMPlayer {
-    /// 直接创建并完成最常见的绑定：添加父视图、约束、资源、是否自动播
-    static func make(in container: UIView,
-                     constraints: (_ make: ConstraintMaker) -> Void,
-                     resource: BMPlayerResource,
-                     definitionIndex: Int = 0,
-                     autoPlay: Bool = BMPlayerConf.shouldAutoPlay,
-                     config: ((BMPlayer) -> Void)? = nil) -> BMPlayer {
-        let p = BMPlayer()
-            .byAddTo(container, make: constraints)
-            .byResource(resource, definitionIndex: definitionIndex, autoPlay: autoPlay)
-        config?(p)
-        return p
-    }
-}
-
 // MARK: - 语义糖（状态读取）
 public extension BMPlayer {
     /// 是否在播（对外镜像，避免直接读内部图层）
