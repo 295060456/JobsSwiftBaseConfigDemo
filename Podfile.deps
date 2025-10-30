@@ -23,7 +23,7 @@ def swiftAppCommon
   pod 'ESPullToRefresh'                    # https://github.com/eggswift/pull-to-refresh       ❤️ Swift 平台 MJRefresh 平替
   pod 'JXBanner'                           # https://github.com/Coder-TanJX/JXBanner           ❤️ 轮播图
   pod 'BMPlayer'                           # https://github.com/BrikerMan/BMPlayer             ❤️ 播放器（参照 ZFPlayer）
-  pod 'LiveChat'                           # https://github.com/livechat/chat-window-ios       ❤️ 第三方的聊天工具 @import LiveChat;
+  pod 'LiveChat'                           # https://github.com/livechat/chat-window-ios       ❤️ 第三方的聊天工具 https://www.livechat.com/
 end
 
 # ============================== 调试框架（仅 Debug） ==============================

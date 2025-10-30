@@ -51,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         JobsLog.showThread = true
 
         // 你的 LiveChat 许可证 ID（到 LiveChat 后台可查看）
-        LiveChat.licenseId = "YOUR_LICENSE_ID"      // 必填
+        LiveChat.licenseId = AppKeys.liveChatKey      // 必填
         // 可选：减少预聊天表单输入
         LiveChat.name  = "Jobs"
         LiveChat.email = "jobs@example.com"

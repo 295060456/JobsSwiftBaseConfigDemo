@@ -32,23 +32,6 @@ extension NSObject {
 }
 // MARK: -
 extension NSObject {
-    /// ✅  weakify 支持有返回值
-    func weakify<T: AnyObject, U>(_ owner: T, _ function: @escaping (T) -> () -> U) -> () -> U? {
-        return { [weak owner] in
-            guard let strongOwner = owner else { return nil }
-            return function(strongOwner)()
-        }
-    }
-    /// ✅ weakify 支持无返回值
-    func weakify<T: AnyObject>(_ owner: T, _ function: @escaping (T) -> () -> Void) -> () -> Void {
-        return { [weak owner] in
-            guard let strongOwner = owner else { return }
-            function(strongOwner)()
-        }
-    }
-}
-// MARK: -
-extension NSObject {
     /// 类名 -> 字符串
     public var className: String {
         return type(of: self).className

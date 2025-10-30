@@ -54,8 +54,10 @@ final class JobsTextDemoVC: BaseVC {
     private lazy var boldBtn: UIButton = { [unowned self] in
         UIButton(type: .system)
             .byTitle("加粗", for: .normal)
-            .onTap { [weak self] _ in self?.onBold() }
-            .byAddTo(view) { make in
+            .onTap(jobs_weakify(self) { me, _ in
+                me.onBold()
+            })
+            .byAddTo(view) { [unowned self] make in
                 make.top.equalTo(self.rawLabel.snp.bottom).offset(12)
                 make.left.equalToSuperview().inset(16)
                 make.height.equalTo(36)

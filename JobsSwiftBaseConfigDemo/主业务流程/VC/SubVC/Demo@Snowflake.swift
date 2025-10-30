@@ -1,15 +1,14 @@
 //
-//  Demo@Snow.swift
+//  Demo@Snowflake.swift
 //  JobsSwiftBaseConfigDemo
 //
 //  Created by Mac on 10/29/25.
 //
 
-
 import UIKit
 import SnapKit
 
-final class SnowDemoVC: BaseVC {
+final class SnowflakeDemoVC: BaseVC {
     private let general = SnowflakeSwift(IDCID: 4, machineID: 30)
     // 结果展示
     private lazy var resultLabel: UILabel = {
@@ -22,7 +21,7 @@ final class SnowDemoVC: BaseVC {
                 if view.jobs_hasVisibleTopBar() {
                     make.top.equalTo(self.gk_navigationBar.snp.bottom).offset(10)
                 } else {
-                    make.top.equalToSuperview()
+                    make.top.equalToSuperview().offset(10)
                 }
                 make.left.right.equalToSuperview().inset(20)
             }
@@ -61,6 +60,7 @@ final class SnowDemoVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        jobsSetupGKNav(title: "雪花算法")
         resultLabel.byVisible(YES)
         genButton.byVisible(YES)
     }

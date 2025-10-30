@@ -22,7 +22,7 @@ class VC2: BaseVC {
     }
 
     func startTask() {
-        let task = weakify(self, VC2.printSomething)
+        let task = jobs_weakify(self, VC2.printSomething)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             task() // ✅ 没有?也可以了
         }
