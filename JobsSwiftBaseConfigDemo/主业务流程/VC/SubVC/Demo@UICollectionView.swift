@@ -136,7 +136,6 @@ final class EmptyCollectionViewDemoVC: BaseVC,
                 make.height.equalTo(view.snp.height).multipliedBy(0.55) // 上面占 55%
             }
     }()
-
     // ============================== UI：下面的【横向】CollectionView ==============================
     private lazy var collectionViewH: UICollectionView = {
         UICollectionView(frame: .zero, collectionViewLayout: flowLayoutH)

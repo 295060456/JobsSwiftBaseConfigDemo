@@ -65,7 +65,6 @@
 		045376632EB0B5BF00133F73 /* FeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045376622EB0B5BE00133F73 /* FeedModel.swift */; };
 		045376652EB0B5D600133F73 /* FeedVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045376642EB0B5D500133F73 /* FeedVideoCell.swift */; };
 		045376672EB0B5E100133F73 /* PlayerCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045376662EB0B5E100133F73 /* PlayerCenter.swift */; };
-		045376692EB0B5EE00133F73 /* DouyinFeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045376682EB0B5ED00133F73 /* DouyinFeedVC.swift */; };
 		045920E42E84EC73008C8D6A /* SwiftTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E32E84EC72008C8D6A /* SwiftTools.swift */; };
 		045920E62E84F389008C8D6A /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E52E84F386008C8D6A /* CALayer.swift */; };
 		045920EA2E84FD82008C8D6A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E92E84FD77008C8D6A /* String.swift */; };
@@ -102,6 +101,18 @@
 		0477D9832E8BE9FC002C6427 /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9822E8BE9FB002C6427 /* KeyboardObserver.swift */; };
 		0477D9852E8BEACB002C6427 /* Reactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9842E8BEACA002C6427 /* Reactive.swift */; };
 		0477D9872E8BEF64002C6427 /* Demo@键盘.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9862E8BEF62002C6427 /* Demo@键盘.swift */; };
+		047E48DA2EB3562C00881898 /* PNPlayerDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E48D92EB3562800881898 /* PNPlayerDemoVC.swift */; };
+		047E48DC2EB3577B00881898 /* pano_360.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 047E48DB2EB3577B00881898 /* pano_360.mp4 */; };
+		047E48E72EB35BAD00881898 /* MetalRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E48E22EB35BAD00881898 /* MetalRenderer.swift */; };
+		047E48E82EB35BAD00881898 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E48E12EB35BAD00881898 /* CameraController.swift */; };
+		047E48E92EB35BAD00881898 /* SphereGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E48E52EB35BAD00881898 /* SphereGeometry.swift */; };
+		047E48EA2EB35BAD00881898 /* VideoTextureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E48E62EB35BAD00881898 /* VideoTextureManager.swift */; };
+		047E48EB2EB35BAD00881898 /* PlayerControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E48E32EB35BAD00881898 /* PlayerControlsView.swift */; };
+		047E48EC2EB35BAD00881898 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 047E48E42EB35BAD00881898 /* Shaders.metal */; };
+		047E48EF2EB35D4900881898 /* MTKView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E48EE2EB35D4800881898 /* MTKView.swift */; };
+		047E48F12EB36A3F00881898 /* MTLRenderPipelineDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E48F02EB36A3E00881898 /* MTLRenderPipelineDescriptor.swift */; };
+		047E48F32EB36A5B00881898 /* MTLDepthStencilDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E48F22EB36A5A00881898 /* MTLDepthStencilDescriptor.swift */; };
+		047E48F52EB36AC600881898 /* MTLSamplerDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E48F42EB36AC600881898 /* MTLSamplerDescriptor.swift */; };
 		0482A5E82EA380EB004176A4 /* BaseWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0482A5E72EA380E1004176A4 /* BaseWebView.swift */; };
 		0482A5EA2EA383B2004176A4 /* Demo@网页加载互动.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0482A5E92EA38392004176A4 /* Demo@网页加载互动.swift */; };
 		0482A5F22EA3A3A2004176A4 /* BaseWebViewDemo.html in Resources */ = {isa = PBXBuildFile; fileRef = 0482A5F12EA3A3A2004176A4 /* BaseWebViewDemo.html */; };
@@ -113,6 +124,8 @@
 		0487AADA2E840CB200B5D307 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0487AAD92E840CB200B5D307 /* UIColor.swift */; };
 		0487AADC2E840EE300B5D307 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0487AADB2E840EE300B5D307 /* libc++.tbd */; };
 		048E37702E87997A004C3A41 /* UIGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048E376F2E879978004C3A41 /* UIGestureRecognizer.swift */; };
+		048F447C2EB311DE00BAA7EE /* Demo@JobsAppDoor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048F447B2EB311C100BAA7EE /* Demo@JobsAppDoor.swift */; };
+		048F447E2EB3267200BAA7EE /* CATransform3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048F447D2EB3267000BAA7EE /* CATransform3D.swift */; };
 		049A65672EA09C6B0006B185 /* SafeCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049A65662EA09C6A0006B185 /* SafeCodable.swift */; };
 		049A65692EA0AAB80006B185 /* Decimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049A65682EA0AAB70006B185 /* Decimal.swift */; };
 		049A656D2EA0CB7F0006B185 /* Demo@解码.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049A656C2EA0CB790006B185 /* Demo@解码.swift */; };
@@ -284,7 +297,6 @@
 		045376622EB0B5BE00133F73 /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
 		045376642EB0B5D500133F73 /* FeedVideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedVideoCell.swift; sourceTree = "<group>"; };
 		045376662EB0B5E100133F73 /* PlayerCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCenter.swift; sourceTree = "<group>"; };
-		045376682EB0B5ED00133F73 /* DouyinFeedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DouyinFeedVC.swift; sourceTree = "<group>"; };
 		045920E32E84EC72008C8D6A /* SwiftTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTools.swift; sourceTree = "<group>"; };
 		045920E52E84F386008C8D6A /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
 		045920E92E84FD77008C8D6A /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -322,6 +334,18 @@
 		0477D9842E8BEACA002C6427 /* Reactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reactive.swift; sourceTree = "<group>"; };
 		0477D9862E8BEF62002C6427 /* Demo@键盘.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@键盘.swift"; sourceTree = "<group>"; };
 		047CC3422EA254A200E84122 /* 心愿单.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "心愿单.md"; sourceTree = "<group>"; };
+		047E48D92EB3562800881898 /* PNPlayerDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PNPlayerDemoVC.swift; sourceTree = "<group>"; };
+		047E48DB2EB3577B00881898 /* pano_360.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = pano_360.mp4; sourceTree = "<group>"; };
+		047E48E12EB35BAD00881898 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
+		047E48E22EB35BAD00881898 /* MetalRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalRenderer.swift; sourceTree = "<group>"; };
+		047E48E32EB35BAD00881898 /* PlayerControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerControlsView.swift; sourceTree = "<group>"; };
+		047E48E42EB35BAD00881898 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		047E48E52EB35BAD00881898 /* SphereGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SphereGeometry.swift; sourceTree = "<group>"; };
+		047E48E62EB35BAD00881898 /* VideoTextureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoTextureManager.swift; sourceTree = "<group>"; };
+		047E48EE2EB35D4800881898 /* MTKView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTKView.swift; sourceTree = "<group>"; };
+		047E48F02EB36A3E00881898 /* MTLRenderPipelineDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTLRenderPipelineDescriptor.swift; sourceTree = "<group>"; };
+		047E48F22EB36A5A00881898 /* MTLDepthStencilDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTLDepthStencilDescriptor.swift; sourceTree = "<group>"; };
+		047E48F42EB36AC600881898 /* MTLSamplerDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTLSamplerDescriptor.swift; sourceTree = "<group>"; };
 		0482A5E72EA380E1004176A4 /* BaseWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWebView.swift; sourceTree = "<group>"; };
 		0482A5E92EA38392004176A4 /* Demo@网页加载互动.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@网页加载互动.swift"; sourceTree = "<group>"; };
 		0482A5F12EA3A3A2004176A4 /* BaseWebViewDemo.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = BaseWebViewDemo.html; sourceTree = "<group>"; };
@@ -333,6 +357,8 @@
 		0487AAD92E840CB200B5D307 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		0487AADB2E840EE300B5D307 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		048E376F2E879978004C3A41 /* UIGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIGestureRecognizer.swift; sourceTree = "<group>"; };
+		048F447B2EB311C100BAA7EE /* Demo@JobsAppDoor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@JobsAppDoor.swift"; sourceTree = "<group>"; };
+		048F447D2EB3267000BAA7EE /* CATransform3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CATransform3D.swift; sourceTree = "<group>"; };
 		049A65662EA09C6A0006B185 /* SafeCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafeCodable.swift; sourceTree = "<group>"; };
 		049A65682EA0AAB70006B185 /* Decimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decimal.swift; sourceTree = "<group>"; };
 		049A656C2EA0CB790006B185 /* Demo@解码.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@解码.swift"; sourceTree = "<group>"; };
@@ -496,6 +522,7 @@
 			isa = PBXGroup;
 			children = (
 				0453763A2EB0B41F00133F73 /* 非iph_X.mp4 */,
+				047E48DB2EB3577B00881898 /* pano_360.mp4 */,
 				0453763B2EB0B41F00133F73 /* iph_X.mp4 */,
 				0453763C2EB0B41F00133F73 /* welcome_video.mp4 */,
 			);
@@ -533,6 +560,7 @@
 		045920E22E84EC64008C8D6A /* SwiftTools */ = {
 			isa = PBXGroup;
 			children = (
+				047E48C52EB3554900881898 /* PNPlayer */,
 				0440B5DB2EB30749005DBE91 /* weak.swift */,
 				0440B5D92EB2FFAC005DBE91 /* keys.swift */,
 				0438389F2EAA21A9007BA552 /* JobsRefresher.swift */,
@@ -560,6 +588,7 @@
 		045920EF2E854C8E008C8D6A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				047E48ED2EB35D3700881898 /* MetalKit.extension */,
 				C564FEEA2E0AAC2B0079B5C1 /* UIKit.extension */,
 			);
 			path = Extensions;
@@ -649,6 +678,38 @@
 			path = "字体";
 			sourceTree = "<group>";
 		};
+		047E48C52EB3554900881898 /* PNPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				047E48E42EB35BAD00881898 /* Shaders.metal */,
+				047E48E12EB35BAD00881898 /* CameraController.swift */,
+				047E48E22EB35BAD00881898 /* MetalRenderer.swift */,
+				047E48E32EB35BAD00881898 /* PlayerControlsView.swift */,
+				047E48E52EB35BAD00881898 /* SphereGeometry.swift */,
+				047E48E62EB35BAD00881898 /* VideoTextureManager.swift */,
+			);
+			path = PNPlayer;
+			sourceTree = "<group>";
+		};
+		047E48D82EB3561200881898 /* Demo@PNPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				047E48D92EB3562800881898 /* PNPlayerDemoVC.swift */,
+			);
+			path = "Demo@PNPlayer";
+			sourceTree = "<group>";
+		};
+		047E48ED2EB35D3700881898 /* MetalKit.extension */ = {
+			isa = PBXGroup;
+			children = (
+				047E48F42EB36AC600881898 /* MTLSamplerDescriptor.swift */,
+				047E48F22EB36A5A00881898 /* MTLDepthStencilDescriptor.swift */,
+				047E48F02EB36A3E00881898 /* MTLRenderPipelineDescriptor.swift */,
+				047E48EE2EB35D4800881898 /* MTKView.swift */,
+			);
+			path = MetalKit.extension;
+			sourceTree = "<group>";
+		};
 		0482A5E62EA380CE004176A4 /* UIWebView */ = {
 			isa = PBXGroup;
 			children = (
@@ -665,9 +726,30 @@
 			path = "网页";
 			sourceTree = "<group>";
 		};
+		048F447A2EB311B100BAA7EE /* Demo@注册登陆 */ = {
+			isa = PBXGroup;
+			children = (
+				048F447B2EB311C100BAA7EE /* Demo@JobsAppDoor.swift */,
+			);
+			path = "Demo@注册登陆";
+			sourceTree = "<group>";
+		};
+		048F447F2EB33CA100BAA7EE /* SubVC */ = {
+			isa = PBXGroup;
+			children = (
+				04FC778A2EB0BE2F00B810BA /* PlayerDetailVC.swift */,
+				04FC77882EB0BE1D00B810BA /* FeedListVC.swift */,
+				045376602EB0B5B000133F73 /* PlayerRemoteVC.swift */,
+				0453765E2EB0B5A100133F73 /* PlayerLocalVC.swift */,
+			);
+			path = SubVC;
+			sourceTree = "<group>";
+		};
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				048F447A2EB311B100BAA7EE /* Demo@注册登陆 */,
+				047E48D82EB3561200881898 /* Demo@PNPlayer */,
 				045376572EB0B56500133F73 /* Demo@BMPlayer */,
 				04124F3A2EB075C500462BE2 /* Demo@Alamofire */,
 				04124F2B2EB0621D00462BE2 /* Demo@Moya */,
@@ -728,6 +810,7 @@
 		04D0C9802E8D19FC00580020 /* iOS.SDK */ = {
 			isa = PBXGroup;
 			children = (
+				048F447D2EB3267000BAA7EE /* CATransform3D.swift */,
 				04BCDC312EA9EAAF00382DE0 /* UICollectionViewFlowLayout.swift */,
 				0482A67B2EA7883E004176A4 /* Dictionary.swift */,
 				0482A5FB2EA63526004176A4 /* WKUserContentController.swift */,
@@ -814,12 +897,8 @@
 		04FC778C2EB0C1EB00B810BA /* VC */ = {
 			isa = PBXGroup;
 			children = (
-				04FC778A2EB0BE2F00B810BA /* PlayerDetailVC.swift */,
-				04FC77882EB0BE1D00B810BA /* FeedListVC.swift */,
-				045376682EB0B5ED00133F73 /* DouyinFeedVC.swift */,
-				045376602EB0B5B000133F73 /* PlayerRemoteVC.swift */,
-				0453765E2EB0B5A100133F73 /* PlayerLocalVC.swift */,
 				0453765A2EB0B57800133F73 /* Demo@BMPlayer.swift */,
+				048F447F2EB33CA100BAA7EE /* SubVC */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -1124,6 +1203,7 @@
 				0459211E2E85588C008C8D6A /* DS-DIGIB.ttf in Resources */,
 				0459211F2E85588C008C8D6A /* fonteditor.ttf in Resources */,
 				045921202E85588C008C8D6A /* DIN-Black-2.otf in Resources */,
+				047E48DC2EB3577B00881898 /* pano_360.mp4 in Resources */,
 				0453764C2EB0B43F00133F73 /* IncomeSource.json in Resources */,
 				0453764D2EB0B43F00133F73 /* UserData.json in Resources */,
 				0453764E2EB0B43F00133F73 /* OccupationList.json in Resources */,
@@ -1255,6 +1335,7 @@
 				04E8D5B92E8E550200E85CDA /* BaseStructDefs.swift in Sources */,
 				0487AADA2E840CB200B5D307 /* UIColor.swift in Sources */,
 				04E8D6232E8E884500E85CDA /* BaseVC.swift in Sources */,
+				047E48F52EB36AC600881898 /* MTLSamplerDescriptor.swift in Sources */,
 				0477D9832E8BE9FC002C6427 /* KeyboardObserver.swift in Sources */,
 				045921042E854FE1008C8D6A /* UInt32.swift in Sources */,
 				0477D96F2E8B8479002C6427 /* UIApplication.swift in Sources */,
@@ -1310,11 +1391,12 @@
 				049A656D2EA0CB7F0006B185 /* Demo@解码.swift in Sources */,
 				C564FC8F2E0959640079B5C1 /* UIProgressView.swift in Sources */,
 				0482A67C2EA7883F004176A4 /* Dictionary.swift in Sources */,
-				045376692EB0B5EE00133F73 /* DouyinFeedVC.swift in Sources */,
 				0401DCFE2E91069F00D572AD /* DateFormatter.swift in Sources */,
 				C564FC9F2E0959640079B5C1 /* UISearchBar.swift in Sources */,
 				04FC77852EB0BDF100B810BA /* ImageLoader.swift in Sources */,
+				048F447C2EB311DE00BAA7EE /* Demo@JobsAppDoor.swift in Sources */,
 				0453765B2EB0B57B00133F73 /* Demo@BMPlayer.swift in Sources */,
+				047E48EF2EB35D4900881898 /* MTKView.swift in Sources */,
 				0401DCFC2E9102BC00D572AD /* UserDefaults.swift in Sources */,
 				04FC77892EB0BE1E00B810BA /* FeedListVC.swift in Sources */,
 				0459210A2E854FFB008C8D6A /* Float16.swift in Sources */,
@@ -1340,12 +1422,19 @@
 				045376612EB0B5B100133F73 /* PlayerRemoteVC.swift in Sources */,
 				04468F902E9E4D7000677000 /* PermissionCenter.swift in Sources */,
 				042B67CE2E95085A000A2970 /* NSTextAttachment.swift in Sources */,
+				047E48F32EB36A5B00881898 /* MTLDepthStencilDescriptor.swift in Sources */,
 				045920EE2E854BE7008C8D6A /* Double.swift in Sources */,
 				C564FC982E0959640079B5C1 /* NSObject.swift in Sources */,
 				C564FCB12E0959990079B5C1 /* CollectionCell.swift in Sources */,
 				04124F2F2EB0623900462BE2 /* DemoAPI.swift in Sources */,
 				045920E42E84EC73008C8D6A /* SwiftTools.swift in Sources */,
 				045920EA2E84FD82008C8D6A /* String.swift in Sources */,
+				047E48E72EB35BAD00881898 /* MetalRenderer.swift in Sources */,
+				047E48E82EB35BAD00881898 /* CameraController.swift in Sources */,
+				047E48E92EB35BAD00881898 /* SphereGeometry.swift in Sources */,
+				047E48EA2EB35BAD00881898 /* VideoTextureManager.swift in Sources */,
+				047E48EB2EB35BAD00881898 /* PlayerControlsView.swift in Sources */,
+				047E48EC2EB35BAD00881898 /* Shaders.metal in Sources */,
 				045920F82E854F91008C8D6A /* Int32.swift in Sources */,
 				04468F8C2E9CFD7700677000 /* Demo@系统弹出框.swift in Sources */,
 				C564FC622E0959510079B5C1 /* BaseEnumDefs.swift in Sources */,
@@ -1370,6 +1459,8 @@
 				043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */,
 				04124F392EB067F000462BE2 /* APIService.swift in Sources */,
 				04124F422EB0762900462BE2 /* AFStubURLProtocol.swift in Sources */,
+				048F447E2EB3267200BAA7EE /* CATransform3D.swift in Sources */,
+				047E48DA2EB3562C00881898 /* PNPlayerDemoVC.swift in Sources */,
 				0440B55A2EB23846005DBE91 /* Demo@LiveChat.swift in Sources */,
 				04C2F0312E98C9D000BA05A9 /* Demo@设计模式MVVM.swift in Sources */,
 				043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */,
@@ -1383,6 +1474,7 @@
 				04A8C54C2E8AA94D00381701 /* Demo@按钮.swift in Sources */,
 				046CF9772E967E6C005A88B4 /* URL.swift in Sources */,
 				04D0C9792E8D066900580020 /* Demo@图片加载.swift in Sources */,
+				047E48F12EB36A3F00881898 /* MTLRenderPipelineDescriptor.swift in Sources */,
 				045920F62E854F8C008C8D6A /* Int16.swift in Sources */,
 				0401DD002E910B3500D572AD /* BaseLet.swift in Sources */,
 				C564FBE92E09580B0079B5C1 /* JobsSwiftBaseConfigDemo.xcdatamodeld in Sources */,

@@ -45,6 +45,7 @@ extension UIDatePicker {
     }
 
     @discardableResult
+    @available(iOS 13.4, *)
     func byPreferredDatePickerStyle(_ style: UIDatePickerStyle) -> Self {
         self.preferredDatePickerStyle = style
         return self

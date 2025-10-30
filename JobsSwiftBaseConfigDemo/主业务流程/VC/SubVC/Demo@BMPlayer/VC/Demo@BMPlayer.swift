@@ -8,9 +8,9 @@
 import UIKit
 import SnapKit
 
-final class DemoMenuVC: BaseVC,
-                        UITableViewDataSource,
-                        UITableViewDelegate {
+final class BMPlayerDemoVC: BaseVC,
+                            UITableViewDataSource,
+                            UITableViewDelegate {
 
     private enum Row: Int, CaseIterable {
         case local, remote, feed

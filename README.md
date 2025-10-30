@@ -7798,11 +7798,15 @@ let b = v as! UIButton                  // 若不是 UIButton 会崩溃
   }
   ```
 
-### 31、**Foundation**.<font color=red>**`Decimal`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 31、**`NSProxy`** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* [**Swift**](https://developer.apple.com/swift/) 里没有原生的 `NSProxy`，也不能用纯 [**Swift**](https://developer.apple.com/swift/) 去继承/实现 `NSProxy`
+
+### 32、**Foundation**.<font color=red>**`Decimal`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > **十进制高精度** 的数值类型，用来避免 `Double/Float` 的二进制浮点误差，**非常适合金额/财务**等需要精确小数的场景。
 
-#### 31.1、为啥不用 `Double`？<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 32.1、为啥不用 `Double`？<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * `Double/Float` 是二进制浮点，像 0.1、0.2 在二进制里是无限小数，会有误差：
 
@@ -7820,12 +7824,12 @@ let b = v as! UIButton                  // 若不是 UIButton 会崩溃
   print(a + b == Decimal(string: "0.3")!) // true
   ```
 
-#### 31.2、与 `NSDecimalNumber` 的关系 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 32.2、与 `NSDecimalNumber` 的关系 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * `NSDecimalNumber` 是 `Decimal` 的 `Objective-C` 包装类，功能相近；在需要 `NSNumber`/`ObjC` 互操作时会用到。
 * 在纯 [**Swift**](https://developer.apple.com/swift/) 里，优先用 `Decimal` + 运算符重载，简洁。
 
-#### 31.3、<font color=red>**实战建议**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 32.3、<font color=red>**实战建议**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 金额/汇率、发票税：**用 `Decimal`**，别用 `Double`
 * 与后端交互：**用字符串传小数**（如 `"123.45"`），[**Swift**](https://developer.apple.com/swift/) 端 `Decimal(string:)` 解析，零损失
