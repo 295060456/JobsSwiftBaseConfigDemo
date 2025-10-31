@@ -55,7 +55,6 @@ final class EmptyCollectionViewDemoVC: BaseVC,
             .registerCell(UICollectionViewCell.self)
             .byBackgroundView(nil)
             .byDragInteractionEnabled(false)
-            .jobs_refreshSense(.insetFollow)
             // 空态按钮
             .jobs_emptyButtonProvider { [unowned self] in
                 UIButton.sys()
@@ -65,9 +64,7 @@ final class EmptyCollectionViewDemoVC: BaseVC,
                     .byImagePlacement(.top)
                     .onTap { [weak self] _ in
                         guard let self else { return }
-                        self.itemsV = (1...12).map { "Item \($0)" }
                         self.collectionViewV.byReloadData()
-                        self.updateFooterAvailabilityV()
                         self.collectionViewV.jobs_reloadEmptyViewAuto()
                     }
                     .jobs_setEmptyLayout { btn, make, host in
@@ -78,55 +75,7 @@ final class EmptyCollectionViewDemoVC: BaseVC,
                         make.width.lessThanOrEqualTo(host).multipliedBy(0.9)
                     }
             }
-
-            // 下拉刷新（竖向）
-            .pullDownWithJobsAnimator({ [weak self] in
-                guard let self = self, !self.isPullRefreshingV else { return }
-                self.isPullRefreshingV = true
-                print("⬇️[V] 下拉刷新触发")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    if self.itemsV.isEmpty {
-                        self.itemsV = (1...12).map { "Item \($0)" }
-                    } else {
-                        self.itemsV.shuffle()
-                    }
-                    self.isPullRefreshingV = false
-                    self.collectionViewV.byReloadData()
-                    self.collectionViewV.pullDownStop()
-                    self.updateFooterAvailabilityV()
-                    self.collectionViewV.jobs_reloadEmptyViewAuto()
-                    print("✅[V] 下拉刷新完成")
-                }
-            }, config: { animator in
-                animator
-                    .byIdleDescription("Jobs@下拉刷新")
-                    .byReleaseToRefreshDescription("Jobs@松开立即刷新")
-                    .byLoadingDescription("Jobs@正在刷新中…")
-                    .byNoMoreDataDescription("Jobs@已经是最新数据")
-            })
-
-            // 上拉加载（竖向）
-            .pullUpWithJobsAnimator({ [weak self] in
-                guard let self = self, !self.isLoadingMoreV else { return }
-                self.isLoadingMoreV = true
-                print("⬆️[V] 上拉加载触发")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    let base = self.itemsV.count
-                    self.itemsV += (1...8).map { "Item \(base + $0)" }
-                    self.isLoadingMoreV = false
-                    self.collectionViewV.byReloadData()
-                    self.collectionViewV.pullUpStop()
-                    self.updateFooterAvailabilityV()
-                    self.collectionViewV.jobs_reloadEmptyViewAuto()
-                    print("✅[V] 上拉加载完成")
-                }
-            }, config: { animator in
-                animator
-                    .byIdleDescription("Jobs@上拉加载更多")
-                    .byReleaseToRefreshDescription("Jobs@松开立即加载")
-                    .byLoadingMoreDescription("Jobs@加载中…")
-                    .byNoMoreDataDescription("Jobs@没有更多数据")
-            }).byAddTo(view) { [unowned self] make in
+            .byAddTo(view) { [unowned self] make in
                 if view.jobs_hasVisibleTopBar() {
                     make.top.equalTo(self.gk_navigationBar.snp.bottom).offset(10)
                 } else {
@@ -141,13 +90,11 @@ final class EmptyCollectionViewDemoVC: BaseVC,
         UICollectionView(frame: .zero, collectionViewLayout: flowLayoutH)
             .byBounces(true)
             .byAlwaysBounceHorizontal(true)
-            .jobs_refreshAxis(.horizontal)
             .byDataSource(self)
             .byDelegate(self)
             .registerCell(UICollectionViewCell.self)
             .byBackgroundView(nil)
             .byDragInteractionEnabled(false)
-            .jobs_refreshAxis(.horizontal).jobs_refreshSense(.insetFollow)
             // 空态按钮
             .jobs_emptyButtonProvider { [unowned self] in
                 UIButton.sys()
@@ -157,9 +104,7 @@ final class EmptyCollectionViewDemoVC: BaseVC,
                     .byImagePlacement(.top)
                     .onTap { [weak self] _ in
                         guard let self else { return }
-                        self.itemsH = (1...10).map { "Card \($0)" }
                         self.collectionViewH.byReloadData()
-                        self.updateFooterAvailabilityH()
                         self.collectionViewH.jobs_reloadEmptyViewAuto()
                     }
                     .jobs_setEmptyLayout { btn, make, host in
@@ -170,61 +115,11 @@ final class EmptyCollectionViewDemoVC: BaseVC,
                         make.width.lessThanOrEqualTo(host).multipliedBy(0.9)
                     }
             }
-            // ⭐️ 水平刷新：切换轴向
-            .jobs_refreshAxis(.horizontal)
-            // 左→右刷新（等价“下拉”）
-            .pullDownWithJobsAnimator({ [weak self] in
-                guard let self = self, !self.isPullRefreshingH else { return }
-                self.isPullRefreshingH = true
-                print("⬅️[H] 左拉刷新触发")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    if self.itemsH.isEmpty {
-                        self.itemsH = (1...10).map { "Card \($0)" }
-                    } else {
-                        self.itemsH.shuffle()
-                    }
-                    self.isPullRefreshingH = false
-                    self.collectionViewH.byReloadData()
-                    self.collectionViewH.pullDownStop()
-                    self.updateFooterAvailabilityH()
-                    self.collectionViewH.jobs_reloadEmptyViewAuto()
-                    print("✅[H] 左拉刷新完成")
-                }
-            }, config: { animator in
-                animator
-                    .byIdleDescription("向右拉刷新")
-                    .byReleaseToRefreshDescription("松开刷新")
-                    .byLoadingDescription("刷新中…")
-                    .byNoMoreDataDescription("—")
-            })
-
-            // 右→左加载（等价“上拉”）
-            .pullUpWithJobsAnimator({ [weak self] in
-                guard let self = self, !self.isLoadingMoreH else { return }
-                self.isLoadingMoreH = true
-                print("➡️[H] 右拉加载触发")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    let base = self.itemsH.count
-                    self.itemsH += (1...6).map { "Card \(base + $0)" }
-                    self.isLoadingMoreH = false
-                    self.collectionViewH.byReloadData()
-                    self.collectionViewH.pullUpStop()
-                    self.updateFooterAvailabilityH()
-                    self.collectionViewH.jobs_reloadEmptyViewAuto()
-                    print("✅[H] 右拉加载完成")
-                }
-            }, config: { animator in
-                animator
-                    .byIdleDescription("向左拉加载")
-                    .byReleaseToRefreshDescription("松开加载")
-                    .byLoadingMoreDescription("加载中…")
-                    .byNoMoreDataDescription("没有更多了")
-            }).byAddTo(view) { [unowned self] make in
+            .byAddTo(view) { [unowned self] make in
                 make.top.equalTo(collectionViewV.snp.bottom).offset(10)
                 make.left.right.equalToSuperview()
                 make.bottom.equalToSuperview().inset(10)               // 下面占余下空间，高度自适应
             }
-        
     }()
 
     // ============================== 生命周期 ==============================
@@ -242,8 +137,6 @@ final class EmptyCollectionViewDemoVC: BaseVC,
                         itemsV.removeAll(); itemsH.removeAll()
                         collectionViewV.byReloadData()
                         collectionViewH.byReloadData()
-                        updateFooterAvailabilityV()
-                        updateFooterAvailabilityH()
                         collectionViewV.jobs_reloadEmptyViewAuto()
                         collectionViewH.jobs_reloadEmptyViewAuto()
                     },
@@ -258,8 +151,6 @@ final class EmptyCollectionViewDemoVC: BaseVC,
                         itemsH += (1...5).map { "Card \(bH + $0)" }
                         collectionViewV.byReloadData()
                         collectionViewH.byReloadData()
-                        updateFooterAvailabilityV()
-                        updateFooterAvailabilityH()
                         collectionViewV.jobs_reloadEmptyViewAuto()
                         collectionViewH.jobs_reloadEmptyViewAuto()
                     }
@@ -271,19 +162,6 @@ final class EmptyCollectionViewDemoVC: BaseVC,
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-         collectionViewV.pullDownStart() // 应该立刻看到“刷新中…”
-         collectionViewH.pullDownStart() // 横向左拉等价“下拉”，也可测
-        // 首屏就演示竖向 footer（上拉加载）
-//        collectionViewV.pullUpStart() // 应该立刻看到“加载中…”
-        // 可选：再演示横向 footer（右→左）
-        // collectionViewH.pullUpStart()
-    }
-    // ============================== Footer 可用性（示例） ==============================
-    private func updateFooterAvailabilityV() {
-        if itemsV.count >= 60 { collectionViewV.pullUpNoMore() } else { collectionViewV.pullUpReset() }
-    }
-    private func updateFooterAvailabilityH() {
-        if itemsH.count >= 40 { collectionViewH.pullUpNoMore() } else { collectionViewH.pullUpReset() }
     }
     // ============================== UICollectionViewDataSource ==============================
     func numberOfSections(in collectionView: UICollectionView) -> Int { 1 }

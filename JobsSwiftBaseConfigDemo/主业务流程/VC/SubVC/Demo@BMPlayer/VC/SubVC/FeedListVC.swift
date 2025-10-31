@@ -43,52 +43,6 @@ final class FeedListVC: BaseVC,
                         make.width.lessThanOrEqualTo(host).multipliedBy(0.9)
                     }
             }
-            // 下拉刷新（模拟网络）
-            .pullDownWithJobsAnimator({ [weak self] in
-                guard let self = self, !self.isPullRefreshing else { return }
-                self.isPullRefreshing = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                    self.page = 1
-                    if self.allItems.isEmpty { self.allItems = FeedModel.loadAll() }
-                    self.items = FeedModel.page(all: self.allItems, page: self.page, pageSize: self.pageSize)
-                    self.tableView.byReloadData()
-                    self.isPullRefreshing = false
-                    self.tableView.pullDownStop()
-                    self.updateFooterAvailability()
-                    self.tableView.jobs_reloadEmptyViewAuto()
-                }
-            }, config: { animator in
-                animator
-                    .byIdleDescription("下拉刷新")
-                    .byReleaseToRefreshDescription("松开立即刷新")
-                    .byLoadingDescription("正在刷新…")
-                    .byNoMoreDataDescription("已经是最新")
-            })
-            // 上拉加载（模拟分页）
-            .pullUpWithJobsAnimator({ [weak self] in
-                guard let self = self, !self.isLoadingMore else { return }
-                self.isLoadingMore = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                    self.page += 1
-                    let next = FeedModel.page(all: self.allItems, page: self.page, pageSize: self.pageSize)
-                    if next.isEmpty {
-                        self.tableView.pullUpNoMore()
-                    } else {
-                        self.items += next
-                        self.tableView.byReloadData()
-                        self.tableView.pullUpStop()
-                    }
-                    self.isLoadingMore = false
-                    self.updateFooterAvailability()
-                    self.tableView.jobs_reloadEmptyViewAuto()
-                }
-            }, config: { animator in
-                animator
-                    .byIdleDescription("上拉加载更多")
-                    .byReleaseToRefreshDescription("松开立即加载")
-                    .byLoadingMoreDescription("加载中…")
-                    .byNoMoreDataDescription("没有更多了")
-            })
             .byAddTo(view) { [unowned self] make in
                 if view.jobs_hasVisibleTopBar() {
                     make.top.equalTo(self.gk_navigationBar.snp.bottom).offset(10)
@@ -119,7 +73,7 @@ final class FeedListVC: BaseVC,
 
     fileprivate func updateFooterAvailability() {
         if items.count >= allItems.count && !items.isEmpty {
-            tableView.pullUpNoMore()
+            /// TODO
         }
     }
     // MARK: DataSource / Delegate

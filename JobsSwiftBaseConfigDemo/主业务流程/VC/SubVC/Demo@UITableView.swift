@@ -56,58 +56,7 @@ final class EmptyTableViewDemoVC: BaseVC,
 //                bottom: 0,
 //                right: 0
 //            ))
-            // 下拉刷新（自定义 JobsHeaderAnimator）
-            .pullDownWithJobsAnimator({ [weak self] in
-                guard let self = self, !self.isPullRefreshing else { return }
-                self.isPullRefreshing = true
-                print("⬇️ 下拉刷新触发")
 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    // —— 演示：如果当前为空，则填充；否则打乱顺序 —— //
-                    if self.items.isEmpty {
-                        self.items = (1...10).map { "Row \($0)" }
-                    } else {
-                        self.items.shuffle()
-                    }
-                    self.isPullRefreshing = false
-                    self.tableView.byReloadData()
-                    self.tableView.pullDownStop()               // 结束下拉
-                    self.updateFooterAvailability()
-                    self.tableView.jobs_reloadEmptyViewAuto()   // 刷新空态显隐
-                    print("✅ 下拉刷新完成")
-                }
-            }, config: { animator in
-                animator
-                    .byIdleDescription("Jobs@下拉刷新")
-                    .byReleaseToRefreshDescription("Jobs@松开立即刷新")
-                    .byLoadingDescription("Jobs@正在刷新中...")
-                    .byNoMoreDataDescription("Jobs@已经是最新数据")
-            })
-            // 上拉加载（自定义 JobsFooterAnimator）
-            .pullUpWithJobsAnimator({ [weak self] in
-                guard let self = self, !self.isLoadingMore else { return }
-                self.isLoadingMore = true
-                print("⬆️ 上拉加载触发")
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    // —— 演示：每次追加 5 条 —— //
-                    let base = self.items.count
-                    self.items += (1...5).map { "Row \(base + $0)" }
-
-                    self.isLoadingMore = false
-                    self.tableView.byReloadData()
-                    self.tableView.pullUpStop()                 // 结束上拉
-                    self.updateFooterAvailability()
-                    self.tableView.jobs_reloadEmptyViewAuto()   // 刷新空态显隐
-                    print("✅ 上拉加载完成")
-                }
-            }, config: { animator in
-                animator
-                    .byIdleDescription("Jobs@上拉加载更多")
-                    .byReleaseToRefreshDescription("Jobs@松开立即加载")
-                    .byLoadingMoreDescription("Jobs@加载中…")
-                    .byNoMoreDataDescription("Jobs@没有更多数据")
-            })
 
             .byAddTo(view) {[unowned self] make in
                 if view.jobs_hasVisibleTopBar() {

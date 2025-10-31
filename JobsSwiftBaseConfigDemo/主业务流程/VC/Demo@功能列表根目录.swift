@@ -29,6 +29,7 @@ final class RootListVC: BaseVC {
         ("🔑 注册登录", JobsAppDoorDemoVC.self),
         ("🛜 Moya网络请求框架", MoyaDemoVC.self),
         ("🛜 Alamofire网络请求框架", AFDemoVC.self),
+        ("🪥 支持左右上下刷新加载@JobsRefresher", JobsRefresherDemoVC.self),
         ("🧧 TraitChange", TraitChangeDemoVC.self),
         ("⛑️ 支持上下左右安全Push和原路返回", SafetyPushDemoVC.self),
         ("⛑️ 安全Present", SafetyPresentDemoVC.self),
@@ -207,45 +208,6 @@ final class RootListVC: BaseVC {
                 bottom: 0,
                 right: 0
             ))
-            // 下拉刷新（自定义 JobsHeaderAnimator）
-            .pullDownWithJobsAnimator({ [weak self] in
-                guard let self = self, !self.isPullRefreshing else { return }
-                self.isPullRefreshing = true
-                print("⬇️ 下拉刷新触发")
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    self.isPullRefreshing = false
-                    self.tableView.byReloadData()
-                    self.tableView.pullDownStop()               // 结束下拉
-                    self.updateFooterAvailability()
-                    print("✅ 下拉刷新完成")
-                }
-            }, config: { animator in
-                animator
-                    .byIdleDescription("Jobs@下拉刷新")
-                    .byReleaseToRefreshDescription("Jobs@松开立即刷新")
-                    .byLoadingDescription("Jobs@正在刷新中...")
-                    .byNoMoreDataDescription("Jobs@已经是最新数据")
-            })
-            // 上拉加载（自定义 JobsFooterAnimator）
-            .pullUpWithJobsAnimator({ [weak self] in
-                guard let self = self, !self.isLoadingMore else { return }
-                self.isLoadingMore = true
-                print("⬆️ 上拉加载触发")
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    self.isLoadingMore = false
-                    self.tableView.pullUpStop()                 // 结束上拉
-                    self.updateFooterAvailability()
-                    print("✅ 上拉加载完成")
-                }
-            }, config: { animator in
-                animator
-                    .byIdleDescription("Jobs@上拉加载更多")
-                    .byReleaseToRefreshDescription("Jobs@松开立即加载")
-                    .byLoadingMoreDescription("Jobs@加载中…")
-                    .byNoMoreDataDescription("Jobs@没有更多数据")
-            })
             .byAddTo(view) { make in
                 make.edges.equalToSuperview()
             }
@@ -325,8 +287,6 @@ final class RootListVC: BaseVC {
                         print("🛑 手动停止刷新")
                         isPullRefreshing = false
                         isLoadingMore    = false
-                        tableView.pullDownStop()
-                        tableView.pullUpStop()
                     }
             ]
         )
@@ -340,14 +300,14 @@ final class RootListVC: BaseVC {
     private func updateFooterAvailability() {
         tableView.layoutIfNeeded()
         let contentH = tableView.contentSize.height
-        let visibleH = tableView.bounds.height
+        let visibleH = tableView.bounds.height 
             - tableView.adjustedContentInset.top
             - tableView.adjustedContentInset.bottom
         let enableLoadMore = contentH > visibleH + 20
 
         tableView.footer?.isHidden = !enableLoadMore
         if !enableLoadMore {
-            tableView.pullUpStop()
+            /// TODO
         }
     }
 }
