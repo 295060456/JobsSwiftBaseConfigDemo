@@ -557,7 +557,7 @@
 			path = "Demo@BMPlayer";
 			sourceTree = "<group>";
 		};
-		045920E22E84EC64008C8D6A /* SwiftTools */ = {
+		045920E22E84EC64008C8D6A /* 第三方和一些工具集 */ = {
 			isa = PBXGroup;
 			children = (
 				047E48C52EB3554900881898 /* PNPlayer */,
@@ -582,7 +582,7 @@
 				045920E32E84EC72008C8D6A /* SwiftTools.swift */,
 				0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */,
 			);
-			path = SwiftTools;
+			path = "第三方和一些工具集";
 			sourceTree = "<group>";
 		};
 		045920EF2E854C8E008C8D6A /* Extensions */ = {
@@ -960,7 +960,7 @@
 				C564FC372E0959120079B5C1 /* Resources */,
 				0459210F2E85572C008C8D6A /* Inheritance */,
 				045920EF2E854C8E008C8D6A /* Extensions */,
-				045920E22E84EC64008C8D6A /* SwiftTools */,
+				045920E22E84EC64008C8D6A /* 第三方和一些工具集 */,
 				C564FEEC2E0AAC900079B5C1 /* SwiftDefines */,
 				C564FEEB2E0AAC5A0079B5C1 /* 主业务流程 */,
 				C564FEE92E0AABE80079B5C1 /* UIBaseModel */,

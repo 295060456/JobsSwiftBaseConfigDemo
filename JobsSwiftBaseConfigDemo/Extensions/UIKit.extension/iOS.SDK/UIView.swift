@@ -1299,14 +1299,38 @@ public extension UIView {
 #if canImport(SnapKit)
 import SnapKit
 /// SnapKit 语法糖🍬
+// 存的就是这个类型
+public typealias JobsConstraintClosure = (_ make: ConstraintMaker) -> Void
+private enum _JobsAssocKeys {
+    static var addClosureKey: UInt8 = 0
+}
 public extension UIView {
+    var jobsAddConstraintsClosure: JobsConstraintClosure? {
+        get {
+            objc_getAssociatedObject(self, &_JobsAssocKeys.addClosureKey) as? JobsConstraintClosure
+        }
+        set {
+            // 闭包推荐 COPY 语义
+            objc_setAssociatedObject(self,
+                                     &_JobsAssocKeys.addClosureKey,
+                                     newValue,
+                                     .OBJC_ASSOCIATION_COPY_NONATOMIC)
+        }
+    }
+    // MARK: - 存储约束
+    @discardableResult
+    func byAddConstraintsClosure(_ closure: ((_ make: ConstraintMaker) -> Void)? = nil) -> Self {
+        if let closure {
+            self.jobsAddConstraintsClosure = closure
+        };return self
+    }
     // MARK: - 添加约束
     @discardableResult
     func byAdd(_ closure: ((_ make: ConstraintMaker) -> Void)? = nil) -> Self {
         if let closure {
+            self.byAddConstraintsClosure(closure)
             self.snp.makeConstraints(closure)
-        }
-        return self
+        };return self
     }
     // MARK: - 添加到父视图
     @discardableResult
@@ -1318,25 +1342,29 @@ public extension UIView {
     }
     // MARK: - 链式 makeConstraints
     @discardableResult
-    func byMakeConstraints(_ closure: (_ make: ConstraintMaker) -> Void) -> Self {
+    func byMakeConstraints(_ closure: @escaping (_ make: ConstraintMaker) -> Void) -> Self {
+        self.byAddConstraintsClosure(closure)
         self.snp.makeConstraints(closure)
         return self
     }
     // MARK: - 链式 remakeConstraints
     @discardableResult
-    func byRemakeConstraints(_ closure: (_ make: ConstraintMaker) -> Void) -> Self {
+    func byRemakeConstraints(_ closure: @escaping (_ make: ConstraintMaker) -> Void) -> Self {
+        self.byAddConstraintsClosure(closure)
         self.snp.remakeConstraints(closure)
         return self
     }
     // MARK: - 链式 updateConstraints
     @discardableResult
-    func byUpdateConstraints(_ closure: (_ make: ConstraintMaker) -> Void) -> Self {
+    func byUpdateConstraints(_ closure: @escaping (_ make: ConstraintMaker) -> Void) -> Self {
+        self.byAddConstraintsClosure(closure)
         self.snp.updateConstraints(closure)
         return self
     }
     // MARK: - 链式 removeConstraints
     @discardableResult
     func byRemoveConstraints() -> Self {
+        self.byAddConstraintsClosure(nil)
         self.snp.removeConstraints()
         return self
     }

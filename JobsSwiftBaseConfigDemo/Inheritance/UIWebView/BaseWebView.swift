@@ -59,14 +59,21 @@ private final class WeakScriptMessageHandlerWithReply: NSObject, WKScriptMessage
 /// 用 keyPath 显式取系统的 name，规避工程里可能的同名扩展
 private typealias WKSM = WebKit.WKScriptMessage
 private extension WKSM { var jobsChannel: String { self[keyPath: \WKSM.name] } }
-/// —— 注意：不再给类加 @MainActor，全靠方法级标注 ——
-/// 这样 deinit 天生 nonisolated，不会再被隔离检查卡死。
 public final class BaseWebView: UIView {
     // ===== 基础配置项（完全通用，无业务常量） =====
     public var allowedHosts: Set<String> = []                         // 空 = 不限制
     public var externalSchemes: Set<String> = [
-        "tel","mailto","sms","facetime","itms-apps","maps",
-        "weixin","alipays","alipay","mqqapi","line"
+        "tel",
+        "mailto",
+        "sms",
+        "facetime",
+        "itms-apps",
+        "maps",
+        "weixin",
+        "alipays",
+        "alipay",
+        "mqqapi",
+        "line"
     ]
     public var openBlankInPlace: Bool = true
     public var disableSelectionAndCallout: Bool = false
@@ -89,6 +96,9 @@ public final class BaseWebView: UIView {
     public var rewriteBurstLimit: Int = 3
     private var rewriteCount = 0
     private var lastRewriteAt = Date.distantPast
+    // ===== 固定无缓存策略开关（写死：始终开启）=====
+    private static let noCacheHeader = "X-Jobs-NoCache"
+    private let alwaysFreshMainDocument = true
     // ===== 通用 MobileBridge（H5 的 iOSBridge 约定）=====
     public struct MobileBridgeConfig {
         public var injectShim: Bool = true                             // 无前端桥时的兜底
@@ -114,11 +124,20 @@ public final class BaseWebView: UIView {
     }
     /// UI / 状态
     private lazy var webView: WKWebView = {
-        WKWebView(frame: .zero, configuration: WKWebViewConfiguration()
-            .byWebsiteDataStore(.default())
-            .byAllowsInlineMediaPlayback(true)
-            .byUserContentController(WKUserContentController().byAddUserScript(Self.makeBridgeUserScript()))
-        )
+        // ✅ 关键：强制使用非持久数据仓库（每个 BaseWebView 实例都是全新 session，零共享 Cookie/缓存）
+        let cfg = WKWebViewConfiguration()
+        cfg.websiteDataStore = .nonPersistent()
+        cfg.allowsInlineMediaPlayback = true
+
+        let ucc = WKUserContentController()
+        ucc.addUserScript(Self.makeBridgeUserScript())
+        if #available(iOS 14.0, *) {
+            // contentWorld 由 addScriptMessageHandler 时再设置
+        }
+        cfg.userContentController = ucc
+
+        let w = WKWebView(frame: .zero, configuration: cfg)
+        return w
     }()
     public private(set) var progressView = UIProgressView(progressViewStyle: .default)
     private var handlers: [String: NativeHandler] = [:]
@@ -150,7 +169,6 @@ public final class BaseWebView: UIView {
         // 默认启用通用 MobileBridge（零配置可用）
         _ = useMobileBridge()
     }
-
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     // —— 学院派：deinit 非隔离；同步跳主线程做清理（无 Task、无 weak self）——
     deinit {
@@ -253,34 +271,34 @@ public final class BaseWebView: UIView {
             let readAccess = url.deletingLastPathComponent()
             webView.loadFileURL(url, allowingReadAccessTo: readAccess)
         } else {
-            webView.load(URLRequest(url: url))
+            let req = URLRequest(url: url)
+            webView.load(makeNoCache(req))
         }
         return self
     }
-
     @discardableResult @MainActor
     public func loadBy(_ urlString: String) -> Self {
         if let url = URL(string: urlString) {
-            webView.load(URLRequest(url: url))
+            let req = URLRequest(url: url)
+            webView.load(makeNoCache(req))
         }
         return self
     }
-
     @discardableResult @MainActor
     public func loadBy(_ url: URL,
                        cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy,
                        timeout: TimeInterval = 60) -> Self {
-        let req = URLRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: timeout)
+        // ⚠️ 对外签名保留，但内部一律走无缓存策略（忽略传入的 cachePolicy）
+        var req = URLRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: timeout)
+        req = makeNoCache(req)
         webView.load(req)
         return self
     }
-
     @discardableResult @MainActor
     public func loadBy(_ request: URLRequest) -> Self {
-        webView.load(request)
+        webView.load(makeNoCache(request))
         return self
     }
-
     @discardableResult @MainActor
     public func loadHTMLBy(_ html: String, baseURL: URL? = nil) -> Self {
         webView.loadHTMLString(html, baseURL: baseURL)
@@ -304,13 +322,11 @@ public final class BaseWebView: UIView {
 
     public func on(_ name: String, handler: @escaping NativeHandler) { handlers[name] = handler }
     public func off(_ name: String) { handlers.removeValue(forKey: name) }
-
     @MainActor
     public func emitEvent(_ name: String, payload: Any?) {
         let js = "window.Native && window.Native.emit(\(Self.quote(name)), \(Self.toJSONLiteral(payload)));"
         webView.jobsEval(js)
     }
-
     @MainActor
     public func callJS(function: String,
                        args: [Any] = [],
@@ -383,7 +399,6 @@ public final class BaseWebView: UIView {
         """
         webView.jobsEval(js)
     }
-
     // ===== MobileBridge：对外 API =====
     @discardableResult @MainActor
     public func useMobileBridge(_ cfg: MobileBridgeConfig = .defaults()) -> Self {
@@ -391,20 +406,17 @@ public final class BaseWebView: UIView {
         if cfg.injectShim { injectMinimalMobileShim() }
         return self
     }
-
     @discardableResult
     public func registerMobileAction(_ name: String, _ handler: @escaping MobileActionHandler) -> Self {
         mobileActionHandlers[name] = handler
         return self
     }
-
     @discardableResult
     public func unregisterMobileAction(_ name: String) -> Self {
         mobileActionHandlers.removeValue(forKey: name)
         return self
     }
 }
-
 // MARK: - MobileBridgeConfig · 链式 DSL
 public extension BaseWebView.MobileBridgeConfig {
     @discardableResult
@@ -808,12 +820,18 @@ extension BaseWebView: WKNavigationDelegate {
         guard let url = action.request.url else { decisionHandler(.cancel); return }
         let scheme = (url.scheme ?? "").lowercased()
         let isMain = (action.targetFrame?.isMainFrame == true)
-
         // 0) 外部 scheme（weixin:// 等）
         let standardSchemes: Set<String> = ["http","https","file","about","data","javascript"]
         if !standardSchemes.contains(scheme) || externalSchemes.contains(scheme) {
             if UIApplication.shared.canOpenURL(url) { UIApplication.shared.open(url, options: [:], completionHandler: nil) }
             decisionHandler(.cancel); return
+        }
+        // 0.5) 主文档一律强制无缓存（若未带标记头则重载为无缓存请求）
+        if alwaysFreshMainDocument && isMain &&
+            action.request.value(forHTTPHeaderField: Self.noCacheHeader) != "1" {
+            decisionHandler(.cancel)
+            webView.load(makeNoCache(action.request))
+            return
         }
         // 1) Safari 兜底（通用规则）
         if isMain, let rule = safariFallbackRule, rule(url) {
@@ -828,7 +846,7 @@ extension BaseWebView: WKNavigationDelegate {
             lastRewriteAt = now
             if rewriteCount <= rewriteBurstLimit {
                 decisionHandler(.cancel)
-                webView.load(URLRequest(url: newURL))
+                webView.load(makeNoCache(URLRequest(url: newURL)))
                 return
             }
         }
@@ -840,13 +858,13 @@ extension BaseWebView: WKNavigationDelegate {
                 webView.configuration.applicationNameForUserAgent = desired
                 webView.customUserAgent = nil
                 decisionHandler(.cancel)
-                webView.load(action.request)
+                webView.load(makeNoCache(action.request))
                 return
             }
         }
         // 4) target=_blank 的 in-place 处理
         if action.targetFrame == nil {
-            if openBlankInPlace { webView.load(action.request) }
+            if openBlankInPlace { webView.load(makeNoCache(action.request)) }
             else { UIApplication.shared.open(url, options: [:], completionHandler: nil) }
             decisionHandler(.cancel); return
         }
@@ -1020,14 +1038,6 @@ public extension BaseWebView {
         self.safariFallbackRule = rule
         return self
     }
-    @discardableResult @MainActor
-    func byBgColor(_ color: UIColor) -> Self { self.backgroundColor = color; return self }
-    @discardableResult @MainActor
-    func byAddTo(_ parent: UIView, _ layout: (ConstraintMaker) -> Void) -> Self {
-        parent.addSubview(self)
-        self.snp.makeConstraints(layout)
-        return self
-    }
     @discardableResult
     func byApply(_ block: (BaseWebView) -> Void) -> Self { block(self); return self }
 }
@@ -1052,9 +1062,38 @@ extension BaseWebView: JobsNavBarHost {
 }
 // ===== 私有：下拉刷新处理（避免与外部 reload 命名冲突）=====
 private extension BaseWebView {
+    // 统一构造“无缓存”请求
+    func makeNoCache(_ original: URLRequest) -> URLRequest {
+        var req = original
+        // 固定忽略本地缓存
+        req.cachePolicy = .reloadIgnoringLocalCacheData
+
+        // 打标，防止在 decidePolicyFor 被我们再次拦截造成死循环
+        var headers = req.allHTTPHeaderFields ?? [:]
+        headers[Self.noCacheHeader] = "1"
+
+        // 明确指令：不缓存、不复用
+        // （服务端若强行缓存，这是我们能做的最大化提示）
+        if headers["Cache-Control"] == nil {
+            headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+        }
+        if headers["Pragma"] == nil {
+            headers["Pragma"] = "no-cache"
+        }
+        if headers["Expires"] == nil {
+            headers["Expires"] = "0"
+        }
+        req.allHTTPHeaderFields = headers
+        return req
+    }
     @MainActor
     @objc func handlePullToRefresh() {
-        webView.reload()
+        // 用当前 URL 重新发起“无缓存”加载，避免 reload 走到内存缓存
+        if let url = webView.url {
+            webView.load(makeNoCache(URLRequest(url: url)))
+        } else {
+            webView.reload()
+        }
         Task {
             try? await Task.sleep(nanoseconds: 600_000_000) // 0.6s
             refresher.endRefreshing()
