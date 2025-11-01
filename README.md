@@ -5332,6 +5332,47 @@ override func viewWillDisappear(_ animated: Bool) {
     btn.bySpinStop()
     ```
 
+### 38、国际化 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 新建语言映射文件`*.strings`
+ ![image-20251101165105182](./assets/image-20251101165105182.png)
+
+ * `Localizable.strings (English)` **中文为键**
+ 
+   ```
+   "🔑 注册登录" = "🔑 Sign in / Register";
+   ```
+ 
+ * `Localizable.strings (Chinese, Simplified)`
+ 
+   ```
+   "🔑 注册登录" = "🔑 注册登录";
+   ```
+ 
+* 启动配置
+  
+  ```swift
+  func application(
+      _ application: UIApplication,
+      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+  ) -> Bool {
+      TRLang.bundleProvider = { LanguageManager.shared.localizedBundle }
+      TRLang.localeCodeProvider = { LanguageManager.shared.currentLanguageCode }
+      return true
+  }
+  ```
+  
+* 使用方式，Api类[**Flutter**](https://flutter.dev)
+
+   ```swift
+   "🔑 注册登录".tr
+   ```
+
+* 说明
+
+   * 切换语言的时候，是通过发通知来转换的
+   * 对于已经赋值的UI控件，还是需要重新赋值。**`*.tr`**只是改变字符串
+
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>

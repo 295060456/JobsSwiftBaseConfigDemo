@@ -31,7 +31,7 @@ final class RootListVC: BaseVC {
             ("🔑 注册登录".tr, JobsAppDoorDemoVC.self), // 👈 这里需要 .tr
             ("🛜 Moya网络请求框架", MoyaDemoVC.self),
             ("🛜 Alamofire网络请求框架", AFDemoVC.self),
-            ("🪥 支持左右上下刷新@JobsRefresher", JobsRefresherDemoVC.self),
+            ("🧹 支持左右上下刷新", JobsRefresherDemoVC.self),
             ("🧧 TraitChange", TraitChangeDemoVC.self),
             ("⛑️ 支持上下左右安全Push和原路返回", SafetyPushDemoVC.self),
             ("⛑️ 安全Present", SafetyPresentDemoVC.self),

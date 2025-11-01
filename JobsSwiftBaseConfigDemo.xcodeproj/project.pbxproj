@@ -347,10 +347,6 @@
 		046786EE2EB4CF2B003FE82D /* DefaultSkins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultSkins.swift; sourceTree = "<group>"; };
 		046786F02EB4CF74003FE82D /* Demo@JobsRefresher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@JobsRefresher.swift"; sourceTree = "<group>"; };
 		046786F42EB5AD13003FE82D /* GKNavigationBarSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GKNavigationBarSwift.swift; sourceTree = "<group>"; };
-		046786F82EB5B1AA003FE82D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
-		046786F92EB5B1AA003FE82D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
-		046786FB2EB5B247003FE82D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
-		046786FD2EB5B24E003FE82D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		046CF9742E9667C8005A88B4 /* UIButtonConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonConfiguration.swift; sourceTree = "<group>"; };
 		046CF9762E967E6B005A88B4 /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		0477D96C2E8B83CA002C6427 /* JobsSafeTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsSafeTransitions.swift; sourceTree = "<group>"; };
@@ -1607,8 +1603,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				C564FBE52E09580B0079B5C1 /* Base */,
-				046786F82EB5B1AA003FE82D /* zh-Hans */,
-				046786FB2EB5B247003FE82D /* en */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -1617,8 +1611,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				C564FBED2E09580D0079B5C1 /* Base */,
-				046786F92EB5B1AA003FE82D /* zh-Hans */,
-				046786FD2EB5B24E003FE82D /* en */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
