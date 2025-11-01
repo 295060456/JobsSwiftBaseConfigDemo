@@ -7,17 +7,17 @@
 
 import Foundation
 
-/// 统一、唯一的本地化入口
 public extension String {
-    /// 只保留这一版：强制走 TRLang.bundleProvider
+    /// 仅此一个 API：每次访问都按“当前语言”取值
     var tr: String {
-        let bundle = TRLang.bundleProvider()
-        let s = NSLocalizedString(self,
-                                  tableName: nil,
-                                  bundle: bundle,
-                                  value: self,
-                                  comment: "")
-        // 不再做兼容：你项目已存在 TRAutoRefresh 标记链，请直接走它
-        return TRAutoRefresh.Marker.pack(translated: s, key: self, table: nil)
+        let b = TRLang.bundle()
+        print("📍 strings path =", b.path(forResource: "Localizable", ofType: "strings") ?? "nil")
+        // value: self → 当 key 未翻到时，回退 key 本身，便于你肉眼排查漏翻
+        return NSLocalizedString(self, tableName: nil, bundle: b, value: self, comment: "")
+    }
+
+    /// 可选：带参数版本（String(format:)）
+    func tr(_ args: CVarArg...) -> String {
+        String(format: self.tr, arguments: args)
     }
 }

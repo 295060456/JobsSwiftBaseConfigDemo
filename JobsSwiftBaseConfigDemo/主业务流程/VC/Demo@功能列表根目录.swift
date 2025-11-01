@@ -229,8 +229,6 @@ final class RootListVC: BaseVC {
         ) { [weak self] _ in
             guard let self = self else { return }
 
-            var d = "🔑 注册登录".tr
-
             self.applyLocalizedTexts()
             // 如有列表
             (self.view as? UITableView)?.reloadData()
@@ -299,6 +297,7 @@ final class RootListVC: BaseVC {
                         sender.isSelected.toggle()
                         let to = (LanguageManager.shared.currentLanguageCode == "zh-Hans") ? "en" : "zh-Hans"
                         LanguageManager.shared.switchTo(to)   // -> 触发通知 -> BaseVC 自动调用 applyLocalizedTexts()
+//                        _langSanityCheck()
                         print("🌐 切换语言 tapped（占位）")
                     },
                 UIButton.sys()
@@ -337,6 +336,25 @@ final class RootListVC: BaseVC {
     }
     public func applyLocalizedTexts() {
         // 交给子类实现；示例见下
+    }
+    func _langSanityCheck() {
+        print("== BEFORE ==")
+        print(TRLang.bundle().bundlePath)
+        print("🔑 =", "🔑 注册登录".tr)
+
+        LanguageManager.shared.switchTo("en") // 异步；加个小延时观察
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+            print("== AFTER en ==")
+            print(TRLang.bundle().bundlePath)
+            print("🔑 =", "🔑 注册登录".tr)
+
+            LanguageManager.shared.switchTo("zh-Hans")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                print("== AFTER zh-Hans ==")
+                print(TRLang.bundle().bundlePath)
+                print("🔑 =", "🔑 注册登录".tr)
+            }
+        }
     }
 }
 // MARK: - DataSource & Delegate

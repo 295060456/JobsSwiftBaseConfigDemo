@@ -35,6 +35,7 @@
 		042F95952EB5E6DC005DE735 /* TRString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F95942EB5E6D9005DE735 /* TRString.swift */; };
 		042F95972EB5E6EB005DE735 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F95962EB5E6EA005DE735 /* LanguageManager.swift */; };
 		042F95992EB5F124005DE735 /* TRAutoRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F95982EB5F123005DE735 /* TRAutoRefresh.swift */; };
+		042F959C2EB5F733005DE735 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 042F959A2EB5F733005DE735 /* Localizable.strings */; };
 		043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043838A12EAA4BB3007BA552 /* BaseWebVC.swift */; };
 		043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */; };
 		0440B5572EB2370E005DBE91 /* SnowflakeSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */; };
@@ -279,6 +280,8 @@
 		042F95942EB5E6D9005DE735 /* TRString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRString.swift; sourceTree = "<group>"; };
 		042F95962EB5E6EA005DE735 /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
 		042F95982EB5F123005DE735 /* TRAutoRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRAutoRefresh.swift; sourceTree = "<group>"; };
+		042F959B2EB5F733005DE735 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		042F959D2EB5F74C005DE735 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		043838A12EAA4BB3007BA552 /* BaseWebVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWebVC.swift; sourceTree = "<group>"; };
 		043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProtocolDefs.swift; sourceTree = "<group>"; };
 		0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnowflakeSwift.swift; sourceTree = "<group>"; };
@@ -550,6 +553,7 @@
 		042F958F2EB5C733005DE735 /* 多语言化 */ = {
 			isa = PBXGroup;
 			children = (
+				042F959A2EB5F733005DE735 /* Localizable.strings */,
 				042F95982EB5F123005DE735 /* TRAutoRefresh.swift */,
 				042F95962EB5E6EA005DE735 /* LanguageManager.swift */,
 				042F95942EB5E6D9005DE735 /* TRString.swift */,
@@ -1255,6 +1259,7 @@
 				0459211F2E85588C008C8D6A /* fonteditor.ttf in Resources */,
 				045921202E85588C008C8D6A /* DIN-Black-2.otf in Resources */,
 				047E48DC2EB3577B00881898 /* pano_360.mp4 in Resources */,
+				042F959C2EB5F733005DE735 /* Localizable.strings in Resources */,
 				0453764C2EB0B43F00133F73 /* IncomeSource.json in Resources */,
 				0453764D2EB0B43F00133F73 /* UserData.json in Resources */,
 				0453764E2EB0B43F00133F73 /* OccupationList.json in Resources */,
@@ -1589,6 +1594,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		042F959A2EB5F733005DE735 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				042F959B2EB5F733005DE735 /* en */,
+				042F959D2EB5F74C005DE735 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		C564FBE42E09580B0079B5C1 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

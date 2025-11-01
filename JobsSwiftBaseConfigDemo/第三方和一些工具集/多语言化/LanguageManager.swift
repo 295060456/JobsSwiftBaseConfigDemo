@@ -14,33 +14,35 @@ public extension Notification.Name {
 
 public final class LanguageManager {
     public static let shared = LanguageManager()
-    private init() {
-        // 启动恢复（可按需持久化）
-        if let saved = UserDefaults.standard.string(forKey: Self.udk) {
+
+    private let userDefaultsKey = "Jobs.LanguageCode"
+    public private(set) var currentLanguageCode: String
+
+    public init() {
+        // 读持久化；默认跟随系统（可按需改）
+        if let saved = UserDefaults.standard.string(forKey: userDefaultsKey) {
             currentLanguageCode = saved
+        } else {
+            currentLanguageCode = Locale.preferredLanguages.first ?? "en"
         }
     }
 
-    private static let udk = "jobs.currentLanguageCode"
-
-    /// 当前语言码（与 .lproj 目录名一致，如 zh-Hans / en）
-    public private(set) var currentLanguageCode: String = "zh-Hans" {
-        didSet { UserDefaults.standard.set(currentLanguageCode, forKey: Self.udk) }
-    }
-
-    /// 计算属性：每次都据当前语言码“拿最新 Bundle”
+    /// 动态 Bundle：每次按当前 code 解析路径
     public var localizedBundle: Bundle {
-        if let path = Bundle.main.path(forResource: currentLanguageCode, ofType: "lproj"),
-           let b = Bundle(path: path) {
-            return b
+        guard
+            let path = Bundle.main.path(forResource: currentLanguageCode, ofType: "lproj"),
+            let b = Bundle(path: path)
+        else {
+            return .main
         }
-        return .main
+        return b
     }
 
-    /// 切换语言：更新语言码 → 广播通知（不重建 Root）
+    /// 切换语言：更新 code → 持久化 → 发通知
     public func switchTo(_ code: String) {
         guard code != currentLanguageCode else { return }
         currentLanguageCode = code
+        UserDefaults.standard.set(code, forKey: userDefaultsKey)
         NotificationCenter.default.post(name: .JobsLanguageDidChange, object: nil)
     }
 }

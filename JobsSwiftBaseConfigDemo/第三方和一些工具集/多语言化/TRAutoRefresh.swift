@@ -78,26 +78,22 @@ public enum TRAutoRefresh {
         lock.lock(); entries.append(entry); lock.unlock()
     }
     /// 主线程刷新全部已注册控件
+    private static var _isRefreshing = false
     public static func refreshAll() {
-        precondition(Thread.isMainThread, "TRAutoRefresh.refreshAll 必须在主线程调用")
-        lock.lock()
-        // 清理已释放目标
+        precondition(Thread.isMainThread, "must be on main")
+        guard !_isRefreshing else { return }     // 防 re-entrancy
+        _isRefreshing = true
+        // 不需要 NSLock（既然强制在主线程）
         entries = entries.filter { $0.target != nil }
         let snapshot = entries
-        lock.unlock()
+        let bundle = TRLang.bundle()
 
-        let bundle = TRLang.bundleProvider()
         for e in snapshot {
             guard let obj = e.target else { continue }
-            let translated = NSLocalizedString(
-                e.key,
-                tableName: e.table,
-                bundle: bundle,
-                value: e.key,
-                comment: ""
-            )
+            let translated = NSLocalizedString(e.key, tableName: e.table, bundle: bundle, value: e.key, comment: "")
             e.apply(obj, translated)
         }
+        _isRefreshing = false
     }
 }
 // MARK: - 常用控件：一行接入

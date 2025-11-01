@@ -6,15 +6,12 @@
 //
 
 import Foundation
-
-/// 语言上下文（唯一真相）
+// MARK: - 统一语言桥（无兼容分支，仅此一套）
 public enum TRLang {
-    /// 返回当前“生效”的本地化 Bundle（必须绑定，默认 .main 仅用于极早期）
-    public private(set) static var bundleProvider: () -> Bundle = { .main }
-
-    /// App 启动时绑定：让 .tr 永远走“最新语言”的 Bundle
+    // 原来是: public static var bundleProvider: (() -> Bundle)?
+    public static var bundleProvider: () -> Bundle = { .main }
+    // 原来是可选；如果你确实需要它，给个安全默认
+    public static var localeCodeProvider: () -> String = { Locale.current.identifier }
     @inline(__always)
-    public static func bindBundleProvider(_ provider: @escaping () -> Bundle) {
-        bundleProvider = provider
-    }
+    public static func bundle() -> Bundle { bundleProvider() }
 }
