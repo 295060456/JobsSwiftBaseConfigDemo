@@ -275,11 +275,9 @@ final class RootListVC: BaseVC {
                         guard let self else { return }
                         sender.isSelected.toggle()
 
-                        sender.isSelected ? LanguageManager.shared.switchTo("en") : LanguageManager.shared.switchTo("zh-Hans") // 切到简体中文
-
-//                        LanguageManager.shared.switchTo("zh-Hans") // 切到简体中文
-//                        LanguageManager.shared.switchTo("zh-Hant") // 切到繁体中文
-
+                        let to = LanguageManager.shared.currentLanguageCode == "zh-Hans" ? "en" : "zh-Hans"
+                         LanguageManager.shared.switchTo(to)     // 更新语言 & 发通知
+                        tableView.reloadData()
                         print("🌐 切换语言 tapped（占位）")
                     },
                 UIButton.sys()

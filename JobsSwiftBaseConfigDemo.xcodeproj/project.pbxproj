@@ -30,6 +30,8 @@
 		04124F442EB0764200462BE2 /* AFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F432EB0764100462BE2 /* AFService.swift */; };
 		041F5B012E87B51800984EEB /* Demo@输入框.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041F5B002E87B50F00984EEB /* Demo@输入框.swift */; };
 		042B67CE2E95085A000A2970 /* NSTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B67CD2E950858000A2970 /* NSTextAttachment.swift */; };
+		042F958E2EB5C478005DE735 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F958D2EB5C477005DE735 /* Bundle.swift */; };
+		042F95912EB5C89F005DE735 /* TRAutoRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F95902EB5C89E005DE735 /* TRAutoRefresh.swift */; };
 		043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043838A12EAA4BB3007BA552 /* BaseWebVC.swift */; };
 		043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */; };
 		0440B5572EB2370E005DBE91 /* SnowflakeSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */; };
@@ -270,6 +272,8 @@
 		04124F432EB0764100462BE2 /* AFService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFService.swift; sourceTree = "<group>"; };
 		041F5B002E87B50F00984EEB /* Demo@输入框.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@输入框.swift"; sourceTree = "<group>"; };
 		042B67CD2E950858000A2970 /* NSTextAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTextAttachment.swift; sourceTree = "<group>"; };
+		042F958D2EB5C477005DE735 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
+		042F95902EB5C89E005DE735 /* TRAutoRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRAutoRefresh.swift; sourceTree = "<group>"; };
 		043838A12EAA4BB3007BA552 /* BaseWebVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWebVC.swift; sourceTree = "<group>"; };
 		043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProtocolDefs.swift; sourceTree = "<group>"; };
 		0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnowflakeSwift.swift; sourceTree = "<group>"; };
@@ -539,6 +543,15 @@
 			path = "Demo@Alamofire";
 			sourceTree = "<group>";
 		};
+		042F958F2EB5C733005DE735 /* 多语言化 */ = {
+			isa = PBXGroup;
+			children = (
+				042F95902EB5C89E005DE735 /* TRAutoRefresh.swift */,
+				046786F62EB5B0E1003FE82D /* LanguageManager.swift */,
+			);
+			path = "多语言化";
+			sourceTree = "<group>";
+		};
 		045376392EB0B3FE00133F73 /* 视频 */ = {
 			isa = PBXGroup;
 			children = (
@@ -581,9 +594,9 @@
 		045920E22E84EC64008C8D6A /* 第三方和一些工具集 */ = {
 			isa = PBXGroup;
 			children = (
+				042F958F2EB5C733005DE735 /* 多语言化 */,
 				046786E32EB4CED9003FE82D /* JobsRefresher */,
 				047E48C52EB3554900881898 /* PNPlayer */,
-				046786F62EB5B0E1003FE82D /* LanguageManager.swift */,
 				0440B5DB2EB30749005DBE91 /* weak.swift */,
 				0440B5D92EB2FFAC005DBE91 /* keys.swift */,
 				04BCDC292EA9DB0B00382DE0 /* JobsText.swift */,
@@ -848,6 +861,7 @@
 		04D0C9802E8D19FC00580020 /* iOS.SDK */ = {
 			isa = PBXGroup;
 			children = (
+				042F958D2EB5C477005DE735 /* Bundle.swift */,
 				048F447D2EB3267000BAA7EE /* CATransform3D.swift */,
 				04BCDC312EA9EAAF00382DE0 /* UICollectionViewFlowLayout.swift */,
 				0482A67B2EA7883E004176A4 /* Dictionary.swift */,
@@ -1346,6 +1360,7 @@
 				C564FCB22E0959990079B5C1 /* EmptyView.swift in Sources */,
 				04124F332EB0625300462BE2 /* Plugins.swift in Sources */,
 				045920FC2E854FA9008C8D6A /* UInt.swift in Sources */,
+				042F958E2EB5C478005DE735 /* Bundle.swift in Sources */,
 				045920FF2E854FBD008C8D6A /* UInt8.swift in Sources */,
 				0440B5DA2EB2FFB7005DBE91 /* keys.swift in Sources */,
 				04D0C96C2E8CCA7400580020 /* UIBarItem.swift in Sources */,
@@ -1368,6 +1383,7 @@
 				04BCDC302EA9E86600382DE0 /* UICollectionViewCell.swift in Sources */,
 				04FC778B2EB0BE2F00B810BA /* PlayerDetailVC.swift in Sources */,
 				04E8D5B92E8E550200E85CDA /* BaseStructDefs.swift in Sources */,
+				042F95912EB5C89F005DE735 /* TRAutoRefresh.swift in Sources */,
 				0487AADA2E840CB200B5D307 /* UIColor.swift in Sources */,
 				04E8D6232E8E884500E85CDA /* BaseVC.swift in Sources */,
 				047E48F52EB36AC600881898 /* MTLSamplerDescriptor.swift in Sources */,

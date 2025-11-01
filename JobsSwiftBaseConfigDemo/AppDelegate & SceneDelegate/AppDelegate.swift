@@ -8,7 +8,7 @@
 import UIKit
 import GKNavigationBarSwift
 import LiveChat
-
+// zzza
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -98,9 +98,7 @@ extension AppDelegate {
     }
 
     func 多语言化(){
-        // 例如 AppDelegate / 启动处：
-        TRLang.bindBundleProvider { LanguageManager.shared.localizedBundle }
-        // 如果你有当前语言码（用于数字/日期本地化的 Locale），也可绑定：
-        TRLang.bindLocaleCodeProvider { LanguageManager.shared.currentLanguageCode } // 没有就不绑
+        TRAutoRefresh.install()
+        Bundle.jobs_enableLanguageHook() // 下面第2步的 swizzle，仅需一次
     }
 }

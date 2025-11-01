@@ -12,7 +12,6 @@ public final class LanguageManager {
     private init() {}
 
     private enum Key { static let userLang = "app.user.language.code" }
-
     /// 当前语言码（如 zh-Hans / en / en-GB），持久化到 UserDefaults
     public var currentLanguageCode: String? {
         get { UserDefaults.standard.string(forKey: Key.userLang) }
@@ -25,7 +24,6 @@ public final class LanguageManager {
             }
         }
     }
-
     /// 当前语言的 Bundle（默认 main）
     public var localizedBundle: Bundle {
         let code = currentLanguageCode ?? Locale.preferredLanguages.first ?? "en"
@@ -33,16 +31,13 @@ public final class LanguageManager {
         if let path = Bundle.main.path(forResource: norm, ofType: "lproj"),
            let bundle = Bundle(path: path) {
             return bundle
-        }
-        return .main
+        };return .main
     }
-
     /// 切换语言（会广播刷新）
     public func switchTo(_ code: String) {
         self.currentLanguageCode = code
-        TRLang.notifyDidChange()
+        NotificationCenter.default.post(name: .TRLanguageDidChange, object: nil) // ✅
     }
-
     /// 规范化成 .lproj 目录名
     private static func normalize(_ raw: String) -> String {
         // 常见别名修正
