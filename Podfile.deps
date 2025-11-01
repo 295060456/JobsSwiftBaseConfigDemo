@@ -25,6 +25,7 @@ def swiftAppCommon
   pod 'BMPlayer'                           # https://github.com/BrikerMan/BMPlayer             ❤️ 播放器（参照 ZFPlayer）
   pod 'LiveChat'                           # https://github.com/livechat/chat-window-ios       ❤️ 第三方的聊天工具 https://www.livechat.com/
   pod 'LunarSwift'                         # https://github.com/6tail/lunar-swift              ❤️ 无第三方依赖的日历工具
+  pod 'CoreXLSX'                           # https://github.com/3973770/SwiftXLSX              ❤️ Excel
 end
 
 # ============================== 调试框架（仅 Debug） ==============================

@@ -12,7 +12,7 @@ import SnapKit
 import GKNavigationBar
 #endif
 /// 农历 <-> 公历 Demo（全面适配你的 UITableView/SnapKit/Jobs DSL）
-final class LunarDemoVC: UIViewController {
+final class LunarDemoVC: BaseVC {
     // MARK: - Sections & Rows
     private enum Section: Int, CaseIterable {
         case example     // README 示例：农历 -> 公历
@@ -119,15 +119,10 @@ final class LunarDemoVC: UIViewController {
         )
         // 表头：用你的 DSL + SnapKit
         let header = UIView()
-        datePicker.byAddTo(header) { [unowned self] make in
-            if view.jobs_hasVisibleTopBar() {
-                make.top.equalTo(self.gk_navigationBar.snp.bottom).offset(10)
-                make.left.right.bottom.equalToSuperview()
-            } else {
-                make.edges.equalToSuperview().inset(UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0))
-            }
+        datePicker.byAddTo(header) { make in
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16))
         }
-        attachHeader(header)
+        attachHeader(header)  // 你已有：计算 fitting 高度并赋给 tableHeaderView
 
         // 初始数据
         buildExampleRows()

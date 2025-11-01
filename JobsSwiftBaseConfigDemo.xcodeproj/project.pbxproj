@@ -127,6 +127,7 @@
 		047E48F32EB36A5B00881898 /* MTLDepthStencilDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E48F22EB36A5A00881898 /* MTLDepthStencilDescriptor.swift */; };
 		047E48F52EB36AC600881898 /* MTLSamplerDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E48F42EB36AC600881898 /* MTLSamplerDescriptor.swift */; };
 		047E9A712EB618B300F58923 /* Demo@Lunar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E9A702EB618B300F58923 /* Demo@Lunar.swift */; };
+		047E9A732EB6217900F58923 /* Demo@XLSX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E9A722EB6217000F58923 /* Demo@XLSX.swift */; };
 		0482A5E82EA380EB004176A4 /* BaseWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0482A5E72EA380E1004176A4 /* BaseWebView.swift */; };
 		0482A5EA2EA383B2004176A4 /* Demo@网页加载互动.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0482A5E92EA38392004176A4 /* Demo@网页加载互动.swift */; };
 		0482A5F22EA3A3A2004176A4 /* BaseWebViewDemo.html in Resources */ = {isa = PBXBuildFile; fileRef = 0482A5F12EA3A3A2004176A4 /* BaseWebViewDemo.html */; };
@@ -375,6 +376,7 @@
 		047E48F22EB36A5A00881898 /* MTLDepthStencilDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTLDepthStencilDescriptor.swift; sourceTree = "<group>"; };
 		047E48F42EB36AC600881898 /* MTLSamplerDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTLSamplerDescriptor.swift; sourceTree = "<group>"; };
 		047E9A702EB618B300F58923 /* Demo@Lunar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@Lunar.swift"; sourceTree = "<group>"; };
+		047E9A722EB6217000F58923 /* Demo@XLSX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@XLSX.swift"; sourceTree = "<group>"; };
 		0482A5E72EA380E1004176A4 /* BaseWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWebView.swift; sourceTree = "<group>"; };
 		0482A5E92EA38392004176A4 /* Demo@网页加载互动.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@网页加载互动.swift"; sourceTree = "<group>"; };
 		0482A5F12EA3A3A2004176A4 /* BaseWebViewDemo.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = BaseWebViewDemo.html; sourceTree = "<group>"; };
@@ -812,6 +814,7 @@
 				04124F2B2EB0621D00462BE2 /* Demo@Moya */,
 				04B00E472EB21F0800901B1C /* Demo@LiveChat.swift */,
 				047E9A702EB618B300F58923 /* Demo@Lunar.swift */,
+				047E9A722EB6217000F58923 /* Demo@XLSX.swift */,
 				0440B5582EB237B3005DBE91 /* Demo@Snowflake.swift */,
 				046786F02EB4CF74003FE82D /* Demo@JobsRefresher.swift */,
 				04BCDC2B2EA9DB7D00382DE0 /* Demo@JobsText.swift */,
@@ -1433,6 +1436,7 @@
 				C564FC892E0959640079B5C1 /* UICollectionView.swift in Sources */,
 				045376652EB0B5D600133F73 /* FeedVideoCell.swift in Sources */,
 				C564FCB32E0959990079B5C1 /* CustomCell.swift in Sources */,
+				047E9A732EB6217900F58923 /* Demo@XLSX.swift in Sources */,
 				045920FA2E854FA5008C8D6A /* Int64.swift in Sources */,
 				0440B5592EB237BE005DBE91 /* Demo@Snowflake.swift in Sources */,
 				04E8D61B2E8E837D00E85CDA /* NSMutableAttributedString.swift in Sources */,
