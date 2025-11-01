@@ -17,44 +17,45 @@ final class RootListVC: BaseVC {
         suspendBtn.stopTimer()
         suspendSpinBtn.stopTimer()
     }
-
-    private let demos: [(title: String, vcType: UIViewController.Type)] = [
-        ("ViewController", ViewController.self),
-        ("✍️ UITextField", UITextFieldDemoVC.self),
-        ("✍️ UITextView", UITextViewDemoVC.self),
-        ("🌋 富文本", RichTextDemoVC.self),
-        ("🌋 普通文本和富文本的融合数据类型", JobsTextDemoVC.self),
-        ("🌍 JobsTabBarCtrl", TabBarDemoVC.self),
-        ("📷 鉴权后调用相机/相册", PhotoAlbumDemoVC.self),
-        ("🛢️ 解码", SafeCodableDemoVC.self),
-        ("🔘 按钮", UIButtonDemoVC.self),
-        ("🔑 注册登录".tr, JobsAppDoorDemoVC.self),
-        ("🛜 Moya网络请求框架", MoyaDemoVC.self),
-        ("🛜 Alamofire网络请求框架", AFDemoVC.self),
-        ("🪥 支持左右上下刷新加载@JobsRefresher", JobsRefresherDemoVC.self),
-        ("🧧 TraitChange", TraitChangeDemoVC.self),
-        ("⛑️ 支持上下左右安全Push和原路返回", SafetyPushDemoVC.self),
-        ("⛑️ 安全Present", SafetyPresentDemoVC.self),
-        ("📹 播放器@BMPlayer", BMPlayerDemoVC.self),
-        ("📹 播放器@PNPlayer", PNPlayerDemoVC.self),
-        ("❄️ 雪花算法", SnowflakeDemoVC.self),
-        ("💬 LiveChat", LiveChatDemoVC.self),
-        ("🗄️ UITableView", EmptyTableViewDemoVC.self),
-        ("🗄️ UICollectionView", EmptyCollectionViewDemoVC.self),
-        ("🐎 跑马灯/🛞 轮播图", JobsMarqueeDemoVC.self),
-        ("🐎 二维码/条形码", QRCodeDemoVC.self),
-        ("🌞 BaseWebView", BaseWebViewDemoVC.self),
-        ("💥 JobsCountdown", JobsCountdownDemoVC.self),
-        ("⏰ Timer", TimerDemoVC.self),
-        ("⌨️ 键盘", KeyboardDemoVC.self),
-        ("🕹️ ControlEvents", JobsControlEventsDemoVC.self),
-        ("🏞️ 图片加载", PicLoadDemoVC.self),
-        ("👮 中国大陆公民身份证号码校验", CNIDDemoVC.self),
-        ("🏷️ Toast", ToastDemoVC.self),
-        ("⚠️ 系统的弹出框", UIAlertDemoVC.self),
-        ("🚀 JobsOpen", JobsOpenDemoVC.self)
-    ]
-
+    private func makeDemos() -> [(title: String, vcType: UIViewController.Type)] {
+        return [
+            ("ViewController", ViewController.self),
+            ("✍️ UITextField", UITextFieldDemoVC.self),
+            ("✍️ UITextView", UITextViewDemoVC.self),
+            ("🌋 富文本", RichTextDemoVC.self),
+            ("🌋 普通文本和富文本的融合数据类型", JobsTextDemoVC.self),
+            ("🌍 JobsTabBarCtrl", TabBarDemoVC.self),
+            ("📷 鉴权后调用相机/相册", PhotoAlbumDemoVC.self),
+            ("🛢️ 解码", SafeCodableDemoVC.self),
+            ("🔘 按钮", UIButtonDemoVC.self),
+            ("🔑 注册登录".tr, JobsAppDoorDemoVC.self), // 👈 这里需要 .tr
+            ("🛜 Moya网络请求框架", MoyaDemoVC.self),
+            ("🛜 Alamofire网络请求框架", AFDemoVC.self),
+            ("🪥 支持左右上下刷新@JobsRefresher", JobsRefresherDemoVC.self),
+            ("🧧 TraitChange", TraitChangeDemoVC.self),
+            ("⛑️ 支持上下左右安全Push和原路返回", SafetyPushDemoVC.self),
+            ("⛑️ 安全Present", SafetyPresentDemoVC.self),
+            ("📹 播放器@BMPlayer", BMPlayerDemoVC.self),
+            ("📹 播放器@PNPlayer", PNPlayerDemoVC.self),
+            ("❄️ 雪花算法", SnowflakeDemoVC.self),
+            ("💬 LiveChat", LiveChatDemoVC.self),
+            ("🗄️ UITableView", EmptyTableViewDemoVC.self),
+            ("🗄️ UICollectionView", EmptyCollectionViewDemoVC.self),
+            ("🐎 跑马灯/🛞 轮播图", JobsMarqueeDemoVC.self),
+            ("🐎 二维码/条形码", QRCodeDemoVC.self),
+            ("🌞 BaseWebView", BaseWebViewDemoVC.self),
+            ("💥 JobsCountdown", JobsCountdownDemoVC.self),
+            ("⏰ Timer", TimerDemoVC.self),
+            ("⌨️ 键盘", KeyboardDemoVC.self),
+            ("🕹️ ControlEvents", JobsControlEventsDemoVC.self),
+            ("🏞️ 图片加载", PicLoadDemoVC.self),
+            ("👮 中国大陆公民身份证号码校验", CNIDDemoVC.self),
+            ("🏷️ Toast", ToastDemoVC.self),
+            ("⚠️ 系统的弹出框", UIAlertDemoVC.self),
+            ("🚀 JobsOpen", JobsOpenDemoVC.self),
+        ]
+    }
+    private lazy var demos: [(title: String, vcType: UIViewController.Type)] = makeDemos()
     private lazy var suspendLab: UILabel = {
         UILabel()
             .byText("VIP")
@@ -220,16 +221,11 @@ final class RootListVC: BaseVC {
 
     override func loadView() {
         super.loadView()
-        // 首屏进来先应用一次
-        applyLocalizedTexts()
-
         // 监听后续切换
         langToken = NotificationCenter.default.addObserver(
             forName: .JobsLanguageDidChange, object: nil, queue: .main
         ) { [weak self] _ in
             guard let self = self else { return }
-
-            self.applyLocalizedTexts()
             // 如有列表
             (self.view as? UITableView)?.reloadData()
             // 或者你有 tableView / collectionView 成员：
@@ -296,8 +292,10 @@ final class RootListVC: BaseVC {
                         guard let self else { return }
                         sender.isSelected.toggle()
                         let to = (LanguageManager.shared.currentLanguageCode == "zh-Hans") ? "en" : "zh-Hans"
-                        LanguageManager.shared.switchTo(to)   // -> 触发通知 -> BaseVC 自动调用 applyLocalizedTexts()
-//                        _langSanityCheck()
+                        LanguageManager.shared.switchTo(to)
+//                        var s = "🔑 注册登录".tr
+                        demos = makeDemos()
+                        tableView.reloadData()
                         print("🌐 切换语言 tapped（占位）")
                     },
                 UIButton.sys()
@@ -334,9 +332,7 @@ final class RootListVC: BaseVC {
             /// TODO
         }
     }
-    public func applyLocalizedTexts() {
-        // 交给子类实现；示例见下
-    }
+
     func _langSanityCheck() {
         print("== BEFORE ==")
         print(TRLang.bundle().bundlePath)
