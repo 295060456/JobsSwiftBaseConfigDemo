@@ -98,7 +98,7 @@ extension AppDelegate {
     }
 
     func 多语言化(){
-        TRAutoRefresh.install()
-        Bundle.jobs_enableLanguageHook() // 下面第2步的 swizzle，仅需一次
+        TRLang.bindBundleProvider { LanguageManager.shared.localizedBundle }
+//        Bundle.jobs_enableLanguageHook() // 下面第2步的 swizzle，仅需一次
     }
 }

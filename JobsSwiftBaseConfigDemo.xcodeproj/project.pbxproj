@@ -31,7 +31,10 @@
 		041F5B012E87B51800984EEB /* Demo@输入框.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041F5B002E87B50F00984EEB /* Demo@输入框.swift */; };
 		042B67CE2E95085A000A2970 /* NSTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B67CD2E950858000A2970 /* NSTextAttachment.swift */; };
 		042F958E2EB5C478005DE735 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F958D2EB5C477005DE735 /* Bundle.swift */; };
-		042F95912EB5C89F005DE735 /* TRAutoRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F95902EB5C89E005DE735 /* TRAutoRefresh.swift */; };
+		042F95932EB5E6C1005DE735 /* TRLang.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F95922EB5E6C0005DE735 /* TRLang.swift */; };
+		042F95952EB5E6DC005DE735 /* TRString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F95942EB5E6D9005DE735 /* TRString.swift */; };
+		042F95972EB5E6EB005DE735 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F95962EB5E6EA005DE735 /* LanguageManager.swift */; };
+		042F95992EB5F124005DE735 /* TRAutoRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F95982EB5F123005DE735 /* TRAutoRefresh.swift */; };
 		043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043838A12EAA4BB3007BA552 /* BaseWebVC.swift */; };
 		043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */; };
 		0440B5572EB2370E005DBE91 /* SnowflakeSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */; };
@@ -97,7 +100,6 @@
 		046786EF2EB4CF2C003FE82D /* DefaultSkins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046786EE2EB4CF2B003FE82D /* DefaultSkins.swift */; };
 		046786F12EB4CF76003FE82D /* Demo@JobsRefresher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046786F02EB4CF74003FE82D /* Demo@JobsRefresher.swift */; };
 		046786F52EB5AD14003FE82D /* GKNavigationBarSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046786F42EB5AD13003FE82D /* GKNavigationBarSwift.swift */; };
-		046786F72EB5B0E2003FE82D /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046786F62EB5B0E1003FE82D /* LanguageManager.swift */; };
 		046CF9752E9667C9005A88B4 /* UIButtonConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046CF9742E9667C8005A88B4 /* UIButtonConfiguration.swift */; };
 		046CF9772E967E6C005A88B4 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046CF9762E967E6B005A88B4 /* URL.swift */; };
 		0477D96D2E8B83D6002C6427 /* JobsSafeTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D96C2E8B83CA002C6427 /* JobsSafeTransitions.swift */; };
@@ -273,7 +275,10 @@
 		041F5B002E87B50F00984EEB /* Demo@输入框.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@输入框.swift"; sourceTree = "<group>"; };
 		042B67CD2E950858000A2970 /* NSTextAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTextAttachment.swift; sourceTree = "<group>"; };
 		042F958D2EB5C477005DE735 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
-		042F95902EB5C89E005DE735 /* TRAutoRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRAutoRefresh.swift; sourceTree = "<group>"; };
+		042F95922EB5E6C0005DE735 /* TRLang.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRLang.swift; sourceTree = "<group>"; };
+		042F95942EB5E6D9005DE735 /* TRString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRString.swift; sourceTree = "<group>"; };
+		042F95962EB5E6EA005DE735 /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
+		042F95982EB5F123005DE735 /* TRAutoRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRAutoRefresh.swift; sourceTree = "<group>"; };
 		043838A12EAA4BB3007BA552 /* BaseWebVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWebVC.swift; sourceTree = "<group>"; };
 		043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProtocolDefs.swift; sourceTree = "<group>"; };
 		0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnowflakeSwift.swift; sourceTree = "<group>"; };
@@ -339,7 +344,6 @@
 		046786EE2EB4CF2B003FE82D /* DefaultSkins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultSkins.swift; sourceTree = "<group>"; };
 		046786F02EB4CF74003FE82D /* Demo@JobsRefresher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@JobsRefresher.swift"; sourceTree = "<group>"; };
 		046786F42EB5AD13003FE82D /* GKNavigationBarSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GKNavigationBarSwift.swift; sourceTree = "<group>"; };
-		046786F62EB5B0E1003FE82D /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
 		046786F82EB5B1AA003FE82D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		046786F92EB5B1AA003FE82D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		046786FB2EB5B247003FE82D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
@@ -546,8 +550,10 @@
 		042F958F2EB5C733005DE735 /* 多语言化 */ = {
 			isa = PBXGroup;
 			children = (
-				042F95902EB5C89E005DE735 /* TRAutoRefresh.swift */,
-				046786F62EB5B0E1003FE82D /* LanguageManager.swift */,
+				042F95982EB5F123005DE735 /* TRAutoRefresh.swift */,
+				042F95962EB5E6EA005DE735 /* LanguageManager.swift */,
+				042F95942EB5E6D9005DE735 /* TRString.swift */,
+				042F95922EB5E6C0005DE735 /* TRLang.swift */,
 			);
 			path = "多语言化";
 			sourceTree = "<group>";
@@ -1367,7 +1373,6 @@
 				C564FC8D2E0959640079B5C1 /* UIBarButtonItem.swift in Sources */,
 				0482A5FA2EA63440004176A4 /* WKWebViewConfiguration.swift in Sources */,
 				C564FC2E2E0958E80079B5C1 /* HUDHelper.swift in Sources */,
-				046786F72EB5B0E2003FE82D /* LanguageManager.swift in Sources */,
 				045920F22E854F79008C8D6A /* Int.swift in Sources */,
 				046786EB2EB4CF0A003FE82D /* UIScrollView+Proxy.swift in Sources */,
 				0477D9752E8B9146002C6427 /* Demo@安全Present.swift in Sources */,
@@ -1380,10 +1385,10 @@
 				045920E62E84F389008C8D6A /* CALayer.swift in Sources */,
 				049A65712EA0E6BB0006B185 /* JobsTabBarCtrl.swift in Sources */,
 				0482A5E82EA380EB004176A4 /* BaseWebView.swift in Sources */,
+				042F95932EB5E6C1005DE735 /* TRLang.swift in Sources */,
 				04BCDC302EA9E86600382DE0 /* UICollectionViewCell.swift in Sources */,
 				04FC778B2EB0BE2F00B810BA /* PlayerDetailVC.swift in Sources */,
 				04E8D5B92E8E550200E85CDA /* BaseStructDefs.swift in Sources */,
-				042F95912EB5C89F005DE735 /* TRAutoRefresh.swift in Sources */,
 				0487AADA2E840CB200B5D307 /* UIColor.swift in Sources */,
 				04E8D6232E8E884500E85CDA /* BaseVC.swift in Sources */,
 				047E48F52EB36AC600881898 /* MTLSamplerDescriptor.swift in Sources */,
@@ -1464,6 +1469,7 @@
 				0459210C2E855004008C8D6A /* Float80.swift in Sources */,
 				045376672EB0B5E100133F73 /* PlayerCenter.swift in Sources */,
 				04D0C96E2E8CD14B00580020 /* UIControl.swift in Sources */,
+				042F95992EB5F124005DE735 /* TRAutoRefresh.swift in Sources */,
 				04BCDC2C2EA9DB7E00382DE0 /* Demo@JobsText.swift in Sources */,
 				0477D9712E8B897D002C6427 /* Demo@支持上下左右安全Push和原路返回.swift in Sources */,
 				C564FCAC2E09597C0079B5C1 /* ViewController.swift in Sources */,
@@ -1486,6 +1492,7 @@
 				047E48E92EB35BAD00881898 /* SphereGeometry.swift in Sources */,
 				047E48EA2EB35BAD00881898 /* VideoTextureManager.swift in Sources */,
 				047E48EB2EB35BAD00881898 /* PlayerControlsView.swift in Sources */,
+				042F95952EB5E6DC005DE735 /* TRString.swift in Sources */,
 				047E48EC2EB35BAD00881898 /* Shaders.metal in Sources */,
 				045920F82E854F91008C8D6A /* Int32.swift in Sources */,
 				04468F8C2E9CFD7700677000 /* Demo@系统弹出框.swift in Sources */,
@@ -1495,6 +1502,7 @@
 				04C2F0332E98C9E000BA05A9 /* Demo@设计模式VIPER.swift in Sources */,
 				046786E52EB4CEE1003FE82D /* RefreshEnums.swift in Sources */,
 				048E37702E87997A004C3A41 /* UIGestureRecognizer.swift in Sources */,
+				042F95972EB5E6EB005DE735 /* LanguageManager.swift in Sources */,
 				C564FC8E2E0959640079B5C1 /* UITabBarController.swift in Sources */,
 				04468E102E9CB43E00677000 /* UIAlertAction.swift in Sources */,
 				04124F312EB0624300462BE2 /* TokenStore.swift in Sources */,

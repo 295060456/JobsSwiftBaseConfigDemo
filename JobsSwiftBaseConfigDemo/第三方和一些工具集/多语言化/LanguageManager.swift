@@ -7,57 +7,40 @@
 
 import Foundation
 
+public extension Notification.Name {
+    /// 全局：语言切换完成
+    static let JobsLanguageDidChange = Notification.Name("JobsLanguageDidChange")
+}
+
 public final class LanguageManager {
     public static let shared = LanguageManager()
-    private init() {}
+    private init() {
+        // 启动恢复（可按需持久化）
+        if let saved = UserDefaults.standard.string(forKey: Self.udk) {
+            currentLanguageCode = saved
+        }
+    }
 
-    private enum Key { static let userLang = "app.user.language.code" }
-    /// 当前语言码（如 zh-Hans / en / en-GB），持久化到 UserDefaults
-    public var currentLanguageCode: String? {
-        get { UserDefaults.standard.string(forKey: Key.userLang) }
-        set {
-            let norm = newValue.flatMap { LanguageManager.normalize($0) }
-            if let norm {
-                UserDefaults.standard.set(norm, forKey: Key.userLang)
-            } else {
-                UserDefaults.standard.removeObject(forKey: Key.userLang)
-            }
-        }
+    private static let udk = "jobs.currentLanguageCode"
+
+    /// 当前语言码（与 .lproj 目录名一致，如 zh-Hans / en）
+    public private(set) var currentLanguageCode: String = "zh-Hans" {
+        didSet { UserDefaults.standard.set(currentLanguageCode, forKey: Self.udk) }
     }
-    /// 当前语言的 Bundle（默认 main）
+
+    /// 计算属性：每次都据当前语言码“拿最新 Bundle”
     public var localizedBundle: Bundle {
-        let code = currentLanguageCode ?? Locale.preferredLanguages.first ?? "en"
-        let norm = LanguageManager.normalize(code)
-        if let path = Bundle.main.path(forResource: norm, ofType: "lproj"),
-           let bundle = Bundle(path: path) {
-            return bundle
-        };return .main
+        if let path = Bundle.main.path(forResource: currentLanguageCode, ofType: "lproj"),
+           let b = Bundle(path: path) {
+            return b
+        }
+        return .main
     }
-    /// 切换语言（会广播刷新）
+
+    /// 切换语言：更新语言码 → 广播通知（不重建 Root）
     public func switchTo(_ code: String) {
-        self.currentLanguageCode = code
-        NotificationCenter.default.post(name: .TRLanguageDidChange, object: nil) // ✅
-    }
-    /// 规范化成 .lproj 目录名
-    private static func normalize(_ raw: String) -> String {
-        // 常见别名修正
-        let lower = raw.lowercased()
-        if lower.hasPrefix("zh") {
-            if lower.contains("hant") || lower.contains("tw") || lower.contains("hk") {
-                return "zh-Hant"
-            } else {
-                return "zh-Hans"
-            }
-        }
-        // 标准化 en-GB / fr-CA 这类
-        let comps = raw.replacingOccurrences(of: "_", with: "-")
-                        .split(separator: "-")
-        if comps.count >= 2 {
-            let lang = comps[0].lowercased()
-            let region = comps[1].uppercased()
-            return "\(lang)-\(region)"
-        } else {
-            return comps.first.map(String.init) ?? "en"
-        }
+        guard code != currentLanguageCode else { return }
+        currentLanguageCode = code
+        NotificationCenter.default.post(name: .JobsLanguageDidChange, object: nil)
     }
 }

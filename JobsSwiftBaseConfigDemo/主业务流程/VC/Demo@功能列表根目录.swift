@@ -11,6 +11,8 @@ import ESPullToRefresh   // 由扩展内部使用
 
 final class RootListVC: BaseVC {
 
+    private var langToken: NSObjectProtocol?
+
     deinit {
         suspendBtn.stopTimer()
         suspendSpinBtn.stopTimer()
@@ -212,10 +214,31 @@ final class RootListVC: BaseVC {
                 make.edges.equalToSuperview()
             }
     }()
-
     // 防抖标记
     private var isPullRefreshing = false
     private var isLoadingMore    = false
+
+    override func loadView() {
+        super.loadView()
+        // 首屏进来先应用一次
+        applyLocalizedTexts()
+
+        // 监听后续切换
+        langToken = NotificationCenter.default.addObserver(
+            forName: .JobsLanguageDidChange, object: nil, queue: .main
+        ) { [weak self] _ in
+            guard let self = self else { return }
+
+            var d = "🔑 注册登录".tr
+
+            self.applyLocalizedTexts()
+            // 如有列表
+            (self.view as? UITableView)?.reloadData()
+            // 或者你有 tableView / collectionView 成员：
+            // self.tableView.reloadData()
+            // self.collectionView.reloadData()
+        }
+    }
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -230,7 +253,7 @@ final class RootListVC: BaseVC {
                 .byImage("list.bullet".sysImg, for: .selected)
                 /// 事件触发@点按
                 .onTap { [weak self] sender in
-                    guard let self else { return }
+//                    guard let self else { return }
                     sender.isSelected.toggle()
                     debugOnly {  // 仅 Debug 执行
                         JobsToast.show(
@@ -274,10 +297,8 @@ final class RootListVC: BaseVC {
                     .onTap { [weak self] sender in
                         guard let self else { return }
                         sender.isSelected.toggle()
-
-                        let to = LanguageManager.shared.currentLanguageCode == "zh-Hans" ? "en" : "zh-Hans"
-                         LanguageManager.shared.switchTo(to)     // 更新语言 & 发通知
-                        tableView.reloadData()
+                        let to = (LanguageManager.shared.currentLanguageCode == "zh-Hans") ? "en" : "zh-Hans"
+                        LanguageManager.shared.switchTo(to)   // -> 触发通知 -> BaseVC 自动调用 applyLocalizedTexts()
                         print("🌐 切换语言 tapped（占位）")
                     },
                 UIButton.sys()
@@ -313,6 +334,9 @@ final class RootListVC: BaseVC {
         if !enableLoadMore {
             /// TODO
         }
+    }
+    public func applyLocalizedTexts() {
+        // 交给子类实现；示例见下
     }
 }
 // MARK: - DataSource & Delegate
