@@ -22,6 +22,7 @@ final class RootListVC: BaseVC {
             ("ViewController", ViewController.self),
             ("✍️ UITextField", UITextFieldDemoVC.self),
             ("✍️ UITextView", UITextViewDemoVC.self),
+            ("📅 日历", LunarDemoVC.self),
             ("🌋 富文本", RichTextDemoVC.self),
             ("🌋 普通文本和富文本的融合数据类型", JobsTextDemoVC.self),
             ("🌍 JobsTabBarCtrl", TabBarDemoVC.self),
