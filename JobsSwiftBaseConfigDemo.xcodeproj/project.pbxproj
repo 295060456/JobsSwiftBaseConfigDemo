@@ -94,7 +94,6 @@
 		046786ED2EB4CF1B003FE82D /* UIScrollView+RefreshAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046786EC2EB4CF1A003FE82D /* UIScrollView+RefreshAPI.swift */; };
 		046786EF2EB4CF2C003FE82D /* DefaultSkins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046786EE2EB4CF2B003FE82D /* DefaultSkins.swift */; };
 		046786F12EB4CF76003FE82D /* Demo@JobsRefresher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046786F02EB4CF74003FE82D /* Demo@JobsRefresher.swift */; };
-		046786F32EB4D17C003FE82D /* String+Verticalized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046786F22EB4D17B003FE82D /* String+Verticalized.swift */; };
 		046CF9752E9667C9005A88B4 /* UIButtonConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046CF9742E9667C8005A88B4 /* UIButtonConfiguration.swift */; };
 		046CF9772E967E6C005A88B4 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046CF9762E967E6B005A88B4 /* URL.swift */; };
 		0477D96D2E8B83D6002C6427 /* JobsSafeTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D96C2E8B83CA002C6427 /* JobsSafeTransitions.swift */; };
@@ -333,7 +332,6 @@
 		046786EC2EB4CF1A003FE82D /* UIScrollView+RefreshAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+RefreshAPI.swift"; sourceTree = "<group>"; };
 		046786EE2EB4CF2B003FE82D /* DefaultSkins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultSkins.swift; sourceTree = "<group>"; };
 		046786F02EB4CF74003FE82D /* Demo@JobsRefresher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@JobsRefresher.swift"; sourceTree = "<group>"; };
-		046786F22EB4D17B003FE82D /* String+Verticalized.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Verticalized.swift"; sourceTree = "<group>"; };
 		046CF9742E9667C8005A88B4 /* UIButtonConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonConfiguration.swift; sourceTree = "<group>"; };
 		046CF9762E967E6B005A88B4 /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		0477D96C2E8B83CA002C6427 /* JobsSafeTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsSafeTransitions.swift; sourceTree = "<group>"; };
@@ -696,7 +694,6 @@
 		046786E32EB4CED9003FE82D /* JobsRefresher */ = {
 			isa = PBXGroup;
 			children = (
-				046786F22EB4D17B003FE82D /* String+Verticalized.swift */,
 				046786EE2EB4CF2B003FE82D /* DefaultSkins.swift */,
 				046786EC2EB4CF1A003FE82D /* UIScrollView+RefreshAPI.swift */,
 				046786EA2EB4CF09003FE82D /* UIScrollView+Proxy.swift */,
@@ -1514,7 +1511,6 @@
 				C564FC2C2E0958D50079B5C1 /* SceneDelegate.swift in Sources */,
 				C564FC922E0959640079B5C1 /* UISwitch.swift in Sources */,
 				046786F12EB4CF76003FE82D /* Demo@JobsRefresher.swift in Sources */,
-				046786F32EB4D17C003FE82D /* String+Verticalized.swift in Sources */,
 				0440B5DC2EB3074C005DBE91 /* weak.swift in Sources */,
 				04BCDC2E2EA9E85800382DE0 /* UITextViewCell.swift in Sources */,
 				049A65732EA0E6E40006B185 /* Demo@自定义TabBar.swift in Sources */,

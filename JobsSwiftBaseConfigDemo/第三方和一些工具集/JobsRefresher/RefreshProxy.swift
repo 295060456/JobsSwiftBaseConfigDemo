@@ -1,15 +1,15 @@
 import UIKit
 
 @MainActor
-final class MRKProxy: NSObject {
+final class JobsProxy: NSObject {
     weak var scrollView: UIScrollView?
     private var kvo: NSKeyValueObservation?
     private var panKvo: NSKeyValueObservation?
 
-    var header: MRKSlot?
-    var footer: MRKSlot?
-    var left:   MRKSlot?
-    var right:  MRKSlot?
+    var header: JobsSlot?
+    var footer: JobsSlot?
+    var left:   JobsSlot?
+    var right:  JobsSlot?
 
     init(scrollView: UIScrollView) {
         self.scrollView = scrollView
@@ -39,9 +39,9 @@ final class MRKProxy: NSObject {
 }
 
 @MainActor
-final class MRKSlot {
-    let position: MRKPosition
-    let view: (UIView & MRKAnimatable)
+final class JobsSlot {
+    let position: JobsPosition
+    let view: (UIView & JobsAnimatable)
     let trigger: CGFloat
     var action: (() -> Void)?
     weak var container: AnyObject?
@@ -59,12 +59,12 @@ final class MRKSlot {
     /// 先退场阶段屏蔽 tick/布局，避免 KVO 干扰
     private var isEndingAnimation = false
 
-    private(set) var state: MRKState = .idle {
+    private(set) var state: JobsState = .idle {
         didSet { view.apply(state: state) }
     }
 
-    init(position: MRKPosition,
-         view: (UIView & MRKAnimatable),
+    init(position: JobsPosition,
+         view: (UIView & JobsAnimatable),
          trigger: CGFloat,
          container: AnyObject?,
          action: @escaping () -> Void) {
@@ -141,7 +141,7 @@ final class MRKSlot {
     }
 
     private func progress(distance: CGFloat,
-                          axis: MRKAxis,
+                          axis: JobsAxis,
                           isDragging: Bool,
                           sv: UIScrollView,
                           isFooter: Bool = false) {
@@ -159,7 +159,7 @@ final class MRKSlot {
         }
     }
 
-    func beginRefreshing(on sv: UIScrollView, axis: MRKAxis? = nil, isFooter: Bool = false) {
+    func beginRefreshing(on sv: UIScrollView, axis: JobsAxis? = nil, isFooter: Bool = false) {
         guard state != .refreshing else { return }
         state = .refreshing
 

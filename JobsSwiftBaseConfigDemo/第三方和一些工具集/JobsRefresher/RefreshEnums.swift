@@ -8,18 +8,18 @@
 import UIKit
 
 @MainActor
-public enum MRKAxis {
+public enum JobsAxis {
     case vertical, horizontal
 }
 
 @MainActor
-public enum MRKPosition {
+public enum JobsPosition {
     case header      // top
     case footer      // bottom
     case left
     case right
 
-    public var axis: MRKAxis {
+    public var axis: JobsAxis {
         switch self {
         case .header, .footer: return .vertical
         case .left, .right:    return .horizontal
@@ -28,7 +28,7 @@ public enum MRKPosition {
 }
 
 @MainActor
-public enum MRKState: Equatable {
+public enum JobsState: Equatable {
     case idle                 // 初始/重置
     case pulling(progress: CGFloat)  // 拖拽进行中（0...1）
     case ready                // 达到阈值，松手即可触发
@@ -38,7 +38,7 @@ public enum MRKState: Equatable {
 }
 
 @MainActor
-public enum MRKSwitch {
+public enum JobsSwitch {
     case refreshing
     case normal
     case removed

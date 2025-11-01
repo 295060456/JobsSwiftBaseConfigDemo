@@ -8,26 +8,26 @@
 import UIKit
 
 @MainActor
-public struct MRKSideFactory {
-    public static func left() -> MRKDefaultIndicatorView { MRKDefaultIndicatorView() }
-    public static func right() -> MRKDefaultIndicatorView { MRKDefaultIndicatorView() }
+public struct JobsSideFactory {
+    public static func left() -> JobsDefaultIndicatorView { JobsDefaultIndicatorView() }
+    public static func right() -> JobsDefaultIndicatorView { JobsDefaultIndicatorView() }
 }
 
 @MainActor
 public extension UIScrollView {
     // MARK: Header
-    func configRefreshHeader(component: (UIView & MRKAnimatable)? = nil,
+    func configRefreshHeader(component: (UIView & JobsAnimatable)? = nil,
                              container: AnyObject? = nil,
                              trigger: CGFloat = 60,
                              action: @escaping () -> Void) -> Self{
-        let c = component ?? MRKDefaultIndicatorView()
-        let slot = MRKSlot(position: .header, view: c, trigger: trigger, container: container, action: action)
+        let c = component ?? JobsDefaultIndicatorView()
+        let slot = JobsSlot(position: .header, view: c, trigger: trigger, container: container, action: action)
         mrk_proxy.header = slot
         slot.attach(to: self)
         return self
     }
 
-    func switchRefreshHeader(to state: MRKSwitch) {
+    func switchRefreshHeader(to state: JobsSwitch) {
         guard let slot = mrk_proxy.header, let sv = mrk_proxy.scrollView else { return }
         switch state {
         case .refreshing:
@@ -44,18 +44,18 @@ public extension UIScrollView {
     }
 
     // MARK: Footer
-    func configRefreshFooter(component: (UIView & MRKAnimatable)? = nil,
+    func configRefreshFooter(component: (UIView & JobsAnimatable)? = nil,
                              container: AnyObject? = nil,
                              trigger: CGFloat = 60,
                              action: @escaping () -> Void) -> Self{
-        let c = component ?? MRKDefaultIndicatorView()
-        let slot = MRKSlot(position: .footer, view: c, trigger: trigger, container: container, action: action)
+        let c = component ?? JobsDefaultIndicatorView()
+        let slot = JobsSlot(position: .footer, view: c, trigger: trigger, container: container, action: action)
         mrk_proxy.footer = slot
         slot.attach(to: self)
         return self
     }
 
-    func switchRefreshFooter(to state: MRKSwitch) {
+    func switchRefreshFooter(to state: JobsSwitch) {
         guard let slot = mrk_proxy.footer, let sv = mrk_proxy.scrollView else { return }
         switch state {
         case .refreshing:
@@ -71,13 +71,13 @@ public extension UIScrollView {
     }
 
     // MARK: Side (Left/Right)
-    func configSideRefresh(with component: (UIView & MRKAnimatable),
+    func configSideRefresh(with component: (UIView & JobsAnimatable),
                            container: AnyObject? = nil,
-                           at position: MRKPosition,
+                           at position: JobsPosition,
                            trigger: CGFloat = 60,
                            action: @escaping () -> Void) -> Self {
         precondition(position == .left || position == .right, "SideRefresh 仅支持 .left / .right")
-        let slot = MRKSlot(position: position, view: component, trigger: trigger, container: container, action: action)
+        let slot = JobsSlot(position: position, view: component, trigger: trigger, container: container, action: action)
         if position == .left {
             mrk_proxy.left = slot
         } else {
@@ -87,7 +87,7 @@ public extension UIScrollView {
         return self
     }
 
-    func switchSideRefresh(_ position: MRKPosition, to state: MRKSwitch) {
+    func switchSideRefresh(_ position: JobsPosition, to state: JobsSwitch) {
         guard (position == .left || position == .right),
               let sv = mrk_proxy.scrollView else { return }
         let slot = (position == .left) ? mrk_proxy.left : mrk_proxy.right

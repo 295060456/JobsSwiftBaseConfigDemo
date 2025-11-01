@@ -37,7 +37,7 @@ final class JobsRefresherDemoVC: BaseVC {
                make.height.equalTo(topHeight)
            }
            // 左侧拉：比如“上一页/回退”
-           .configSideRefresh(with: MRKDefaultLeft(),
+           .configSideRefresh(with: JobsDefaultLeft(),
                               container: self,
                               at: .left,
                               trigger: 70) { [weak self] in
@@ -51,7 +51,7 @@ final class JobsRefresherDemoVC: BaseVC {
                }
            }
            // 右侧拉：比如“下一页/加载更多卡片”
-           .configSideRefresh(with: MRKDefaultRight(),
+           .configSideRefresh(with: JobsDefaultRight(),
                                            container: self,
                                            at: .right,
                                            trigger: 70) { [weak self] in
@@ -76,7 +76,7 @@ final class JobsRefresherDemoVC: BaseVC {
                 make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             }
             // 下拉刷新 Header
-            .configRefreshHeader(component: MRKDefaultHeader(),
+            .configRefreshHeader(component: JobsDefaultHeader(),
                                  container: self,
                                  trigger: 66) { [weak self] in
                 guard let self else { return }
@@ -89,7 +89,7 @@ final class JobsRefresherDemoVC: BaseVC {
                 }
             }
             // 上拉加载 Footer
-            .configRefreshFooter(component: MRKDefaultFooter(),
+            .configRefreshFooter(component: JobsDefaultFooter(),
                                           container: self,
                                           trigger: 66) { [weak self] in
                 guard let self else { return }

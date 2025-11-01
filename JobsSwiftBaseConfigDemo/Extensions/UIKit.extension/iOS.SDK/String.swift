@@ -281,6 +281,13 @@ public extension String {
         String(format: localized, arguments: parameters)
     }
 }
+// MARK: - 将字符串竖排化：每字符一行（Emoji/空格也原样拆分）
+public extension String {
+    var verticalized: String {
+        guard !isEmpty else { return self }
+        return self.map { String($0) }.joined(separator: "\n")
+    }
+}
 @MainActor
 public extension String {
     // MARK: - 一行打开：网址 / 任何支持的 URL scheme

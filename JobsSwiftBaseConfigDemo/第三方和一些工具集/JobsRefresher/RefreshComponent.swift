@@ -8,13 +8,13 @@
 import UIKit
 
 @MainActor
-public protocol MRKAnimatable: AnyObject {
-    func apply(state: MRKState)
+public protocol JobsAnimatable: AnyObject {
+    func apply(state: JobsState)
     var heightOrWidth: CGFloat { get }   // header/footer 用高度；left/right 用宽度
 }
 
 @MainActor
-public class MRKDefaultIndicatorView: UIView, MRKAnimatable {
+public class JobsDefaultIndicatorView: UIView, JobsAnimatable {
     private let indicator = UIActivityIndicatorView(style: .medium)
     public var heightOrWidth: CGFloat = 60
 
@@ -32,7 +32,7 @@ public class MRKDefaultIndicatorView: UIView, MRKAnimatable {
 
     required init?(coder: NSCoder) { fatalError() }
 
-    public func apply(state: MRKState) {
+    public func apply(state: JobsState) {
         switch state {
         case .idle:
             indicator.stopAnimating()

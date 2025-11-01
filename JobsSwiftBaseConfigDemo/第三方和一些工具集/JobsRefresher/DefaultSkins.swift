@@ -8,25 +8,33 @@
 import UIKit
 
 @MainActor
-public final class MRKDefaultHeader: MRKDefaultIndicatorView {
+public final class JobsDefaultHeader: JobsDefaultIndicatorView {
     public override init(frame: CGRect) { super.init(frame: frame); heightOrWidth = 60 }
     required init?(coder: NSCoder) { fatalError() }
 }
 
 @MainActor
-public final class MRKDefaultFooter: MRKDefaultIndicatorView {
+public final class JobsDefaultFooter: JobsDefaultIndicatorView {
     public override init(frame: CGRect) { super.init(frame: frame); heightOrWidth = 60 }
     required init?(coder: NSCoder) { fatalError() }
 }
-
 /// —— 横向侧拉专用：竖排文案 ——
 /// 结构：指示器（上） + 竖排 UILabel（下），在非 refreshing 时隐藏转圈，仅显示竖排提示。
 @MainActor
-public class MRKSideIndicatorView: UIView, MRKAnimatable {
-    private let indicator = UIActivityIndicatorView(style: .medium)
-    private let label = UILabel()
+public class JobsSideIndicatorView: UIView, JobsAnimatable {
+    private lazy var indicator : UIActivityIndicatorView = {
+        self.byAddSubviewRetSub(UIActivityIndicatorView(style: .medium).byHidesWhenStopped(true))
+    }()
+    private lazy var label:UILabel = {
+        self.byAddSubviewRetSub(
+            UILabel()
+                .byFont(.systemFont(ofSize: 14, weight: .medium))
+                .byTextColor(.secondaryLabel)
+                .byNumberOfLines(0)
+                .byTextAlignment(.center)
+        )
+    }()
     public var heightOrWidth: CGFloat = 60
-
     /// 外部可自定义文案（不含状态词），内部会自动竖排化。
     public var idleText: String = "继续侧拉"
     public var readyText: String = "松手刷新"
@@ -37,22 +45,14 @@ public class MRKSideIndicatorView: UIView, MRKAnimatable {
     public override init(frame: CGRect) {
         super.init(frame: frame)
         isUserInteractionEnabled = false
-
-        addSubview(indicator)
-        addSubview(label)
-
-        indicator.hidesWhenStopped = true
-
-        label.font = .systemFont(ofSize: 14, weight: .medium)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
-        label.textAlignment = .center
+        indicator.byVisible(YES)
+        label.byVisible(YES)
     }
 
     required init?(coder: NSCoder) { fatalError() }
 
-    public func apply(state: MRKState) {
-        func setVertical(_ s: String) { label.text = s.mrk_verticalized }
+    public func apply(state: JobsState) {
+        func setVertical(_ s: String) { label.text = s.verticalized }
 
         switch state {
         case .idle:
@@ -104,9 +104,8 @@ public class MRKSideIndicatorView: UIView, MRKAnimatable {
         )
     }
 }
-
 @MainActor
-public final class MRKDefaultLeft: MRKSideIndicatorView {
+public final class JobsDefaultLeft: JobsSideIndicatorView {
     public override init(frame: CGRect) {
         super.init(frame: frame)
         heightOrWidth = 60
@@ -116,9 +115,8 @@ public final class MRKDefaultLeft: MRKSideIndicatorView {
     }
     required init?(coder: NSCoder) { fatalError() }
 }
-
 @MainActor
-public final class MRKDefaultRight: MRKSideIndicatorView {
+public final class JobsDefaultRight: JobsSideIndicatorView {
     public override init(frame: CGRect) {
         super.init(frame: frame)
         heightOrWidth = 60

@@ -9,19 +9,19 @@ import UIKit
 import ObjectiveC
 
 @MainActor
-private struct MRKAssocKeys {
+private struct JobsAssocKeys {
     // 用地址作为唯一键，避免 String 桥接 & 提高唯一性
     static var proxy: UInt8 = 0
 }
 
 @MainActor
 extension UIScrollView {
-    var mrk_proxy: MRKProxy {
-        if let p = objc_getAssociatedObject(self, &MRKAssocKeys.proxy) as? MRKProxy {
+    var mrk_proxy: JobsProxy {
+        if let p = objc_getAssociatedObject(self, &JobsAssocKeys.proxy) as? JobsProxy {
             return p
         }
-        let p = MRKProxy(scrollView: self)
-        objc_setAssociatedObject(self, &MRKAssocKeys.proxy, p, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        let p = JobsProxy(scrollView: self)
+        objc_setAssociatedObject(self, &JobsAssocKeys.proxy, p, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         return p
     }
 }
