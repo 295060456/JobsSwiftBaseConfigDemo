@@ -478,3 +478,16 @@ func jobsSolidBlue(
         ctx.fill(CGRect(origin: .zero, size: size))
     }
 }
+// MARK: - NSTextAlignment 映射到 CATextLayerAlignmentMode
+extension CATextLayerAlignmentMode {
+    static func fromNSTextAlignment(_ a: NSTextAlignment) -> CATextLayerAlignmentMode {
+        switch a {
+        case .left: return .left
+        case .right: return .right
+        case .center: return .center
+        case .justified: return .justified
+        case .natural: return .natural
+        @unknown default: return .natural
+        }
+    }
+}

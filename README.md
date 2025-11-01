@@ -1505,9 +1505,81 @@ tableView.es.addInfiniteScrolling {
 </plist>
 ```
 
-### 6、应用程序图片 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 6、APP名 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 6.1、iOS <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+> 快速自检
+>
+> ```swift
+> let displayName =
+>     Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName")
+>     ?? Bundle.main.object(forInfoDictionaryKey: "CFBundleName")
+> print("DisplayName =", displayName ?? "nil")
+> ```
+
+#### 6.1、**`CFBundleName`**  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 内部包名/工程产物名，用户通常看不到；缺省时可能被用来兜底显示。
+
+```xml
+<key>CFBundleName</key>
+<string>$(PRODUCT_NAME)</string>
+```
+
+![image-20251101102516019](./assets/image-20251101102516019.png)
+
+#### 6.2、桌面名  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 单语言显示名
+
+  ```xml
+  <!--Info.plist-->
+  <key>CFBundleDisplayName</key>
+  <string>你的名字</string>
+  ```
+
+* 多语言显示名：在各语言的 **`InfoPlist.strings`** 里写
+
+  ```
+  "CFBundleDisplayName" = "中文名或英文名";
+  ```
+
+### 7、利用`*.xcconfig`配置Xcode工程项目 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 7.1、新建配置文件 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+<table style="width:100%; table-layout:fixed;">
+  <tr>
+    <td><img src="./assets/image-20251101105448424.png" alt="image-20251101105448424" style="width:100%; height:auto;"></td>
+    <td><img src="./assets/image-20251101105508441.png" alt="image-20251101105508441" style="width:100%; height:auto;"></td>
+  </tr>
+</table>
+
+#### 7.2、自动识别关联 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+![image-20251101105957398](./assets/image-20251101105957398.png)
+
+#### 7.3、`*.xcconfig`里面的内容 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+//
+//  Config.xcconfig
+//  JobsSwiftBaseConfigDemo
+//
+//  Created by Mac on 11/1/25.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
+
+PRODUCT_NAME = SwiftDemo
+APP_DISPLAY_NAME = SwiftDemo
+INFOPLIST_KEY_CFBundleDisplayName = $(APP_DISPLAY_NAME)
+INFOPLIST_KEY_CFBundleName = $(PRODUCT_NAME)
+```
+
+### 8、应用程序图片 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 8.1、iOS <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ **@3x 的引入点是 iPhone 6 Plus（iOS 8）**。
 >  6/7/8 的 **非 Plus** 机型始终是 **@2x**；6/7/8 **Plus** 是 **@3x**（而且渲染 1242×2208 后再下采样到 1080×1920 显示，这是当年的 downsampling 特性）。
@@ -1536,7 +1608,7 @@ tableView.es.addInfiniteScrolling {
     * 设置（Settings）：**87×87**（@3x iPhone）、**58×58**（@2x，含 iPad）
     * 通知（Notifications）：**60×60**（@3x iPhone）、**40×40**（@2x，含 iPad）
 
-#### 6.2、Android <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 8.2、Android <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > ldpi：（@0.75x）
 
@@ -1561,7 +1633,7 @@ tableView.es.addInfiniteScrolling {
   * **旧设备（Legacy Launcher 图标）**（如仍需兼容）：48、72、96、144、192 px（mdpi…xxxhdpi）
   * **Google Play 上架图标（商店用）**：**512×512 px, 32-bit PNG, sRGB，≤1MB**（Play 会统一蒙版/投影）。这与启动器图标不同，单独上传。
 
-### 7、其他 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 9、其他 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 👉 [**Swift**](https://developer.apple.com/swift/) 的<u>API 展望（提前声明未来能力）</u>这种机制，**在Objc世界几乎不存在**
 

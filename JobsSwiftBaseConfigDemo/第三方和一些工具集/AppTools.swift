@@ -23,25 +23,6 @@ public func presentAlert(for urlString: String, on textView: UITextView) {
             ?? UIApplication.jobsTopMostVC(ignoreAlert: true)   // ✅ 统一找最顶 VC
     host?.present(alert, animated: true)
 }
-// MARK: - LanguageManager 单例
-final class LanguageManager {
-    static let shared = LanguageManager()
-    private init() {}
-    /// 当前语言对应的 Bundle
-    var localizedBundle: Bundle {
-        // 可以根据自己的逻辑动态返回
-        // 比如通过 UserDefaults 保存的语言 key
-        if let path = Bundle.main.path(forResource: currentLanguageCode, ofType: "lproj"),
-           let bundle = Bundle(path: path) {
-            return bundle
-        }
-        return .main
-    }
-    /// 当前语言代码（默认系统语言）
-    var currentLanguageCode: String {
-        UD.string(forKey: "AppLanguage") ?? Locale.preferredLanguages.first ?? "en"
-    }
-}
 // MARK: - 启动分类处理（Block DSL）
 ///
 /// - Parameters:
@@ -94,7 +75,7 @@ public func nowClock() -> String {
 public func fmt(_ d: Date) -> String {
     DateFormatter().byDateFormat("HH:mm:ss.SSS").string(from: d)
 }
-
+// MARK: - 判断目标字符串是否是URL
 @inline(__always)
 public func isHttpURL(_ raw: String?) -> Bool {
     guard let s = raw?.trimmingCharacters(in: .whitespacesAndNewlines),

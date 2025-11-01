@@ -23,9 +23,21 @@ import Kingfisher
 #if canImport(SDWebImage)
 import SDWebImage
 #endif
-/// 字符串相关格式的（通用）转换
+// MARK: String? 扩展：nil 安全
+public extension Optional where Wrapped == String {
+    @inlinable var byTrimmedOrNil: String? {
+        self?.byTrimmedOrNil
+    }
+    @inlinable var isNonEmptyHttpURL: Bool {
+        self?.isNonEmptyHttpURL ?? false
+    }
+    @inlinable var asHttpURLOrNil: String? {
+        self?.asHttpURLOrNil
+    }
+}
+// MARK: 字符串相关格式的（通用）转换
 extension String {
-    // MARK: - String 转 Int
+    /// String 转 Int
     public func toInt() -> Int? {
         if let num = NumberFormatter().number(from: self) {
             return num.intValue
@@ -33,7 +45,7 @@ extension String {
             return nil
         }
     }
-    // MARK: - String 转 Int64
+    /// String 转 Int64
     public func toInt64() -> Int64? {
         if let num = NumberFormatter().number(from: self) {
             return num.int64Value
@@ -41,7 +53,7 @@ extension String {
             return nil
         }
     }
-    // MARK: - String 转 Double
+    /// String 转 Double
     public func toDouble() -> Double? {
         let formatter = NumberFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")  // 固定使用 . 作为小数点
@@ -53,7 +65,7 @@ extension String {
 
         return formatter.number(from: self.trimmingCharacters(in: .whitespacesAndNewlines))?.doubleValue
     }
-    // MARK: - String 转 Double
+    /// String 转 Double
     public func toDouble(_ max:Int,_ min:Int) -> Double? {
         let format = NumberFormatter.init()
         format.maximumFractionDigits = max
@@ -64,7 +76,7 @@ extension String {
             return nil
         }
     }
-    // MARK: - String 转 Float
+    /// String 转 Float
     public func toFloat() -> Float? {
         if let num = NumberFormatter().number(from: self) {
             return num.floatValue
@@ -72,7 +84,7 @@ extension String {
             return nil
         }
     }
-    // MARK: - String 转 Bool
+    /// String 转 Bool
     public func toBool() -> Bool? {
         let trimmedString = self
             .trimmingCharacters(in: .whitespacesAndNewlines)
@@ -87,11 +99,11 @@ extension String {
             return nil
         }
     }
-    // MARK: - String 转 NSString
+    /// String 转 NSString
     public var toNSString: NSString {
         return self as NSString
     }
-    // MARK: - String 转 NSAttributedString
+    /// String 转 NSAttributedString
     /// 转富文本（默认空属性）
     var rich: NSAttributedString {
         NSAttributedString(string: self)
@@ -100,21 +112,34 @@ extension String {
     func rich(_ attrs: [NSAttributedString.Key: Any]) -> NSAttributedString {
         NSAttributedString(string: self, attributes: attrs)
     }
-}
-// MARK: - 辅助
-extension CATextLayerAlignmentMode {
-    static func fromNSTextAlignment(_ a: NSTextAlignment) -> CATextLayerAlignmentMode {
-        switch a {
-        case .left: return .left
-        case .right: return .right
-        case .center: return .center
-        case .justified: return .justified
-        case .natural: return .natural
-        @unknown default: return .natural
-        }
+    /// 将字符串竖排化：每字符一行（Emoji/空格也原样拆分）
+    var verticalized: String {
+        guard !isEmpty else { return self }
+        return self.map { String($0) }.joined(separator: "\n")
     }
 }
-// MARK: - 字符串转换成资源
+// MARK: String 扩展：点语法裁剪 / 校验
+public extension String {
+    /// 去掉首尾空白+换行
+    @inlinable var byTrimmed: String {
+        trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    /// 裁剪后非空则返回自身，否则 nil
+    @inlinable var byTrimmedOrNil: String? {
+        let s = byTrimmed
+        return s.isEmpty ? nil : s
+    }
+    /// 裁剪后为非空且 scheme 是 http/https
+    @inlinable var isNonEmptyHttpURL: Bool {
+        let p = byTrimmed.lowercased()
+        return !p.isEmpty && (p.hasPrefix("http://") || p.hasPrefix("https://"))
+    }
+    /// 裁剪后若是 http(s) 则返回字符串，否则 nil
+    @inlinable var asHttpURLOrNil: String? {
+        isNonEmptyHttpURL ? byTrimmed : nil
+    }
+}
+// MARK: 字符串转换成资源
 public extension String {
     // MARK: - 字符串@Bundle
     /// 在指定 Bundle 查找媒体资源 URL（支持 "name.ext" 或 "name"）。
@@ -258,39 +283,25 @@ public extension String {
     }
 #endif
 }
-// MARK: - 国际化
-public extension String {
-     var localized: String {
-        return NSLocalizedString(self,
-                                 tableName: nil,
-                                 bundle: Bundle.main,
-                                 value: "",
-                                 comment: "")
-    }
-    func localized(comment: String? = nil,
-                   defaultValue: String? = nil,
-                   parameters: [String] = []) -> String {
-        let localized = NSLocalizedString(self,
-                                          tableName: nil,
-                                          bundle: LanguageManager.shared.localizedBundle,
-                                          value: defaultValue ?? self,
-                                          comment: comment.safelyUnwrapped())
-        return localizedFormatString(localized: localized, parameters: parameters)
-    }
-    private func localizedFormatString(localized: String, parameters: [String] = []) -> String {
-        String(format: localized, arguments: parameters)
-    }
-}
-// MARK: - 将字符串竖排化：每字符一行（Emoji/空格也原样拆分）
-public extension String {
-    var verticalized: String {
-        guard !isEmpty else { return self }
-        return self.map { String($0) }.joined(separator: "\n")
-    }
-}
+// MARK: 一行打开：网址(任何支持的 URL scheme) 、一行拨号、发邮件
 @MainActor
 public extension String {
-    // MARK: - 一行打开：网址 / 任何支持的 URL scheme
+    // 内部委托：托管 MFMailComposeViewController 的回调与收尾
+    fileprivate final class _JobsMailProxy: NSObject, @MainActor MFMailComposeViewControllerDelegate {
+        static let shared = _JobsMailProxy()
+        var completion: ((JobsOpenResult) -> Void)?
+
+        @MainActor func mailComposeController(_ controller: MFMailComposeViewController,
+                                   didFinishWith result: MFMailComposeResult,
+                                   error: Error?) {
+            controller.dismiss(animated: true) { [completion] in
+                // 这层 API 只关心“是否成功调起”，这里统一回调 .opened
+                completion?(.opened)
+            }
+            self.completion = nil
+        }
+    }
+    /// 一行打开：网址 / 任何支持的 URL scheme
     /// 例子：
     /// "www.baidu.com".open()
     /// "https://example.com?q=中文".open()
@@ -315,7 +326,7 @@ public extension String {
         }
         return .opened
     }
-    // MARK: - 一行拨号
+    /// 一行拨号
     /// 例子：
     /// "13434343434".call()                 // 直接走 tel://（停留在电话 App）
     /// "13434343434".call(usePrompt: true)  // 用 telprompt://（回到 App；有被拒历史，谨慎）
@@ -420,92 +431,7 @@ public extension String {
         return .opened
     }
 }
-// MARK: - 私有工具
-private extension String {
-    /// 尝试将任意字符串转为“可打开”的 URL：
-    /// - 无 scheme 且像域名 → 自动补 `https://`
-    /// - 做百分号编码，保证中文/空格安全
-    static func makeURL(from raw: String) -> URL? {
-        let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else { return nil }
-        // 已包含 scheme：直接编码重建
-        if trimmed.contains("://") {
-            return percentEncodedURL(trimmed)
-        }
-        // 没有 scheme：如果像域名/路径，自动补 https://
-        // 简单启发式：包含点号或以 "www." 开头，就按网址处理
-        if trimmed.hasPrefix("www.") || trimmed.contains(".") {
-            return percentEncodedURL("https://" + trimmed)
-        }
-        // 既没 scheme 又不像网址：当成无效
-        return nil
-    }
-    /// 百分号编码（保留合法字符，编码空格、中文、emoji 等）
-    static func percentEncodedURL(_ s: String) -> URL? {
-        // 尽量宽松地保留 URL 合法字符，其余编码
-        var allowed = CharacterSet.urlQueryAllowed
-        allowed.insert(charactersIn: "/:#?&=@!$'()*+,;[]%._~-") // 常见保留
-        let encoded = s.addingPercentEncoding(withAllowedCharacters: allowed) ?? s
-        return URL(string: encoded)
-    }
-    /// 只保留 0-9 与最前面的 '+'
-    static func sanitizePhone(_ s: String) -> String {
-        let t = s.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !t.isEmpty else { return "" }
-
-        var result = ""
-        var seenPlus = false
-        for ch in t {
-            if ch == "+" && !seenPlus && result.isEmpty {
-                result.append(ch)
-                seenPlus = true
-            } else if ch.isNumber {
-                result.append(ch)
-            }
-        }
-        return result
-    }
-    /// 解析多个邮箱：支持逗号/分号/空格
-    static func _parseEmails(_ raw: String) -> [String] {
-        raw
-            .split { ",; ".contains($0) }
-            .map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
-            .filter { !$0.isEmpty && $0.contains("@") }
-    }
-
-    static func _makeMailtoURL(to: [String],
-                               subject: String?,
-                               body: String?,
-                               cc: [String],
-                               bcc: [String]) -> URL? {
-        var comps = URLComponents()
-        comps.scheme = "mailto"
-        comps.path = to.joined(separator: ",")
-        var items: [URLQueryItem] = []
-        if let subject, !subject.isEmpty { items.append(.init(name: "subject", value: subject)) }
-        if let body, !body.isEmpty       { items.append(.init(name: "body", value: body)) }
-        if !cc.isEmpty { items.append(.init(name: "cc", value: cc.joined(separator: ","))) }
-        if !bcc.isEmpty { items.append(.init(name: "bcc", value: bcc.joined(separator: ","))) }
-        comps.queryItems = items.isEmpty ? nil : items
-        return comps.url
-    }
-}
-// 内部委托：托管 MFMailComposeViewController 的回调与收尾
-fileprivate final class _JobsMailProxy: NSObject, MFMailComposeViewControllerDelegate {
-    static let shared = _JobsMailProxy()
-    var completion: ((JobsOpenResult) -> Void)?
-
-    func mailComposeController(_ controller: MFMailComposeViewController,
-                               didFinishWith result: MFMailComposeResult,
-                               error: Error?) {
-        controller.dismiss(animated: true) { [completion] in
-            // 这层 API 只关心“是否成功调起”，这里统一回调 .opened
-            completion?(.opened)
-        }
-        self.completion = nil
-    }
-}
-// MARK: - 二维码
+// MARK: 二维码
 public extension String {
     /// 由当前字符串生成二维码 UIImage（无插值放大，清晰）
     /// - Parameters:
@@ -633,7 +559,7 @@ public extension String {
         }
     }
 }
-// MARK: - 条形码
+// MARK: 条形码
 public extension String {
     /// Code128 条形码（可指定目标尺寸；自动无插值放大）
     /// - Parameters:
@@ -726,36 +652,177 @@ public extension String {
         }
     }
 }
-// MARK: - String 扩展：点语法裁剪 / 校验
-public extension String {
-    /// 去掉首尾空白+换行
-    @inlinable var byTrimmed: String {
-        trimmingCharacters(in: .whitespacesAndNewlines)
+// MARK: 统一的字符串本地化桥
+/// 语言上下文（与现有 LanguageManager 解耦对接）
+public enum TRLang {
+    /// 返回当前生效的本地化 Bundle（默认 .main；建议绑定到 LanguageManager.shared.localizedBundle）
+    public static var bundleProvider: (() -> Bundle)?
+    /// 返回当前语言码（如 "zh-Hans"/"en"），用于数字/日期等格式化（可不设）
+    public static var localeCodeProvider: (() -> String?)?
+
+    @inlinable
+    public static func bindBundleProvider(_ provider: @escaping () -> Bundle) {
+        bundleProvider = provider
     }
-    /// 裁剪后非空则返回自身，否则 nil
-    @inlinable var byTrimmedOrNil: String? {
-        let s = byTrimmed
-        return s.isEmpty ? nil : s
+
+    @inlinable
+    public static func bindLocaleCodeProvider(_ provider: @escaping () -> String?) {
+        localeCodeProvider = provider
     }
-    /// 裁剪后为非空且 scheme 是 http/https
-    @inlinable var isNonEmptyHttpURL: Bool {
-        let p = byTrimmed.lowercased()
-        return !p.isEmpty && (p.hasPrefix("http://") || p.hasPrefix("https://"))
+    /// 语言切换完成后手动广播，用于触发 UI 刷新
+    @inlinable
+    public static func notifyDidChange() {
+        NotificationCenter.default.post(name: .TRLanguageDidChange, object: nil)
     }
-    /// 裁剪后若是 http(s) 则返回字符串，否则 nil
-    @inlinable var asHttpURLOrNil: String? {
-        isNonEmptyHttpURL ? byTrimmed : nil
+    // 实际生效
+    @inlinable static var activeBundle: Bundle { bundleProvider?() ?? .main }
+    @inlinable static var activeLocaleID: String {
+        localeCodeProvider?() ?? Locale.preferredLanguages.first ?? "en"
     }
 }
-// MARK: - String? 扩展：nil 安全
-public extension Optional where Wrapped == String {
-    @inlinable var byTrimmedOrNil: String? {
-        self?.byTrimmedOrNil
+
+public extension Notification.Name {
+    static let TRLanguageDidChange = Notification.Name("TRLanguageDidChange")
+}
+/// 统一查表（全部走 Bundle.localizedString，避免 iOS 15 重载限制）
+fileprivate enum TRLookup {
+    @inline(__always)
+    static func value(
+        forKey key: String,
+        table: String? = nil,
+        defaultValue: String?,
+        comment: String?
+    ) -> String {
+        // 说明：
+        // 1) 这里不用 String(localized:) 的任何重载，因为它要求 StaticString/LocalizationValue（编译期常量）。
+        // 2) Bundle.localizedString 同样支持 .stringsdict 复数 & .xcstrings（向后兼容），满足需求。
+        return TRLang.activeBundle.localizedString(
+            forKey: key,
+            value: defaultValue ?? key,
+            table: table
+        )
     }
-    @inlinable var isNonEmptyHttpURL: Bool {
-        self?.isNonEmptyHttpURL ?? false
+}
+/// .tr / .tr(table:) / .tr(args...) / .tr(count:)
+public extension String {
+    /// 直接把自身作为 key 查表（默认表），未命中回 key 本身
+    var tr: String {
+        TRLookup.value(forKey: self, table: nil, defaultValue: self, comment: nil)
     }
-    @inlinable var asHttpURLOrNil: String? {
-        self?.asHttpURLOrNil
+    /// 指定 table 的版本
+    func tr(table: String) -> String {
+        TRLookup.value(forKey: self, table: table, defaultValue: self, comment: nil)
+    }
+    /// 占位符格式化（%@、%d 等）
+    func tr(_ args: CVarArg...) -> String {
+        let fmt = self.tr
+        return String(
+            format: fmt,
+            locale: Locale(identifier: TRLang.activeLocaleID),
+            arguments: args
+        )
+    }
+    /// 复数 / 数量（配合 .stringsdict）
+    func tr(count: Int) -> String {
+        let fmt = self.tr
+        return String.localizedStringWithFormat((fmt as NSString) as String, count)
+    }
+}
+/// 兼容现有的 API（内部统一走 TRLookup）
+public extension String {
+    /// 原来的 `var localized: String`
+    var localized: String {
+        // 与老实现保持“空字符串回退”的语义
+        TRLookup.value(forKey: self, table: nil, defaultValue: "", comment: nil)
+    }
+    /// 原来的重载（支持 comment / defaultValue / parameters）
+    func localized(
+        comment: String? = nil,
+        defaultValue: String? = nil,
+        parameters: [String] = []
+    ) -> String {
+        let base = TRLookup.value(
+            forKey: self,
+            table: nil,
+            defaultValue: (defaultValue ?? self),
+            comment: comment
+        )
+        guard !parameters.isEmpty else { return base }
+        let args: [CVarArg] = parameters.map { $0 as CVarArg }
+        return String(
+            format: base,
+            locale: Locale(identifier: TRLang.activeLocaleID),
+            arguments: args
+        )
+    }
+}
+// MARK: - 私有工具
+private extension String {
+    /// 尝试将任意字符串转为“可打开”的 URL：
+    /// - 无 scheme 且像域名 → 自动补 `https://`
+    /// - 做百分号编码，保证中文/空格安全
+    static func makeURL(from raw: String) -> URL? {
+        let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+        // 已包含 scheme：直接编码重建
+        if trimmed.contains("://") {
+            return percentEncodedURL(trimmed)
+        }
+        // 没有 scheme：如果像域名/路径，自动补 https://
+        // 简单启发式：包含点号或以 "www." 开头，就按网址处理
+        if trimmed.hasPrefix("www.") || trimmed.contains(".") {
+            return percentEncodedURL("https://" + trimmed)
+        }
+        // 既没 scheme 又不像网址：当成无效
+        return nil
+    }
+    /// 百分号编码（保留合法字符，编码空格、中文、emoji 等）
+    static func percentEncodedURL(_ s: String) -> URL? {
+        // 尽量宽松地保留 URL 合法字符，其余编码
+        var allowed = CharacterSet.urlQueryAllowed
+        allowed.insert(charactersIn: "/:#?&=@!$'()*+,;[]%._~-") // 常见保留
+        let encoded = s.addingPercentEncoding(withAllowedCharacters: allowed) ?? s
+        return URL(string: encoded)
+    }
+    /// 只保留 0-9 与最前面的 '+'
+    static func sanitizePhone(_ s: String) -> String {
+        let t = s.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !t.isEmpty else { return "" }
+
+        var result = ""
+        var seenPlus = false
+        for ch in t {
+            if ch == "+" && !seenPlus && result.isEmpty {
+                result.append(ch)
+                seenPlus = true
+            } else if ch.isNumber {
+                result.append(ch)
+            }
+        }
+        return result
+    }
+    /// 解析多个邮箱：支持逗号/分号/空格
+    static func _parseEmails(_ raw: String) -> [String] {
+        raw
+            .split { ",; ".contains($0) }
+            .map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty && $0.contains("@") }
+    }
+
+    static func _makeMailtoURL(to: [String],
+                               subject: String?,
+                               body: String?,
+                               cc: [String],
+                               bcc: [String]) -> URL? {
+        var comps = URLComponents()
+        comps.scheme = "mailto"
+        comps.path = to.joined(separator: ",")
+        var items: [URLQueryItem] = []
+        if let subject, !subject.isEmpty { items.append(.init(name: "subject", value: subject)) }
+        if let body, !body.isEmpty       { items.append(.init(name: "body", value: body)) }
+        if !cc.isEmpty { items.append(.init(name: "cc", value: cc.joined(separator: ","))) }
+        if !bcc.isEmpty { items.append(.init(name: "bcc", value: bcc.joined(separator: ","))) }
+        comps.queryItems = items.isEmpty ? nil : items
+        return comps.url
     }
 }

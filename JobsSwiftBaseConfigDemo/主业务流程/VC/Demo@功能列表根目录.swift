@@ -26,7 +26,7 @@ final class RootListVC: BaseVC {
         ("📷 鉴权后调用相机/相册", PhotoAlbumDemoVC.self),
         ("🛢️ 解码", SafeCodableDemoVC.self),
         ("🔘 按钮", UIButtonDemoVC.self),
-        ("🔑 注册登录", JobsAppDoorDemoVC.self),
+        ("🔑 注册登录".tr, JobsAppDoorDemoVC.self),
         ("🛜 Moya网络请求框架", MoyaDemoVC.self),
         ("🛜 Alamofire网络请求框架", AFDemoVC.self),
         ("🪥 支持左右上下刷新加载@JobsRefresher", JobsRefresherDemoVC.self),
@@ -274,6 +274,12 @@ final class RootListVC: BaseVC {
                     .onTap { [weak self] sender in
                         guard let self else { return }
                         sender.isSelected.toggle()
+
+                        sender.isSelected ? LanguageManager.shared.switchTo("en") : LanguageManager.shared.switchTo("zh-Hans") // 切到简体中文
+
+//                        LanguageManager.shared.switchTo("zh-Hans") // 切到简体中文
+//                        LanguageManager.shared.switchTo("zh-Hant") // 切到繁体中文
+
                         print("🌐 切换语言 tapped（占位）")
                     },
                 UIButton.sys()
