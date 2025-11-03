@@ -49,8 +49,7 @@ extension NSObject {
             output = output.replacingOccurrences(of: "\\/", with: "/") // 处理\/转义字符
         } catch {
 
-        }
-        return output
+        };return output
     }
 }
 
@@ -205,8 +204,6 @@ extension NSObject {
         return root
     }
 }
-
-
 
 #if canImport(NSObject_Rx)
 import NSObject_Rx

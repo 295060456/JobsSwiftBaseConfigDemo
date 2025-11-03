@@ -162,6 +162,10 @@
 		04BD5B412EA8E51C0056DA62 /* Demo@UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BD5B402EA8E5170056DA62 /* Demo@UITableView.swift */; };
 		04C2F0312E98C9D000BA05A9 /* Demo@设计模式MVVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C2F0302E98C9CA00BA05A9 /* Demo@设计模式MVVM.swift */; };
 		04C2F0332E98C9E000BA05A9 /* Demo@设计模式VIPER.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C2F0322E98C9DF00BA05A9 /* Demo@设计模式VIPER.swift */; };
+		04C442112EB86BC5008E0F09 /* Terms of Use.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 04C442102EB86BC5008E0F09 /* Terms of Use.pdf */; };
+		04C4428E2EB86CB5008E0F09 /* Demo@PDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C4428D2EB86CAB008E0F09 /* Demo@PDF.swift */; };
+		04C442902EB87ED8008E0F09 /* PDFView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C4428F2EB87ED6008E0F09 /* PDFView.swift */; };
+		04C442922EB87F77008E0F09 /* PDFThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C442912EB87F76008E0F09 /* PDFThumbnailView.swift */; };
 		04CF028C2E8808540083ACF0 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028B2E8808500083ACF0 /* UIButton.swift */; };
 		04CF028E2E8A37BB0083ACF0 /* TextInputStrategies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */; };
 		04CF02902E8A3A160083ACF0 /* Demo@输入文本.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */; };
@@ -412,6 +416,10 @@
 		04BD5B402EA8E5170056DA62 /* Demo@UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@UITableView.swift"; sourceTree = "<group>"; };
 		04C2F0302E98C9CA00BA05A9 /* Demo@设计模式MVVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@设计模式MVVM.swift"; sourceTree = "<group>"; };
 		04C2F0322E98C9DF00BA05A9 /* Demo@设计模式VIPER.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@设计模式VIPER.swift"; sourceTree = "<group>"; };
+		04C442102EB86BC5008E0F09 /* Terms of Use.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Terms of Use.pdf"; sourceTree = "<group>"; };
+		04C4428D2EB86CAB008E0F09 /* Demo@PDF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@PDF.swift"; sourceTree = "<group>"; };
+		04C4428F2EB87ED6008E0F09 /* PDFView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFView.swift; sourceTree = "<group>"; };
+		04C442912EB87F76008E0F09 /* PDFThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFThumbnailView.swift; sourceTree = "<group>"; };
 		04CF028B2E8808500083ACF0 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputStrategies.swift; sourceTree = "<group>"; };
 		04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@输入文本.swift"; sourceTree = "<group>"; };
@@ -813,6 +821,7 @@
 				04124F3A2EB075C500462BE2 /* Demo@Alamofire */,
 				04124F2B2EB0621D00462BE2 /* Demo@Moya */,
 				04B00E472EB21F0800901B1C /* Demo@LiveChat.swift */,
+				04C4428D2EB86CAB008E0F09 /* Demo@PDF.swift */,
 				047E9A702EB618B300F58923 /* Demo@Lunar.swift */,
 				047E9A722EB6217000F58923 /* Demo@XLSX.swift */,
 				0440B5582EB237B3005DBE91 /* Demo@Snowflake.swift */,
@@ -850,6 +859,14 @@
 			path = SubVC;
 			sourceTree = "<group>";
 		};
+		04C4420F2EB86BAE008E0F09 /* PDF */ = {
+			isa = PBXGroup;
+			children = (
+				04C442102EB86BC5008E0F09 /* Terms of Use.pdf */,
+			);
+			path = PDF;
+			sourceTree = "<group>";
+		};
 		04D0C97C2E8D19AB00580020 /* MJRefresh */ = {
 			isa = PBXGroup;
 			children = (
@@ -873,6 +890,8 @@
 		04D0C9802E8D19FC00580020 /* iOS.SDK */ = {
 			isa = PBXGroup;
 			children = (
+				04C442912EB87F76008E0F09 /* PDFThumbnailView.swift */,
+				04C4428F2EB87ED6008E0F09 /* PDFView.swift */,
 				042F958D2EB5C477005DE735 /* Bundle.swift */,
 				048F447D2EB3267000BAA7EE /* CATransform3D.swift */,
 				04BCDC312EA9EAAF00382DE0 /* UICollectionViewFlowLayout.swift */,
@@ -1073,6 +1092,7 @@
 		C564FC372E0959120079B5C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				04C4420F2EB86BAE008E0F09 /* PDF */,
 				045376402EB0B43900133F73 /* Json文件 */,
 				045376392EB0B3FE00133F73 /* 视频 */,
 				0482A5EC2EA39DF8004176A4 /* 网页 */,
@@ -1266,6 +1286,7 @@
 				0453764D2EB0B43F00133F73 /* UserData.json in Resources */,
 				0453764E2EB0B43F00133F73 /* OccupationList.json in Resources */,
 				0453764F2EB0B43F00133F73 /* CommentData.json in Resources */,
+				04C442112EB86BC5008E0F09 /* Terms of Use.pdf in Resources */,
 				045376502EB0B43F00133F73 /* Countries.json in Resources */,
 				045376512EB0B43F00133F73 /* CityList.json in Resources */,
 				045376522EB0B43F00133F73 /* data.json in Resources */,
@@ -1373,9 +1394,11 @@
 				C564FCB22E0959990079B5C1 /* EmptyView.swift in Sources */,
 				04124F332EB0625300462BE2 /* Plugins.swift in Sources */,
 				045920FC2E854FA9008C8D6A /* UInt.swift in Sources */,
+				04C4428E2EB86CB5008E0F09 /* Demo@PDF.swift in Sources */,
 				042F958E2EB5C478005DE735 /* Bundle.swift in Sources */,
 				045920FF2E854FBD008C8D6A /* UInt8.swift in Sources */,
 				0440B5DA2EB2FFB7005DBE91 /* keys.swift in Sources */,
+				04C442902EB87ED8008E0F09 /* PDFView.swift in Sources */,
 				04D0C96C2E8CCA7400580020 /* UIBarItem.swift in Sources */,
 				C564FC8D2E0959640079B5C1 /* UIBarButtonItem.swift in Sources */,
 				0482A5FA2EA63440004176A4 /* WKWebViewConfiguration.swift in Sources */,
@@ -1474,6 +1497,7 @@
 				04124F2A2EB05E9000462BE2 /* Demo@Moya.swift in Sources */,
 				045921122E855769008C8D6A /* JobsPaddedLabel.swift in Sources */,
 				04BCDC322EA9EAB000382DE0 /* UICollectionViewFlowLayout.swift in Sources */,
+				04C442922EB87F77008E0F09 /* PDFThumbnailView.swift in Sources */,
 				0459210C2E855004008C8D6A /* Float80.swift in Sources */,
 				045376672EB0B5E100133F73 /* PlayerCenter.swift in Sources */,
 				04D0C96E2E8CD14B00580020 /* UIControl.swift in Sources */,
