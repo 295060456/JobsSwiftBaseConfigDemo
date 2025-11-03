@@ -5293,17 +5293,17 @@ override func viewWillDisappear(_ animated: Bool) {
  ![image-20251101165105182](./assets/image-20251101165105182.png)
 
  * `Localizable.strings (English)` **中文为键**
- 
+
    ```
    "🔑 注册登录" = "🔑 Sign in / Register";
    ```
- 
+
  * `Localizable.strings (Chinese, Simplified)`
- 
+
    ```
    "🔑 注册登录" = "🔑 注册登录";
    ```
- 
+
 * 启动配置
   
   ```swift
@@ -5327,6 +5327,56 @@ override func viewWillDisappear(_ animated: Bool) {
 
    * 切换语言的时候，是通过发通知来转换的
    * 对于已经赋值的UI控件，还是需要重新赋值。**`*.tr`**只是改变字符串
+
+### 39、PDF <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+import PDFKit // 系统API
+
+private lazy var pdfView: PDFView = {
+    PDFView()
+        .byAutoScales(NO) // 交给我们手动控制
+        .byDisplayMode(.singlePageContinuous)
+        .byDisplayDirection(.vertical)
+        .byBgColor(.secondarySystemBackground)
+        .byAddTo(view) { [unowned self] make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            make.bottom.equalTo(thumbnailView.snp.top)
+        }
+}()
+
+private lazy var thumbnailView: PDFThumbnailView = { [unowned self] in
+    PDFThumbnailView()
+        .byLayoutMode(.horizontal)
+        .byThumbnailSize(CGSize(width: 60, height: 80))
+        .byBgColor(.tertiarySystemBackground)
+        .byContentInset(UIEdgeInsets(top: 6, left: 8, bottom: 6, right: 8))
+        .byAddTo(view) { [unowned self] make in
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            make.height.equalTo(96)
+        }
+}()
+
+thumbnailView.byPDFView(to: pdfView)
+
+override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    pdfView.byFitScale(max: 4.0)
+        .byFitNow(maxScale: 4.0)
+}
+/// 可选增强（避免旋转后又变样）：
+override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    super.viewWillTransition(to: size, with: coordinator)
+    coordinator.animate(alongsideTransition: { _ in
+        let fit = self.pdfView.scaleFactorForSizeToFit
+        self.pdfView.minScaleFactor = fit
+        self.pdfView.maxScaleFactor = max(fit, 4.0)
+        self.pdfView.scaleFactor   = fit
+    })
+}
+```
 
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 

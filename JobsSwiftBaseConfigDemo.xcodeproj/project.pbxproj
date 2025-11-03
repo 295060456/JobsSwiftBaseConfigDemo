@@ -1045,7 +1045,6 @@
 				045920EF2E854C8E008C8D6A /* Extensions */,
 				045920E22E84EC64008C8D6A /* 第三方和一些工具集 */,
 				C564FEEC2E0AAC900079B5C1 /* SwiftDefines */,
-				C564FEEB2E0AAC5A0079B5C1 /* 主业务流程 */,
 				C564FC282E0958C40079B5C1 /* AppDelegate & SceneDelegate */,
 				C564FBEF2E09580D0079B5C1 /* Info.plist */,
 				04FD2AAA2EB5B9AB00CDB5D5 /* JobsConfig.xcconfig */,
@@ -1085,6 +1084,7 @@
 				C564FC292E0958D50079B5C1 /* AppDelegate.swift */,
 				C564FC2A2E0958D50079B5C1 /* SceneDelegate.swift */,
 				C564FC272E0958BD0079B5C1 /* 3rd */,
+				C564FEEB2E0AAC5A0079B5C1 /* 主业务流程 */,
 			);
 			path = "AppDelegate & SceneDelegate";
 			sourceTree = "<group>";
