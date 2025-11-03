@@ -166,6 +166,9 @@
 		04C4428E2EB86CB5008E0F09 /* Demo@PDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C4428D2EB86CAB008E0F09 /* Demo@PDF.swift */; };
 		04C442902EB87ED8008E0F09 /* PDFView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C4428F2EB87ED6008E0F09 /* PDFView.swift */; };
 		04C442922EB87F77008E0F09 /* PDFThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C442912EB87F76008E0F09 /* PDFThumbnailView.swift */; };
+		04C442A62EB8B93A008E0F09 /* Demo@Lottie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C442A52EB8B935008E0F09 /* Demo@Lottie.swift */; };
+		04C442AA2EB8BC13008E0F09 /* 9squares_AlBoardman.json in Resources */ = {isa = PBXBuildFile; fileRef = 04C442A92EB8BC13008E0F09 /* 9squares_AlBoardman.json */; };
+		04C442AC2EB8BC27008E0F09 /* LottieLogo1.json in Resources */ = {isa = PBXBuildFile; fileRef = 04C442AB2EB8BC27008E0F09 /* LottieLogo1.json */; };
 		04CF028C2E8808540083ACF0 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028B2E8808500083ACF0 /* UIButton.swift */; };
 		04CF028E2E8A37BB0083ACF0 /* TextInputStrategies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */; };
 		04CF02902E8A3A160083ACF0 /* Demo@输入文本.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */; };
@@ -420,6 +423,9 @@
 		04C4428D2EB86CAB008E0F09 /* Demo@PDF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@PDF.swift"; sourceTree = "<group>"; };
 		04C4428F2EB87ED6008E0F09 /* PDFView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFView.swift; sourceTree = "<group>"; };
 		04C442912EB87F76008E0F09 /* PDFThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFThumbnailView.swift; sourceTree = "<group>"; };
+		04C442A52EB8B935008E0F09 /* Demo@Lottie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@Lottie.swift"; sourceTree = "<group>"; };
+		04C442A92EB8BC13008E0F09 /* 9squares_AlBoardman.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = 9squares_AlBoardman.json; sourceTree = "<group>"; };
+		04C442AB2EB8BC27008E0F09 /* LottieLogo1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = LottieLogo1.json; sourceTree = "<group>"; };
 		04CF028B2E8808500083ACF0 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputStrategies.swift; sourceTree = "<group>"; };
 		04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@输入文本.swift"; sourceTree = "<group>"; };
@@ -609,7 +615,7 @@
 			path = "Demo@BMPlayer";
 			sourceTree = "<group>";
 		};
-		045920E22E84EC64008C8D6A /* 第三方和一些工具集 */ = {
+		045920E22E84EC64008C8D6A /* 3rdTools */ = {
 			isa = PBXGroup;
 			children = (
 				042F958F2EB5C733005DE735 /* 多语言化 */,
@@ -628,6 +634,8 @@
 				C564FC852E0959640079B5C1 /* UIKitModel.swift */,
 				0401DD052E9115CD00D572AD /* JobsToast.swift */,
 				0477D9822E8BE9FB002C6427 /* KeyboardObserver.swift */,
+				C564FC2D2E0958E80079B5C1 /* HUDHelper.swift */,
+				044272842E8146130084B25C /* JXScale.swift */,
 				0477D97C2E8BDB94002C6427 /* JobsCountdownButton.swift */,
 				0477D96C2E8B83CA002C6427 /* JobsSafeTransitions.swift */,
 				04CF03182E8A80CA0083ACF0 /* AppTools.swift */,
@@ -636,7 +644,7 @@
 				045920E32E84EC72008C8D6A /* SwiftTools.swift */,
 				0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */,
 			);
-			path = "第三方和一些工具集";
+			path = 3rdTools;
 			sourceTree = "<group>";
 		};
 		045920EF2E854C8E008C8D6A /* Extensions */ = {
@@ -815,6 +823,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				04C442A52EB8B935008E0F09 /* Demo@Lottie.swift */,
 				048F447A2EB311B100BAA7EE /* Demo@注册登陆 */,
 				047E48D82EB3561200881898 /* Demo@PNPlayer */,
 				045376572EB0B56500133F73 /* Demo@BMPlayer */,
@@ -865,6 +874,15 @@
 				04C442102EB86BC5008E0F09 /* Terms of Use.pdf */,
 			);
 			path = PDF;
+			sourceTree = "<group>";
+		};
+		04C442A82EB8BBFA008E0F09 /* Lottie动画 */ = {
+			isa = PBXGroup;
+			children = (
+				04C442AB2EB8BC27008E0F09 /* LottieLogo1.json */,
+				04C442A92EB8BC13008E0F09 /* 9squares_AlBoardman.json */,
+			);
+			path = "Lottie动画";
 			sourceTree = "<group>";
 		};
 		04D0C97C2E8D19AB00580020 /* MJRefresh */ = {
@@ -1043,9 +1061,10 @@
 				C564FC372E0959120079B5C1 /* Resources */,
 				0459210F2E85572C008C8D6A /* Inheritance */,
 				045920EF2E854C8E008C8D6A /* Extensions */,
-				045920E22E84EC64008C8D6A /* 第三方和一些工具集 */,
+				045920E22E84EC64008C8D6A /* 3rdTools */,
 				C564FEEC2E0AAC900079B5C1 /* SwiftDefines */,
 				C564FC282E0958C40079B5C1 /* AppDelegate & SceneDelegate */,
+				C564FEEB2E0AAC5A0079B5C1 /* 主业务流程 */,
 				C564FBEF2E09580D0079B5C1 /* Info.plist */,
 				04FD2AAA2EB5B9AB00CDB5D5 /* JobsConfig.xcconfig */,
 			);
@@ -1069,22 +1088,11 @@
 			path = JobsSwiftBaseConfigDemoUITests;
 			sourceTree = "<group>";
 		};
-		C564FC272E0958BD0079B5C1 /* 3rd */ = {
-			isa = PBXGroup;
-			children = (
-				C564FC2D2E0958E80079B5C1 /* HUDHelper.swift */,
-				044272842E8146130084B25C /* JXScale.swift */,
-			);
-			path = 3rd;
-			sourceTree = "<group>";
-		};
 		C564FC282E0958C40079B5C1 /* AppDelegate & SceneDelegate */ = {
 			isa = PBXGroup;
 			children = (
 				C564FC292E0958D50079B5C1 /* AppDelegate.swift */,
 				C564FC2A2E0958D50079B5C1 /* SceneDelegate.swift */,
-				C564FC272E0958BD0079B5C1 /* 3rd */,
-				C564FEEB2E0AAC5A0079B5C1 /* 主业务流程 */,
 			);
 			path = "AppDelegate & SceneDelegate";
 			sourceTree = "<group>";
@@ -1092,6 +1100,7 @@
 		C564FC372E0959120079B5C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				04C442A82EB8BBFA008E0F09 /* Lottie动画 */,
 				04C4420F2EB86BAE008E0F09 /* PDF */,
 				045376402EB0B43900133F73 /* Json文件 */,
 				045376392EB0B3FE00133F73 /* 视频 */,
@@ -1285,6 +1294,7 @@
 				0453764C2EB0B43F00133F73 /* IncomeSource.json in Resources */,
 				0453764D2EB0B43F00133F73 /* UserData.json in Resources */,
 				0453764E2EB0B43F00133F73 /* OccupationList.json in Resources */,
+				04C442AA2EB8BC13008E0F09 /* 9squares_AlBoardman.json in Resources */,
 				0453764F2EB0B43F00133F73 /* CommentData.json in Resources */,
 				04C442112EB86BC5008E0F09 /* Terms of Use.pdf in Resources */,
 				045376502EB0B43F00133F73 /* Countries.json in Resources */,
@@ -1297,6 +1307,7 @@
 				0482A5F22EA3A3A2004176A4 /* BaseWebViewDemo.html in Resources */,
 				C564FBEE2E09580D0079B5C1 /* LaunchScreen.storyboard in Resources */,
 				C564FBE62E09580B0079B5C1 /* Main.storyboard in Resources */,
+				04C442AC2EB8BC27008E0F09 /* LottieLogo1.json in Resources */,
 				040B31132EB2294500862F75 /* Assets.xcassets in Resources */,
 				04DBEE0B2EA1E305000E52D3 /* Sound.wav in Resources */,
 			);
@@ -1475,6 +1486,7 @@
 				C564FCA52E0959640079B5C1 /* UIPickerView.swift in Sources */,
 				C564FC882E0959640079B5C1 /* UISlider.swift in Sources */,
 				C564FC912E0959640079B5C1 /* UIScrollView.swift in Sources */,
+				04C442A62EB8B93A008E0F09 /* Demo@Lottie.swift in Sources */,
 				049A656D2EA0CB7F0006B185 /* Demo@解码.swift in Sources */,
 				C564FC8F2E0959640079B5C1 /* UIProgressView.swift in Sources */,
 				0482A67C2EA7883F004176A4 /* Dictionary.swift in Sources */,
