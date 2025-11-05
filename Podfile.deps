@@ -26,6 +26,9 @@ def swiftAppCommon
   pod 'LiveChat'                           # https://github.com/livechat/chat-window-ios       ❤️ 第三方的聊天工具 https://www.livechat.com/
   pod 'LunarSwift'                         # https://github.com/6tail/lunar-swift              ❤️ 无第三方依赖的日历工具
   pod 'CoreXLSX'                           # https://github.com/3973770/SwiftXLSX              ❤️ Excel
+  pod 'ComponentKit'                       # https://github.com/facebook/componentkit          ❤️ Facebook出品的一款UI框架
+#  pod 'Texture'                            # https://github.com/texturegroup/texture           ❤️ Facebook出品的一款UI框架
+
 end
 
 # ============================== 调试框架（仅 Debug） ==============================
