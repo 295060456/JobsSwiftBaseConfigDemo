@@ -5386,235 +5386,286 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
 
 #### 1.1、系统注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-- <font color=red>**`@available(...)`**</font>/ <font color=red>**`@unavailable(...)`**</font>
+##### 1.1.1、<font color=red>**`@available(...)`**</font>/ <font color=red>**`@unavailable(...)`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-  > 控制平台/版本可用性、弃用信息
+> 控制平台/版本可用性、弃用信息
 
-  ```swift
-  @available(iOS 14, *) 
-  func foo() {}
-  
-  @available(*, deprecated, message: "Use newFoo()")
-  func oldFoo() {}
-  
-  @unavailable(iOS, message: "Not on iOS")
-  func macOnly() {}
+```swift
+@available(iOS 14, *) 
+func foo() {}
 
-- <font color=red>**`@main`**</font>指定程序入口 
+@available(*, deprecated, message: "Use newFoo()")
+func oldFoo() {}
 
-  > 取代旧的 `@UIApplicationMain` / `@NSApplicationMain`
+@unavailable(iOS, message: "Not on iOS")
+func macOnly() {}
+```
 
-  ```swift
-  @main
-  struct AppMain {
-    static func main() { /* ... */ }
-  }
-  ```
+##### 1.1.2、<font color=red>**`@main`**</font>指定程序入口 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-- <font color=red>**`@inlinable`**</font>/ <font color=red>**`@usableFromInline`**</font>
+> 取代旧的 `@UIApplicationMain` / `@NSApplicationMain`
 
-  > 跨模块内联/符号可见性微控（发布库时常用）
+```swift
+@main
+struct AppMain {
+  static func main() { /* ... */ }
+}
+```
 
-  ```swift
-  @inlinable public func add(_ a:Int,_ b:Int)->Int { a+b }
-  @usableFromInline internal let cache = ...
-  ```
-  
-- <font color=red>**`@frozen`**</font>
+##### 1.1.3、<font color=red>**`@inlinable`**</font>/ <font color=red>**`@usableFromInline`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-  > * 冻结 `enum` 的布局，保证 **ABI** 稳定（库作者用）
-  >   *  [**API 🆚 ABI**](#API🆚ABI)
-  >   * [**ABI不兼容**](#ABI不兼容)
+> 跨模块内联/符号可见性微控（发布库时常用）
 
-  ```swift
-  @frozen public enum ColorSpace { case srgb, displayP3 }
-  ```
+```swift
+@inlinable public func add(_ a:Int,_ b:Int)->Int { a+b }
+@usableFromInline internal let cache = ...
+```
 
-- <font color=red>**`@discardableResult`**</font>
+##### 1.1.4、<font color=red>**`@frozen`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-  > 允许丢弃返回值（链式 API 常用）
+> * 冻结 `enum` 的布局，保证 **ABI** 稳定（库作者用）
+>   *  [**API 🆚 ABI**](#API🆚ABI)
+>   * [**ABI不兼容**](#ABI不兼容)
 
-  ```swift
-  @discardableResult
-  func setTitle(_ s:String) -> Self { /* ... */ return self }
-  ```
+```swift
+@frozen public enum ColorSpace { case srgb, displayP3 }
+```
 
--  <font color=red>**`@escaping`**</font>
+##### 1.1.5、<font color=red>**`@discardableResult`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-  > 标记逃逸闭包参数
+> 允许丢弃返回值（链式 API 常用）
 
-  ```swift
-  func asyncOp(_ block: @escaping ()->Void) { /* store & call later */ }
-  ```
+```swift
+@discardableResult
+func setTitle(_ s:String) -> Self { /* ... */ return self }
+```
 
-- <font color=red>**`@autoclosure`**</font>
+##### 1.1.6、<font color=red>**`@escaping`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-  > 调用端可省略 `{}` 延迟求值
+> 标记逃逸闭包参数
 
-  ```swift
-  func assert(_ cond: @autoclosure ()->Bool) {}
-  assert(1 < 2)   // 等价于 { 1 < 2 }
-  ```
+```swift
+func asyncOp(_ block: @escaping ()->Void) { /* store & call later */ }
+```
 
-- <font color=red>**`@Sendable`**</font>
+##### 1.1.7、<font color=red>**`@autoclosure`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-  > 并发安全闭包（跨 **actor**/线程）
+> 调用端可省略 `{}` 延迟求值
 
-  ```swift
-  func run(_ job: @Sendable ()->Void) {}
-  ```
+```swift
+func assert(_ cond: @autoclosure ()->Bool) {}
+assert(1 < 2)   // 等价于 { 1 < 2 }
+```
 
-- <font color=red>**`@MainActor`**</font>/ 自定义 <font color=red>**`@globalActor`**</font>
+##### 1.1.8、<font color=red>**`@Sendable`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-  > 将函数/类型限定在主线程或某个 **actor** 上
+> 并发安全闭包（跨 **actor**/线程）
 
-  ```swift
-  @MainActor
-  class ViewModel {
-    func updateUI() {}
-  }
-  ```
+```swift
+func run(_ job: @Sendable ()->Void) {}
+```
 
-- <font color=red>**`@preconcurrency`**</font>
+##### 1.1.9、<font color=red>**`@MainActor`**</font>/ 自定义 <font color=red>**`@globalActor`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-  > 为旧接口提供向后兼容的并发注释（迁移期会见到）
+> 将函数/类型限定在主线程或某个 **actor** 上
 
-- <font color=red>**`@objc`**</font>/ <font color=red>**`@objcMembers`**</font>/ <font color=red>**`@nonobjc`**</font>
+```swift
+@MainActor
+class ViewModel {
+  func updateUI() {}
+}
+```
 
-  > 暴露/隐藏给 **Objc** 运行时（<font color=red>**Selector**</font>、**KVC/KVO**、**IB** 需要）
+##### 1.1.10、<font color=red>**`@preconcurrency`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-  ```swift
-  @objcMembers class Foo: NSObject {
-    func bar() {}          // 全部默认 @objc
-    @nonobjc func swiftOnly() {}
-  }
-  ```
+> 为旧接口提供向后兼容的并发注释（迁移期会见到）
 
-- <font color=red>**`@warn_unqualified_access`**</font>
+##### 1.1.11、<font color=red>**`@objc`**</font>/ <font color=red>**`@objcMembers`**</font>/ <font color=red>**`@nonobjc`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-  > 未加类型前缀调用时产生警告，逼调用方加前缀，避免 API 名称冲突
+* <font color=red>**`@objc`**</font>
 
-  ```swift
-  @warn_unqualified_access
-  func ambiguous() {}
-  ```
+  * 把 **Swift 符号暴露给 Objective-C 运行时** 用的标记。只有暴露后，才能用 **selector / KVC / KVO / 目标-动作** 等基于 Obj-C Runtime 的机制。
 
-- <font color=red>**`@dynamicMemberLookup`**</font>& <font color=red>**`@dynamicCallable`**</font>
+  * 仅 `@objc` 只是“可见”，**不强制动态派发**；需要消息发送（`objc_msgSend`）就用 `dynamic`（`dynamic` 会隐式带上 `@objc`）。
 
-  > 让类型支持 `obj.someName` 动态解析或像函数一样被“调用”
+  * 什么时候必须用❓
 
-  ```swift
-  @dynamicMemberLookup
-  struct JSON {
-    subscript(dynamicMember key: String) -> JSON { /* ... */ JSON() }
-  }
-  ```
+    * **Target-Action**（按钮、手势、定时器等）
 
-- <font color=red>**`@resultBuilder`**</font>
+      ```
+      @objc func didTap(_ sender: UIButton) { ... }
+      button.addTarget(self, action: #selector(didTap(_:)), for: .touchUpInside)
+      ```
 
-  > **SwiftUI** 等 **DSL** 背后的机制。你用到的多是框架提供的具体 **builder**
+    * KVO / KVC
 
-  ```swift
-  @resultBuilder
-  struct HTMLBuilder { /* ... */ }
-  ```
+      ```
+      @objc dynamic var titleText: String = ""   // KVO 需要动态派发
+      ```
 
-- <font color=red>**`@testable`**</font> **import ModuleName** 
+    * selector 版通知回调
 
-  > 允许测试访问目标模块的 **internal** 成员
+      ```
+      @objc private func onLangChanged(_ n: Notification) { ... }
+      NotificationCenter.default.addObserver(self,
+                                             selector: #selector(onLangChanged(_:)),
+                                             name: .JobsLanguageDidChange, object: nil)
+      ```
 
-- <font color=red>**`@IBAction`**</font>/ <font color=red>**`@IBOutlet`**</font>
+    * **可选协议方法**（只有 `@objc protocol` 才能 `optional`）
 
-  > 连接 storyboard/xib
+      ```
+      @objc protocol JobsDelegate: AnyObject {
+          @objc optional func didFinish(_ vc: UIViewController)
+      }
+      ```
 
-  ```swift
-  @IBAction func didTap(_ sender: UIButton) {}
-  @IBOutlet weak var titleLabel: UILabel!
-  ```
+  * 什么时候不需要❓
 
--  <font color=red>**`@IBInspectable`**</font>/ <font color=red>**`@IBDesignable`**</font>
+    * 全是 **纯 Swift** 闭包回调（你自己的 `.onTap { }` / Rx / Combine）。
+    * 纯 Swift 调用、没有 selector/KVO/KVC 的场景。
+    * 不对外暴露给 Obj-C 的类型/方法。
 
-  > 在 IB 可编辑/实时渲染自定义视图属性
+  * 特别注意
 
-  ```swift
-  @IBDesignable
-  class CardView: UIView {
-    @IBInspectable var corner: CGFloat = 8
-  }
-  ```
+    * **忘了继承 `NSObject`**：即使 `@objc` 了，某些机制仍用不了。
+    * **KVO 只写了 `@objc`**：没 `dynamic` 不会触发。
+    * **方法重载** 导致 selector 冲突：用 `@objc(customName:)` 指定。
+    * **扩展里暴露**：在 extension 成员上单独加 `@objc`，或对类用 `@objcMembers`（同文件）。
+    * **可见性**：`private` 成员给 Obj-C 用不到；一般用 `internal`/`@objc` 即可（必要时 `@objc public`）。
 
-- <font color=red>**`@NSManaged`**</font>
+* <font color=red>**`@objcMembers`**</font>
 
-  > **Core Data**动态解析属性/方法（不需要自己实现存取器）
+  * 写在 **类** 上，让**该类的成员默认都暴露**到 Obj-C（同文件内的扩展也受影响）。
+  * 风险：暴露过多，ABI/二进制体积膨胀，调度开销↑。**不建议全开**，精确标注更好。
 
-  ```swift
-  class User: NSManagedObject {
-    @NSManaged var name: String
-  }
-  ```
+* <font color=red>**`@nonobjc`**</font>
 
-- <font color=red>**`@NSCopying`**</font>
+##### 1.1.12、<font color=red>**`@warn_unqualified_access`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-  > 属性赋值时自动拷贝（要求值类型实现 `NSCopying`）
+> 未加类型前缀调用时产生警告，逼调用方加前缀，避免 API 名称冲突
 
-  ```swift
-  class Foo: NSObject {
-    @NSCopying var path: NSString = ""
-  }
-  ```
+```swift
+@warn_unqualified_access
+func ambiguous() {}
+```
 
-- <font color=red>**`@State`**</font>/<font color=red>**`@Binding`**</font>/<font color=red>**`@StateObject`**</font>/<font color=red>**`@ObservedObject`**</font>/<font color=red>**`@Environment`**</font>/<font color=red>**`@EnvironmentObject`**</font>/<font color=red>**`@AppStorage`**</font>/<font color=red>**`@SceneStorage`**</font>/<font color=red>**`@FocusState`**</font>
+##### 1.1.13、<font color=red>**`@dynamicMemberLookup `**</font>& <font color=red>**`@dynamicCallable`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-  ```swift
-  struct Counter: View {
-    @State private var count = 0
-    var body: some View { Text("\(count)") }
-  }
-  ```
+> 让类型支持 `obj.someName` 动态解析或像函数一样被“调用”
 
-- <font color=red>**`@Published`**</font>
+```swift
+@dynamicMemberLookup
+struct JSON {
+  subscript(dynamicMember key: String) -> JSON { /* ... */ JSON() }
+}
+```
 
-  ```swift
-  class VM: ObservableObject {
-    @Published var name = ""
-  }
-  ```
+##### 1.1.14、<font color=red>**`@resultBuilder`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-- <font color=red>**`@unchecked`**</font>
+> **SwiftUI** 等 **DSL** 背后的机制。你用到的多是框架提供的具体 **builder**
 
-  > 它是 **[Swift](https://developer.apple.com/swift/) 的一个属性修饰符**，目前主要和 **协议 `Sendable`** 结合使用
+```swift
+@resultBuilder
+struct HTMLBuilder { /* ... */ }
+```
+
+##### 1.1.15、<font color=red>**`@testable`**</font> **import ModuleName**  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 允许测试访问目标模块的 **internal** 成员
+
+##### 1.1.16、<font color=red>**`@IBAction`**</font>/ <font color=red>**`@IBOutlet`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 连接 storyboard/xib
+
+```swift
+@IBAction func didTap(_ sender: UIButton) {}
+@IBOutlet weak var titleLabel: UILabel!
+```
+
+##### 1.1.17、<font color=red>**`@IBInspectable`**</font>/ <font color=red>**`@IBDesignable`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 在 IB 可编辑/实时渲染自定义视图属性
+
+```swift
+@IBDesignable
+class CardView: UIView {
+  @IBInspectable var corner: CGFloat = 8
+}
+```
+
+##### 1.1.18、<font color=red>**`@NSManaged`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> **Core Data**动态解析属性/方法（不需要自己实现存取器）
+
+```swift
+class User: NSManagedObject {
+  @NSManaged var name: String
+}
+```
+
+##### 1.1.19、<font color=red>**`@NSCopying`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 属性赋值时自动拷贝（要求值类型实现 `NSCopying`）
+
+```swift
+class Foo: NSObject {
+  @NSCopying var path: NSString = ""
+}
+```
+
+##### 1.1.20、<font color=red>**`@State`**</font>/<font color=red>**`@Binding`**</font>/<font color=red>**`@StateObject`**</font>/<font color=red>**`@ObservedObject`**</font>/<font color=red>**`@Environment`**</font>/<font color=red>**`@EnvironmentObject`**</font>/<font color=red>**`@AppStorage`**</font>/<font color=red>**`@SceneStorage`**</font>/<font color=red>**`@FocusState`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+struct Counter: View {
+  @State private var count = 0
+  var body: some View { Text("\(count)") }
+}
+```
+
+##### 1.1.21、<font color=red>**`@Published`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+class VM: ObservableObject {
+  @Published var name = ""
+}
+```
+
+##### 1.1.22、<font color=red>**`@unchecked`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 它是 **[Swift](https://developer.apple.com/swift/) 的一个属性修饰符**，目前主要和 **协议 `Sendable`** 结合使用
+>
+> 本质就是 [**Swift**](https://developer.apple.com/swift/) 提供的一个 **安全逃生口**
+
+```swift
+/// 跳过编译器的并发安全检查，由开发者自己保证。
+@unchecked Sendable
+```
+
+* 背景：并发安全检查
+
+  > 从 [**Swift**](https://developer.apple.com/swift/) 5.5 引入并发（`async/await`、`Task` 等）开始，苹果为了防止 **数据竞争**，提出了一个协议：
   >
-  > 本质就是 [**Swift**](https://developer.apple.com/swift/) 提供的一个 **安全逃生口**
+  > ```swift
+  > protocol Sendable { }
+  > ```
+  >
+  > 一个类型如果要在 **多线程 / 并发任务** 中安全传递，就必须是 `Sendable`
+  >
+  > - 值类型（`struct`，内部全是 `Sendable` 成员） → 自动符合 `Sendable`。
+  > - 引用类型（`class`） → 默认 **不是 `Sendable`**，因为引用可能被多线程同时访问，造成数据竞争。
 
-  ```swift
-  /// 跳过编译器的并发安全检查，由开发者自己保证。
-  @unchecked Sendable
-  ```
+##### 1.1.23、<font color=red>**`@resultBuilder`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-  * 背景：并发安全检查
+##### 1.1.24、<font color=red>**`@ViewBuilder`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-    > 从 [**Swift**](https://developer.apple.com/swift/) 5.5 引入并发（`async/await`、`Task` 等）开始，苹果为了防止 **数据竞争**，提出了一个协议：
-    >
-    > ```swift
-    > protocol Sendable { }
-    > ```
-    >
-    > 一个类型如果要在 **多线程 / 并发任务** 中安全传递，就必须是 `Sendable`
-    >
-    > - 值类型（`struct`，内部全是 `Sendable` 成员） → 自动符合 `Sendable`。
-    > - 引用类型（`class`） → 默认 **不是 `Sendable`**，因为引用可能被多线程同时访问，造成数据竞争。
+##### 1.1.25、<font color=red>**`@SceneBuilder`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-- <font color=red>**`@resultBuilder`**</font>
+##### 1.1.26、<font color=red>**`@ToolbarContentBuilder`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-- <font color=red>**`@ViewBuilder`**</font>
+##### 1.1.27、<font color=red>**`@CommandsBuilder`**</font>  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-- <font color=red>**`@SceneBuilder`**</font>
-
-- <font color=red>**`@ToolbarContentBuilder`**</font>
-
-- <font color=red>**`@CommandsBuilder`**</font>
-
-- <font color=red>**`@LibraryContentBuilder`**</font>
+##### 1.1.28、<font color=red>**`@LibraryContentBuilder`**</font>  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 #### 1.2、🙋 <font color=red>**自定义注解**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 

@@ -18,6 +18,9 @@ class DemoDetailVC: BaseVC {
     private var input: Any?
     override func loadView() {
         super.loadView()
+
+        OCCls().string("q", image: nil)
+
         // 读取并缓存（一次性拿 Any 即可）
         input = (inputData() as Any?)
         // 需要的话再按类型分别打印

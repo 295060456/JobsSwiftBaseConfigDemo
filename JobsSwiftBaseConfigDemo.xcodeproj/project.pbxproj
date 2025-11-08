@@ -184,6 +184,7 @@
 		04D0C97D2E8D19AB00580020 /* MJRefreshAutoNormalFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D0C97B2E8D19AB00580020 /* MJRefreshAutoNormalFooter.swift */; };
 		04D0C97E2E8D19AB00580020 /* MJRefreshNormalHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D0C97A2E8D19AB00580020 /* MJRefreshNormalHeader.swift */; };
 		04D0C9822E8D1CF400580020 /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D0C9812E8D1CF300580020 /* Optional.swift */; };
+		04D49C252EBE055000BCD6F1 /* OCCls.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D49C242EBE055000BCD6F1 /* OCCls.m */; };
 		04D842292E96377B001E8C90 /* Demo@打开模块.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D842282E96377A001E8C90 /* Demo@打开模块.swift */; };
 		04D8422B2E965BA1001E8C90 /* JobsMarqueeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D8422A2E965BA0001E8C90 /* JobsMarqueeView.swift */; };
 		04DBEE0B2EA1E305000E52D3 /* Sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 04DBEE0A2EA1E305000E52D3 /* Sound.wav */; };
@@ -443,6 +444,9 @@
 		04D0C97A2E8D19AB00580020 /* MJRefreshNormalHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MJRefreshNormalHeader.swift; sourceTree = "<group>"; };
 		04D0C97B2E8D19AB00580020 /* MJRefreshAutoNormalFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MJRefreshAutoNormalFooter.swift; sourceTree = "<group>"; };
 		04D0C9812E8D1CF300580020 /* Optional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
+		04D49C222EBE055000BCD6F1 /* JobsSwiftBaseConfigDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JobsSwiftBaseConfigDemo-Bridging-Header.h"; sourceTree = "<group>"; };
+		04D49C232EBE055000BCD6F1 /* OCCls.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OCCls.h; sourceTree = "<group>"; };
+		04D49C242EBE055000BCD6F1 /* OCCls.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OCCls.m; sourceTree = "<group>"; };
 		04D842282E96377A001E8C90 /* Demo@打开模块.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@打开模块.swift"; sourceTree = "<group>"; };
 		04D8422A2E965BA0001E8C90 /* JobsMarqueeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsMarqueeView.swift; sourceTree = "<group>"; };
 		04DBEE0A2EA1E305000E52D3 /* Sound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Sound.wav; sourceTree = "<group>"; };
@@ -984,6 +988,15 @@
 			path = iOS.SDK;
 			sourceTree = "<group>";
 		};
+		04D49C262EBE07BE00BCD6F1 /* OCCls */ = {
+			isa = PBXGroup;
+			children = (
+				04D49C232EBE055000BCD6F1 /* OCCls.h */,
+				04D49C242EBE055000BCD6F1 /* OCCls.m */,
+			);
+			path = OCCls;
+			sourceTree = "<group>";
+		};
 		04DBEE092EA1E2F9000E52D3 /* 声音 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1073,6 +1086,7 @@
 				C564FEEB2E0AAC5A0079B5C1 /* 主业务流程 */,
 				C564FBEF2E09580D0079B5C1 /* Info.plist */,
 				04FD2AAA2EB5B9AB00CDB5D5 /* JobsConfig.xcconfig */,
+				04D49C222EBE055000BCD6F1 /* JobsSwiftBaseConfigDemo-Bridging-Header.h */,
 			);
 			path = JobsSwiftBaseConfigDemo;
 			sourceTree = "<group>";
@@ -1153,6 +1167,7 @@
 		C564FEEB2E0AAC5A0079B5C1 /* 主业务流程 */ = {
 			isa = PBXGroup;
 			children = (
+				04D49C262EBE07BE00BCD6F1 /* OCCls */,
 				C564FCAD2E0959920079B5C1 /* Views */,
 				C564FCA82E0959690079B5C1 /* VC */,
 			);
@@ -1250,6 +1265,7 @@
 				TargetAttributes = {
 					C564FBDA2E09580B0079B5C1 = {
 						CreatedOnToolsVersion = 15.2;
+						LastSwiftMigration = 2610;
 					};
 					C564FBF32E09580D0079B5C1 = {
 						CreatedOnToolsVersion = 15.2;
@@ -1351,7 +1367,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		78A525BA5E5C756DB61C5B8A /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1360,8 +1377,12 @@
 			);
 			inputFileListPaths = (
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1402,6 +1423,7 @@
 				045921152E8557FE008C8D6A /* UIFont.swift in Sources */,
 				046786E72EB4CEED003FE82D /* RefreshComponent.swift in Sources */,
 				C564FC2B2E0958D50079B5C1 /* AppDelegate.swift in Sources */,
+				04D49C252EBE055000BCD6F1 /* OCCls.m in Sources */,
 				044272852E8146130084B25C /* JXScale.swift in Sources */,
 				C564FCB22E0959990079B5C1 /* EmptyView.swift in Sources */,
 				04124F332EB0625300462BE2 /* Plugins.swift in Sources */,
@@ -1794,6 +1816,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8LVJBHA68K;
@@ -1815,6 +1838,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jobs.JobsSwiftBaseConfigDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "${SRCROOT}/JobsSwiftBaseConfigDemo/JobsSwiftBaseConfigDemo-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1826,6 +1851,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8LVJBHA68K;
@@ -1847,6 +1873,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jobs.JobsSwiftBaseConfigDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "${SRCROOT}/JobsSwiftBaseConfigDemo/JobsSwiftBaseConfigDemo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
