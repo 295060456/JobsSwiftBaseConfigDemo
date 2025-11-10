@@ -189,6 +189,8 @@
 
 * [**波测**](https://www.boce.com/)
 
+* [**向附近设备分享文件**](https://localsend.org/download)
+
 * [**uuwallet@虚拟卡**](https://www.uuwallet.com/)
 
 * [<font id=UI界面调试工具>**UI界面调试工具**</font>](https://lookin.work/)（必须是有线连接，并且**`Lookin.app`**要先于项目文件启动）
@@ -6108,18 +6110,19 @@ class DataManager {
   }
   ```
 
-##### 4.2.3、自动闭包<font color=red>**`@autoclosure`**</font>  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 4.2.3、自动（惰性）闭包<font color=red>**`@autoclosure`**</font>  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-> 1️⃣ 用 <font color=red>**`@autoclosure`**</font> 标记，**把一个表达式自动包装成闭包**。
+> 1️⃣ 用 <font color=red>**`@autoclosure`**</font> 标记，**把一个表达式自动包装成闭包**。**用到才执行**；**不缓存**。
 >
 > 2️⃣ 常用于懒执行、断言、日志。
 
 ```swift
-func log(_ msg: @autoclosure () -> String) {
+func debugLog(_ msg: @autoclosure () -> String, enabled: Bool) {
+    guard enabled else { return } // 不需要就不执行 msg()
     print(msg())
 }
 
-log("Hello")  // 自动变成 { "Hello" }
+debugLog("expensive build \(verySlow())", enabled: false) // 不触发 verySlow()
 ```
 
 #### 4.3、闭包的简写 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -7995,13 +7998,125 @@ let b = v as! UIButton                  // 若不是 UIButton 会崩溃
 
 #### 32.2、与 `NSDecimalNumber` 的关系 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* `NSDecimalNumber` 是 `Decimal` 的 `Objective-C` 包装类，功能相近；在需要 `NSNumber`/`ObjC` 互操作时会用到。
+* `NSDecimalNumber` 是 `Decimal` 的 `Objc` 包装类，功能相近；在需要 `NSNumber`/`ObjC` 互操作时会用到。
 * 在纯 [**Swift**](https://developer.apple.com/swift/) 里，优先用 `Decimal` + 运算符重载，简洁。
 
 #### 32.3、<font color=red>**实战建议**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 金额/汇率、发票税：**用 `Decimal`**，别用 `Double`
 * 与后端交互：**用字符串传小数**（如 `"123.45"`），[**Swift**](https://developer.apple.com/swift/) 端 `Decimal(string:)` 解析，零损失
+
+### 33、[**Swift**](https://developer.apple.com/swift/) 随机 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* <font color=red>[**Swift**](https://developer.apple.com/swift/) 随机协议</font>
+
+  > 1️⃣ [**Swift**](https://developer.apple.com/swift/) 的随机体系是基于 `RandomNumberGenerator` 协议
+  >
+  > 2️⃣ [**Swift**](https://developer.apple.com/swift/) 标准库默认`SystemRandomNumberGenerator`。系统级 CSPRNG（加密强度足够，**对大多数场景足够安全**，一般不可复现）
+
+  * ```swift
+    /// Swift/Misc/SystemRandomNumberGenerator
+    @frozen public struct SystemRandomNumberGenerator : RandomNumberGenerator, Sendable {
+        @inlinable public init()
+        @inlinable public mutating func next() -> UInt64
+        @inlinable public mutating func next<T>() -> T where T : FixedWidthInteger, T : UnsignedInteger
+        @inlinable public mutating func next<T>(upperBound: T) -> T where T : FixedWidthInteger, T : UnsignedInteger
+    }
+    ```
+
+  * 概率随机布尔
+
+    * **返回值**：`true` 或 `false`，概率各 **50%**
+
+      ```swift
+      Bool.random()
+      ```
+
+    * 带自定义概率的随机布尔
+
+      ```swift
+      extension Bool {
+          static func random(probability p: Double) -> Bool {
+              precondition(0...1 ~= p)
+              return Double.random(in: 0...1) < p
+          }
+      }
+      
+      Bool.random(probability: 0.2)  // 约 20% 为 true
+      ```
+
+    * 指定随机源
+
+      ```swift
+      var rng = SystemRandomNumberGenerator()
+      let v = Bool.random(using: &rng)
+      ```
+
+* <font color=red>[**Swift**](https://developer.apple.com/swift/) 随机源</font>
+
+  * C 层/系统函数
+
+    * ```c
+      arc4random() / arc4random_buf() / arc4random_uniform(_:)
+      ```
+
+  * <font id=GameplayKit>**`GameplayKit`**</font>（适合游戏/仿真，非安全）
+
+    * `GKLinearCongruentialRandomSource(seed:)`（轻量、快、可复现）
+    * `GKMersenneTwisterRandomSource(seed:)`（质量更好、可复现）
+    * `GKARC4RandomSource(seed:)`（已不推荐做安全用途）
+
+    ```swift
+    import GameplayKit
+    
+    struct GKAdapter: RandomNumberGenerator {
+        private let src: GKRandom
+        init(_ src: GKRandom) { self.src = src }
+        mutating func next() -> UInt64 {
+            // 组合两个 32-bit 来凑 64-bit
+            let hi = UInt64(bitPattern: Int64(src.nextInt()))
+            let lo = UInt64(bitPattern: Int64(src.nextInt()))
+            return (hi << 32) ^ lo
+        }
+    }
+    
+    // 用法
+    var gk = GKAdapter(GKMersenneTwisterRandomSource(seed: 12345))
+    let v = Int.random(in: 0..<1000, using: &gk)
+    ```
+
+  * **`CryptoKit`**
+
+    * 如果是**严格的密码学用途**，优先用 **`CryptoKit`**
+    * 如果是**严格的密码学用途**，优先用 **`CryptoKit`**
+    * 但 **`CryptoKit`** 本身不是通用 RNG
+
+  * `Security` 框架（底层 CSPRNG）：`SecRandomCopyBytes`系统 CSPRNG，拿原始字节
+
+    ```swift
+    import Security
+    // MARK: - 安全随机字节（密码学/密钥材料）
+    /// 每次调用都向系统的 CSPRNG（加密安全随机数发生器）要 8 个字节，拼成一个 UInt64 返回
+    /// 这比伪随机（LCG、梅森旋转）更难预测，适合密钥、nonce、token、盐等安全场景
+    struct SecureRNG: RandomNumberGenerator {
+        mutating func next() -> UInt64 {
+            var x: UInt64 = 0
+            let ok = withUnsafeMutableBytes(of: &x) {
+                SecRandomCopyBytes(kSecRandomDefault, $0.count, $0.baseAddress!)
+            } == errSecSuccess
+            precondition(ok, "SecRandomCopyBytes failed")
+            return x
+        }
+    }
+    // MARK: - 用法
+    var sec = SecureRNG()
+    /// 用这个安全 RNG 生成一个 64 位的随机整数 token。范围是整个 UInt64 可表示的区间。
+    /// 生成登录/重置链接的一次性 token
+    /// 随机盐值（password hashing）
+    /// 协议里的nonce/IV（注意很多密码库有专门 API，更推荐直接用它们）
+    /// 任何需要不可预测随机性的地方
+    let token = UInt64.random(in: .min... .max, using: &sec)
+    ```
 
 ## 五、<font color=red>**F**</font><font color=green>**A**</font><font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
