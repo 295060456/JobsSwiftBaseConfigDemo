@@ -197,6 +197,10 @@
 		04E8D6192E8E6EC300E85CDA /* UIToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D6182E8E6EBF00E85CDA /* UIToolbar.swift */; };
 		04E8D61B2E8E837D00E85CDA /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D61A2E8E837C00E85CDA /* NSMutableAttributedString.swift */; };
 		04E8D6232E8E884500E85CDA /* BaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D6222E8E883F00E85CDA /* BaseVC.swift */; };
+		04F7AF672EC321B700ACB509 /* LiveCommentDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F7AF662EC321B500ACB509 /* LiveCommentDemoVC.swift */; };
+		04F7AF6D2EC327FE00ACB509 /* LiveMsg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F7AF6C2EC327FC00ACB509 /* LiveMsg.swift */; };
+		04F7AF6F2EC3280D00ACB509 /* LiveMsgCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F7AF6E2EC3280B00ACB509 /* LiveMsgCell.swift */; };
+		04F7AF712EC3282300ACB509 /* LiveInputBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F7AF702EC3282200ACB509 /* LiveInputBar.swift */; };
 		04FC77852EB0BDF100B810BA /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FC77842EB0BDF000B810BA /* ImageLoader.swift */; };
 		04FC77872EB0BE0C00B810BA /* FeedListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FC77862EB0BE0B00B810BA /* FeedListCell.swift */; };
 		04FC77892EB0BE1E00B810BA /* FeedListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FC77882EB0BE1D00B810BA /* FeedListVC.swift */; };
@@ -461,6 +465,11 @@
 		04E8D6182E8E6EBF00E85CDA /* UIToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIToolbar.swift; sourceTree = "<group>"; };
 		04E8D61A2E8E837C00E85CDA /* NSMutableAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedString.swift; sourceTree = "<group>"; };
 		04E8D6222E8E883F00E85CDA /* BaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
+		04F7AF662EC321B500ACB509 /* LiveCommentDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCommentDemoVC.swift; sourceTree = "<group>"; };
+		04F7AF682EC321DE00ACB509 /* JobsSwiftBaseConfigDemo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = JobsSwiftBaseConfigDemo.xcodeproj; sourceTree = "<group>"; };
+		04F7AF6C2EC327FC00ACB509 /* LiveMsg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveMsg.swift; sourceTree = "<group>"; };
+		04F7AF6E2EC3280B00ACB509 /* LiveMsgCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveMsgCell.swift; sourceTree = "<group>"; };
+		04F7AF702EC3282200ACB509 /* LiveInputBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveInputBar.swift; sourceTree = "<group>"; };
 		04FC77842EB0BDF000B810BA /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		04FC77862EB0BE0B00B810BA /* FeedListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedListCell.swift; sourceTree = "<group>"; };
 		04FC77882EB0BE1D00B810BA /* FeedListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedListVC.swift; sourceTree = "<group>"; };
@@ -838,6 +847,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				04F7AF6B2EC327DC00ACB509 /* Demo@直播间滚动留言模块 */,
 				048F447A2EB311B100BAA7EE /* Demo@注册登陆 */,
 				047E48D82EB3561200881898 /* Demo@PNPlayer */,
 				045376572EB0B56500133F73 /* Demo@BMPlayer */,
@@ -1023,6 +1033,22 @@
 			path = UIViewController;
 			sourceTree = "<group>";
 		};
+		04F6B3932EC33481009ABD63 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
+		04F7AF6B2EC327DC00ACB509 /* Demo@直播间滚动留言模块 */ = {
+			isa = PBXGroup;
+			children = (
+				04F7AF702EC3282200ACB509 /* LiveInputBar.swift */,
+				04F7AF6E2EC3280B00ACB509 /* LiveMsgCell.swift */,
+				04F7AF6C2EC327FC00ACB509 /* LiveMsg.swift */,
+				04F7AF662EC321B500ACB509 /* LiveCommentDemoVC.swift */,
+			);
+			path = "Demo@直播间滚动留言模块";
+			sourceTree = "<group>";
+		};
 		04FC778C2EB0C1EB00B810BA /* VC */ = {
 			isa = PBXGroup;
 			children = (
@@ -1063,6 +1089,7 @@
 		C564FBD22E09580A0079B5C1 = {
 			isa = PBXGroup;
 			children = (
+				04F7AF682EC321DE00ACB509 /* JobsSwiftBaseConfigDemo.xcodeproj */,
 				047CC3422EA254A200E84122 /* 心愿单.md */,
 				C564FBDD2E09580B0079B5C1 /* JobsSwiftBaseConfigDemo */,
 				C564FBF72E09580D0079B5C1 /* JobsSwiftBaseConfigDemoTests */,
@@ -1301,6 +1328,12 @@
 			);
 			productRefGroup = C564FBDC2E09580B0079B5C1 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 04F6B3932EC33481009ABD63 /* Products */;
+					ProjectRef = 04F7AF682EC321DE00ACB509 /* JobsSwiftBaseConfigDemo.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				C564FBDA2E09580B0079B5C1 /* JobsSwiftBaseConfigDemo */,
@@ -1518,6 +1551,7 @@
 				C564FC9E2E0959640079B5C1 /* UINavigationController.swift in Sources */,
 				0401DD062E9115CE00D572AD /* JobsToast.swift in Sources */,
 				0477D9792E8BADB2002C6427 /* Demo@被Push或者Present的次级页面.swift in Sources */,
+				04F7AF712EC3282300ACB509 /* LiveInputBar.swift in Sources */,
 				0453765F2EB0B5A200133F73 /* PlayerLocalVC.swift in Sources */,
 				C564FCA52E0959640079B5C1 /* UIPickerView.swift in Sources */,
 				C564FC882E0959640079B5C1 /* UISlider.swift in Sources */,
@@ -1525,6 +1559,7 @@
 				04C442A62EB8B93A008E0F09 /* Demo@Lottie.swift in Sources */,
 				049A656D2EA0CB7F0006B185 /* Demo@解码.swift in Sources */,
 				C564FC8F2E0959640079B5C1 /* UIProgressView.swift in Sources */,
+				04F7AF6D2EC327FE00ACB509 /* LiveMsg.swift in Sources */,
 				0482A67C2EA7883F004176A4 /* Dictionary.swift in Sources */,
 				0401DCFE2E91069F00D572AD /* DateFormatter.swift in Sources */,
 				C564FC9F2E0959640079B5C1 /* UISearchBar.swift in Sources */,
@@ -1560,6 +1595,7 @@
 				C564FC962E0959640079B5C1 /* Inlines.swift in Sources */,
 				045376612EB0B5B100133F73 /* PlayerRemoteVC.swift in Sources */,
 				04468F902E9E4D7000677000 /* PermissionCenter.swift in Sources */,
+				04F7AF6F2EC3280D00ACB509 /* LiveMsgCell.swift in Sources */,
 				042B67CE2E95085A000A2970 /* NSTextAttachment.swift in Sources */,
 				047E48F32EB36A5B00881898 /* MTLDepthStencilDescriptor.swift in Sources */,
 				045920EE2E854BE7008C8D6A /* Double.swift in Sources */,
@@ -1582,6 +1618,7 @@
 				C564FCA22E0959640079B5C1 /* UITableView.swift in Sources */,
 				04C2F0332E98C9E000BA05A9 /* Demo@设计模式VIPER.swift in Sources */,
 				046786E52EB4CEE1003FE82D /* RefreshEnums.swift in Sources */,
+				04F7AF672EC321B700ACB509 /* LiveCommentDemoVC.swift in Sources */,
 				0424625A2EBAFCD800D6BFCC /* Demo@ComponentKit.swift in Sources */,
 				048E37702E87997A004C3A41 /* UIGestureRecognizer.swift in Sources */,
 				042F95972EB5E6EB005DE735 /* LanguageManager.swift in Sources */,

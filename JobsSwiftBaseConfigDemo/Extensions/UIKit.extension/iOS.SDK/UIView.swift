@@ -451,6 +451,13 @@ extension UIView {
     }
     /// 手势封装：添加手势以后返回这个手势本身@常用于链式调用
     @discardableResult
+    func jobs_addGestureRetView<T: UIGestureRecognizer>(_ gesture: T?) -> Self {
+        guard let gesture = gesture else { return self }
+        addGestureRecognizer(gesture)
+        return self
+    }
+    /// 手势封装：添加手势以后返回这个手势本身@常用于链式调用
+    @discardableResult
     func jobs_addGesture<T: UIGestureRecognizer>(_ gesture: T?) -> T? {
         guard let gesture = gesture else { return nil }
         addGestureRecognizer(gesture)

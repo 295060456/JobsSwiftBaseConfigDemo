@@ -24,6 +24,7 @@ final class RootListVC: BaseVC {
             ("📌 自定义注解", 自定义注解Demo.self),
             ("📅 日历", LunarDemoVC.self),
             ("📊 Excel", XLSXDemoVC.self),
+            ("🌘 滚动留言", LiveCommentDemoVC.self),
             ("🌛 PDF", PDFDemoVC.self),
             ("🧒 Lottie动画", LottieDemoVC.self),
             ("🌋 富文本", RichTextDemoVC.self),
