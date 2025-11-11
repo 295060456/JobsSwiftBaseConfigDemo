@@ -30,27 +30,27 @@ instance_eval(File.read(deps_path), deps_path, 1)
 
 # 统一工程设置 & 把 Podfile.deps 显示到 Pods 分组里
 post_install do |installer|
-  # -------- 1. 宿主 App 工程设置 --------
+  # -------- 1、宿主 App 工程设置 --------
   installer.aggregate_targets.each do |agg|
     user_project = agg.user_project
     user_project.native_targets.each do |t|
       t.build_configurations.each do |config|
         config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
       end
     end
     user_project.save
   end
 
-  # -------- 2. Pods 工程最低系统版本统一 --------
+  # -------- 2、Pods 工程最低系统版本统一 --------
   pods_project = installer.pods_project
   pods_project.targets.each do |t|
     t.build_configurations.each do |config|
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
     end
   end
 
-  # -------- 3. 在 Pods 分组里展示 Podfile.deps（Ruby 语法高亮） --------
+  # -------- 3、在 Pods 分组里展示 Podfile.deps（Ruby 语法高亮） --------
   main_group   = pods_project.main_group
   deps_relpath = '../Podfile.deps'
   file_ref = main_group.find_file_by_path(deps_relpath) || main_group.new_file(deps_relpath)

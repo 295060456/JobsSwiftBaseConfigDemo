@@ -1635,7 +1635,54 @@ INFOPLIST_KEY_CFBundleName = $(PRODUCT_NAME)
   * **旧设备（Legacy Launcher 图标）**（如仍需兼容）：48、72、96、144、192 px（mdpi…xxxhdpi）
   * **Google Play 上架图标（商店用）**：**512×512 px, 32-bit PNG, sRGB，≤1MB**（Play 会统一蒙版/投影）。这与启动器图标不同，单独上传。
 
-### 9、其他 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 9、📦 [**Swift**](https://developer.apple.com/swift/).<font color=red>Package</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 依据系统模版，创建`swift package`
+
+  ```shell
+  swift package init --type macro --name MyMacros
+  ```
+
+* 检查版本
+
+  ```shell
+  swift --version
+  ```
+
+  > ```shell
+  > swift-driver version: 1.127.14.1 Apple Swift version 6.2.1 (swiftlang-6.2.1.4.8 clang-1700.4.4.1)
+  > Target: arm64-apple-macosx26.0
+  > ```
+
+* 构建（成功后方可通过Xcode添加进 [**Swift**](https://developer.apple.com/swift/)项目中）
+
+  ```
+  swift build
+  ```
+
+  > ```shell
+  > ➜  MyMacrosClean swift build                             
+  > [1/1] Planning build
+  > Building for debugging...
+  > [17/17] Applying MyMacrosClient
+  > Build complete! (2.56s)
+  > ```
+
+
+* 通过Xcode添加进 [**Swift**](https://developer.apple.com/swift/)项目中👇
+
+  <table style="width:100%; table-layout:fixed;">
+    <tr>
+      <td><img src="./assets/image-20251111112926618.png" style="width:100%; height:auto;"></td>
+      <td><img src="./assets/image-20251111113104109.png" style="width:100%; height:auto;"></td>
+    </tr>
+    <tr>
+      <td><img src="./assets/image-20251111113213346.png" style="width:100%; height:auto;"></td>
+      <td><img src="./assets/image-20251111113627022.png" style="width:100%; height:auto;"></td>
+    </tr>
+  </table>
+
+### 10、其他 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 👉 [**Swift**](https://developer.apple.com/swift/) 的<u>API 展望（提前声明未来能力）</u>这种机制，**在Objc世界几乎不存在**
 
@@ -4213,11 +4260,6 @@ required init?(coder: NSCoder) {
       $0.textColor = .red
       $0.textAlignment = .center
   }
-  
-  let label = UILabel()
-  label.text = "Hello"
-  label.textColor = .red
-  label.textAlignment = .center
   ```
 
 ### 14、对[**SnapKit**](https://github.com/SnapKit/SnapKit)的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -4234,12 +4276,11 @@ required init?(coder: NSCoder) {
   import SnapKit
   
   private lazy var view: UIView = {
-      UIView()
-          .byAddTo(subView) { [unowned self] make in
+      UIView().byAddTo(subView) { [unowned self] make in
               make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(40)
               make.left.right.equalToSuperview().inset(24)
               make.height.equalTo(44)
-          }
+          }   
   }()
   ```
 
@@ -5671,27 +5712,6 @@ class VM: ObservableObject {
 
 #### 1.2、🙋 <font color=red>**自定义注解**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* **`propertyWrapper`**
-
-  ```swift 
-  @propertyWrapper
-  struct Trimmed {
-      private var value: String = ""
-      var wrappedValue: String {
-          get { value }
-          set { value = newValue.trimmingCharacters(in: .whitespacesAndNewlines) }
-      }
-  }
-  
-  struct User {
-      @Trimmed var name: String
-  }
-  
-  var u = User()
-  u.name = "   Jobs   "
-  print(u.name)  // "Jobs"
-  ```
-
 * 宏 ([**Swift**](https://developer.apple.com/swift/) 5.9+ / [**Swift**](https://developer.apple.com/swift/) Macros)
 
   > [**Swift**](https://developer.apple.com/swift/) 5.9 引入了 **宏系统**，可以写类似 `@CodingKeys`、`@AddCompletionHandler` 的 **编译期注解/代码生成**。
@@ -5840,7 +5860,7 @@ class VM: ObservableObject {
 
 *  [**Swift**](https://developer.apple.com/swift/)  ↔ **Objc** 协议对照
 
-  | Swift 协议                                                   | 作用                     | Swift 用法                                                | Objective-C 对应                                             |
+  | Swift 协议                                                   | 作用                     | [**Swift**](https://developer.apple.com/swift/) 用法      | Objc 对应                                                    |
   | ------------------------------------------------------------ | ------------------------ | --------------------------------------------------------- | ------------------------------------------------------------ |
   | <font color=red>`Equatable`</font>                           | 判等                     | `struct A: Equatable { let id:Int }`                      | 覆写 `-isEqual:`                                             |
   | <font color=red>`Comparable`</font>                          | 排序比较                 | `struct A: Comparable { static func < (...) -> Bool }`    | 实现 `-compare:`（返回 `NSComparisonResult`），或提供排序 block |
@@ -5861,7 +5881,7 @@ class VM: ObservableObject {
   | `NSCopying`                                                  | 拷贝                     | `class A: NSCopying { -copyWithZone: }`                   | 同名协议（Foundation）                                       |
   | `NSMutableCopying`                                           | 可变拷贝                 | `-mutableCopyWithZone:`                                   | 同名协议（Foundation）                                       |
   | `NSSecureCoding`                                             | 安全归档                 | `+supportsSecureCoding` / 编解码                          | 同名协议（Foundation）                                       |
-  | `NSObjectProtocol`                                           | 基础行为                 | ——                                                        | 同名协议（Objective-C 基础）                                 |
+  | `NSObjectProtocol`                                           | 基础行为                 | ——                                                        | 同名协议（Objc 基础）                                        |
 
 ### 3、属性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -5943,7 +5963,7 @@ class DataManager {
 >
 > 2️⃣ <font color=red>**不能直接用在计算属性上**</font>（计算属性可以直接在 `set` 里写逻辑）
 
-*  默认名
+* 默认名
 
   > 在 [**Swift**](https://developer.apple.com/swift/) 的 **属性观察器** 里，如果不写参数名，系统默认给两个名字
   >
@@ -5961,6 +5981,21 @@ class DataManager {
   }
   ```
 
+
+* 懒加载 + 属性观察器
+
+  ```swift
+  final class Demo {
+      lazy var cache: [Int] = {
+          print("lazy init")
+          return [1, 2, 3]
+      }() {
+          willSet { print("willSet cache ->", newValue) }
+          didSet  { print("didSet cache  <-", oldValue) }
+      }
+  }
+  ```
+
 * 自定义参数名
 
   ```swift
@@ -5973,6 +6008,65 @@ class DataManager {
       }
   }
   ```
+  
+* 与初始化 / 析构的关系
+
+  ```swift
+  final class X {
+      var a: Int = 0 {
+          willSet { print("willSet a ->", newValue) }
+          didSet  { print("didSet  a <-", oldValue) }
+      }
+  
+      init() {
+          a = 1            // 不触发 willSet/didSet（构造期间）
+      }
+  
+      deinit {
+          a = 2            // 不触发 willSet/didSet（析构期间）
+      }
+  }
+  ```
+
+### 4、属性包装器 <font color=red>**@propertyWrapper**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* <font color=red>**`@propertyWrapper`**</font>看起来像“注解”，但它**不是纯元数据**，而是**一段可执行、带状态的包装类型**，会真实改写这个属性的存取过程。它也不是给编译器看的静态标签
+
+* 干预（拦截并自定义）属性的**`init`** / **`set`** / **`get`**过程，将同质化操作提取出来，便于代码的解耦。多用于架构层面，以下是使用对比👇
+
+  * 不使用属性包装器
+
+    ```swift
+    struct Settings_NoWrapper {
+        var enableHaptics: Bool {
+            get { UserDefaults.standard.object(forKey: "enableHaptics") as? Bool ?? true }
+            set { UserDefaults.standard.set(newValue, forKey: "enableHaptics") }
+        }
+        var username: String {
+            get { UserDefaults.standard.string(forKey: "username") ?? "guest" }
+            set { UserDefaults.standard.set(newValue, forKey: "username") }
+        }
+    }
+    ```
+
+  * 使用属性包装器
+
+    ```swift
+    @propertyWrapper
+    struct Defaults<T> {
+        let key: String
+        let defaultValue: T
+        var wrappedValue: T {
+            get { (UserDefaults.standard.object(forKey: key) as? T) ?? defaultValue }
+            set { UserDefaults.standard.set(newValue, forKey: key) }
+        }
+    }
+    
+    struct Settings {
+        @Defaults(key: "enableHaptics", defaultValue: true)  var enableHaptics: Bool
+        @Defaults(key: "username",      defaultValue: "guest") var username: String
+    }
+    ```
 
 ### 4、💼 [**Swift**](https://developer.apple.com/swift/) 闭包 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -7419,9 +7513,9 @@ class Player {
 
 > ```swift
 > class Coach: Player.Delegate {
->     func didScore(points: Int) {
->         print("👏 Scored \(points)")
->     }
+>      func didScore(points: Int) {
+>          print("👏 Scored \(points)")
+>      }
 > }
 > ```
 
@@ -8217,15 +8311,15 @@ let b = v as! UIButton                  // 若不是 UIButton 会崩溃
 
 * **ARC** 管理
 
-  > `struct`：因为是值类型，不需要 **ARC** 管理，生命周期简单。
+  > `struct`：因为是值类型，不需要 **ARC** 管理，生命周期简单
   >
-  > `class`：由 **ARC** 管理，可能有 **循环引用** 问题，需要 `weak` / `unowned`。
+  > `class`：由 **ARC** 管理，可能有 **循环引用** 问题，需要 `weak` / `unowned` 
 
 * 可变性
 
-  > `struct`：在 `let` 常量下是完全不可变的（包括属性）。
+  > `struct`：在 `let` 常量下是完全不可变的（包括属性）
   >
-  > `class`：在 `let` 常量下对象本身不可变，但属性仍然可改。
+  > `class`：在 `let` 常量下对象本身不可变，但属性仍然可改
 
   ```swift
   struct S {
@@ -8271,8 +8365,8 @@ let b = v as! UIButton                  // 若不是 UIButton 会崩溃
   * 避免了 class 的 堆 分配和 ARC 引用计数开销
 
 * **语义更清晰**
-  * `struct` 强调值的不可变性，适合建模“数据”。
-  * `class` 强调身份和共享，适合建模“对象”。
+  * `struct` 强调值的不可变性，适合建模“数据”
+  * `class` 强调身份和共享，适合建模“对象”
 
 * **和 [Swift](https://developer.apple.com/swift/)  标准库一致**
   * [**Swift**](https://developer.apple.com/swift/) 里大量核心类型都是 `struct`：`String`, `Array`, `Dictionary`, `Set`

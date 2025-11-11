@@ -7,7 +7,6 @@
 
 import UIKit
 import GKNavigationBarSwift
-import ESPullToRefresh   // 由扩展内部使用
 
 final class RootListVC: BaseVC {
 
@@ -22,6 +21,7 @@ final class RootListVC: BaseVC {
             ("ViewController", ViewController.self),
             ("✍️ UITextField", UITextFieldDemoVC.self),
             ("✍️ UITextView", UITextViewDemoVC.self),
+            ("📌 自定义注解", 自定义注解Demo.self),
             ("📅 日历", LunarDemoVC.self),
             ("📊 Excel", XLSXDemoVC.self),
             ("🌛 PDF", PDFDemoVC.self),
@@ -358,29 +358,28 @@ final class RootListVC: BaseVC {
     }
 }
 // MARK: - DataSource & Delegate
-extension RootListVC: UITableViewDataSource, UITableViewDelegate {
+extension RootListVC: UITableViewDataSource {
 
-    func tableView(_ tableView: UITableView,
-                   numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView,numberOfRowsInSection section: Int) -> Int {
         demos.count
     }
 
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: UITableViewCell.self), for: indexPath)
-        var content = cell.defaultContentConfiguration()
-        content.text = demos[indexPath.row].title
-        cell.contentConfiguration = content
-        cell.accessoryType = .disclosureIndicator
-        return cell
+        tableView.dequeueReusableCell(withIdentifier: String(describing: UITableViewCell.self), for: indexPath)
+            .byText(demos[indexPath.row].title)
+            .byAccessoryType(.disclosureIndicator)
     }
+}
 
-    func tableView(_ tableView: UITableView,
-                   didSelectRowAt indexPath: IndexPath) {
+extension RootListVC: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         demos[indexPath.row].vcType.init().byPush(self)
     }
+}
 
+extension RootListVC: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateFooterAvailability()
     }

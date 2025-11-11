@@ -19,7 +19,7 @@ class DemoDetailVC: BaseVC {
     override func loadView() {
         super.loadView()
 
-        OCCls().string("q", image: nil)
+        OCCls().string("q", image: "".img)
 
         // 读取并缓存（一次性拿 Any 即可）
         input = (inputData() as Any?)

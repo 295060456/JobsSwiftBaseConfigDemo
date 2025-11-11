@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Texture
+//import Texture
 import SnapKit
 
 // MARK: - 数据模型（等价 CKDemoItem）
@@ -295,7 +295,7 @@ final class KitchenSinkNode: ASDisplayNode {
 }
 
 // MARK: - 视图控制器：外层用 SnapKit 约束
-final class ComponentKitLikeKitchenSinkVC: UIViewController {
+final class ComponentKitLikeKitchenSinkVC: BaseVC {
 
     private var items: [DemoItem] = [
         .item(.text, "Text", "ASTextNode"),
