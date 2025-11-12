@@ -491,3 +491,14 @@ extension CATextLayerAlignmentMode {
         }
     }
 }
+import CoreText
+
+@inline(__always)
+func jobsCTTextWidth(_ text: String, font: UIFont) -> CGFloat {
+    let attr = [NSAttributedString.Key.font: font]
+    let asr  = NSAttributedString(string: text, attributes: attr)
+    let line = CTLineCreateWithAttributedString(asr)
+    let w    = CGFloat(CTLineGetTypographicBounds(line, nil, nil, nil))
+    let s    = UIScreen.main.scale
+    return ceil(w * s) / s   // 像素对齐
+}

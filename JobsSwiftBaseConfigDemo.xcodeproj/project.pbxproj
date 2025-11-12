@@ -41,6 +41,19 @@
 		042F959C2EB5F733005DE735 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 042F959A2EB5F733005DE735 /* Localizable.strings */; };
 		043283412EC34BB40031CDD6 /* Demo@SwiftEntryKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283402EC34BB00031CDD6 /* Demo@SwiftEntryKit.swift */; };
 		043283442EC437220031CDD6 /* 软键盘退出.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283432EC437190031CDD6 /* 软键盘退出.swift */; };
+		043283602EC4534D0031CDD6 /* CashbackRootVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283592EC444050031CDD6 /* CashbackRootVC.swift */; };
+		043283612EC453530031CDD6 /* RebatePageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0432835A2EC444160031CDD6 /* RebatePageVC.swift */; };
+		043283622EC453570031CDD6 /* PlaceholderListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0432835E2EC444510031CDD6 /* PlaceholderListVC.swift */; };
+		043283632EC4535B0031CDD6 /* CashbackCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0432835D2EC444430031CDD6 /* CashbackCardCell.swift */; };
+		043283642EC4535F0031CDD6 /* LeftMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0432835C2EC444340031CDD6 /* LeftMenuCell.swift */; };
+		043283652EC453640031CDD6 /* LeftMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0432835B2EC444240031CDD6 /* LeftMenuView.swift */; };
+		043283682EC458C20031CDD6 /* CAGradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283672EC458C10031CDD6 /* CAGradientLayer.swift */; };
+		0432836A2EC45D840031CDD6 /* JXSegmentedTitleDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283692EC45D840031CDD6 /* JXSegmentedTitleDataSource.swift */; };
+		0432836D2EC45E7A0031CDD6 /* JXSegmentedBaseDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0432836C2EC45E790031CDD6 /* JXSegmentedBaseDataSource.swift */; };
+		0432836F2EC45F400031CDD6 /* JXSegmentedIndicatorLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0432836E2EC45F3F0031CDD6 /* JXSegmentedIndicatorLineView.swift */; };
+		043283712EC45F4D0031CDD6 /* JXSegmentedIndicatorBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283702EC45F4C0031CDD6 /* JXSegmentedIndicatorBaseView.swift */; };
+		043283732EC4601D0031CDD6 /* JXSegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283722EC4601D0031CDD6 /* JXSegmentedView.swift */; };
+		043283752EC461260031CDD6 /* JXSegmentedListContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283742EC461260031CDD6 /* JXSegmentedListContainerView.swift */; };
 		043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043838A12EAA4BB3007BA552 /* BaseWebVC.swift */; };
 		043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */; };
 		0440B5572EB2370E005DBE91 /* SnowflakeSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */; };
@@ -309,6 +322,20 @@
 		042F959D2EB5F74C005DE735 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		043283402EC34BB00031CDD6 /* Demo@SwiftEntryKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@SwiftEntryKit.swift"; sourceTree = "<group>"; };
 		043283432EC437190031CDD6 /* 软键盘退出.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "软键盘退出.swift"; sourceTree = "<group>"; };
+		043283582EC443E50031CDD6 /* Demo@首页联动.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Demo@首页联动.png"; sourceTree = "<group>"; };
+		043283592EC444050031CDD6 /* CashbackRootVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashbackRootVC.swift; sourceTree = "<group>"; };
+		0432835A2EC444160031CDD6 /* RebatePageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RebatePageVC.swift; sourceTree = "<group>"; };
+		0432835B2EC444240031CDD6 /* LeftMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftMenuView.swift; sourceTree = "<group>"; };
+		0432835C2EC444340031CDD6 /* LeftMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftMenuCell.swift; sourceTree = "<group>"; };
+		0432835D2EC444430031CDD6 /* CashbackCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashbackCardCell.swift; sourceTree = "<group>"; };
+		0432835E2EC444510031CDD6 /* PlaceholderListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderListVC.swift; sourceTree = "<group>"; };
+		043283672EC458C10031CDD6 /* CAGradientLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAGradientLayer.swift; sourceTree = "<group>"; };
+		043283692EC45D840031CDD6 /* JXSegmentedTitleDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedTitleDataSource.swift; sourceTree = "<group>"; };
+		0432836C2EC45E790031CDD6 /* JXSegmentedBaseDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedBaseDataSource.swift; sourceTree = "<group>"; };
+		0432836E2EC45F3F0031CDD6 /* JXSegmentedIndicatorLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedIndicatorLineView.swift; sourceTree = "<group>"; };
+		043283702EC45F4C0031CDD6 /* JXSegmentedIndicatorBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedIndicatorBaseView.swift; sourceTree = "<group>"; };
+		043283722EC4601D0031CDD6 /* JXSegmentedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedView.swift; sourceTree = "<group>"; };
+		043283742EC461260031CDD6 /* JXSegmentedListContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedListContainerView.swift; sourceTree = "<group>"; };
 		043838A12EAA4BB3007BA552 /* BaseWebVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWebVC.swift; sourceTree = "<group>"; };
 		043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProtocolDefs.swift; sourceTree = "<group>"; };
 		0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnowflakeSwift.swift; sourceTree = "<group>"; };
@@ -604,6 +631,49 @@
 			path = "多语言化";
 			sourceTree = "<group>";
 		};
+		043283452EC4405B0031CDD6 /* Demo@首页联动 */ = {
+			isa = PBXGroup;
+			children = (
+				043283582EC443E50031CDD6 /* Demo@首页联动.png */,
+				043283512EC440E30031CDD6 /* View */,
+				043283502EC440DB0031CDD6 /* VC */,
+			);
+			path = "Demo@首页联动";
+			sourceTree = "<group>";
+		};
+		043283502EC440DB0031CDD6 /* VC */ = {
+			isa = PBXGroup;
+			children = (
+				0432835E2EC444510031CDD6 /* PlaceholderListVC.swift */,
+				0432835A2EC444160031CDD6 /* RebatePageVC.swift */,
+				043283592EC444050031CDD6 /* CashbackRootVC.swift */,
+			);
+			path = VC;
+			sourceTree = "<group>";
+		};
+		043283512EC440E30031CDD6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				0432835D2EC444430031CDD6 /* CashbackCardCell.swift */,
+				0432835C2EC444340031CDD6 /* LeftMenuCell.swift */,
+				0432835B2EC444240031CDD6 /* LeftMenuView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		0432836B2EC45E380031CDD6 /* JXSegmentedView */ = {
+			isa = PBXGroup;
+			children = (
+				043283742EC461260031CDD6 /* JXSegmentedListContainerView.swift */,
+				043283722EC4601D0031CDD6 /* JXSegmentedView.swift */,
+				043283702EC45F4C0031CDD6 /* JXSegmentedIndicatorBaseView.swift */,
+				0432836E2EC45F3F0031CDD6 /* JXSegmentedIndicatorLineView.swift */,
+				0432836C2EC45E790031CDD6 /* JXSegmentedBaseDataSource.swift */,
+				043283692EC45D840031CDD6 /* JXSegmentedTitleDataSource.swift */,
+			);
+			path = JXSegmentedView;
+			sourceTree = "<group>";
+		};
 		045376392EB0B3FE00133F73 /* 视频 */ = {
 			isa = PBXGroup;
 			children = (
@@ -646,13 +716,13 @@
 		045920E22E84EC64008C8D6A /* 3rdTools */ = {
 			isa = PBXGroup;
 			children = (
-				043283432EC437190031CDD6 /* 软键盘退出.swift */,
 				042F958F2EB5C733005DE735 /* 多语言化 */,
 				046786E32EB4CED9003FE82D /* JobsRefresher */,
 				047E48C52EB3554900881898 /* PNPlayer */,
 				0440B5DB2EB30749005DBE91 /* weak.swift */,
 				0440B5D92EB2FFAC005DBE91 /* keys.swift */,
 				04BCDC292EA9DB0B00382DE0 /* JobsText.swift */,
+				043283432EC437190031CDD6 /* 软键盘退出.swift */,
 				0482A5F72EA5F308004176A4 /* JobsNavBar.swift */,
 				049A65702EA0E6BA0006B185 /* JobsTabBarCtrl.swift */,
 				049A65662EA09C6A0006B185 /* SafeCodable.swift */,
@@ -852,6 +922,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				043283452EC4405B0031CDD6 /* Demo@首页联动 */,
 				04F7AF6B2EC327DC00ACB509 /* Demo@直播间滚动留言模块 */,
 				048F447A2EB311B100BAA7EE /* Demo@注册登陆 */,
 				047E48D82EB3561200881898 /* Demo@PNPlayer */,
@@ -931,6 +1002,7 @@
 		04D0C97F2E8D19DE00580020 /* 3rd */ = {
 			isa = PBXGroup;
 			children = (
+				0432836B2EC45E380031CDD6 /* JXSegmentedView */,
 				046786F42EB5AD13003FE82D /* GKNavigationBarSwift.swift */,
 				04FC778F2EB0C88A00B810BA /* BMPlayer.swift */,
 				0477D9842E8BEACA002C6427 /* Reactive.swift */,
@@ -942,6 +1014,7 @@
 		04D0C9802E8D19FC00580020 /* iOS.SDK */ = {
 			isa = PBXGroup;
 			children = (
+				043283672EC458C10031CDD6 /* CAGradientLayer.swift */,
 				0402F0AD2EC2D73E0054A151 /* UIListContentConfiguration.swift */,
 				04C442912EB87F76008E0F09 /* PDFThumbnailView.swift */,
 				04C4428F2EB87ED6008E0F09 /* PDFView.swift */,
@@ -1480,8 +1553,10 @@
 				04D49C252EBE055000BCD6F1 /* OCCls.m in Sources */,
 				044272852E8146130084B25C /* JXScale.swift in Sources */,
 				C564FCB22E0959990079B5C1 /* EmptyView.swift in Sources */,
+				0432836A2EC45D840031CDD6 /* JXSegmentedTitleDataSource.swift in Sources */,
 				04124F332EB0625300462BE2 /* Plugins.swift in Sources */,
 				045920FC2E854FA9008C8D6A /* UInt.swift in Sources */,
+				043283632EC4535B0031CDD6 /* CashbackCardCell.swift in Sources */,
 				0402F0AE2EC2D7400054A151 /* UIListContentConfiguration.swift in Sources */,
 				04C4428E2EB86CB5008E0F09 /* Demo@PDF.swift in Sources */,
 				042F958E2EB5C478005DE735 /* Bundle.swift in Sources */,
@@ -1494,11 +1569,14 @@
 				C564FC2E2E0958E80079B5C1 /* HUDHelper.swift in Sources */,
 				045920F22E854F79008C8D6A /* Int.swift in Sources */,
 				046786EB2EB4CF0A003FE82D /* UIScrollView+Proxy.swift in Sources */,
+				043283752EC461260031CDD6 /* JXSegmentedListContainerView.swift in Sources */,
+				043283652EC453640031CDD6 /* LeftMenuView.swift in Sources */,
 				0477D9752E8B9146002C6427 /* Demo@安全Present.swift in Sources */,
 				045920F42E854F85008C8D6A /* Int8.swift in Sources */,
 				0477D96D2E8B83D6002C6427 /* JobsSafeTransitions.swift in Sources */,
 				046786F52EB5AD14003FE82D /* GKNavigationBarSwift.swift in Sources */,
 				C564FC9A2E0959640079B5C1 /* UITextView.swift in Sources */,
+				043283712EC45F4D0031CDD6 /* JXSegmentedIndicatorBaseView.swift in Sources */,
 				C564FC942E0959640079B5C1 /* UIPageViewController.swift in Sources */,
 				0482A5F82EA5F309004176A4 /* JobsNavBar.swift in Sources */,
 				045920E62E84F389008C8D6A /* CALayer.swift in Sources */,
@@ -1508,6 +1586,7 @@
 				04BCDC302EA9E86600382DE0 /* UICollectionViewCell.swift in Sources */,
 				04FC778B2EB0BE2F00B810BA /* PlayerDetailVC.swift in Sources */,
 				04E8D5B92E8E550200E85CDA /* BaseStructDefs.swift in Sources */,
+				043283732EC4601D0031CDD6 /* JXSegmentedView.swift in Sources */,
 				0487AADA2E840CB200B5D307 /* UIColor.swift in Sources */,
 				04E8D6232E8E884500E85CDA /* BaseVC.swift in Sources */,
 				047E48F52EB36AC600881898 /* MTLSamplerDescriptor.swift in Sources */,
@@ -1551,6 +1630,7 @@
 				047E9A732EB6217900F58923 /* Demo@XLSX.swift in Sources */,
 				045920FA2E854FA5008C8D6A /* Int64.swift in Sources */,
 				0440B5592EB237BE005DBE91 /* Demo@Snowflake.swift in Sources */,
+				043283612EC453530031CDD6 /* RebatePageVC.swift in Sources */,
 				04E8D61B2E8E837D00E85CDA /* NSMutableAttributedString.swift in Sources */,
 				0482A5FC2EA63527004176A4 /* WKUserContentController.swift in Sources */,
 				041F5B012E87B51800984EEB /* Demo@输入框.swift in Sources */,
@@ -1587,6 +1667,7 @@
 				C564FCA12E0959640079B5C1 /* UIPageControl.swift in Sources */,
 				04124F2D2EB0622E00462BE2 /* Models.swift in Sources */,
 				04A18E4D2E86533B004BB9DC /* UIImage.swift in Sources */,
+				043283622EC453570031CDD6 /* PlaceholderListVC.swift in Sources */,
 				04124F2A2EB05E9000462BE2 /* Demo@Moya.swift in Sources */,
 				045921122E855769008C8D6A /* JobsPaddedLabel.swift in Sources */,
 				04BCDC322EA9EAB000382DE0 /* UICollectionViewFlowLayout.swift in Sources */,
@@ -1595,6 +1676,7 @@
 				045376672EB0B5E100133F73 /* PlayerCenter.swift in Sources */,
 				04D0C96E2E8CD14B00580020 /* UIControl.swift in Sources */,
 				042F95992EB5F124005DE735 /* TRAutoRefresh.swift in Sources */,
+				043283602EC4534D0031CDD6 /* CashbackRootVC.swift in Sources */,
 				04BCDC2C2EA9DB7E00382DE0 /* Demo@JobsText.swift in Sources */,
 				0477D9712E8B897D002C6427 /* Demo@支持上下左右安全Push和原路返回.swift in Sources */,
 				C564FCAC2E09597C0079B5C1 /* ViewController.swift in Sources */,
@@ -1626,9 +1708,11 @@
 				C564FC622E0959510079B5C1 /* BaseEnumDefs.swift in Sources */,
 				C564FC972E0959640079B5C1 /* UIActivityIndicatorView.swift in Sources */,
 				C564FCA22E0959640079B5C1 /* UITableView.swift in Sources */,
+				0432836D2EC45E7A0031CDD6 /* JXSegmentedBaseDataSource.swift in Sources */,
 				04C2F0332E98C9E000BA05A9 /* Demo@设计模式VIPER.swift in Sources */,
 				046786E52EB4CEE1003FE82D /* RefreshEnums.swift in Sources */,
 				04F7AF672EC321B700ACB509 /* LiveCommentDemoVC.swift in Sources */,
+				0432836F2EC45F400031CDD6 /* JXSegmentedIndicatorLineView.swift in Sources */,
 				0424625A2EBAFCD800D6BFCC /* Demo@ComponentKit.swift in Sources */,
 				048E37702E87997A004C3A41 /* UIGestureRecognizer.swift in Sources */,
 				042F95972EB5E6EB005DE735 /* LanguageManager.swift in Sources */,
@@ -1637,6 +1721,8 @@
 				04124F312EB0624300462BE2 /* TokenStore.swift in Sources */,
 				04CF02902E8A3A160083ACF0 /* Demo@输入文本.swift in Sources */,
 				045921022E854FDA008C8D6A /* UInt16.swift in Sources */,
+				043283682EC458C20031CDD6 /* CAGradientLayer.swift in Sources */,
+				043283642EC4535F0031CDD6 /* LeftMenuCell.swift in Sources */,
 				C564FCAB2E09597C0079B5C1 /* VC2.swift in Sources */,
 				0477D97F2E8BDBBC002C6427 /* Demo@倒计时.swift in Sources */,
 				04124F402EB0760D00462BE2 /* AFLogger.swift in Sources */,
