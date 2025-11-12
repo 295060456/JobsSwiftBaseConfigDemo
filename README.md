@@ -171,6 +171,8 @@
 
 * [**苹果开发者账户续费**](https://account.apple.com/account/manage/section/payment)
 
+* [**在线演示**](https://appetize.io) 👉 上传你的（支持iOS/Android）包，就能在线运行、演示、调试、自动化测试，还能嵌到网页或内部系统里给客服/销售/培训/QA 用
+
 * [**配置SourceTree脚本**](https://github.com/295060456/SourceTree.sh)
 
 * [**代码块**](https://github.com/295060456/JobsCodeSnippets)

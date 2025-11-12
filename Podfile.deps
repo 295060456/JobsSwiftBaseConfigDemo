@@ -27,6 +27,9 @@ def swiftAppCommon
   pod 'LunarSwift'                         # https://github.com/6tail/lunar-swift              ❤️ 无第三方依赖的日历工具
   pod 'CoreXLSX'                           # https://github.com/3973770/SwiftXLSX              ❤️ Excel
   pod 'SwiftEntryKit'                      # https://github.com/huri000/SwiftEntryKit          ❤️ 用 Swift 编写的简单而功能强大的内容展示器
+  pod 'FSPopoverView'                      # https://github.com/lifution/FSPopoverView         ❤️ 下拉三角小菜单
+  pod 'AMPopTip'                           # https://github.com/andreamazz/AMPopTip            ❤️
+  pod 'SkeletonView'                       # https://github.com/Juanpe/SkeletonView            ❤️ 骨架屏/闪动占位
 #  pod 'ComponentKit'                       # https://github.com/facebook/componentkit          ❤️ Facebook出品的一款UI框架
 #  pod 'Texture'                            # https://github.com/texturegroup/texture           ❤️ Facebook出品的一款UI框架
 

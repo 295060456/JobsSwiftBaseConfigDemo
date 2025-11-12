@@ -57,6 +57,10 @@
 		0432837D2EC471980031CDD6 /* EKAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0432837C2EC471970031CDD6 /* EKAttributes.swift */; };
 		043283802EC478FC0031CDD6 /* SheetContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0432837F2EC478FB0031CDD6 /* SheetContentView.swift */; };
 		043283832EC4794A0031CDD6 /* ConfirmToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283822EC4794A0031CDD6 /* ConfirmToastView.swift */; };
+		043283862EC47F200031CDD6 /* Demo@FSPopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283852EC47F1B0031CDD6 /* Demo@FSPopoverView.swift */; };
+		043283882EC4804D0031CDD6 /* Demo@SkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283872EC4804A0031CDD6 /* Demo@SkeletonView.swift */; };
+		0432838A2EC484D80031CDD6 /* SkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283892EC484D70031CDD6 /* SkeletonView.swift */; };
+		0432838D2EC48BE70031CDD6 /* SkeletonUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0432838C2EC48BE50031CDD6 /* SkeletonUserCell.swift */; };
 		043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043838A12EAA4BB3007BA552 /* BaseWebVC.swift */; };
 		043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */; };
 		0440B5572EB2370E005DBE91 /* SnowflakeSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */; };
@@ -342,6 +346,11 @@
 		0432837C2EC471970031CDD6 /* EKAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EKAttributes.swift; sourceTree = "<group>"; };
 		0432837F2EC478FB0031CDD6 /* SheetContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetContentView.swift; sourceTree = "<group>"; };
 		043283822EC4794A0031CDD6 /* ConfirmToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmToastView.swift; sourceTree = "<group>"; };
+		043283852EC47F1B0031CDD6 /* Demo@FSPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@FSPopoverView.swift"; sourceTree = "<group>"; };
+		043283872EC4804A0031CDD6 /* Demo@SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@SkeletonView.swift"; sourceTree = "<group>"; };
+		043283892EC484D70031CDD6 /* SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonView.swift; sourceTree = "<group>"; };
+		0432838C2EC48BE50031CDD6 /* SkeletonUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonUserCell.swift; sourceTree = "<group>"; };
+		0432838F2EC48E030031CDD6 /* 中国大陆公民身份证校验规则.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "中国大陆公民身份证校验规则.jpg"; sourceTree = "<group>"; };
 		043838A12EAA4BB3007BA552 /* BaseWebVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWebVC.swift; sourceTree = "<group>"; };
 		043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProtocolDefs.swift; sourceTree = "<group>"; };
 		0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnowflakeSwift.swift; sourceTree = "<group>"; };
@@ -713,6 +722,24 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		0432838B2EC48BD60031CDD6 /* Demo@SkeletonView */ = {
+			isa = PBXGroup;
+			children = (
+				0432838C2EC48BE50031CDD6 /* SkeletonUserCell.swift */,
+				043283872EC4804A0031CDD6 /* Demo@SkeletonView.swift */,
+			);
+			path = "Demo@SkeletonView";
+			sourceTree = "<group>";
+		};
+		0432838E2EC48DE00031CDD6 /* Demo@中国大陆居民身份证验证 */ = {
+			isa = PBXGroup;
+			children = (
+				0432838F2EC48E030031CDD6 /* 中国大陆公民身份证校验规则.jpg */,
+				04E8D5BA2E8E5ACF00E85CDA /* Demo@中国大陆居民身份证验证.swift */,
+			);
+			path = "Demo@中国大陆居民身份证验证";
+			sourceTree = "<group>";
+		};
 		045376392EB0B3FE00133F73 /* 视频 */ = {
 			isa = PBXGroup;
 			children = (
@@ -961,6 +988,8 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				0432838E2EC48DE00031CDD6 /* Demo@中国大陆居民身份证验证 */,
+				0432838B2EC48BD60031CDD6 /* Demo@SkeletonView */,
 				0432837E2EC478C60031CDD6 /* Demo@SwiftEntryKit */,
 				043283452EC4405B0031CDD6 /* Demo@首页联动 */,
 				04F7AF6B2EC327DC00ACB509 /* Demo@直播间滚动留言模块 */,
@@ -971,6 +1000,7 @@
 				04124F2B2EB0621D00462BE2 /* Demo@Moya */,
 				0424625B2EBB020E00D6BFCC /* Demo@Texture.swift */,
 				042462592EBAFCD500D6BFCC /* Demo@ComponentKit.swift */,
+				043283852EC47F1B0031CDD6 /* Demo@FSPopoverView.swift */,
 				04C442A52EB8B935008E0F09 /* Demo@Lottie.swift */,
 				04B00E472EB21F0800901B1C /* Demo@LiveChat.swift */,
 				04C4428D2EB86CAB008E0F09 /* Demo@PDF.swift */,
@@ -995,7 +1025,6 @@
 				04D842282E96377A001E8C90 /* Demo@打开模块.swift */,
 				04AD62902E9122FC00E18984 /* Demo@时间.swift */,
 				0401DD072E91182900D572AD /* Demo@弹出提示.swift */,
-				04E8D5BA2E8E5ACF00E85CDA /* Demo@中国大陆居民身份证验证.swift */,
 				04D0C9782E8D066000580020 /* Demo@图片加载.swift */,
 				04D0C9712E8CD39200580020 /* Demo@控制层回调.swift */,
 				0477D9862E8BEF62002C6427 /* Demo@键盘.swift */,
@@ -1045,6 +1074,7 @@
 				0432836B2EC45E380031CDD6 /* JXSegmentedView */,
 				046786F42EB5AD13003FE82D /* GKNavigationBarSwift.swift */,
 				04FC778F2EB0C88A00B810BA /* BMPlayer.swift */,
+				043283892EC484D70031CDD6 /* SkeletonView.swift */,
 				0477D9842E8BEACA002C6427 /* Reactive.swift */,
 				04D0C97C2E8D19AB00580020 /* MJRefresh */,
 			);
@@ -1656,6 +1686,7 @@
 				045376632EB0B5BF00133F73 /* FeedModel.swift in Sources */,
 				0477D97D2E8BDB95002C6427 /* JobsCountdownButton.swift in Sources */,
 				04AC74C52E86682E004B8305 /* Notification.swift in Sources */,
+				0432838A2EC484D80031CDD6 /* SkeletonView.swift in Sources */,
 				04D0C9722E8CD39300580020 /* Demo@控制层回调.swift in Sources */,
 				C564FC8A2E0959640079B5C1 /* UISegmentedControl.swift in Sources */,
 				04124F372EB0626900462BE2 /* MoyaProvider+Async.swift in Sources */,
@@ -1693,6 +1724,7 @@
 				04F7AF6D2EC327FE00ACB509 /* LiveMsg.swift in Sources */,
 				0482A67C2EA7883F004176A4 /* Dictionary.swift in Sources */,
 				0401DCFE2E91069F00D572AD /* DateFormatter.swift in Sources */,
+				043283862EC47F200031CDD6 /* Demo@FSPopoverView.swift in Sources */,
 				C564FC9F2E0959640079B5C1 /* UISearchBar.swift in Sources */,
 				04FC77852EB0BDF100B810BA /* ImageLoader.swift in Sources */,
 				048F447C2EB311DE00BAA7EE /* Demo@JobsAppDoor.swift in Sources */,
@@ -1700,6 +1732,7 @@
 				047E48EF2EB35D4900881898 /* MTKView.swift in Sources */,
 				0401DCFC2E9102BC00D572AD /* UserDefaults.swift in Sources */,
 				0402F0A92EC2D5A40054A151 /* Demo@自定义注解.swift in Sources */,
+				0432838D2EC48BE70031CDD6 /* SkeletonUserCell.swift in Sources */,
 				04FC77892EB0BE1E00B810BA /* FeedListVC.swift in Sources */,
 				0459210A2E854FFB008C8D6A /* Float16.swift in Sources */,
 				048314002E9A08510009A44B /* Demo@跑马灯轮播图.swift in Sources */,
@@ -1709,6 +1742,7 @@
 				C564FCA12E0959640079B5C1 /* UIPageControl.swift in Sources */,
 				04124F2D2EB0622E00462BE2 /* Models.swift in Sources */,
 				04A18E4D2E86533B004BB9DC /* UIImage.swift in Sources */,
+				043283882EC4804D0031CDD6 /* Demo@SkeletonView.swift in Sources */,
 				043283622EC453570031CDD6 /* PlaceholderListVC.swift in Sources */,
 				04124F2A2EB05E9000462BE2 /* Demo@Moya.swift in Sources */,
 				043283802EC478FC0031CDD6 /* SheetContentView.swift in Sources */,

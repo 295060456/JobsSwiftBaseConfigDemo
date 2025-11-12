@@ -26,6 +26,8 @@ final class RootListVC: BaseVC {
             ("📊 Excel", XLSXDemoVC.self),
             ("🌘 滚动留言", LiveCommentDemoVC.self),
             ("🌹 弹出方式", SwiftEntryKitDemoVC.self),
+            ("🔽 下拉三角小菜单", FSPopoverDemoVC.self),
+            ("☠️ 骨架屏", SkeletonViewDemoVC.self),
             ("🏠 首页联动", CashbackRootVC.self),
             ("🌛 PDF", PDFDemoVC.self),
             ("🧒 Lottie动画", LottieDemoVC.self),
@@ -253,8 +255,7 @@ final class RootListVC: BaseVC {
                 .byImage("list.bullet".sysImg, for: .normal)
                 .byImage("list.bullet".sysImg, for: .selected)
                 /// 事件触发@点按
-                .onTap { [weak self] sender in
-//                    guard let self else { return }
+                .onTap { sender in
                     sender.isSelected.toggle()
                     debugOnly {  // 仅 Debug 执行
                         JobsToast.show(
@@ -281,8 +282,7 @@ final class RootListVC: BaseVC {
                     .byImage("moon.circle.fill".sysImg, for: .normal)
                     .byImage("moon.circle.fill".sysImg, for: .selected)
                     /// 事件触发@点按
-                    .onTap { [weak self] sender in
-                        guard let self else { return }
+                    .onTap { sender in
                         sender.isSelected.toggle()
                         guard let ws = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                               let win = ws.windows.first else { return }
@@ -334,7 +334,7 @@ final class RootListVC: BaseVC {
             - tableView.adjustedContentInset.bottom
         let enableLoadMore = contentH > visibleH + 20
 
-        tableView.footer?.isHidden = !enableLoadMore
+        tableView.mj_footer?.isHidden = !enableLoadMore
         if !enableLoadMore {
             /// TODO
         }

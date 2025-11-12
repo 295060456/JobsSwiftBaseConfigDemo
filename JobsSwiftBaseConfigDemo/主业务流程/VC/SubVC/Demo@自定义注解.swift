@@ -10,23 +10,20 @@ import SnapKit
 import MyMacros   // ⬅️ 导入你本地包导出的宏（模块名即导出层 target）
 
 @EquatableBy("id")
-struct User {
+private struct UserInfo {
     let id: Int
     var name: String
 }
 
 final class 自定义注解Demo: BaseVC {   // ⬅️ 与后面扩展保持一致
-
     private enum Section { case main }
-
     // MARK: - State
-    private var users: [User] = [
+    private var users: [UserInfo] = [
         .init(id: 1, name: "Alice"),
         .init(id: 2, name: "Bob"),
         .init(id: 3, name: "Cindy")
     ]
     private var rows: Int = 3 { didSet { rows = max(0, rows) } }
-
     // MARK: - UI
     private lazy var tableView: UITableView = {
         UITableView(frame: .zero, style: .insetGrouped)
@@ -44,7 +41,7 @@ final class 自定义注解Demo: BaseVC {   // ⬅️ 与后面扩展保持一�
                     .byImagePlacement(.top)
                     .onTap { [weak self] _ in
                         guard let self else { return }
-                        self.users = (1...10).map { User(id: $0, name: "User \($0)") }
+                        self.users = (1...10).map { UserInfo(id: $0, name: "UserInfo \($0)") }
                         self.rows = self.users.count
                         self.applySnapshot(animated: true)
                     }
@@ -65,7 +62,7 @@ final class 自定义注解Demo: BaseVC {   // ⬅️ 与后面扩展保持一�
                 Task { @MainActor in
                     try? await Task.sleep(nanoseconds: 1_000_000_000)
                     self.rows = 20
-                    self.users = (1...self.rows).map { User(id: $0, name: "User \($0)") }
+                    self.users = (1...self.rows).map { UserInfo(id: $0, name: "UserInfo \($0)") }
                     self.applySnapshot(animated: true)
                     self.tableView.switchRefreshHeader(to: .normal)
                     self.tableView.switchRefreshFooter(to: .normal)
@@ -82,7 +79,7 @@ final class 自定义注解Demo: BaseVC {   // ⬅️ 与后面扩展保持一�
                     if self.rows < 60 {
                         let start = self.rows + 1
                         self.rows += 20
-                        let more = (start...self.rows).map { User(id: $0, name: "User \($0)") }
+                        let more = (start...self.rows).map { UserInfo(id: $0, name: "UserInfo \($0)") }
                         self.users.append(contentsOf: more)
                         self.applySnapshot(animated: true)
                         self.tableView.switchRefreshFooter(to: .normal)
@@ -131,7 +128,7 @@ final class 自定义注解Demo: BaseVC {   // ⬅️ 与后面扩展保持一�
     }()
 
     // MARK: - Diffable DataSource
-    private var dataSource: UITableViewDiffableDataSource<Section, User>!
+    private var dataSource: UITableViewDiffableDataSource<Section, UserInfo>!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -140,7 +137,7 @@ final class 自定义注解Demo: BaseVC {   // ⬅️ 与后面扩展保持一�
         _ = tableView; _ = renameButton; _ = replaceButton
 
         // Diffable：真正的数据源
-        dataSource = UITableViewDiffableDataSource<Section, User>(tableView: tableView) { tableView, indexPath, item in
+        dataSource = UITableViewDiffableDataSource<Section, UserInfo>(tableView: tableView) { tableView, indexPath, item in
             tableView
                 .dequeueReusableCell(withIdentifier: String(describing: UITableViewCell.self), for: indexPath)
                 .byText("ID=\(item.id)")
@@ -156,8 +153,8 @@ final class 自定义注解Demo: BaseVC {   // ⬅️ 与后面扩展保持一�
     }
 
     // MARK: - Snapshot
-    private func applySnapshot(animated: Bool = true, reload: [User] = []) {
-        var snap = NSDiffableDataSourceSnapshot<Section, User>()
+    private func applySnapshot(animated: Bool = true, reload: [UserInfo] = []) {
+        var snap = NSDiffableDataSourceSnapshot<Section, UserInfo>()
         snap.appendSections([.main])
         let display = Array(users.prefix(rows))
         snap.appendItems(display, toSection: .main)
@@ -174,7 +171,7 @@ final class 自定义注解Demo: BaseVC {   // ⬅️ 与后面扩展保持一�
 
     private func replaceWithNewID() {
         guard let idx = users.firstIndex(where: { $0.id == 2 }) else { return }
-        let new = User(id: 99, name: "Bob(NewID)")
+        let new = UserInfo(id: 99, name: "Bob(NewID)")
         users[idx] = new                         // id 变了：Diffable 识别为新 item → 插入/删除动画
         applySnapshot(animated: true)
     }
@@ -200,7 +197,7 @@ extension 自定义注解Demo: UITableViewDelegate {
         let display = Array(users.prefix(rows))
         guard indexPath.row < display.count else { return }
         let u = display[indexPath.row]
-        print("👉 tap user id=\(u.id), name=\(u.name)")
+        print("👉 tap UserInfo id=\(u.id), name=\(u.name)")
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }

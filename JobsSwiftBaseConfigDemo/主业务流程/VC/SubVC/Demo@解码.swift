@@ -29,7 +29,7 @@ final class SafeCodableDemoVC: BaseVC {
         }
     }
     // MARK: - Model
-    struct User: Codable {
+    private struct User: Codable {
         @SafeCodable var id: Int
         @SafeCodable var name: String
         @SafeCodable var vip: Bool
