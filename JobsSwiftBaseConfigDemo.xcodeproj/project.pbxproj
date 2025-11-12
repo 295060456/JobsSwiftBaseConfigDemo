@@ -61,6 +61,14 @@
 		043283882EC4804D0031CDD6 /* Demo@SkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283872EC4804A0031CDD6 /* Demo@SkeletonView.swift */; };
 		0432838A2EC484D80031CDD6 /* SkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283892EC484D70031CDD6 /* SkeletonView.swift */; };
 		0432838D2EC48BE70031CDD6 /* SkeletonUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0432838C2EC48BE50031CDD6 /* SkeletonUserCell.swift */; };
+		043283A22EC49B2E0031CDD6 /* BRCity.json in Resources */ = {isa = PBXBuildFile; fileRef = 043283A12EC49B2E0031CDD6 /* BRCity.json */; };
+		043283A52EC49F830031CDD6 /* BRPickerStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283A42EC49F820031CDD6 /* BRPickerStyle.swift */; };
+		043283A72EC49F910031CDD6 /* BRPickerPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283A62EC49F910031CDD6 /* BRPickerPanel.swift */; };
+		043283A92EC49FA60031CDD6 /* BRTextPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283A82EC49FA50031CDD6 /* BRTextPickerView.swift */; };
+		043283AB2EC49FED0031CDD6 /* BRDatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283AA2EC49FED0031CDD6 /* BRDatePickerView.swift */; };
+		043283AD2EC4A0540031CDD6 /* BRPicker+DSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283AC2EC4A0530031CDD6 /* BRPicker+DSL.swift */; };
+		043283AF2EC4A0630031CDD6 /* UIButton+BRPickerAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283AE2EC4A0620031CDD6 /* UIButton+BRPickerAdditions.swift */; };
+		043283B12EC4A08B0031CDD6 /* BRPickerAllJobsDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283B02EC4A08A0031CDD6 /* BRPickerAllJobsDemoVC.swift */; };
 		043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043838A12EAA4BB3007BA552 /* BaseWebVC.swift */; };
 		043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */; };
 		0440B5572EB2370E005DBE91 /* SnowflakeSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */; };
@@ -351,6 +359,14 @@
 		043283892EC484D70031CDD6 /* SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonView.swift; sourceTree = "<group>"; };
 		0432838C2EC48BE50031CDD6 /* SkeletonUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonUserCell.swift; sourceTree = "<group>"; };
 		0432838F2EC48E030031CDD6 /* 中国大陆公民身份证校验规则.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "中国大陆公民身份证校验规则.jpg"; sourceTree = "<group>"; };
+		043283A12EC49B2E0031CDD6 /* BRCity.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = BRCity.json; sourceTree = "<group>"; };
+		043283A42EC49F820031CDD6 /* BRPickerStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BRPickerStyle.swift; sourceTree = "<group>"; };
+		043283A62EC49F910031CDD6 /* BRPickerPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BRPickerPanel.swift; sourceTree = "<group>"; };
+		043283A82EC49FA50031CDD6 /* BRTextPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BRTextPickerView.swift; sourceTree = "<group>"; };
+		043283AA2EC49FED0031CDD6 /* BRDatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BRDatePickerView.swift; sourceTree = "<group>"; };
+		043283AC2EC4A0530031CDD6 /* BRPicker+DSL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BRPicker+DSL.swift"; sourceTree = "<group>"; };
+		043283AE2EC4A0620031CDD6 /* UIButton+BRPickerAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+BRPickerAdditions.swift"; sourceTree = "<group>"; };
+		043283B02EC4A08A0031CDD6 /* BRPickerAllJobsDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BRPickerAllJobsDemoVC.swift; sourceTree = "<group>"; };
 		043838A12EAA4BB3007BA552 /* BaseWebVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWebVC.swift; sourceTree = "<group>"; };
 		043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProtocolDefs.swift; sourceTree = "<group>"; };
 		0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnowflakeSwift.swift; sourceTree = "<group>"; };
@@ -740,6 +756,19 @@
 			path = "Demo@中国大陆居民身份证验证";
 			sourceTree = "<group>";
 		};
+		043283912EC499E00031CDD6 /* BRPickerViewSwift */ = {
+			isa = PBXGroup;
+			children = (
+				043283AE2EC4A0620031CDD6 /* UIButton+BRPickerAdditions.swift */,
+				043283AC2EC4A0530031CDD6 /* BRPicker+DSL.swift */,
+				043283AA2EC49FED0031CDD6 /* BRDatePickerView.swift */,
+				043283A82EC49FA50031CDD6 /* BRTextPickerView.swift */,
+				043283A62EC49F910031CDD6 /* BRPickerPanel.swift */,
+				043283A42EC49F820031CDD6 /* BRPickerStyle.swift */,
+			);
+			path = BRPickerViewSwift;
+			sourceTree = "<group>";
+		};
 		045376392EB0B3FE00133F73 /* 视频 */ = {
 			isa = PBXGroup;
 			children = (
@@ -754,6 +783,7 @@
 		045376402EB0B43900133F73 /* Json文件 */ = {
 			isa = PBXGroup;
 			children = (
+				043283A12EC49B2E0031CDD6 /* BRCity.json */,
 				045376412EB0B43F00133F73 /* IncomeSource.json */,
 				045376422EB0B43F00133F73 /* OccupationList.json */,
 				045376432EB0B43F00133F73 /* Philippines.json */,
@@ -782,6 +812,7 @@
 		045920E22E84EC64008C8D6A /* 3rdTools */ = {
 			isa = PBXGroup;
 			children = (
+				043283912EC499E00031CDD6 /* BRPickerViewSwift */,
 				042F958F2EB5C733005DE735 /* 多语言化 */,
 				046786E32EB4CED9003FE82D /* JobsRefresher */,
 				047E48C52EB3554900881898 /* PNPlayer */,
@@ -988,6 +1019,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				043283B02EC4A08A0031CDD6 /* BRPickerAllJobsDemoVC.swift */,
 				0432838E2EC48DE00031CDD6 /* Demo@中国大陆居民身份证验证 */,
 				0432838B2EC48BD60031CDD6 /* Demo@SkeletonView */,
 				0432837E2EC478C60031CDD6 /* Demo@SwiftEntryKit */,
@@ -1512,6 +1544,7 @@
 				042F959C2EB5F733005DE735 /* Localizable.strings in Resources */,
 				0453764C2EB0B43F00133F73 /* IncomeSource.json in Resources */,
 				0453764D2EB0B43F00133F73 /* UserData.json in Resources */,
+				043283A22EC49B2E0031CDD6 /* BRCity.json in Resources */,
 				0453764E2EB0B43F00133F73 /* OccupationList.json in Resources */,
 				04C442AA2EB8BC13008E0F09 /* 9squares_AlBoardman.json in Resources */,
 				0453764F2EB0B43F00133F73 /* CommentData.json in Resources */,
@@ -1620,6 +1653,7 @@
 				045921152E8557FE008C8D6A /* UIFont.swift in Sources */,
 				046786E72EB4CEED003FE82D /* RefreshComponent.swift in Sources */,
 				C564FC2B2E0958D50079B5C1 /* AppDelegate.swift in Sources */,
+				043283AD2EC4A0540031CDD6 /* BRPicker+DSL.swift in Sources */,
 				043283442EC437220031CDD6 /* 软键盘退出.swift in Sources */,
 				04D49C252EBE055000BCD6F1 /* OCCls.m in Sources */,
 				044272852E8146130084B25C /* JXScale.swift in Sources */,
@@ -1759,6 +1793,7 @@
 				C564FCAC2E09597C0079B5C1 /* ViewController.swift in Sources */,
 				04BD5B3F2EA8E5070056DA62 /* Demo@UICollectionView.swift in Sources */,
 				046786ED2EB4CF1B003FE82D /* UIScrollView+RefreshAPI.swift in Sources */,
+				043283A92EC49FA60031CDD6 /* BRTextPickerView.swift in Sources */,
 				046786E92EB4CEFA003FE82D /* RefreshProxy.swift in Sources */,
 				C564FC962E0959640079B5C1 /* Inlines.swift in Sources */,
 				045376612EB0B5B100133F73 /* PlayerRemoteVC.swift in Sources */,
@@ -1786,7 +1821,9 @@
 				C564FC972E0959640079B5C1 /* UIActivityIndicatorView.swift in Sources */,
 				C564FCA22E0959640079B5C1 /* UITableView.swift in Sources */,
 				0432837D2EC471980031CDD6 /* EKAttributes.swift in Sources */,
+				043283AB2EC49FED0031CDD6 /* BRDatePickerView.swift in Sources */,
 				0432836D2EC45E7A0031CDD6 /* JXSegmentedBaseDataSource.swift in Sources */,
+				043283A72EC49F910031CDD6 /* BRPickerPanel.swift in Sources */,
 				04C2F0332E98C9E000BA05A9 /* Demo@设计模式VIPER.swift in Sources */,
 				046786E52EB4CEE1003FE82D /* RefreshEnums.swift in Sources */,
 				04F7AF672EC321B700ACB509 /* LiveCommentDemoVC.swift in Sources */,
@@ -1823,13 +1860,16 @@
 				0401DD082E91183000D572AD /* Demo@弹出提示.swift in Sources */,
 				04CF03192E8A80CE0083ACF0 /* AppTools.swift in Sources */,
 				04D0C9822E8D1CF400580020 /* Optional.swift in Sources */,
+				043283AF2EC4A0630031CDD6 /* UIButton+BRPickerAdditions.swift in Sources */,
 				04124F3E2EB075EA00462BE2 /* AFRoute.swift in Sources */,
 				C564FC952E0959640079B5C1 /* UIView.swift in Sources */,
 				04A8C54C2E8AA94D00381701 /* Demo@按钮.swift in Sources */,
 				046CF9772E967E6C005A88B4 /* URL.swift in Sources */,
 				047E9A712EB618B300F58923 /* Demo@Lunar.swift in Sources */,
 				04D0C9792E8D066900580020 /* Demo@图片加载.swift in Sources */,
+				043283B12EC4A08B0031CDD6 /* BRPickerAllJobsDemoVC.swift in Sources */,
 				047E48F12EB36A3F00881898 /* MTLRenderPipelineDescriptor.swift in Sources */,
+				043283A52EC49F830031CDD6 /* BRPickerStyle.swift in Sources */,
 				045920F62E854F8C008C8D6A /* Int16.swift in Sources */,
 				0401DD002E910B3500D572AD /* BaseLet.swift in Sources */,
 				C564FBE92E09580B0079B5C1 /* JobsSwiftBaseConfigDemo.xcdatamodeld in Sources */,

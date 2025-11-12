@@ -47,6 +47,7 @@ final class RootListVC: BaseVC {
             ("📹 播放器@BMPlayer", BMPlayerDemoVC.self),
             ("📹 播放器@PNPlayer", PNPlayerDemoVC.self),
             ("❄️ 雪花算法", SnowflakeDemoVC.self),
+            ("🍚 选择器", BRPickerDemoVC.self),
             ("💬 LiveChat", LiveChatDemoVC.self),
             ("🗄️ UITableView", EmptyTableViewDemoVC.self),
             ("🗄️ UICollectionView", EmptyCollectionViewDemoVC.self),

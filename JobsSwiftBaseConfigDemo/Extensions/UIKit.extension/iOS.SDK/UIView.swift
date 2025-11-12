@@ -19,6 +19,12 @@ import ObjectiveC.runtime
 extension UIView {
     // MARK: 设置UI
     @discardableResult
+    func byAddArranged(to stack: UIStackView) -> Self {
+        stack.addArrangedSubview(self)
+        return self
+    }
+    
+    @discardableResult
     func byBgColor(_ color: UIColor?) -> Self {
         backgroundColor = color
         return self
