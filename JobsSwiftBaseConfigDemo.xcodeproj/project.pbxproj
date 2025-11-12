@@ -54,6 +54,9 @@
 		043283712EC45F4D0031CDD6 /* JXSegmentedIndicatorBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283702EC45F4C0031CDD6 /* JXSegmentedIndicatorBaseView.swift */; };
 		043283732EC4601D0031CDD6 /* JXSegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283722EC4601D0031CDD6 /* JXSegmentedView.swift */; };
 		043283752EC461260031CDD6 /* JXSegmentedListContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283742EC461260031CDD6 /* JXSegmentedListContainerView.swift */; };
+		0432837D2EC471980031CDD6 /* EKAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0432837C2EC471970031CDD6 /* EKAttributes.swift */; };
+		043283802EC478FC0031CDD6 /* SheetContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0432837F2EC478FB0031CDD6 /* SheetContentView.swift */; };
+		043283832EC4794A0031CDD6 /* ConfirmToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283822EC4794A0031CDD6 /* ConfirmToastView.swift */; };
 		043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043838A12EAA4BB3007BA552 /* BaseWebVC.swift */; };
 		043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */; };
 		0440B5572EB2370E005DBE91 /* SnowflakeSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */; };
@@ -336,6 +339,9 @@
 		043283702EC45F4C0031CDD6 /* JXSegmentedIndicatorBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedIndicatorBaseView.swift; sourceTree = "<group>"; };
 		043283722EC4601D0031CDD6 /* JXSegmentedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedView.swift; sourceTree = "<group>"; };
 		043283742EC461260031CDD6 /* JXSegmentedListContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedListContainerView.swift; sourceTree = "<group>"; };
+		0432837C2EC471970031CDD6 /* EKAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EKAttributes.swift; sourceTree = "<group>"; };
+		0432837F2EC478FB0031CDD6 /* SheetContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetContentView.swift; sourceTree = "<group>"; };
+		043283822EC4794A0031CDD6 /* ConfirmToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmToastView.swift; sourceTree = "<group>"; };
 		043838A12EAA4BB3007BA552 /* BaseWebVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWebVC.swift; sourceTree = "<group>"; };
 		043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProtocolDefs.swift; sourceTree = "<group>"; };
 		0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnowflakeSwift.swift; sourceTree = "<group>"; };
@@ -674,6 +680,39 @@
 			path = JXSegmentedView;
 			sourceTree = "<group>";
 		};
+		0432837A2EC470220031CDD6 /* 临时项目页面 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "临时项目页面";
+			sourceTree = "<group>";
+		};
+		0432837B2EC471920031CDD6 /* EKAttributes */ = {
+			isa = PBXGroup;
+			children = (
+				0432837C2EC471970031CDD6 /* EKAttributes.swift */,
+			);
+			path = EKAttributes;
+			sourceTree = "<group>";
+		};
+		0432837E2EC478C60031CDD6 /* Demo@SwiftEntryKit */ = {
+			isa = PBXGroup;
+			children = (
+				043283812EC479400031CDD6 /* View */,
+				043283402EC34BB00031CDD6 /* Demo@SwiftEntryKit.swift */,
+			);
+			path = "Demo@SwiftEntryKit";
+			sourceTree = "<group>";
+		};
+		043283812EC479400031CDD6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				043283822EC4794A0031CDD6 /* ConfirmToastView.swift */,
+				0432837F2EC478FB0031CDD6 /* SheetContentView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		045376392EB0B3FE00133F73 /* 视频 */ = {
 			isa = PBXGroup;
 			children = (
@@ -922,6 +961,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				0432837E2EC478C60031CDD6 /* Demo@SwiftEntryKit */,
 				043283452EC4405B0031CDD6 /* Demo@首页联动 */,
 				04F7AF6B2EC327DC00ACB509 /* Demo@直播间滚动留言模块 */,
 				048F447A2EB311B100BAA7EE /* Demo@注册登陆 */,
@@ -933,7 +973,6 @@
 				042462592EBAFCD500D6BFCC /* Demo@ComponentKit.swift */,
 				04C442A52EB8B935008E0F09 /* Demo@Lottie.swift */,
 				04B00E472EB21F0800901B1C /* Demo@LiveChat.swift */,
-				043283402EC34BB00031CDD6 /* Demo@SwiftEntryKit.swift */,
 				04C4428D2EB86CAB008E0F09 /* Demo@PDF.swift */,
 				047E9A702EB618B300F58923 /* Demo@Lunar.swift */,
 				047E9A722EB6217000F58923 /* Demo@XLSX.swift */,
@@ -1002,6 +1041,7 @@
 		04D0C97F2E8D19DE00580020 /* 3rd */ = {
 			isa = PBXGroup;
 			children = (
+				0432837B2EC471920031CDD6 /* EKAttributes */,
 				0432836B2EC45E380031CDD6 /* JXSegmentedView */,
 				046786F42EB5AD13003FE82D /* GKNavigationBarSwift.swift */,
 				04FC778F2EB0C88A00B810BA /* BMPlayer.swift */,
@@ -1201,8 +1241,9 @@
 				C564FEEC2E0AAC900079B5C1 /* SwiftDefines */,
 				C564FC282E0958C40079B5C1 /* AppDelegate & SceneDelegate */,
 				C564FEEB2E0AAC5A0079B5C1 /* 主业务流程 */,
-				C564FBEF2E09580D0079B5C1 /* Info.plist */,
+				0432837A2EC470220031CDD6 /* 临时项目页面 */,
 				04FD2AAA2EB5B9AB00CDB5D5 /* JobsConfig.xcconfig */,
+				C564FBEF2E09580D0079B5C1 /* Info.plist */,
 				04D49C222EBE055000BCD6F1 /* JobsSwiftBaseConfigDemo-Bridging-Header.h */,
 			);
 			path = JobsSwiftBaseConfigDemo;
@@ -1573,6 +1614,7 @@
 				043283652EC453640031CDD6 /* LeftMenuView.swift in Sources */,
 				0477D9752E8B9146002C6427 /* Demo@安全Present.swift in Sources */,
 				045920F42E854F85008C8D6A /* Int8.swift in Sources */,
+				043283832EC4794A0031CDD6 /* ConfirmToastView.swift in Sources */,
 				0477D96D2E8B83D6002C6427 /* JobsSafeTransitions.swift in Sources */,
 				046786F52EB5AD14003FE82D /* GKNavigationBarSwift.swift in Sources */,
 				C564FC9A2E0959640079B5C1 /* UITextView.swift in Sources */,
@@ -1669,6 +1711,7 @@
 				04A18E4D2E86533B004BB9DC /* UIImage.swift in Sources */,
 				043283622EC453570031CDD6 /* PlaceholderListVC.swift in Sources */,
 				04124F2A2EB05E9000462BE2 /* Demo@Moya.swift in Sources */,
+				043283802EC478FC0031CDD6 /* SheetContentView.swift in Sources */,
 				045921122E855769008C8D6A /* JobsPaddedLabel.swift in Sources */,
 				04BCDC322EA9EAB000382DE0 /* UICollectionViewFlowLayout.swift in Sources */,
 				04C442922EB87F77008E0F09 /* PDFThumbnailView.swift in Sources */,
@@ -1708,6 +1751,7 @@
 				C564FC622E0959510079B5C1 /* BaseEnumDefs.swift in Sources */,
 				C564FC972E0959640079B5C1 /* UIActivityIndicatorView.swift in Sources */,
 				C564FCA22E0959640079B5C1 /* UITableView.swift in Sources */,
+				0432837D2EC471980031CDD6 /* EKAttributes.swift in Sources */,
 				0432836D2EC45E7A0031CDD6 /* JXSegmentedBaseDataSource.swift in Sources */,
 				04C2F0332E98C9E000BA05A9 /* Demo@设计模式VIPER.swift in Sources */,
 				046786E52EB4CEE1003FE82D /* RefreshEnums.swift in Sources */,
