@@ -3617,7 +3617,14 @@ jobsSetupGKNav(
 
 ### 3、📏 设备尺寸相关 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 3.1、📏 [**全局比例尺**](#全局比例尺@实现逻辑) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 3.1、📏 [按比例（默认比例1）获取屏幕宽高@兼容设备横竖屏](#获取屏幕尺寸@实现逻辑) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+let w = ScreenWidth()
+let h = ScreenHeight()
+```
+
+#### 3.2、📏 [**全局比例尺**](#全局比例尺@实现逻辑) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 入口配置
 
@@ -3651,13 +3658,6 @@ jobsSetupGKNav(
   ```swift
   CGRect(x: 20.w, y: 100.h, width: 200.w, height: 40.h)
   ```
-
-#### 3.2、📏 [屏幕宽高@兼容设备横竖屏](#获取屏幕尺寸@实现逻辑) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
-
-```swift
-let w = Screen.width
-let h = Screen.height
-```
 
 ### 4、🖨️ 日志打印工具的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -4405,23 +4405,12 @@ UIView().byNavBarEnabled(true)
 
 ### 16、获取高频系统关键量 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* `jobsNearestVC`
+* `jobsNearestVC` 👉 从任意 **UIResponder**（View / VC）向上找到最近的宿主 VC；若全程找不到则兜底到 **`keyWindow`** 的 **root**
 
-  > 从任意 **UIResponder**（View / VC）向上找到最近的宿主 VC；若全程找不到则兜底到 **`keyWindow`** 的 **root**
+* `UIApplication.jobsKeyWindow()?` 👉 统一的 **KeyWindow** 获取（**支持 iOS 13 多场景；老系统兜底**）
 
-* `jobsKeyWindow` 👉 统一的 **KeyWindow** 获取（**支持 iOS 13 多场景；老系统兜底**）
-
-  ```swift
-  UIApplication.jobsKeyWindow()?
-  ```
-
-* `jobsTopMostVC` 👉（递归解析）获取当前“最顶层可见”的 **UIViewController**
-
-  ```swift
-  if let topVC = UIApplication.jobsTopMostVC() {
-     /// TODO
-  }
-  ```
+* ` UIApplication.jobsTopMostVC()` 👉（递归解析）获取当前“最顶层可见”的 **UIViewController**
+* `UIResponder.jobsCurrentFirstResponder()` 👉 定位当前第一响应者
 
 ### 17、<font color=red>推页面@带参数</font>（`push`/`present`）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 

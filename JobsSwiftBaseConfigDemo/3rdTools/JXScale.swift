@@ -6,6 +6,16 @@
 //
 
 import UIKit
+
+@inline(__always)
+func ScreenWidth(_ rate:CGFloat = 1) -> CGFloat {
+    Screen.width * rate
+}
+
+@inline(__always)
+func ScreenHeight(_ rate:CGFloat = 1) -> CGFloat {
+    Screen.height * rate
+}
 // MARK: - 核心比例器
 public enum JXScale {
     private static var designW: CGFloat = 375
@@ -20,7 +30,7 @@ public enum JXScale {
         self.useSafeArea = useSafeArea
     }
     
-    private static var screenSize: CGSize {
+    public static var screenSize: CGSize {
         guard let window = UIApplication.jobsKeyWindow() else {
             return UIScreen.main.bounds.size
         }

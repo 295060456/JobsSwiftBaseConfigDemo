@@ -903,3 +903,11 @@ private extension UINavigationController {
         return _jobs_popToRootViewController_swizzled(animated: animated)
     }
 }
+// MARK: - 给“实现了 JobsDataReceivable 的 VC”提供强类型重载：编译期直达 receive(_:)
+extension JobsDataReceivable where Self: UIViewController {
+    @discardableResult
+    func byData(_ data: InputData) -> Self {
+        receive(data)
+        return self
+    }
+}

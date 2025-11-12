@@ -25,6 +25,7 @@ final class RootListVC: BaseVC {
             ("📅 日历", LunarDemoVC.self),
             ("📊 Excel", XLSXDemoVC.self),
             ("🌘 滚动留言", LiveCommentDemoVC.self),
+            ("🌹 弹出方式", SwiftEntryKitDemoVC.self),
             ("🌛 PDF", PDFDemoVC.self),
             ("🧒 Lottie动画", LottieDemoVC.self),
             ("🌋 富文本", RichTextDemoVC.self),

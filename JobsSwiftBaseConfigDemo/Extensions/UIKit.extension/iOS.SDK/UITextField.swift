@@ -310,6 +310,15 @@ public extension UITextField {
         self.adjustsFontForContentSizeCategory = true
         return self
     }
+    /// 链式监听“发送/回车”键
+    @discardableResult
+    func onReturn(_ handler: @escaping (UITextField) -> Void) -> Self {
+        let wrapper = UIAction { [weak self] _ in
+            guard let self = self else { return }; handler(self)
+        }
+        addAction(wrapper, for: .editingDidEndOnExit)
+        return self
+    }
 }
 // MARK: - 左侧图标 & 纯留白
 public extension UITextField {

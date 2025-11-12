@@ -39,6 +39,8 @@
 		042F95972EB5E6EB005DE735 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F95962EB5E6EA005DE735 /* LanguageManager.swift */; };
 		042F95992EB5F124005DE735 /* TRAutoRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F95982EB5F123005DE735 /* TRAutoRefresh.swift */; };
 		042F959C2EB5F733005DE735 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 042F959A2EB5F733005DE735 /* Localizable.strings */; };
+		043283412EC34BB40031CDD6 /* Demo@SwiftEntryKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283402EC34BB00031CDD6 /* Demo@SwiftEntryKit.swift */; };
+		043283442EC437220031CDD6 /* 软键盘退出.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283432EC437190031CDD6 /* 软键盘退出.swift */; };
 		043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043838A12EAA4BB3007BA552 /* BaseWebVC.swift */; };
 		043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */; };
 		0440B5572EB2370E005DBE91 /* SnowflakeSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */; };
@@ -305,6 +307,8 @@
 		042F95982EB5F123005DE735 /* TRAutoRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRAutoRefresh.swift; sourceTree = "<group>"; };
 		042F959B2EB5F733005DE735 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		042F959D2EB5F74C005DE735 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		043283402EC34BB00031CDD6 /* Demo@SwiftEntryKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@SwiftEntryKit.swift"; sourceTree = "<group>"; };
+		043283432EC437190031CDD6 /* 软键盘退出.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "软键盘退出.swift"; sourceTree = "<group>"; };
 		043838A12EAA4BB3007BA552 /* BaseWebVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWebVC.swift; sourceTree = "<group>"; };
 		043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProtocolDefs.swift; sourceTree = "<group>"; };
 		0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnowflakeSwift.swift; sourceTree = "<group>"; };
@@ -642,6 +646,7 @@
 		045920E22E84EC64008C8D6A /* 3rdTools */ = {
 			isa = PBXGroup;
 			children = (
+				043283432EC437190031CDD6 /* 软键盘退出.swift */,
 				042F958F2EB5C733005DE735 /* 多语言化 */,
 				046786E32EB4CED9003FE82D /* JobsRefresher */,
 				047E48C52EB3554900881898 /* PNPlayer */,
@@ -857,6 +862,7 @@
 				042462592EBAFCD500D6BFCC /* Demo@ComponentKit.swift */,
 				04C442A52EB8B935008E0F09 /* Demo@Lottie.swift */,
 				04B00E472EB21F0800901B1C /* Demo@LiveChat.swift */,
+				043283402EC34BB00031CDD6 /* Demo@SwiftEntryKit.swift */,
 				04C4428D2EB86CAB008E0F09 /* Demo@PDF.swift */,
 				047E9A702EB618B300F58923 /* Demo@Lunar.swift */,
 				047E9A722EB6217000F58923 /* Demo@XLSX.swift */,
@@ -1035,6 +1041,8 @@
 		};
 		04F6B3932EC33481009ABD63 /* Products */ = {
 			isa = PBXGroup;
+			children = (
+			);
 			name = Products;
 			sourceTree = "<group>";
 		};
@@ -1468,6 +1476,7 @@
 				045921152E8557FE008C8D6A /* UIFont.swift in Sources */,
 				046786E72EB4CEED003FE82D /* RefreshComponent.swift in Sources */,
 				C564FC2B2E0958D50079B5C1 /* AppDelegate.swift in Sources */,
+				043283442EC437220031CDD6 /* 软键盘退出.swift in Sources */,
 				04D49C252EBE055000BCD6F1 /* OCCls.m in Sources */,
 				044272852E8146130084B25C /* JXScale.swift in Sources */,
 				C564FCB22E0959990079B5C1 /* EmptyView.swift in Sources */,
@@ -1602,6 +1611,7 @@
 				C564FC982E0959640079B5C1 /* NSObject.swift in Sources */,
 				C564FCB12E0959990079B5C1 /* CollectionCell.swift in Sources */,
 				04124F2F2EB0623900462BE2 /* DemoAPI.swift in Sources */,
+				043283412EC34BB40031CDD6 /* Demo@SwiftEntryKit.swift in Sources */,
 				045920E42E84EC73008C8D6A /* SwiftTools.swift in Sources */,
 				045920EA2E84FD82008C8D6A /* String.swift in Sources */,
 				047E48E72EB35BAD00881898 /* MetalRenderer.swift in Sources */,
