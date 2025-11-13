@@ -6066,15 +6066,15 @@ class DataManager {
     }
     ```
 
-### 4、💼 [**Swift**](https://developer.apple.com/swift/) 闭包 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 5、💼 [**Swift**](https://developer.apple.com/swift/) 闭包 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 4.1、**闭包表达式** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 5.1、**闭包表达式** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * `{ (参数) -> 返回 in 语句 }`
 
-#### 4.2、[**Swift**](https://developer.apple.com/swift/) 里的闭包分类 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 5.2、[**Swift**](https://developer.apple.com/swift/) 里的闭包分类 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-##### 4.2.1、🌪️ <font id=尾随闭包>**尾随闭包（语法糖）**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 5.2.1、🌪️ <font id=尾随闭包>**尾随闭包（语法糖）**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 纯粹是 **语法糖**，和闭包本质没区别。
 > 用在函数的最后一个参数是闭包时，让代码更简洁。
@@ -6158,7 +6158,7 @@ class DataManager {
   }
   ```
 
-##### 4.2.2、逃逸<font color=red>**`@escaping`**</font>/非逃逸闭包 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 5.2.2、逃逸<font color=red>**`@escaping`**</font>/非逃逸闭包 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ 当一个闭包在函数**返回之后**还会被**持有或执行**时，这个闭包就是「逃逸闭包」。
 >
@@ -6202,7 +6202,7 @@ class DataManager {
   }
   ```
 
-##### 4.2.3、自动（惰性）闭包<font color=red>**`@autoclosure`**</font>  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 5.2.3、自动（惰性）闭包<font color=red>**`@autoclosure`**</font>  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ 用 <font color=red>**`@autoclosure`**</font> 标记，**把一个表达式自动包装成闭包**。**用到才执行**；**不缓存**。
 >
@@ -6217,7 +6217,7 @@ func debugLog(_ msg: @autoclosure () -> String, enabled: Bool) {
 debugLog("expensive build \(verySlow())", enabled: false) // 不触发 verySlow()
 ```
 
-#### 4.3、闭包的简写 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 5.3、闭包的简写 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * [**尾随闭包的调用简写**](#尾随闭包)
 
@@ -6240,9 +6240,9 @@ debugLog("expensive build \(verySlow())", enabled: false) // 不触发 verySlow(
   let names = [User(name:"A"), User(name:"B")].map(\.name)
   ```
 
-#### 4.4、[**避免循环引用**](#避免循环引用) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 5.4、[**避免循环引用**](#避免循环引用) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 5、[**Swift**](https://developer.apple.com/swift/) 运算符重载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 6、[**Swift**](https://developer.apple.com/swift/) 运算符重载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ 运算符重载本质就是函数调用，性能没有特别损耗
 >
@@ -6290,11 +6290,11 @@ debugLog("expensive build \(verySlow())", enabled: false) // 不触发 verySlow(
     }
     ```
 
-### 6、<font color=red>**单例**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 7、<font color=red>**单例**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 6.1、无法主动销毁的单例 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 7.1、无法主动销毁的单例 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-##### 6.1.1、推荐写法 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 7.1.1、推荐写法 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ <font color=red>**`static let` **</font>**懒加载**： [**Swift**](https://developer.apple.com/swift/) 中 `static let` 天生就是线程安全的懒加载。不会提前初始化，也不用额外加锁。
 >
@@ -6322,7 +6322,7 @@ final class MySingleton {
 MySingleton.shared.doSomething()
 ```
 
-##### 6.1.2、其他写法（对比） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 7.1.2、其他写法（对比） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 不推荐，代码更复杂
 
@@ -6348,7 +6348,7 @@ MySingleton.shared.doSomething()
   }
   ```
 
-#### 6.2、可以主动销毁的单例 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 7.2、可以主动销毁的单例 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 需要**自己维护引用**，而不是 `static let`：
 
@@ -6367,7 +6367,7 @@ MySingleton.shared?.doSomething()
 MySingleton.destroy()
 ```
 
-### 7、[**Swift**](https://developer.apple.com/swift/)派发（Dispatch）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 8、[**Swift**](https://developer.apple.com/swift/)派发（Dispatch）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 🔹 性能对比 (快 → 慢)
 > * **静态派发**（最优化，可能内联）
@@ -6384,7 +6384,7 @@ MySingleton.destroy()
 > * 值类型 (struct/enum) → 静态派发
 
 
-#### 7.1、静态派发 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 8.1、静态派发 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ 编译期就确定调用哪个方法。
 >
@@ -6406,7 +6406,7 @@ MySingleton.destroy()
  foo.bar()   // 静态派发，编译器直接内联
  ```
 
-#### 7.2、虚拟派发 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 8.2、虚拟派发 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ 经典的 **vtable (虚函数表)** 派发。
 >
@@ -6428,7 +6428,7 @@ let a: A = B()
 a.foo()   // 虚拟派发，通过 vtable 查找 -> "B"
 ```
 
-#### 7.3、动态派发 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 8.3、动态派发 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ 通过 **Objective-C runtime 的消息发送机制 (`objc_msgSend`)**。
 >
@@ -6447,7 +6447,7 @@ let c = C()
 c.foo()   // objc_msgSend 动态派发
 ```
 
-#### 7.4、直接派发 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 8.4、直接派发 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ 用在 **协议的默认实现**，通过 **witness table (见证表)** 来调用。
 >
@@ -6467,9 +6467,9 @@ let p: P = S()
 p.foo()   // witness table 派发
 ```
 
-### 8、[**Swift**](https://developer.apple.com/swift/) 高阶函数<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 9、[**Swift**](https://developer.apple.com/swift/) 高阶函数<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 8.1、`joined()` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 9.1、`joined()` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 正常拼接
 
@@ -6489,7 +6489,7 @@ p.foo()   // witness table 派发
   print(sentence)   // Hello World Swift
   ```
 
-### 9、[**Swift**](https://developer.apple.com/swift/) 没有直接的<font color=red>**KVO**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 10、[**Swift**](https://developer.apple.com/swift/) 没有直接的<font color=red>**KVO**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * <font color=red>**KVO**</font>的特点
   * 依赖 **runtime 动态生成子类（isa-swizzling）** 来拦截属性 setter
@@ -6506,7 +6506,7 @@ p.foo()   // witness table 派发
   * 桥接**ObjC**后使用<font color=red>**KVO**</font>
   * 开源库支持：[**Bond**](https://github.com/DeclarativeHub/Bond)、[**RxSwift**](https://github.com/ReactiveX/RxSwift)、[**ReactiveSwift**](https://github.com/ReactiveCocoa/ReactiveSwift)
 
-### 10、`throw`/`do`/`try`/`catch`/`finally` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 11、`throw`/`do`/`try`/`catch`/`finally` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * <font color=red>**`throw`**</font>
 
@@ -6570,7 +6570,7 @@ do {
   }
   ```
 
-### 11、⏰ <font id=定时器>定时器</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 12、⏰ <font id=定时器>定时器</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ UI 层、简单重复 → `Timer`（配合 `.common` 模式 & `tolerance`）
 >
@@ -6582,9 +6582,9 @@ do {
 >
 > 5️⃣ 纯异步任务、易取消 → `Task.sleep` 循环，或（更现代）基于 `Clock`
 
-#### 11.1、定时器分类 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 12.1、定时器分类 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-##### 11.1.1、Foundation.Timer（`NSTimer`）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 12.1.1、Foundation.Timer（`NSTimer`）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ **RunLoop 依赖**：`Timer` 只会在其所附的 RunLoop 运行时触发。
 >
@@ -6657,7 +6657,7 @@ do {
     }
     ```
 
-##### 11.1.2、`DispatchSourceTimer`（GCD 计时器） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 12.1.2、`DispatchSourceTimer`（GCD 计时器） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ **不依赖 RunLoop**，任何队列都能准点触发；更适合“服务型”任务。
 >
@@ -6696,7 +6696,7 @@ final class Ticker {
 }
 ```
 
-##### 11.1.3、`CADisplayLink`（逐帧定时）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 12.1.3、`CADisplayLink`（逐帧定时）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ **用途**：自绘动画、游戏循环、进度条平滑更新。
 > 2️⃣ **不要用它** 做“每 1s 一次”的业务定时，浪费电。
@@ -6724,7 +6724,7 @@ class DisplayDriver {
 }
 ```
 
-##### 11.1.4、`Combine` 的 `Timer.TimerPublisher`  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 12.1.4、`Combine` 的 `Timer.TimerPublisher`  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **UIKit**
 
@@ -6768,7 +6768,7 @@ class DisplayDriver {
   }
   ```
 
-##### 11.1.5、[**Swift**](https://developer.apple.com/swift/)  并发的<u>软定时器</u>（`Task.sleep` / `Clock`） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 12.1.5、[**Swift**](https://developer.apple.com/swift/)  并发的<u>软定时器</u>（`Task.sleep` / `Clock`） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > **优点**：无 RunLoop 依赖；天然支持取消；写法直观。
 > **注意**：这不是系统级“定时器事件源”，而是协程里“睡眠 + 循环”的模式。不要在里头做阻塞工作；需要 UI 更新就回主线程。
@@ -6812,7 +6812,7 @@ class DisplayDriver {
   }
   ```
 
-#### 11.2、精度、耗电与后台的硬约束 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 12.2、精度、耗电与后台的硬约束 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **精度现实**：移动端不追求纳秒级。主线程卡顿、CPU 负载、系统省电合并都会让你**延后**。
 
@@ -6828,7 +6828,7 @@ class DisplayDriver {
   - 后台音频、VoIP、定位、蓝牙等**特定**后台模式、
   - Push/静默推送（APNs + Background Fetch）。**不要**试图用定时器“偷跑”后台——会被系统杀/限。
 
-#### 11.3、`RunLoop` 模式与线程模型 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 12.3、`RunLoop` 模式与线程模型 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **模式**：
 
@@ -6842,7 +6842,7 @@ class DisplayDriver {
   - `Timer` 绑定创建它的线程的 RunLoop。子线程需要手动跑 RunLoop。
   - `DispatchSourceTimer` 绑定 `DispatchQueue`，不需要 RunLoop。
 
-#### 11.4、典型场景代码片段 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 12.4、典型场景代码片段 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 倒计时（UI 安全、不卡顿）
 
@@ -6920,14 +6920,14 @@ class DisplayDriver {
   }
   ```
 
-#### 11.5、`SwiftUI`@定时器 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 12.5、`SwiftUI`@定时器 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **Timer + onReceive**：简单列表/倒计时 UI 用这个够了
 * **`Task` + `sleep`**：在 `task { }` 里写循环，支持取消，逻辑更直
 * **TimelineView**（做时间驱动的视图刷新，如表盘/秒针）比生 Timer 更语义化
 * **不要在 View 里直接持有 GCD timer**；把它放到 **ViewModel**/**ObservableObject** 管理
 
-#### 11.6、时间来源与校正 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 12.6、时间来源与校正 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **系统时间 🆚 单调时钟**：用户改系统时钟可能影响基于<u>**挂钟时间**</u>的调度
   - 对抗：使用单调时间（GCD/Clock），或基于相对时间推进
@@ -6936,7 +6936,7 @@ class DisplayDriver {
 
 * **纠偏策略**：记录基准 `Date/Instant`，每次计算“应该的下一次”而非<u>**当前时间 + 固定周期**</u>
 
-### 12、` enum codingkeys : String, CodingKey` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 13、` enum codingkeys : String, CodingKey` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 当需要让一个 `struct` 或 `class` 遵守 `Codable`（即 `Encodable & Decodable`）协议时，[**Swift**](https://developer.apple.com/swift/)  默认会做 **属性名 <-> JSON key** 的自动映射。
 >
@@ -6990,15 +6990,15 @@ class DisplayDriver {
   }
   ```
 
-### 13、`Subscript`（TODO） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 14、`Subscript`（TODO） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-### 14、<font color=red>**`inout`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 15、<font color=red>**`inout`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > - <font color=red>**`inout`**</font> 用来 **把参数当作引用传递**（类似 **C++** 的引用 / 指针，或者 **Objc** 的 `&` 参数）
 > - 默认情况下，[**Swift**](https://developer.apple.com/swift/) 的函数参数是 **值传递**，函数里修改不会影响外部
 > - 用 <font color=red>**`inout`**</font> 修饰后，函数里修改的就是外部变量本身
 
-#### 1、基本用法 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 15.1、基本用法 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 为什么要写 `&`
 > - [**Swift**](https://developer.apple.com/swift/) 很强调安全性，不允许你<u>无意中</u>把一个值传进去就被函数改掉。
@@ -7014,9 +7014,9 @@ addTen(to: &value)   // 传参时要加 & 符号
 print(value)         // 15
 ```
 
-#### 2、[**参数传递的比较**](#普通参数传递🆚inout参数传递) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 15.2、[**参数传递的比较**](#普通参数传递🆚inout参数传递) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 3、<font color=red>**`inout`**</font>的限制 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 15.3、<font color=red>**`inout`**</font>的限制 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 只能传变量，不能传常量 / 字面量
 
@@ -7031,7 +7031,7 @@ print(value)         // 15
 
 * **不能和可变参数 `...` 一起用**
 
-#### 4、使用场景 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 15.4、使用场景 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 交换两个变量
 
@@ -7062,7 +7062,7 @@ print(value)         // 15
   
   ```
 
-#### 5、底层理解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 15.5、底层理解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > `inout` 本质上是 **Copy-In Copy-Out**：
 
@@ -7072,9 +7072,9 @@ print(value)         // 15
 
 所以它比真正的<u>**指针**</u>安全一些，但语义上等价于<u>**引用传递**</u>
 
-### 15、[**Swift**](https://developer.apple.com/swift/) 数值类型 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 16、[**Swift**](https://developer.apple.com/swift/) 数值类型 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 15.1、整数类型（内建） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 16.1、整数类型（内建） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 来源：**Swift 标准库 (Swift Standard Library)** 
 
@@ -7091,7 +7091,7 @@ print(value)         // 15
   * `UInt32`：0 ~ 4,294,967,295
   * `UInt64`：0 ~ 18,446,744,073,709,551,615
 
-#### 15.2、浮点数类型（内建） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 16.2、浮点数类型（内建） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 来源：[**Swift**](https://developer.apple.com/swift/) **标准库 (Swift Standard Library)** 
 >
@@ -7102,19 +7102,19 @@ print(value)         // 15
 * `Float16`：16 位半精度浮点数（精度低，常用于图形/机器学习优化）
 * `Float80`：80 位扩展精度浮点数（仅在某些平台可用，比如 **macOS** 的 `x86_64`；**Apple Silicon** 上已经没有）
 
-#### 15.3、其他数值相关类型 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 16.3、其他数值相关类型 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * `Decimal`（来自 **`Foundation`**）：高精度十进制浮点数，常用于金融/货币计算，避免 `Double` 的精度误差。
 * `NSNumber`（来自 **`Foundation`**，**Objc** 桥接）：可以包装 **Int**、**Float**、**Double**、**Bool** 等。
 * `CGFloat`（来自 **CoreGraphics**）：<font color=red>**在 32 位平台是 `Float`，在 64 位平台是 `Double`，常用于 UI 框架。**</font>
 
-#### 15.4、特殊类型 / 标记 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 16.4、特殊类型 / 标记 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * `Bool`：严格来说不是数值类型，但只有 `true` / `false`，底层存储为 1 bit/1 byte。
 * `Character`、`UnicodeScalar` 虽然能转成数值（`asciiValue` / `value`），但不算数值类型。
 * `SIMD` 向量类型（`SIMD2<Float>`、`SIMD4<Double>` 等）：Apple 针对并行计算/Metal 提供的数值向量。
 
-### 16、<font id=swift关键字用作变量名>[**Swift**](https://developer.apple.com/swift/)关键字用作变量名</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 17、<font id=swift关键字用作变量名>[**Swift**](https://developer.apple.com/swift/)关键字用作变量名</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 将[**Swift**](https://developer.apple.com/swift/)关键字用反引号包起来
 
@@ -7123,7 +7123,7 @@ let `class` = "Jobs"
 print(`class`)   // 输出 "Jobs"
 ```
 
-### 17、[**Swift**](https://developer.apple.com/swift/)方法的重载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 18、[**Swift**](https://developer.apple.com/swift/)方法的重载 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 在 [**Swift**](https://developer.apple.com/swift/) 里，只要 **方法签名（方法名 + 参数标签 + 参数类型）不同**，就可以视为不同的方法，不会冲突。
 
@@ -7139,7 +7139,7 @@ func resizableImage(edge: UIEdgeInsets = UIEdgeInsets(top: 10.h,
 }
 ```
 
-### 18、[**Swift**](https://developer.apple.com/swift/).<font color=red>**extension**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 19、[**Swift**](https://developer.apple.com/swift/).<font color=red>**extension**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > **能做的事**：
 >
@@ -7154,7 +7154,7 @@ func resizableImage(edge: UIEdgeInsets = UIEdgeInsets(top: 10.h,
 > * 不能加存储属性
 > * 不能 <font color=red>**@override**</font>
 
-#### 18.1、[**Swift**](https://developer.apple.com/swift/).<font color=red>**extension**</font>的基本使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 19.1、[**Swift**](https://developer.apple.com/swift/).<font color=red>**extension**</font>的基本使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > [**Swift**](https://developer.apple.com/swift/) 里面 <font color=red>**extension**</font> 可以加在任何类型上，不局限于类（<font color=red>**class**</font>），也可以是 <font color=red>**struct**</font>、<font color=red>**enum**</font>、甚至 <font color=red>**protocol**</font>
 
@@ -7232,7 +7232,7 @@ func resizableImage(edge: UIEdgeInsets = UIEdgeInsets(top: 10.h,
   Bird().fly()  // Default flying...
   ```
 
-#### 18.2、[**Swift**](https://developer.apple.com/swift/).<font color=red>**extension**</font>的限制使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 19.2、[**Swift**](https://developer.apple.com/swift/).<font color=red>**extension**</font>的限制使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > ```swift
 > extension <类型> where <条件> {
@@ -7256,7 +7256,7 @@ func resizableImage(edge: UIEdgeInsets = UIEdgeInsets(top: 10.h,
   print(b.isEmptyOrNil)  // true
   ```
 
-### 19、返回类对象 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 20、返回类对象 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **Objc**写法
 
@@ -7270,7 +7270,7 @@ func resizableImage(edge: UIEdgeInsets = UIEdgeInsets(top: 10.h,
   UITableViewCell.self
   ```
 
-### 20、[**Swift**](https://developer.apple.com/swift/).**Actor**（高阶用法） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 21、[**Swift**](https://developer.apple.com/swift/).**Actor**（高阶用法） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 👉 `class` 是多线程「共享内存，自己小心加锁」
 >  👉 `actor` 是「默认不共享内存，[**Swift**](https://developer.apple.com/swift/)  编译器帮你保证不会同时访问」
@@ -7353,9 +7353,9 @@ func resizableImage(edge: UIEdgeInsets = UIEdgeInsets(top: 10.h,
   }
   ```
 
-### 21、<font color=red>**@available**</font> 的使用示例 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 22、<font color=red>**@available**</font> 的使用示例 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 21.1、基本语法 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 22.1、基本语法 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 @available(平台名称 版本号, introduced: 引入版本, deprecated: 弃用版本, obsoleted: 废弃版本, message: "提示信息")
@@ -7369,7 +7369,7 @@ func resizableImage(edge: UIEdgeInsets = UIEdgeInsets(top: 10.h,
 | watchOS  | 适用于 watchOS |
 | *        | 适用于所有平台 |
 
-#### 21.2、常见写法示例 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 22.2、常见写法示例 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 指定可用平台和版本
 
@@ -7451,9 +7451,9 @@ func resizableImage(edge: UIEdgeInsets = UIEdgeInsets(top: 10.h,
   }
   ```
 
-### 22、嵌套定义 **<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>**
+### 23、嵌套定义 **<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>**
 
-#### 22.1、嵌套 <font color=red>class</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 23.1、嵌套 <font color=red>class</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 class Outer {
@@ -7469,7 +7469,7 @@ let inner = Outer.Inner()
 inner.say()
 ```
 
-#### 22.2、嵌套 <font color=red>struct</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 23.2、嵌套 <font color=red>struct</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 struct Container {
@@ -7483,7 +7483,7 @@ let i = Container.Item(name: "🍎 Apple")
 print(i.name)
 ```
 
-#### 22.3、嵌套 <font color=red>enum</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 23.3、嵌套 <font color=red>enum</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 class DownloadManager {
@@ -7499,7 +7499,7 @@ let s: DownloadManager.Status = .downloading
 print("状态：\(s)")
 ```
 
-#### 22.4、嵌套 <font color=red>protocol</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 23.4、嵌套 <font color=red>protocol</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 class Player {
@@ -7517,7 +7517,7 @@ class Player {
 > }
 > ```
 
-#### 22.5、嵌套 <font color=red>actor</font>（[**Swift**](https://developer.apple.com/swift/) 5.5+）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 23.5、嵌套 <font color=red>actor</font>（[**Swift**](https://developer.apple.com/swift/) 5.5+）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 class DataCenter {
@@ -7537,7 +7537,7 @@ Task {
 }
 ```
 
-#### 22.6、嵌套 <font color=red>func</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 23.6、嵌套 <font color=red>func</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 func outer() {
@@ -7551,7 +7551,7 @@ func outer() {
 outer()
 ```
 
-#### 22.7、🚫不支持嵌套的（仅备注）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 23.7、🚫不支持嵌套的（仅备注）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 func badExample() {
@@ -7562,7 +7562,7 @@ func badExample() {
 }
 ```
 
-### 23、<font color=red>typealias</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 24、<font color=red>typealias</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
   func example() {
@@ -7593,7 +7593,7 @@ func badExample() {
   }
   ```
 
-### 24、编译器（方法过期）警告抑制 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 25、编译器（方法过期）警告抑制 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 @available(iOS, introduced: 2.0, obsoleted: 13.0)
@@ -7603,7 +7603,7 @@ public func legacyKeyWindowPreiOS13() -> UIWindow? {
 }
 ```
 
-### 25、按钮的配置项 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 26、按钮的配置项 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 在**Objc**里面，按钮的配置项`UIButtonConfiguration`是专门以类的形式出现的
 
@@ -7637,7 +7637,7 @@ public func legacyKeyWindowPreiOS13() -> UIWindow? {
   }
   ```
 
-### 26、iOS模拟器剔除 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 27、iOS模拟器剔除 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 #if targetEnvironment(simulator)
@@ -7647,13 +7647,13 @@ public func legacyKeyWindowPreiOS13() -> UIWindow? {
 #endif
 ```
 
-### 27、<font color=red>**guard** 🆚 **if**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 28、<font color=red>**guard** 🆚 **if**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 1️⃣ `guard` 后面需要的是**布尔条件**或**可选绑定**，而不是对象本身；
 >
 > 2️⃣ `guard ... else { ... }` 的 `else` 分支里**必须提前退出当前作用域**（`return/throw/continue/break`），不能在里头“赋个默认值然后继续”。
 
-#### 27.1、参入校验 + 早退出 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 28.1、参入校验 + 早退出 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 func pay(_ amount: Decimal?) {
@@ -7675,7 +7675,7 @@ func pay(_ amount: Decimal?) {
 }
 ```
 
-#### 27.2、Optional 绑定 🆚 判空取值 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 28.2、Optional 绑定 🆚 判空取值 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 guard let user = user else { return }
@@ -7687,7 +7687,7 @@ if (!user) return;
 NSLog(@"%@", user.name);
 ```
 
-#### 27.3、多条件拍平（减少嵌套）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 28.3、多条件拍平（减少嵌套）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 func submit(token: String?, payload: Data?) {
@@ -7705,7 +7705,7 @@ func submit(token: String?, payload: Data?) {
 }
 ```
 
-#### 27.4、循环中过滤（continue/break）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 28.4、循环中过滤（continue/break）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 for item in items {
@@ -7721,7 +7721,7 @@ for (Item *item in items) {
 }
 ```
 
-#### 27.5、有则用传入、无则默认 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 28.5、有则用传入、无则默认 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 let request = withdraw ?? JXWalletWithdrawRequest()
@@ -7732,7 +7732,7 @@ JXWalletWithdrawRequest *request = withdraw ?: [JXWalletWithdrawRequest new]; //
 // 或标准三目：withdraw ? withdraw : [JXWalletWithdrawRequest new];
 ```
 
-#### 27.6、抛错/失败即退出 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 28.6、抛错/失败即退出 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 func load(path: String?) throws -> Data {
@@ -7751,7 +7751,7 @@ func load(path: String?) throws -> Data {
 }
 ```
 
-#### 27.7、 初始化流程中的“守卫” <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 28.7、 初始化流程中的“守卫” <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 init?(config: Config?) {
@@ -7770,7 +7770,7 @@ init?(config: Config?) {
 }
 ```
 
-#### 27.8、清理/收尾（<font color=red>**`defer`**</font> 对比） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 28.8、清理/收尾（<font color=red>**`defer`**</font> 对比） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 func work() {
@@ -7794,9 +7794,9 @@ func work() {
 }
 ```
 
-### 28、<font color=red>**`as`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 29、<font color=red>**`as`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-#### 28.1、<font color=red>**`as`**</font> 👉 编译期**上转型/桥接/字面量定型** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 29.1、<font color=red>**`as`**</font> 👉 编译期**上转型/桥接/字面量定型** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * **上转型**（子 → 父/协议）：总是安全、无需运行时检查。
 
@@ -7820,7 +7820,7 @@ func work() {
   let any: Any = btn as Any
   ```
 
-#### 28.2、<font color=red>**`as?`**</font> 👉 **可选向下转型**，失败返回 `nil` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 29.2、<font color=red>**`as?`**</font> 👉 **可选向下转型**，失败返回 `nil` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 let v: UIView = UIButton()
@@ -7829,7 +7829,7 @@ let b2 = v as? UILabel                  // nil
 if let button = b1 { button.setTitle("OK", for: .normal) }
 ```
 
-#### 28.3、<font color=red>**`as!`**</font> 👉 **强制向下转型**，失败崩溃 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 29.3、<font color=red>**`as!`**</font> 👉 **强制向下转型**，失败崩溃 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 只有在你**百分百**确定类型时才用；否则用 <font color=red>**`as?`**</font>：
 
@@ -7838,7 +7838,7 @@ let v: UIView = UIButton()
 let b = v as! UIButton                  // 若不是 UIButton 会崩溃
 ```
 
-### 29、<font color=red>**`defer`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 30、<font color=red>**`defer`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > <font color=red>**`defer`**</font> 不是必须写在 `try` 里，它放在“当前作用域”里的任何位置，都会在**离开这个作用域时**必定执行（除非进程被杀/`fatalError` 之类）
 
@@ -8040,7 +8040,7 @@ let b = v as! UIButton                  // 若不是 UIButton 会崩溃
     ```
 
 
-### 30、**`UIAlertController`** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 31、**`UIAlertController`** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * `UIAlertController`内置输入框
 
@@ -8062,15 +8062,15 @@ let b = v as! UIButton                  // 若不是 UIButton 会崩溃
   }
   ```
 
-### 31、**`NSProxy`** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 32、**`NSProxy`** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * [**Swift**](https://developer.apple.com/swift/) 里没有原生的 `NSProxy`，也不能用纯 [**Swift**](https://developer.apple.com/swift/) 去继承/实现 `NSProxy`
 
-### 32、**Foundation**.<font color=red>**`Decimal`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 33、**Foundation**.<font color=red>**`Decimal`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > **十进制高精度** 的数值类型，用来避免 `Double/Float` 的二进制浮点误差，**非常适合金额/财务**等需要精确小数的场景。
 
-#### 32.1、为啥不用 `Double`？<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 33.1、为啥不用 `Double`？<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * `Double/Float` 是二进制浮点，像 0.1、0.2 在二进制里是无限小数，会有误差：
 
@@ -8088,17 +8088,17 @@ let b = v as! UIButton                  // 若不是 UIButton 会崩溃
   print(a + b == Decimal(string: "0.3")!) // true
   ```
 
-#### 32.2、与 `NSDecimalNumber` 的关系 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 33.2、与 `NSDecimalNumber` 的关系 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * `NSDecimalNumber` 是 `Decimal` 的 `Objc` 包装类，功能相近；在需要 `NSNumber`/`ObjC` 互操作时会用到。
 * 在纯 [**Swift**](https://developer.apple.com/swift/) 里，优先用 `Decimal` + 运算符重载，简洁。
 
-#### 32.3、<font color=red>**实战建议**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 33.3、<font color=red>**实战建议**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 金额/汇率、发票税：**用 `Decimal`**，别用 `Double`
 * 与后端交互：**用字符串传小数**（如 `"123.45"`），[**Swift**](https://developer.apple.com/swift/) 端 `Decimal(string:)` 解析，零损失
 
-### 33、[**Swift**](https://developer.apple.com/swift/) 随机 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 34、[**Swift**](https://developer.apple.com/swift/) 随机 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * <font color=red>[**Swift**](https://developer.apple.com/swift/) 随机协议</font>
 
@@ -8210,7 +8210,7 @@ let b = v as! UIButton                  // 若不是 UIButton 会崩溃
     let token = UInt64.random(in: .min... .max, using: &sec)
     ```
 
-### 34、Task <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 35、Task <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 函数本身就只在主线程用（推荐）
 

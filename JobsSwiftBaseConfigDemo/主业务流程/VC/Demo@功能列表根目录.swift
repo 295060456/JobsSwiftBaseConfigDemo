@@ -23,6 +23,7 @@ final class RootListVC: BaseVC {
             ("✍️ UITextView", UITextViewDemoVC.self),
             ("📌 自定义注解", 自定义注解Demo.self),
             ("🍚 选择器", BRPickerDemoVC.self),
+            ("🔥", EditProfileDemoVC.self),
             ("📅 日历", LunarDemoVC.self),
             ("📊 Excel", XLSXDemoVC.self),
             ("🌘 滚动留言", LiveCommentDemoVC.self),

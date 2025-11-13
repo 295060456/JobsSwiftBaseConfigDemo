@@ -181,6 +181,7 @@
 		049A65712EA0E6BB0006B185 /* JobsTabBarCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049A65702EA0E6BA0006B185 /* JobsTabBarCtrl.swift */; };
 		049A65732EA0E6E40006B185 /* Demo@自定义TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049A65722EA0E6D70006B185 /* Demo@自定义TabBar.swift */; };
 		04A18E4D2E86533B004BB9DC /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A18E4C2E865336004BB9DC /* UIImage.swift */; };
+		04A368142EC59517000FC898 /* EditProfileDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A368132EC59516000FC898 /* EditProfileDemoVC.swift */; };
 		04A8C54C2E8AA94D00381701 /* Demo@按钮.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A8C54B2E8AA94B00381701 /* Demo@按钮.swift */; };
 		04A8C54E2E8AA9F900381701 /* Demo@功能列表根目录.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A8C54D2E8AA9F800381701 /* Demo@功能列表根目录.swift */; };
 		04AC74C52E86682E004B8305 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AC74C42E86682D004B8305 /* Notification.swift */; };
@@ -480,6 +481,7 @@
 		049A65702EA0E6BA0006B185 /* JobsTabBarCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsTabBarCtrl.swift; sourceTree = "<group>"; };
 		049A65722EA0E6D70006B185 /* Demo@自定义TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@自定义TabBar.swift"; sourceTree = "<group>"; };
 		04A18E4C2E865336004BB9DC /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		04A368132EC59516000FC898 /* EditProfileDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileDemoVC.swift; sourceTree = "<group>"; };
 		04A8C54B2E8AA94B00381701 /* Demo@按钮.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@按钮.swift"; sourceTree = "<group>"; };
 		04A8C54D2E8AA9F800381701 /* Demo@功能列表根目录.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@功能列表根目录.swift"; sourceTree = "<group>"; };
 		04AC74C42E86682D004B8305 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
@@ -708,6 +710,7 @@
 		0432837A2EC470220031CDD6 /* 临时项目页面 */ = {
 			isa = PBXGroup;
 			children = (
+				04A368132EC59516000FC898 /* EditProfileDemoVC.swift */,
 			);
 			path = "临时项目页面";
 			sourceTree = "<group>";
@@ -1879,6 +1882,7 @@
 				045921082E854FF3008C8D6A /* Float.swift in Sources */,
 				C564FCA62E0959640079B5C1 /* UINavigationBar.swift in Sources */,
 				046786EF2EB4CF2C003FE82D /* DefaultSkins.swift in Sources */,
+				04A368142EC59517000FC898 /* EditProfileDemoVC.swift in Sources */,
 				04124F442EB0764200462BE2 /* AFService.swift in Sources */,
 				04AD628F2E9120C500E18984 /* JobsTimer.swift in Sources */,
 				C564FC2C2E0958D50079B5C1 /* SceneDelegate.swift in Sources */,
