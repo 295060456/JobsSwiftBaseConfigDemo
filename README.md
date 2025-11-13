@@ -5419,6 +5419,125 @@ override func viewWillTransition(to size: CGSize, with coordinator: UIViewContro
 jobsDismissKeyboard()
 ```
 
+### 41、`UITableViewCell`  的数据配置体系（`UICollectionViewCell` 同理）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 此协议用于 `UITableViewCell` 亦可用于`UICollectionViewCell` 
+
+  ```swift
+  // MARK: - 统一的「任意配置」协议
+  public protocol JobsConfigCellProtocol: AnyObject {
+      /// any 可以是任意类型（struct / enum / tuple / dict），
+      /// 在具体 cell 里自己去解包。
+      @discardableResult
+      func byConfigure(_ any: Any?) -> Self
+  }
+  ```
+
+* 通过一束**数据束**进行管理，除了能携带必要的配置信息以外，**还可以携带一些特定的数据（data: Any?）**
+
+  ```swift
+  // MARK: - 通用于 UITableViewCell 和 UICollectionViewCell 的模型组件
+  public struct JobsCellConfig {
+      public let title: String?
+      public let detail: String?
+      public let image: UIImage?
+      public let data: Any?
+  
+      public init(title: String? = nil,
+                  detail: String? = nil,
+                  image: UIImage? = nil,
+                  data: Any? = nil) {
+          self.title = title
+          self.detail = detail
+          self.image = image
+          self.data = data 
+      }
+  }
+  ```
+
+* 给所有的`UITableViewCell`添加此协议（**`JobsConfigCellProtocol`**）所赋予的方法（**`byConfigure`**）,以传递数据模型（**`JobsCellConfig`**）
+
+  ```swift
+  extension UITableViewCell: JobsConfigCellProtocol {
+      @discardableResult
+      @objc
+      public func byConfigure(_ any: Any?) -> Self {
+          // 如果不是给普通 value1 用的，直接忽略
+          guard let cfg = any as? JobsCellConfig else { return self }
+          if #available(iOS 14.0, *) {
+              return byContentConfiguration { content in
+                  // 你自己的 UIListContentConfiguration DSL 写法
+                  content
+                      .byText(cfg.title)
+                      .bySecondaryText(cfg.detail)
+                      .byImage(cfg.image)
+              }
+          } else {
+              // 旧系统依赖 textLabel / detailTextLabel
+              if let title = cfg.title {
+                  textLabel?.byText(title)
+              }
+              if let detail = cfg.detail {
+                  detailTextLabel?.byText(detail)
+              }
+              if let image = cfg.image {
+                  imageView?.byImage(image)
+              };return self
+          }
+      }
+  }
+  ```
+
+* 在自定义的`UITableViewCell`里面进行自我解析
+
+  ```swift
+  final class AvatarCell: UITableViewCell {
+  
+      private lazy var avatarView: UIImageView = {
+          UIImageView()
+              .byContentMode(.scaleAspectFill)
+              .byClipsToBounds(true)
+              .byCornerRadius(22)
+              .byBgColor(.systemGray5)
+              .byAddTo(contentView) { [unowned self] make in
+                  make.size.equalTo(CGSize(width: 44, height: 44))
+                  make.centerY.equalToSuperview()
+                  // 预留 disclosureIndicator 的空间
+                  make.trailing.equalToSuperview().inset(16)
+              }
+      }()
+  
+      override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+          super.init(style: .value1, reuseIdentifier: reuseIdentifier)
+          bySelectionStyle(.none)
+              .byAccessoryType(.disclosureIndicator)
+  
+          textLabel?.byFont(.systemFont(ofSize: 16)).byTextColor(.label)
+          detailTextLabel?.byFont(.systemFont(ofSize: 14)).byTextColor(.secondaryLabel)
+          avatarView.byVisible(YES)
+      }
+  
+      required init?(coder: NSCoder) {
+          fatalError("init(coder:) has not been implemented")
+      }
+  
+      @discardableResult
+      @objc
+      override func byConfigure(_ any: Any?) -> Self {
+          guard let cfg = any as? JobsCellConfig else { return self }
+  
+          // 头像行只关心 title + image，detail 直接忽略
+          if let title = cfg.title {
+              textLabel?.byText(title)
+          }
+          if let image = cfg.image {
+              avatarView.byImage(image)
+          }
+          return self
+      }
+  }
+  ```
+
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>

@@ -87,4 +87,26 @@ func toastBy(_ string: String) {
         )
     }
 }
+/// 全局通用注册@UITableViewCell及其子类
+extension UITableView {
+    @discardableResult
+    func register() -> Self{
+        self.registerCell(AvatarCell.self)
+        self.registerCell(UITableViewCell.self)
 
+        self.registerCell(BaseTableViewCellByDefault.self)
+        self.registerCell(BaseTableViewCellByValue1.self)
+        self.registerCell(BaseTableViewCellByValue2.self)
+        self.registerCell(BaseTableViewCellBySubtitle.self)
+
+        return self;
+    }
+}
+/// 全局通用注册@UICollectionViewCell及其子类
+extension UICollectionView {
+    @discardableResult
+    func register() -> Self{
+        self.registerCell(UICollectionViewCell.self)
+        return self;
+    }
+}

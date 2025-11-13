@@ -70,3 +70,10 @@ public extension JobsAsyncable {
         }
     }
 }
+// MARK: - 统一的「任意配置」协议
+public protocol JobsConfigCellProtocol: AnyObject {
+    /// any 可以是任意类型（struct / enum / tuple / dict），
+    /// 在具体 cell 里自己去解包。
+    @discardableResult
+    func byConfigure(_ any: Any?) -> Self
+}

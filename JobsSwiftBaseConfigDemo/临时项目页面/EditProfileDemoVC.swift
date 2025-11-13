@@ -21,14 +21,14 @@ private enum EditProfileRow: CaseIterable {
 
     var title: String {
         switch self {
-        case .avatar:     return "Avatar"
-        case .nickname:   return "Nick name"
-        case .gender:     return "Gender"
-        case .sign:       return "Sign"
-        case .birthday:   return "Birthday"
-        case .emotion:    return "Emotion"
-        case .hometown:   return "Hometown"
-        case .profession: return "Profession"
+        case .avatar:     return "头像"
+        case .nickname:   return "昵称"
+        case .gender:     return "性别"
+        case .sign:       return "签名"
+        case .birthday:   return "生日"
+        case .emotion:    return "情感"
+        case .hometown:   return "家乡"
+        case .profession: return "职业"
         }
     }
 
@@ -54,23 +54,18 @@ private enum EditProfileRow: CaseIterable {
     }
 }
 
-// MARK: - VC
 final class EditProfileDemoVC: BaseVC {
-
-    // section0: 头像 + 昵称 + 性别 + 签名
-    // section1: 生日 + 情感 + 家乡 + 职业
+    
     private let sections: [[EditProfileRow]] = [
         [.avatar, .nickname, .gender, .sign],
         [.birthday, .emotion, .hometown, .profession]
     ]
 
-    // MARK: - UI
     private lazy var tableView: UITableView = {
-        UITableView(frame: .zero, style: .insetGrouped)
+        UITableView(frame: .zero, style: .plain)
             .byDataSource(self)
             .byDelegate(self)
-            .registerCell(AvatarCell.self)
-            .registerCell(UITableViewCell.self)
+            .register()
             .byRowHeight(52)
             .byEstimatedRowHeight(52)
             .byNoContentInsetAdjustment()
@@ -86,7 +81,6 @@ final class EditProfileDemoVC: BaseVC {
             }
     }()
 
-    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         jobsSetupGKNav(title: "Edit profile")
@@ -94,7 +88,6 @@ final class EditProfileDemoVC: BaseVC {
         tableView.byVisible(YES)
     }
 }
-
 // MARK: - UITableViewDataSource
 extension EditProfileDemoVC: UITableViewDataSource {
 
@@ -112,34 +105,21 @@ extension EditProfileDemoVC: UITableViewDataSource {
 
         switch row {
         case .avatar:
-            let cell: AvatarCell = tableView.py_dequeueReusableCell(
+            return tableView.py_dequeueReusableCell(
                 withType: AvatarCell.self,
                 for: indexPath
-            )
-            cell.configure(
-                title: row.title,
-                image: UIImage(named: "avatar_placeholder") // 自己换成真实头像
-            )
-            return cell
-
+            ).byConfigure(JobsCellConfig(title: row.title, image: "list.bullet".sysImg))
         default:
-            let cell: UITableViewCell = tableView.py_dequeueReusableCell(
-                withType: UITableViewCell.self,
-                for: indexPath
-            )
-            cell
+            return tableView.py_dequeueReusableCell(withType: BaseTableViewCellByValue1.self, for: indexPath)
+                .byTitleFont(.systemFont(ofSize: 16))
+                .byDetailTitleFont((.systemFont(ofSize: 14)))
                 .bySelectionStyle(.none)
                 .byAccessoryType(.disclosureIndicator)
-                .byText(row.title)
-                .bySecondaryText(row.detail)
-
-            // 分割线稍微往内缩一点
-            cell.bySeparatorInset(.init(top: 0, left: 16, bottom: 0, right: 16))
-            return cell
+                .bySeparatorInset(.init(top: 0, left: 16, bottom: 0, right: 16))
+                .byConfigure(JobsCellConfig(title: row.title,detail:row.detail))
         }
     }
 }
-
 // MARK: - UITableViewDelegate
 extension EditProfileDemoVC: UITableViewDelegate {
 
@@ -169,7 +149,6 @@ extension EditProfileDemoVC: UITableViewDelegate {
         print("tap row: \(row)")
     }
 }
-
 // MARK: - 头像 cell
 final class AvatarCell: UITableViewCell {
 
@@ -177,34 +156,39 @@ final class AvatarCell: UITableViewCell {
         UIImageView()
             .byContentMode(.scaleAspectFill)
             .byClipsToBounds(true)
-            .byCornerRadius(22)   // 44 / 2
+            .byCornerRadius(22)
             .byBgColor(.systemGray5)
+            .byAddTo(contentView) { [unowned self] make in
+                make.size.equalTo(CGSize(width: 44, height: 44))
+                make.centerY.equalToSuperview()
+                // 预留 disclosureIndicator 的空间
+                make.trailing.equalToSuperview().inset(16)
+            }
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
-
-        bySelectionStyle(.none)
-            .byAccessoryType(.disclosureIndicator)
-
-        textLabel?.font = .systemFont(ofSize: 16)
-        textLabel?.textColor = .label
-
-        contentView.addSubview(avatarView)
-        avatarView.snp.makeConstraints { make in
-            make.size.equalTo(CGSize(width: 44, height: 44))
-            make.centerY.equalToSuperview()
-            // 留一点位置给系统的披露箭头
-            make.trailing.equalToSuperview().inset(16 + 24)
-        }
+        textLabel?.byFont(.systemFont(ofSize: 16)).byTextColor(.label)
+        detailTextLabel?.byFont(.systemFont(ofSize: 14)).byTextColor(.secondaryLabel)
+        avatarView.byVisible(YES)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(title: String, image: UIImage?) {
-        textLabel?.text = title
-        avatarView.image = image
+    @discardableResult
+    @objc
+    override func byConfigure(_ any: Any?) -> Self {
+        guard let cfg = any as? JobsCellConfig else { return self }
+        if let title = cfg.title {
+            textLabel?.byText(title)
+        }
+        if let detail = cfg.detail {
+            detailTextLabel?.byText(detail)
+        }
+        if let image = cfg.image {
+            avatarView.byImage(image)
+        };return self
     }
 }

@@ -16,16 +16,7 @@
 import ObjectiveC
 // MARK: - 🍬语法糖@注册：UITableViewCell、HeaderFooterView、HeaderFooterView
 extension UITableView {
-    @discardableResult
-    public func registerCell<T: UITableViewCell>(_ cellClass: T.Type) -> Self {
-        self.register(cellClass, forCellReuseIdentifier: String(describing: cellClass))
-        return self
-    }
-    @discardableResult
-    public func registerCellByID<T: UITableViewCell>(CellCls cellClass: T.Type,ID id:String) -> Self {
-        self.register(cellClass, forCellReuseIdentifier: id)
-        return self
-    }
+    /// 通用注册@类名（类名自己为🆔）
     @discardableResult
     public func py_register(cellClassType: UITableViewCell.Type) -> Self {
         let cellId = cellClassType.className
@@ -33,6 +24,19 @@ extension UITableView {
         self.register(cellClass, forCellReuseIdentifier: cellId)
         return self
     }
+    /// 注册UITableViewCell@（类名自己为🆔）
+    @discardableResult
+    public func registerCell<T: UITableViewCell>(_ cellClass: T.Type) -> Self {
+        self.register(cellClass, forCellReuseIdentifier: String(describing: cellClass))
+        return self
+    }
+    /// 注册UITableViewCell@类名和🆔
+    @discardableResult
+    public func registerCellByID<T: UITableViewCell>(CellCls cellClass: T.Type,ID id:String) -> Self {
+        self.register(cellClass, forCellReuseIdentifier: id)
+        return self
+    }
+    /// 注册UITableViewCell@Nib
     @discardableResult
     public func py_register(cellNibType: UITableViewCell.Type) -> Self{
         let cellId = cellNibType.className
@@ -40,6 +44,7 @@ extension UITableView {
         self.register(cellNib, forCellReuseIdentifier: cellId)
         return self
     }
+    /// 注册UITableViewHeaderFooterView@类名
     @discardableResult
     public func py_register(headerFooterViewClassType: UIView.Type) -> Self{
         let reuseId = headerFooterViewClassType.className
@@ -47,6 +52,7 @@ extension UITableView {
         self.register(viewType, forHeaderFooterViewReuseIdentifier: reuseId)
         return self
     }
+    /// 注册UITableViewHeaderFooterView@Nib
     @discardableResult
     public func py_register(headerFooterViewNibType: UIView.Type) -> Self{
         let reuseId = headerFooterViewNibType.className
@@ -92,14 +98,23 @@ extension UITableView {
 }
 // MARK: - 🍬语法糖@复用
 extension UITableView {
+    /// 快捷复用@UITableViewCell
     public func py_dequeueReusableCell<T: UITableViewCell>(withType cellType: T.Type, for indexPath: IndexPath) -> T {
-        let cy_cellId = cellType.className
-        return self.dequeueReusableCell(withIdentifier: cy_cellId, for: indexPath) as! T
+        let reuseId = cellType.className
+        // 先探测一下有没有为这个 identifier 注册
+        if dequeueReusableCell(withIdentifier: reuseId) == nil {
+            // 没注册就自动注册这个 cellType 自己
+            registerCell(cellType)
+        };return self.dequeueReusableCell(withIdentifier: reuseId, for: indexPath) as! T
     }
-
+    /// 快捷复用@UITableViewHeaderFooterView
     public func py_dequeueReusableHeaderFooterView<T: UIView>(headerFooterViewWithType: T.Type) -> T {
         let reuseId = headerFooterViewWithType.className
-        return self.dequeueReusableHeaderFooterView(withIdentifier: reuseId) as! T
+        // 先探测一下有没有为这个 identifier 注册
+        if dequeueReusableHeaderFooterView(withIdentifier: reuseId) == nil {
+            // 没注册就自动注册这个 cellType 自己
+            py_register(headerFooterViewClassType: headerFooterViewWithType)
+        };return self.dequeueReusableHeaderFooterView(withIdentifier: reuseId) as! T
     }
 }
 // MARK: - 🍬语法糖@UI

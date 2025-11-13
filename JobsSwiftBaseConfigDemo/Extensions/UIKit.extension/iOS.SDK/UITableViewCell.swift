@@ -126,10 +126,18 @@ public extension UITableViewCell {
     @discardableResult
     func byContentConfiguration(_ build: (inout UIListContentConfiguration) -> Void,
                                 automaticallyUpdates: Bool = false) -> Self {
-        var cfg = self.defaultContentConfiguration()
+        // ✅ 优先基于当前的 configuration 继续修改，避免每次重建把之前的覆盖掉
+        var cfg: UIListContentConfiguration
+        if let current = contentConfiguration as? UIListContentConfiguration {
+            cfg = current
+        } else {
+            cfg = defaultContentConfiguration()
+        }
+
         build(&cfg)
-        self.automaticallyUpdatesContentConfiguration = automaticallyUpdates
-        self.contentConfiguration = cfg
+
+        automaticallyUpdatesContentConfiguration = automaticallyUpdates
+        contentConfiguration = cfg
         return self
     }
     /// 文本
@@ -241,5 +249,87 @@ public extension UITableViewCell {
     static func make(style: UITableViewCell.CellStyle = .default,
                      reuseIdentifier: String? = nil) -> UITableViewCell {
         UITableViewCell(style: style, reuseIdentifier: reuseIdentifier ?? String(describing: self))
+    }
+}
+
+public extension UITableViewCell {
+
+    // ================================== 标题字体 ==================================
+    @discardableResult
+    func byTitleFont(_ font: UIFont) -> Self {
+        if #available(iOS 14.0, *) {
+            return byContentConfiguration { cfg in
+                cfg.textProperties.font = font
+            }
+        } else {
+            // ✅ iOS 13-
+            textLabel?.font = font
+            return self
+        }
+    }
+
+    // ================================== 副标题字体 ==================================
+    @discardableResult
+    func byDetailTitleFont(_ font: UIFont) -> Self {
+        if #available(iOS 14.0, *) {
+            return byContentConfiguration { cfg in
+                cfg.secondaryTextProperties.font = font
+            }
+        } else {
+            detailTextLabel?.font = font
+            return self
+        }
+    }
+
+    // ================================== 标题颜色 ==================================
+    @discardableResult
+    func byTitleCor(_ cor: UIColor) -> Self {
+        if #available(iOS 14.0, *) {
+            return byContentConfiguration { cfg in
+                cfg.textProperties.color = cor
+            }
+        } else {
+            textLabel?.textColor = cor
+            return self
+        }
+    }
+
+    // ================================== 副标题颜色 ==================================
+    @discardableResult
+    func byDetailTitleCor(_ cor: UIColor) -> Self {
+        if #available(iOS 14.0, *) {
+            return byContentConfiguration { cfg in
+                cfg.secondaryTextProperties.color = cor
+            }
+        } else {
+            detailTextLabel?.textColor = cor
+            return self
+        }
+    }
+}
+
+extension UITableViewCell: JobsConfigCellProtocol {
+    @discardableResult
+    @objc
+    public func byConfigure(_ any: Any?) -> Self {
+        // 如果不是给普通 value1 用的，直接忽略
+        guard let cfg = any as? JobsCellConfig else { return self }
+        if #available(iOS 14.0, *) {
+            return self
+                .byText(cfg.title)
+                .bySecondaryText(cfg.detail)
+                .byImage(cfg.image)
+        } else {
+            // 旧系统依赖 textLabel / detailTextLabel
+            if let title = cfg.title {
+                textLabel?.byText(title)
+            }
+            if let detail = cfg.detail {
+                detailTextLabel?.byText(detail)
+            }
+            if let image = cfg.image {
+                imageView?.byImage(image)
+            };return self
+        }
     }
 }
