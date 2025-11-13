@@ -21,7 +21,6 @@ public extension BRTextPickerView {
     @discardableResult func brOnSingle(_ block: @escaping (BRTextModel?, Int) -> Void) -> Self { singleResultBlock = block; return self }
     @discardableResult func brOnMulti(_ block: @escaping ([BRTextModel], [Int]) -> Void) -> Self { multiResultBlock = block; return self }
     @discardableResult func brOnCascade(_ block: @escaping ([BRTextModel], [Int]) -> Void) -> Self { cascadeResultBlock = block; return self }
-
     /// 链式展示（避免与 `present(in:)` 冲突）
     @discardableResult func brPresent(in container: UIView? = nil) -> Self { present(in: container); return self }
 }

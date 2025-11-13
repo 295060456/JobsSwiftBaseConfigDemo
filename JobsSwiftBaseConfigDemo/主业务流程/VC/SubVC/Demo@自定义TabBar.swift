@@ -80,24 +80,14 @@ final class TabBarDemoVC: BaseVC {
                             } else {
                                 sender.removeCornerBadge()
                             }
-                            JobsToast.show(
-                                text: "优惠@点按事件",
-                                config: JobsToast.Config()
-                                    .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                                    .byCornerRadius(12)
-                            )
+                            toastBy("优惠@点按事件")
                         }
                         /// 事件触发@长按
                         .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                              if gr.state == .began {
                                  btn.alpha = 0.6
                                  print("长按开始 on \(btn)")
-                                 JobsToast.show(
-                                     text: "优惠@长按事件",
-                                     config: JobsToast.Config()
-                                         .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                                         .byCornerRadius(12)
-                                 )
+                                 toastBy("优惠@长按事件")
                              } else if gr.state == .ended || gr.state == .cancelled {
                                  btn.alpha = 1.0
                                  print("长按结束")

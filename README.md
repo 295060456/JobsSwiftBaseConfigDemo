@@ -8210,6 +8210,37 @@ let b = v as! UIButton                  // 若不是 UIButton 会崩溃
     let token = UInt64.random(in: .min... .max, using: &sec)
     ```
 
+### 34、Task <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 函数本身就只在主线程用（推荐）
+
+  ```swift
+  @MainActor
+  func toastBy(_ string: String) {
+      JobsToast.show(
+          text: string,
+          config: JobsToast.Config()
+              .byBgColor(.systemGreen.withAlphaComponent(0.9))
+              .byCornerRadius(12)
+      )
+  }
+  ```
+
+* 允许任意线程调用这个方法
+
+  ```swift
+  func toastBy(_ string: String) {
+      Task { @MainActor in
+          JobsToast.show(
+              text: string,
+              config: JobsToast.Config()
+                  .byBgColor(.systemGreen.withAlphaComponent(0.9))
+                  .byCornerRadius(12)
+          )
+      }
+  }
+  ```
+
 ## 五、<font color=red>**F**</font><font color=green>**A**</font><font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、[**Swift**](https://developer.apple.com/swift/) 纯类 🆚 `NSObject` 子类 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>

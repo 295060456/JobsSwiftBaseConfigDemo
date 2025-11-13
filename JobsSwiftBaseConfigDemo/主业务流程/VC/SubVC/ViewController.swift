@@ -20,13 +20,8 @@ class ViewController: UIViewController {
     deinit {
         // 清理资源
         print("deinit")
-//        Task { @MainActor in
-//            JobsToast.show(
-//                text: "当前控制器销毁成功",
-//                config: JobsToast.Config()
-//                    .byBgColor(.systemGreen.withAlphaComponent(0.9))
-//                    .byCornerRadius(12)
-//            )
+//        debugOnly {  // 仅 Debug 执行
+//            toastBy("当前控制器销毁成功")
 //        }
     }
 

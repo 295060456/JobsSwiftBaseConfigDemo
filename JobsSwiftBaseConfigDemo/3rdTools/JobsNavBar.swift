@@ -269,12 +269,7 @@ public class JobsNavBar: UIView {
             onBack()
         } else {
             debugOnly {  // 仅 Debug 执行
-                JobsToast.show(
-                    text: "Hello",
-                    config: JobsToast.Config()
-                        .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                        .byCornerRadius(12)
-                )
+                toastBy("Hello")
             }
         }
     }

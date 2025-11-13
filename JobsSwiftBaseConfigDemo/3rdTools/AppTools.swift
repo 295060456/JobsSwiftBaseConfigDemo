@@ -54,15 +54,6 @@ public struct AppLaunchManager {
         return kind
     }
 }
-@MainActor
- public func showToast(_ text: String) {
-     JobsToast.show(
-         text: text,
-         config: JobsToast.Config()
-             .byBgColor(.systemGreen.withAlphaComponent(0.9))
-             .byCornerRadius(12)
-     )
-}
 // MARK: - 关于时间格式化
 public func nowClock() -> String {
     DateFormatter()
@@ -84,3 +75,16 @@ public func isHttpURL(_ raw: String?) -> Bool {
     let p = s.lowercased()
     return p.hasPrefix("http://") || p.hasPrefix("https://")
 }
+
+func toastBy(_ string: String) {
+    /// 允许任意线程调用这个方法
+    Task { @MainActor in
+        JobsToast.show(
+            text: string,
+            config: JobsToast.Config()
+                .byBgColor(.systemGreen.withAlphaComponent(0.9))
+                .byCornerRadius(12)
+        )
+    }
+}
+

@@ -104,20 +104,12 @@ final class PDFDemoVC: BaseVC {
         }
 
         guard let url = bundleURL ?? docsURL else {
-            JobsToast.show(
-                text: "未找到 \(resourceName).\(fileExtension)\n请将文件放入 Bundle 或 Documents 目录。",
-                config: JobsToast.Config()
-                    .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                    .byCornerRadius(12)
-            );return
+            toastBy("未找到 \(resourceName).\(fileExtension)\n请将文件放入 Bundle 或 Documents 目录。")
+            return
         }
         guard let doc = PDFDocument(url: url) else {
-            JobsToast.show(
-                text: "无法打开 PDF：\(url.lastPathComponent)",
-                config: JobsToast.Config()
-                    .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                    .byCornerRadius(12)
-            );return
+            toastBy("无法打开 PDF：\(url.lastPathComponent)")
+            return
         }
 
         loadedURL = url

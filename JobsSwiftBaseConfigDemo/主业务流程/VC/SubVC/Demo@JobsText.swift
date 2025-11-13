@@ -185,10 +185,10 @@ final class JobsTextDemoVC: BaseVC {
 
     private func onExportRTF() {
         guard let data = current.rtfData() else {
-            showTip("RTF 导出失败")
+            toastBy("RTF 导出失败")
             return
         }
-        showTip("RTF 导出成功（\(data.count) bytes）")
+        toastBy("RTF 导出成功（\(data.count) bytes）")
         history.append(current) // 简单留存，供“导入”演示
     }
 
@@ -197,7 +197,7 @@ final class JobsTextDemoVC: BaseVC {
         if let last = history.last, let data = last.rtfData(),
            let restored = JobsText.from(data: data) {
             current = restored
-            showTip("已从 RTF 恢复")
+            toastBy("已从 RTF 恢复")
             refresh()
         } else {
             let html = """
@@ -209,10 +209,10 @@ final class JobsTextDemoVC: BaseVC {
                    .characterEncoding: String.Encoding.utf8.rawValue
                ]) {
                 current = restored
-                showTip("已从 HTML 恢复")
+                toastBy("已从 HTML 恢复")
                 refresh()
             } else {
-                showTip("RTF/HTML 导入失败")
+                toastBy("RTF/HTML 导入失败")
             }
         }
     }
@@ -253,14 +253,5 @@ final class JobsTextDemoVC: BaseVC {
             lines.append("  - range: \(range.location)..<\(range.location + range.length), attrs: \(attrs)")
         }
         return lines.joined(separator: "\n")
-    }
-
-    private func showTip(_ msg: String) {
-        JobsToast.show(
-            text: msg,
-            config: JobsToast.Config()
-                .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                .byCornerRadius(12)
-        )
     }
 }

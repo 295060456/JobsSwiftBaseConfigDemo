@@ -90,12 +90,7 @@ final class BaseWebViewDemoVC: BaseVC {
             }
             .registerMobileAction("showToast") {  [weak self] body, reply in
                 /// 显示Toast
-                JobsToast.show(
-                    text: body.stringValue(for: "message") ?? "",
-                    config: JobsToast.Config()
-                        .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                        .byCornerRadius(12)
-                )
+                toastBy(body.stringValue(for: "message") ?? "")
                 reply(nil)
             }
     }()

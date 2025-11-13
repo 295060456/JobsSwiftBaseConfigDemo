@@ -148,12 +148,7 @@ final class FSPopoverDemoVC: BaseVC {
             it.isSeparatorHidden = false
             it.selectedHandler = { item in
                 guard let i = item as? FSPopoverListTextItem else { return }
-                JobsToast.show(
-                    text: "点击：\(i.title ?? "")",
-                    config: JobsToast.Config()
-                        .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                        .byCornerRadius(12)
-                )
+                toastBy("点击：\(i.title ?? "")")
             }
             it.updateLayout()
             return it

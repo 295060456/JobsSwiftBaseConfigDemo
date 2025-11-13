@@ -50,50 +50,27 @@ final class ToastDemoVC: BaseVC {
 
         // 1) 默认：1s、底部偏移120
         addButton("默认 Toast（“谢谢光临”）") {
-            JobsToast.show(text: "谢谢光临")
+            toastBy("谢谢光临")
         }
 
         // 2) 自定义时长/位置（链式 Config）
         addButton("时长2.5s / 底部偏移80") {
-            JobsToast.show(
-                text: "操作成功",
-                config: JobsToast.Config()
-                    .byDuration(2.5)
-                    .byBottomOffset(80)
-            )
+            toastBy("操作成功")
         }
 
         // 3) 自定义样式：绿色背景 + 圆角12
         addButton("绿色圆角 Toast") {
-            JobsToast.show(
-                text: "保存成功",
-                config: JobsToast.Config()
-                    .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                    .byCornerRadius(12)
-            )
+            toastBy("保存成功")
         }
 
         // 4) 可点击（按钮作为内容，tap 回调）
         addButton("可点击 Toast（撤销）") {
-            JobsToast.show(
-                text: "点我撤销",
-                tap: { _ in
-                    print("🫳 撤销一次")
-                },
-                completion: {
-                    print("✅ 点击或超时后消失")
-                }
-            )
+            toastBy("点我撤销")
         }
 
         // 5) 大内边距（更宽的背景气泡）
         addButton("大 padding Toast") {
-            JobsToast.show(
-                text: "大 padding",
-                config: JobsToast.Config()
-                    .byHorizontalPadding(24)
-                    .byVerticalPadding(14)
-            )
+            toastBy("大 padding")
         }
 
         // 6) 手动提前关闭（先弹再 1s 后主动 dismiss）

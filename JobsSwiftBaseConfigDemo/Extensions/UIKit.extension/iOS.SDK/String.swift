@@ -342,12 +342,7 @@ public extension String {
         // ================== 模拟器环境直接拦截 ==================
         print("📵 模拟器不支持拨号功能")
         Task { @MainActor in
-            JobsToast.show(
-                text: "模拟器不支持拨号功能",
-                config: JobsToast.Config()
-                    .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                    .byCornerRadius(12)
-            )
+            toastBy("模拟器不支持拨号功能")
         }
         completion?(.cannotOpen)
         return .cannotOpen

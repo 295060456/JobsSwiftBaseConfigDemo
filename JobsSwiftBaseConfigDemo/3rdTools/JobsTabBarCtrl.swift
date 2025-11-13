@@ -312,12 +312,7 @@ final class JobsTabBarCtrl: BaseVC, UIScrollViewDelegate {
     }
 
     private func showNoControllerToast() {
-        JobsToast.show(
-            text: "请配置子控制器",
-            config: JobsToast.Config()
-                .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                .byCornerRadius(12)
-        )
+        toastBy("请配置子控制器")
     }
 
     private func applySelectionState(animated: Bool) {

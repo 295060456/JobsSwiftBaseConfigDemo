@@ -68,7 +68,7 @@
 		043283AB2EC49FED0031CDD6 /* BRDatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283AA2EC49FED0031CDD6 /* BRDatePickerView.swift */; };
 		043283AD2EC4A0540031CDD6 /* BRPicker+DSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283AC2EC4A0530031CDD6 /* BRPicker+DSL.swift */; };
 		043283AF2EC4A0630031CDD6 /* UIButton+BRPickerAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283AE2EC4A0620031CDD6 /* UIButton+BRPickerAdditions.swift */; };
-		043283B12EC4A08B0031CDD6 /* BRPickerAllJobsDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283B02EC4A08A0031CDD6 /* BRPickerAllJobsDemoVC.swift */; };
+		043283B12EC4A08B0031CDD6 /* Demo@BRPickerViewSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283B02EC4A08A0031CDD6 /* Demo@BRPickerViewSwift.swift */; };
 		043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043838A12EAA4BB3007BA552 /* BaseWebVC.swift */; };
 		043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */; };
 		0440B5572EB2370E005DBE91 /* SnowflakeSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */; };
@@ -366,7 +366,7 @@
 		043283AA2EC49FED0031CDD6 /* BRDatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BRDatePickerView.swift; sourceTree = "<group>"; };
 		043283AC2EC4A0530031CDD6 /* BRPicker+DSL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BRPicker+DSL.swift"; sourceTree = "<group>"; };
 		043283AE2EC4A0620031CDD6 /* UIButton+BRPickerAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+BRPickerAdditions.swift"; sourceTree = "<group>"; };
-		043283B02EC4A08A0031CDD6 /* BRPickerAllJobsDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BRPickerAllJobsDemoVC.swift; sourceTree = "<group>"; };
+		043283B02EC4A08A0031CDD6 /* Demo@BRPickerViewSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@BRPickerViewSwift.swift"; sourceTree = "<group>"; };
 		043838A12EAA4BB3007BA552 /* BaseWebVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWebVC.swift; sourceTree = "<group>"; };
 		043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProtocolDefs.swift; sourceTree = "<group>"; };
 		0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnowflakeSwift.swift; sourceTree = "<group>"; };
@@ -741,8 +741,8 @@
 		0432838B2EC48BD60031CDD6 /* Demo@SkeletonView */ = {
 			isa = PBXGroup;
 			children = (
-				0432838C2EC48BE50031CDD6 /* SkeletonUserCell.swift */,
 				043283872EC4804A0031CDD6 /* Demo@SkeletonView.swift */,
+				0432838C2EC48BE50031CDD6 /* SkeletonUserCell.swift */,
 			);
 			path = "Demo@SkeletonView";
 			sourceTree = "<group>";
@@ -1019,7 +1019,6 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
-				043283B02EC4A08A0031CDD6 /* BRPickerAllJobsDemoVC.swift */,
 				0432838E2EC48DE00031CDD6 /* Demo@中国大陆居民身份证验证 */,
 				0432838B2EC48BD60031CDD6 /* Demo@SkeletonView */,
 				0432837E2EC478C60031CDD6 /* Demo@SwiftEntryKit */,
@@ -1032,9 +1031,11 @@
 				04124F2B2EB0621D00462BE2 /* Demo@Moya */,
 				0424625B2EBB020E00D6BFCC /* Demo@Texture.swift */,
 				042462592EBAFCD500D6BFCC /* Demo@ComponentKit.swift */,
+				043283B02EC4A08A0031CDD6 /* Demo@BRPickerViewSwift.swift */,
 				043283852EC47F1B0031CDD6 /* Demo@FSPopoverView.swift */,
 				04C442A52EB8B935008E0F09 /* Demo@Lottie.swift */,
 				04B00E472EB21F0800901B1C /* Demo@LiveChat.swift */,
+				0477D9782E8BADB1002C6427 /* Demo@被Push或者Present的次级页面.swift */,
 				04C4428D2EB86CAB008E0F09 /* Demo@PDF.swift */,
 				047E9A702EB618B300F58923 /* Demo@Lunar.swift */,
 				047E9A722EB6217000F58923 /* Demo@XLSX.swift */,
@@ -1358,7 +1359,6 @@
 			isa = PBXGroup;
 			children = (
 				04A8C54D2E8AA9F800381701 /* Demo@功能列表根目录.swift */,
-				0477D9782E8BADB1002C6427 /* Demo@被Push或者Present的次级页面.swift */,
 				04A8C54F2E8AA9FF00381701 /* SubVC */,
 			);
 			path = VC;
@@ -1867,7 +1867,7 @@
 				046CF9772E967E6C005A88B4 /* URL.swift in Sources */,
 				047E9A712EB618B300F58923 /* Demo@Lunar.swift in Sources */,
 				04D0C9792E8D066900580020 /* Demo@图片加载.swift in Sources */,
-				043283B12EC4A08B0031CDD6 /* BRPickerAllJobsDemoVC.swift in Sources */,
+				043283B12EC4A08B0031CDD6 /* Demo@BRPickerViewSwift.swift in Sources */,
 				047E48F12EB36A3F00881898 /* MTLRenderPipelineDescriptor.swift in Sources */,
 				043283A52EC49F830031CDD6 /* BRPickerStyle.swift in Sources */,
 				045920F62E854F8C008C8D6A /* Int16.swift in Sources */,

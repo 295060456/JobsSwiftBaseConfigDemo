@@ -13,12 +13,7 @@ class BaseVC: UIViewController {
         // 清理资源
         print("deinit")
         debugOnly {  // 仅 Debug 执行
-            JobsToast.show(
-                text: "当前控制器销毁成功",
-                config: JobsToast.Config()
-                    .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                    .byCornerRadius(12)
-            )
+            toastBy("当前控制器销毁成功")
         }
     }
     override func viewDidLoad() {

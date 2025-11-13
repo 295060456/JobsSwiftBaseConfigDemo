@@ -22,6 +22,7 @@ final class RootListVC: BaseVC {
             ("✍️ UITextField", UITextFieldDemoVC.self),
             ("✍️ UITextView", UITextViewDemoVC.self),
             ("📌 自定义注解", 自定义注解Demo.self),
+            ("🍚 选择器", BRPickerDemoVC.self),
             ("📅 日历", LunarDemoVC.self),
             ("📊 Excel", XLSXDemoVC.self),
             ("🌘 滚动留言", LiveCommentDemoVC.self),
@@ -47,7 +48,6 @@ final class RootListVC: BaseVC {
             ("📹 播放器@BMPlayer", BMPlayerDemoVC.self),
             ("📹 播放器@PNPlayer", PNPlayerDemoVC.self),
             ("❄️ 雪花算法", SnowflakeDemoVC.self),
-            ("🍚 选择器", BRPickerDemoVC.self),
             ("💬 LiveChat", LiveChatDemoVC.self),
             ("🗄️ UITableView", EmptyTableViewDemoVC.self),
             ("🗄️ UICollectionView", EmptyCollectionViewDemoVC.self),
@@ -108,22 +108,12 @@ final class RootListVC: BaseVC {
             .onLongPress(minimumPressDuration: 0.8) { btn, gr in
 //                if gr.state == .began { btn.alpha = 0.6 }
 //                else if gr.state == .ended || gr.state == .cancelled { btn.alpha = 1.0 }
-                JobsToast.show(
-                    text: "长按了悬浮按钮",
-                    config: JobsToast.Config()
-                        .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                        .byCornerRadius(12)
-                )
+                toastBy("长按了悬浮按钮")
             }
             // 点击开始：不传 total => 正计时
             .onTap { [weak self] btn in
                 guard let self else { return }
-                JobsToast.show(
-                    text: "点击了悬浮按钮",
-                    config: JobsToast.Config()
-                        .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                        .byCornerRadius(12)
-                )
+                toastBy("点击了悬浮按钮")
 //                btn.startTimer(total: nil,
 //                               interval: 1.0,
 //                               kind: .gcd)
@@ -163,12 +153,7 @@ final class RootListVC: BaseVC {
             }
             // 长按：原逻辑
             .onLongPress(minimumPressDuration: 0.8) { btn, _ in
-                JobsToast.show(
-                    text: "长按了悬浮按钮",
-                    config: JobsToast.Config()
-                        .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                        .byCornerRadius(12)
-                )
+                toastBy("长按了悬浮按钮")
             }
             // 点击：保持原来的 Toast（不改动计时逻辑）
             .onTap { [weak self] btn in
@@ -180,20 +165,14 @@ final class RootListVC: BaseVC {
                     // 暂停计时（保留已累计秒，不重置）
                     btn.timer?.pause()        // ✅ 推荐：你的统一内核挂在 button.timer 上
                     // 如果你有封装方法，则用：btn.pauseTimer()
-                    JobsToast.show(
-                        text: "已暂停旋转 & 计时",
-                        config: .init().byBgColor(.systemGreen.withAlphaComponent(0.9)).byCornerRadius(12)
-                    )
+                    toastBy("已暂停旋转 & 计时")
                 } else {
                     // 恢复旋转
                     btn.bySpinStart()
                     // 恢复计时（从暂停处继续累加）
                     btn.timer?.resume()       // ✅ 推荐
                     // 如果你有封装方法，则用：btn.resumeTimer()
-                    JobsToast.show(
-                        text: "继续旋转 & 计时",
-                        config: .init().byBgColor(.systemGreen.withAlphaComponent(0.9)).byCornerRadius(12)
-                    )
+                    toastBy("继续旋转 & 计时")
                 }
             }
             // 悬浮配置
@@ -259,12 +238,7 @@ final class RootListVC: BaseVC {
                 .onTap { sender in
                     sender.isSelected.toggle()
                     debugOnly {  // 仅 Debug 执行
-                        JobsToast.show(
-                            text: "点按了列表按钮",
-                            config: JobsToast.Config()
-                                .byBgColor(.systemGreen.withAlphaComponent(0.9))
-                                .byCornerRadius(12)
-                        )
+                        toastBy("点按了列表按钮")
                     }
                 }
                 /// 事件触发@长按

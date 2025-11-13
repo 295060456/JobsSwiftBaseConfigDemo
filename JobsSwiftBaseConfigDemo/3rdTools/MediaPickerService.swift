@@ -18,9 +18,8 @@ public final class MediaPickerService: NSObject {
         PermissionCenter.ensure(.camera, from: presenter) {
             guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
                 onMain {
-                    showToast("此设备不支持相机")
-                }
-                return
+                   toastBy("此设备不支持相机")
+                };return
             }
             onMain {
                 let proxy = CameraProxy(allowsEditing: allowsEditing, completion: onImage)
@@ -74,7 +73,7 @@ public final class MediaPickerService: NSObject {
             PermissionCenter.ensure(.microphone, from: presenter) {
 
                 guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-                    Task { @MainActor in showToast("此设备不支持相机") }
+                    toastBy("此设备不支持相机")
                     return
                 }
                 // 1) 能力检查：是否支持录视频 UTI
@@ -84,7 +83,7 @@ public final class MediaPickerService: NSObject {
                 }()
                 let supported = UIImagePickerController.availableMediaTypes(for: .camera) ?? []
                 guard supported.contains(movieUTI) else {
-                    Task { @MainActor in showToast("此设备不支持视频录制") }
+                    toastBy("此设备不支持视频录制")
                     return
                 }
                 // 2) 能力检查：哪个摄像头支持 video
@@ -106,8 +105,10 @@ public final class MediaPickerService: NSObject {
                     return nil
                 }()
                 guard let device = chooseDevice else {
-                    Task { @MainActor in showToast("未检测到可用摄像头用于录制") }
-                    return
+                    Task{
+                        @MainActor in
+                        toastBy("未检测到可用摄像头用于录制")
+                    };return
                 }
                 // 3) 顺序很重要：先 mediaTypes，后 cameraCaptureMode
                 onMain {
