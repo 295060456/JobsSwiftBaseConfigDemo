@@ -10,6 +10,8 @@ import AppKit
 #elseif os(iOS) || os(tvOS)
 import UIKit
 #endif
+
+import SwiftEntryKit
 // MARK: 🔔 通用弹窗提示
 public func presentAlert(for urlString: String, on textView: UITextView) {
     let alert = UIAlertController(
@@ -108,5 +110,39 @@ extension UICollectionView {
     func register() -> Self{
         self.registerCell(UICollectionViewCell.self)
         return self;
+    }
+}
+
+public func makeEKAttributes() -> EKAttributes{
+    let anim = EKAttributes.animScaleInFadeOut
+    return EKAttributes()
+        .byPosition(.center)
+        .byDuration(.infinity)  // 交互型：不自动消失
+        // 统一交给 EK 控制外观
+        .byBackground(.color(color: EKColor(.secondarySystemBackground)))
+        .byCorner(radius: 14)
+        .byShadow()
+        // 外部点击无效，必须点按钮
+        .byEntryInteraction(.absorbTouches)
+        .byScreenInteraction(.forward)
+        // 给一点儿半透明遮罩增强聚焦，但不响应关闭
+        .byScreen(.color(color: EKColor(UIColor(white: 0, alpha: 0.15))))
+        .byDisplayMode(.inferred)
+        .byStatusBar(.inferred)
+        .byEntrance(anim.entrance)
+        .byExit(anim.exit)
+}
+/// 分割线
+extension UIView {
+    /// 在指定 view 下方添加一条分割线，添加到当前 view（self）上
+    @discardableResult
+    func makeSeparator(below view:UIView ,offset t:CGFloat = 0.0) -> UIView {
+        UIView()
+            .byBgColor("#3C3C431F".cor)
+            .byAddTo(self) { make in
+                make.height.equalTo(0.6)
+                make.top.equalTo(view.snp_bottomMargin).offset(t)
+                make.left.right.equalToSuperview()
+            }
     }
 }

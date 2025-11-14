@@ -137,9 +137,17 @@ extension EditProfileDemoVC: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView,
                    viewForHeaderInSection section: Int) -> UIView? {
-        let v = UIView()
-        v.backgroundColor = .clear
-        return v
+        UIView().byBgColor(.clear)
+    }
+
+    func tipsGrantPermission(){
+        SwiftEntryKit.display(
+            entry: TipsGrantPermissionView().onConfirm {
+                print("去开启")
+                SwiftEntryKit.dismiss(.all)
+            },
+            using: makeEKAttributes().bySize(width: .constant(value: 326.w), height: .constant(value: 206.h))
+        )
     }
 
     func tableView(_ tableView: UITableView,
@@ -148,24 +156,34 @@ extension EditProfileDemoVC: UITableViewDelegate {
         let row = sections[indexPath.section][indexPath.row]
         switch row {
         case .avatar:
-            let anim = EKAttributes.animScaleInFadeOut
-            let attr = EKAttributes()
-                .byPosition(.center)
-                .bySize(width: .constant(value: 340.w), height: .constant(value: 217.h))
-                .byDuration(.infinity)  // 交互型：不自动消失
-                // 统一交给 EK 控制外观
-                .byBackground(.color(color: EKColor(.secondarySystemBackground)))
-                .byCorner(radius: 14)
-                .byShadow()
-                // 外部点击无效，必须点按钮
-                .byEntryInteraction(.absorbTouches)
-                .byScreenInteraction(.forward)
-                // 给一点儿半透明遮罩增强聚焦，但不响应关闭
-                .byScreen(.color(color: EKColor(UIColor(white: 0, alpha: 0.15))))
-                .byDisplayMode(.inferred)
-                .byStatusBar(.inferred)
-                .byEntrance(anim.entrance).byExit(anim.exit)
-
+            SwiftEntryKit.display(
+                entry: PhotoPermissionAlertView()
+                    .onLimited {
+                        print("有限访问")
+                        SwiftEntryKit.dismiss{ [weak self] in
+                            guard let self else { return }
+                            tipsGrantPermission()
+                        }
+                    }
+                    .onFull {
+                        print("全部允许")
+                        SwiftEntryKit.dismiss()
+                    }
+                    .onDeny {
+                        print("不允许")
+                        SwiftEntryKit.dismiss()
+                    },
+                using: makeEKAttributes().bySize(width: .constant(value: 340.w), height: .constant(value: 217.h))
+            )
+        case .nickname:
+            SwiftEntryKit.display(
+                entry: TipsGrantPermissionView().onConfirm {
+                    print("去开启")
+                    SwiftEntryKit.dismiss(.all)
+                },
+                using: makeEKAttributes().bySize(width: .constant(value: 326.w), height: .constant(value: 206.h))
+            )
+        case .gender:
             SwiftEntryKit.display(
                 entry: PhotoPermissionAlertView()
                     .onLimited {
@@ -180,163 +198,93 @@ extension EditProfileDemoVC: UITableViewDelegate {
                         print("不允许")
                         SwiftEntryKit.dismiss()
                     },
-                using: attr
+                using: makeEKAttributes()
             )
-        case .nickname:
-            var attr = EKAttributes()
-                .byPosition(.center)
-                .bySize(width: .constant(value: 340.w), height: .constant(value: 270.h))
-                .byDuration(.infinity)  // 交互型：不自动消失
-                // 统一交给 EK 控制外观
-                .byBackground(.color(color: EKColor(.secondarySystemBackground)))
-                .byCorner(radius: 14)
-                .byShadow()
-                // 外部点击无效，必须点按钮
-                .byEntryInteraction(.absorbTouches)
-                .byScreenInteraction(.forward)
-                // 给一点儿半透明遮罩增强聚焦，但不响应关闭
-                .byScreen(.color(color: EKColor(UIColor(white: 0, alpha: 0.15))))
-                .byDisplayMode(.inferred)
-                .byStatusBar(.inferred)
-
-            let anim = EKAttributes.animScaleInFadeOut
-            attr = attr.byEntrance(anim.entrance).byExit(anim.exit)
-
-            SwiftEntryKit.display(entry: PhotoPermissionAlertView().onConfirm {
-                SwiftEntryKit.dismiss()
-            },using: attr)
-        case .gender:
-            var attr = EKAttributes()
-                .byPosition(.center)
-                .byDuration(.infinity)  // 交互型：不自动消失
-                // 统一交给 EK 控制外观
-                .byBackground(.color(color: EKColor(.secondarySystemBackground)))
-                .byCorner(radius: 14)
-                .byShadow()
-                // 外部点击无效，必须点按钮
-                .byEntryInteraction(.absorbTouches)
-                .byScreenInteraction(.forward)
-                // 给一点儿半透明遮罩增强聚焦，但不响应关闭
-                .byScreen(.color(color: EKColor(UIColor(white: 0, alpha: 0.15))))
-                .byDisplayMode(.inferred)
-                .byStatusBar(.inferred)
-
-            let anim = EKAttributes.animScaleInFadeOut
-            attr = attr.byEntrance(anim.entrance).byExit(anim.exit)
-
-            SwiftEntryKit.display(entry: PhotoPermissionAlertView().onConfirm {
-                SwiftEntryKit.dismiss()
-            },using: attr)
         case .sign:
-            var attr = EKAttributes()
-                .byPosition(.center)
-                .byDuration(.infinity)  // 交互型：不自动消失
-                // 统一交给 EK 控制外观
-                .byBackground(.color(color: EKColor(.secondarySystemBackground)))
-                .byCorner(radius: 14)
-                .byShadow()
-                // 外部点击无效，必须点按钮
-                .byEntryInteraction(.absorbTouches)
-                .byScreenInteraction(.forward)
-                // 给一点儿半透明遮罩增强聚焦，但不响应关闭
-                .byScreen(.color(color: EKColor(UIColor(white: 0, alpha: 0.15))))
-                .byDisplayMode(.inferred)
-                .byStatusBar(.inferred)
-
-            let anim = EKAttributes.animScaleInFadeOut
-            attr = attr.byEntrance(anim.entrance).byExit(anim.exit)
-
-            SwiftEntryKit.display(entry: PhotoPermissionAlertView().onConfirm {
-                SwiftEntryKit.dismiss()
-            },using: attr)
+            SwiftEntryKit.display(
+                entry: PhotoPermissionAlertView()
+                    .onLimited {
+                        print("有限访问")
+                        SwiftEntryKit.dismiss()
+                    }
+                    .onFull {
+                        print("全部允许")
+                        SwiftEntryKit.dismiss()
+                    }
+                    .onDeny {
+                        print("不允许")
+                        SwiftEntryKit.dismiss()
+                    },
+                using: makeEKAttributes()
+            )
         case .birthday:
-            var attr = EKAttributes()
-                .byPosition(.center)
-                .byDuration(.infinity)  // 交互型：不自动消失
-                // 统一交给 EK 控制外观
-                .byBackground(.color(color: EKColor(.secondarySystemBackground)))
-                .byCorner(radius: 14)
-                .byShadow()
-                // 外部点击无效，必须点按钮
-                .byEntryInteraction(.absorbTouches)
-                .byScreenInteraction(.forward)
-                // 给一点儿半透明遮罩增强聚焦，但不响应关闭
-                .byScreen(.color(color: EKColor(UIColor(white: 0, alpha: 0.15))))
-                .byDisplayMode(.inferred)
-                .byStatusBar(.inferred)
-
-            let anim = EKAttributes.animScaleInFadeOut
-            attr = attr.byEntrance(anim.entrance).byExit(anim.exit)
-
-            SwiftEntryKit.display(entry: PhotoPermissionAlertView().onConfirm {
-                SwiftEntryKit.dismiss()
-            },using: attr)
+            SwiftEntryKit.display(
+                entry: PhotoPermissionAlertView()
+                    .onLimited {
+                        print("有限访问")
+                        SwiftEntryKit.dismiss()
+                    }
+                    .onFull {
+                        print("全部允许")
+                        SwiftEntryKit.dismiss()
+                    }
+                    .onDeny {
+                        print("不允许")
+                        SwiftEntryKit.dismiss()
+                    },
+                using: makeEKAttributes()
+            )
         case .emotion:
-            var attr = EKAttributes()
-                .byPosition(.center)
-                .byDuration(.infinity)  // 交互型：不自动消失
-                // 统一交给 EK 控制外观
-                .byBackground(.color(color: EKColor(.secondarySystemBackground)))
-                .byCorner(radius: 14)
-                .byShadow()
-                // 外部点击无效，必须点按钮
-                .byEntryInteraction(.absorbTouches)
-                .byScreenInteraction(.forward)
-                // 给一点儿半透明遮罩增强聚焦，但不响应关闭
-                .byScreen(.color(color: EKColor(UIColor(white: 0, alpha: 0.15))))
-                .byDisplayMode(.inferred)
-                .byStatusBar(.inferred)
-
-            let anim = EKAttributes.animScaleInFadeOut
-            attr = attr.byEntrance(anim.entrance).byExit(anim.exit)
-
-            SwiftEntryKit.display(entry: PhotoPermissionAlertView().onConfirm {
-                SwiftEntryKit.dismiss()
-            },using: attr)
+            SwiftEntryKit.display(
+                entry: PhotoPermissionAlertView()
+                    .onLimited {
+                        print("有限访问")
+                        SwiftEntryKit.dismiss()
+                    }
+                    .onFull {
+                        print("全部允许")
+                        SwiftEntryKit.dismiss()
+                    }
+                    .onDeny {
+                        print("不允许")
+                        SwiftEntryKit.dismiss()
+                    },
+                using: makeEKAttributes()
+            )
         case .hometown:
-            var attr = EKAttributes()
-                .byPosition(.center)
-                .byDuration(.infinity)  // 交互型：不自动消失
-                // 统一交给 EK 控制外观
-                .byBackground(.color(color: EKColor(.secondarySystemBackground)))
-                .byCorner(radius: 14)
-                .byShadow()
-                // 外部点击无效，必须点按钮
-                .byEntryInteraction(.absorbTouches)
-                .byScreenInteraction(.forward)
-                // 给一点儿半透明遮罩增强聚焦，但不响应关闭
-                .byScreen(.color(color: EKColor(UIColor(white: 0, alpha: 0.15))))
-                .byDisplayMode(.inferred)
-                .byStatusBar(.inferred)
-
-            let anim = EKAttributes.animScaleInFadeOut
-            attr = attr.byEntrance(anim.entrance).byExit(anim.exit)
-
-            SwiftEntryKit.display(entry: PhotoPermissionAlertView().onConfirm {
-                SwiftEntryKit.dismiss()
-            },using: attr)
+            SwiftEntryKit.display(
+                entry: PhotoPermissionAlertView()
+                    .onLimited {
+                        print("有限访问")
+                        SwiftEntryKit.dismiss()
+                    }
+                    .onFull {
+                        print("全部允许")
+                        SwiftEntryKit.dismiss()
+                    }
+                    .onDeny {
+                        print("不允许")
+                        SwiftEntryKit.dismiss()
+                    },
+                using: makeEKAttributes()
+            )
         case .profession:
-            var attr = EKAttributes()
-                .byPosition(.center)
-                .byDuration(.infinity)  // 交互型：不自动消失
-                // 统一交给 EK 控制外观
-                .byBackground(.color(color: EKColor(.secondarySystemBackground)))
-                .byCorner(radius: 14)
-                .byShadow()
-                // 外部点击无效，必须点按钮
-                .byEntryInteraction(.absorbTouches)
-                .byScreenInteraction(.forward)
-                // 给一点儿半透明遮罩增强聚焦，但不响应关闭
-                .byScreen(.color(color: EKColor(UIColor(white: 0, alpha: 0.15))))
-                .byDisplayMode(.inferred)
-                .byStatusBar(.inferred)
-
-            let anim = EKAttributes.animScaleInFadeOut
-            attr = attr.byEntrance(anim.entrance).byExit(anim.exit)
-
-            SwiftEntryKit.display(entry: PhotoPermissionAlertView().onConfirm {
-                SwiftEntryKit.dismiss()
-            },using: attr)
+            SwiftEntryKit.display(
+                entry: PhotoPermissionAlertView()
+                    .onLimited {
+                        print("有限访问")
+                        SwiftEntryKit.dismiss()
+                    }
+                    .onFull {
+                        print("全部允许")
+                        SwiftEntryKit.dismiss()
+                    }
+                    .onDeny {
+                        print("不允许")
+                        SwiftEntryKit.dismiss()
+                    },
+                using: makeEKAttributes()
+            )
         }
     }
 }

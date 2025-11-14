@@ -40,8 +40,8 @@ final class PhotoPermissionAlertView: UIView {
             .byNumberOfLines(0)
             .byTextAlignment(.center)
             .byAddTo(self) { make in
-                make.top.equalToSuperview().offset(18)
-//                make.height.equalTo(60.h)
+                make.top.equalToSuperview()
+                make.height.equalTo(60.h)
                 make.left.right.equalToSuperview().inset(16)
             }
     }()
@@ -50,10 +50,13 @@ final class PhotoPermissionAlertView: UIView {
         UIStackView()
             .byAxis(.vertical)
             .byAlignment(.fill)
-            .byDistribution(.fill)
+            .byDistribution(.fillEqually)   // 改成等分
             .bySpacing(0)
+            .addArrangedSubviews(limitedButton)
+            .addArrangedSubviews(fullButton)
+            .addArrangedSubviews(denyButton)
             .byAddTo(self) { [unowned self] make in
-                make.top.equalTo(self.titleLabel.snp.bottom).offset(18)
+                make.top.equalTo(self.titleLabel.snp.bottom)
                 make.height.equalTo(156)
                 make.left.right.bottom.equalToSuperview()
             }
@@ -61,7 +64,7 @@ final class PhotoPermissionAlertView: UIView {
 
     private lazy var limitedButton: UIButton = {
         makeActionButton("允许有限访问")
-            .byNormalBgColor(.red)
+            .byNormalBgColor(.white)
             .onTap { [weak self] _ in
                 self?.limitedHandler?()
             }
@@ -69,7 +72,7 @@ final class PhotoPermissionAlertView: UIView {
 
     private lazy var fullButton: UIButton = {
         makeActionButton("全部允许")
-            .byNormalBgColor(.green)
+            .byNormalBgColor(.white)
             .onTap { [weak self] _ in
                 self?.fullHandler?()
             }
@@ -77,7 +80,7 @@ final class PhotoPermissionAlertView: UIView {
 
     private lazy var denyButton: UIButton = {
         makeActionButton("不允许")
-            .byNormalBgColor(.blue)
+            .byNormalBgColor(.white)
             .onTap { [weak self] _ in
                 self?.denyHandler?()
             }
@@ -101,19 +104,8 @@ private extension PhotoPermissionAlertView {
             .byClipsToBounds(true)
 
         titleLabel.byVisible(YES)
+        makeSeparator(below: titleLabel).byVisible(YES)
         buttonsStack.byVisible(YES)
-
-        // 按钮 + 分割线，模拟系统样式
-        buttonsStack.addArrangedSubview(makeSeparator())
-        buttonsStack.addArrangedSubview(limitedButton)
-        buttonsStack.addArrangedSubview(fullButton)
-        buttonsStack.addArrangedSubview(denyButton)
-
-        [limitedButton, fullButton, denyButton].forEach {
-            $0.snp.makeConstraints { make in
-                make.height.equalTo(44)
-            }
-        }
     }
 
     func makeActionButton(_ title: String) -> UIButton {
@@ -123,13 +115,5 @@ private extension PhotoPermissionAlertView {
             .byTitleFont(.systemFont(ofSize: 16))
             .byBackgroundColor(.clear, for: .normal)
             .byContentEdgeInsets(.init(top: 11, left: 0, bottom: 11, right: 0))
-    }
-
-    func makeSeparator() -> UIView {
-        UIView()
-            .byBgColor(.red)
-            .byAdd() { make in
-                make.height.equalTo(0.6)
-            }
     }
 }

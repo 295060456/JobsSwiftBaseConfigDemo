@@ -25,6 +25,7 @@
 		040E68F62EC704C400598A5B /* MyMacros in Frameworks */ = {isa = PBXBuildFile; productRef = 040E68F52EC704C400598A5B /* MyMacros */; };
 		040E68F82EC704C400598A5B /* MyMacrosClient in Frameworks */ = {isa = PBXBuildFile; productRef = 040E68F72EC704C400598A5B /* MyMacrosClient */; };
 		040E68F92EC704DA00598A5B /* Demo@自定义注解.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0402F0A82EC2D59A0054A151 /* Demo@自定义注解.swift */; };
+		040E68FD2EC7118800598A5B /* TipsGrantPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040E68FC2EC7118000598A5B /* TipsGrantPermissionView.swift */; };
 		04124F2A2EB05E9000462BE2 /* Demo@Moya.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F292EB05E8A00462BE2 /* Demo@Moya.swift */; };
 		04124F2D2EB0622E00462BE2 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F2C2EB0622D00462BE2 /* Models.swift */; };
 		04124F2F2EB0623900462BE2 /* DemoAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F2E2EB0623900462BE2 /* DemoAPI.swift */; };
@@ -323,6 +324,7 @@
 		0401DD072E91182900D572AD /* Demo@弹出提示.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@弹出提示.swift"; sourceTree = "<group>"; };
 		0402F0A82EC2D59A0054A151 /* Demo@自定义注解.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@自定义注解.swift"; sourceTree = "<group>"; };
 		0402F0AD2EC2D73E0054A151 /* UIListContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIListContentConfiguration.swift; sourceTree = "<group>"; };
+		040E68FC2EC7118000598A5B /* TipsGrantPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsGrantPermissionView.swift; sourceTree = "<group>"; };
 		04124F292EB05E8A00462BE2 /* Demo@Moya.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@Moya.swift"; sourceTree = "<group>"; };
 		04124F2C2EB0622D00462BE2 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		04124F2E2EB0623900462BE2 /* DemoAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoAPI.swift; sourceTree = "<group>"; };
@@ -1126,6 +1128,7 @@
 		04B5B49C2EC5D8F800ED4505 /* 提示开启权限 */ = {
 			isa = PBXGroup;
 			children = (
+				040E68FC2EC7118000598A5B /* TipsGrantPermissionView.swift */,
 				04B5B49A2EC5D8B600ED4505 /* 提示开启权限.png */,
 			);
 			path = "提示开启权限";
@@ -1582,8 +1585,8 @@
 			);
 			mainGroup = C564FBD22E09580A0079B5C1;
 			packageReferences = (
-				040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "../../swift-syntax" */,
-				040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "../../MyMacrosClean" */,
+				040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "swift-syntax" */,
+				040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "MyMacrosClean" */,
 			);
 			productRefGroup = C564FBDC2E09580B0079B5C1 /* Products */;
 			projectDirPath = "";
@@ -1672,8 +1675,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "
-";
+			shellScript = "\n";
 		};
 		14290BEF19396C1A77BA49FB /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1682,12 +1684,8 @@
 			);
 			inputFileListPaths = (
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1905,6 +1903,7 @@
 				0432836D2EC45E7A0031CDD6 /* JXSegmentedBaseDataSource.swift in Sources */,
 				043283A72EC49F910031CDD6 /* BRPickerPanel.swift in Sources */,
 				04C2F0332E98C9E000BA05A9 /* Demo@设计模式VIPER.swift in Sources */,
+				040E68FD2EC7118800598A5B /* TipsGrantPermissionView.swift in Sources */,
 				046786E52EB4CEE1003FE82D /* RefreshEnums.swift in Sources */,
 				04F7AF672EC321B700ACB509 /* LiveCommentDemoVC.swift in Sources */,
 				0432836F2EC45F400031CDD6 /* JXSegmentedIndicatorLineView.swift in Sources */,
@@ -2344,11 +2343,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "../../swift-syntax" */ = {
+		040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "swift-syntax" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../../swift-syntax";
 		};
-		040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "../../MyMacrosClean" */ = {
+		040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "MyMacrosClean" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../MyMacrosClean;
 		};

@@ -18,6 +18,13 @@ import ObjectiveC.runtime
 // MARK: 语法糖🍬
 extension UIView {
     // MARK: 设置UI
+    /// 统一在一个回调里配置 layer
+    @discardableResult
+    func byLayer(_ config: (CALayer) -> Void) -> Self {
+        config(layer)
+        return self
+    }
+
     @discardableResult
     func byAddArranged(to stack: UIStackView) -> Self {
         stack.addArrangedSubview(self)

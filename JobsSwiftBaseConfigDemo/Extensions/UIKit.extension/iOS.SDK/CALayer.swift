@@ -57,14 +57,38 @@ extension CALayer {
 
     // MARK: - 阴影
     @discardableResult
+    func byShadowCor(color: UIColor) -> Self {
+        self.shadowColor = color.cgColor
+        return self
+    }
+
+    @discardableResult
+    func byShadowOpacity(opacity: Float = 0.5) -> Self {
+        self.shadowOpacity = opacity
+        return self
+    }
+
+    @discardableResult
+    func byShadowOffset(offset: CGSize = .zero) -> Self {
+        self.shadowOffset = offset
+        return self
+    }
+
+    @discardableResult
+    func byShadowRadius(radius: CGFloat = 3) -> Self {
+        self.shadowRadius = radius
+        return self
+    }
+
+    @discardableResult
     func byShadow(color: UIColor,
                   opacity: Float = 0.5,
                   offset: CGSize = .zero,
                   radius: CGFloat = 3) -> Self {
-        self.shadowColor = color.cgColor
-        self.shadowOpacity = opacity
-        self.shadowOffset = offset
-        self.shadowRadius = radius
+        shadowColor = color.cgColor
+        shadowOpacity = opacity
+        shadowOffset = offset
+        shadowRadius = radius
         return self
     }
 }

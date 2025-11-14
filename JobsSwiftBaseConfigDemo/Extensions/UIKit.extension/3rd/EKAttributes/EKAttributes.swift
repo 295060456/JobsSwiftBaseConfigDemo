@@ -25,7 +25,9 @@ extension EKAttributes {
 
     // opacity 是 Float，不是 CGFloat
     @discardableResult
-    func byShadow(color: UIColor = .black, opacity: Float = 0.15, radius: CGFloat = 10) -> Self {
+    func byShadow(color: UIColor = .black,
+                  opacity: Float = 0.15,
+                  radius: CGFloat = 10) -> Self {
         var a = self
         a.shadow = .active(with: .init(color: EKColor(color),   // ⬅️ 这里用 EKColor(...)
                                        opacity: opacity,
