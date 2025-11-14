@@ -170,6 +170,8 @@
 
 * [**MacOS配置个人热点🛜**](https://github.com/295060456/JobsDocs/blob/main/MacOS配置个人热点🛜.md/MacOS配置个人热点🛜.md)
 
+* [**Swift Package Dependence使用指南🧭**](https://github.com/295060456/JobsDocs/tree/main/Swift Package Dependence使用指南/Swift Package Dependence使用指南.md)
+
 * [**创建自定义模版**](https://juejin.cn/post/6974702344021737485)
 
 * [**苹果开发者账户续费**](https://account.apple.com/account/manage/section/payment)
