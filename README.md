@@ -1642,12 +1642,6 @@ INFOPLIST_KEY_CFBundleName = $(PRODUCT_NAME)
 
 ### 9、📦 [**Swift**](https://developer.apple.com/swift/).<font color=red>Package</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* 依据系统模版，创建`swift package`
-
-  ```shell
-  swift package init --type macro --name MyMacros
-  ```
-
 * 检查版本
 
   ```shell
@@ -1658,6 +1652,12 @@ INFOPLIST_KEY_CFBundleName = $(PRODUCT_NAME)
   > swift-driver version: 1.127.14.1 Apple Swift version 6.2.1 (swiftlang-6.2.1.4.8 clang-1700.4.4.1)
   > Target: arm64-apple-macosx26.0
   > ```
+
+* 依据系统模版，手动创建`swift package`
+
+  ```shell
+  swift package init --type macro --name MyMacros
+  ```
 
 * 构建（成功后方可通过Xcode添加进 [**Swift**](https://developer.apple.com/swift/)项目中）
 
@@ -1674,6 +1674,8 @@ INFOPLIST_KEY_CFBundleName = $(PRODUCT_NAME)
   > ```
 
 
+* 系统包可以用Git进行统一管理，最后再手动引入工程。例如：[**swift-syntax**](https://github.com/swiftlang/swift-syntax)
+
 * 通过Xcode添加进 [**Swift**](https://developer.apple.com/swift/)项目中👇
 
   <table style="width:100%; table-layout:fixed;">
@@ -1686,6 +1688,20 @@ INFOPLIST_KEY_CFBundleName = $(PRODUCT_NAME)
       <td><img src="./assets/image-20251111113627022.png" style="width:100%; height:auto;"></td>
     </tr>
   </table>
+  
+* 删除（涉及到3处）
+
+  * `Xcode` 👉 `File` 👉 `Add Package Dependencies`
+
+    ![image-20251114135259050](./assets/image-20251114135259050.png)
+
+  * 工程`x.xcodeproj `👉 `PROJECT` 👉 `Package Dependencies`
+
+    ![image-20251114135317423](./assets/image-20251114135317423.png)
+
+  * 工程`x.xcodeproj `👉 `TARGETS` 👉 `General `👉 `Frameworks,Libraries,and Embedded Content`
+
+    ![image-20251114135325330](./assets/image-20251114135325330.png)
 
 ### 10、其他 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 

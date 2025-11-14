@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,14 @@
 		0402F0AE2EC2D7400054A151 /* UIListContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0402F0AD2EC2D73E0054A151 /* UIListContentConfiguration.swift */; };
 		040B31122EB2294100862F75 /* ColorAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0442717A2E8139CF0084B25C /* ColorAssets.xcassets */; };
 		040B31132EB2294500862F75 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C564FBEA2E09580D0079B5C1 /* Assets.xcassets */; };
+		040E68EB2EC704AD00598A5B /* SwiftBasicFormat in Frameworks */ = {isa = PBXBuildFile; productRef = 040E68EA2EC704AD00598A5B /* SwiftBasicFormat */; };
+		040E68ED2EC704AD00598A5B /* SwiftCompilerPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 040E68EC2EC704AD00598A5B /* SwiftCompilerPlugin */; };
+		040E68EF2EC704AD00598A5B /* SwiftDiagnostics in Frameworks */ = {isa = PBXBuildFile; productRef = 040E68EE2EC704AD00598A5B /* SwiftDiagnostics */; };
+		040E68F12EC704AD00598A5B /* SwiftIDEUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 040E68F02EC704AD00598A5B /* SwiftIDEUtils */; };
+		040E68F32EC704AD00598A5B /* SwiftIfConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 040E68F22EC704AD00598A5B /* SwiftIfConfig */; };
+		040E68F62EC704C400598A5B /* MyMacros in Frameworks */ = {isa = PBXBuildFile; productRef = 040E68F52EC704C400598A5B /* MyMacros */; };
+		040E68F82EC704C400598A5B /* MyMacrosClient in Frameworks */ = {isa = PBXBuildFile; productRef = 040E68F72EC704C400598A5B /* MyMacrosClient */; };
+		040E68F92EC704DA00598A5B /* Demo@自定义注解.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0402F0A82EC2D59A0054A151 /* Demo@自定义注解.swift */; };
 		04124F2A2EB05E9000462BE2 /* Demo@Moya.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F292EB05E8A00462BE2 /* Demo@Moya.swift */; };
 		04124F2D2EB0622E00462BE2 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F2C2EB0622D00462BE2 /* Models.swift */; };
 		04124F2F2EB0623900462BE2 /* DemoAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F2E2EB0623900462BE2 /* DemoAPI.swift */; };
@@ -613,7 +621,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				0487AADC2E840EE300B5D307 /* libc++.tbd in Frameworks */,
+				040E68EB2EC704AD00598A5B /* SwiftBasicFormat in Frameworks */,
+				040E68F32EC704AD00598A5B /* SwiftIfConfig in Frameworks */,
+				040E68F62EC704C400598A5B /* MyMacros in Frameworks */,
+				040E68ED2EC704AD00598A5B /* SwiftCompilerPlugin in Frameworks */,
+				040E68F12EC704AD00598A5B /* SwiftIDEUtils in Frameworks */,
+				040E68EF2EC704AD00598A5B /* SwiftDiagnostics in Frameworks */,
 				E057C9BC81890DCCBD7F5FBE /* Pods_JobsSwiftBaseConfigDemo.framework in Frameworks */,
+				040E68F82EC704C400598A5B /* MyMacrosClient in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1566,6 +1581,10 @@
 				"zh-Hans",
 			);
 			mainGroup = C564FBD22E09580A0079B5C1;
+			packageReferences = (
+				040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "../../swift-syntax" */,
+				040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "../../MyMacrosClean" */,
+			);
 			productRefGroup = C564FBDC2E09580B0079B5C1 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
@@ -1855,6 +1874,7 @@
 				046786ED2EB4CF1B003FE82D /* UIScrollView+RefreshAPI.swift in Sources */,
 				043283A92EC49FA60031CDD6 /* BRTextPickerView.swift in Sources */,
 				046786E92EB4CEFA003FE82D /* RefreshProxy.swift in Sources */,
+				040E68F92EC704DA00598A5B /* Demo@自定义注解.swift in Sources */,
 				C564FC962E0959640079B5C1 /* Inlines.swift in Sources */,
 				045376612EB0B5B100133F73 /* PlayerRemoteVC.swift in Sources */,
 				04468F902E9E4D7000677000 /* PermissionCenter.swift in Sources */,
@@ -2322,6 +2342,48 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "../../swift-syntax" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../swift-syntax";
+		};
+		040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "../../MyMacrosClean" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../MyMacrosClean;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		040E68EA2EC704AD00598A5B /* SwiftBasicFormat */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftBasicFormat;
+		};
+		040E68EC2EC704AD00598A5B /* SwiftCompilerPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftCompilerPlugin;
+		};
+		040E68EE2EC704AD00598A5B /* SwiftDiagnostics */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftDiagnostics;
+		};
+		040E68F02EC704AD00598A5B /* SwiftIDEUtils */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftIDEUtils;
+		};
+		040E68F22EC704AD00598A5B /* SwiftIfConfig */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftIfConfig;
+		};
+		040E68F52EC704C400598A5B /* MyMacros */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MyMacros;
+		};
+		040E68F72EC704C400598A5B /* MyMacrosClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MyMacrosClient;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		C564FBE72E09580B0079B5C1 /* JobsSwiftBaseConfigDemo.xcdatamodeld */ = {
