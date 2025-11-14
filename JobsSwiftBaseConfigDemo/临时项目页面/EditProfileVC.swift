@@ -1,5 +1,5 @@
 //
-//  EditProfileDemoVC.swift
+//  EditProfileVC.swift
 //  JobsSwiftBaseConfigDemo
 //
 //  Created by Jobs on 2025/11/13.
@@ -55,7 +55,7 @@ private enum EditProfileRow: CaseIterable {
     }
 }
 
-final class EditProfileDemoVC: BaseVC {
+final class EditProfileVC: BaseVC {
     
     private let sections: [[EditProfileRow]] = [
         [.avatar, .nickname, .gender, .sign],
@@ -90,7 +90,7 @@ final class EditProfileDemoVC: BaseVC {
     }
 }
 // MARK: - UITableViewDataSource
-extension EditProfileDemoVC: UITableViewDataSource {
+extension EditProfileVC: UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
         sections.count
@@ -122,7 +122,7 @@ extension EditProfileDemoVC: UITableViewDataSource {
     }
 }
 // MARK: - UITableViewDelegate
-extension EditProfileDemoVC: UITableViewDelegate {
+extension EditProfileVC: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView,
                    heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -184,22 +184,10 @@ extension EditProfileDemoVC: UITableViewDelegate {
                 using: makeEKAttributes().bySize(width: .constant(value: 326.w), height: .constant(value: 206.h))
             )
         case .gender:
-            SwiftEntryKit.display(
-                entry: PhotoPermissionAlertView()
-                    .onLimited {
-                        print("有限访问")
-                        SwiftEntryKit.dismiss()
-                    }
-                    .onFull {
-                        print("全部允许")
-                        SwiftEntryKit.dismiss()
-                    }
-                    .onDeny {
-                        print("不允许")
-                        SwiftEntryKit.dismiss()
-                    },
-                using: makeEKAttributes()
-            )
+            EditNicknameVC()
+                .byData("https://www.baidu.com")
+                .byPush(self)
+                .byCompletion { print("❤️结束❤️ fromBottom") }
         case .sign:
             SwiftEntryKit.display(
                 entry: PhotoPermissionAlertView()

@@ -189,7 +189,7 @@
 		049A65712EA0E6BB0006B185 /* JobsTabBarCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049A65702EA0E6BA0006B185 /* JobsTabBarCtrl.swift */; };
 		049A65732EA0E6E40006B185 /* Demo@自定义TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049A65722EA0E6D70006B185 /* Demo@自定义TabBar.swift */; };
 		04A18E4D2E86533B004BB9DC /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A18E4C2E865336004BB9DC /* UIImage.swift */; };
-		04A368142EC59517000FC898 /* EditProfileDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A368132EC59516000FC898 /* EditProfileDemoVC.swift */; };
+		04A368142EC59517000FC898 /* EditProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A368132EC59516000FC898 /* EditProfileVC.swift */; };
 		04A8C54C2E8AA94D00381701 /* Demo@按钮.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A8C54B2E8AA94B00381701 /* Demo@按钮.swift */; };
 		04A8C54E2E8AA9F900381701 /* Demo@功能列表根目录.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A8C54D2E8AA9F800381701 /* Demo@功能列表根目录.swift */; };
 		04AC74C52E86682E004B8305 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AC74C42E86682D004B8305 /* Notification.swift */; };
@@ -200,6 +200,7 @@
 		04B5B4952EC5CCCC00ED4505 /* BaseTableViewCellByDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5B4942EC5CCC700ED4505 /* BaseTableViewCellByDefault.swift */; };
 		04B5B4972EC5CCF300ED4505 /* BaseTableViewCellBySubtitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5B4962EC5CCF200ED4505 /* BaseTableViewCellBySubtitle.swift */; };
 		04B5B4A02EC5DB0F00ED4505 /* PhotoPermissionAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5B49F2EC5DACB00ED4505 /* PhotoPermissionAlertView.swift */; };
+		04BA33D92EC72CB100B9C8D7 /* EditNicknameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BA33D82EC72CAF00B9C8D7 /* EditNicknameVC.swift */; };
 		04BCDC2A2EA9DB0C00382DE0 /* JobsText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BCDC292EA9DB0B00382DE0 /* JobsText.swift */; };
 		04BCDC2C2EA9DB7E00382DE0 /* Demo@JobsText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BCDC2B2EA9DB7D00382DE0 /* Demo@JobsText.swift */; };
 		04BCDC2E2EA9E85800382DE0 /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BCDC2D2EA9E85600382DE0 /* UITableViewCell.swift */; };
@@ -493,7 +494,7 @@
 		049A65702EA0E6BA0006B185 /* JobsTabBarCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsTabBarCtrl.swift; sourceTree = "<group>"; };
 		049A65722EA0E6D70006B185 /* Demo@自定义TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@自定义TabBar.swift"; sourceTree = "<group>"; };
 		04A18E4C2E865336004BB9DC /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
-		04A368132EC59516000FC898 /* EditProfileDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileDemoVC.swift; sourceTree = "<group>"; };
+		04A368132EC59516000FC898 /* EditProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileVC.swift; sourceTree = "<group>"; };
 		04A8C54B2E8AA94B00381701 /* Demo@按钮.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@按钮.swift"; sourceTree = "<group>"; };
 		04A8C54D2E8AA9F800381701 /* Demo@功能列表根目录.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@功能列表根目录.swift"; sourceTree = "<group>"; };
 		04AC74C42E86682D004B8305 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
@@ -508,6 +509,7 @@
 		04B5B49A2EC5D8B600ED4505 /* 提示开启权限.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "提示开启权限.png"; sourceTree = "<group>"; };
 		04B5B49B2EC5D8E000ED4505 /* 改名许可.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "改名许可.png"; sourceTree = "<group>"; };
 		04B5B49F2EC5DACB00ED4505 /* PhotoPermissionAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPermissionAlertView.swift; sourceTree = "<group>"; };
+		04BA33D82EC72CAF00B9C8D7 /* EditNicknameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNicknameVC.swift; sourceTree = "<group>"; };
 		04BCDC292EA9DB0B00382DE0 /* JobsText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsText.swift; sourceTree = "<group>"; };
 		04BCDC2B2EA9DB7D00382DE0 /* Demo@JobsText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@JobsText.swift"; sourceTree = "<group>"; };
 		04BCDC2D2EA9E85600382DE0 /* UITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewCell.swift; sourceTree = "<group>"; };
@@ -735,7 +737,8 @@
 		0432837A2EC470220031CDD6 /* 临时项目页面 */ = {
 			isa = PBXGroup;
 			children = (
-				04A368132EC59516000FC898 /* EditProfileDemoVC.swift */,
+				04BA33D82EC72CAF00B9C8D7 /* EditNicknameVC.swift */,
+				04A368132EC59516000FC898 /* EditProfileVC.swift */,
 				04B5B4982EC5D80200ED4505 /* 弹出的提示框 */,
 			);
 			path = "临时项目页面";
@@ -1585,8 +1588,8 @@
 			);
 			mainGroup = C564FBD22E09580A0079B5C1;
 			packageReferences = (
-				040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "swift-syntax" */,
-				040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "MyMacrosClean" */,
+				040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "../../swift-syntax" */,
+				040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "../../MyMacrosClean" */,
 			);
 			productRefGroup = C564FBDC2E09580B0079B5C1 /* Products */;
 			projectDirPath = "";
@@ -1675,7 +1678,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		14290BEF19396C1A77BA49FB /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1684,8 +1688,12 @@
 			);
 			inputFileListPaths = (
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1909,6 +1917,7 @@
 				0432836F2EC45F400031CDD6 /* JXSegmentedIndicatorLineView.swift in Sources */,
 				0424625A2EBAFCD800D6BFCC /* Demo@ComponentKit.swift in Sources */,
 				048E37702E87997A004C3A41 /* UIGestureRecognizer.swift in Sources */,
+				04BA33D92EC72CB100B9C8D7 /* EditNicknameVC.swift in Sources */,
 				042F95972EB5E6EB005DE735 /* LanguageManager.swift in Sources */,
 				C564FC8E2E0959640079B5C1 /* UITabBarController.swift in Sources */,
 				04468E102E9CB43E00677000 /* UIAlertAction.swift in Sources */,
@@ -1958,7 +1967,7 @@
 				045921082E854FF3008C8D6A /* Float.swift in Sources */,
 				C564FCA62E0959640079B5C1 /* UINavigationBar.swift in Sources */,
 				046786EF2EB4CF2C003FE82D /* DefaultSkins.swift in Sources */,
-				04A368142EC59517000FC898 /* EditProfileDemoVC.swift in Sources */,
+				04A368142EC59517000FC898 /* EditProfileVC.swift in Sources */,
 				04124F442EB0764200462BE2 /* AFService.swift in Sources */,
 				04AD628F2E9120C500E18984 /* JobsTimer.swift in Sources */,
 				C564FC2C2E0958D50079B5C1 /* SceneDelegate.swift in Sources */,
@@ -2343,11 +2352,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "swift-syntax" */ = {
+		040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "../../swift-syntax" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../../swift-syntax";
 		};
-		040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "MyMacrosClean" */ = {
+		040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "../../MyMacrosClean" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../MyMacrosClean;
 		};

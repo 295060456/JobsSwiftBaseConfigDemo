@@ -108,7 +108,7 @@ final class TipsGrantPermissionView: UIView {
         // 触发 lazy 创建
         cardView.byVisible(YES)
         stack.byVisible(YES)
-        cardView.makeSeparator(below: titleLabel, offset: 12)
+        cardView.makeBelowSeparatorBy(below: titleLabel, offset: 12)
     }
 }
 

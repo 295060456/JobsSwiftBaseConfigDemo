@@ -104,7 +104,7 @@ private extension PhotoPermissionAlertView {
             .byClipsToBounds(true)
 
         titleLabel.byVisible(YES)
-        makeSeparator(below: titleLabel).byVisible(YES)
+        makeBelowSeparatorBy(below: titleLabel).byVisible(YES)
         buttonsStack.byVisible(YES)
     }
 

@@ -12,6 +12,7 @@ import UIKit
 #endif
 
 import SwiftEntryKit
+import SnapKit
 // MARK: 🔔 通用弹窗提示
 public func presentAlert(for urlString: String, on textView: UITextView) {
     let alert = UIAlertController(
@@ -136,12 +137,29 @@ public func makeEKAttributes() -> EKAttributes{
 extension UIView {
     /// 在指定 view 下方添加一条分割线，添加到当前 view（self）上
     @discardableResult
-    func makeSeparator(below view:UIView ,offset t:CGFloat = 0.0) -> UIView {
+    func makeBelowSeparatorBy(below anchor:UIView ,offset t:CGFloat = 0.0) -> UIView {
         UIView()
             .byBgColor("#3C3C431F".cor)
             .byAddTo(self) { make in
                 make.height.equalTo(0.6)
-                make.top.equalTo(view.snp_bottomMargin).offset(t)
+                make.top.equalTo(anchor.snp.bottom).offset(t)
+                make.left.right.equalToSuperview()
+            }
+    }
+    /// 在当前 UILayoutGuide 下方添加一条分割线，添加到它的 owningView 上
+    @discardableResult
+    func makeBelowSeparatorBy(below anchor:UILayoutGuide ,offset t: CGFloat = 0.0) -> UIView? {
+        // 1️⃣ owningView 是可选，要先解包，而且函数要返回 UIView
+        guard let hostView = anchor.owningView else {
+            assertionFailure("UILayoutGuide 没有 owningView，无法添加分割线")
+            return nil
+        }
+        // 2️⃣ 分割线加到 hostView 上，约束基于“当前 guide(self)” 的 bottom
+        return UIView()
+            .byBgColor("#3C3C431F".cor)
+            .byAddTo(hostView) { make in
+                make.height.equalTo(0.6)
+                make.top.equalTo(anchor.snp.top).offset(t)
                 make.left.right.equalToSuperview()
             }
     }
