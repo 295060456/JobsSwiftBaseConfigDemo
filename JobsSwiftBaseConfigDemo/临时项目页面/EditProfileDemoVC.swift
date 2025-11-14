@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import SwiftEntryKit
 
 // MARK: - 行模型
 private enum EditProfileRow: CaseIterable {
@@ -63,11 +64,11 @@ final class EditProfileDemoVC: BaseVC {
 
     private lazy var tableView: UITableView = {
         UITableView(frame: .zero, style: .plain)
+            .byBgColor("#EFEFEF".cor)
             .byDataSource(self)
             .byDelegate(self)
             .register()
-            .byRowHeight(52)
-            .byEstimatedRowHeight(52)
+            .byScrollEnabled(NO)
             .byNoContentInsetAdjustment()
             .byNoSectionHeaderTopPadding()
             .byTableFooterView(UIView())
@@ -83,8 +84,8 @@ final class EditProfileDemoVC: BaseVC {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.byBgColor("#EFEFEF".cor)
         jobsSetupGKNav(title: "Edit profile")
-        view.backgroundColor = .systemGroupedBackground
         tableView.byVisible(YES)
     }
 }
@@ -108,7 +109,7 @@ extension EditProfileDemoVC: UITableViewDataSource {
             return tableView.py_dequeueReusableCell(
                 withType: AvatarCell.self,
                 for: indexPath
-            ).byConfigure(JobsCellConfig(title: row.title, image: "list.bullet".sysImg))
+            ).byConfigure(JobsCellConfig(title: row.title))
         default:
             return tableView.py_dequeueReusableCell(withType: BaseTableViewCellByValue1.self, for: indexPath)
                 .byTitleFont(.systemFont(ofSize: 16))
@@ -145,8 +146,198 @@ extension EditProfileDemoVC: UITableViewDelegate {
                    didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let row = sections[indexPath.section][indexPath.row]
-        // TODO: push 具体编辑页
-        print("tap row: \(row)")
+        switch row {
+        case .avatar:
+            let anim = EKAttributes.animScaleInFadeOut
+            let attr = EKAttributes()
+                .byPosition(.center)
+                .bySize(width: .constant(value: 340.w), height: .constant(value: 217.h))
+                .byDuration(.infinity)  // 交互型：不自动消失
+                // 统一交给 EK 控制外观
+                .byBackground(.color(color: EKColor(.secondarySystemBackground)))
+                .byCorner(radius: 14)
+                .byShadow()
+                // 外部点击无效，必须点按钮
+                .byEntryInteraction(.absorbTouches)
+                .byScreenInteraction(.forward)
+                // 给一点儿半透明遮罩增强聚焦，但不响应关闭
+                .byScreen(.color(color: EKColor(UIColor(white: 0, alpha: 0.15))))
+                .byDisplayMode(.inferred)
+                .byStatusBar(.inferred)
+                .byEntrance(anim.entrance).byExit(anim.exit)
+
+            SwiftEntryKit.display(
+                entry: PhotoPermissionAlertView()
+                    .onLimited {
+                        print("有限访问")
+                        SwiftEntryKit.dismiss()
+                    }
+                    .onFull {
+                        print("全部允许")
+                        SwiftEntryKit.dismiss()
+                    }
+                    .onDeny {
+                        print("不允许")
+                        SwiftEntryKit.dismiss()
+                    },
+                using: attr
+            )
+        case .nickname:
+            var attr = EKAttributes()
+                .byPosition(.center)
+                .bySize(width: .constant(value: 340.w), height: .constant(value: 270.h))
+                .byDuration(.infinity)  // 交互型：不自动消失
+                // 统一交给 EK 控制外观
+                .byBackground(.color(color: EKColor(.secondarySystemBackground)))
+                .byCorner(radius: 14)
+                .byShadow()
+                // 外部点击无效，必须点按钮
+                .byEntryInteraction(.absorbTouches)
+                .byScreenInteraction(.forward)
+                // 给一点儿半透明遮罩增强聚焦，但不响应关闭
+                .byScreen(.color(color: EKColor(UIColor(white: 0, alpha: 0.15))))
+                .byDisplayMode(.inferred)
+                .byStatusBar(.inferred)
+
+            let anim = EKAttributes.animScaleInFadeOut
+            attr = attr.byEntrance(anim.entrance).byExit(anim.exit)
+
+            SwiftEntryKit.display(entry: PhotoPermissionAlertView().onConfirm {
+                SwiftEntryKit.dismiss()
+            },using: attr)
+        case .gender:
+            var attr = EKAttributes()
+                .byPosition(.center)
+                .byDuration(.infinity)  // 交互型：不自动消失
+                // 统一交给 EK 控制外观
+                .byBackground(.color(color: EKColor(.secondarySystemBackground)))
+                .byCorner(radius: 14)
+                .byShadow()
+                // 外部点击无效，必须点按钮
+                .byEntryInteraction(.absorbTouches)
+                .byScreenInteraction(.forward)
+                // 给一点儿半透明遮罩增强聚焦，但不响应关闭
+                .byScreen(.color(color: EKColor(UIColor(white: 0, alpha: 0.15))))
+                .byDisplayMode(.inferred)
+                .byStatusBar(.inferred)
+
+            let anim = EKAttributes.animScaleInFadeOut
+            attr = attr.byEntrance(anim.entrance).byExit(anim.exit)
+
+            SwiftEntryKit.display(entry: PhotoPermissionAlertView().onConfirm {
+                SwiftEntryKit.dismiss()
+            },using: attr)
+        case .sign:
+            var attr = EKAttributes()
+                .byPosition(.center)
+                .byDuration(.infinity)  // 交互型：不自动消失
+                // 统一交给 EK 控制外观
+                .byBackground(.color(color: EKColor(.secondarySystemBackground)))
+                .byCorner(radius: 14)
+                .byShadow()
+                // 外部点击无效，必须点按钮
+                .byEntryInteraction(.absorbTouches)
+                .byScreenInteraction(.forward)
+                // 给一点儿半透明遮罩增强聚焦，但不响应关闭
+                .byScreen(.color(color: EKColor(UIColor(white: 0, alpha: 0.15))))
+                .byDisplayMode(.inferred)
+                .byStatusBar(.inferred)
+
+            let anim = EKAttributes.animScaleInFadeOut
+            attr = attr.byEntrance(anim.entrance).byExit(anim.exit)
+
+            SwiftEntryKit.display(entry: PhotoPermissionAlertView().onConfirm {
+                SwiftEntryKit.dismiss()
+            },using: attr)
+        case .birthday:
+            var attr = EKAttributes()
+                .byPosition(.center)
+                .byDuration(.infinity)  // 交互型：不自动消失
+                // 统一交给 EK 控制外观
+                .byBackground(.color(color: EKColor(.secondarySystemBackground)))
+                .byCorner(radius: 14)
+                .byShadow()
+                // 外部点击无效，必须点按钮
+                .byEntryInteraction(.absorbTouches)
+                .byScreenInteraction(.forward)
+                // 给一点儿半透明遮罩增强聚焦，但不响应关闭
+                .byScreen(.color(color: EKColor(UIColor(white: 0, alpha: 0.15))))
+                .byDisplayMode(.inferred)
+                .byStatusBar(.inferred)
+
+            let anim = EKAttributes.animScaleInFadeOut
+            attr = attr.byEntrance(anim.entrance).byExit(anim.exit)
+
+            SwiftEntryKit.display(entry: PhotoPermissionAlertView().onConfirm {
+                SwiftEntryKit.dismiss()
+            },using: attr)
+        case .emotion:
+            var attr = EKAttributes()
+                .byPosition(.center)
+                .byDuration(.infinity)  // 交互型：不自动消失
+                // 统一交给 EK 控制外观
+                .byBackground(.color(color: EKColor(.secondarySystemBackground)))
+                .byCorner(radius: 14)
+                .byShadow()
+                // 外部点击无效，必须点按钮
+                .byEntryInteraction(.absorbTouches)
+                .byScreenInteraction(.forward)
+                // 给一点儿半透明遮罩增强聚焦，但不响应关闭
+                .byScreen(.color(color: EKColor(UIColor(white: 0, alpha: 0.15))))
+                .byDisplayMode(.inferred)
+                .byStatusBar(.inferred)
+
+            let anim = EKAttributes.animScaleInFadeOut
+            attr = attr.byEntrance(anim.entrance).byExit(anim.exit)
+
+            SwiftEntryKit.display(entry: PhotoPermissionAlertView().onConfirm {
+                SwiftEntryKit.dismiss()
+            },using: attr)
+        case .hometown:
+            var attr = EKAttributes()
+                .byPosition(.center)
+                .byDuration(.infinity)  // 交互型：不自动消失
+                // 统一交给 EK 控制外观
+                .byBackground(.color(color: EKColor(.secondarySystemBackground)))
+                .byCorner(radius: 14)
+                .byShadow()
+                // 外部点击无效，必须点按钮
+                .byEntryInteraction(.absorbTouches)
+                .byScreenInteraction(.forward)
+                // 给一点儿半透明遮罩增强聚焦，但不响应关闭
+                .byScreen(.color(color: EKColor(UIColor(white: 0, alpha: 0.15))))
+                .byDisplayMode(.inferred)
+                .byStatusBar(.inferred)
+
+            let anim = EKAttributes.animScaleInFadeOut
+            attr = attr.byEntrance(anim.entrance).byExit(anim.exit)
+
+            SwiftEntryKit.display(entry: PhotoPermissionAlertView().onConfirm {
+                SwiftEntryKit.dismiss()
+            },using: attr)
+        case .profession:
+            var attr = EKAttributes()
+                .byPosition(.center)
+                .byDuration(.infinity)  // 交互型：不自动消失
+                // 统一交给 EK 控制外观
+                .byBackground(.color(color: EKColor(.secondarySystemBackground)))
+                .byCorner(radius: 14)
+                .byShadow()
+                // 外部点击无效，必须点按钮
+                .byEntryInteraction(.absorbTouches)
+                .byScreenInteraction(.forward)
+                // 给一点儿半透明遮罩增强聚焦，但不响应关闭
+                .byScreen(.color(color: EKColor(UIColor(white: 0, alpha: 0.15))))
+                .byDisplayMode(.inferred)
+                .byStatusBar(.inferred)
+
+            let anim = EKAttributes.animScaleInFadeOut
+            attr = attr.byEntrance(anim.entrance).byExit(anim.exit)
+
+            SwiftEntryKit.display(entry: PhotoPermissionAlertView().onConfirm {
+                SwiftEntryKit.dismiss()
+            },using: attr)
+        }
     }
 }
 // MARK: - 头像 cell
@@ -155,6 +346,8 @@ final class AvatarCell: UITableViewCell {
     private lazy var avatarView: UIImageView = {
         UIImageView()
             .byContentMode(.scaleAspectFill)
+            .byClipsToBounds()
+            .kf_setImage(from: "https://picsum.photos/200", placeholder: "Ani".img)
             .byClipsToBounds(true)
             .byCornerRadius(22)
             .byBgColor(.systemGray5)

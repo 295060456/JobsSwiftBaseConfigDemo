@@ -25,17 +25,52 @@ extension UIColor {
     }
 
     /// init method with hex string and alpha(default: 1)
-    public convenience init?(hexString: String, alpha: CGFloat = 1.0) {
-        var formatted = hexString.replacingOccurrences(of: "0x", with: "")
-        formatted = formatted.replacingOccurrences(of: "#", with: "")
-        if let hex = Int(formatted, radix: 16) {
-          let red = CGFloat(CGFloat((hex & 0xFF0000) >> 16)/255.0)
-          let green = CGFloat(CGFloat((hex & 0x00FF00) >> 8)/255.0)
-          let blue = CGFloat(CGFloat((hex & 0x0000FF) >> 0)/255.0)
-          self.init(red: red, green: green, blue: blue, alpha: alpha)
-        } else {
+    /// 支持格式：
+    /// "#RRGGBB" / "RRGGBB" / "0xRRGGBB"
+    /// "#RGB"   / "RGB"
+    /// "#AARRGGBB" / "AARRGGBB"
+    convenience init?(hexString: String, alpha: CGFloat = 1) {
+        var hex = hexString.trimmingCharacters(in: .whitespacesAndNewlines)
+                           .lowercased()
+
+        // 去掉前缀
+        if hex.hasPrefix("#") {
+            hex.removeFirst()
+        } else if hex.hasPrefix("0x") {
+            hex.removeFirst(2)
+        }
+
+        // 3 位压缩格式：RGB -> RRGGBB
+        if hex.count == 3 {
+            let r = hex[hex.startIndex]
+            let g = hex[hex.index(hex.startIndex, offsetBy: 1)]
+            let b = hex[hex.index(hex.startIndex, offsetBy: 2)]
+            hex = "\(r)\(r)\(g)\(g)\(b)\(b)"
+        }
+
+        var a: CGFloat = alpha
+        var r: CGFloat = 0
+        var g: CGFloat = 0
+        var b: CGFloat = 0
+
+        var value: UInt64 = 0
+        guard Scanner(string: hex).scanHexInt64(&value) else { return nil }
+
+        switch hex.count {
+        case 6: // RRGGBB
+            r = CGFloat((value & 0xFF0000) >> 16) / 255.0
+            g = CGFloat((value & 0x00FF00) >> 8)  / 255.0
+            b = CGFloat( value & 0x0000FF)        / 255.0
+        case 8: // AARRGGBB
+            a = CGFloat((value & 0xFF000000) >> 24) / 255.0
+            r = CGFloat((value & 0x00FF0000) >> 16) / 255.0
+            g = CGFloat((value & 0x0000FF00) >> 8)  / 255.0
+            b = CGFloat( value & 0x000000FF)        / 255.0
+        default:
             return nil
         }
+
+        self.init(red: r, green: g, blue: b, alpha: a)
     }
 
     /// init method from Gray value and alpha(default:1)

@@ -21,7 +21,7 @@ final class RootListVC: BaseVC {
             ("ViewController", ViewController.self),
             ("✍️ UITextField", UITextFieldDemoVC.self),
             ("✍️ UITextView", UITextViewDemoVC.self),
-            ("📌 自定义注解", 自定义注解Demo.self),
+//            ("📌 自定义注解", 自定义注解Demo.self),
             ("🍚 选择器", BRPickerDemoVC.self),
             ("🔥", EditProfileDemoVC.self),
             ("📅 日历", LunarDemoVC.self),

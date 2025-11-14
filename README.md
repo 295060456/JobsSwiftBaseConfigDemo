@@ -168,6 +168,8 @@
 
 * [**CocoaPods**](https://cocoapods.org/)
 
+* [**MacOS配置个人热点🛜**](https://github.com/295060456/JobsDocs/blob/main/MacOS配置个人热点🛜.md/MacOS配置个人热点🛜.md)
+
 * [**创建自定义模版**](https://juejin.cn/post/6974702344021737485)
 
 * [**苹果开发者账户续费**](https://account.apple.com/account/manage/section/payment)
@@ -5537,6 +5539,25 @@ jobsDismissKeyboard()
       }
   }
   ```
+
+### 42、🎨 字符串取色（校验规定格式） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+/// 支持格式：
+/// "#RRGGBB" / "RRGGBB" / "0xRRGGBB"
+/// "#RGB"   / "RGB"
+/// "#AARRGGBB" / "AARRGGBB"
+
+"#353a3e".cor          // OK → 正常色
+"353a3e".cor           // OK
+"0x353a3e".cor         // OK
+"#FFF".cor             // OK → 展开成 #FFFFFF
+"80FF0000".cor         // OK → alpha=0x80, red
+"乱七八糟".cor         // ❌ → 直接红色
+
+"80FF0000".cor(alpha: 1) // alpha 走字符串里的 0x80，而不是你传的 1
+"垃圾".cor(.black)        // 非法 → black
+```
 
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 

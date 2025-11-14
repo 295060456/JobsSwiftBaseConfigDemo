@@ -18,8 +18,8 @@ func ScreenHeight(_ rate:CGFloat = 1) -> CGFloat {
 }
 // MARK: - 核心比例器
 public enum JXScale {
-    private static var designW: CGFloat = 375
-    private static var designH: CGFloat = 812
+    private static var designW: CGFloat = 390
+    private static var designH: CGFloat = 843
     private static var useSafeArea: Bool = false
     
     public static func setup(designWidth: CGFloat,

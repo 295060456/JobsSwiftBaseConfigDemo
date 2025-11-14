@@ -46,6 +46,7 @@ final class SwiftEntryKitDemoVC: BaseVC {
         UIButton.sys()
             .byTitle("顶部 Banner（2s 自动消失）")
             .onTap { [weak self] (_: UIButton) in
+                let anim = EKAttributes.animTranslationInOut
                 var attr = EKAttributes()
                     .byPosition(.top)
                     .byDuration(2)
@@ -58,9 +59,8 @@ final class SwiftEntryKitDemoVC: BaseVC {
                     .byDisplayMode(.inferred)
                     .byStatusBar(.inferred)
                     .byWindow(level: .normal)
-
-                let anim = EKAttributes.animTranslationInOut
-                attr = attr.byEntrance(anim.entrance).byExit(anim.exit)
+                    .byEntrance(anim.entrance)
+                    .byExit(anim.exit)
                 SwiftEntryKit.display(entry: makeMessageView(title: "已完成", desc: "数据保存成功", systemImage: "checkmark.circle.fill"),
                                       using: attr)
             }
@@ -70,7 +70,9 @@ final class SwiftEntryKitDemoVC: BaseVC {
         UIButton.sys()
             .byTitle("中心 Toast（缩放进入）")
             .onTap { [weak self] (_: UIButton) in
+                let anim = EKAttributes.animScaleInFadeOut
                 var attr = EKAttributes()
+                    .bySize(width: .constant(value: 340.w), height: .constant(value: 270.h))
                     .byPosition(.center)
                     .byDuration(1.6)
                     .byBackground(.color(color: EKColor(.label)))
@@ -80,9 +82,8 @@ final class SwiftEntryKitDemoVC: BaseVC {
                     .byAbsorbTouches(false)
                     .byDisplayMode(.light)
                     .byStatusBar(.inferred)
-
-                let anim = EKAttributes.animScaleInFadeOut
-                attr = attr.byEntrance(anim.entrance).byExit(anim.exit)
+                    .byEntrance(anim.entrance)
+                    .byExit(anim.exit)
                 SwiftEntryKit.display(entry: makeMessageView(title: "提示", desc: "中心 Toast", systemImage: "bolt.fill"),
                                       using: attr)
             }
@@ -92,6 +93,7 @@ final class SwiftEntryKitDemoVC: BaseVC {
         UIButton.sys()
             .byTitle("底部半高 Sheet（可拖动&键盘避让）")
             .onTap { [weak self] (_: UIButton) in
+                let anim = EKAttributes.animTranslationInOut
                 var attr = EKAttributes()
                     .byPosition(.bottom)
                     .byDuration(.infinity)
@@ -104,14 +106,12 @@ final class SwiftEntryKitDemoVC: BaseVC {
                     .byDisplayMode(.inferred)
                     .byStatusBar(.inferred)
                     .byKeyboardAvoiding(.bind(offset: .init(bottom: 10, screenEdgeResistance: 20)))
-
-                attr = attr.bySize(
-                    width:  EKAttributes.PositionConstraints.Edge.offset(value: 0),
-                    height: EKAttributes.PositionConstraints.Edge.ratio(value: 0.45)
-                )
-
-                let anim = EKAttributes.animTranslationInOut
-                attr = attr.byEntrance(anim.entrance).byExit(anim.exit)
+                    .byEntrance(anim.entrance)
+                    .byExit(anim.exit)
+                    .bySize(
+                        width:  EKAttributes.PositionConstraints.Edge.offset(value: 0),
+                        height: EKAttributes.PositionConstraints.Edge.ratio(value: 0.45)
+                    )
                 SwiftEntryKit.display(entry: SheetContentView(),
                                       using: attr)
             }
@@ -123,6 +123,7 @@ final class SwiftEntryKitDemoVC: BaseVC {
             .onTap { [weak self] (_: UIButton) in
                 guard let self else { return }
                 label.byVisible(YES)
+                let anim = EKAttributes.animScaleInFadeOut
                 var attr = EKAttributes()
                     .byPosition(.center)
                     .byDuration(.infinity)
@@ -133,7 +134,8 @@ final class SwiftEntryKitDemoVC: BaseVC {
                     .byDisplayMode(.dark)
                     .byStatusBar(.light)
                     .byWindow(level: .alerts)
-
+                    .byEntrance(anim.entrance)
+                    .byExit(anim.exit)
                 // 全屏
                 var c = attr.positionConstraints
                 c.size = EKAttributes.PositionConstraints.Size(
@@ -141,9 +143,6 @@ final class SwiftEntryKitDemoVC: BaseVC {
                     height: .offset(value: 0)
                 )
                 attr.positionConstraints = c
-
-                let anim = EKAttributes.animScaleInFadeOut
-                attr = attr.byEntrance(anim.entrance).byExit(anim.exit)
                 SwiftEntryKit.display(entry: container, using: attr)
             }
     }()
@@ -152,7 +151,9 @@ final class SwiftEntryKitDemoVC: BaseVC {
         UIButton.sys()
             .byTitle("中心 Toast（确认按钮关闭）")
             .onTap { [weak self] (_: UIButton) in
+                let anim = EKAttributes.animScaleInFadeOut
                 var attr = EKAttributes()
+                    .bySize(width: .constant(value: 340.w), height: .constant(value: 270.h))
                     .byPosition(.center)
                     .byDuration(.infinity)  // 交互型：不自动消失
                     // 统一交给 EK 控制外观
@@ -166,10 +167,8 @@ final class SwiftEntryKitDemoVC: BaseVC {
                     .byScreen(.color(color: EKColor(UIColor(white: 0, alpha: 0.15))))
                     .byDisplayMode(.inferred)
                     .byStatusBar(.inferred)
-
-                let anim = EKAttributes.animScaleInFadeOut
-                attr = attr.byEntrance(anim.entrance).byExit(anim.exit)
-
+                    .byEntrance(anim.entrance)
+                    .byExit(anim.exit)
                 SwiftEntryKit.display(entry: ConfirmToastView().onConfirm {
                     SwiftEntryKit.dismiss()
                 },using: attr)
@@ -181,6 +180,7 @@ final class SwiftEntryKitDemoVC: BaseVC {
             .byTitle("队列与优先级（先排队，再插队）")
             .onTap { [weak self] (_: UIButton) in
                 func enqueue(_ title: String, priority: EKAttributes.Precedence.Priority = .normal) {
+                    let anim = EKAttributes.animTranslationInOut
                     var a = EKAttributes()
                         .byPosition(.top)
                         .byDuration(1.2)
@@ -189,9 +189,8 @@ final class SwiftEntryKitDemoVC: BaseVC {
                         .byShadow()
                         .byQueue(priority: priority, dropEnqueuedEntries: false)
                         .byHaptic(.success)
-
-                    let anim = EKAttributes.animTranslationInOut
-                    a = a.byEntrance(anim.entrance).byExit(anim.exit)
+                        .byEntrance(anim.entrance)
+                        .byExit(anim.exit)
                     SwiftEntryKit.display(entry: makeMessageView(title: title, desc: "队列演示", systemImage: "list.bullet"),
                                           using: a)
                 }
@@ -201,6 +200,7 @@ final class SwiftEntryKitDemoVC: BaseVC {
                 enqueue("普通 #3")
 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    let anim = EKAttributes.animTranslationInOut
                     var a = EKAttributes()
                         .byPosition(.top)
                         .byDuration(1.8)
@@ -208,9 +208,7 @@ final class SwiftEntryKitDemoVC: BaseVC {
                         .byCorner(radius: 12)
                         .byQueue(priority: .max, dropEnqueuedEntries: false)
                         .byHaptic(.success)
-
-                    let anim = EKAttributes.animTranslationInOut
-                    a = a.byEntrance(anim.entrance).byExit(anim.exit)
+                        .byEntrance(anim.entrance).byExit(anim.exit)
                     SwiftEntryKit.display(entry: makeMessageView(title: "⚡️ 高优先级覆盖", desc: "precedence.override", systemImage: "bolt.fill"),
                                           using: a)
                 }
@@ -221,6 +219,7 @@ final class SwiftEntryKitDemoVC: BaseVC {
         UIButton.sys()
             .byTitle("状态栏样式切换（light/dark）")
             .onTap { [weak self] (_: UIButton) in
+                let t = EKAttributes.animTranslationInOut
                 var a1 = EKAttributes()
                     .byPosition(.top)
                     .byDuration(1.4)
@@ -228,12 +227,14 @@ final class SwiftEntryKitDemoVC: BaseVC {
                     .byCorner(radius: 12)
                     .byStatusBar(.light)
                     .byHaptic(.success)
-                let t = EKAttributes.animTranslationInOut
-                a1 = a1.byEntrance(t.entrance).byExit(t.exit)
+                    .byEntrance(t.entrance)
+                    .byExit(t.exit)
+
                 SwiftEntryKit.display(entry: makeMessageView(title: "状态栏：Light", desc: "statusBar = .light", systemImage: "sun.max.fill"),
                                       using: a1)
 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    let tt = EKAttributes.animTranslationInOut
                     var a2 = EKAttributes()
                         .byPosition(.top)
                         .byDuration(1.4)
@@ -241,8 +242,9 @@ final class SwiftEntryKitDemoVC: BaseVC {
                         .byCorner(radius: 12)
                         .byStatusBar(.dark)
                         .byHaptic(.warning)
-                    let tt = EKAttributes.animTranslationInOut
-                    a2 = a2.byEntrance(tt.entrance).byExit(tt.exit)
+                        .byEntrance(tt.entrance)
+                        .byExit(tt.exit)
+
                     SwiftEntryKit.display(entry: makeMessageView(title: "状态栏：Dark", desc: "statusBar = .dark", systemImage: "moon.fill"),
                                           using: a2)
                 }

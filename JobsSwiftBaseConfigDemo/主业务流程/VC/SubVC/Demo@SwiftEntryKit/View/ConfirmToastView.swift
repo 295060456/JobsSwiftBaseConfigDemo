@@ -7,13 +7,6 @@
 
 // ============================== 自定义“需确认”中心 Toast 视图 ==============================
 final class ConfirmToastView: UIView {
-    private var confirmHandler: (() -> Void)?
-    /// 链式设置确认回调（点语法，返回 self）
-    @discardableResult
-    func onConfirm(_ handler: @escaping () -> Void) -> Self {
-        self.confirmHandler = handler
-        return self
-    }
 
     private lazy var titleLabel: UILabel = {
         UILabel()
