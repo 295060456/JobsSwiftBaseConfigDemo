@@ -8,8 +8,7 @@
 import UIKit
 import SnapKit
 
-final class EditNicknameVC: UIViewController {
-
+final class EditNicknameVC: BaseVC {
     /// 昵称输入框
     private lazy var nicknameField: UITextField = {
         UITextField()
@@ -32,14 +31,19 @@ final class EditNicknameVC: UIViewController {
             .bySmartQuotesType(.no)
             .bySmartDashesType(.no)
             .bySmartInsertDeleteType(.no)
+            // 限制输入
+            .byLimitLength(12) {[weak self] isLimited, tf in
+                guard let self else { return }
+                tipLabel.byVisible(isLimited)
+            }
             // 编辑属性
             .byAllowsEditingTextAttributes(true)
             .byDefaultTextAttributes([.kern: 0.5]) // 字距
             .byTypingAttributes([.foregroundColor: UIColor.label])
             .onChange { [weak self] tf, input, old, isDeleting in
                 guard let self else { return }
-                let text = input
-                btn.isEnabled = !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                let text = input.trimmingCharacters(in: .whitespacesAndNewlines)
+                btn.isEnabled = !text.isEmpty
             }
             .byAddTo(view) { [unowned self] make in
                 make.top.equalTo(self.gk_navigationBar.snp.bottom).offset(10)
@@ -50,7 +54,7 @@ final class EditNicknameVC: UIViewController {
 
     private lazy var btn: UIButton = {
         UIButton.sys()
-        /// 普通字符串@设置主标题
+            /// 普通字符串@设置主标题
             .byTitle("保存", for: .normal)
             .byTitleColor(.systemBlue, for: .normal)
             .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
@@ -65,7 +69,7 @@ final class EditNicknameVC: UIViewController {
         UILabel()
             .byText("长度限制12个字节，仅免费修改1次")
             .byFont(.systemFont(ofSize: 12))
-            .byTextColor(.secondaryLabel)
+            .byTextColor(.red)
             .byNumberOfLines(0)
             .byAddTo(view) { [unowned self] make in
                 make.top.equalTo(nicknameField.snp.bottom).offset(8)
@@ -80,8 +84,7 @@ final class EditNicknameVC: UIViewController {
             title: "编辑昵称",
             rightButtons: [btn]
         )
-
+        btn.byEnabled(NO)
         nicknameField.byVisible(YES)
-        tipLabel.byVisible(YES)
     }
 }

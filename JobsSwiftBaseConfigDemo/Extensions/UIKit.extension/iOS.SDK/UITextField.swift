@@ -19,10 +19,16 @@ import ObjectiveC.runtime
 import RxSwift
 import RxCocoa
 import NSObject_Rx
-
+/// 限长状态变化时的回调
+/// isLimited = true  : 进入“被限长”状态（尝试超出时被拦截）
+/// isLimited = false : 从“被限长”状态恢复（删到 maxLength 以下）
+public typealias JobsTFOnLimitChanged = (_ isLimited: Bool, _ textField: UITextField) -> Void
 public enum JobsTFKeys {
-    static var limitBag = UInt8(0)
+    static var limitBag = UInt8(0)                // 专用 DisposeBag
     static var textInputActive = UInt8(0)
+    static var limitLastText: UInt8 = 0           // 最近一次合法文本
+    static var limitCallback: UInt8 = 0           // 超长回调
+    static var limitIsLimited: UInt8 = 0          // 当前是否处于“被限长”状态
     // ↓↓↓ 新增 3 个 AO Key
     static var onChangeBlock = UInt8(0)
     static var onChangeIncludeMarked = UInt8(0)
@@ -430,13 +436,23 @@ public extension UITextField {
         self.tintColor = existingTintColor
     }
 }
-// MARK: 限制输入框最大长度（不能与textInput进行混用，优先级:textInput > byLimitLength）
+// MARK: 限制输入框最大长度（最大长度和最大长度回退的时候回调）
 public extension UITextField {
-    /// 仅做“纯限长”；与 textInput 互斥
+    /// 仅做“纯限长”；与 textInput 互斥。
+    ///
+    /// - Parameters:
+    ///   - maxLength: 最大允许长度（按 Character 计，避免拆 emoji）
+    ///   - onLimitChanged:
+    ///       - isLimited: 是否处于“被限长”状态
+    ///       - textField: 当前输入框
+    ///
+    /// 触发时机：
+    ///   1. false -> true：第一次尝试超过 maxLength 被拦截
+    ///   2. true  -> false：从满格状态删到 maxLength 以下
     @discardableResult
-    func byLimitLength(_ maxLength: Int) -> Self {
+    func byLimitLength(_ maxLength: Int,
+                       onLimitChanged: JobsTFOnLimitChanged? = nil) -> Self {
         guard maxLength > 0 else { return self }
-
         // 若已启用 textInput，则跳过（避免双向回写冲突）
         if (objc_getAssociatedObject(self, &JobsTFKeys.textInputActive) as? Bool) == true {
             #if DEBUG
@@ -444,25 +460,124 @@ public extension UITextField {
             #endif
             return self
         }
-
-        // 为当前 textField 挂一个专用 DisposeBag（重复调用会覆盖旧的）
-        objc_setAssociatedObject(self, &JobsTFKeys.limitBag, disposeBag, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-
-        // 基于 Character 截断（避免拆 emoji/合成字符）
+        // 记录回调
+        if let onLimitChanged {
+            objc_setAssociatedObject(self,
+                                     &JobsTFKeys.limitCallback,
+                                     onLimitChanged,
+                                     .OBJC_ASSOCIATION_COPY_NONATOMIC)
+        } else {
+            objc_setAssociatedObject(self,
+                                     &JobsTFKeys.limitCallback,
+                                     nil,
+                                     .OBJC_ASSOCIATION_COPY_NONATOMIC)
+        }
+        // 为当前 textField 挂一个专用 DisposeBag（重复调用会覆盖旧订阅）
+        let bag = DisposeBag()
+        objc_setAssociatedObject(self,
+                                 &JobsTFKeys.limitBag,
+                                 bag,
+                                 .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        // 初始化“最近一次合法文本”：保证不 > maxLength
+        var initialText = self.text ?? ""
+        if initialText.count > maxLength {
+            initialText = String(initialText.prefix(maxLength))
+            self.text = initialText
+        }
+        objc_setAssociatedObject(self,
+                                 &JobsTFKeys.limitLastText,
+                                 initialText,
+                                 .OBJC_ASSOCIATION_COPY_NONATOMIC)
+        // 初始时默认认为“未被限长”
+        objc_setAssociatedObject(self,
+                                 &JobsTFKeys.limitIsLimited,
+                                 false,
+                                 .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        // 监听文本变化
         rx.text.orEmpty
-            .map { [weak self] text -> String in
-                // 组字中（中文/日文等 IME）不动它
-                if let tf = self, tf.markedTextRange != nil { return text }
-                return text.count > maxLength ? String(text.prefix(maxLength)) : text
-            }
-            .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
-            .bind(to: rx.text)
-            .disposed(by: disposeBag)
+            .subscribe(onNext: { [weak self] newText in
+                guard let self = self else { return }
 
+                // 有高亮（中文/日文 IME 组字中）时不做限制
+                if let range = self.markedTextRange,
+                   self.position(from: range.start, offset: 0) != nil {
+                    return
+                }
+
+                let maxLen = maxLength
+                let callback = objc_getAssociatedObject(self,
+                                                        &JobsTFKeys.limitCallback) as? JobsTFOnLimitChanged
+                let wasLimited =
+                    (objc_getAssociatedObject(self, &JobsTFKeys.limitIsLimited) as? Bool) ?? false
+
+                var processed = newText
+
+                if newText.count > maxLen {
+                    // ❌ 尝试超出：裁剪到 maxLength，进入“被限长”状态
+                    processed = String(newText.prefix(maxLen))
+
+                    if processed != self.text {
+                        self.text = processed
+                    }
+
+                    objc_setAssociatedObject(self,
+                                             &JobsTFKeys.limitLastText,
+                                             processed,
+                                             .OBJC_ASSOCIATION_COPY_NONATOMIC)
+
+                    if wasLimited == false {
+                        // false -> true：第一次触发限长
+                        objc_setAssociatedObject(self,
+                                                 &JobsTFKeys.limitIsLimited,
+                                                 true,
+                                                 .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+                        callback?(true, self)
+                    }
+                    // 已经是 true 再次乱按键，不重复回调
+                } else {
+                    // ✅ 在 maxLength 以内，更新合法文本
+                    objc_setAssociatedObject(self,
+                                             &JobsTFKeys.limitLastText,
+                                             processed,
+                                             .OBJC_ASSOCIATION_COPY_NONATOMIC)
+
+                    let isNowLimited: Bool
+                    if processed.count < maxLen {
+                        // 长度 < maxLength 必然不在“被限长”
+                        isNowLimited = false
+                    } else {
+                        // processed.count == maxLen
+                        // 是否把“刚好等于 maxLength”也当作 limited，看需求；
+                        // 这里按“只有出现过超长拦截才算 limited”来处理：
+                        isNowLimited = wasLimited
+                    }
+
+                    if wasLimited == true && isNowLimited == false {
+                        // true -> false：从“被限长”状态删回来了
+                        objc_setAssociatedObject(self,
+                                                 &JobsTFKeys.limitIsLimited,
+                                                 false,
+                                                 .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+                        callback?(false, self)
+                    } else {
+                        objc_setAssociatedObject(self,
+                                                 &JobsTFKeys.limitIsLimited,
+                                                 isNowLimited,
+                                                 .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+                    }
+                }
+            })
+            .disposed(by: bag)
         return self
     }
+    /// 兼容你原来只有 maxLength 的老签名（不关心回调就用这个）
+    @discardableResult
+    func byLimitLength(_ maxLength: Int) -> Self {
+        byLimitLength(maxLength, onLimitChanged: nil)
+    }
 }
+
 // MARK: - Rx 快捷桥接（去掉 .rx,给 UITextField 直接用）
 public extension UITextField {
     /// 删除键事件（等价 rx.didPressDelete）

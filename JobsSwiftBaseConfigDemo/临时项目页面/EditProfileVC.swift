@@ -20,7 +20,7 @@ private enum EditProfileRow: CaseIterable {
     case hometown
     case profession
 
-    var title: String {
+    var title: JobsText {
         switch self {
         case .avatar:     return "头像"
         case .nickname:   return "昵称"
@@ -33,12 +33,19 @@ private enum EditProfileRow: CaseIterable {
         }
     }
 
-    var detail: String? {
+    var detail: JobsText? {
         switch self {
         case .avatar:
             return nil
         case .nickname:
-            return "I am the user's nickname"
+            return JobsText(JobsRichText.make([
+                JobsRichRun(.text("等级达到2级才能修改昵称"))
+                    .font(.systemFont(ofSize: 14))
+                    .color(.systemRed),
+                JobsRichRun(.text("Eric"))
+                    .font(.systemFont(ofSize: 14, weight: .semibold))
+                    .color(.secondaryLabel)
+            ]))
         case .gender:
             return "female"
         case .sign:
@@ -250,6 +257,7 @@ extension EditProfileVC: UITableViewDelegate {
         case .emotion:
             self.eduPicker.brPresent(in: self.view)
         case .hometown:
+            toastBy("可能这个最后要被取消")
         case .profession:
             SwiftEntryKit.display(
                 entry: PhotoPermissionAlertView()
@@ -302,13 +310,14 @@ final class AvatarCell: UITableViewCell {
 
     @discardableResult
     @objc
+    /// 富文本的优先级比普通文本高。即，如果同时设置富文本和普通文本，优先展示富文本
     override func byConfigure(_ any: Any?) -> Self {
         guard let cfg = any as? JobsCellConfig else { return self }
         if let title = cfg.title {
-            textLabel?.byText(title)
+            textLabel?.byJobsAttributedText(title)
         }
         if let detail = cfg.detail {
-            detailTextLabel?.byText(detail)
+            detailTextLabel?.byJobsAttributedText(detail)
         }
         if let image = cfg.image {
             avatarView.byImage(image)

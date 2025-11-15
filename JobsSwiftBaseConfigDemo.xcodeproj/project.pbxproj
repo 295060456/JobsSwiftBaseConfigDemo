@@ -249,6 +249,7 @@
 		04FC77892EB0BE1E00B810BA /* FeedListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FC77882EB0BE1D00B810BA /* FeedListVC.swift */; };
 		04FC778B2EB0BE2F00B810BA /* PlayerDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FC778A2EB0BE2F00B810BA /* PlayerDetailVC.swift */; };
 		04FC77902EB0C89100B810BA /* BMPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FC778F2EB0C88A00B810BA /* BMPlayer.swift */; };
+		1E7E539AFEE3F28FBE3B8CC7 /* Pods_JobsSwiftBaseConfigDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65BE9CCB0770DF6DCD68B4A0 /* Pods_JobsSwiftBaseConfigDemo.framework */; };
 		C564FBE62E09580B0079B5C1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C564FBE42E09580B0079B5C1 /* Main.storyboard */; };
 		C564FBE92E09580B0079B5C1 /* JobsSwiftBaseConfigDemo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C564FBE72E09580B0079B5C1 /* JobsSwiftBaseConfigDemo.xcdatamodeld */; };
 		C564FBEE2E09580D0079B5C1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C564FBEC2E09580D0079B5C1 /* LaunchScreen.storyboard */; };
@@ -295,7 +296,6 @@
 		C564FCB12E0959990079B5C1 /* CollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FCAE2E0959990079B5C1 /* CollectionCell.swift */; };
 		C564FCB22E0959990079B5C1 /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FCAF2E0959990079B5C1 /* EmptyView.swift */; };
 		C564FCB32E0959990079B5C1 /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FCB02E0959990079B5C1 /* CustomCell.swift */; };
-		E057C9BC81890DCCBD7F5FBE /* Pods_JobsSwiftBaseConfigDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96519C3A98C0AF0AF01C9C66 /* Pods_JobsSwiftBaseConfigDemo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -562,9 +562,8 @@
 		04FC778A2EB0BE2F00B810BA /* PlayerDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDetailVC.swift; sourceTree = "<group>"; };
 		04FC778F2EB0C88A00B810BA /* BMPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMPlayer.swift; sourceTree = "<group>"; };
 		04FD2AAA2EB5B9AB00CDB5D5 /* JobsConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = JobsConfig.xcconfig; sourceTree = "<group>"; };
-		15199648AD7ECE6DE3BEF8FF /* Pods-JobsSwiftBaseConfigDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemo.release.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemo/Pods-JobsSwiftBaseConfigDemo.release.xcconfig"; sourceTree = "<group>"; };
-		504DE6DC4594FFC493D1962A /* Pods-JobsSwiftBaseConfigDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemo.debug.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemo/Pods-JobsSwiftBaseConfigDemo.debug.xcconfig"; sourceTree = "<group>"; };
-		96519C3A98C0AF0AF01C9C66 /* Pods_JobsSwiftBaseConfigDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JobsSwiftBaseConfigDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		65BE9CCB0770DF6DCD68B4A0 /* Pods_JobsSwiftBaseConfigDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JobsSwiftBaseConfigDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		71E1614408A4CB56B21D1B81 /* Pods-JobsSwiftBaseConfigDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemo.debug.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemo/Pods-JobsSwiftBaseConfigDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		C564FBDB2E09580B0079B5C1 /* JobsSwiftBaseConfigDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JobsSwiftBaseConfigDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C564FBE52E09580B0079B5C1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C564FBE82E09580B0079B5C1 /* JobsSwiftBaseConfigDemo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JobsSwiftBaseConfigDemo.xcdatamodel; sourceTree = "<group>"; };
@@ -617,6 +616,7 @@
 		C564FCAE2E0959990079B5C1 /* CollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionCell.swift; sourceTree = "<group>"; };
 		C564FCAF2E0959990079B5C1 /* EmptyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
 		C564FCB02E0959990079B5C1 /* CustomCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
+		DE8816F73D6C7CD637950BCB /* Pods-JobsSwiftBaseConfigDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobsSwiftBaseConfigDemo.release.xcconfig"; path = "Target Support Files/Pods-JobsSwiftBaseConfigDemo/Pods-JobsSwiftBaseConfigDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -631,8 +631,8 @@
 				040E68ED2EC704AD00598A5B /* SwiftCompilerPlugin in Frameworks */,
 				040E68F12EC704AD00598A5B /* SwiftIDEUtils in Frameworks */,
 				040E68EF2EC704AD00598A5B /* SwiftDiagnostics in Frameworks */,
-				E057C9BC81890DCCBD7F5FBE /* Pods_JobsSwiftBaseConfigDemo.framework in Frameworks */,
 				040E68F82EC704C400598A5B /* MyMacrosClient in Frameworks */,
+				1E7E539AFEE3F28FBE3B8CC7 /* Pods_JobsSwiftBaseConfigDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1344,8 +1344,8 @@
 		B8CEBE2669D72254F6970521 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				504DE6DC4594FFC493D1962A /* Pods-JobsSwiftBaseConfigDemo.debug.xcconfig */,
-				15199648AD7ECE6DE3BEF8FF /* Pods-JobsSwiftBaseConfigDemo.release.xcconfig */,
+				71E1614408A4CB56B21D1B81 /* Pods-JobsSwiftBaseConfigDemo.debug.xcconfig */,
+				DE8816F73D6C7CD637950BCB /* Pods-JobsSwiftBaseConfigDemo.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -1489,7 +1489,7 @@
 			isa = PBXGroup;
 			children = (
 				0487AADB2E840EE300B5D307 /* libc++.tbd */,
-				96519C3A98C0AF0AF01C9C66 /* Pods_JobsSwiftBaseConfigDemo.framework */,
+				65BE9CCB0770DF6DCD68B4A0 /* Pods_JobsSwiftBaseConfigDemo.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1501,12 +1501,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C564FC082E09580E0079B5C1 /* Build configuration list for PBXNativeTarget "JobsSwiftBaseConfigDemo" */;
 			buildPhases = (
-				4797AF5AC27E61287EA5F656 /* [CP] Check Pods Manifest.lock */,
+				CA00CFD08168FA6B03F23851 /* [CP] Check Pods Manifest.lock */,
 				C564FBD72E09580B0079B5C1 /* Sources */,
 				C564FBD82E09580B0079B5C1 /* Frameworks */,
 				C564FBD92E09580B0079B5C1 /* Resources */,
 				04CF02912E8A3DE40083ACF0 /* ShellScript */,
-				14290BEF19396C1A77BA49FB /* [CP] Copy Pods Resources */,
+				8ED027F733F47F705EC724B3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1588,8 +1588,8 @@
 			);
 			mainGroup = C564FBD22E09580A0079B5C1;
 			packageReferences = (
-				040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "../../swift-syntax" */,
-				040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "../../MyMacrosClean" */,
+				040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "swift-syntax" */,
+				040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "MyMacrosClean" */,
 			);
 			productRefGroup = C564FBDC2E09580B0079B5C1 /* Products */;
 			projectDirPath = "";
@@ -1678,29 +1678,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "
-";
+			shellScript = "\n";
 		};
-		14290BEF19396C1A77BA49FB /* [CP] Copy Pods Resources */ = {
+		8ED027F733F47F705EC724B3 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-JobsSwiftBaseConfigDemo/Pods-JobsSwiftBaseConfigDemo-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		4797AF5AC27E61287EA5F656 /* [CP] Check Pods Manifest.lock */ = {
+		CA00CFD08168FA6B03F23851 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2165,7 +2160,7 @@
 		};
 		C564FC092E09580E0079B5C1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 504DE6DC4594FFC493D1962A /* Pods-JobsSwiftBaseConfigDemo.debug.xcconfig */;
+			baseConfigurationReference = 71E1614408A4CB56B21D1B81 /* Pods-JobsSwiftBaseConfigDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -2200,7 +2195,7 @@
 		};
 		C564FC0A2E09580E0079B5C1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 15199648AD7ECE6DE3BEF8FF /* Pods-JobsSwiftBaseConfigDemo.release.xcconfig */;
+			baseConfigurationReference = DE8816F73D6C7CD637950BCB /* Pods-JobsSwiftBaseConfigDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -2352,11 +2347,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "../../swift-syntax" */ = {
+		040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "swift-syntax" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../../swift-syntax";
 		};
-		040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "../../MyMacrosClean" */ = {
+		040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "MyMacrosClean" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../MyMacrosClean;
 		};

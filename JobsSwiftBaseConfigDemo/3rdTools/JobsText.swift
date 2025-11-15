@@ -13,8 +13,8 @@ import AppKit
 #if os(iOS) || os(tvOS)
 import UIKit
 #endif
-
 /// 统一载体：既可承载纯文本，也可承载富文本（不依赖 UIKit）
+/// Swift 并发里，跨 actor / 跨任务传递的数据，如果是 Sendable，编译器才认为你这么用是安全的。
 public struct JobsText: Sendable {
     // ⚠️ 注意：NSAttributedString 非 Sendable
     // 这里的 Storage 不再声明 Sendable，而是在下面用 @unchecked Sendable 明确“我保证只读与拷贝”。
@@ -23,8 +23,7 @@ public struct JobsText: Sendable {
         case attributed(NSAttributedString)
     }
 
-    public let storage: Storage
-
+    public let storage: Storage // 内部实现：真正的数据、复制策略、观察逻辑
     // MARK: - 构造
     public init(_ string: String) {
         self.storage = .plain(string)
@@ -39,13 +38,11 @@ public struct JobsText: Sendable {
     public init(_ swiftAttr: AttributedString) {
         self.storage = .attributed(NSAttributedString(swiftAttr))
     }
-
     // 字面量支持：可直接写 let t: JobsText = "hello"
     public init(stringLiteral value: StringLiteralType) {
         self.storage = .plain(value)
     }
 }
-
 // MARK: - 并发声明
 // Storage 持有 NSAttributedString（非 Sendable）。
 // 我们确保：
@@ -58,7 +55,7 @@ extension JobsText.Storage: @unchecked Sendable {}
 // MARK: - 字面量协议 & 描述
 extension JobsText: ExpressibleByStringLiteral {}
 extension JobsText: CustomStringConvertible {
-    public var description: String { rawString }
+    public var description: String { asString }
 }
 // MARK: - 基础访问
 public extension JobsText {
@@ -66,12 +63,27 @@ public extension JobsText {
     var isPlain: Bool {
         if case .plain = storage { return true } else { return false }
     }
-
-    /// 以纯文本形式取出（富文本会丢失样式，只保留 .string）
-    var rawString: String {
+    /// ⬆️ 不管 plain/attributed，都给 NSAttributedString
+    var asAttributed: NSAttributedString {
+        switch storage {
+        case .plain(let s):
+            return NSAttributedString(string: s)
+        case .attributed(let at):
+            return at
+        }
+    }
+    /// ⬇️ 不管 plain/attributed，都给String（富文本会丢失样式，只保留 .string）
+    var asString: String {
         switch storage {
         case .plain(let s): return s
         case .attributed(let a): return a.string
+        }
+    }
+    /// 只关心富文本时用；纯文本则返回 nil
+    var attributed: NSAttributedString? {
+        switch storage {
+        case .plain:              return nil
+        case .attributed(let at): return at
         }
     }
     /// 以 NSAttributedString 取出
@@ -152,7 +164,6 @@ public extension JobsText {
         return try? a.data(from: NSRange(location: 0, length: a.length),
                            documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
     }
-
     /// 从 RTF/RTFD/HTML 等数据恢复富文本
     static func from(data: Data,
                      options: [NSAttributedString.DocumentReadingOptionKey: Any] = [:]) -> JobsText? {

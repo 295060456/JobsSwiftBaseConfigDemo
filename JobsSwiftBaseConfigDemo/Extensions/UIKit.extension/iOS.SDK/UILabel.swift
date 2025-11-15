@@ -17,6 +17,12 @@ import ObjectiveC
 // MARK: - UILabel 链式扩展
 extension UILabel {
     @discardableResult
+    func byJobsAttributedText(_ text: JobsText?) -> Self {
+        guard let text else { return self }
+        self.attributedText = text.asAttributed
+        return self
+    }
+    @discardableResult
     func byText(_ text: String?) -> Self {
         self.text = text
         return self

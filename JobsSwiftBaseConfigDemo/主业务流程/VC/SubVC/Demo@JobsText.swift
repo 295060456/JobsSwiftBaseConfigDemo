@@ -221,7 +221,7 @@ final class JobsTextDemoVC: BaseVC {
         // 1) 富文本预览
         previewLabel.attributedText = current.asAttributedString()
         // 2) 纯文本视图
-        rawLabel.byText("rawString: \(current.rawString)")
+        rawLabel.byText("rawString: \(current.asString)")
         // 3) 调试信息
         debugTextView.text = debugDump(current)
     }

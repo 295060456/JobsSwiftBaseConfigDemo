@@ -57,8 +57,7 @@ public struct JobsRichRun {
 // MARK: - 拼装器
 public struct JobsRichText {
     /// 核心：把一组 run（文本片段/附件）合成为 NSMutableAttributedString
-    public static func make(_ runs: [JobsRichRun],
-                            paragraphStyle: NSMutableParagraphStyle? = nil) -> NSMutableAttributedString {
+    public static func make(_ runs: [JobsRichRun],paragraphStyle: NSMutableParagraphStyle? = nil) -> NSMutableAttributedString {
         // 先串接纯字符串（附件位置占位为 U+FFFC）
         var finalString = ""
         var pieces: [(range: NSRange, run: JobsRichRun)] = []

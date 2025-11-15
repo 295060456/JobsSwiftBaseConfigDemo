@@ -2854,7 +2854,8 @@ private lazy var web: BaseWebView = { [unowned self] in
   > ```
 
   ```swift
-  private lazy var passwordTF: UITextField = {
+  /// 密码输入框
+  private lazy var tf1: UITextField = {
       UITextField()
           .byDelegate(self) // 数据源
           .byPlaceholder("请输入密码（6-20 位）")
@@ -2917,7 +2918,11 @@ private lazy var web: BaseWebView = { [unowned self] in
                            print("👁 当前状态：\(sender.isSelected ? "隐藏密码" : "显示密码")")
                        }, mode: .always)
           .byInputView(datePicker) // 演示自定义 inputView：点密码框弹日期（纯展示，不建议真实项目这么用）
-          .byLimitLength(5)
+          // 限制输入
+          .byLimitLength(12) {[weak self] isLimited, tf in
+              guard let self else { return }
+              tipLabel.byVisible(isLimited)
+          }
           .onChange { tf, input, old, isDeleting in
               let new = tf.text ?? ""
               print("✏️ input='\(input)' old='\(old)' new='\(new)' deleting=\(isDeleting)")

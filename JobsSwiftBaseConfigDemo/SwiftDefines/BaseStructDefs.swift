@@ -270,13 +270,13 @@ private extension LaunchChecker {
 }
 // MARK: - 通用于 UITableViewCell 和 UICollectionViewCell 的模型组件
 public struct JobsCellConfig {
-    public let title: String?
-    public let detail: String?
+    public let title: JobsText?
+    public let detail: JobsText?
     public let image: UIImage?
     public let data: Any?
 
-    public init(title: String? = nil,
-                detail: String? = nil,
+    public init(title: JobsText? = nil,
+                detail: JobsText? = nil,
                 image: UIImage? = nil,
                 data: Any? = nil) {
         self.title = title

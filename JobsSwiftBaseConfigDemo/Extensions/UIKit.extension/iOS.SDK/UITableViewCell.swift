@@ -141,6 +141,15 @@ public extension UITableViewCell {
         return self
     }
     /// 文本
+    func byJobsText(_ text: JobsText?) -> Self {
+        guard let text else { return self }
+        if #available(iOS 14.0, *) {
+            return byContentConfiguration { $0.attributedText = text.asAttributed }
+        } else {
+            self.textLabel?.attributedText = text.asAttributed
+            return self
+        };
+    }
     @discardableResult
     func byText(_ text: String?) -> Self {
         if #available(iOS 14.0, *) {
@@ -149,6 +158,15 @@ public extension UITableViewCell {
             self.textLabel?.text = text
             return self
         }
+    }
+    func bySecondaryJobsText(_ text: JobsText?) -> Self {
+        guard let text else { return self }
+        if #available(iOS 14.0, *) {
+            return byContentConfiguration { $0.secondaryAttributedText = text.asAttributed }
+        } else {
+            self.detailTextLabel?.attributedText = text.asAttributed
+            return self
+        };
     }
     /// 富文本标题
     @discardableResult
@@ -316,16 +334,16 @@ extension UITableViewCell: JobsConfigCellProtocol {
         guard let cfg = any as? JobsCellConfig else { return self }
         if #available(iOS 14.0, *) {
             return self
-                .byText(cfg.title)
-                .bySecondaryText(cfg.detail)
+                .byJobsText(cfg.title)
+                .bySecondaryJobsText(cfg.detail)
                 .byImage(cfg.image)
         } else {
             // 旧系统依赖 textLabel / detailTextLabel
             if let title = cfg.title {
-                textLabel?.byText(title)
+                textLabel?.byJobsAttributedText(title)
             }
             if let detail = cfg.detail {
-                detailTextLabel?.byText(detail)
+                detailTextLabel?.byJobsAttributedText(detail)
             }
             if let image = cfg.image {
                 imageView?.byImage(image)

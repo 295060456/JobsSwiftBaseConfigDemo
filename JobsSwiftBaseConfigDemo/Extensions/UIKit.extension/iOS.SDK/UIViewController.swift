@@ -246,7 +246,7 @@ public extension UIViewController {
         rightButtons: [UIButton]? = nil
     ) {
         // 标题（GK 只吃 String）
-        gk_navTitle = title.rawString
+        gk_navTitle = title.asString
 
         // 左侧按钮：nil → 默认返回；否则用传入的 UIButton
         if let btn = leftButton {
