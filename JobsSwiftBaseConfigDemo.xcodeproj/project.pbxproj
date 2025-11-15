@@ -737,8 +737,8 @@
 		0432837A2EC470220031CDD6 /* 临时项目页面 */ = {
 			isa = PBXGroup;
 			children = (
-				04BA33D82EC72CAF00B9C8D7 /* EditNicknameVC.swift */,
 				04A368132EC59516000FC898 /* EditProfileVC.swift */,
+				04BA33D82EC72CAF00B9C8D7 /* EditNicknameVC.swift */,
 				04B5B4982EC5D80200ED4505 /* 弹出的提示框 */,
 			);
 			path = "临时项目页面";

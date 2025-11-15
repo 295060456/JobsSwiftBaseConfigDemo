@@ -78,7 +78,7 @@ final class BRPickerDemoVC: BaseVC {
             .brStyle { $0.minuteInterval = 1 }
             .brOnResult { [weak self] dt in
                 guard let self else { return }
-                toastBy("系统 Date：\(dt.map { Self.fmt($0, "yyyy-MM-dd") } ?? "-")")
+                toastBy("系统 Date：\(dt.map { fmt($0, "yyyy-MM-dd") } ?? "-")")
             }
     }()
     /// 日期：系统 Date & Time
@@ -90,7 +90,7 @@ final class BRPickerDemoVC: BaseVC {
             .brStyle { $0.minuteInterval = 5 }
             .brOnResult { [weak self] dt in
                 guard let self else { return }
-                toastBy("系统 Date&Time：\(dt.map { Self.fmt($0, "yyyy-MM-dd HH:mm") } ?? "-")")
+                toastBy("系统 Date&Time：\(dt.map { fmt($0, "yyyy-MM-dd HH:mm") } ?? "-")")
             }
     }()
     /// 日期：系统 Time（12h）
@@ -105,7 +105,7 @@ final class BRPickerDemoVC: BaseVC {
             }
             .brOnResult { [weak self] dt in
                 guard let self else { return }
-                toastBy("系统 Time：\(dt.map { Self.fmt($0, "HH:mm") } ?? "-")")
+                toastBy("系统 Time：\(dt.map { fmt($0, "HH:mm") } ?? "-")")
             }
     }()
     /// 日期：系统 CountDownTimer
@@ -116,7 +116,7 @@ final class BRPickerDemoVC: BaseVC {
             .brSelectDate(Date())
             .brOnResult { [weak self] dt in
                 guard let self else { return }
-                toastBy("系统 CountDownTimer：\(dt.map { Self.fmt($0, "HH:mm") } ?? "-")")
+                toastBy("系统 CountDownTimer：\(dt.map { fmt($0, "HH:mm") } ?? "-")")
             }
     }()
     /// 日期：自定义 YMD（年月日）
@@ -127,7 +127,7 @@ final class BRPickerDemoVC: BaseVC {
             .brSelectDate(Date())
             .brOnResult { [weak self] dt in
                 guard let self else { return }
-                toastBy("自定义 YMD：\(dt.map { Self.fmt($0, "yyyy-MM-dd") } ?? "-")")
+                toastBy("自定义 YMD：\(dt.map { fmt($0, "yyyy-MM-dd") } ?? "-")")
             }
     }()
     /// 日期：自定义 YM（年月）
@@ -138,7 +138,7 @@ final class BRPickerDemoVC: BaseVC {
             .brSelectDate(Date())
             .brOnResult { [weak self] dt in
                 guard let self else { return }
-                toastBy("自定义 YM：\(dt.map { Self.fmt($0, "yyyy-MM") } ?? "-")")
+                toastBy("自定义 YM：\(dt.map { fmt($0, "yyyy-MM") } ?? "-")")
             }
     }()
     /// 日期：自定义 Y（年）
@@ -149,7 +149,7 @@ final class BRPickerDemoVC: BaseVC {
             .brSelectDate(Date())
             .brOnResult { [weak self] dt in
                 guard let self else { return }
-                toastBy("自定义 Y：\(dt.map { Self.fmt($0, "yyyy") } ?? "-")")
+                toastBy("自定义 Y：\(dt.map { fmt($0, "yyyy") } ?? "-")")
             }
     }()
     /// 日期：自定义 MD（月日）
@@ -160,7 +160,7 @@ final class BRPickerDemoVC: BaseVC {
             .brSelectDate(Date())
             .brOnResult { [weak self] dt in
                 guard let self else { return }
-                toastBy("自定义 MD：\(dt.map { Self.fmt($0, "MM-dd") } ?? "-")")
+                toastBy("自定义 MD：\(dt.map { fmt($0, "MM-dd") } ?? "-")")
             }
     }()
     /// 日期：自定义 HM（时:分，步进 = 5）
@@ -172,7 +172,7 @@ final class BRPickerDemoVC: BaseVC {
             .brStyle { $0.minuteInterval = 5 }
             .brOnResult { [weak self] dt in
                 guard let self else { return }
-                toastBy("自定义 HM：\(dt.map { Self.fmt($0, "HH:mm") } ?? "-")")
+                toastBy("自定义 HM：\(dt.map { fmt($0, "HH:mm") } ?? "-")")
             }
     }()
 
@@ -421,9 +421,5 @@ final class BRPickerDemoVC: BaseVC {
              secText, btnSingle, btnMulti, btnCascade,
              secSys, btnSysDate, btnSysDateTime, btnSysTime, btnSysCount,
              secCustom, btnYMD, btnYM, btnY, btnMD, btnHM]
-    }
-
-    private static func fmt(_ date: Date, _ f: String) -> String {
-        DateFormatter().byLocale(.current).byDateFormat(f).string(from: date)
     }
 }

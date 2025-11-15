@@ -81,6 +81,44 @@ final class EditProfileVC: BaseVC {
                 }
             }
     }()
+    /// 文本：单列（学历）
+    private lazy var eduPicker: BRTextPickerView = { [unowned self] in
+        BRTextPickerView()
+            .brMode(.single)
+            .brTitle("")
+            .brStyle { $0.isAutoSelect = false }
+            .brDataSource(["女", "男", "不想透露"])
+            .brSelectIndex(2)
+            .brOnSingle { m, idx in
+                toastBy("单列：\(m?.text ?? "-")（index=\(idx)）")
+            }
+    }()
+    /// 文本：单列（情感状态）
+    private lazy var emotionPicker: BRTextPickerView = { [unowned self] in
+        BRTextPickerView()
+            .brMode(.single)
+            .brTitle("")
+            .brStyle { $0.isAutoSelect = false }
+            .brDataSource(["已婚", "单身", "不想透露"])
+            .brSelectIndex(2)
+            .brOnSingle { m, idx in
+                toastBy("单列：\(m?.text ?? "-")（index=\(idx)）")
+            }
+    }()
+    /// 日期：系统 Date（年月日）
+    private lazy var dateSysDatePicker: BRDatePickerView = { [unowned self] in
+        BRDatePickerView()
+            .brMode(.date)
+            .brTitle("出生日")
+            .brSelectDate(Date())
+            .brMinDate(Calendar.current.date(byAdding: .year, value: -80, to: Date()))
+            .brMaxDate(Date())
+            .brStyle { $0.minuteInterval = 1 }
+            .brOnResult { [weak self] dt in
+                guard let self else { return }
+                toastBy("系统 Date：\(dt.map { fmt($0, "yyyy-MM-dd") } ?? "-")")
+            }
+    }()        
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -175,19 +213,21 @@ extension EditProfileVC: UITableViewDelegate {
                     },
                 using: makeEKAttributes().bySize(width: .constant(value: 340.w), height: .constant(value: 217.h))
             )
+
+//            SwiftEntryKit.display(
+//                entry: TipsGrantPermissionView().onConfirm {
+//                    print("去开启")
+//                    SwiftEntryKit.dismiss(.all)
+//                },
+//                using: makeEKAttributes().bySize(width: .constant(value: 326.w), height: .constant(value: 206.h))
+//            )
         case .nickname:
-            SwiftEntryKit.display(
-                entry: TipsGrantPermissionView().onConfirm {
-                    print("去开启")
-                    SwiftEntryKit.dismiss(.all)
-                },
-                using: makeEKAttributes().bySize(width: .constant(value: 326.w), height: .constant(value: 206.h))
-            )
-        case .gender:
             EditNicknameVC()
                 .byData("https://www.baidu.com")
                 .byPush(self)
                 .byCompletion { print("❤️结束❤️ fromBottom") }
+        case .gender:
+            self.eduPicker.brPresent(in: self.view)
         case .sign:
             SwiftEntryKit.display(
                 entry: PhotoPermissionAlertView()
@@ -206,56 +246,10 @@ extension EditProfileVC: UITableViewDelegate {
                 using: makeEKAttributes()
             )
         case .birthday:
-            SwiftEntryKit.display(
-                entry: PhotoPermissionAlertView()
-                    .onLimited {
-                        print("有限访问")
-                        SwiftEntryKit.dismiss()
-                    }
-                    .onFull {
-                        print("全部允许")
-                        SwiftEntryKit.dismiss()
-                    }
-                    .onDeny {
-                        print("不允许")
-                        SwiftEntryKit.dismiss()
-                    },
-                using: makeEKAttributes()
-            )
+            dateSysDatePicker.brPresent(in: self.view)
         case .emotion:
-            SwiftEntryKit.display(
-                entry: PhotoPermissionAlertView()
-                    .onLimited {
-                        print("有限访问")
-                        SwiftEntryKit.dismiss()
-                    }
-                    .onFull {
-                        print("全部允许")
-                        SwiftEntryKit.dismiss()
-                    }
-                    .onDeny {
-                        print("不允许")
-                        SwiftEntryKit.dismiss()
-                    },
-                using: makeEKAttributes()
-            )
+            self.eduPicker.brPresent(in: self.view)
         case .hometown:
-            SwiftEntryKit.display(
-                entry: PhotoPermissionAlertView()
-                    .onLimited {
-                        print("有限访问")
-                        SwiftEntryKit.dismiss()
-                    }
-                    .onFull {
-                        print("全部允许")
-                        SwiftEntryKit.dismiss()
-                    }
-                    .onDeny {
-                        print("不允许")
-                        SwiftEntryKit.dismiss()
-                    },
-                using: makeEKAttributes()
-            )
         case .profession:
             SwiftEntryKit.display(
                 entry: PhotoPermissionAlertView()

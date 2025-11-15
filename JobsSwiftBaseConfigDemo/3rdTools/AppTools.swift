@@ -133,6 +133,10 @@ public func makeEKAttributes() -> EKAttributes{
         .byEntrance(anim.entrance)
         .byExit(anim.exit)
 }
+
+public func fmt(_ date: Date, _ f: String) -> String {
+    DateFormatter().byLocale(.current).byDateFormat(f).string(from: date)
+}
 /// 分割线
 extension UIView {
     /// 在指定 view 下方添加一条分割线，添加到当前 view（self）上
