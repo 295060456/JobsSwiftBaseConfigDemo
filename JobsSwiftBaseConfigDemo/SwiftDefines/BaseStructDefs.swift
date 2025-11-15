@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 // MARK: - ShadowDirection
 struct ShadowDirection: OptionSet {
     let rawValue: UInt

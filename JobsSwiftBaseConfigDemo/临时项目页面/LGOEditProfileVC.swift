@@ -1,5 +1,5 @@
 //
-//  EditProfileVC.swift
+//  LGOEditProfileVC.swift
 //  JobsSwiftBaseConfigDemo
 //
 //  Created by Jobs on 2025/11/13.
@@ -62,7 +62,7 @@ private enum EditProfileRow: CaseIterable {
     }
 }
 
-final class EditProfileVC: BaseVC {
+final class LGOEditProfileVC: BaseVC {
     
     private let sections: [[EditProfileRow]] = [
         [.avatar, .nickname, .gender, .sign],
@@ -135,7 +135,7 @@ final class EditProfileVC: BaseVC {
     }
 }
 // MARK: - UITableViewDataSource
-extension EditProfileVC: UITableViewDataSource {
+extension LGOEditProfileVC: UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
         sections.count
@@ -167,7 +167,7 @@ extension EditProfileVC: UITableViewDataSource {
     }
 }
 // MARK: - UITableViewDelegate
-extension EditProfileVC: UITableViewDelegate {
+extension LGOEditProfileVC: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView,
                    heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -229,7 +229,7 @@ extension EditProfileVC: UITableViewDelegate {
 //                using: makeEKAttributes().bySize(width: .constant(value: 326.w), height: .constant(value: 206.h))
 //            )
         case .nickname:
-            EditNicknameVC()
+            LGOEditNicknameVC()
                 .byData("https://www.baidu.com")
                 .byPush(self)
                 .byCompletion { print("❤️结束❤️ fromBottom") }

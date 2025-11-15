@@ -138,7 +138,7 @@ public enum NSTimerCurrentStatus: UInt {
          destroy     /// 定时器销毁
 }
 // MARK: - 登录方式
-public enum LoginType: Int {
+public enum JobsLoginType: Int {
     case silent = 0,/// 静默登录（只在账密登录成功后有效）
          manual     /// 非静默登录
 }

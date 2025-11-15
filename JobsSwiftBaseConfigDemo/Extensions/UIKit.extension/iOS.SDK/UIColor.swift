@@ -116,7 +116,7 @@ extension UIColor {
                        alpha: CGFloat(alpha))
     }
     /// 生成随机颜色
-    static var random: UIColor {
+    static var randomColor: UIColor {
         let red = CGFloat.random(in: 0...1)
         let green = CGFloat.random(in: 0...1)
         let blue = CGFloat.random(in: 0...1)

@@ -1,5 +1,5 @@
 //
-//  EditNicknameVC.swift
+//  LGOEditNicknameVC.swift
 //  JobsSwiftBaseConfigDemo
 //
 //  Created by Jobs on 11/14/25.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class EditNicknameVC: BaseVC {
+final class LGOEditNicknameVC: BaseVC {
     /// 昵称输入框
     private lazy var nicknameField: UITextField = {
         UITextField()
