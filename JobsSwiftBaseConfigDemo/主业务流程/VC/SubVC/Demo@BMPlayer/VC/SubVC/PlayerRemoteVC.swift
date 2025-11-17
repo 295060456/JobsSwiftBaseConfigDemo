@@ -10,6 +10,9 @@ import SnapKit
 import BMPlayer
 
 final class PlayerRemoteVC: BaseVC {
+    deinit {
+        JobsNetworkTrafficMonitor.shared.stop()
+    }
     // MARK: - 懒加载：播放器
     private lazy var player: BMPlayer = { [unowned self] in
         BMPlayer()
@@ -44,6 +47,24 @@ final class PlayerRemoteVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        view.makeNetworkListener()
+
+        JobsNetworkTrafficMonitor.shared
+            .byOnUpdate { [weak self] source, up, down in
+                guard let self else { return }
+
+                let upStr   = jobs_formatSpeed(up)
+                let downStr = jobs_formatSpeed(down)
+
+                let text = """
+                源: \(source.displayName)
+                ⬆︎ \(upStr)  ⬇︎ \(downStr)
+                """
+
+                view.makeNetworkListener().byText(text)
+            }
+            .byStart(interval: 1.0)
+
         jobsSetupGKNav(title: "网络单播")
         player.byVisible(YES)
     }

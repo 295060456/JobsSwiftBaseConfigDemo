@@ -168,3 +168,49 @@ extension UIView {
             }
     }
 }
+/// 网络监听
+private enum JobsNetworkListenerKeys {
+    static var labelKey: UInt8 = 0
+}
+
+public extension UIView {
+    /// 为当前 view 创建 / 复用一个悬浮网络监听 Label
+    @discardableResult
+    func makeNetworkListener(in containerView: UIView? = nil) -> UILabel {
+        // 1️⃣ 如果已经有了，直接复用
+        if let cached = objc_getAssociatedObject(self, &JobsNetworkListenerKeys.labelKey) as? UILabel {
+            return cached
+        }
+
+        // 2️⃣ 第一次创建
+        let container = containerView ?? self
+
+        let label = UILabel()
+            .byText("网络初始化中...")
+            .byFont(.systemFont(ofSize: 11, weight: .medium))
+            .byTextColor(.white)
+            .byNumberOfLines(2)
+            .byTextAlignment(.center)
+            .byBgColor(UIColor.black.withAlphaComponent(0.7))
+            .byCornerRadius(8)
+            .byMasksToBounds(true)
+            .byUserInteractionEnabled(YES)
+            .bySuspend { cfg in
+                cfg
+                    .byContainer(container)
+                    .byStart(.point(CGPoint(x: Screen.width - 160,
+                                            y: Screen.height - 200))) // 起始点（可用区域坐标）
+                    .byFallbackSize(CGSize(width: 140, height: 48))
+                    .byDocking(.nearestEdge)
+                    .byHapticOnDock(true)
+            }
+
+        // 3️⃣ 关联到当前 view，保证之后都是这一个
+        objc_setAssociatedObject(self,
+                                 &JobsNetworkListenerKeys.labelKey,
+                                 label,
+                                 .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+
+        return label
+    }
+}
