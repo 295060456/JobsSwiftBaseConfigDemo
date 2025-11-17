@@ -647,6 +647,13 @@ public extension String {
         }
     }
 }
+// MARK: - 公有工具
+public extension String {
+    /// 复制当前字符串到系统剪切板
+    func paste(){
+        UIPasteboard.general.string = self
+    }
+}
 // MARK: - 私有工具
 private extension String {
     /// 尝试将任意字符串转为“可打开”的 URL：
