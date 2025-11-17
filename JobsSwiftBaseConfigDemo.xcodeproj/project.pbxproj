@@ -39,6 +39,7 @@
 		04124F422EB0762900462BE2 /* AFStubURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F412EB0762900462BE2 /* AFStubURLProtocol.swift */; };
 		04124F442EB0764200462BE2 /* AFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F432EB0764100462BE2 /* AFService.swift */; };
 		041F5B012E87B51800984EEB /* Demo@输入框.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041F5B002E87B50F00984EEB /* Demo@输入框.swift */; };
+		042405332ECB03A2005B89AA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 042405312ECB03A2005B89AA /* InfoPlist.strings */; };
 		0424625A2EBAFCD800D6BFCC /* Demo@ComponentKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042462592EBAFCD500D6BFCC /* Demo@ComponentKit.swift */; };
 		042B67CE2E95085A000A2970 /* NSTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B67CD2E950858000A2970 /* NSTextAttachment.swift */; };
 		042F958E2EB5C478005DE735 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F958D2EB5C477005DE735 /* Bundle.swift */; };
@@ -339,6 +340,8 @@
 		04124F412EB0762900462BE2 /* AFStubURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFStubURLProtocol.swift; sourceTree = "<group>"; };
 		04124F432EB0764100462BE2 /* AFService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFService.swift; sourceTree = "<group>"; };
 		041F5B002E87B50F00984EEB /* Demo@输入框.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@输入框.swift"; sourceTree = "<group>"; };
+		042405322ECB03A2005B89AA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		042405342ECB03A9005B89AA /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		042462592EBAFCD500D6BFCC /* Demo@ComponentKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@ComponentKit.swift"; sourceTree = "<group>"; };
 		0424625B2EBB020E00D6BFCC /* Demo@Texture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@Texture.swift"; sourceTree = "<group>"; };
 		042B67CD2E950858000A2970 /* NSTextAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTextAttachment.swift; sourceTree = "<group>"; };
@@ -1387,6 +1390,7 @@
 				0432837A2EC470220031CDD6 /* 临时项目页面 */,
 				04FD2AAA2EB5B9AB00CDB5D5 /* JobsConfig.xcconfig */,
 				C564FBEF2E09580D0079B5C1 /* Info.plist */,
+				042405312ECB03A2005B89AA /* InfoPlist.strings */,
 				04D49C222EBE055000BCD6F1 /* JobsSwiftBaseConfigDemo-Bridging-Header.h */,
 			);
 			path = JobsSwiftBaseConfigDemo;
@@ -1614,6 +1618,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0453763D2EB0B41F00133F73 /* 非iph_X.mp4 in Resources */,
+				042405332ECB03A2005B89AA /* InfoPlist.strings in Resources */,
 				040B31122EB2294100862F75 /* ColorAssets.xcassets in Resources */,
 				0453763E2EB0B41F00133F73 /* iph_X.mp4 in Resources */,
 				0453763F2EB0B41F00133F73 /* welcome_video.mp4 in Resources */,
@@ -2012,6 +2017,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		042405312ECB03A2005B89AA /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				042405322ECB03A2005B89AA /* en */,
+				042405342ECB03A9005B89AA /* zh-Hans */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		042F959A2EB5F733005DE735 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
