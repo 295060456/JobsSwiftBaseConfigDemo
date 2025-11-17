@@ -47,7 +47,22 @@ final class PlayerRemoteVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        view.makeNetworkListener()
+
+//        JobsNetworkTrafficMonitor.shared
+//            .byOnUpdate { [weak self] source, up, down in
+//                guard let self else { return }
+//
+//                let upStr   = jobs_formatSpeed(up)
+//                let downStr = jobs_formatSpeed(down)
+//
+//                let text = """
+//                源: \(source.displayName)
+//                ⬆︎ \(upStr)  ⬇︎ \(downStr)
+//                """
+//
+//                view.makeNetworkListener().byText(text)
+//            }
+//            .byStart(interval: 1.0)
 
         JobsNetworkTrafficMonitor.shared
             .byOnUpdate { [weak self] source, up, down in
@@ -56,12 +71,48 @@ final class PlayerRemoteVC: BaseVC {
                 let upStr   = jobs_formatSpeed(up)
                 let downStr = jobs_formatSpeed(down)
 
-                let text = """
-                源: \(source.displayName)
-                ⬆︎ \(upStr)  ⬇︎ \(downStr)
-                """
+                // 段落样式：居中 + 行距
+                let paragraph = jobsMakeParagraphStyle { ps in
+                    ps.alignment = .center
+                    ps.lineSpacing = 2
+                }
 
-                view.makeNetworkListener().byText(text)
+                // 用 JobsRichText 拼富文本
+                let attr = JobsRichText.make([
+                    // 第 1 行：源
+                    JobsRichRun(.text("源: "))
+                        .font(.systemFont(ofSize: 10, weight: .medium))
+                        .color(.secondaryLabel),
+
+                    JobsRichRun(.text(source.displayName))
+                        .font(.systemFont(ofSize: 11, weight: .semibold))
+                        .color(.white),
+
+                    JobsRichRun(.text("\n")),
+
+                    // 第 2 行：上行
+                    JobsRichRun(.text("⬆︎ "))
+                        .font(.systemFont(ofSize: 11))
+                        .color(.systemGreen),
+
+                    JobsRichRun(.text(upStr + "  "))
+                        .font(.monospacedDigitSystemFont(ofSize: 11, weight: .medium))
+                        .color(.white),
+
+                    // 下行
+                    JobsRichRun(.text("⬇︎ "))
+                        .font(.systemFont(ofSize: 11))
+                        .color(.systemRed),
+
+                    JobsRichRun(.text(downStr))
+                        .font(.monospacedDigitSystemFont(ofSize: 11, weight: .medium))
+                        .color(.white)
+                ], paragraphStyle: paragraph)
+
+                // 单例悬浮 Label + 富文本
+                self.view
+                    .makeNetworkListener()
+                    .byAttributedString(attr)
             }
             .byStart(interval: 1.0)
 

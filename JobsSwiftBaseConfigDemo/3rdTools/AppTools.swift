@@ -181,10 +181,8 @@ public extension UIView {
         if let cached = objc_getAssociatedObject(self, &JobsNetworkListenerKeys.labelKey) as? UILabel {
             return cached
         }
-
         // 2️⃣ 第一次创建
         let container = containerView ?? self
-
         let label = UILabel()
             .byText("网络初始化中...")
             .byFont(.systemFont(ofSize: 11, weight: .medium))
@@ -204,13 +202,11 @@ public extension UIView {
                     .byDocking(.nearestEdge)
                     .byHapticOnDock(true)
             }
-
         // 3️⃣ 关联到当前 view，保证之后都是这一个
         objc_setAssociatedObject(self,
                                  &JobsNetworkListenerKeys.labelKey,
                                  label,
                                  .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-
         return label
     }
 }
