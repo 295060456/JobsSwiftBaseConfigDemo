@@ -210,3 +210,66 @@ public extension UIView {
         return label
     }
 }
+
+func networkNormalListenerBy(_ view:UIView){
+    JobsNetworkTrafficMonitor.shared
+        .byOnUpdate {source, up, down in
+
+            let upStr   = jobs_formatSpeed(up)
+            let downStr = jobs_formatSpeed(down)
+
+            let text = """
+            源: \(source.displayName)
+            ⬆︎ \(upStr)  ⬇︎ \(downStr)
+            """
+
+            view.makeNetworkListener().byText(text)
+        }
+        .byStart(interval: 1.0)
+}
+
+func networkRichListenerBy(_ view:UIView){
+    JobsNetworkTrafficMonitor.shared
+        .byOnUpdate {source, up, down in
+            let upStr   = jobs_formatSpeed(up)
+            let downStr = jobs_formatSpeed(down)
+            // 段落样式：居中 + 行距
+            let paragraph = jobsMakeParagraphStyle { ps in
+                ps.alignment = .center
+                ps.lineSpacing = 2
+            }
+            // 用 JobsRichText 拼富文本
+            let attr = JobsRichText.make([
+                // 第 1 行：源
+                JobsRichRun(.text("源: "))
+                    .font(.systemFont(ofSize: 10, weight: .medium))
+                    .color(.secondaryLabel),
+
+                JobsRichRun(.text(source.displayName))
+                    .font(.systemFont(ofSize: 11, weight: .semibold))
+                    .color(.white),
+
+                JobsRichRun(.text("\n")),
+                // 第 2 行：上行
+                JobsRichRun(.text("⬆︎ "))
+                    .font(.systemFont(ofSize: 11))
+                    .color(.systemGreen),
+
+                JobsRichRun(.text(upStr + "  "))
+                    .font(.monospacedDigitSystemFont(ofSize: 11, weight: .medium))
+                    .color(.white),
+                // 下行
+                JobsRichRun(.text("⬇︎ "))
+                    .font(.systemFont(ofSize: 11))
+                    .color(.systemRed),
+
+                JobsRichRun(.text(downStr))
+                    .font(.monospacedDigitSystemFont(ofSize: 11, weight: .medium))
+                    .color(.white)
+            ], paragraphStyle: paragraph)
+            // 单例悬浮 Label + 富文本
+            view.makeNetworkListener().byAttributedString(attr)
+        }
+        .byStart(interval: 1.0)
+}
+

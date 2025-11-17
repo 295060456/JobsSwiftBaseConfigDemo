@@ -5974,7 +5974,7 @@ jobsDismissKeyboard()
   }
   ```
 
-### 42、🎨 字符串取色（校验规定格式） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 42、🎨 字符串取色（校验规定格式）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 /// 支持格式：
@@ -5992,6 +5992,25 @@ jobsDismissKeyboard()
 "80FF0000".cor(alpha: 1) // alpha 走字符串里的 0x80，而不是你传的 1
 "垃圾".cor(.black)        // 非法 → black
 ```
+
+### 43、网络数据的监听（数据来源 + 上行/下载）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+![image-20251117172827722](./assets/image-20251117172827722.png)
+
+* 创建监听
+
+   ```swift
+   networkNormalListenerBy(view) // 普通文本
+   networkRichListenerBy(view) // 富文本
+   ```
+
+* 手动移除
+
+  ```swift
+  deinit {
+      JobsNetworkTrafficMonitor.shared.stop()
+  }
+  ```
 
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
