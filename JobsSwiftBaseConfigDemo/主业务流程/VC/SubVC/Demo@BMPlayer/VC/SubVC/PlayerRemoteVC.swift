@@ -11,7 +11,8 @@ import BMPlayer
 
 final class PlayerRemoteVC: BaseVC {
     deinit {
-        JobsNetworkTrafficMonitor.shared.stop()
+        JobsNetworkTrafficMonitorStop()  /// 停止网络实时监听
+        JobsCancelWaitNetworkDataReady() /// 停止网络数据源监听
     }
     // MARK: - 懒加载：播放器
     private lazy var player: BMPlayer = { [unowned self] in

@@ -5993,24 +5993,44 @@ jobsDismissKeyboard()
 "垃圾".cor(.black)        // 非法 → black
 ```
 
-### 43、网络数据的监听（数据来源 + 上行/下载）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 43、网络数据的监听 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ![image-20251117172827722](./assets/image-20251117172827722.png)
 
-* 创建监听
+#### 43.1、监听：数据来源 + 上行⬆️ / 下载⬇️ <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-   ```swift
-   networkNormalListenerBy(view) // 普通文本
-   networkRichListenerBy(view) // 富文本
-   ```
+```swift
+networkNormalListenerBy(view) // 普通文本
+networkRichListenerBy(view) // 富文本
+```
 
-* 手动移除
+```swift
+/// 手动移除
+deinit {
+    JobsNetworkTrafficMonitorStop()  /// 停止网络实时监听
+}
+```
 
-  ```swift
-  deinit {
-      JobsNetworkTrafficMonitor.shared.stop()
-  }
-  ```
+#### 43.2、监听第一次数据源 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+ jobsWaitNetworkDataReady(
+     onWiFiReady: {
+         print("✅ Wi-Fi 已有真实流量")
+     },
+     onCellularReady: {
+         print("✅ 蜂窝已实际可用，可以走后续逻辑")
+         // 比如这里再去重试接口、发起播放等
+     }
+ )
+```
+
+```swift
+/// 手动移除
+deinit {
+    JobsCancelWaitNetworkDataReady()       /// 停止网络数据源监听
+}
+```
 
 ### 44、将不同的数据合二为一（普通字符串➕富文本字符串）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 

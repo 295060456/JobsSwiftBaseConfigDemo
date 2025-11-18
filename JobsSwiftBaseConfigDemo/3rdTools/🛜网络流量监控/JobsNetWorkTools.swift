@@ -427,6 +427,14 @@ final class JobsNetworkDataReadyMonitor {
         deadline = nil
     }
 }
+/// 取消当前这一次网络数据就绪的等待
+func JobsCancelWaitNetworkDataReady() {
+    JobsNetworkDataReadyMonitor.shared.cancel()
+}
+/// 停止网络实时监听
+func JobsNetworkTrafficMonitorStop() {
+    JobsNetworkTrafficMonitor.shared.stop()
+}
 // MARK: - DSL 风格封装（链式）
 extension JobsNetworkDataReadyMonitor {
     @discardableResult
