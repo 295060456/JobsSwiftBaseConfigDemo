@@ -6193,7 +6193,21 @@ deinit {
 
 ### 45、有序字典 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-> [**Swift**](https://developer.apple.com/swift/) / **Objc** 的原生字典，在打印的时候不会按照键值对的添加先后顺序打印。此时需要用到[**OrderedDictionary**](https://github.com/apple/swift-collections#)
+iOS 的原生字典，在打印的时候不会按照键值对的添加先后顺序打印。此时需要用到[**OrderedDictionary**](https://github.com/apple/swift-collections#)
+
+```ruby
+pod 'swift-collections'                  # https://github.com/apple/swift-collections#       ❤️ 有序字典
+```
+
+```swift
+/// https://github.com/apple/swift-collections#
+/// 同一个类型，不同接入方式的 module 名不一样
+#if canImport(Collections)
+import Collections          // ✅ Pod 或 SPM 直接接 apple/swift-collections
+#elseif canImport(OrderedCollections)
+import OrderedCollections   // ✅ SPM 只接 OrderedCollections product 的情况
+#endif
+```
 
 ![image-20251118154055795](./assets/image-20251118154055795.png)
 

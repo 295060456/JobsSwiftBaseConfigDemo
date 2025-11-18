@@ -8,7 +8,13 @@
 import UIKit
 import GKNavigationBarSwift
 import LiveChat
-// zzza
+/// https://github.com/apple/swift-collections#
+#if canImport(Collections)
+import Collections          // ✅ Pod 或 SPM 直接接 apple/swift-collections
+#elseif canImport(OrderedCollections)
+import OrderedCollections   // ✅ SPM 只接 OrderedCollections product 的情况
+#endif
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -37,6 +43,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             "fff":"3",
             "fdf":"4"
         ]
+        let d4: OrderedDictionary<String, String> = [
+            "hi":  "1",
+            "mo":  "2",
+            "do": "3",
+            "gg": "4"
+        ]
+
+        for (k, v) in d4 {
+            // ✅ 一定是 sd, ff, fff, fdf
+            print(k, v)
+        }
 
         log(d1)
         log(d2)
