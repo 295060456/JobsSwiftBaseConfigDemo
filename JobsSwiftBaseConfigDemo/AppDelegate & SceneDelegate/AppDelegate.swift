@@ -30,7 +30,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         JSONDecoder嵌套JSON数组解析()
         JSONDecoder嵌套对象()
 
-
         OrderedDictionary测试()
 
         GK配置()
@@ -71,6 +70,7 @@ extension AppDelegate {
 
         do {
             let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase // 👈 这个开关可以直接全局打开
             let user = try decoder.decode(User.self, from: json)
             print(user.id, user.name, user.isVIP) // 1 Jobs true
         } catch {
@@ -78,12 +78,14 @@ extension AppDelegate {
         }
     }
 
+    /// 结论：最好写 CodingKeys。keyDecodingStrategy不是万能的
     func JSONDecoder解析字段key不一致_CodingKeys(){
 
         struct User: Codable {
             let userId: Int
             let userName: String
-            enum CodingKeys: String, CodingKey {
+            /// 模型名 = 服务器字段名
+            enum CodingKeys: String, CodingKey { // 👈 关键
                 case userId   = "user_id"
                 case userName = "user_name"
             }
@@ -121,7 +123,7 @@ extension AppDelegate {
 
         do {
             let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            decoder.keyDecodingStrategy = .convertFromSnakeCase // 👈 关键
             let user = try decoder.decode(User.self, from: json)
             print(user.userId, user.userName) // 1 Jobs true
         } catch {
