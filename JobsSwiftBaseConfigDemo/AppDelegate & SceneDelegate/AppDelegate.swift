@@ -16,6 +16,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+
+        let d1: [String: JSONValue] = [
+            "sd": .int(1),
+            "fg": .string("2"),
+            "pi": .double(3.14159),
+            "flag": .bool(true),
+            "list": .array([.int(1), .int(2)]),
+            "config": .object([
+                "debug": .bool(false),
+                "threshold": .double(0.75)
+            ]),
+            "nothing": .null
+        ]
+
+        let d2 = [1,2,3,4]
+        let d3 = [
+            "sd":"1",
+            "ff":"2",
+            "fff":"3",
+            "fdf":"4"
+        ]
+
+        log(d1)
+        log(d2)
+        log(d3)
+
+        for key in d3.keys.sorted() {
+            print(key,d3[key] as Any);
+        }
+
+        print(type(of: d3))
+        dump(d3)
+
+        for (k, v) in d3 {
+            print(k, v)
+        }
+
         GK配置()
         删除键监听()
         全局比例尺()

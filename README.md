@@ -6280,7 +6280,7 @@ assert(1 < 2)   // 等价于 { 1 < 2 }
 func run(_ job: @Sendable ()->Void) {}
 ```
 
-##### 1.1.9、<font color=red>**`@MainActor`**</font>/ 自定义 <font color=red>**`@globalActor`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+##### 1.1.9、<font id=@MainActor color=red>**`@MainActor`**</font>/ 自定义 <font color=red>**`@globalActor`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 它代表了一个**特殊的 actor**，这个 actor 绑定在 **主线程（主 runloop）** 上
 >
@@ -6341,15 +6341,6 @@ func run(_ job: @Sendable ()->Void) {}
       }
   }
   ```
-
-* <font color=red>**`@MainActor`**</font> 🆚 **`DispatchQueue.main.async`**
-
-  | 点                          | `@MainActor`                   | `DispatchQueue.main.async` |
-  | --------------------------- | ------------------------------ | -------------------------- |
-  | 是否静态检查                | ✅ 有，编译期就拦               | ❌ 完全靠你自觉             |
-  | 是否表达数据隔离            | ✅ 是 actor 隔离域的一部分      | ❌ 只是队列调度             |
-  | 是否和 async/await 深度整合 | ✅ 有，自动 hop、需要 `await`   | ❌ 只是闭包回调             |
-  | 是否可以标记类型 / 属性     | ✅ 可以（整类、属性、全局变量） | ❌ 不行                     |
 
 ##### 1.1.10、<font color=red>**`@preconcurrency`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -9975,7 +9966,7 @@ Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS
 | 可定义初始化方法            | ✅                                 | ✅                                                   | ✅                                  |
 | 自定义 `init()`             | ✅                                 | ✅                                                   | ✅                                  |
 | `mutating` 方法             | ✅（改变自身 case 时）             | ✅                                                   | ❌（直接改）                        |
-| `deinit` 析构函数           | ❌                                 | ❌                                                   | ✅                                  |
+| `deinit` 析构函数           | ❌（值类型出作用域直接销毁）       | ❌（值类型出作用域直接销毁）                         | ✅                                  |
 | ARC 管理                    | ❌                                 | ❌                                                   | ✅                                  |
 | 可用作常量空间              | ✅（默认不可实例化）               | ✅（需 <font color=red>**`private`**</font> `init`） | ⚠️ 可，但过重                       |
 | Equatable/Hashable 自动合成 | ✅                                 | ✅                                                   | ⚠️ 需自写                           |
@@ -10064,7 +10055,7 @@ Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS
 | **可变容器但希望拷贝隔离**       | <font color=red>**`struct`**</font> + `mutating`         |
 | **全局单例或引用共享**           | <font color=red>**`class`**</font> + `static let shared` |
 
-### 21、**`DispatchQueue.main.async`** 🆚 <font color=red>**@MainActor**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 21、**`DispatchQueue.main.async`** 🆚 [<font color=red>**`@MainActor`**</font>](#@MainActor) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 #### 21.1、核心对比 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -10074,7 +10065,7 @@ Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS
   * 用途：从后台切回 UI 线程；**刻意“下一帧再做”**；把重活拆出去避免阻塞当前调用
   * 语义：**时序**（when），不提供编译器隔离检查
 
-* <font color=red>**@MainActor**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+*  [<font color=red>**`@MainActor`**</font>](#@MainActor) 
 
   > ```swift
   > /// 这个函数必须在主线程运行
@@ -10089,6 +10080,13 @@ Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS
   * 作用：编译器/运行时**强制**在主线程上访问；从非主 Actor 调用会**hop**到主 Actor（需要 `await` 或异步调度）
   * 用途：声明“这玩意儿必须在主线程用”（UI 类型/方法，状态容器等）
   * 语义：**归属**（where/which executor），不承诺“下一帧”，可能**立刻**在主线程执行
+  
+* | 点                          | `@MainActor`                   | `DispatchQueue.main.async` |
+  | --------------------------- | ------------------------------ | -------------------------- |
+  | 是否静态检查                | ✅ 有，编译期就拦               | ❌ 完全靠你自觉             |
+  | 是否表达数据隔离            | ✅ 是 actor 隔离域的一部分      | ❌ 只是队列调度             |
+  | 是否和 async/await 深度整合 | ✅ 有，自动 hop、需要 `await`   | ❌ 只是闭包回调             |
+  | 是否可以标记类型 / 属性     | ✅ 可以（整类、属性、全局变量） | ❌ 不行                     |
 
 #### 21.2、组合关系 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -10199,7 +10197,7 @@ flowchart TD
 
 ### 24、为什么在[**Masonry**](https://github.com/SnapKit/Masonry)/[**SnapKit**](https://github.com/SnapKit/SnapKit)里面可以不用**weak**化的`self`❓<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* 因为 [**Masonry**](https://github.com/SnapKit/Masonry)/[**SnapKit**](https://github.com/SnapKit/SnapKit) 的约束闭包是**同步执行、不会被保存（non-escaping）**的
+* 因为 [**Masonry**](https://github.com/SnapKit/Masonry)/[**SnapKit**](https://github.com/SnapKit/SnapKit) 的约束闭包是**同步执行、不会被保存（非逃逸闭包）**的
 
   > `mas_makeConstraints:` 的实现本质上就是：创建一个 `MASConstraintMaker`，**立刻**调用你传进来的 **block**，然后安装约束，整个过程当场结束，不会把 **block** 存到任何被 `self` 持有的地方，自然也就**不会形成 self ↔︎ block 的循环引用**。
 
@@ -10208,7 +10206,78 @@ flowchart TD
   - 把 **block** 存成 `self.someBlock = ^{ ... self ... };`（典型循环引用）
   - 传给会把 **block** 保存在属性里的对象，而这个对象又被 `self` 强持有
 
-### 25、<font color=red id=COW>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite（先共享，写的时候才真正拷贝）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 25、**Objc**.字典 🆚 [**Swift**](https://developer.apple.com/swift/).字典 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **Objc**.字典`NSDictionary<id<NSCopying>, id> *dict;`
+
+  * Key：对象类型、实现了 `NSCopying` 协议、**最好是不可变对象** & 哈希稳定（唯一）、不可为<font color=red>**nil**</font>。
+    * 👉 可以直接做OC.**NSDictionary**.Key的：`NSString *`、`NSNumber *`、`NSDate *`、自己实现了`NSCopying`的类
+  * Value：可以是任意对象（原始类型要装箱成 `NSNumber` / `NSValue`）；不能是基本数据类型、不可为<font color=red>**nil**</font>（要用 `NSNull`）
+
+* [**Swift**](https://developer.apple.com/swift/).字典（字典和数组都是用[]进行包裹）
+
+  * Key：必须是 `Hashable`（即，必须能比较相等：`Equatable` ➕ 必须能提供哈希值：`func hash(into:)`）、**最好是不可变对象** & 哈希稳定（唯一）
+
+    * 👉 可以直接做[**Swift**](https://developer.apple.com/swift/).**Dictionary**.Key的：`String`/`Int` / `Double` / `Bool`/`UUID`/`enum`（不带关联值的自动 Hashable；带关联值需让它遵守亦可以）/自定义的结构体/枚举/类，需遵守 `Hashable`
+
+    * Key 可以是 Optional
+
+      ```swift
+      var dict: [String?: String] = [
+          nil: "空 key",
+          "a": "值 A"
+      ]
+      ```
+
+  * Value：没有约束，任意类型都行（<font color=red>但字典里的 Value 类型必须统一</font>）
+
+    ```swift
+    // 全是 Int
+    var d1: [String: Int] = [
+        "sd": 1,
+        "fg": 2
+    ]
+    // 全是 String
+    var d2: [String: String] = [
+        "sd": "1",
+        "fg": "2"
+    ]
+    // 类似 OC 的 id
+    var d3: [String: Any] = [
+        "sd": 1,         // Int
+        "fg": "2",       // String
+        "arr": [1, 2, 3] // [Int]
+    ]
+    // 用的时候自己解：
+    if let n = d3["sd"] as? Int { ... }
+    if let s = d3["fg"] as? String { ... }
+    ```
+
+### 26、数组是引用类型还是值类型❓<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+*  语言视角：**Array** 是 **struct**，属于值类型
+
+  ```swift
+  var a = [1, 2, 3]
+  var b = a     // 这里从语义上讲是「复制了一份」
+  
+  b.append(4)
+  
+  print(a)  // [1, 2, 3]
+  print(b)  // [1, 2, 3, 4]
+  ```
+
+* 实现视角：底层确实有“对象”，但对其隐藏了
+
+  * 虽然语义是值类型，但为了性能，[**Swift**](https://developer.apple.com/swift/) **不会每次赋值就真的立刻拷贝整块内存**，而是：数组本体 (`Array<T>`) 是一个 `struct`，里面持有一个指向堆上 buffer（一个 **引用类型的存储对象**） 的引用
+
+    ```swift
+    var a = [1, 2, 3]
+    var b = a     // 此时 a 和 b 共享同一个底层 buffer（RC = 2）
+    b.append(4)   // 发现 buffer 被多方共享 ⇒ 触发 Copy-on-Write ⇒ 为 b 拷贝一份新 buffer
+    ```
+
+### 27、<font color=red id=COW>**C**</font>opy-<font color=red>**O**</font>n-<font color=red>**W**</font>rite（**第一次写入且有共享时**：才真的复制）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > * **定义**：当你复制一个值类型的时候，[**Swift**](https://developer.apple.com/swift/) 不会立即复制它的底层存储，而是让两个变量共享同一块内存
 > * **触发拷贝的时机**：一旦其中一个变量尝试 **写入（修改）** 数据，[**Swift**](https://developer.apple.com/swift/) 才会真正复制一份新的内存，以保证<u>值语义</u>的正确性
