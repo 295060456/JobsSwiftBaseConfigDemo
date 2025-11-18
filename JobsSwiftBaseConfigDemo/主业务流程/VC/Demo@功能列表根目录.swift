@@ -46,7 +46,7 @@ final class RootListVC: BaseVC {
             ("🧧 TraitChange", TraitChangeDemoVC.self),
             ("⛑️ 支持上下左右安全Push和原路返回", SafetyPushDemoVC.self),
             ("⛑️ 安全Present", SafetyPresentDemoVC.self),
-            ("📹 播放器@BMPlayer", BMPlayerDemoVC.self),
+            ("📹 播放器@BMPlayer(🛜网络流量监控)", BMPlayerDemoVC.self),
             ("📹 播放器@PNPlayer", PNPlayerDemoVC.self),
             ("❄️ 雪花算法", SnowflakeDemoVC.self),
             ("💬 LiveChat", LiveChatDemoVC.self),
