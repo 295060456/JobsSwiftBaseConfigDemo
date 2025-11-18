@@ -8,7 +8,6 @@
 import UIKit
 import SnapKit
 import SwiftEntryKit
-
 // MARK: - 行模型
 private enum EditProfileRow: CaseIterable {
     case avatar
@@ -32,7 +31,7 @@ private enum EditProfileRow: CaseIterable {
         case .profession: return "职业"
         }
     }
-
+    /// ❤️ 这里的字段“detail”，既可以是String类型，也可以是NSAttributedString类型。合二为一
     var detail: JobsText? {
         switch self {
         case .avatar:

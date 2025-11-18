@@ -140,13 +140,23 @@ public extension UITableViewCell {
         contentConfiguration = cfg
         return self
     }
-    /// 文本
-    func byJobsText(_ text: JobsText?) -> Self {
+    /// 解析为富文本
+    func byJobsAttributedText(_ text: JobsText?) -> Self {
         guard let text else { return self }
         if #available(iOS 14.0, *) {
             return byContentConfiguration { $0.attributedText = text.asAttributed }
         } else {
             self.textLabel?.attributedText = text.asAttributed
+            return self
+        };
+    }
+    /// 解析为普通文本
+    func byJobsText(_ text: JobsText?) -> Self {
+        guard let text else { return self }
+        if #available(iOS 14.0, *) {
+            return byContentConfiguration { $0.text = text.asString }
+        } else {
+            self.textLabel?.text = text.asString
             return self
         };
     }
@@ -334,8 +344,8 @@ extension UITableViewCell: JobsConfigCellProtocol {
         guard let cfg = any as? JobsCellConfig else { return self }
         if #available(iOS 14.0, *) {
             return self
-                .byJobsText(cfg.title)
-                .bySecondaryJobsText(cfg.detail)
+                .byJobsText(cfg.title)                  // 解析为普通字符串
+                .bySecondaryJobsText(cfg.detail)        // 解析为富文本字符串
                 .byImage(cfg.image)
         } else {
             // 旧系统依赖 textLabel / detailTextLabel

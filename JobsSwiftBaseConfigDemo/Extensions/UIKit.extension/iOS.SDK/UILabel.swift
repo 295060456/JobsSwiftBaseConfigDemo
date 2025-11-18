@@ -23,6 +23,12 @@ extension UILabel {
         return self
     }
     @discardableResult
+    func byJobsText(_ text: JobsText?) -> Self {
+        guard let text else { return self }
+        self.text = text.asString
+        return self
+    }
+    @discardableResult
     func byText(_ text: String?) -> Self {
         self.text = text
         return self

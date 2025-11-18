@@ -6012,6 +6012,165 @@ jobsDismissKeyboard()
   }
   ```
 
+### 44、将不同的数据合二为一（普通字符串➕富文本字符串）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 通过**`func byConfigure(_ any: Any?) -> Self`**对外统一接收唯一的数据束（这里是**`JobsCellConfig`**），方便管理
+
+  ```swift
+  // MARK: - 统一的「任意配置」协议
+  public protocol JobsConfigCellProtocol: AnyObject {
+      /// any 可以是任意类型（struct / enum / tuple / dict），
+      /// 在具体 cell 里自己去解包。
+      @discardableResult
+      func byConfigure(_ any: Any?) -> Self
+  }
+  ```
+
+  ```swift
+  extension UITableViewCell: JobsConfigCellProtocol {
+      @discardableResult
+      @objc
+      public func byConfigure(_ any: Any?) -> Self {
+          // 如果不是给普通 value1 用的，直接忽略
+          guard let cfg = any as? JobsCellConfig else { return self }
+          if #available(iOS 14.0, *) {
+              return self
+                  .byJobsText(cfg.title)                  // 解析为普通字符串
+                  .bySecondaryJobsText(cfg.detail)        // 解析为富文本字符串
+                  .byImage(cfg.image)
+          } else {
+              // 旧系统依赖 textLabel / detailTextLabel
+              if let title = cfg.title {
+                  textLabel?.byJobsAttributedText(title)
+              }
+              if let detail = cfg.detail {
+                  detailTextLabel?.byJobsAttributedText(detail)
+              }
+              if let image = cfg.image {
+                  imageView?.byImage(image)
+              };return self
+          }
+      }
+  }
+  ```
+
+* 自定义数据（模型）层**`JobsCellConfig`**
+
+  * 数据模型里面的数据类型是**`JobsText`**
+
+    ```swift
+    // MARK: - 通用于 UITableViewCell 和 UICollectionViewCell 的模型组件
+    public struct JobsCellConfig {
+        public let title: JobsText?
+        public let detail: JobsText?
+        public let image: UIImage?
+        public let data: Any?
+    
+        public init(title: JobsText? = nil,
+                    detail: JobsText? = nil,
+                    image: UIImage? = nil,
+                    data: Any? = nil) {
+            self.title = title
+            self.detail = detail
+            self.image = image
+            self.data = data
+        }
+    }
+    ```
+
+  * 枚举里面的值的类型是**`JobsText`**
+
+    ```swift
+    // MARK: - 行模型
+    private enum EditProfileRow: CaseIterable {
+        case avatar
+        case nickname
+        case gender
+    
+        var title: JobsText {
+            switch self {
+            case .avatar:     return "头像"
+            case .nickname:   return "昵称"
+            case .gender:     return "性别"
+            }
+        }
+    		/// ❤️ 这里的字段“detail”，既可以是String类型，也可以是NSAttributedString类型。合二为一
+        var detail: JobsText? {
+            switch self {
+            case .avatar:
+                return nil
+            case .nickname:
+              	/// 富文本
+                return JobsText(JobsRichText.make([
+                    JobsRichRun(.text("等级达到2级才能修改昵称"))
+                        .font(.systemFont(ofSize: 14))
+                        .color(.systemRed),
+                    JobsRichRun(.text("Eric"))
+                        .font(.systemFont(ofSize: 14, weight: .semibold))
+                        .color(.secondaryLabel)
+                ]))
+            case .gender:
+                /// 普通文本
+                return "female"
+        }
+    }
+    ```
+
+* 数据灌入
+
+  ```swift
+  tableView.py_dequeueReusableCell(withType: BaseTableViewCellByValue1.self, for: indexPath)
+           .byConfigure(JobsCellConfig(title: row.title,detail:row.detail))
+  ```
+
+* <font color=red>**数据解析（核心）**</font>
+
+  * 解析数据到`UILabel`
+
+    ```swift
+    extension UILabel {
+        @discardableResult
+        func byJobsAttributedText(_ text: JobsText?) -> Self {
+            guard let text else { return self }
+            self.attributedText = text.asAttributed
+            return self
+        }
+        @discardableResult
+        func byJobsText(_ text: JobsText?) -> Self {
+            guard let text else { return self }
+            self.text = text.asString
+            return self
+        }
+    }
+    ```
+
+  * 解析数据到`UITableViewCell`
+
+    ```swift
+    public extension UITableViewCell {
+        /// 解析为富文本
+        func byJobsAttributedText(_ text: JobsText?) -> Self {
+            guard let text else { return self }
+            if #available(iOS 14.0, *) {
+                return byContentConfiguration { $0.attributedText = text.asAttributed }
+            } else {
+                self.textLabel?.attributedText = text.asAttributed
+                return self
+            };
+        }
+        /// 解析为普通文本
+        func byJobsText(_ text: JobsText?) -> Self {
+            guard let text else { return self }
+            if #available(iOS 14.0, *) {
+                return byContentConfiguration { $0.text = text.asString }
+            } else {
+                self.textLabel?.text = text.asString
+                return self
+            };
+        }
+    }
+    ```
+
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
