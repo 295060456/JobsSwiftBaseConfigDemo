@@ -26,7 +26,6 @@
 		040E68F82EC704C400598A5B /* MyMacrosClient in Frameworks */ = {isa = PBXBuildFile; productRef = 040E68F72EC704C400598A5B /* MyMacrosClient */; };
 		040E68F92EC704DA00598A5B /* Demo@自定义注解.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0402F0A82EC2D59A0054A151 /* Demo@自定义注解.swift */; };
 		040E68FD2EC7118800598A5B /* TipsGrantPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040E68FC2EC7118000598A5B /* TipsGrantPermissionView.swift */; };
-		041174662ECB1E8C004D47B7 /* JobsNetworkTrafficMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041174652ECB1E8B004D47B7 /* JobsNetworkTrafficMonitor.swift */; };
 		04124F2A2EB05E9000462BE2 /* Demo@Moya.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F292EB05E8A00462BE2 /* Demo@Moya.swift */; };
 		04124F2D2EB0622E00462BE2 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F2C2EB0622D00462BE2 /* Models.swift */; };
 		04124F2F2EB0623900462BE2 /* DemoAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F2E2EB0623900462BE2 /* DemoAPI.swift */; };
@@ -329,7 +328,6 @@
 		0402F0A82EC2D59A0054A151 /* Demo@自定义注解.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@自定义注解.swift"; sourceTree = "<group>"; };
 		0402F0AD2EC2D73E0054A151 /* UIListContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIListContentConfiguration.swift; sourceTree = "<group>"; };
 		040E68FC2EC7118000598A5B /* TipsGrantPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsGrantPermissionView.swift; sourceTree = "<group>"; };
-		041174652ECB1E8B004D47B7 /* JobsNetworkTrafficMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsNetworkTrafficMonitor.swift; sourceTree = "<group>"; };
 		04124F292EB05E8A00462BE2 /* Demo@Moya.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@Moya.swift"; sourceTree = "<group>"; };
 		04124F2C2EB0622D00462BE2 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		04124F2E2EB0623900462BE2 /* DemoAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoAPI.swift; sourceTree = "<group>"; };
@@ -663,7 +661,6 @@
 		041174672ECB1E91004D47B7 /* 🛜网络流量监控 */ = {
 			isa = PBXGroup;
 			children = (
-				041174652ECB1E8B004D47B7 /* JobsNetworkTrafficMonitor.swift */,
 				042407062ECB160E005B89AA /* JobsNetWorkTools.swift */,
 			);
 			path = "🛜网络流量监控";
@@ -1842,7 +1839,6 @@
 				04E8D61B2E8E837D00E85CDA /* NSMutableAttributedString.swift in Sources */,
 				0482A5FC2EA63527004176A4 /* WKUserContentController.swift in Sources */,
 				041F5B012E87B51800984EEB /* Demo@输入框.swift in Sources */,
-				041174662ECB1E8C004D47B7 /* JobsNetworkTrafficMonitor.swift in Sources */,
 				04124F3C2EB075D400462BE2 /* Demo@Alamofire.swift in Sources */,
 				C564FC902E0959640079B5C1 /* UILabel.swift in Sources */,
 				04BD5B412EA8E51C0056DA62 /* Demo@UITableView.swift in Sources */,
