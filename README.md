@@ -6191,6 +6191,12 @@ deinit {
     }
     ```
 
+### 45、有序字典 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> [**Swift**](https://developer.apple.com/swift/) / **Objc** 的原生字典，在打印的时候不会按照键值对的添加先后顺序打印。此时需要用到[**OrderedDictionary**](https://github.com/apple/swift-collections#)
+
+![image-20251118154055795](./assets/image-20251118154055795.png)
+
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>

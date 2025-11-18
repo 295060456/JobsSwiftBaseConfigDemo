@@ -30,6 +30,7 @@ def swiftAppCommon
   pod 'FSPopoverView'                      # https://github.com/lifution/FSPopoverView         ❤️ 下拉三角小菜单
   pod 'AMPopTip'                           # https://github.com/andreamazz/AMPopTip            ❤️
   pod 'SkeletonView'                       # https://github.com/Juanpe/SkeletonView            ❤️ 骨架屏/闪动占位
+  pod 'swift-collections'                  # https://github.com/apple/swift-collections#       ❤️ 有序字典
 #  pod 'ComponentKit'                       # https://github.com/facebook/componentkit          ❤️ Facebook出品的一款UI框架
 #  pod 'Texture'                            # https://github.com/texturegroup/texture           ❤️ Facebook出品的一款UI框架
 
