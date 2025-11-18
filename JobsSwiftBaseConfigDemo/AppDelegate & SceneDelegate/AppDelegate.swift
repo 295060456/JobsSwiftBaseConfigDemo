@@ -23,6 +23,196 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
 
+        JSONDecoder解析字段对齐()
+        JSONDecoder解析字段key不一致_CodingKeys()
+        JSONDecoder解析字段key不一致_keyDecodingStrategy()
+        JSONDecoder解析字段处理时间()
+        JSONDecoder嵌套JSON数组解析()
+        JSONDecoder嵌套对象()
+
+
+        OrderedDictionary测试()
+
+        GK配置()
+        删除键监听()
+        全局比例尺()
+        安全Push和Present()
+        启动检测()
+        日志打印()
+        LiveChat配置()
+        多语言化()
+        return true
+    }
+    // MARK: UISceneSession Lifecycle
+    func application(
+        _ application: UIApplication,
+        configurationForConnecting connectingSceneSession: UISceneSession,
+        options: UIScene.ConnectionOptions
+    ) -> UISceneConfiguration {
+        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+    }
+}
+
+extension AppDelegate {
+    func JSONDecoder解析字段对齐(){
+        struct User: Codable {
+            let id: Int
+            let name: String
+            let isVIP: Bool
+        }
+
+        let json = """
+        {
+            "id": 1,
+            "name": "Jobs",
+            "isVIP": true
+        }
+        """.data(using: .utf8)!
+
+        do {
+            let decoder = JSONDecoder()
+            let user = try decoder.decode(User.self, from: json)
+            print(user.id, user.name, user.isVIP) // 1 Jobs true
+        } catch {
+            print("❌ 解析失败：\(error)")
+        }
+    }
+
+    func JSONDecoder解析字段key不一致_CodingKeys(){
+
+        struct User: Codable {
+            let userId: Int
+            let userName: String
+            enum CodingKeys: String, CodingKey {
+                case userId   = "user_id"
+                case userName = "user_name"
+            }
+        }
+
+        let json = """
+        {
+          "user_id": 1,
+          "user_name": "Jobs"
+        }
+        """.data(using: .utf8)!
+
+        do {
+            let decoder = JSONDecoder()
+            let user = try decoder.decode(User.self, from: json)
+            print(user.userId, user.userName) // 1 Jobs true
+        } catch {
+            print("❌ 解析失败：\(error)")
+        }
+    }
+
+    func JSONDecoder解析字段key不一致_keyDecodingStrategy(){
+
+        struct User: Codable {
+            let userId: Int
+            let userName: String
+        }
+
+        let json = """
+        {
+          "user_id": 1,
+          "user_name": "Jobs"
+        }
+        """.data(using: .utf8)!
+
+        do {
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            let user = try decoder.decode(User.self, from: json)
+            print(user.userId, user.userName) // 1 Jobs true
+        } catch {
+            print("❌ 解析失败：\(error)")
+        }
+    }
+
+    func JSONDecoder解析字段处理时间(){
+        struct Post: Codable {
+            let id: Int
+            let createdAt: Date
+        }
+
+        let json = """
+        {
+          "id": 1,
+          "created_at": "2025-11-18 16:39:00"
+        }
+        """.data(using: .utf8)!
+
+        let decoder = JSONDecoder()
+            .bykeyDecodingStrategy(.convertFromSnakeCase)
+            .byDateDecodingStrategy(
+                .formatted(DateFormatter()
+                .byDateFormat("yyyy-MM-dd HH:mm:ss")
+                .byLocale(Locale(identifier: "en_US_POSIX"))))
+        do {
+            let post = try decoder.decode(Post.self, from: json)
+            print(post.createdAt)
+        } catch {
+            print("❌ 解析失败：\(error)")
+        }
+    }
+
+    func JSONDecoder嵌套JSON数组解析(){
+        struct User: Codable {
+            let id: Int
+            let name: String
+        }
+
+        let json = """
+        [
+          { "id": 1, "name": "A" },
+          { "id": 2, "name": "B" }
+        ]
+        """.data(using: .utf8)!
+
+        let decoder = JSONDecoder()
+        do {
+            let users = try decoder.decode([User].self, from: json)
+            print(users.count) // 2
+        } catch {
+            print("❌ 解析失败：\(error)")
+        }
+    }
+
+    func JSONDecoder嵌套对象(){
+
+        struct APIResponse<T: Codable>: Codable {
+            let code: Int
+            let message: String
+            let data: T
+        }
+
+        struct User: Codable {
+            let id: Int
+            let name: String
+        }
+
+        let json = """
+        {
+          "code": 0,
+          "message": "ok",
+          "data": {
+            "id": 1,
+            "name": "Jobs"
+          }
+        }
+        """.data(using: .utf8)!
+
+        let decoder = JSONDecoder()
+        do {
+            let resp = try decoder.decode(APIResponse<User>.self, from: json)
+            let user = resp.data
+            print(user) // 2
+        } catch {
+            print("❌ 解析失败：\(error)")
+        }
+    }
+
+    func OrderedDictionary测试(){
         let d1: [String: JSONValue] = [
             "sd": .int(1),
             "fg": .string("2"),
@@ -69,28 +259,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         for (k, v) in d3 {
             print(k, v)
         }
-
-        GK配置()
-        删除键监听()
-        全局比例尺()
-        安全Push和Present()
-        启动检测()
-        日志打印()
-        LiveChat配置()
-        多语言化()
-        return true
-    }
-    // MARK: UISceneSession Lifecycle
-    func application(
-        _ application: UIApplication,
-        configurationForConnecting connectingSceneSession: UISceneSession,
-        options: UIScene.ConnectionOptions
-    ) -> UISceneConfiguration {
-        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
 }
 
 extension AppDelegate {
+
     func GK配置(){
         GKNavigationBarConfigure
             .bySetupDefault()

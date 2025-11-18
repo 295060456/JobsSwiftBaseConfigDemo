@@ -6570,7 +6570,7 @@ class VM: ObservableObject {
 
 * [**Swift**](https://developer.apple.com/swift/) 的系统协议大概分几大类
 
-  * **值语义**：`RawRepresentable`, `CaseIterable`
+  * **值语义**：`RawRepresentable`, `CaseIterable`（几乎只在 <font color=red>**enum**</font> 上有意义）
 
     * 类型 <-> 原始值 双向映射，常用于枚举和 ID 包装类型
 
