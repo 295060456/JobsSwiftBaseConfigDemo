@@ -46,13 +46,15 @@ final class PlayerRemoteVC: BaseVC {
 
     override func loadView() {
         super.loadView()
-        // 比如：用户点击“开启蜂窝播放”
-        jobsWaitCellularDataReady {
-            // ✅ 第一次检测到有真实流量（上/下行）进来了
-            print("✅ 蜂窝数据已实际可用，可以放心走后续逻辑")
-            // toastBy("蜂窝数据已启用")
-            // 或者在这里重试你的网络请求
-        }
+        jobsWaitNetworkDataReady(
+            onWiFiReady: {
+                print("✅ Wi-Fi 已有真实流量")
+            },
+            onCellularReady: {
+                print("✅ 蜂窝已实际可用，可以走后续逻辑")
+                // 比如这里再去重试接口、发起播放等
+            }
+        )
     }
     // MARK: - 生命周期
     override func viewDidLoad() {

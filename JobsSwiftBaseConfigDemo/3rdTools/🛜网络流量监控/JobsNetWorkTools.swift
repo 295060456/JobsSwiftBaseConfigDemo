@@ -27,19 +27,46 @@ enum JobsNetworkSource {
     }
 }
 // MARK: - 获取当前总上传/下载字节（Wi-Fi + 蜂窝）
-/// 总字节数：下行 / 上行
+/// 单一方向的总字节数：下行 / 上行
 struct NetworkBytes {
-    let received: UInt64   // 下行总字节数
-    let sent: UInt64       // 上行总字节数
+    let download: UInt64   // 下行总字节数
+    let upload: UInt64     // 上行总字节数
+
+    init(download: UInt64 = 0, upload: UInt64 = 0) {
+        self.download = download
+        self.upload = upload
+    }
 }
-/// 读取当前所有网络接口的总上下行字节（只统计 UP 状态的 Wi-Fi / 蜂窝）
-func currentNetworkBytes() -> NetworkBytes {
+/// 按来源拆分的字节统计
+struct NetworkSplitBytes {
+    let wifi: NetworkBytes
+    let cellular: NetworkBytes
+    let other: NetworkBytes
+
+    /// 所有来源合计
+    var total: NetworkBytes {
+        NetworkBytes(
+            download: wifi.download &+ cellular.download &+ other.download,
+            upload:   wifi.upload   &+ cellular.upload   &+ other.upload
+        )
+    }
+}
+/// 读取当前所有网络接口的总上下行字节（只统计 UP 状态的 Wi-Fi / 蜂窝 / 其他）
+func currentNetworkBytesSplit() -> NetworkSplitBytes {
     var addrs: UnsafeMutablePointer<ifaddrs>?
-    var totalIn: UInt64 = 0
-    var totalOut: UInt64 = 0
+    var wifiIn: UInt64 = 0
+    var wifiOut: UInt64 = 0
+    var cellIn: UInt64 = 0
+    var cellOut: UInt64 = 0
+    var otherIn: UInt64 = 0
+    var otherOut: UInt64 = 0
 
     guard getifaddrs(&addrs) == 0, let firstAddr = addrs else {
-        return NetworkBytes(received: 0, sent: 0)
+        return NetworkSplitBytes(
+            wifi: NetworkBytes(),
+            cellular: NetworkBytes(),
+            other: NetworkBytes()
+        )
     }
 
     var ptr: UnsafeMutablePointer<ifaddrs>? = firstAddr
@@ -54,18 +81,36 @@ func currentNetworkBytes() -> NetworkBytes {
 
         let name = String(cString: ifa.ifa_name)
 
-        // en0 / en1... 一般是 Wi-Fi，pdp_ip0... 一般是蜂窝
-        if name.hasPrefix("en") || name.hasPrefix("pdp_ip") {
-            if let data = ifa.ifa_data?.assumingMemoryBound(to: if_data.self).pointee {
-                totalIn  += UInt64(data.ifi_ibytes)
-                totalOut += UInt64(data.ifi_obytes)
+        if let data = ifa.ifa_data?.assumingMemoryBound(to: if_data.self).pointee {
+            let inBytes  = UInt64(data.ifi_ibytes)
+            let outBytes = UInt64(data.ifi_obytes)
+
+            // en0 / en1... 一般是 Wi-Fi（也可能有有线），pdp_ip0... 一般是蜂窝
+            if name.hasPrefix("en") {
+                wifiIn  &+= inBytes
+                wifiOut &+= outBytes
+            } else if name.hasPrefix("pdp_ip") {
+                cellIn  &+= inBytes
+                cellOut &+= outBytes
+            } else {
+                otherIn  &+= inBytes
+                otherOut &+= outBytes
             }
         }
 
         ptr = ifa.ifa_next
     }
     freeifaddrs(addrs)
-    return NetworkBytes(received: totalIn, sent: totalOut)
+
+    return NetworkSplitBytes(
+        wifi: NetworkBytes(download: wifiIn, upload: wifiOut),
+        cellular: NetworkBytes(download: cellIn, upload: cellOut),
+        other: NetworkBytes(download: otherIn, upload: otherOut)
+    )
+}
+/// 向后兼容：总字节数（Wi-Fi + 蜂窝 + 其他）
+func currentNetworkBytes() -> NetworkBytes {
+    currentNetworkBytesSplit().total
 }
 // MARK: - 网络流量监控（来源 + 上下行速度）
 /// 统一的网络流量监控：
@@ -82,8 +127,9 @@ final class JobsNetworkTrafficMonitor {
     private let pathMonitor = NWPathMonitor()
     private let pathQueue = DispatchQueue(label: "jobs.network.path")
     private var timer: DispatchSourceTimer?
+
     private var lastBytes: NetworkBytes?
-    private var currentSource: JobsNetworkSource = .none
+    public var currentSource: JobsNetworkSource = .none
 
     private init() {
         // 监听当前网络类型
@@ -117,16 +163,14 @@ final class JobsNetworkTrafficMonitor {
 
         t.setEventHandler { [weak self] in
             guard let self else { return }
-
-            let now = currentNetworkBytes()
-
             guard let last = self.lastBytes else {
-                self.lastBytes = now
+                self.lastBytes = currentNetworkBytes()
                 return
             }
 
-            let deltaIn  = Double(now.received &- last.received)
-            let deltaOut = Double(now.sent &- last.sent)
+            let now = currentNetworkBytes()
+            let deltaIn  = Double(now.download &- last.download)
+            let deltaOut = Double(now.upload   &- last.upload)
 
             let downSpeed = deltaIn / interval   // Bytes/s
             let upSpeed   = deltaOut / interval  // Bytes/s
@@ -142,7 +186,7 @@ final class JobsNetworkTrafficMonitor {
         t.resume()
         timer = t
     }
-    /// 停止监控
+    /// 停止流量监控
     func stop() {
         timer?.cancel()
         timer = nil
@@ -156,10 +200,15 @@ extension JobsNetworkTrafficMonitor {
         self.onUpdate = block
         return self
     }
+
     @discardableResult
     func byStart(interval: TimeInterval = 1.0) -> Self {
         start(interval: interval)
         return self
+    }
+    /// 当前系统首选网络来源（基于 NWPathMonitor）
+    var jobsCurrentSource: JobsNetworkSource {
+        currentSource
     }
 }
 // MARK: - 单位格式化（B/s -> KB/s / MB/s）
@@ -172,141 +221,184 @@ func jobs_formatSpeed(_ bytesPerSec: Double) -> String {
         return String(format: "%.2f MB/s", bytesPerSec / 1024 / 1024)
     }
 }
-// MARK: - 监听当前网络是否可用（系统层）
-/// 只关心「是否可以访问网络」：
-/// - Wi-Fi / 蜂窝 任意一条满足即可
-final class NetworkPermissionMonitor {
-    private let monitor = NWPathMonitor()
-    private let queue = DispatchQueue(label: "jobs.network.monitor")
-    /// canUseNetwork: 当前是否还能正常访问网络（true = 能，false = 不能）
-    var onChanged: ((Bool) -> Void)?
-    func start() {
-        monitor.pathUpdateHandler = { [weak self] path in
-            let canUseNetwork = (path.status == .satisfied)
-            DispatchQueue.main.async {
-                self?.onChanged?(canUseNetwork)
+// MARK: - 蜂窝 / Wi-Fi 运营商信息
+/// 当前蜂窝运营商信息（如果有的话）
+func currentCellularCarrierDescription() -> String? {
+    let networkInfo = CTTelephonyNetworkInfo()
+    // iOS 12+ 可能有多卡
+    if #available(iOS 12.0, *) {
+        guard let providers = networkInfo.serviceSubscriberCellularProviders else { return nil }
+        let descs: [String] = providers.values.compactMap { carrier in
+            var parts: [String] = []
+            if let name = carrier.carrierName {
+                parts.append(name)
             }
+            if let mcc = carrier.mobileCountryCode, let mnc = carrier.mobileNetworkCode {
+                parts.append("MCC/MNC: \(mcc)/\(mnc)")
+            }
+            if carrier.isoCountryCode != nil {
+                // 可以扩展更多字段
+            }
+            return parts.isEmpty ? nil : parts.joined(separator: "，")
         }
-        monitor.start(queue: queue)
-    }
-    func stop() {
-        monitor.cancel()
-    }
-}
-// MARK: - 只关心蜂窝网络是否被限制（系统设置开关）
-/// 只关心蜂窝权限：
-/// - 依赖 CTCellularData 的 restrictedState
-final class CellularPermissionMonitor {
-    private let cellularData = CTCellularData()
-    /// 回调当前蜂窝限制状态
-    var onChanged: ((CTCellularDataRestrictedState) -> Void)?
-    init() {
-        cellularData.cellularDataRestrictionDidUpdateNotifier = { [weak self] state in
-            DispatchQueue.main.async {
-                self?.onChanged?(state)
-            }
+        return descs.isEmpty ? nil : descs.joined(separator: " | ")
+    } else {
+        guard let carrier = networkInfo.subscriberCellularProvider else { return nil }
+        var parts: [String] = []
+        if let name = carrier.carrierName {
+            parts.append(name)
         }
+        if let mcc = carrier.mobileCountryCode, let mnc = carrier.mobileNetworkCode {
+            parts.append("MCC/MNC: \(mcc)/\(mnc)")
+        }
+        return parts.isEmpty ? nil : parts.joined(separator: "，")
     }
 }
-// MARK: - 兼容：只要网速，不关心网络来源的简单监控（可选）
-/// 如果你有地方只想要「上下行网速」而不关心来源，
-/// 可以用这个包装器，内部仍然复用 JobsNetworkTrafficMonitor.shared。
-final class NetworkSpeedMonitor {
-    private var timerInterval: TimeInterval = 1.0
-    private var isStarted = false
-    /// 回调：上/下行速度（单位：Bytes/s）
-    var onUpdate: ((Double, Double) -> Void)?
-
-    func start(interval: TimeInterval = 1.0) {
-        timerInterval = interval
-        isStarted = true
-
-        JobsNetworkTrafficMonitor.shared
-            .byOnUpdate { [weak self] _, up, down in
-                guard let self, self.isStarted else { return }
-                self.onUpdate?(up, down)
-            }
-            .byStart(interval: interval)
-    }
-
-    func stop() {
-        isStarted = false
-        JobsNetworkTrafficMonitor.shared.stop()
-    }
+// MARK: - 当前网络类型描述（Wi-Fi / 蜂窝 / 其他）
+/// 使用 NWPathMonitor 获取当前网络类型
+func currentNetworkSource() -> JobsNetworkSource {
+    // 这里简单挪用 JobsNetworkTrafficMonitor 的 currentSource
+    JobsNetworkTrafficMonitor.shared.byStart(interval: 10) // 轻启一个定时器，防止完全没初始化
+    return JobsNetworkTrafficMonitor.shared.onUpdate.map { _ in
+        // 如果 onUpdate 有人监听，就用监听时更新过的 currentSource
+        // 否则临时起一个 NWPathMonitor 也行，这里为简单起见用已有对象
+        // 但要注意：第一次拿到值可能有一点延迟。
+        JobsNetworkTrafficMonitor.shared.currentSource
+    } ?? .none
 }
-// MARK: - 一次性：等到“真的有流量”再回调（典型用在蜂窝数据授权场景）
-/// 用法场景：
-/// 1、触发了一个需要蜂窝数据的网络请求；
-/// 2、系统可能弹出「是否允许使用蜂窝数据」；
-//// 3、你不关心弹窗，只关心：什么时候真的有字节进来；
-/// 4、第一次探测到有数据流动（上行/下行任意一边 > 0）时回调 block，然后停止轮询。
-final class JobsCellularDataReadyMonitor {
+// MARK: - 等待“有真实流量”的监控（基于字节差值）
+/// 等待 Wi-Fi / 蜂窝“有真实数据传输”
+///
+/// 使用场景：
+/// - 比如你在「只在 Wi-Fi 下自动播放视频」的业务里，希望确认 _确实已经有真实的下行数据_ 再开始播；
+/// - 或者在蜂窝网络下，想要在「真的有数据流量已经开始跑」之后，才算进入计费逻辑（比如上报一次埋点）。
+///
+/// 实现思路：
+/// - 每隔 interval 秒读取一次 `currentNetworkBytesSplit()`；
+/// - 只关心「Wi-Fi 字节数的增量」「蜂窝字节数的增量」是否 > 0；
+/// - 分别对 Wi-Fi / 蜂窝做一次「首包回调」。
+///
+/// 注意：
+/// - 这个逻辑只判断「网卡层的字节变化」，无法保证一定是你 App 发起的请求；
+/// - 但在你触发了自己的网络请求之后再调用本方法，基本可以认为“出现的新增流量”与当前操作有强相关性。
+final class JobsNetworkDataReadyMonitor {
 
-    static let shared = JobsCellularDataReadyMonitor()
+    static let shared = JobsNetworkDataReadyMonitor()
 
-    private let queue = DispatchQueue(label: "jobs.cellular.ready")
+    private let queue = DispatchQueue(label: "jobs.network.ready")
     private var timer: DispatchSourceTimer?
-    private var lastBytes: NetworkBytes?
-    private var isWaiting: Bool = false
+
+    private var lastWiFi: NetworkBytes?
+    private var lastCellular: NetworkBytes?
+
+    private var waiting: Bool = false
+    private var wifiDone: Bool = false
+    private var cellularDone: Bool = false
+    private var deadline: CFAbsoluteTime?
 
     private init() {}
 
-    /// 等到“有数据流动”之后仅回调一次。
+    /// 等到“有数据流动”之后仅回调一次（Wi-Fi / 蜂窝 分别触发）。
     ///
     /// - Parameters:
     ///   - interval: 轮询间隔（秒），建议 0.5 ~ 1.0 之间
     ///   - timeout: 超时时间（可选；为 nil 则一直等）
-    ///   - onReady: 第一次探测到有数据流动时触发（主线程回调）
-    ///   - onTimeout: 超时仍无数据时触发（主线程回调，可选）
+    ///   - onWiFiReady: 第一次探测到 Wi-Fi 有数据流动时触发（主线程回调，可选）
+    ///   - onCellularReady: 第一次探测到蜂窝有数据流动时触发（主线程回调，可选）
+    ///   - onTimeout: 超时仍无任何数据时触发（主线程回调，可选）
     func waitOnce(
         interval: TimeInterval = 0.5,
-        timeout: TimeInterval? = nil,
-        onReady: @escaping () -> Void,
+        timeout: TimeInterval? = 10,
+        onWiFiReady: (() -> Void)? = nil,
+        onCellularReady: (() -> Void)? = nil,
         onTimeout: (() -> Void)? = nil
     ) {
         queue.async { [weak self] in
             guard let self else { return }
 
-            // 已经在等，不重复启动（简单版本：一个 VC 一个 wait 就够了）
-            if self.isWaiting { return }
+            // 清理旧的
+            self.stopLocked()
 
-            self.isWaiting = true
-            self.lastBytes = currentNetworkBytes()
-            let startTime = CFAbsoluteTimeGetCurrent()
+            // 如果两个回调都没传，其实就没必要等
+            self.wifiDone = (onWiFiReady == nil)
+            self.cellularDone = (onCellularReady == nil)
+            self.waiting = !(self.wifiDone && self.cellularDone)
+            guard self.waiting else { return }
+
+            // 记录起始字节
+            let split = currentNetworkBytesSplit()
+            self.lastWiFi = split.wifi
+            self.lastCellular = split.cellular
+
+            if let timeout = timeout {
+                self.deadline = CFAbsoluteTimeGetCurrent() + timeout
+            } else {
+                self.deadline = nil
+            }
 
             let t = DispatchSource.makeTimerSource(queue: self.queue)
             t.schedule(deadline: .now() + interval, repeating: interval)
 
             t.setEventHandler { [weak self] in
                 guard let self else { return }
+                guard self.waiting else { return }
 
-                let now = currentNetworkBytes()
-                guard let last = self.lastBytes else {
-                    self.lastBytes = now
-                    return
-                }
+                // 使用 NWPathMonitor 的主线路信息做“互斥判断”：
+                // - 如果同时传了 Wi-Fi / 蜂窝两个回调，就只触发当前主线路对应的那个；
+                // - 如果只传了其中一个，则保持原本“只要有对应流量就触发”的行为。
+                let primary = JobsNetworkTrafficMonitor.shared.jobsCurrentSource
+                let exclusive = (onWiFiReady != nil && onCellularReady != nil)
 
-                let deltaIn  = now.received &- last.received
-                let deltaOut = now.sent &- last.sent
-                self.lastBytes = now
-                // ✅ 核心：只要有任意一方向的字节增长，就认为“数据通了”
-                if deltaIn > 0 || deltaOut > 0 {
-                    self.stopLocked()
-                    DispatchQueue.main.async {
-                        onReady()
-                    }
-                    return
-                }
-                // 可选：超时兜底
-                if let timeout = timeout {
-                    let nowTime = CFAbsoluteTimeGetCurrent()
-                    if nowTime - startTime >= timeout {
-                        self.stopLocked()
-                        if let onTimeout {
-                            DispatchQueue.main.async {
-                                onTimeout()
+                let nowSplit = currentNetworkBytesSplit()
+                let nowWiFi = nowSplit.wifi
+                let nowCell = nowSplit.cellular
+
+                // Wi-Fi 首包
+                if !self.wifiDone, let last = self.lastWiFi {
+                    let deltaDown = nowWiFi.download &- last.download
+                    let deltaUp   = nowWiFi.upload   &- last.upload
+                    if deltaDown > 0 || deltaUp > 0 {
+                        // exclusive 模式下，如果系统当前主线路是蜂窝，则忽略 Wi-Fi 抖动
+                        if !exclusive || primary != .cellular {
+                            self.wifiDone = true
+                            if let onWiFiReady = onWiFiReady {
+                                DispatchQueue.main.async { onWiFiReady() }
                             }
                         }
+                    }
+                }
+
+                // 蜂窝首包
+                if !self.cellularDone, let last = self.lastCellular {
+                    let deltaDown = nowCell.download &- last.download
+                    let deltaUp   = nowCell.upload   &- last.upload
+                    if deltaDown > 0 || deltaUp > 0 {
+                        // exclusive 模式下，如果系统当前主线路是 Wi-Fi，则忽略蜂窝抖动
+                        if !exclusive || primary != .wifi {
+                            self.cellularDone = true
+                            if let onCellularReady = onCellularReady {
+                                DispatchQueue.main.async { onCellularReady() }
+                            }
+                        }
+                    }
+                }
+
+                self.lastWiFi = nowWiFi
+                self.lastCellular = nowCell
+
+                // 两边都已经触发完了，收工
+                if self.wifiDone && self.cellularDone {
+                    self.stopLocked()
+                    return
+                }
+
+                // 超时兜底（只在完全没有任何流量时才触发）
+                if let deadline = self.deadline,
+                   CFAbsoluteTimeGetCurrent() >= deadline {
+                    let firedAny = self.wifiDone || self.cellularDone
+                    self.stopLocked()
+                    if !firedAny, let onTimeout = onTimeout {
+                        DispatchQueue.main.async { onTimeout() }
                     }
                 }
             }
@@ -325,34 +417,65 @@ final class JobsCellularDataReadyMonitor {
     private func stopLocked() {
         timer?.cancel()
         timer = nil
-        lastBytes = nil
-        isWaiting = false
+
+        lastWiFi = nil
+        lastCellular = nil
+
+        waiting = false
+        wifiDone = false
+        cellularDone = false
+        deadline = nil
     }
 }
-// DSL 风格封装一下，方便链式调用
-extension JobsCellularDataReadyMonitor {
-    /// 链式版本
+// MARK: - DSL 风格封装（链式）
+extension JobsNetworkDataReadyMonitor {
     @discardableResult
     func byWaitOnce(
         interval: TimeInterval = 0.5,
-        timeout: TimeInterval? = nil,
-        onReady: @escaping () -> Void,
+        timeout: TimeInterval? = 10,
+        onWiFiReady: (() -> Void)? = nil,
+        onCellularReady: (() -> Void)? = nil,
         onTimeout: (() -> Void)? = nil
     ) -> Self {
-        waitOnce(interval: interval, timeout: timeout, onReady: onReady, onTimeout: onTimeout)
+        waitOnce(
+            interval: interval,
+            timeout: timeout,
+            onWiFiReady: onWiFiReady,
+            onCellularReady: onCellularReady,
+            onTimeout: onTimeout
+        )
         return self
     }
 }
-/// 等到“有蜂窝流量实际跑起来”再调用 block。
-/// - 内部：interval=0.5s，timeout=10s，超时只打印一行日志。
-/// deinit { JobsCellularDataReadyMonitor.shared.cancel() }
-func jobsWaitCellularDataReady(_ onReady: @escaping () -> Void) {
-    JobsCellularDataReadyMonitor.shared
-        .byWaitOnce(interval: 0.5, timeout: 10) {
-            onReady()
-        } onTimeout: {
-            #if DEBUG
-            print("⚠️ jobs_waitCellularDataReady: 10 秒内没有探测到任何上下行字节，可能用户点了“不允许”或网络异常。")
-            #endif
-        }
+/// 统一入口：等待 Wi-Fi / 蜂窝“真的有流量”
+///
+/// - 默认 interval = 0.5s, timeout = 10s；
+/// - 哪个 block 不关心就传 nil。
+///
+/// 示例：
+/// ```swift
+/// jobsWaitNetworkDataReady(
+///     onWiFiReady: {
+///         print("✅ Wi-Fi 有真实流量了")
+///     },
+///     onCellularReady: {
+///         print("✅ 蜂窝有真实流量了，可以放心走付费流量逻辑")
+///     },
+///     onTimeout: {
+///         print("⏰ 一直没探测到流量（可能请求失败或者网络环境很奇怪）")
+///     }
+/// )
+/// ```
+func jobsWaitNetworkDataReady(
+    onWiFiReady: (() -> Void)? = nil,
+    onCellularReady: (() -> Void)? = nil,
+    onTimeout: (() -> Void)? = nil
+) {
+    JobsNetworkDataReadyMonitor.shared.byWaitOnce(
+        interval: 0.5,
+        timeout: 10,
+        onWiFiReady: onWiFiReady,
+        onCellularReady: onCellularReady,
+        onTimeout: onTimeout
+    )
 }

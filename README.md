@@ -1795,7 +1795,7 @@ INFOPLIST_KEY_CFBundleName = $(PRODUCT_NAME)
 #endif
 ```
 
-### 2、⛓️链式调用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 2、⛓️<font id=懒加载+链式调用>懒加载+链式调用</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 #### 2.1、🏷️`UILabel` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -6176,6 +6176,8 @@ jobsDismissKeyboard()
 ### 1、注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > [**Swift**](https://developer.apple.com/swift/) 不支持运行时反射注解
+>
+> 随着[**Swift**](https://developer.apple.com/swift/)版本的不断更新，也会出现新的注解。比如：<font color=red>**`@freestanding`**</font> **从 [Swift](https://developer.apple.com/swift/) 5.9 开始** 才正式可用的（也就是 Xcode 15 对应的那个 [**Swift**](https://developer.apple.com/swift/) 版本）。
 
 #### 1.1、系统注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -6260,14 +6262,74 @@ func run(_ job: @Sendable ()->Void) {}
 
 ##### 1.1.9、<font color=red>**`@MainActor`**</font>/ 自定义 <font color=red>**`@globalActor`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-> 将函数/类型限定在主线程或某个 **actor** 上
+> 它代表了一个**特殊的 actor**，这个 actor 绑定在 **主线程（主 runloop）** 上
+>
+> 被标记为 <font color=red>**`@MainActor`**</font> 的函数 / 属性 / 类型，**逻辑上归属于这个 actor 的隔离域**
+>
+> 如果标注在类型上，这个类型里的 **所有存储属性和实例方法**，默认都视为 <font color=red>**`@MainActor`**</font>
+>
+> 如果标注在属性 / 全局变量上，只会针对这个属性 / 全局变量 <font color=red>**`@MainActor`**</font>
 
-```swift
-@MainActor
-class ViewModel {
-  func updateUI() {}
-}
-```
+* 编译器层面的效果（静态检查）
+
+  ```swift
+  @MainActor
+  class MyViewModel {
+      var title: String = ""
+      func updateUI() {
+          // 就算 updateUI 写的是 func（同步函数），对别的 actor 来说它也是“逻辑异步”的，
+        	// 因为要先 hop 到 MainActor 的执行器，这一步本身就是异步的，所以你还是要 await。这不是“标注”，是实打实改变了调用方式。
+      }
+  }
+  
+  actor Worker {
+      func doWork(vm: MyViewModel) async {
+          vm.title = "xxx"      // ❌ 跨 actor 访问 main actor 隔离的属性
+          vm.updateUI()         // ❌ 跨 actor 调用 main actor 隔离的方法
+      }
+  }
+  /// 必须 通过 await + 自动 hop 来调用：
+  actor Worker {
+      func doWork(vm: MyViewModel) async {
+          await vm.updateUI()   // ✅ 编译器知道：这里要 hop 到 MainActor
+      }
+  }
+  ```
+
+* 运行时层面的效果（线程/执行器切换）
+
+  * 发现你在非 <font color=red>**`@MainActor`**</font> 上 `await` 一个 `@MainActor` 函数
+  * 自动做一件有点像 `DispatchQueue.main.async` 的事：**跳到主 actor（主线程）上执行这段代码**
+  * 确保这段代码在主线程运行
+
+* <font color=red>**`@MainActor(unsafe)`**</font>
+
+  * 告诉编译器“这玩意算 <font color=red>**`@MainActor`**</font> 的”，但是 **实际运行时不保证真在主线程**，主要是为了一些过渡场景做兼容
+  * 这个一般不推荐乱用，尤其是在搞 UI 的时候
+
+* `nonisolated` 打洞
+
+  ```swift
+  /// 如果把一个类标记为 @MainActor，但有些方法又明确希望任何线程都能调用，可以：
+  @MainActor
+  final class MyViewModel {
+      var state: String = ""
+      nonisolated func logState() {
+          // 这里不能直接访问 state（因为打破了隔离）
+          // 但可以做不依赖隔离的逻辑，比如打印
+          print("log")
+      }
+  }
+  ```
+
+* <font color=red>**`@MainActor`**</font> 🆚 **`DispatchQueue.main.async`**
+
+  | 点                          | `@MainActor`                   | `DispatchQueue.main.async` |
+  | --------------------------- | ------------------------------ | -------------------------- |
+  | 是否静态检查                | ✅ 有，编译期就拦               | ❌ 完全靠你自觉             |
+  | 是否表达数据隔离            | ✅ 是 actor 隔离域的一部分      | ❌ 只是队列调度             |
+  | 是否和 async/await 深度整合 | ✅ 有，自动 hop、需要 `await`   | ❌ 只是闭包回调             |
+  | 是否可以标记类型 / 属性     | ✅ 可以（整类、属性、全局变量） | ❌ 不行                     |
 
 ##### 1.1.10、<font color=red>**`@preconcurrency`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -6277,7 +6339,7 @@ class ViewModel {
 
 * <font color=red>**`@objc`**</font>
 
-  * 把 **Swift 符号暴露给 Objective-C 运行时** 用的标记。只有暴露后，才能用 **selector / KVC / KVO / 目标-动作** 等基于 Obj-C Runtime 的机制。
+  * 把 **[Swift](https://developer.apple.com/swift/) 符号暴露给 Objc运行时** 用的标记。只有暴露后，才能用 **selector / KVC / KVO / 目标-动作** 等基于 Obj-C Runtime 的机制。
 
   * 仅 `@objc` 只是“可见”，**不强制动态派发**；需要消息发送（`objc_msgSend`）就用 `dynamic`（`dynamic` 会隐式带上 `@objc`）。
 
@@ -6315,9 +6377,9 @@ class ViewModel {
 
   * 什么时候不需要❓
 
-    * 全是 **纯 Swift** 闭包回调（你自己的 `.onTap { }` / Rx / Combine）。
-    * 纯 Swift 调用、没有 selector/KVO/KVC 的场景。
-    * 不对外暴露给 Obj-C 的类型/方法。
+    * 全是 **纯 [Swift](https://developer.apple.com/swift/)** 闭包回调（你自己的 `.onTap { }` / Rx / Combine）。
+    * 纯 [**Swift**](https://developer.apple.com/swift/) 调用、没有 selector/KVO/KVC 的场景。
+    * 不对外暴露给 ObjC 的类型/方法。
 
   * 特别注意
 
@@ -6329,7 +6391,7 @@ class ViewModel {
 
 * <font color=red>**`@objcMembers`**</font>
 
-  * 写在 **类** 上，让**该类的成员默认都暴露**到 Obj-C（同文件内的扩展也受影响）。
+  * 写在 **类** 上，让**该类的成员默认都暴露**到 ObjC（同文件内的扩展也受影响）。
   * 风险：暴露过多，ABI/二进制体积膨胀，调度开销↑。**不建议全开**，精确标注更好。
 
 * <font color=red>**`@nonobjc`**</font>
@@ -6690,22 +6752,13 @@ struct Config {
 print(Config.maxCount)   // 直接通过类型访问
 ```
 
-#### 3.4、`延迟存储属性` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 3.4、`延迟存储属性`（懒加载） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 > 用 `lazy` 修饰，<font color=red>**只有第一次访问时才初始化**</font>。
 >
 > 常用于初始化成本较高，或者依赖外部数据的属性。
 
-```swift
-class DataManager {
-    lazy var data = loadData()   // 第一次访问时才执行 loadData()
-    
-    func loadData() -> [String] {
-        print("Loading data...")
-        return ["A", "B", "C"]
-    }
-}
-```
+* [**懒加载+链式调用**](#懒加载+链式调用)
 
 #### 3.5、<font id=属性观察器>`属性观察器`</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -8992,6 +9045,60 @@ let b = v as! UIButton                  // 若不是 UIButton 会崩溃
       }
   }
   ```
+
+### 36、溢出运算符 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 通俗释义（加减乘法同源）
+
+  ```swift
+  let x: UInt8 = 0
+  let y = x - 1   // ❌ 运行时直接崩溃：整数溢出
+  ```
+
+  ```swift
+  let x: UInt8 = 0
+  let y = x &- 1  // ✅ y == 255
+  // UInt8 是 0...255，0 再减 1 就绕回最大值 255
+  ```
+
+* `&+`  溢出加法 / `&-`  溢出减法 / `&*`  溢出乘法 <font color=red>**没有溢出除法**</font>。[**Swift**](https://developer.apple.com/swift/) 很早期（1.x）的时候是有 `&/`、`&%` 的，后来在 [**Swift**](https://developer.apple.com/swift/) 1.2 / Xcode 6.3 被干掉了。官方理由大致是：
+
+  - 它们和 `&+` / `&-` / `&*` 不一样，**不能提供统一的“二进制补码包裹（two’s complement wrapping）语义**；
+  - 除法有两个“特殊情况”：
+    - 除 0；
+    - 有符号整数里的 `Int.min / -1`（数学上可表示，但结果超出类型范围）；
+  - 这些特殊 case 需要单独处理，放在一个“看起来跟别的溢出运算符一样”的 `&/`、`&%` 里反而误导，于是干脆从语言里删掉，让你**自己写显式判断**。[Stack Overflow+2Swift Forums+2](https://stackoverflow.com/questions/30378591/overflow-division-operator-not-recognized?utm_source=chatgpt.com)
+
+* 溢出运算符必须连写
+
+  ```swift
+  a &- b   // 溢出减法
+  a & -b   // 先对 b 取负号 -b，再做按位与 &
+  ```
+
+### 37、<font color=red>**`mutating`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 告诉编译器：这个方法会修改「值类型」本身（self），所以请按可变引用来处理
+
+  ```swift
+  struct Counter {
+      var value = 0
+      // 不加 mutating：❌ 编译不过。报错：Cannot assign to property: 'self' is immutable
+      mutating func increment() {
+          value += 1
+      }
+  }
+  ```
+
+  * `struct` / `enum` 是 **值类型**
+  * 方法里默认把 `self` 当成 **不可变的值** 来看待
+  * 所以，如果你在方法里想改 `self` 或者 `self` 的属性，必须先声明这个方法是 **mutating**，编译器才会把 `self` 当作 `inout` 来处理
+
+* 只会出现在 **值类型** 上。在 `class` 上完全不会用 <font color=red>**`mutating`**</font>，因为引用类型的方法可以随便改 `self` 的属性，不需要额外标记
+
+  * `struct`
+  * `enum`
+  * 以及它们在 **protocol** 里的方法声明
 
 ## 五、<font color=red>**F**</font><font color=green>**A**</font><font color=blue>**Q**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
