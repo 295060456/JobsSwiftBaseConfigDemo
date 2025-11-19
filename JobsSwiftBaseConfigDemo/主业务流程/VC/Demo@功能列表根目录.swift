@@ -236,11 +236,15 @@ final class RootListVC: BaseVC {
                 .byImage("list.bullet".sysImg, for: .normal)
                 .byImage("list.bullet".sysImg, for: .selected)
                 /// 事件触发@点按
-                .onTap { sender in
+                .onTap {[weak self] sender in
+                    guard let self else { return }
                     sender.isSelected.toggle()
                     debugOnly {  // 仅 Debug 执行
                         toastBy("点按了列表按钮")
                     }
+                    let cell = tableView[section: 0, row: 3]
+                    let cell1 = tableView[section: 12, row: 3]
+                    print("")
                 }
                 /// 事件触发@长按
                 .onLongPress(minimumPressDuration: 0.8) { btn, gr in

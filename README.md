@@ -6211,6 +6211,55 @@ import OrderedCollections   // ✅ SPM 只接 OrderedCollections product 的情�
 
 ![image-20251118154055795](./assets/image-20251118154055795.png)
 
+### 46、[**安全取值**](#Subscript) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 安全取字符
+
+  ```swift
+  let s = "Jobs"
+  print(s[1] as Any)   // Optional("o")
+  print(s[10] as Any)  // nil
+  ```
+
+* 安全取数组
+
+  ```swift
+  let arr = [10, 20, 30]
+  
+  let a = arr[safe:1]              // Optional(20)
+  let b = arr[safe:99]             // nil
+  print(a as Any)   // Optional(20)
+  print(b as Any)  // nil
+  ```
+
+* 安全取字典
+
+  ```swift
+  let dict = ["a": 1, "b": 2]
+  
+  let x = dict[safe: "a"]                 // Optional(1)
+  let y = dict[safe: "zzz"]               // nil
+  
+  print(x as Any)   // Optional("o")
+  print(y as Any)   // nil
+  ```
+  
+* 安全取`UICollectionViewCell`
+
+  ```swift
+  let cell = collectionView[section: 0, item: 3]
+  let cell1 = collectionView[section: 0, item: 300]
+  print("")
+  ```
+  
+* 安全取`UITableViewCell`
+
+  ```swift
+  let cell = tableView[section: 0, row: 3]
+  let cell1 = tableView[section: 12, row: 3]
+  print("")
+  ```
+
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -7772,38 +7821,88 @@ class DisplayDriver {
 
 * **纠偏策略**：记录基准 `Date/Instant`，每次计算“应该的下一次”而非<u>**当前时间 + 固定周期**</u>
 
-### 13、` enum codingkeys : String, CodingKey` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 13、**`JSONDecoder`** <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-> 当需要让一个 `struct` 或 `class` 遵守 `Codable`（即 `Encodable & Decodable`）协议时，[**Swift**](https://developer.apple.com/swift/)  默认会做 **属性名 <-> JSON key** 的自动映射。
->
-> 但是有些情况：
->
-> - 你的属性名和 **JSON** 字段名 **不一样**
-> - 你想 **忽略某些字段**
-> - 你需要 **手动控制映射**
->
-> 这时候就需要写一个 **嵌套枚举 `CodingKeys`**，它遵循 `CodingKey` 协议
+* <font color=red>**标准 JSON格式 里，JSON对象的 key 永远是字符串**</font>
 
-```json
-{
-  "hi": "Hello",
-  "full_name": "Jobs"
-}
-```
+* **` enum CodingKeys : String, CodingKey`** 👉 这是一个用字符串做 key 的 **CodingKey** 集合
 
-* 如果属性 **不写在 `CodingKeys` 里**，就不会被编解码
+* `keyDecodingStrategy` 🆚 `CodingKeys`
+
+  * `JSONDecoder().keyDecodingStrategy = .convertFromSnakeCase` 这个开关可以直接全局打开
+  * 最好写 `CodingKeys`。`keyDecodingStrategy`不是万能的
+  * 没写 `CodingKeys` 时：用 keyDecodingStrategy 的规则。
+  * 写了 `CodingKeys`：以 `CodingKeys` 为准（你手动指定是什么就是什么）。
+
+* 当需要让一个 `struct` 或 `class` 遵守 <font color=red>**`Codable`**</font>（即，<font color=red>**`Codable`**</font> =  `Encodable` + ` Decodable`）协议时，[**Swift**](https://developer.apple.com/swift/)  默认会做 **属性名 ⇆ JSON key** 的自动映射：
 
   ```swift
-  struct Person: Codable {
-      var greeting: String
-      var name: String
-      var age: Int   // 👈 想忽略
+  /// JSONDecoder解析字段@用keyDecodingStrategy处理Json字段名和模型名不一致
+  func JSONDecoder_keyDecodingStrategy(){
   
-      enum CodingKeys: String, CodingKey {
-          case greeting, name  // age 不写 → 不会出现在 JSON
+      let json = """
+      {
+        "user_id": 1,
+        "user_name": "Jobs"
+      }
+      """.data(using: .utf8)!
+  
+      struct User: Codable {
+          let userId: Int
+          let userName: String
+      }
+  
+      do {
+          let user = try JSONDecoder()
+              .bykeyDecodingStrategy(.convertFromSnakeCase) // 👈 关键
+              .decode(User.self, from: json)
+          print(user.userId, user.userName) // 1 Jobs true
+      } catch {
+          print("❌ 解析失败：\(error)")
       }
   }
   ```
+
+* 但是有些情况
+
+  - 你的属性名和 **JSON** 字段名 **不一样**
+
+  - 你需要 **手动控制映射**
+
+  - 你想 **忽略某些字段**
+
+    ```swift
+    /// JSONDecoder解析字段@用CodingKeys处理Json字段名和模型名不一致以及忽略字段（age）
+    func JSONDecoder_CodingKeys(){
+    
+        let json = """
+        {
+          "user_id": 1,
+          "user_name": "Jobs"
+        }
+        """.data(using: .utf8)!
+    
+        struct User: Codable {
+            let userId: Int
+            let userName: String
+            let age: Int? = nil  // 👈 想忽略:在下面的 `enum CodingKeys: String, CodingKey` 里面不做映射,并且给予默认值（否则语法错误）
+            /// 模型名 = 服务器字段名
+            /// 如果属性不写在 `CodingKeys` 里，就不会被编解码
+            /// 结论：最好写 CodingKeys。keyDecodingStrategy不是万能的
+            enum CodingKeys: String, CodingKey {
+                case userId   = "user_id"
+                case userName = "user_name"
+            }
+        }
+    
+        do {
+            let user = try JSONDecoder().decode(User.self, from: json)
+            print(user.userId, user.userName) // 1 Jobs true
+        } catch {
+            print("❌ 解析失败：\(error)")
+        }
+    }
+    ```
 
 * 进阶：手动实现 `init(from:)`
 
@@ -7826,7 +7925,100 @@ class DisplayDriver {
   }
   ```
 
-### 14、`Subscript`（TODO） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 14、<font id=Subscript color=red>`Subscript`</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* `subscript` = 带参数的**计算属性**，用 `[]` 语法访问。用来让自定义的类型，也能像数组 / 字典那样 `obj[...]` 取值、改值。
+
+* 经典案例
+
+  * 安全取`Array`
+
+    ```swift
+    extension Array {
+        /// 安全读：越界返回 nil，不 crash
+        subscript(safe index: Int) -> Element? {
+            indices.contains(index) ? self[index] : nil
+        }
+    }
+    ```
+
+  * 安全取`Dictionary`.`Value`
+
+    ```swift
+    extension Dictionary {
+        /// 语义化安全读：其实就是 self[key]
+        subscript(safe key: Key) -> Value? {
+            self[key]      // 这里会调用标准库原来的 subscript(key:)
+        }
+    }
+    ```
+
+  * 安全取字符`String`.`Character`
+
+    ```swift
+    public extension String {
+        /// 安全取字符
+        subscript(_ index: Int) -> Character? {
+            guard index >= 0 && index < count else { return nil }
+            let i = self.index(startIndex, offsetBy: index)
+            return self[i]
+        }
+    }
+    ```
+
+  * 安全取`UITableViewCell`
+
+    ```swift
+    extension UITableView {
+        /// 校验 IndexPath 是否在当前 tableView 的有效范围内
+        private func isValid(indexPath: IndexPath) -> Bool {
+            let section = indexPath.section
+            let row = indexPath.row
+    
+            guard section >= 0, row >= 0 else { return false }
+            guard section < numberOfSections else { return false }
+            guard row < numberOfRows(inSection: section) else { return false }
+            return true
+        }
+        /// 通过 IndexPath 安全获取 cell：越界 / 不存在 返回 nil
+        subscript(safe indexPath: IndexPath) -> UITableViewCell? {
+            guard isValid(indexPath: indexPath) else { return nil }
+            return cellForRow(at: indexPath)
+        }
+        /// 通过 section / row 安全获取 cell：越界 / 不存在 返回 nil
+        subscript(section s: Int, row r: Int) -> UITableViewCell? {
+            let indexPath = IndexPath(row: r, section: s)
+            return self[safe: indexPath]
+        }
+    }
+    ```
+
+  * 安全取`UICollectionViewCell`
+
+    ```swift
+    extension UICollectionView {
+        /// 校验 IndexPath 是否在当前 collectionView 的有效范围内
+        private func isValid(indexPath: IndexPath) -> Bool {
+            let section = indexPath.section
+            let item = indexPath.item
+    
+            guard section >= 0, item >= 0 else { return false }
+            guard section < numberOfSections else { return false }
+            guard item < numberOfItems(inSection: section) else { return false }
+            return true
+        }
+        /// 通过 IndexPath 安全获取 cell：越界 / 不存在 返回 nil
+        subscript(safe indexPath: IndexPath) -> UICollectionViewCell? {
+            guard isValid(indexPath: indexPath) else { return nil }
+            return cellForItem(at: indexPath)
+        }
+        /// 通过 section / item 安全获取 cell：越界 / 不存在 返回 nil
+        subscript(section section: Int, item item: Int) -> UICollectionViewCell? {
+            let indexPath = IndexPath(item: item, section: section)
+            return self[safe: indexPath]
+        }
+    }
+    ```
 
 ### 15、<font color=red>**`inout`**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 

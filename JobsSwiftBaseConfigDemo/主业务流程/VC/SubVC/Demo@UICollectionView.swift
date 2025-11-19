@@ -13,10 +13,7 @@
 import UIKit
 import SnapKit
 
-final class EmptyCollectionViewDemoVC: BaseVC,
-                                       UICollectionViewDataSource,
-                                       UICollectionViewDelegate,
-                                       UICollectionViewDelegateFlowLayout {
+final class EmptyCollectionViewDemoVC: BaseVC {
 
     // ============================== 数据源 & 状态 ==============================
     // 竖向列表
@@ -85,6 +82,7 @@ final class EmptyCollectionViewDemoVC: BaseVC,
                 make.height.equalTo(view.snp.height).multipliedBy(0.55) // 上面占 55%
             }
     }()
+
     // ============================== UI：下面的【横向】CollectionView ==============================
     private lazy var collectionViewH: UICollectionView = {
         UICollectionView(frame: .zero, collectionViewLayout: flowLayoutH)
@@ -160,15 +158,22 @@ final class EmptyCollectionViewDemoVC: BaseVC,
         collectionViewV.byAlpha(1)
         collectionViewH.byAlpha(1)
     }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
-    // ============================== UICollectionViewDataSource ==============================
+}
+// MARK: - UICollectionViewDataSource
+extension EmptyCollectionViewDemoVC: UICollectionViewDataSource {
+
     func numberOfSections(in collectionView: UICollectionView) -> Int { 1 }
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
         if collectionView === collectionViewV { return itemsV.count }
         return itemsH.count
     }
+
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: UICollectionViewCell = collectionView.dequeueCell(UICollectionViewCell.self, for: indexPath)
@@ -197,19 +202,28 @@ final class EmptyCollectionViewDemoVC: BaseVC,
             label.text = itemsV[indexPath.item]
         } else {
             label.text = itemsH[indexPath.item]
-        }
-        return cell
+        };return cell
     }
-    // ============================== UICollectionViewDelegate ==============================
+}
+// MARK: - UICollectionViewDelegate
+extension EmptyCollectionViewDemoVC: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView === collectionViewV {
             print("✅[V] didSelect Item: \(indexPath.item)")
+            let cell = collectionViewV[section: 0, item: 3]
+            let cell2 = collectionViewV[section: 0, item: 300]
+            print("")
         } else {
             print("✅[H] didSelect Item: \(indexPath.item)")
+            let cell = collectionViewH[section: 0, item: 3]
+            let cell2 = collectionViewH[section: 0, item: 300]
+            print("")
         }
         collectionView.deselectItem(at: indexPath, animated: true)
     }
-    // ============================== UICollectionViewDelegateFlowLayout ==============================
+}
+// MARK: - UICollectionViewDelegateFlowLayout
+extension EmptyCollectionViewDemoVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {

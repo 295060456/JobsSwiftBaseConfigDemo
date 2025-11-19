@@ -653,6 +653,12 @@ public extension String {
     func paste(){
         UIPasteboard.general.string = self
     }
+    /// 安全取字符
+    subscript(_ index: Int) -> Character? {
+        guard index >= 0 && index < count else { return nil }
+        let i = self.index(startIndex, offsetBy: index)
+        return self[i]
+    }
 }
 // MARK: - 私有工具
 private extension String {
@@ -701,10 +707,9 @@ private extension String {
     }
     /// 解析多个邮箱：支持逗号/分号/空格
     static func _parseEmails(_ raw: String) -> [String] {
-        raw
-            .split { ",; ".contains($0) }
-            .map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
-            .filter { !$0.isEmpty && $0.contains("@") }
+        raw.split { ",; ".contains($0) }
+           .map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
+           .filter { !$0.isEmpty && $0.contains("@") }
     }
 
     static func _makeMailtoURL(to: [String],
@@ -729,14 +734,12 @@ fileprivate func jobsParseHexColor(_ raw: String,
                                    defaultAlpha: CGFloat = 1.0) -> (rgbHex: String, alpha: CGFloat)? {
     var hex = raw.trimmingCharacters(in: .whitespacesAndNewlines)
                  .lowercased()
-
     // 前缀处理
     if hex.hasPrefix("#") {
         hex.removeFirst()
     } else if hex.hasPrefix("0x") {
         hex.removeFirst(2)
     }
-
     // 3 位压缩格式：RGB -> RRGGBB
     if hex.count == 3 {
         let r = hex[hex.startIndex]
@@ -744,10 +747,8 @@ fileprivate func jobsParseHexColor(_ raw: String,
         let b = hex[hex.index(hex.startIndex, offsetBy: 2)]
         hex = "\(r)\(r)\(g)\(g)\(b)\(b)"
     }
-
     // 只接受 6 / 8 位
     guard hex.count == 6 || hex.count == 8 else { return nil }
-
     // 只允许 0-9a-f
     let validChars = CharacterSet(charactersIn: "0123456789abcdef")
     guard hex.unicodeScalars.allSatisfy({ validChars.contains($0) }) else {
@@ -805,7 +806,6 @@ public extension String {
             return UIColor.red.withAlphaComponent(explicitAlpha)
         };return color
     }
-
     /// 指定兜底颜色版本（你要自定义 fallback 就用这个）
     func cor(_ fallback: UIColor) -> UIColor {
         guard let (rgb, alpha) = jobsParseHexColor(self),

@@ -23,9 +23,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
 
-        JSONDecoder解析字段对齐()
-        JSONDecoder解析字段key不一致_CodingKeys()
-        JSONDecoder解析字段key不一致_keyDecodingStrategy()
+        Subscript_Character()
+        Subscript_Array()
+        Subscript_Dictionary()
+        /// 没写 CodingKeys 时：用 keyDecodingStrategy 的规则。
+        /// 写了 CodingKeys：以 CodingKeys 为准（你手动指定是什么就是什么）。
+        JSONDecoder_CodingKeys()
+        JSONDecoder_keyDecodingStrategy()
         JSONDecoder解析字段处理时间()
         JSONDecoder嵌套JSON数组解析()
         JSONDecoder嵌套对象()
@@ -53,78 +57,82 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 extension AppDelegate {
-    func JSONDecoder解析字段对齐(){
-        struct User: Codable {
-            let id: Int
-            let name: String
-            let isVIP: Bool
-        }
+    func Subscript_Character(){
+        let s = "Jobs"
+        print(s[1] as Any)   // Optional("o")
+        print(s[10] as Any)  // nil
+    }
+
+    func Subscript_Array(){
+        let arr = [10, 20, 30]
+
+        let a = arr[safe:1]              // Optional(20)
+        let b = arr[safe:99]             // nil
+        print(a as Any)   // Optional(20)
+        print(b as Any)  // nil
+    }
+
+    func Subscript_Dictionary(){
+        let dict = ["a": 1, "b": 2]
+
+        let x = dict[safe: "a"]                 // Optional(1)
+        let y = dict[safe: "zzz"]               // nil
+
+        print(x as Any)   // Optional("o")
+        print(y as Any)   // nil
+    }
+}
+
+extension AppDelegate {
+    /// JSONDecoder解析字段@用CodingKeys处理Json字段名和模型名不一致以及忽略字段（age）
+    func JSONDecoder_CodingKeys(){
 
         let json = """
         {
-            "id": 1,
-            "name": "Jobs",
-            "isVIP": true
+          "user_id": 1,
+          "user_name": "Jobs"
         }
         """.data(using: .utf8)!
-
-        do {
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase // 👈 这个开关可以直接全局打开
-            let user = try decoder.decode(User.self, from: json)
-            print(user.id, user.name, user.isVIP) // 1 Jobs true
-        } catch {
-            print("❌ 解析失败：\(error)")
-        }
-    }
-
-    /// 结论：最好写 CodingKeys。keyDecodingStrategy不是万能的
-    func JSONDecoder解析字段key不一致_CodingKeys(){
 
         struct User: Codable {
             let userId: Int
             let userName: String
+            let age: Int? = nil  // 👈 想忽略:在下面的 `enum CodingKeys: String, CodingKey` 里面不做映射,并且给予默认值（否则语法错误）
             /// 模型名 = 服务器字段名
-            enum CodingKeys: String, CodingKey { // 👈 关键
+            /// 如果属性不写在 `CodingKeys` 里，就不会被编解码
+            /// 结论：最好写 CodingKeys。keyDecodingStrategy不是万能的
+            enum CodingKeys: String, CodingKey {
                 case userId   = "user_id"
                 case userName = "user_name"
             }
         }
 
+        do {
+            let user = try JSONDecoder().decode(User.self, from: json)
+            print(user.userId, user.userName) // 1 Jobs true
+        } catch {
+            print("❌ 解析失败：\(error)")
+        }
+    }
+    /// JSONDecoder解析字段@用keyDecodingStrategy处理Json字段名和模型名不一致
+    func JSONDecoder_keyDecodingStrategy(){
+
         let json = """
         {
           "user_id": 1,
           "user_name": "Jobs"
         }
         """.data(using: .utf8)!
-
-        do {
-            let decoder = JSONDecoder()
-            let user = try decoder.decode(User.self, from: json)
-            print(user.userId, user.userName) // 1 Jobs true
-        } catch {
-            print("❌ 解析失败：\(error)")
-        }
-    }
-
-    func JSONDecoder解析字段key不一致_keyDecodingStrategy(){
 
         struct User: Codable {
             let userId: Int
             let userName: String
         }
 
-        let json = """
-        {
-          "user_id": 1,
-          "user_name": "Jobs"
-        }
-        """.data(using: .utf8)!
-
         do {
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase // 👈 关键
-            let user = try decoder.decode(User.self, from: json)
+            let user = try JSONDecoder()
+                .bykeyDecodingStrategy(.convertFromSnakeCase) // 👈 关键
+                .decode(User.self, from: json)
             print(user.userId, user.userName) // 1 Jobs true
         } catch {
             print("❌ 解析失败：\(error)")
@@ -132,10 +140,6 @@ extension AppDelegate {
     }
 
     func JSONDecoder解析字段处理时间(){
-        struct Post: Codable {
-            let id: Int
-            let createdAt: Date
-        }
 
         let json = """
         {
@@ -143,6 +147,11 @@ extension AppDelegate {
           "created_at": "2025-11-18 16:39:00"
         }
         """.data(using: .utf8)!
+
+        struct Post: Codable {
+            let id: Int
+            let createdAt: Date
+        }
 
         let decoder = JSONDecoder()
             .bykeyDecodingStrategy(.convertFromSnakeCase)
@@ -159,10 +168,6 @@ extension AppDelegate {
     }
 
     func JSONDecoder嵌套JSON数组解析(){
-        struct User: Codable {
-            let id: Int
-            let name: String
-        }
 
         let json = """
         [
@@ -171,9 +176,13 @@ extension AppDelegate {
         ]
         """.data(using: .utf8)!
 
-        let decoder = JSONDecoder()
+        struct User: Codable {
+            let id: Int
+            let name: String
+        }
+
         do {
-            let users = try decoder.decode([User].self, from: json)
+            let users = try JSONDecoder().decode([User].self, from: json)
             print(users.count) // 2
         } catch {
             print("❌ 解析失败：\(error)")
@@ -181,17 +190,6 @@ extension AppDelegate {
     }
 
     func JSONDecoder嵌套对象(){
-
-        struct APIResponse<T: Codable>: Codable {
-            let code: Int
-            let message: String
-            let data: T
-        }
-
-        struct User: Codable {
-            let id: Int
-            let name: String
-        }
 
         let json = """
         {
@@ -204,9 +202,19 @@ extension AppDelegate {
         }
         """.data(using: .utf8)!
 
-        let decoder = JSONDecoder()
+        struct APIResponse<T: Codable>: Codable {
+            let code: Int
+            let message: String
+            let data: T
+        }
+
+        struct User: Codable {
+            let id: Int
+            let name: String
+        }
+
         do {
-            let resp = try decoder.decode(APIResponse<User>.self, from: json)
+            let resp = try JSONDecoder().decode(APIResponse<User>.self, from: json)
             let user = resp.data
             print(user) // 2
         } catch {

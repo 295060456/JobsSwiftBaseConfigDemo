@@ -22,3 +22,10 @@ extension Dictionary where Key == String {
         return String(describing: v)
     }
 }
+
+extension Dictionary {
+    /// 语义化安全读：其实就是 self[key]
+    subscript(safe key: Key) -> Value? {
+        self[key]      // 这里会调用标准库原来的 subscript(key:)
+    }
+}
