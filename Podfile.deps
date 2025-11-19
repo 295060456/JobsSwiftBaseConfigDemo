@@ -3,7 +3,6 @@ def swiftAppCommon
   # --- OC ---
   pod 'SDWebImage'                         # https://github.com/SDWebImage/SDWebImage          ❤️
   pod 'MJRefresh'                          # https://github.com/CoderMJLee/MJRefresh           ❤️
-  pod 'IQKeyboardManager'                  # https://github.com/hackiftekhar/IQKeyboardManager ❤️
   pod 'HTMLReader'                         # https://github.com/nolanw/HTMLReader              ❤️
 
   # --- Swift ---
@@ -31,6 +30,7 @@ def swiftAppCommon
   pod 'AMPopTip'                           # https://github.com/andreamazz/AMPopTip            ❤️
   pod 'SkeletonView'                       # https://github.com/Juanpe/SkeletonView            ❤️ 骨架屏/闪动占位
   pod 'swift-collections'                  # https://github.com/apple/swift-collections#       ❤️ 有序字典
+  pod 'IQKeyboardManagerSwift'             # https://github.com/hackiftekhar/IQKeyboardManager ❤️
 #  pod 'ComponentKit'                       # https://github.com/facebook/componentkit          ❤️ Facebook出品的一款UI框架
 #  pod 'Texture'                            # https://github.com/texturegroup/texture           ❤️ Facebook出品的一款UI框架
 
