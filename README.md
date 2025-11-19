@@ -8104,7 +8104,7 @@ print(value)         // 15
 
 #### 16.1、整数类型（内建） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-> 来源：**Swift 标准库 (Swift Standard Library)** 
+> 来源：**[Swift](https://developer.apple.com/swift/) 标准库 (Swift Standard Library)** 
 
 * 有符号整数 (signed)
   * `Int`：默认整数类型（和平台位宽一致，32 位系统上就是 32 位，64 位系统上就是 64 位）

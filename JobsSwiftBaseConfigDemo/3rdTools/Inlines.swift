@@ -28,8 +28,7 @@ func jobsGetMainWindowBefore13() -> UIWindow? {
         } else {
             window = UIApplication.shared.perform(#selector(getter: UIApplication.keyWindow))?.takeUnretainedValue() as? UIWindow
         }
-    }
-    return window
+    };return window
 }
 
 @inline(__always)
@@ -47,8 +46,7 @@ func jobsGetMainWindowAfter13() -> UIWindow? {
                 }
             }
         }
-    }
-    return nil
+    };return nil
 }
 
 @inline(__always)
@@ -119,5 +117,3 @@ func jobsMakeScreenEdgePanGesture(_ block: ((UIScreenEdgePanGestureRecognizer) -
     block?(gesture)
     return gesture
 }
-
-
