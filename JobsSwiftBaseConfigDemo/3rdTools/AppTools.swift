@@ -15,16 +15,16 @@ import SwiftEntryKit
 import SnapKit
 // MARK: 🔔 通用弹窗提示
 public func presentAlert(for urlString: String, on textView: UITextView) {
-    let alert = UIAlertController(
-        title: "点击链接",
-        message: "已点击：\(urlString)",
-        preferredStyle: .alert
-    )
-    alert.addAction(UIAlertAction(title: "确定", style: .default))
-    // 💡 iOS17+ 的 delegate 可能不在当前 VC，需要兜底 rootViewController
-    let host = textView.window?.rootViewController
-            ?? UIApplication.jobsTopMostVC(ignoreAlert: true)   // ✅ 统一找最顶 VC
-    host?.present(alert, animated: true)
+    // 💡 iOS17+：delegate 不一定是当前 VC，用原来的兜底逻辑
+    guard let host = textView.window?.rootViewController
+        ?? UIApplication.jobsTopMostVC(ignoreAlert: true) else {
+        return
+    }
+
+    UIAlertController
+        .makeAlert("点击链接", "已点击：\(urlString)")
+        .byAddOK()                  // 默认“确定”按钮
+        .byPresent(host)            // 用你封装过的 present 逻辑
 }
 // MARK: - 启动分类处理（Block DSL）
 ///
@@ -78,7 +78,7 @@ public func isHttpURL(_ raw: String?) -> Bool {
     let p = s.lowercased()
     return p.hasPrefix("http://") || p.hasPrefix("https://")
 }
-
+// MARK: - Tips
 func toastBy(_ string: String) {
     /// 允许任意线程调用这个方法
     Task { @MainActor in
@@ -113,7 +113,7 @@ extension UICollectionView {
         return self;
     }
 }
-
+// MARK: - 弹窗策略
 public func makeEKAttributes() -> EKAttributes{
     let anim = EKAttributes.animScaleInFadeOut
     return EKAttributes()
@@ -133,11 +133,11 @@ public func makeEKAttributes() -> EKAttributes{
         .byEntrance(anim.entrance)
         .byExit(anim.exit)
 }
-
+// MARK: - 时间格式化策略
 public func fmt(_ date: Date, _ f: String) -> String {
     DateFormatter().byLocale(.current).byDateFormat(f).string(from: date)
 }
-/// 分割线
+// MARK: - 分割线
 extension UIView {
     /// 在指定 view 下方添加一条分割线，添加到当前 view（self）上
     @discardableResult
@@ -168,7 +168,7 @@ extension UIView {
             }
     }
 }
-/// 网络监听
+// MARK: - 网络监听
 private enum JobsNetworkListenerKeys {
     static var labelKey: UInt8 = 0
 }
@@ -272,4 +272,21 @@ func networkRichListenerBy(_ view:UIView){
         }
         .byStart(interval: 1.0)
 }
-
+// MARK: - 制造非波拉契数列
+struct FibonacciSequence: Sequence {
+    let count: Int
+    func makeIterator() -> AnyIterator<Int> {
+        var i = 0
+        var a = 0
+        var b = 1
+        return AnyIterator {
+            guard i < self.count else { return nil }
+            defer {
+                let next = a + b
+                a = b
+                b = next
+                i += 1
+            };return a
+        }
+    }
+}

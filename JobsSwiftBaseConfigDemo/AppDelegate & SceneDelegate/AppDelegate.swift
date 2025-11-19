@@ -23,6 +23,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
 
+        if let (minV, maxV) = [3, 1, 9, 7].minMax() {
+            print(minV, maxV)   // 1 9
+        }
+
+        udSave()
+        udRead()
+        udSaveAge()
+        udReadAge()
+
         Subscript_Character()
         Subscript_Array()
         Subscript_Dictionary()
@@ -53,6 +62,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         options: UIScene.ConnectionOptions
     ) -> UISceneConfiguration {
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+    }
+}
+extension AppDelegate {
+    struct UserInfoModel: Codable {
+        let id: Int
+        let name: String
+        let isVIP: Bool
+    }
+    /// 存对象
+    func udSave(){
+        UD.save(UserInfoModel(id: 1001, name: "Jobs", isVIP: true), forKey: "kUserInfo")
+    }
+    /// 取对象
+    func udRead(){
+        // 读取时指定类型
+        if let loadedUser = UD.load(UserInfoModel.self, forKey: "kUserInfo") {
+            print(loadedUser.id)     // 1001
+            print(loadedUser.name)   // Jobs
+            print(loadedUser.isVIP)  // true
+        } else {
+            print("还没有存过用户信息")
+        }
+    }
+    /// 存 Int
+    func udSaveAge() {
+        let age = 18
+        UD.save(age, forKey: "kUserAge")   // T = Int（Int: Codable）
+    }
+    /// 取 Int
+    func udReadAge() {
+        let age: Int? = UD.load(Int.self, forKey: "kUserAge")
+        if let age {
+            print("当前年龄：\(age)")
+        } else {
+            print("还没有存过年龄")
+        }
     }
 }
 

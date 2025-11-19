@@ -119,15 +119,45 @@ public extension UserDefaults {
 }
 // MARK: 通用工具
 public extension UserDefaults {
+    /// 读取：从 模型 解一个 Codable 类型
+    func load<T: Decodable>(_ type: T.Type, forKey key: String) -> T? {
+        guard let data = data(forKey: key) else { return nil }
+        do {
+            return try JSONDecoder().decode(type, from: data)
+        } catch {
+            print("读取失败：\(error)")
+            return nil
+        }
+    }
+    /// 写入：把 Codable 编码存进去
+    func save<T: Encodable>(_ value: T, forKey key: String) {
+        do {
+            let data = try JSONEncoder().encode(value)
+            set(data, forKey: key)
+            synchronize()
+        } catch {
+            print("保存失败：\(error)")
+        }
+    }
+
+    func exists(_ key: String) -> Bool {
+        return object(forKey: key) != nil
+    }
+
     @discardableResult
     func removeBy(_ key: String) -> UserDefaults{
         removeObject(forKey: key)
         synchronize()
         return self
     }
-    func exists(_ key: String) -> Bool {
-        return object(forKey: key) != nil
+
+    @discardableResult
+    func clean(_ key: String) -> UserDefaults {
+        removeObject(forKey: key)
+        synchronize()
+        return self
     }
+
     @discardableResult
     func clearAll() -> UserDefaults {
         for (k, _) in dictionaryRepresentation() {

@@ -268,8 +268,7 @@ public extension UIAlertController {
                                     y: host.view.bounds.maxY - 1,
                                     width: 1, height: 1)
             pop.permittedArrowDirections = []
-        }
-        return self
+        };return self
     }
     /// present：与系统转场协调执行（本地背景“强制同步安装”，网络图“转场后淡入”）
     @discardableResult
@@ -324,8 +323,7 @@ public extension UIAlertController {
                 }
             }
             completion?()
-        }
-        return self
+        };return self
     }
 }
 // MARK: - AO（UInt8 哨兵）

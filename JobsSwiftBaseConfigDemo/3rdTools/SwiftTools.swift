@@ -13,9 +13,6 @@ import AppKit
 import UIKit
 #endif
 
-public let YES = true
-public let NO  = false
-
 // MARK: - 扩展 Int 与 JXAuthCode 的比较
 public func ==(lhs: Int?, rhs: JXAuthCode) -> Bool {
     guard let lhs = lhs else { return false }

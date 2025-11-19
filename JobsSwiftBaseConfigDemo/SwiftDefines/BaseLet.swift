@@ -8,3 +8,5 @@
 import Foundation
 
 public let UD = UserDefaults.standard
+public let YES = true
+public let NO  = false

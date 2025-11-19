@@ -556,7 +556,7 @@
     <img src="./assets/image-20250616174404275.png" alt="image-2" style="width:65%; display:inline-block; vertical-align: top;" />
   </div>
 
-### 4、一些适用于[Swift](https://developer.apple.com/swift/)的第三方框架（持续更新...） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 4、一些适用于[Swift](https://developer.apple.com/swift/)的第三方框架（持续更新...）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 #### 4.1、[**DeviceKit**](https://github.com/devicekit/DeviceKit) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -4934,6 +4934,102 @@ AppLaunchManager.handleLaunch(
 
 #### 25.2、[`UIAlertController`](#UIAlertController) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a> 
 
+* 最简单的 Alert：主/副标题 + 取消_确定@按钮行为监听 + 中间弹出 + 点击空白区域不可取消
+
+  ```swift
+  // MARK: 最简单的 Alert：主/副标题 + 取消_确定@按钮行为监听 + 中间弹出 + 点击空白区域不可取消
+  private lazy var simpleAlert: UIAlertController = {
+      UIAlertController
+          .makeAlert("提示", "这是一条简单提示")
+          .byAddCancel { [weak self] _ in
+              guard let self else { return }
+              print("Cancel")
+              // TODO: 这里写你的取消逻辑
+          }
+          .byAddOK { [weak self] _ in
+              guard let self else { return }
+              print("OK")
+              // TODO: 这里写你的确认逻辑
+          }
+  }()
+  ```
+
+* 最简单的 Alert：主/副标题 + 取消_确定@按钮行为监听 + 中间弹出 + 点击空白区域不可取消
+
+  ```swift
+  // MARK: 最简单的 Alert：主/副标题 + 取消_确定@按钮行为监听 + 中间弹出 + 点击空白区域不可取消
+  private lazy var simpleAlert: UIAlertController = {
+      UIAlertController
+          .makeAlert("重命名", "请输入新的名称")
+  //        .bySDBgImageView("https://picsum.photos/800/600",
+  //                         image: "唐老鸭".img,
+  //                         hideSystemBackdrop: true)
+  //        .byKFBgImageView("https://picsum.photos/800/600",
+  //                         image: "唐老鸭".img,
+  //                         hideSystemBackdrop: true)
+          .byBgImage("唐老鸭".img)                      // 本地图背景（同步阶段，无动画）
+          .byCardBorder(width: 1, color: .systemBlue)   // 外层卡片描边
+          .byAddTextField(placeholder: "新名称",
+                          borderWidth: nil,             // ← 不给 tf 自身描边
+                          borderColor: nil,
+                          cornerRadius: 8) { alert, tf, input, oldText, isDeleting in
+              let ok = alert.actions.first { $0.title == "确定" }
+              ok?.isEnabled = !(tf.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+          }
+          .byTextFieldOuterBorder(at: 0,
+                                  width: 1,
+                                  color: .systemBlue,
+                                  cornerRadius: 10,
+                                  insets: .init(top: 6, left: 12, bottom: 6, right: 12)) // ← 给灰色容器描边
+          .byAddCancel { _ in                          // ✅ 一个回调（只给 action）
+              print("Cancel tapped")
+          }
+          .byAddOK{ alert, _ in                 // 需要 alert + action 的回调
+              let name = alert.textField(at: 0)?.text ?? ""
+              print("new name =", name)
+          }
+          .byTintColor(.systemBlue)
+          .byPresent(self)
+  }()
+  ```
+
+* 主标题 + 相机_相册_取消@按钮行为监听 + 屏幕底部弹出 + 点击空白区域可取消
+
+  ```swift
+  // MARK: 主标题 + 相机_相册_取消@按钮行为监听 + 屏幕底部弹出 + 点击空白区域可取消
+  private lazy var simpleAlert: UIAlertController = {
+      UIAlertController
+          .makeActionSheet("选择来源", nil)
+          .byAddAction(title: "相机") { _ in
+              print("camera")
+          }
+          .byAddAction(title: "相册") { _ in
+              print("photos")
+          }
+          .byAddCancel { _ in
+              print("Cancel tapped")
+          }
+          .byPresent(self)
+  }()
+  ```
+
+* 主标题 + 删除_取消@按钮行为监听 + 从按钮自身位置（锚点）弹出 + 点击空白区域可取消
+
+  ```swift
+  // MARK: 主标题 + 删除_取消@按钮行为监听 + 从按钮自身位置（锚点）弹出 + 点击空白区域可取消
+  private lazy var simpleAlert: UIAlertController = {
+      UIAlertController
+          .makeActionSheet("操作", nil)
+          .byAddDestructive("删除") { _ in
+              print("delete")
+          }
+          .byAddCancel { _ in
+              print("Cancel tapped")
+          }
+          .byPresent(self, anchor: .view(sender, sender.bounds)) // 指定锚点
+  }()
+  ```
+
 ### 26、调用系统设备（内部有鉴权@需配置[**`Info.plist`**](#Info.plist) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 #### 26.1、调用iOS系统相机@照相 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -6258,6 +6354,67 @@ import OrderedCollections   // ✅ SPM 只接 OrderedCollections product 的情�
   let cell = tableView[section: 0, row: 3]
   let cell1 = tableView[section: 12, row: 3]
   print("")
+  ```
+
+### 47、`UserDefaults.standard` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+public let UD = UserDefaults.standard
+
+struct UserInfoModel: Codable {
+    let id: Int
+    let name: String
+    let isVIP: Bool
+}
+```
+
+#### 47.1、存取对象 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **存对象**
+
+  ```swift
+  func udSave(){
+      UD.save(UserInfoModel(id: 1001, name: "Jobs", isVIP: true), forKey: "kUserInfo")
+  }
+  ```
+
+* **取对象**
+
+  ```swift
+  func udRead(){
+      // 读取时指定类型
+      if let loadedUser = UD.load(UserInfoModel.self, forKey: "kUserInfo") {
+          print(loadedUser.id)     // 1001
+          print(loadedUser.name)   // Jobs
+          print(loadedUser.isVIP)  // true
+      } else {
+          print("还没有存过用户信息")
+      }
+  }
+  ```
+
+#### 47.2、存取[**Swift**](https://developer.apple.com/swift/)的基本数据类型 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* **存 Int**
+
+  ```swift
+  func udSaveAge() {
+      let age = 18
+      UD.save(age, forKey: "kUserAge")   // T = Int（Int: Codable）
+  }
+  ```
+
+* **取 Int**
+
+  ```swift
+  func udReadAge() {
+      let age: Int? = UD.load(Int.self, forKey: "kUserAge")
+      if let age {
+          print("当前年龄：\(age)")
+      } else {
+          print("还没有存过年龄")
+      }
+  }
   ```
 
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
