@@ -3,7 +3,6 @@
 //  ✅ 全面兼容 UIButton.Configuration 管线（不丢字、不丢色）
 
 import UIKit
-
 // ================================== 倒计时模型 ==================================
 public enum JobsCountdownMode {
     case down(from: Int)
@@ -89,7 +88,6 @@ public final class TimerTicker: JobsTicker {
         isRunning = false
     }
 }
-
 // ================================== 配置体 ==================================
 public struct JobsCountdownConfig {
     public var mode: JobsCountdownMode = .down(from: 60)
@@ -116,7 +114,6 @@ public struct JobsCountdownConfig {
 
     public init() {}
 }
-
 // ================================== 控制器 ==================================
 public final class JobsCountdownController {
     private weak var button: UIButton?
@@ -164,7 +161,6 @@ public final class JobsCountdownController {
     }
 
     public var isRunning: Bool { ticker?.isRunning ?? false }
-
     // MARK: - 状态控制
     private func applyEnabledPolicy(_ running: Bool) {
         guard let btn = button else { return }
@@ -175,7 +171,6 @@ public final class JobsCountdownController {
             btn.isUserInteractionEnabled = !running
         }
     }
-
     // MARK: - UI 渲染
     fileprivate func render(sec: Int) {
         guard let btn = button else { return }
@@ -212,10 +207,8 @@ public final class JobsCountdownController {
         }
     }
 }
-
 // ================================== UIButton 接口 ==================================
 private var kCountdownControllerKey: Void?
-
 public extension UIButton {
     /// 配置倒计时控制器（一次性绑定）
     @discardableResult
@@ -227,7 +220,6 @@ public extension UIButton {
         objc_setAssociatedObject(self, &kCountdownControllerKey, ctl, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         return self
     }
-
     /// 自动处理点击：未运行 → start；运行中 → stop 或自定义 onTapWhileRunning
     @discardableResult
     func byCountdownOnTapAuto() -> Self {

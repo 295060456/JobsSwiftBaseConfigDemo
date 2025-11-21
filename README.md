@@ -5080,32 +5080,40 @@ AppLaunchManager.handleLaunch(
 
 #### 22.1、⏰[（`NSTimer`/`GCD`/`DisplayLink`/`RunLoop`）统一协议方便调用](#定时器) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-> ```swift
-> public protocol JobsTimerProtocol: AnyObject {
->     /// 当前是否运行中
->     var isRunning: Bool { get }
->     /// 启动计时器
->     func start()
->     /// 暂停计时器
->     func pause()
->     /// 恢复计时器
->     func resume()
->     /// 立即触发一次（fire）
->     func fireOnce()
->     /// 停止计时器（销毁）
->     func stop()
->     /// 注册回调（每 tick 执行一次）
->     @discardableResult
->     func onTick(_ block: @escaping () -> Void) -> Self
->     /// 注册完成回调（用于一次性定时器或倒计时）
->     @discardableResult
->     func onFinish(_ block: @escaping () -> Void) -> Self
-> }
-> // MARK: - 计时器状态
-> public enum TimerState { case idle, running, paused, stopped }
-> ```
+```swift
+public protocol JobsTimerProtocol: AnyObject {
+    /// 当前是否运行中
+    var isRunning: Bool { get }
+    /// 启动计时器
+    func start()
+    /// 暂停计时器
+    func pause()
+    /// 恢复计时器
+    func resume()
+    /// 停止计时器（销毁@有回调）
+    func fireOnce()
+    /// 停止计时器（销毁@无回调）
+    func stop()
+    /// 注册回调（每 tick 执行一次）
+    @discardableResult
+    func onTick(_ block: @escaping () -> Void) -> Self
+    /// 注册完成回调（用于一次性定时器或倒计时）
+    @discardableResult
+    func onFinish(_ block: @escaping () -> Void) -> Self
+}
+```
 
-#### 22.2、[计数按钮](#计数按钮) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 22.2、使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+JobsTimerFactory.make(kind: .displayLink,
+                      config: JobsTimerConfig(interval: 1, repeats: true, tolerance: 0.002, queue: .main)) {
+    ///  日期打印
+    print(Date().formatted(date: .numeric, time: .standard))
+}.start()
+```
+
+#### 22.3、[计数按钮](#计数按钮) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 23、跑马灯+轮播图 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 

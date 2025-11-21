@@ -27,6 +27,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print(minV, maxV)   // 1 9
         }
 
+        JobsTimerFactory.make(kind: .displayLink,
+                              config: JobsTimerConfig(interval: 1, repeats: true, tolerance: 0.002, queue: .main)) {
+            ///  日期打印
+            print(Date().formatted(date: .numeric, time: .standard))
+        }.start()
+
         udSave()
         udRead()
         udSaveAge()

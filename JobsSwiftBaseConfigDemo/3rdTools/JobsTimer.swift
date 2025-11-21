@@ -7,7 +7,6 @@
 
 import Foundation
 import QuartzCore // CADisplayLink
-
 // MARK: - 配置体
 public struct JobsTimerConfig {
     /// 🔁 每次触发的时间间隔（秒）
@@ -39,9 +38,9 @@ public protocol JobsTimerProtocol: AnyObject {
     func pause()
     /// 恢复计时器
     func resume()
-    /// 立即触发一次（fire）
+    /// 停止计时器（销毁@有回调）
     func fireOnce()
-    /// 停止计时器（销毁）
+    /// 停止计时器（销毁@无回调）
     func stop()
     /// 注册回调（每 tick 执行一次）
     @discardableResult
@@ -50,15 +49,13 @@ public protocol JobsTimerProtocol: AnyObject {
     @discardableResult
     func onFinish(_ block: @escaping () -> Void) -> Self
 }
-
 // MARK: - 定时器内核枚举
 public enum JobsTimerKind: String, CaseIterable {
     case foundation     // Foundation.Timer
     case gcd            // DispatchSourceTimer
     case displayLink    // CADisplayLink
-    case runLoopCore    // CFRunLoopTimer
+    case runLoopCore    // CFRunLoopTimer:NSTimer 背后的 C 语言/CoreFoundation层 原始定时器
 }
-
 // 显示名
 public extension JobsTimerKind {
     var jobs_displayName: String {
@@ -70,7 +67,6 @@ public extension JobsTimerKind {
         }
     }
 }
-
 // MARK: - NSTimer 实现
 final class JobsFoundationTimer: JobsTimerProtocol {
     private var timer: Timer?
@@ -289,7 +285,6 @@ final class JobsDisplayLinkTimer: JobsTimerProtocol {
         }
     }
 }
-
 // MARK: - CFRunLoopTimer 实现
 final class JobsRunLoopTimer: JobsTimerProtocol {
     private let config: JobsTimerConfig
@@ -363,7 +358,6 @@ final class JobsRunLoopTimer: JobsTimerProtocol {
     @discardableResult
     func onFinish(_ block: @escaping () -> Void) -> Self { finishBlocks.append(block); return self }
 }
-
 // MARK: - 工厂
 public enum JobsTimerFactory {
     public static func make(kind: JobsTimerKind,
