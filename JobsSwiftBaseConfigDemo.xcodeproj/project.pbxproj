@@ -181,6 +181,7 @@
 		048314002E9A08510009A44B /* Demo@跑马灯轮播图.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048313FF2E9A08500009A44B /* Demo@跑马灯轮播图.swift */; };
 		0487AADA2E840CB200B5D307 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0487AAD92E840CB200B5D307 /* UIColor.swift */; };
 		0487AADC2E840EE300B5D307 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0487AADB2E840EE300B5D307 /* libc++.tbd */; };
+		048B795C2ED5452500A6FEF1 /* Demo@系统导航栏.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048B795B2ED5451A00A6FEF1 /* Demo@系统导航栏.swift */; };
 		048E37702E87997A004C3A41 /* UIGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048E376F2E879978004C3A41 /* UIGestureRecognizer.swift */; };
 		048F447C2EB311DE00BAA7EE /* Demo@JobsAppDoor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048F447B2EB311C100BAA7EE /* Demo@JobsAppDoor.swift */; };
 		048F447E2EB3267200BAA7EE /* CATransform3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048F447D2EB3267000BAA7EE /* CATransform3D.swift */; };
@@ -493,6 +494,7 @@
 		048313FF2E9A08500009A44B /* Demo@跑马灯轮播图.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@跑马灯轮播图.swift"; sourceTree = "<group>"; };
 		0487AAD92E840CB200B5D307 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		0487AADB2E840EE300B5D307 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		048B795B2ED5451A00A6FEF1 /* Demo@系统导航栏.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@系统导航栏.swift"; sourceTree = "<group>"; };
 		048E376F2E879978004C3A41 /* UIGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIGestureRecognizer.swift; sourceTree = "<group>"; };
 		048F447B2EB311C100BAA7EE /* Demo@JobsAppDoor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@JobsAppDoor.swift"; sourceTree = "<group>"; };
 		048F447D2EB3267000BAA7EE /* CATransform3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CATransform3D.swift; sourceTree = "<group>"; };
@@ -1099,6 +1101,7 @@
 				043283B02EC4A08A0031CDD6 /* Demo@BRPickerViewSwift.swift */,
 				043283852EC47F1B0031CDD6 /* Demo@FSPopoverView.swift */,
 				04C442A52EB8B935008E0F09 /* Demo@Lottie.swift */,
+				048B795B2ED5451A00A6FEF1 /* Demo@系统导航栏.swift */,
 				04B00E472EB21F0800901B1C /* Demo@LiveChat.swift */,
 				0477D9782E8BADB1002C6427 /* Demo@被Push或者Present的次级页面.swift */,
 				04C4428D2EB86CAB008E0F09 /* Demo@PDF.swift */,
@@ -1835,6 +1838,7 @@
 				04AC74C52E86682E004B8305 /* Notification.swift in Sources */,
 				0432838A2EC484D80031CDD6 /* SkeletonView.swift in Sources */,
 				04D0C9722E8CD39300580020 /* Demo@控制层回调.swift in Sources */,
+				048B795C2ED5452500A6FEF1 /* Demo@系统导航栏.swift in Sources */,
 				C564FC8A2E0959640079B5C1 /* UISegmentedControl.swift in Sources */,
 				04124F372EB0626900462BE2 /* MoyaProvider+Async.swift in Sources */,
 				04D842292E96377B001E8C90 /* Demo@打开模块.swift in Sources */,

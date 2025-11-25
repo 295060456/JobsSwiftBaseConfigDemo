@@ -7,15 +7,12 @@
 
 import UIKit
 import SnapKit
-
 // MARK: - 自定义滚动 TabBar（继承 BaseVC）
 final class JobsTabBarCtrl: BaseVC, UIScrollViewDelegate {
-
     // MARK: - 可配置项
     public var isSwipeEnabled: Bool = true {
         didSet { contentScrollView.isScrollEnabled = isSwipeEnabled }
     }
-
     /// 只允许横向翻页（默认 true）
     public var horizontalOnly: Bool = true {
         didSet {
@@ -23,15 +20,12 @@ final class JobsTabBarCtrl: BaseVC, UIScrollViewDelegate {
             contentScrollView.isDirectionalLockEnabled = horizontalOnly
         }
     }
-
     /// （可选）对子 VC 内滚动视图禁用纵向滚动（默认 false）
     public var suppressChildVerticalScrolls: Bool = false
-
     /// 默认高度 = 49 + safeBottom
     public var customBarHeight: CGFloat? {
         didSet { view.setNeedsLayout() }
     }
-
     /// 距底部上移量（>0 上移）
     public var barBottomOffset: CGFloat = 0 {
         didSet { view.setNeedsLayout() }
@@ -44,71 +38,53 @@ final class JobsTabBarCtrl: BaseVC, UIScrollViewDelegate {
     public var barBackgroundImage: UIImage? {
         didSet { bgImageView.image = barBackgroundImage }
     }
-
     /// TabBar 内边距（用于 1/2~5 规则与 >5 的参考宽度计算）
     public var contentInset: UIEdgeInsets = .init(top: 0, left: 12, bottom: 0, right: 12)
-
     /// 2~5 等分时的按钮间距
     public var equalSpacing: CGFloat = 8
-
     /// 2~5 的可见等分范围（上限决定 >5 时的“参考单元宽度”）
     public var equalVisibleRange: ClosedRange<Int> = 2...5
-
     /// 超过 5 个时是否仍然用“5 等分”的单元宽度与间距（是则超出横滑）
     public var lockUnitToMaxEqualCount: Bool = true
-
     /// 尺寸变化（旋转/分屏）时是否自动重排按钮
     public var autoRelayoutForBoundsChange: Bool = true
-
     /// 首次构建完按钮（addSubview 完）回调——只调一次
     public var onButtonsBuilt: (([UIButton]) -> Void)?
-
     /// 每次布局完按钮 frame 之后回调（含旋转/尺寸变化后）——可在此重复“中间按钮凸起”
     public var onButtonsLayouted: (([UIButton]) -> Void)?
-
     // MARK: - 数据源
     private(set) var buttons: [UIButton] = []
     private(set) var controllers: [UIViewController] = []
-
     // MARK: - 选中
     private(set) var selectedIndex: Int = 0
-
     // MARK: - UI
     private lazy var bgImageView: UIImageView = {
-        let iv = UIImageView()
-        iv.contentMode = .scaleToFill
-        return iv
+        UIImageView().byContentMode(.scaleToFill)
     }()
-
     /// 满足 `JobsTabBarCtrl().TabBar.byAlpha(1)` 的链式风格
     public lazy var TabBar: UIScrollView = {
-        let sv = UIScrollView()
-        sv.showsHorizontalScrollIndicator = false
-        sv.alwaysBounceHorizontal = true
-        sv.clipsToBounds = false
-        sv.backgroundColor = barBackgroundColor
-        return sv
+        UIScrollView()
+            .byShowsHorizontalScrollIndicator(NO)
+            .byAlwaysBounceHorizontal(YES)
+            .byClipsToBounds(NO)
+            .byBgColor(barBackgroundColor)
     }()
 
     private lazy var contentScrollView: UIScrollView = {
-        let sv = UIScrollView()
-        sv.isPagingEnabled = true
-        sv.bounces = false
-        sv.showsHorizontalScrollIndicator = false
-        sv.showsVerticalScrollIndicator = false
-        sv.delegate = self
-        sv.backgroundColor = .clear
-        sv.isScrollEnabled = isSwipeEnabled
-        // 只横向相关
-        sv.alwaysBounceVertical = !horizontalOnly
-        sv.isDirectionalLockEnabled = true
-        sv.alwaysBounceHorizontal = true
-        return sv
+        UIScrollView()
+            .byPagingEnabled(YES)
+            .byBounces(NO)
+            .byShowsHorizontalScrollIndicator(NO)
+            .byShowsVerticalScrollIndicator(NO)
+            .byDelegate(self)
+            .byBgColor(.clear)
+            .byScrollEnabled(isSwipeEnabled)
+            .byAlwaysBounceVertical(!horizontalOnly)
+            .byDirectionalLockEnabled(YES)
+            .byAlwaysBounceHorizontal(YES)
     }()
-
     // 旧策略标记
     private var builtOnce = false
-
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -119,7 +95,6 @@ final class JobsTabBarCtrl: BaseVC, UIScrollViewDelegate {
         super.viewDidLayoutSubviews()
         layoutUI()
     }
-
     // MARK: - Public API
     public func setDataSource(buttons: [UIButton], controllers: [UIViewController]) {
         // 清理旧的
@@ -134,11 +109,9 @@ final class JobsTabBarCtrl: BaseVC, UIScrollViewDelegate {
         self.buttons = []
         self.controllers = []
         builtOnce = false
-
         // 写入新数据
         self.buttons = buttons
         self.controllers = controllers
-
         // 配按钮
         for (i, b) in buttons.enumerated() {
             b.tag = i
@@ -147,7 +120,6 @@ final class JobsTabBarCtrl: BaseVC, UIScrollViewDelegate {
             }
             TabBar.addSubview(b)
         }
-
         // 配子控制器：仅取前 N（N = min(btns, ctrls)）
         let pageCount = min(buttons.count, controllers.count)
         for i in 0..<pageCount {
@@ -170,24 +142,21 @@ final class JobsTabBarCtrl: BaseVC, UIScrollViewDelegate {
 
         view.setNeedsLayout()
     }
-
     /// 主动选中
     public func select(index: Int, animated: Bool = true) {
         guard index >= 0, index < buttons.count else { return }
         guard index < min(buttons.count, controllers.count) else {
-            showNoControllerToast()
+            toastBy("请配置子控制器")
             return
         }
         selectedIndex = index
         applySelectionState(animated: animated)
     }
-
     /// 主动请求重排（适用于你手动触发）
     public func requestRelayout() {
         view.setNeedsLayout()
         view.layoutIfNeeded()
     }
-
     // MARK: - UI
     private func setupUI() {
         view.backgroundColor = .systemBackground
@@ -214,19 +183,16 @@ final class JobsTabBarCtrl: BaseVC, UIScrollViewDelegate {
             width: view.bounds.width,
             height: view.bounds.height - barH - barBottomOffset
         )
-
         // 按钮布局
         if autoRelayoutForBoundsChange || !builtOnce {
             layoutButtonsByRule()
             builtOnce = true
             onButtonsLayouted?(buttons) // 给外部重做“凸起”等改动
         }
-
         // 页面布局
         layoutPages()
         syncContentOffset(animated: false)
     }
-
     /// 1 -> 居中；2~5 -> 等分；>5 -> 仍按“max 等分(默认 5)”的单元宽度排，超出横滑
     private func layoutButtonsByRule() {
         guard !buttons.isEmpty else {
@@ -301,18 +267,13 @@ final class JobsTabBarCtrl: BaseVC, UIScrollViewDelegate {
         }
         contentScrollView.contentSize = CGSize(width: pageW * CGFloat(pageCount), height: pageH)
     }
-
     // MARK: - 交互
     private func handleTap(at index: Int) {
         if index >= min(buttons.count, controllers.count) {
-            showNoControllerToast()
+            toastBy("请配置子控制器")
             return
         }
         select(index: index, animated: true)
-    }
-
-    private func showNoControllerToast() {
-        toastBy("请配置子控制器")
     }
 
     private func applySelectionState(animated: Bool) {
@@ -344,7 +305,6 @@ final class JobsTabBarCtrl: BaseVC, UIScrollViewDelegate {
             scrollView.contentOffset.y = 0
         }
     }
-
     // MARK: - 子 VC 内纵向滚动禁用（可选启用）
     private func suppressVertical(in root: UIView) {
         if let tv = root as? UITableView {
@@ -369,7 +329,6 @@ final class JobsTabBarCtrl: BaseVC, UIScrollViewDelegate {
         }
         root.subviews.forEach { suppressVertical(in: $0) }
     }
-
     // MARK: - UIScrollViewDelegate（页切换同步）
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         guard scrollView === contentScrollView else { return }
@@ -389,7 +348,6 @@ final class JobsTabBarCtrl: BaseVC, UIScrollViewDelegate {
         }
     }
 }
-
 // MARK: - 链式扩展
 extension JobsTabBarCtrl {
     // 基础布尔/数值/对象配置
@@ -413,7 +371,6 @@ extension JobsTabBarCtrl {
         self.barBackgroundImage = image
         return self
     }
-
     // 布局策略
     @discardableResult public func byContentInset(_ inset: UIEdgeInsets) -> Self {
         self.contentInset = inset
@@ -435,7 +392,6 @@ extension JobsTabBarCtrl {
         self.autoRelayoutForBoundsChange = flag
         return self
     }
-
     // 横向/子滚动限制
     @discardableResult public func byHorizontalOnly(_ flag: Bool) -> Self {
         self.horizontalOnly = flag
@@ -445,7 +401,6 @@ extension JobsTabBarCtrl {
         self.suppressChildVerticalScrolls = flag
         return self
     }
-
     // 回调（支持链式设置）
     @discardableResult public func onButtonsBuilt(_ block: @escaping ([UIButton]) -> Void) -> Self {
         self.onButtonsBuilt = block
@@ -461,7 +416,6 @@ extension JobsTabBarCtrl {
         self.setDataSource(buttons: buttons, controllers: controllers)
         return self
     }
-
     /// 安全弱持有 owner 的包装，避免你在外部写 [weak self]
     @discardableResult
     public func onButtonsLayoutedWeakOwner(
@@ -470,7 +424,6 @@ extension JobsTabBarCtrl {
         self.onButtonsLayouted = { [weak self] btns in
             guard let self else { return }
             block(self, btns)
-        }
-        return self
+        };return self
     }
 }
