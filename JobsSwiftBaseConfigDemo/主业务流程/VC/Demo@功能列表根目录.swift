@@ -19,6 +19,7 @@ final class RootListVC: BaseVC {
     private func makeDemos() -> [(title: String, vcType: UIViewController.Type)] {
         return [
             ("ViewController", ViewController.self),
+            ("系统导航栏", JobsNavigationDemoVC.self),
             ("✍️ UITextField", UITextFieldDemoVC.self),
             ("✍️ UITextView", UITextViewDemoVC.self),
             ("📌 自定义注解", 自定义注解Demo.self),

@@ -273,7 +273,7 @@ public extension UIViewController {
             .byTitleEdgeInsets(.zero)
             .onTap { [weak self] _ in
                 guard let self else { return }
-                closeByResult("") // 系统通用返回
+                goBack("") // 系统通用返回
             }
     }
     /// 立即隐藏/显示 GK 的导航栏（并把系统栏同步隐藏，避免双栏）
@@ -336,7 +336,7 @@ public extension UIViewController {
     }
 
     @discardableResult
-    func closeByResult(_ result: Any?, animated: Bool = true) -> Self {
+    func goBack(_ result: Any?, animated: Bool = true) -> Self {
         if let r = result { sendResult(r) }
         if let nav = navigationController { nav.popViewController(animated: animated) }
         else { dismiss(animated: animated) }

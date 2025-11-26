@@ -324,9 +324,10 @@ extension UILabel {
 /// 一些功能性的
 extension UILabel {
     // MARK: 设置富文本
-    func richTextBy(_ runs: [JobsRichRun], paragraphStyle: NSMutableParagraphStyle? = nil) {
+    func richTextBy(_ runs: [JobsRichRun], paragraphStyle: NSMutableParagraphStyle? = nil)->Self {
         self.attributedText = JobsRichText.make(runs, paragraphStyle: paragraphStyle)
         self.isUserInteractionEnabled = false
+        return self;
     }
     // MARK: - 检测点击位置是否在指定富文本范围内
     func didTapAttributedText(in range: NSRange, at: UITapGestureRecognizer) -> Bool {

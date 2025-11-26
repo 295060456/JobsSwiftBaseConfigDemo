@@ -67,7 +67,7 @@ final class BaseWebVC: BaseVC {
             /// 返回行为：优先后退，否则关闭当前控制器
             .byNavBarOnBack { [weak self] in
                 guard let self else { return }
-                closeByResult("")
+                goBack("")
             }
             .byAddTo(view) { [unowned self] make in
                 if view.jobs_hasVisibleTopBar() {
@@ -80,7 +80,7 @@ final class BaseWebVC: BaseVC {
             // MARK: - 以下是依据前端暴露的自定义方法进行的JS交互
             /// 跳转到首页
             .registerMobileAction("navigateToHome") { [weak self] body, reply in
-                self!.closeByResult("")
+                self!.goBack("")
                 reply(nil)
             }
             .registerMobileAction("getToken") { [weak self] body, reply in

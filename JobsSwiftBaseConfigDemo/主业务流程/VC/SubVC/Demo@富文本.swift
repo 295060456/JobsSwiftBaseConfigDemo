@@ -10,8 +10,7 @@ import RxSwift
 import RxCocoa
 import NSObject_Rx          // 自动提供 disposeBag
 import SnapKit              // 约束用 SnapKit
-
-// 自定义可点击标记（给“电话”用：红字+蓝线，不走系统 link 样式）
+/// 自定义可点击标记（给“电话”用：红字+蓝线，不走系统 link 样式）
 private extension NSAttributedString.Key {
     static let jobsAction = NSAttributedString.Key("jobsAction")
 }
@@ -53,13 +52,10 @@ final class RichTextDemoVC: BaseVC, HasDisposeBag {
         tableView.byAlpha(1)
     }
 }
-
 // MARK: - DataSource / Delegate
 extension RichTextDemoVC: UITableViewDataSource, UITableViewDelegate {
-
     // 从 2 → 3：第三项是右对齐示例
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { 3 }
-
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
@@ -73,7 +69,6 @@ extension RichTextDemoVC: UITableViewDataSource, UITableViewDelegate {
 
         let cell = tableView.dequeueReusableCell(withIdentifier: LinkCell.reuseID,
                                                  for: indexPath) as! LinkCell
-
         if mode == .rightAligned {
             // ====================== 右对齐示例 ======================
             let rightPS = jobsMakeParagraphStyle {
@@ -160,15 +155,11 @@ extension RichTextDemoVC: UITableViewDataSource, UITableViewDelegate {
                 mode: mode,
                 vc: self
             )
-        }
-
-        return cell
+        };return cell
     }
 }
-
 // MARK: - UITextViewDelegate（仅用于 Delegate 方案处理“专属客服”）
 extension RichTextDemoVC: UITextViewDelegate {
-
     // iOS 17+
     @available(iOS 17.0, *)
     func textView(_ textView: UITextView,
@@ -176,10 +167,8 @@ extension RichTextDemoVC: UITextViewDelegate {
         if case let .link(url) = textItem.content {
             handleURL(url, source: "Delegate")
             return nil
-        }
-        return nil
+        };return nil
     }
-
     // iOS 16 及以下
     @available(iOS, introduced: 10.0, deprecated: 17.0,
                message: "Use textView(_:primaryActionFor:) on iOS17+ instead")
@@ -211,13 +200,10 @@ extension RichTextDemoVC: UITextViewDelegate {
         }
     }
 }
-
 // MARK: - 单一 Cell（支持 Delegate / RAC / RightAligned）
 final class LinkCell: UITableViewCell, HasDisposeBag {
-
     enum Mode { case delegate, rac, rightAligned }   // ← 新增 rightAligned
     static let reuseID = "LinkCell"
-
     // ============================== UI（懒加载：内部完成 add + 约束） ==============================
     private lazy var titleLabel: UILabel = { [unowned self] in
         UILabel()
@@ -266,7 +252,6 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
                 make.bottom.equalToSuperview().inset(12)
             }
     }()
-
     // ============================== Init ==============================
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -278,9 +263,7 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
         textView.byAlpha(1)
         attachmentLabel.byAlpha(1)
     }
-
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
     // ============================== 配置入口 ==============================
     func configure(title: String,
                    runs: [JobsRichRun],
@@ -291,17 +274,13 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
                    attachmentParagraphStyle: NSMutableParagraphStyle,
                    mode: Mode,
                    vc: RichTextDemoVC) {
-
         // 懒加载可能尚未唤起，保险再“点”一次
         titleLabel.byAlpha(1); cardView.byAlpha(1); textView.byAlpha(1); attachmentLabel.byAlpha(1)
-
         titleLabel.byText(title)
-
         // 复用安全：清理旧状态
         textView.byDelegate(nil)
             .byDataDetectorTypes([])
             .bySelectable(mode == .delegate || mode == .rightAligned) // rightAligned 也保留系统 link 的可交互能力
-
         // 主富文本
         textView.richTextBy(runs, paragraphStyle: paragraphStyle)
 
@@ -319,13 +298,10 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
                 textView.byAttributedText(ms)
             }
         }
-
         // 附件文案
         attachmentLabel.richTextBy(attachmentRuns, paragraphStyle: attachmentParagraphStyle)
-
         // 手势：先清旧，再加新
         textView.gestureRecognizers?.forEach { textView.removeGestureRecognizer($0) }
-
         // ✅ 使用的手势 DSL：byConfig / byCancelsTouchesInView / byTaps / byTouches …
         let tap = textView.jobs_addGesture(UITapGestureRecognizer
             .byConfig { gr in
@@ -334,7 +310,6 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
             .byCancelsTouchesInView(false)
             .byTaps(1)
             .byTouches(1))
-
         switch mode {
         case .delegate:
             // 仅处理自定义“电话”；系统 link（专属客服）交给 UITextViewDelegate
@@ -347,7 +322,6 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
                 })
                 .disposed(by: disposeBag)
             textView.byDelegate(vc)
-
         case .rac:
             // 自管“专属客服”+“电话”
             tap!.event
@@ -357,7 +331,6 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
                     self.handle(url: url, on: vc, racCustomerAlert: true)
                 })
                 .disposed(by: disposeBag)
-
         case .rightAligned:
             // 和 delegate 一致：系统 link 仍走 UITextViewDelegate；自定义电话走手势
             tap!.event
@@ -371,7 +344,6 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
             textView.byDelegate(vc)
         }
     }
-
     // ============================== 命中算法（优先 .jobsAction） ==============================
     private func urlAtTap(in textView: UITextView,
                           gesture: UITapGestureRecognizer,
@@ -403,7 +375,6 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
         if let s = attrs[.link] as? String, let url = URL(string: s) { return url }
         return nil
     }
-
     // ============================== URL 处理 ==============================
     private func handle(url: URL,
                         on vc: UIViewController,
@@ -432,10 +403,8 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
                     .byTintColor(.systemBlue)
                     .byPresent(vc)
 
-            }
-            return
+            };return
         }
-
         if url.scheme == "tel" || url.scheme == "telprompt" {
             #if targetEnvironment(simulator)
             let ac = UIAlertController(title: "提示",

@@ -44,7 +44,7 @@ class DemoDetailVC: BaseVC {
             // 点按事件（统一入口）
             .onTap { [weak self] sender in
                 guard let self else { return }
-                closeByResult(input)
+                goBack(input)
             }
             .byAddTo(view) { make in
                 make.center.equalToSuperview()

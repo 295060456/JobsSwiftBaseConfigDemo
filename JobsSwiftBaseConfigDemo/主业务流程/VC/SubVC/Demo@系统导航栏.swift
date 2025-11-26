@@ -5,3 +5,179 @@
 //  Created by Jobs on 11/25/25.
 //
 
+import UIKit
+
+final class JobsNavigationDemoVC: BaseVC {
+    deinit {
+        print("JobsNavigationDemoVC deinit")
+    }
+    // MARK: - 左侧：自定义返回按钮（用你的按钮 DSL）
+    private lazy var backButton: UIButton = {
+        UIButton.sys()
+            .byBackgroundColor(.systemGreen, for: .normal)
+            .byTitle("返回", for: .normal)
+            .byTitleColor(.white, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 12, weight: .bold))
+            .byImage("chevron.backward".sysImg, for: .normal)
+            .byContentEdgeInsets(.init(top: 0, left: 10, bottom: 0, right: 10))
+            .byTitleEdgeInsets(.init(top: 0, left: 4, bottom: 0, right: -4))
+            .onTap { [weak self] _ in
+                guard let self else { return }
+                print("👉 点击了左侧『返回』按钮")
+                goBack(nil)
+            }
+            .onLongPress(minimumPressDuration: 0.6) { btn, gr in
+                if gr.state == .began {
+                    btn.alpha = 0.6
+                    print("返回按钮长按开始")
+                } else if gr.state == .ended || gr.state == .cancelled {
+                    btn.alpha = 1.0
+                    print("返回按钮长按结束")
+                }
+            }
+    }()
+    // MARK: - 右侧：铃铛按钮（用你的按钮 DSL，带红点 + NEW 角标）
+    private lazy var bellButton: UIButton = {
+        UIButton.sys()
+            .byBackgroundColor(.systemGreen, for: .normal)
+            .byTitle("铃", for: .normal)
+            .byTitleColor(.systemBlue, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 12, weight: .bold))
+            .byImage(UIImage(systemName: "bell"), for: .normal)
+            .byContentEdgeInsets(.init(top: 0, left: 10, bottom: 0, right: 10))
+            .byTitleEdgeInsets(.init(top: 0, left: 4, bottom: 0, right: -4))
+            .byTapSound("Sound.wav") // 如果你项目里有这个声音资源
+            .byCornerDot(diameter: 8, offset: .init(horizontal: -4, vertical: 4))
+            .byCornerBadgeText("NEW") { cfg in
+                cfg.byOffset(.init(horizontal: -6, vertical: 4))
+                    .byInset(.init(top: 2, left: 6, bottom: 2, right: 6))
+                    .byBgColor(.systemRed)
+                    .byFont(.systemFont(ofSize: 10, weight: .bold))
+                    .byShadow(color: UIColor.black.withAlphaComponent(0.25),
+                              radius: 2,
+                              opacity: 0.6,
+                              offset: .init(width: 0, height: 1))
+            }
+            .onTap { [weak self] _ in
+                guard let self else { return }
+                print("👉 点击了右侧『铃铛』按钮")
+                toastBy("点击了右侧『铃铛』按钮")
+            }
+            .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+                if gr.state == .began {
+                    btn.alpha = 0.6
+                    print("铃铛长按开始")
+                    toastBy("铃铛长按开始")
+                } else if gr.state == .ended || gr.state == .cancelled {
+                    btn.alpha = 1.0
+                    print("铃铛长按结束")
+                    toastBy("铃铛长按结束")
+                }
+            }
+    }()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .lightGray
+        configureNavigationBarAppearance()  // 1. 外观：背景图、底色、tintColor 等
+        setupNavigationTitle()              // 2. 标题：富文本（JobsRichRun）
+        setupLeftBackItem()                 // 3. 左侧按钮（用按钮 DSL）
+        setupRightItems()                   // 4. 右侧按钮（一个系统 hi + 一个 DSL 铃铛）
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+        navigationController?.navigationBar.isHidden = false
+        UINavigationBar.appearance().isHidden = false
+    }
+    // MARK: - 导航栏外观
+    private func configureNavigationBarAppearance() {
+        guard let navBar = navigationController?.navigationBar else { return }
+        navBar.tintColor = .black
+        let bgImage = "导航栏背景图".img
+        if #available(iOS 13.0, *) {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+
+            appearance.backgroundImage = bgImage
+            appearance.backgroundColor = .yellow
+
+            appearance.titleTextAttributes = [
+                .foregroundColor: UIColor.red,
+                .font: UIFont.boldSystemFont(ofSize: 18)
+            ]
+
+            appearance.largeTitleTextAttributes = [
+                .foregroundColor: UIColor.cyan,
+                .font: UIFont.boldSystemFont(ofSize: 30)
+            ]
+
+            appearance.shadowColor = .clear
+
+            navBar.standardAppearance = appearance
+            navBar.scrollEdgeAppearance = appearance
+            navBar.compactAppearance = appearance
+            if #available(iOS 15.0, *) {
+                navBar.compactScrollEdgeAppearance = appearance
+            }
+        } else {
+            navBar.setBackgroundImage(bgImage, for: .default)
+            navBar.barTintColor = .yellow
+            navBar.isTranslucent = false
+
+            navBar.titleTextAttributes = [
+                .foregroundColor: UIColor.red,
+                .font: UIFont.boldSystemFont(ofSize: 18)
+            ]
+            navBar.shadowImage = UIImage()
+        }
+    }
+    // MARK: - 标题：用 JobsRichRun / JobsRichText
+    private func setupNavigationTitle() {
+        self.title = "系统导航栏 Demo" // 普通文本的优先级低于富文本。title的优先级低于navigationItem.titleView
+        navigationItem.titleView = UILabel()
+            .byTextAlignment(.center)
+            .byBgCor(.clear)
+            .byNumberOfLines(1)
+            .richTextBy([
+                JobsRichRun(.text("合理"))
+                    .font(.systemFont(ofSize: 12, weight: .regular))
+                    .color(.systemBlue),
+                JobsRichRun(.text("的"))
+                    .font(.systemFont(ofSize: 13, weight: .semibold))
+                    .color(.white),
+                JobsRichRun(.text("语法糖"))
+                    .font(.systemFont(ofSize: 14, weight: .ultraLight))
+                    .color(.red)
+            ], paragraphStyle: jobsMakeParagraphStyle {
+                $0.alignment = .center
+                $0.lineSpacing = 0
+        }).bySizeToFit()
+    }
+    // MARK: - 左边：按钮 DSL 嵌进导航栏
+    private func setupLeftBackItem() {
+        navigationItem.hidesBackButton = true
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
+        // 如果你有需求，也可以：
+        // navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+    // MARK: - 右边：一个系统 hi + 一个按钮 DSL 铃铛
+    private func setupRightItems() {
+        navigationItem.rightBarButtonItems = [UIBarButtonItem(
+            title: "hi",
+            style: .plain,
+            target: self,
+            action: #selector(hiButtonTapped)
+        ), UIBarButtonItem(customView: bellButton)]
+    }
+
+    @objc private func hiButtonTapped() {
+        print("👉 点击了右侧『hi』按钮")
+    }
+    // MARK: - 状态栏样式
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+}
