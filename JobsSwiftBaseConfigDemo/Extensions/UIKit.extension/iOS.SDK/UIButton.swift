@@ -1492,45 +1492,59 @@ public extension UIButton {
                             allowNetworkIfMissing: Bool = false) {
         target.jobs_isClone = true
         target.jobs_bgState = state
-        // 1) 源按钮已有位图：直接复用（不触网）
-        if #available(iOS 15.0, *), let cfgImg = self.configuration?.background.image {
-            Task { @MainActor in target.jobsResetBtnBgImage(cfgImg, for: state) }
-            return
+        // 先 snapshot 一份配置，避免跨 actor 反复读 AO
+        let snapCfg = self._sd_config
+        // 有效 URL：优先用 _sd_loadBackgroundImage 记录的 jobs_bgURL，退回配置里的 url
+        let effectiveURL = self.jobs_bgURL ?? snapCfg.url
+        // ===== 情况 1：没有 URL，说明是纯本地背景图，直接复用现成位图后结束 =====
+        if effectiveURL == nil {
+            if #available(iOS 15.0, *), let cfgImg = self.configuration?.background.image {
+                Task { @MainActor in
+                    target.jobsResetBtnBgImage(cfgImg, for: state)
+                };return
+            }
+            if let img = self.backgroundImage(for: state) {
+                Task { @MainActor in
+                    target.jobsResetBtnBgImage(img, for: state)
+                };return
+            }
+            // 只有占位图的极端情况
+            if let ph = snapCfg.placeholder {
+                Task { @MainActor in
+                    target.jobsResetBtnBgImage(ph, for: state)
+                }
+            };return
         }
-        if let img = self.backgroundImage(for: state) {
-            Task { @MainActor in target.jobsResetBtnBgImage(img, for: state) }
-            return
+        // ===== 情况 2：有 URL，说明是远程图；此时现成位图很可能只是占位，不能直接 return =====
+        if let ph = snapCfg.placeholder {
+            Task { @MainActor in
+                target.jobsResetBtnBgImage(ph, for: state)
+            }
         }
-        // 2) 占位图先顶上，克隆按钮立刻有图
-        let ph = self._sd_config.placeholder
-        if ph != nil {
-            Task { @MainActor in target.jobsResetBtnBgImage(ph, for: state) }
-        }
-        // 3) URL 来源：优先用 self.jobs_bgURL（_sd_loadBackgroundImage 已记录），退回 _sd_config.url
-        let url = self.jobs_bgURL ?? self._sd_config.url
+        let url = effectiveURL!
         target.jobs_bgURL = url
-        guard let url else { return }
-        // 4) 查询缓存（同步返回，不阻塞 UI；Key 用 SD 提供的工具生成以兼容全局 cacheKeyFilter）
+        // 先查缓存（同步），命中就直接用缓存图
         let key = SDWebImageManager.shared.cacheKey(for: url) ?? url.absoluteString
         if let cached = SDImageCache.shared.imageFromCache(forKey: key) {
-            Task { @MainActor in target.jobsResetBtnBgImage(cached, for: state) }
-            return
+            Task { @MainActor in
+                target.jobsResetBtnBgImage(cached, for: state)
+            };return
         }
-        // 5) 缓存未命中：按需触网
+        // 不允许走网，直接停在占位图
         guard allowNetworkIfMissing else { return }
-        // 复制源按钮的加载配置；克隆场景加 avoidAutoSetImage，避免 SD 自动写回导致瞬间闪白
-        var opts = self._sd_config.options
+        // 允许走网：复制源按钮的加载配置；克隆场景加 avoidAutoSetImage，避免闪烁
+        var opts = snapCfg.options
         opts.insert(.continueInBackground)
         opts.insert(.highPriority)
         opts.insert(.avoidAutoSetImage)
 
         target._sd_setImageURL(url)
-        target._sd_setPlaceholder(ph)
+        target._sd_setPlaceholder(snapCfg.placeholder)
         target._sd_setOptions(opts)
-        target._sd_setContext(self._sd_config.context)
-        target._sd_setProgress(self._sd_config.progress)
-        target._sd_setCompleted(self._sd_config.completed)
-        // 用你现有的回调淡入版本：_sd_loadBackgroundImage(for:)
+        target._sd_setContext(snapCfg.context)
+        target._sd_setProgress(snapCfg.progress)
+        target._sd_setCompleted(snapCfg.completed)
+        // 用你已有的淡入版本，真正发起 SD 的背景图加载
         target._sd_loadBackgroundImage(for: state)
     }
     /// 克隆“前景图”
@@ -1753,52 +1767,56 @@ public extension UIButton {
                             allowNetworkIfMissing: Bool) {
         target.jobs_isClone = true
         target.jobs_bgState = state
-
-        // 1) 先用“现成位图”（源按钮已有就直接复用，不触网）
-        if #available(iOS 15.0, *), let img = self.configuration?.background.image {
-            Task { @MainActor in target.jobsResetBtnBgImage(img, for: state) }
-            return
-        }
-        if let img = self.backgroundImage(for: state) {
-            Task { @MainActor in target.jobsResetBtnBgImage(img, for: state) }
-            return
+        // 0) 配置先 snapshot 出来，后面到处要用
+        let snapCfg = self._kf_config   // KFButtonLoadConfig
+        // 1) 只有“纯本地背景图”（没有 url）时，才直接复用现成位图，不走缓存/网络
+        if snapCfg.url == nil {
+            if #available(iOS 15.0, *), let img = self.configuration?.background.image {
+                Task { @MainActor in
+                    target.jobsResetBtnBgImage(img, for: state)
+                };return
+            }
+            if let img = self.backgroundImage(for: state) {
+                Task { @MainActor in
+                    target.jobsResetBtnBgImage(img, for: state)
+                };return
+            }
         }
         // 2) 先把占位图顶上，保证克隆按钮立刻有图
-        let snapCfg = self._kf_config       // 快照，避免跨 actor 读 AO
-        let ph      = snapCfg.placeholder
-        if ph != nil {
-            Task { @MainActor in target.jobsResetBtnBgImage(ph, for: state) }
+        let ph = snapCfg.placeholder
+        if let ph {
+            Task { @MainActor in
+                target.jobsResetBtnBgImage(ph, for: state)
+            }
         }
-        // 3) URL：优先用显式记录的 kf_bgURL，其次用配置里的 url
+        // 3) URL：优先显式记录的 kf_bgURL，其次配置里的 url
         guard let url = self.kf_bgURL ?? snapCfg.url else { return }
         target.jobs_bgURL = url
-        // 4) 只从缓存取一次（不会触网，也不用自己算 cacheKey）
+        // 4) 只从缓存取一次（不会触网）
         var cacheOnlyOpts = snapCfg.options
         cacheOnlyOpts.append(.onlyFromCache)
-
         KingfisherManager.shared.retrieveImage(with: url, options: cacheOnlyOpts) { result in
             switch result {
             case .success(let r):
-                // ✅ 命中缓存，直接写回
+                // ✅ 命中缓存
                 Task { @MainActor in
                     target.jobsResetBtnBgImage(r.image, for: state)
                 }
             case .failure:
-                // 5) 缓存没有：按需走网（可关闭过渡避免闪烁）
+                // 5) 缓存没命中：按需走网
                 guard allowNetworkIfMissing else { return }
 
                 var opts = snapCfg.options
-                // 克隆态建议去掉过渡动画，避免滚动/复用时闪一下
+                // 克隆态建议去掉过渡动画，避免滚动闪一下
                 opts.removeAll { if case .transition = $0 { return true } else { return false } }
-                // 后台解码，避免主线程卡顿
-                if !opts.contains(where: { if case .backgroundDecode = $0 { return true } else { return false } }) {
-                    opts.append(.backgroundDecode)
-                }
-                // 没有占位时，才保留“加载中保持当前图片”的策略
+                // 没占位时才保留 keepCurrentImageWhileLoading
                 if ph == nil && !opts.contains(where: { if case .keepCurrentImageWhileLoading = $0 { return true } else { return false } }) {
                     opts.append(.keepCurrentImageWhileLoading)
                 }
-
+                // 强制后台解码
+                if !opts.contains(where: { if case .backgroundDecode = $0 { return true } else { return false } }) {
+                    opts.append(.backgroundDecode)
+                }
                 Task { @MainActor in
                     target.kf.setBackgroundImage(
                         with: url,

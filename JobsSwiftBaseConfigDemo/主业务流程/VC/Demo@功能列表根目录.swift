@@ -50,8 +50,6 @@ final class RootListVC: BaseVC {
             ("☠️ 骨架屏", SkeletonViewDemoVC.self),
             ("🌛 PDF", PDFDemoVC.self),
             ("🧒 Lottie动画", LottieDemoVC.self),
-            ("🌋 富文本", RichTextDemoVC.self),
-            ("🌋 普通文本和富文本的融合数据类型", JobsTextDemoVC.self),
             ("🛢️ 解码", SafeCodableDemoVC.self),
             ("🔑 注册登录".tr, JobsAppDoorDemoVC.self), // 👈 这里需要 .tr
             ("🛜 Moya网络请求框架", MoyaDemoVC.self),
@@ -63,8 +61,10 @@ final class RootListVC: BaseVC {
             ("🐎 二维码/条形码", QRCodeDemoVC.self),
             ("👮 中国大陆公民身份证号码校验", CNIDDemoVC.self),
             ("🏠 首页联动", CashbackRootVC.self),
+            ("🌋 富文本", RichTextDemoVC.self),
+            ("🌋 普通文本和富文本的融合数据类型", JobsTextDemoVC.self),
+            ("🔥 编辑个人资料", LGOEditProfileVC.self),
             ("ViewController", ViewController.self),
-            ("🔥", LGOEditProfileVC.self),
         ]
     }
     private lazy var demos: [(title: String, vcType: UIViewController.Type)] = makeDemos()
