@@ -931,13 +931,12 @@ final class JobsMarqueeDemoVC: BaseVC {
             .byDataSourceButtons([
                 UIButton.sys()
                     .byBorderColor(UIColor.systemGray3)
-                    .byClipsToBounds(true)
                     .byTitle("我是UIButton主标题@SDWebImage")
                     .bySubTitle("我是UIButton副标题@SDWebImage")
-                    .sd_imageURL("https://picsum.photos/200")
+                    .sd_imageURL("https://picsum.photos/" + ScreenWidth().toString(0) + "/" + self.marqueeHeight.toString(0))
                     .sd_placeholderImage(nil)
                     .sd_options([.retryFailed, .highPriority, .scaleDownLargeImages])
-                    .sd_normalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
+                    .sd_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 SDWebImage@背景图 1 tapped, selected=\(sender.isSelected)")
@@ -954,13 +953,12 @@ final class JobsMarqueeDemoVC: BaseVC {
                     },
                 UIButton.sys()
                     .byBorderColor(UIColor.systemGray3)
-                    .byClipsToBounds(true)
                     .byTitle("我是UIButton主标题@SDWebImage")
                     .bySubTitle("我是UIButton副标题@SDWebImage")
-                    .sd_imageURL("https://picsum.photos/200")
+                    .sd_imageURL("https://picsum.photos/" + ScreenWidth().toString(0) + "/" + self.marqueeHeight.toString(0))
                     .sd_placeholderImage(nil)
                     .sd_options([.retryFailed, .highPriority, .scaleDownLargeImages])
-                    .sd_normalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
+                    .sd_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 SDWebImage@背景图 2 tapped, selected=\(sender.isSelected)")
@@ -977,13 +975,12 @@ final class JobsMarqueeDemoVC: BaseVC {
                     },
                 UIButton.sys()
                     .byBorderColor(UIColor.systemGray3)
-                    .byClipsToBounds(true)
                     .byTitle("我是UIButton主标题@SDWebImage")
                     .bySubTitle("我是UIButton副标题@SDWebImage")
-                    .sd_imageURL("https://picsum.photos/200")
+                    .sd_imageURL("https://picsum.photos/" + ScreenWidth().toString(0) + "/" + self.marqueeHeight.toString(0))
                     .sd_placeholderImage(nil)
                     .sd_options([.retryFailed, .highPriority, .scaleDownLargeImages])
-                    .sd_normalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
+                    .sd_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 SDWebImage@背景图 3 tapped, selected=\(sender.isSelected)")
@@ -1011,11 +1008,11 @@ final class JobsMarqueeDemoVC: BaseVC {
             .byDirection(.left)
             .byScrollMode(.frequency(interval: 1.0))
             .byItemSizeMode(.fillBounds)
-            .byDataSourceButtons([
+            .byDataSourceButtons ([
                 UIButton.sys()
                     .byTitle("我是UIButton主标题@Kingfisher").byTitleColor(.red)
                     .bySubTitle("我是UIButton副标题@Kingfisher").bySubTitleColor(.yellow)
-                    .kf_imageURL("https://picsum.photos/300/200")
+                    .kf_imageURL("https://picsum.photos/" + ScreenWidth().toString(0) + "/" + self.marqueeHeight.toString(0))
                     .kf_placeholderImage("唐老鸭".img)
                     .kf_options([
                         .processor(DownsamplingImageProcessor(size: CGSize(width: 500, height: 200))),
@@ -1042,7 +1039,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                 UIButton.sys()
                     .byTitle("我是UIButton主标题@Kingfisher").byTitleColor(.red)
                     .bySubTitle("我是UIButton副标题@Kingfisher").bySubTitleColor(.yellow)
-                    .kf_imageURL("https://picsum.photos/300/200")
+                    .kf_imageURL("https://picsum.photos/" + ScreenWidth().toString(0) + "/" + self.marqueeHeight.toString(0))
                     .kf_placeholderImage("唐老鸭".img)
                     .kf_options([
                         .processor(DownsamplingImageProcessor(size: CGSize(width: 500, height: 200))),
@@ -1069,7 +1066,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                 UIButton.sys()
                     .byTitle("我是UIButton主标题@Kingfisher").byTitleColor(.red)
                     .bySubTitle("我是UIButton副标题@Kingfisher").bySubTitleColor(.yellow)
-                    .kf_imageURL("https://picsum.photos/300/200")
+                    .kf_imageURL("https://picsum.photos/" + ScreenWidth().toString(0) + "/" + self.marqueeHeight.toString(0))
                     .kf_placeholderImage("唐老鸭".img)
                     .kf_options([
                         .processor(DownsamplingImageProcessor(size: CGSize(width: 500, height: 200))),

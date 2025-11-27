@@ -195,7 +195,6 @@
 		04A2458A2ECC818F009649E8 /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A245892ECC818E009649E8 /* JSONDecoder.swift */; };
 		04A245912ECD7373009649E8 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A245902ECD7373009649E8 /* Array.swift */; };
 		04A245932ECDA78D009649E8 /* Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A245922ECDA78B009649E8 /* Sequence.swift */; };
-		04A245962ECDA8F3009649E8 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A245952ECDA8F2009649E8 /* Collection.swift */; };
 		04A368142EC59517000FC898 /* LGOEditProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A368132EC59516000FC898 /* LGOEditProfileVC.swift */; };
 		04A8C54C2E8AA94D00381701 /* Demo@按钮.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A8C54B2E8AA94B00381701 /* Demo@按钮.swift */; };
 		04A8C54E2E8AA9F900381701 /* Demo@功能列表根目录.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A8C54D2E8AA9F800381701 /* Demo@功能列表根目录.swift */; };
@@ -224,6 +223,8 @@
 		04C442A62EB8B93A008E0F09 /* Demo@Lottie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C442A52EB8B935008E0F09 /* Demo@Lottie.swift */; };
 		04C442AA2EB8BC13008E0F09 /* 9squares_AlBoardman.json in Resources */ = {isa = PBXBuildFile; fileRef = 04C442A92EB8BC13008E0F09 /* 9squares_AlBoardman.json */; };
 		04C442AC2EB8BC27008E0F09 /* LottieLogo1.json in Resources */ = {isa = PBXBuildFile; fileRef = 04C442AB2EB8BC27008E0F09 /* LottieLogo1.json */; };
+		04C68D242ED850A700A11F53 /* LosslessStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D232ED850A600A11F53 /* LosslessStringConvertible.swift */; };
+		04C68D262ED8510E00A11F53 /* BinaryFloatingPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D252ED8510D00A11F53 /* BinaryFloatingPoint.swift */; };
 		04CF028C2E8808540083ACF0 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028B2E8808500083ACF0 /* UIButton.swift */; };
 		04CF028E2E8A37BB0083ACF0 /* TextInputStrategies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */; };
 		04CF02902E8A3A160083ACF0 /* Demo@输入文本.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */; };
@@ -508,7 +509,6 @@
 		04A245892ECC818E009649E8 /* JSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
 		04A245902ECD7373009649E8 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		04A245922ECDA78B009649E8 /* Sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sequence.swift; sourceTree = "<group>"; };
-		04A245952ECDA8F2009649E8 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		04A368132EC59516000FC898 /* LGOEditProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LGOEditProfileVC.swift; sourceTree = "<group>"; };
 		04A8C54B2E8AA94B00381701 /* Demo@按钮.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@按钮.swift"; sourceTree = "<group>"; };
 		04A8C54D2E8AA9F800381701 /* Demo@功能列表根目录.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@功能列表根目录.swift"; sourceTree = "<group>"; };
@@ -541,6 +541,8 @@
 		04C442A52EB8B935008E0F09 /* Demo@Lottie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@Lottie.swift"; sourceTree = "<group>"; };
 		04C442A92EB8BC13008E0F09 /* 9squares_AlBoardman.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = 9squares_AlBoardman.json; sourceTree = "<group>"; };
 		04C442AB2EB8BC27008E0F09 /* LottieLogo1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = LottieLogo1.json; sourceTree = "<group>"; };
+		04C68D232ED850A600A11F53 /* LosslessStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LosslessStringConvertible.swift; sourceTree = "<group>"; };
+		04C68D252ED8510D00A11F53 /* BinaryFloatingPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryFloatingPoint.swift; sourceTree = "<group>"; };
 		04CF028B2E8808500083ACF0 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputStrategies.swift; sourceTree = "<group>"; };
 		04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@输入文本.swift"; sourceTree = "<group>"; };
@@ -1078,7 +1080,9 @@
 		04A245882ECC817D009649E8 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
+				04C68D252ED8510D00A11F53 /* BinaryFloatingPoint.swift */,
 				04A245892ECC818E009649E8 /* JSONDecoder.swift */,
+				04C68D232ED850A600A11F53 /* LosslessStringConvertible.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -1232,7 +1236,6 @@
 		04D0C9802E8D19FC00580020 /* iOS.SDK */ = {
 			isa = PBXGroup;
 			children = (
-				04A245952ECDA8F2009649E8 /* Collection.swift */,
 				04A245922ECDA78B009649E8 /* Sequence.swift */,
 				04A245902ECD7373009649E8 /* Array.swift */,
 				042F958D2EB5C477005DE735 /* Bundle.swift */,
@@ -1626,8 +1629,8 @@
 			);
 			mainGroup = C564FBD22E09580A0079B5C1;
 			packageReferences = (
-				040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "swift-syntax" */,
-				040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "MyMacrosClean" */,
+				040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "../../swift-syntax" */,
+				040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "../../MyMacrosClean" */,
 			);
 			productRefGroup = C564FBDC2E09580B0079B5C1 /* Products */;
 			projectDirPath = "";
@@ -1717,7 +1720,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		8ED027F733F47F705EC724B3 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1726,8 +1730,12 @@
 			);
 			inputFileListPaths = (
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1776,6 +1784,7 @@
 				0432836A2EC45D840031CDD6 /* JXSegmentedTitleDataSource.swift in Sources */,
 				04A245932ECDA78D009649E8 /* Sequence.swift in Sources */,
 				04124F332EB0625300462BE2 /* Plugins.swift in Sources */,
+				04C68D262ED8510E00A11F53 /* BinaryFloatingPoint.swift in Sources */,
 				045920FC2E854FA9008C8D6A /* UInt.swift in Sources */,
 				043283632EC4535B0031CDD6 /* CashbackCardCell.swift in Sources */,
 				0402F0AE2EC2D7400054A151 /* UIListContentConfiguration.swift in Sources */,
@@ -1849,6 +1858,7 @@
 				0482A5EA2EA383B2004176A4 /* Demo@网页加载互动.swift in Sources */,
 				04E8D5BB2E8E5AD000E85CDA /* Demo@中国大陆居民身份证验证.swift in Sources */,
 				C564FC892E0959640079B5C1 /* UICollectionView.swift in Sources */,
+				04C68D242ED850A700A11F53 /* LosslessStringConvertible.swift in Sources */,
 				045376652EB0B5D600133F73 /* FeedVideoCell.swift in Sources */,
 				C564FCB32E0959990079B5C1 /* CustomCell.swift in Sources */,
 				047E9A732EB6217900F58923 /* Demo@XLSX.swift in Sources */,
@@ -2007,7 +2017,6 @@
 				C564FCA62E0959640079B5C1 /* UINavigationBar.swift in Sources */,
 				046786EF2EB4CF2C003FE82D /* DefaultSkins.swift in Sources */,
 				04A368142EC59517000FC898 /* LGOEditProfileVC.swift in Sources */,
-				04A245962ECDA8F3009649E8 /* Collection.swift in Sources */,
 				04124F442EB0764200462BE2 /* AFService.swift in Sources */,
 				04AD628F2E9120C500E18984 /* JobsTimer.swift in Sources */,
 				C564FC2C2E0958D50079B5C1 /* SceneDelegate.swift in Sources */,
@@ -2401,11 +2410,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "swift-syntax" */ = {
+		040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "../../swift-syntax" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../../swift-syntax";
 		};
-		040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "MyMacrosClean" */ = {
+		040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "../../MyMacrosClean" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../MyMacrosClean;
 		};

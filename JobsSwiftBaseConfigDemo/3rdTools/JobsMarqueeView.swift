@@ -459,7 +459,7 @@ public final class JobsMarqueeView: UIView {
 
         // 1. 用你的工厂方法创建按钮
         let button = UIButton.sys()
-        button.jobs_isClone = true    // 给你 SD 背景图那一套用
+        button.jobs_isClone = true    // 给 SD / KF 背景图克隆那一套用
 
         // 2. 标题 & 图片（链式）
         let states: [UIControl.State] = [.normal, .highlighted, .selected, .disabled]
@@ -518,7 +518,29 @@ public final class JobsMarqueeView: UIView {
         button.layer.borderWidth   = source.layer.borderWidth
         button.layer.borderColor   = source.layer.borderColor
 
-        // 8. 复制 target-action（兼容老式 addTarget，包括你 jobs_addTapClosure 那一套）
+        // 8. 远程图片：SDWebImage / Kingfisher 配置克隆
+        //    - 如果该按钮没用 SD / KF，则对应 url 为 nil，下面这些调用都直接 return，不会有副作用
+        //    - 如果已经加载过，会优先命中缓存；没缓存才按需触网
+
+        #if canImport(SDWebImage)
+        // SDWebImage@前景图
+//        source.sd_cloneImage(to: button, for: .normal)
+        // SDWebImage@背景图
+        source.sd_cloneBackground(to: button,
+                                  for: .normal,
+                                  allowNetworkIfMissing: true)
+        #endif
+
+        #if canImport(Kingfisher)
+        // Kingfisher@前景图
+//        source.kf_cloneImage(to: button, for: .normal)
+        // Kingfishe@背景图
+        source.kf_cloneBackground(to: button,
+                                  for: .normal,
+                                  allowNetworkIfMissing: true)
+        #endif
+
+        // 9. 复制 target-action（兼容老式 addTarget，包括 jobs_addTapClosure 那一套）
         var hasTapTarget = false
 
         for target in source.allTargets {
@@ -530,7 +552,8 @@ public final class JobsMarqueeView: UIView {
                 .valueChanged,
                 .primaryActionTriggered
             ] {
-                guard let actions = source.actions(forTarget: target, forControlEvent: event) else { continue }
+                guard let actions = source.actions(forTarget: target,
+                                                   forControlEvent: event) else { continue }
                 for action in actions {
                     button.addTarget(target, action: Selector(action), for: event)
                     if event == .touchUpInside {
@@ -540,8 +563,8 @@ public final class JobsMarqueeView: UIView {
             }
         }
 
-        // 9. 兼容 onTap / byTapSound：它们在 iOS 14+ 用的是 UIAction，看不到 target-action
-        //    如果没有任何 .touchUpInside 的 target，就加一个“转发器”：
+        // 10. 兼容 onTap / byTapSound：它们在 iOS 14+ 用的是 UIAction，看不到 target-action
+        //     如果没有任何 .touchUpInside 的 target，就加一个“转发器”：
         if #available(iOS 14.0, *), !hasTapTarget {
             button.addAction(
                 UIAction { [weak source] _ in
@@ -552,7 +575,7 @@ public final class JobsMarqueeView: UIView {
             )
         }
 
-        // 10. 复制长按手势（onLongPress）
+        // 11. 复制长按手势（onLongPress）
         if let recognizers = source.gestureRecognizers {
             for recognizer in recognizers {
                 guard let lp = recognizer as? UILongPressGestureRecognizer else { continue }
@@ -582,8 +605,11 @@ public final class JobsMarqueeView: UIView {
 
                 button.addGestureRecognizer(cloneGR)
             }
-        };return button
+        }
+
+        return button
     }
+
 }
 
 extension JobsMarqueeView {
