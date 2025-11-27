@@ -930,10 +930,14 @@ final class JobsMarqueeDemoVC: BaseVC {
             .byItemSizeMode(.fillBounds)
             .byDataSourceButtons([
                 UIButton.sys()
-                    .sd_imageURL("https://picsum.photos/3000/2000")
+                    .byBorderColor(UIColor.systemGray3)
+                    .byClipsToBounds(true)
+                    .byTitle("我是UIButton主标题@SDWebImage")
+                    .bySubTitle("我是UIButton副标题@SDWebImage")
+                    .sd_imageURL("https://picsum.photos/200")
                     .sd_placeholderImage(nil)
-                    .sd_options([.scaleDownLargeImages, .retryFailed])
-                    .sd_bgNormalLoad() // 之前是配置项，这里才是真正决定渲染背景图/前景图
+                    .sd_options([.retryFailed, .highPriority, .scaleDownLargeImages])
+                    .sd_normalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 SDWebImage@背景图 1 tapped, selected=\(sender.isSelected)")
@@ -949,10 +953,14 @@ final class JobsMarqueeDemoVC: BaseVC {
                         }
                     },
                 UIButton.sys()
-                    .sd_imageURL("https://picsum.photos/3000/2000")
+                    .byBorderColor(UIColor.systemGray3)
+                    .byClipsToBounds(true)
+                    .byTitle("我是UIButton主标题@SDWebImage")
+                    .bySubTitle("我是UIButton副标题@SDWebImage")
+                    .sd_imageURL("https://picsum.photos/200")
                     .sd_placeholderImage(nil)
-                    .sd_options([.scaleDownLargeImages, .retryFailed])
-                    .sd_bgNormalLoad()
+                    .sd_options([.retryFailed, .highPriority, .scaleDownLargeImages])
+                    .sd_normalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 SDWebImage@背景图 2 tapped, selected=\(sender.isSelected)")
@@ -968,10 +976,14 @@ final class JobsMarqueeDemoVC: BaseVC {
                         }
                     },
                 UIButton.sys()
-                    .sd_imageURL("https://picsum.photos/3000/2000")
+                    .byBorderColor(UIColor.systemGray3)
+                    .byClipsToBounds(true)
+                    .byTitle("我是UIButton主标题@SDWebImage")
+                    .bySubTitle("我是UIButton副标题@SDWebImage")
+                    .sd_imageURL("https://picsum.photos/200")
                     .sd_placeholderImage(nil)
-                    .sd_options([.scaleDownLargeImages, .retryFailed])
-                    .sd_bgNormalLoad()
+                    .sd_options([.retryFailed, .highPriority, .scaleDownLargeImages])
+                    .sd_normalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 SDWebImage@背景图 3 tapped, selected=\(sender.isSelected)")
@@ -1001,8 +1013,10 @@ final class JobsMarqueeDemoVC: BaseVC {
             .byItemSizeMode(.fillBounds)
             .byDataSourceButtons([
                 UIButton.sys()
+                    .byTitle("我是UIButton主标题@Kingfisher").byTitleColor(.red)
+                    .bySubTitle("我是UIButton副标题@Kingfisher").bySubTitleColor(.yellow)
                     .kf_imageURL("https://picsum.photos/300/200")
-                    .kf_placeholderImage(nil)
+                    .kf_placeholderImage("唐老鸭".img)
                     .kf_options([
                         .processor(DownsamplingImageProcessor(size: CGSize(width: 500, height: 200))),
                         .scaleFactor(UIScreen.main.scale),
@@ -1010,15 +1024,17 @@ final class JobsMarqueeDemoVC: BaseVC {
                         .transition(.fade(0.25)),
                         .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
                     ])
-                    .kf_bgNormalLoad()
+                    .kf_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 Kingfisher@背景图 1 tapped, selected=\(sender.isSelected)")
                         toastBy("点击了Kingfisher@背景图")
                     },
                 UIButton.sys()
+                    .byTitle("我是UIButton主标题@Kingfisher").byTitleColor(.red)
+                    .bySubTitle("我是UIButton副标题@Kingfisher").bySubTitleColor(.yellow)
                     .kf_imageURL("https://picsum.photos/300/200")
-                    .kf_placeholderImage(nil)
+                    .kf_placeholderImage("唐老鸭".img)
                     .kf_options([
                         .processor(DownsamplingImageProcessor(size: CGSize(width: 500, height: 200))),
                         .scaleFactor(UIScreen.main.scale),
@@ -1026,15 +1042,17 @@ final class JobsMarqueeDemoVC: BaseVC {
                         .transition(.fade(0.25)),
                         .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
                     ])
-                    .kf_bgNormalLoad()
+                    .kf_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 Kingfisher@背景图 2 tapped, selected=\(sender.isSelected)")
                         toastBy("点击了Kingfisher@背景图")
                     },
                 UIButton.sys()
+                    .byTitle("我是UIButton主标题@Kingfisher").byTitleColor(.red)
+                    .bySubTitle("我是UIButton副标题@Kingfisher").bySubTitleColor(.yellow)
                     .kf_imageURL("https://picsum.photos/300/200")
-                    .kf_placeholderImage(nil)
+                    .kf_placeholderImage("唐老鸭".img)
                     .kf_options([
                         .processor(DownsamplingImageProcessor(size: CGSize(width: 500, height: 200))),
                         .scaleFactor(UIScreen.main.scale),
@@ -1042,7 +1060,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                         .transition(.fade(0.25)),
                         .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
                     ])
-                    .kf_bgNormalLoad()
+                    .kf_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 Kingfisher@背景图 3 tapped, selected=\(sender.isSelected)")
@@ -1053,7 +1071,6 @@ final class JobsMarqueeDemoVC: BaseVC {
             .byAddTo(self.scrollView) { [unowned self] make in
                 make.top.equalTo(self.sdWebImageButtonsMarquee.snp.bottom).offset(self.verticalSpacing)
                 make.left.right.height.equalTo(self.upContinuousMarquee)
-
                 // 🔚 最后一条封底，决定 scrollView.contentSize.height
                 if #available(iOS 11.0, *) {
                     make.bottom.equalTo(self.scrollView.contentLayoutGuide.snp.bottom).inset(20)

@@ -95,7 +95,7 @@ final class PicLoadDemoVC: BaseVC {
             }
     }()
     // MARK: - UIButton
-    /// 按钮网络背景图@SDWebImage
+    /// UIButton网络背景图@SDWebImage
     private lazy var btnBG: UIButton = {
         UIButton(type: .system)
             .byCornerRadius(12)
@@ -113,15 +113,15 @@ final class PicLoadDemoVC: BaseVC {
                 make.height.equalTo(64)
             }
     }()
-    /// 按钮网络前景图@SDWebImage
+    /// UIButton网络前景图@SDWebImage
     private lazy var btnImage: UIButton = {
         UIButton(type: .system)
             .byCornerRadius(12)
             .byBorderWidth(1)
             .byBorderColor(UIColor.systemGray3)
             .byClipsToBounds(true)
-            .byTitle("我是主标题@SDWebImage")
-            .bySubTitle("我是副标题@SDWebImage")
+            .byTitle("我是UIButton主标题@SDWebImage")
+            .bySubTitle("我是UIButton副标题@SDWebImage")
             .sd_imageURL("https://picsum.photos/200")
             .sd_placeholderImage(nil)
             .sd_options([.retryFailed, .highPriority, .scaleDownLargeImages])
@@ -133,13 +133,13 @@ final class PicLoadDemoVC: BaseVC {
                 make.height.greaterThanOrEqualTo(56)
             }
     }()
-    /// 按钮网络背景图@Kingfisher
+    /// UIButton网络背景图@Kingfisher
     private lazy var btnBG_KF: UIButton = {
         UIButton(type: .system)
             .byCornerRadius(12)
             .byClipsToBounds(true)
-            .byTitle("我是主标题@Kingfisher").byTitleColor(.red)
-            .bySubTitle("我是副标题@Kingfisher").bySubTitleColor(.yellow)
+            .byTitle("我是UIButton主标题@Kingfisher").byTitleColor(.red)
+            .bySubTitle("我是UIButton副标题@Kingfisher").bySubTitleColor(.yellow)
             .kf_imageURL("https://picsum.photos/300/200")
             .kf_placeholderImage("唐老鸭".img)
             .kf_options([
@@ -157,15 +157,15 @@ final class PicLoadDemoVC: BaseVC {
                 make.height.equalTo(64)
             }
     }()
-    /// 按钮网络前景图@Kingfisher
+    /// UIButton网络前景图@Kingfisher
     private lazy var btnImage_KF: UIButton = {
         UIButton(type: .system)
             .byCornerRadius(12)
             .byBorderWidth(1)
             .byBorderColor(UIColor.systemGray3)
             .byClipsToBounds(true)
-            .byTitle("我是主标题@Kingfisher")
-            .bySubTitle("我是副标题@Kingfisher")
+            .byTitle("我是UIButton主标题@Kingfisher")
+            .bySubTitle("我是UIButton副标题@Kingfisher")
             .kf_imageURL("https://picsum.photos/200")
             .kf_placeholderImage(nil)
             .kf_options([
@@ -197,10 +197,10 @@ final class PicLoadDemoVC: BaseVC {
         wrapperImgView.byAlpha(1)    // UIImageView网络图（失败兜底图）@Kingfisher
         wrapperImgViewSD.byAlpha(1)  // UIImageView网络图（失败兜底图）@SDWebImage
 
-        btnBG.byAlpha(1)             // 按钮网络背景图@SDWebImage
-        btnImage.byAlpha(1)          // 按钮网络前景图@SDWebImage
-        btnBG_KF.byAlpha(1)          // 按钮网络背景图@Kingfisher
-        btnImage_KF.byAlpha(1)       // 按钮网络前景图@Kingfisher
+        btnBG.byAlpha(1)             // UIButton网络背景图@SDWebImage
+        btnImage.byAlpha(1)          // UIButton网络前景图@SDWebImage
+        btnBG_KF.byAlpha(1)          // UIButton网络背景图@Kingfisher
+        btnImage_KF.byAlpha(1)       // UIButton网络前景图@Kingfisher
         // 结束滚动内容
         scrollView.contentLayoutGuide.snp.makeConstraints { make in
             make.bottom.equalTo(btnImage_KF.snp.bottom).offset(24)

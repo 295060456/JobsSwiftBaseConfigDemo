@@ -383,62 +383,50 @@ public final class JobsMarqueeView: UIView {
     }
     /// 复制 UIButton 的外观 & 行为（尽量复制标题、图片、颜色、事件）
     private func cloneButton(from source: UIButton) -> UIButton {
-
         // 1. 按类型用你的工厂方法创建按钮
         let button = UIButton.sys()
         // 标记克隆态（给你 UIImage / 背景图那一套用）
         button.jobs_isClone = true
-
         // 2. 标题 & 图片（用 byXXX 链式）
         let states: [UIControl.State] = [.normal, .highlighted, .selected, .disabled]
         for state in states {
-
             if let title = source.title(for: state) {
                 button.byTitle(title, for: state)
             }
-
             if let attrTitle = source.attributedTitle(for: state) {
                 button.byAttributedTitle(attrTitle, for: state)
             }
-
             if let color = source.titleColor(for: state) {
                 button.byTitleColor(color, for: state)
             }
-
             if let image = source.image(for: state) {
                 button.byImage(image, for: state)
             }
-
             if let bgImage = source.backgroundImage(for: state) {
                 button.byBackgroundImage(bgImage, for: state)
             }
         }
-
         // 3. 字体 & 内边距（同样用链式）
         if let font = source.titleLabel?.font {
             button.byTitleFont(font)
         }
-
         button
             .byContentEdgeInsets(source.contentEdgeInsets)
             .byTitleEdgeInsets(source.titleEdgeInsets)
             .byImageEdgeInsets(source.imageEdgeInsets)
-
         if let bgColor = source.backgroundColor {
             button.byBackgroundColor(bgColor, for: .normal)
         }
-
         // 4. 对齐方式（这里原生 API 没有你封的就直接复制）
         button.contentHorizontalAlignment = source.contentHorizontalAlignment
         button.contentVerticalAlignment   = source.contentVerticalAlignment
-
         // 5. layer 样式
-        button.layer.cornerRadius = source.layer.cornerRadius
+        button.layer.cornerRadius  = source.layer.cornerRadius
         button.layer.masksToBounds = source.layer.masksToBounds
-        button.layer.borderWidth = source.layer.borderWidth
-        button.layer.borderColor = source.layer.borderColor
-
-        // 6. 复制 target-action（保持 onTap / onLongPress 等行为）
+        button.layer.borderWidth   = source.layer.borderWidth
+        button.layer.borderColor   = source.layer.borderColor
+        // 6. 复制 target-action（保持老式 target-action 行为）
+        var hasTapTarget = false
         for target in source.allTargets {
             for event in [
                 UIControl.Event.touchUpInside,
@@ -451,14 +439,25 @@ public final class JobsMarqueeView: UIView {
                 if let actions = source.actions(forTarget: target, forControlEvent: event) {
                     for action in actions {
                         button.addTarget(target, action: Selector(action), for: event)
+                        if event == .touchUpInside {
+                            hasTapTarget = true
+                        }
                     }
                 }
             }
         }
-
-        return button
+        // 7. 兼容你 onTap / byTapSound 这类用 UIAction 的情况：
+        //    如果没有任何 .touchUpInside 的 target-action，大概率是只绑定了 UIAction，
+        //    那就把克隆按钮的点击转发给 source，让 source 自己触发它身上的 onTap / byTapSound 闭包。
+        if #available(iOS 14.0, *), !hasTapTarget {
+            button.addAction(
+                UIAction { [weak source] _ in
+                    source?.sendActions(for: .touchUpInside)
+                },
+                for: .touchUpInside
+            )
+        };return button
     }
-
 }
 
 extension JobsMarqueeView {
