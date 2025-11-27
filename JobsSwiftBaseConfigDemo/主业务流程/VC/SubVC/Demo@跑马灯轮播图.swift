@@ -1029,6 +1029,15 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .onTap { sender in
                         print("🔴 Kingfisher@背景图 1 tapped, selected=\(sender.isSelected)")
                         toastBy("点击了Kingfisher@背景图")
+                    }
+                    .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+                        if gr.state == .began {
+                            btn.alpha = 0.6
+                            print("长按开始 on \(btn)")
+                        } else if gr.state == .ended || gr.state == .cancelled {
+                            btn.alpha = 1.0
+                            print("长按结束")
+                        }
                     },
                 UIButton.sys()
                     .byTitle("我是UIButton主标题@Kingfisher").byTitleColor(.red)
@@ -1047,6 +1056,15 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .onTap { sender in
                         print("🔴 Kingfisher@背景图 2 tapped, selected=\(sender.isSelected)")
                         toastBy("点击了Kingfisher@背景图")
+                    }
+                    .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+                        if gr.state == .began {
+                            btn.alpha = 0.6
+                            print("长按开始 on \(btn)")
+                        } else if gr.state == .ended || gr.state == .cancelled {
+                            btn.alpha = 1.0
+                            print("长按结束")
+                        }
                     },
                 UIButton.sys()
                     .byTitle("我是UIButton主标题@Kingfisher").byTitleColor(.red)
@@ -1066,6 +1084,15 @@ final class JobsMarqueeDemoVC: BaseVC {
                         print("🔴 Kingfisher@背景图 3 tapped, selected=\(sender.isSelected)")
                         toastBy("点击了Kingfisher@背景图")
                     }
+                    .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+                        if gr.state == .began {
+                            btn.alpha = 0.6
+                            print("长按开始 on \(btn)")
+                        } else if gr.state == .ended || gr.state == .cancelled {
+                            btn.alpha = 1.0
+                            print("长按结束")
+                        }
+                    },
             ])
             .byBgColor(.randomColor)
             .byAddTo(self.scrollView) { [unowned self] make in

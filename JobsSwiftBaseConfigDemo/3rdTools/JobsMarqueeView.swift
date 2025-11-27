@@ -383,50 +383,71 @@ public final class JobsMarqueeView: UIView {
     }
     /// 复制 UIButton 的外观 & 行为（尽量复制标题、图片、颜色、事件）
     private func cloneButton(from source: UIButton) -> UIButton {
-        // 1. 按类型用你的工厂方法创建按钮
+
+        // 1. 用你的工厂方法创建按钮
         let button = UIButton.sys()
-        // 标记克隆态（给你 UIImage / 背景图那一套用）
-        button.jobs_isClone = true
-        // 2. 标题 & 图片（用 byXXX 链式）
+        button.jobs_isClone = true    // 给你 SD 背景图那一套用
+
+        // 2. 标题 & 图片（链式）
         let states: [UIControl.State] = [.normal, .highlighted, .selected, .disabled]
         for state in states {
+
             if let title = source.title(for: state) {
                 button.byTitle(title, for: state)
             }
+
             if let attrTitle = source.attributedTitle(for: state) {
                 button.byAttributedTitle(attrTitle, for: state)
             }
+
             if let color = source.titleColor(for: state) {
                 button.byTitleColor(color, for: state)
             }
+
             if let image = source.image(for: state) {
                 button.byImage(image, for: state)
             }
+
             if let bgImage = source.backgroundImage(for: state) {
                 button.byBackgroundImage(bgImage, for: state)
             }
         }
-        // 3. 字体 & 内边距（同样用链式）
+
+        // 3. 字体
         if let font = source.titleLabel?.font {
             button.byTitleFont(font)
         }
-        button
-            .byContentEdgeInsets(source.contentEdgeInsets)
-            .byTitleEdgeInsets(source.titleEdgeInsets)
-            .byImageEdgeInsets(source.imageEdgeInsets)
+
+        // 4. 内边距 / configuration（避免 iOS 15 之后的 deprecated 警告）
+        if #available(iOS 15.0, *), let cfg = source.configuration {
+            // 按钮已经在用 UIButton.Configuration：直接克隆配置
+            button.configuration = cfg
+        } else {
+            // 老模式：用 edgeInsets（只在 < iOS 15 的分支里调用，不会再黄）
+            button
+                .byContentEdgeInsets(source.contentEdgeInsets)
+                .byTitleEdgeInsets(source.titleEdgeInsets)
+                .byImageEdgeInsets(source.imageEdgeInsets)
+        }
+
+        // 5. 背景色
         if let bgColor = source.backgroundColor {
             button.byBackgroundColor(bgColor, for: .normal)
         }
-        // 4. 对齐方式（这里原生 API 没有你封的就直接复制）
+
+        // 6. 对齐方式
         button.contentHorizontalAlignment = source.contentHorizontalAlignment
         button.contentVerticalAlignment   = source.contentVerticalAlignment
-        // 5. layer 样式
+
+        // 7. layer 样式
         button.layer.cornerRadius  = source.layer.cornerRadius
         button.layer.masksToBounds = source.layer.masksToBounds
         button.layer.borderWidth   = source.layer.borderWidth
         button.layer.borderColor   = source.layer.borderColor
-        // 6. 复制 target-action（保持老式 target-action 行为）
+
+        // 8. 复制 target-action（兼容老式 addTarget，包括你 jobs_addTapClosure 那一套）
         var hasTapTarget = false
+
         for target in source.allTargets {
             for event in [
                 UIControl.Event.touchUpInside,
@@ -436,26 +457,58 @@ public final class JobsMarqueeView: UIView {
                 .valueChanged,
                 .primaryActionTriggered
             ] {
-                if let actions = source.actions(forTarget: target, forControlEvent: event) {
-                    for action in actions {
-                        button.addTarget(target, action: Selector(action), for: event)
-                        if event == .touchUpInside {
-                            hasTapTarget = true
-                        }
+                guard let actions = source.actions(forTarget: target, forControlEvent: event) else { continue }
+                for action in actions {
+                    button.addTarget(target, action: Selector(action), for: event)
+                    if event == .touchUpInside {
+                        hasTapTarget = true
                     }
                 }
             }
         }
-        // 7. 兼容你 onTap / byTapSound 这类用 UIAction 的情况：
-        //    如果没有任何 .touchUpInside 的 target-action，大概率是只绑定了 UIAction，
-        //    那就把克隆按钮的点击转发给 source，让 source 自己触发它身上的 onTap / byTapSound 闭包。
+
+        // 9. 兼容 onTap / byTapSound：它们在 iOS 14+ 用的是 UIAction，看不到 target-action
+        //    如果没有任何 .touchUpInside 的 target，就加一个“转发器”：
         if #available(iOS 14.0, *), !hasTapTarget {
             button.addAction(
                 UIAction { [weak source] _ in
+                    // 让原按钮自己触发所有点击逻辑（onTap + byTapSound 全跑）
                     source?.sendActions(for: .touchUpInside)
                 },
                 for: .touchUpInside
             )
+        }
+
+        // 10. 复制长按手势（onLongPress）
+        if let recognizers = source.gestureRecognizers {
+            for recognizer in recognizers {
+                guard let lp = recognizer as? UILongPressGestureRecognizer else { continue }
+
+                let cloneGR = UILongPressGestureRecognizer()
+
+                cloneGR.minimumPressDuration    = lp.minimumPressDuration
+                cloneGR.numberOfTapsRequired    = lp.numberOfTapsRequired
+                cloneGR.numberOfTouchesRequired = lp.numberOfTouchesRequired
+                cloneGR.allowableMovement       = lp.allowableMovement
+                cloneGR.cancelsTouchesInView    = lp.cancelsTouchesInView
+                cloneGR.delaysTouchesBegan      = lp.delaysTouchesBegan
+                cloneGR.delaysTouchesEnded      = lp.delaysTouchesEnded
+                cloneGR.isEnabled               = lp.isEnabled
+
+                // ✅ 从原手势上把 sleeve 拿出来，挂到 cloneGR 上
+                if let sleeve = objc_getAssociatedObject(lp, &kJobsUIButtonLongPressSleeveKey) {
+                    // _GRSleeve.invoke(_:) 暴露到 ObjC 后就是 "invoke:"
+                    cloneGR.addTarget(sleeve, action: NSSelectorFromString("invoke:"))
+                    objc_setAssociatedObject(
+                        cloneGR,
+                        &kJobsUIButtonLongPressSleeveKey,
+                        sleeve,
+                        .OBJC_ASSOCIATION_RETAIN_NONATOMIC
+                    )
+                }
+
+                button.addGestureRecognizer(cloneGR)
+            }
         };return button
     }
 }
