@@ -2712,6 +2712,37 @@ private lazy var flowLayout: UICollectionViewFlowLayout = {
 
 #### 2.6、`UIImageView` <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
+* 字符串本地图
+
+  ```swift
+  /// UIImageView@字符串本地图
+  private lazy var localImgView: UIImageView = {
+      UIImageView()
+          .byImage("Ani".img)
+          .byContentMode(.scaleAspectFill)
+          .byClipsToBounds()
+          .onTap { iv in
+              toastBy("单击图片：\(iv)")
+           }
+          .onLongPress(minDuration: 0.8, movement: 12, touches: 1, name: "customLongPress") { iv, gr in
+              switch gr.state {
+              case .began:
+                  toastBy("长按开始 on \(iv)")
+              case .ended, .cancelled, .failed:
+                  toastBy("长按结束 on \(iv)")
+              default:
+                  break
+              }
+          }
+          .byAddTo(scrollView) { [unowned self] make in
+              make.top.equalTo(scrollView.contentLayoutGuide.snp.top).offset(10.h)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20.w)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20.w)
+              make.height.equalTo(180.h)
+          }
+  }()
+  ```
+  
 * [**Kingfisher**](https://github.com/onevcat/Kingfishe)
 
   ```swift
@@ -2721,11 +2752,24 @@ private lazy var flowLayout: UICollectionViewFlowLayout = {
           .byAsyncImageKF("https://picsum.photos/200/300", fallback: "唐老鸭".img)
           .byContentMode(.scaleAspectFill)
           .byClipsToBounds()
+          .onTap { iv in
+              toastBy("单击图片：\(iv)")
+           }
+          .onLongPress(minDuration: 0.8, movement: 12, touches: 1, name: "customLongPress") { iv, gr in
+              switch gr.state {
+              case .began:
+                  toastBy("长按开始 on \(iv)")
+              case .ended, .cancelled, .failed:
+                  toastBy("长按结束 on \(iv)")
+              default:
+                  break
+              }
+          }
           .byAddTo(scrollView) { [unowned self] make in
-              make.top.equalTo(localImgView.snp.bottom).offset(20)
-              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
-              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
-              make.height.equalTo(180)
+              make.top.equalTo(localImgView.snp.bottom).offset(20.h)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20.w)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20.w)
+              make.height.equalTo(180.h)
           }
   }()
   ```
@@ -2737,11 +2781,24 @@ private lazy var flowLayout: UICollectionViewFlowLayout = {
           .byContentMode(.scaleAspectFill)
           .byClipsToBounds()
           .kf_setImage(from: "https://picsum.photos/200", placeholder: "Ani".img)
+          .onTap { iv in
+              toastBy("单击图片：\(iv)")
+           }
+          .onLongPress(minDuration: 0.8, movement: 12, touches: 1, name: "customLongPress") { iv, gr in
+              switch gr.state {
+              case .began:
+                  toastBy("长按开始 on \(iv)")
+              case .ended, .cancelled, .failed:
+                  toastBy("长按结束 on \(iv)")
+              default:
+                  break
+              }
+          }
           .byAddTo(scrollView) { [unowned self] make in
-              make.top.equalTo(asyncImgViewSD.snp.bottom).offset(20)
-              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
-              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
-              make.height.equalTo(180)
+              make.top.equalTo(asyncImgViewSD.snp.bottom).offset(20.h)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20.w)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20.w)
+              make.height.equalTo(180.h)
           }
   }()
   ```
@@ -2755,15 +2812,28 @@ private lazy var flowLayout: UICollectionViewFlowLayout = {
           .byAsyncImageSD("https://picsum.photos/400/300", fallback: "唐老鸭".img)
           .byContentMode(.scaleAspectFill)
           .byClipsToBounds()
+          .onTap { iv in
+              toastBy("单击图片：\(iv)")
+           }
+          .onLongPress(minDuration: 0.8, movement: 12, touches: 1, name: "customLongPress") { iv, gr in
+              switch gr.state {
+              case .began:
+                  toastBy("长按开始 on \(iv)")
+              case .ended, .cancelled, .failed:
+                  toastBy("长按结束 on \(iv)")
+              default:
+                  break
+              }
+          }
           .byAddTo(scrollView) { [unowned self] make in
-              make.top.equalTo(asyncImgView.snp.bottom).offset(20)
-              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
-              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
-              make.height.equalTo(180)
+              make.top.equalTo(asyncImgView.snp.bottom).offset(20.h)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20.w)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20.w)
+              make.height.equalTo(180.h)
           }
   }()
   ```
-
+  
   ```swift
   /// UIImageView网络图（失败兜底图）@SDWebImage
   private lazy var wrapperImgViewSD: UIImageView = {
@@ -2771,11 +2841,24 @@ private lazy var flowLayout: UICollectionViewFlowLayout = {
           .byContentMode(.scaleAspectFill)
           .byClipsToBounds()
           .sd_setImage(from: "https://picsum.photos/200", placeholder: "Ani".img)
+          .onTap { iv in
+              toastBy("单击图片：\(iv)")
+           }
+          .onLongPress(minDuration: 0.8, movement: 12, touches: 1, name: "customLongPress") { iv, gr in
+              switch gr.state {
+              case .began:
+                  toastBy("长按开始 on \(iv)")
+              case .ended, .cancelled, .failed:
+                  toastBy("长按结束 on \(iv)")
+              default:
+                  break
+              }
+          }
           .byAddTo(scrollView) { [unowned self] make in
-              make.top.equalTo(wrapperImgView.snp.bottom).offset(20)
-              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
-              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
-              make.height.equalTo(180)
+              make.top.equalTo(wrapperImgView.snp.bottom).offset(20.h)
+              make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20.w)
+              make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20.w)
+              make.height.equalTo(180.h)
           }
   }()
   ```

@@ -24,7 +24,7 @@ final class PicLoadDemoVC: BaseVC {
             .byContentInset(.init(top: 0, left: 0, bottom: 24, right: 0))
             .byContentInsetAdjustmentBehavior(.never)
             .byAddTo(view) { [unowned self] make in
-                make.top.equalTo(gk_navigationBar.snp.bottom).offset(10) // 占满
+                make.top.equalTo(gk_navigationBar.snp.bottom).offset(10.h) // 占满
                 make.left.right.bottom.equalTo(view) // 占满
             }
     }()
@@ -35,11 +35,24 @@ final class PicLoadDemoVC: BaseVC {
             .byImage("Ani".img)
             .byContentMode(.scaleAspectFill)
             .byClipsToBounds()
+            .onTap { iv in
+                toastBy("单击图片：\(iv)")
+             }
+            .onLongPress(minDuration: 0.8, movement: 12, touches: 1, name: "customLongPress") { iv, gr in
+                switch gr.state {
+                case .began:
+                    toastBy("长按开始 on \(iv)")
+                case .ended, .cancelled, .failed:
+                    toastBy("长按结束 on \(iv)")
+                default:
+                    break
+                }
+            }
             .byAddTo(scrollView) { [unowned self] make in
                 make.top.equalTo(scrollView.contentLayoutGuide.snp.top).offset(10.h)
-                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
-                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
-                make.height.equalTo(180)
+                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20.w)
+                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20.w)
+                make.height.equalTo(180.h)
             }
     }()
     /// UIImageView字符串网络图@Kingfisher
@@ -48,11 +61,24 @@ final class PicLoadDemoVC: BaseVC {
             .byAsyncImageKF("https://picsum.photos/200/300", fallback: "唐老鸭".img)
             .byContentMode(.scaleAspectFill)
             .byClipsToBounds()
+            .onTap { iv in
+                toastBy("单击图片：\(iv)")
+             }
+            .onLongPress(minDuration: 0.8, movement: 12, touches: 1, name: "customLongPress") { iv, gr in
+                switch gr.state {
+                case .began:
+                    toastBy("长按开始 on \(iv)")
+                case .ended, .cancelled, .failed:
+                    toastBy("长按结束 on \(iv)")
+                default:
+                    break
+                }
+            }
             .byAddTo(scrollView) { [unowned self] make in
-                make.top.equalTo(localImgView.snp.bottom).offset(20)
-                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
-                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
-                make.height.equalTo(180)
+                make.top.equalTo(localImgView.snp.bottom).offset(20.h)
+                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20.w)
+                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20.w)
+                make.height.equalTo(180.h)
             }
     }()
     /// UIImageView字符串网络图@SDWebImage
@@ -61,11 +87,24 @@ final class PicLoadDemoVC: BaseVC {
             .byAsyncImageSD("https://picsum.photos/400/300", fallback: "唐老鸭".img)
             .byContentMode(.scaleAspectFill)
             .byClipsToBounds()
+            .onTap { iv in
+                toastBy("单击图片：\(iv)")
+             }
+            .onLongPress(minDuration: 0.8, movement: 12, touches: 1, name: "customLongPress") { iv, gr in
+                switch gr.state {
+                case .began:
+                    toastBy("长按开始 on \(iv)")
+                case .ended, .cancelled, .failed:
+                    toastBy("长按结束 on \(iv)")
+                default:
+                    break
+                }
+            }
             .byAddTo(scrollView) { [unowned self] make in
-                make.top.equalTo(asyncImgView.snp.bottom).offset(20)
-                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
-                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
-                make.height.equalTo(180)
+                make.top.equalTo(asyncImgView.snp.bottom).offset(20.h)
+                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20.w)
+                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20.w)
+                make.height.equalTo(180.h)
             }
     }()
     /// UIImageView网络图（失败兜底图）@Kingfisher
@@ -74,11 +113,24 @@ final class PicLoadDemoVC: BaseVC {
             .byContentMode(.scaleAspectFill)
             .byClipsToBounds()
             .kf_setImage(from: "https://picsum.photos/200", placeholder: "Ani".img)
+            .onTap { iv in
+                toastBy("单击图片：\(iv)")
+             }
+            .onLongPress(minDuration: 0.8, movement: 12, touches: 1, name: "customLongPress") { iv, gr in
+                switch gr.state {
+                case .began:
+                    toastBy("长按开始 on \(iv)")
+                case .ended, .cancelled, .failed:
+                    toastBy("长按结束 on \(iv)")
+                default:
+                    break
+                }
+            }
             .byAddTo(scrollView) { [unowned self] make in
-                make.top.equalTo(asyncImgViewSD.snp.bottom).offset(20)
-                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
-                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
-                make.height.equalTo(180)
+                make.top.equalTo(asyncImgViewSD.snp.bottom).offset(20.h)
+                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20.w)
+                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20.w)
+                make.height.equalTo(180.h)
             }
     }()
     /// UIImageView网络图（失败兜底图）@SDWebImage
@@ -87,11 +139,24 @@ final class PicLoadDemoVC: BaseVC {
             .byContentMode(.scaleAspectFill)
             .byClipsToBounds()
             .sd_setImage(from: "https://picsum.photos/200", placeholder: "Ani".img)
+            .onTap { iv in
+                toastBy("单击图片：\(iv)")
+             }
+            .onLongPress(minDuration: 0.8, movement: 12, touches: 1, name: "customLongPress") { iv, gr in
+                switch gr.state {
+                case .began:
+                    toastBy("长按开始 on \(iv)")
+                case .ended, .cancelled, .failed:
+                    toastBy("长按结束 on \(iv)")
+                default:
+                    break
+                }
+            }
             .byAddTo(scrollView) { [unowned self] make in
-                make.top.equalTo(wrapperImgView.snp.bottom).offset(20)
-                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
-                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
-                make.height.equalTo(180)
+                make.top.equalTo(wrapperImgView.snp.bottom).offset(20.h)
+                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20.w)
+                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20.w)
+                make.height.equalTo(180.h)
             }
     }()
     // MARK: - UIButton
@@ -100,17 +165,30 @@ final class PicLoadDemoVC: BaseVC {
         UIButton(type: .system)
             .byCornerRadius(12)
             .byClipsToBounds(true)
-            .byTitle("我是主标题@SDWebImage")
-            .bySubTitle("我是副标题@SDWebImage")
+            .byTitle("我是UIButton主标题@SDWebImage")
+            .bySubTitle("我是UIButton副标题@SDWebImage")
             .sd_imageURL("https://picsum.photos/3000/2000")
             .sd_placeholderImage(nil)
             .sd_options([.scaleDownLargeImages, .retryFailed])
             .sd_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
+            .onTap { sender in
+                print("🔴 Kingfisher@背景图 2 tapped, selected=\(sender.isSelected)")
+                toastBy("点击了UIButton网络背景图@SDWebImage")
+            }
+            .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+                if gr.state == .began {
+                    btn.alpha = 0.6
+                    print("长按开始 on \(btn)")
+                } else if gr.state == .ended || gr.state == .cancelled {
+                    btn.alpha = 1.0
+                    print("长按结束")
+                }
+            }
             .byAddTo(scrollView) { [unowned self] make in
-                make.top.equalTo(wrapperImgViewSD.snp.bottom).offset(24)
-                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
-                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
-                make.height.equalTo(64)
+                make.top.equalTo(wrapperImgViewSD.snp.bottom).offset(24.h)
+                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20.w)
+                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20.w)
+                make.height.equalTo(64.h)
             }
     }()
     /// UIButton网络前景图@SDWebImage
@@ -126,11 +204,24 @@ final class PicLoadDemoVC: BaseVC {
             .sd_placeholderImage(nil)
             .sd_options([.retryFailed, .highPriority, .scaleDownLargeImages])
             .sd_normalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
+            .onTap { sender in
+                print("🔴 Kingfisher@背景图 2 tapped, selected=\(sender.isSelected)")
+                toastBy("UIButton网络前景图@SDWebImage")
+            }
+            .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+                if gr.state == .began {
+                    btn.alpha = 0.6
+                    print("长按开始 on \(btn)")
+                } else if gr.state == .ended || gr.state == .cancelled {
+                    btn.alpha = 1.0
+                    print("长按结束")
+                }
+            }
             .byAddTo(scrollView) { [unowned self] make in
-                make.top.equalTo(btnBG.snp.bottom).offset(16)
-                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
-                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
-                make.height.greaterThanOrEqualTo(56)
+                make.top.equalTo(btnBG.snp.bottom).offset(16.h)
+                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20.w)
+                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20.w)
+                make.height.greaterThanOrEqualTo(56.h)
             }
     }()
     /// UIButton网络背景图@Kingfisher
@@ -150,11 +241,24 @@ final class PicLoadDemoVC: BaseVC {
                 .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
             ])
             .kf_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
+            .onTap { sender in
+                print("🔴 Kingfisher@背景图 2 tapped, selected=\(sender.isSelected)")
+                toastBy("UIButton网络背景图@Kingfisher")
+            }
+            .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+                if gr.state == .began {
+                    btn.alpha = 0.6
+                    print("长按开始 on \(btn)")
+                } else if gr.state == .ended || gr.state == .cancelled {
+                    btn.alpha = 1.0
+                    print("长按结束")
+                }
+            }
             .byAddTo(scrollView) { [unowned self] make in
-                make.top.equalTo(btnImage.snp.bottom).offset(24)
-                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
-                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
-                make.height.equalTo(64)
+                make.top.equalTo(btnImage.snp.bottom).offset(24.h)
+                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20.w)
+                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20.w)
+                make.height.equalTo(64.h)
             }
     }()
     /// UIButton网络前景图@Kingfisher
@@ -176,11 +280,24 @@ final class PicLoadDemoVC: BaseVC {
                 .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
             ])
             .kf_normalLoad() // 之前是配置项，这里才是真正决定渲染背景图/前景图
+            .onTap { sender in
+                print("🔴 Kingfisher@背景图 2 tapped, selected=\(sender.isSelected)")
+                toastBy("UIButton网络前景图@Kingfisher")
+            }
+            .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+                if gr.state == .began {
+                    btn.alpha = 0.6
+                    print("长按开始 on \(btn)")
+                } else if gr.state == .ended || gr.state == .cancelled {
+                    btn.alpha = 1.0
+                    print("长按结束")
+                }
+            }
             .byAddTo(scrollView) { [unowned self] make in
-                make.top.equalTo(btnBG_KF.snp.bottom).offset(16)
-                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20)
-                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20)
-                make.height.equalTo(64)
+                make.top.equalTo(btnBG_KF.snp.bottom).offset(16.h)
+                make.left.equalTo(scrollView.frameLayoutGuide.snp.left).offset(20.w)
+                make.right.equalTo(scrollView.frameLayoutGuide.snp.right).inset(20.w)
+                make.height.equalTo(64.h)
             }
     }()
     // MARK: - 生命周期
