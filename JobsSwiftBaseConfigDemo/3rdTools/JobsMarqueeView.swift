@@ -157,11 +157,11 @@ public final class JobsMarqueeView: UIView {
 
         switch (isHorizontal, itemSizeMode) {
         case (true, .fillBounds):
-            // 水平 & 按钮宽度 == 视图宽度：至少 3 个
-            targetCount = max(3, sourceCount)
+            // 水平 & 轮播图：多复制 1 个，形成 1,2,3,1 这种结构，方便无感循环
+            targetCount = max(3, sourceCount + 1)
         case (false, .fillBounds):
-            // 垂直 & 按钮高度 == 视图高度：至少 3 个
-            targetCount = max(3, sourceCount)
+            // 垂直 & 轮播图：同理，多复制 1 个
+            targetCount = max(3, sourceCount + 1)
         case (true, .fitContent):
             // 水平 & 按内容：个数 = 视图宽 / S1
             let s1 = max(minButtonSize.width, 1.0)
@@ -300,33 +300,106 @@ public final class JobsMarqueeView: UIView {
     /// 按频率滚动（间隔滚动）
     private func tickFrequency() {
         guard !internalButtons.isEmpty, stepLength > 0 else { return }
-
-        var offset = scrollView.contentOffset
+        let isHorizontal = direction.isHorizontal
+        let current = scrollView.contentOffset
         let maxOffsetX = max(0, scrollView.contentSize.width  - scrollView.bounds.width)
         let maxOffsetY = max(0, scrollView.contentSize.height - scrollView.bounds.height)
-
+        var target = current                  // 动画要滚到哪里
+        var needResetAfterAnimation = false   // 动画结束后是否需要“无感复位”
+        var resetOffset = current             // 复位到哪里（填充好再用）
         switch direction {
         case .left:
             guard maxOffsetX > 0 else { return }
-            offset.x += stepLength
-            if offset.x > maxOffsetX { offset.x = 0 }
+            let next = current.x + stepLength
+
+            if itemSizeMode == .fillBounds {
+                // 轮播图模式：最后一页是“首个的副本”
+                if next >= maxOffsetX {
+                    // 动画到副本那一页
+                    target.x = maxOffsetX
+                    // 动画结束后瞬移到真实第一页
+                    resetOffset.x = 0
+                    needResetAfterAnimation = true
+                } else {
+                    target.x = next
+                }
+            } else {
+                // 跑马灯模式：用原来的逻辑
+                if next > maxOffsetX {
+                    target.x = 0
+                } else {
+                    target.x = next
+                }
+            }
         case .right:
             guard maxOffsetX > 0 else { return }
-            offset.x -= stepLength
-            if offset.x < 0 { offset.x = maxOffsetX }
+            let next = current.x - stepLength
+
+            if itemSizeMode == .fillBounds {
+                if next <= 0 {
+                    // 动画到真实第一页
+                    target.x = 0
+                    // 动画结束后瞬移到“最后一页的副本”
+                    resetOffset.x = maxOffsetX
+                    needResetAfterAnimation = true
+                } else {
+                    target.x = next
+                }
+            } else {
+                if next < 0 {
+                    target.x = maxOffsetX
+                } else {
+                    target.x = next
+                }
+            }
         case .up:
             guard maxOffsetY > 0 else { return }
-            offset.y += stepLength
-            if offset.y > maxOffsetY { offset.y = 0 }
+            let next = current.y + stepLength
+
+            if itemSizeMode == .fillBounds {
+                if next >= maxOffsetY {
+                    target.y = maxOffsetY
+                    resetOffset.y = 0
+                    needResetAfterAnimation = true
+                } else {
+                    target.y = next
+                }
+            } else {
+                if next > maxOffsetY {
+                    target.y = 0
+                } else {
+                    target.y = next
+                }
+            }
         case .down:
             guard maxOffsetY > 0 else { return }
-            offset.y -= stepLength
-            if offset.y < 0 { offset.y = maxOffsetY }
+            let next = current.y - stepLength
+
+            if itemSizeMode == .fillBounds {
+                if next <= 0 {
+                    target.y = 0
+                    resetOffset.y = maxOffsetY
+                    needResetAfterAnimation = true
+                } else {
+                    target.y = next
+                }
+            } else {
+                if next < 0 {
+                    target.y = maxOffsetY
+                } else {
+                    target.y = next
+                }
+            }
         }
 
-        UIView.animate(withDuration: 0.25) {
-            self.scrollView.contentOffset = offset
-        }
+        UIView.animate(withDuration: 0.25, animations: {
+            self.scrollView.contentOffset = target
+        }, completion: { finished in
+            guard finished, needResetAfterAnimation else { return }
+            // ⚠️ 这里的瞬移是“无感”的：
+            // 1,2,3,1 里 maxOffsetX 对应的那页 和 offset=0 的第一页内容一样
+            self.scrollView.contentOffset = resetOffset
+        })
     }
     /// 连续滚动
     private func tickContinuous() {

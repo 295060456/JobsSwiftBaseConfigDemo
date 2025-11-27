@@ -858,7 +858,7 @@ final class JobsMarqueeDemoVC: BaseVC {
             }
     }()
     // MARK: - 11. 本地@背景图
-    private lazy var localImageButtonsMarquee: JobsMarqueeView = { [unowned self] in
+    private lazy var localImageButtonsMarquee: JobsMarqueeView = {  [unowned self] in
         JobsMarqueeView()
             .byDirection(.left)
             .byScrollMode(.frequency(interval: 1.0))
