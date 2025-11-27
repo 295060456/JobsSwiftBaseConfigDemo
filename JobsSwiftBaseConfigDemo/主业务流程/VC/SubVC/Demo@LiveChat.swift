@@ -47,8 +47,8 @@ final class LiveChatDemoVC: BaseVC, LiveChatDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        jobsSetupGKNav(title: "LiveChat Demo")
         view.backgroundColor = .systemBackground
+        jobsSetupGKNav(title: "LiveChat Demo")
         btnDefault.byVisible(YES)
         btnCustom.byVisible(YES)
 

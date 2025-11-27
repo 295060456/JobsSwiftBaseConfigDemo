@@ -55,7 +55,7 @@ end
 # ❤️ 新工程需要修改这里：把目标名替换为你的实际 target 名字
 target 'JobsSwiftBaseConfigDemo' do
   use_frameworks! :linkage => :static
-  # debugPods
+  debugPods
   swiftAppCommon
   #cocoPodsConfig   # ← 若你在主 Podfile 里有这个方法，这里会生效；没有就删掉
 end

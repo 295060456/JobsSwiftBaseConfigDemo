@@ -7,523 +7,769 @@
 
 import UIKit
 import SnapKit
-#if canImport(SDWebImage)
-import SDWebImage
-#endif
-#if canImport(Kingfisher)
-import Kingfisher
-#endif
 
+/// Demo：11 组 JobsMarqueeView
+/// 1. 向上连续滚动
+/// 2. 向下连续滚动
+/// 3. 向左连续滚动
+/// 4. 向右连续滚动
+/// 5. 向上间隔滚动
+/// 6. 向下间隔滚动
+/// 7. 向左间隔滚动
+/// 8. 向右间隔滚动
+/// 9. 极端：只有 1 个按钮
+/// 10. 极端：只有 2 个按钮
+/// 11. 极端：没有按钮（空数据源）
 final class JobsMarqueeDemoVC: BaseVC {
-    // ================================== 状态 ==================================
-    private var currentDirection: MarqueeDirection = .left
-    private var currentMode: MarqueeMode = .continuous(speed: 40)
-    /// 由于 JobsMarqueeView 默认自动开始，这里 VC 侧用本地状态位来管理按钮可用性
-    private var started: Bool = true   // 进入页面即视为已开启
-    private var paused: Bool  = false  // 初始未暂停
-    // ================================== 1) 文本（普通） ==================================
-    private lazy var marqueeText: JobsMarqueeView = {
-        JobsMarqueeView()
-            .byDirection(.left)
-            .byMode(.continuous(speed: 40))
-            .byContentWrapEnabled(true)
-            .byLoopEnabled(true)
-            .byGestureScrollEnabled(true)
-            .byDirectionalLockEnabled(true)
-            .byHardAxisLock(true)
-            .byDecelerationRate(.fast)
-            .byPauseOnUserDrag(true)
-            .byResumeAfterDragDelay(0.8)
-            .byItemSpacing(8)
-            .byItemMainAxisLength(.fillViewport)
-            .byOnItemTap { idx, btn in
-                print("TEXT tap idx=\(idx), title=\(btn.title(for: .normal) ?? "-")")
-            }
-            .setButtons([
-                UIButton(type: .system)
-                    .byTitle("跑马灯 · 主标题")
-                    .byTitleFont(.systemFont(ofSize: 17, weight: .semibold))
-                    .byTitleColor(.white)
-                    .bySubTitle("副标题：普通文本")
-                    .bySubTitleFont(.systemFont(ofSize: 11))
-                    .bySubTitleColor(UIColor.white.withAlphaComponent(0.85))
-                    .byNormalBgColor(.systemIndigo)
-                    .byContentEdgeInsets(.init(top: 8, left: 12, bottom: 8, right: 12))
-                    .byImagePlacement(.leading, padding: 8)
-                    .byImage("bolt.horizontal.circle.fill".sysImg)
-            ])
-            .byAddTo(view) { [unowned self] make in
-                make.top.equalTo(gk_navigationBar.snp.bottom).offset(10)
-                make.left.right.equalToSuperview()
-                make.height.equalTo(64)
-            }
-//            // ✅ UIView 层启动开关：父视图先布局 → 若是 Marquee 再重建 → 内部自动 start
-            .byActivateAfterAdd()
-    }()
 
-    // ================================== 2) 文本（富文本：JobsRichText） ==================================
-    private lazy var marqueeRich: JobsMarqueeView = {
-        return JobsMarqueeView()
-            .byDirection(.left)
-            .byMode(.continuous(speed: 40))                // 跑马灯：连续模式 → 不显示 PageControl
-            .byContentWrapEnabled(true)
-            .byLoopEnabled(true)
-            .byGestureScrollEnabled(true)
-            .byDirectionalLockEnabled(true)
-            .byHardAxisLock(true)
-            .byDecelerationRate(.fast)
-            .byPauseOnUserDrag(true)
-            .byResumeAfterDragDelay(0.8)
-            .byItemSpacing(8)
-            .byOnItemTap { idx, _ in
-                print("RICH tap idx=\(idx)")
-            }
-            .setButtons([UIButton(type: .system)
-                .byRichTitle(JobsRichText.make([
-                    JobsRichRun(.text("【富文本主标题】"))
-                        .font(.systemFont(ofSize: 18, weight: .bold))
-                        .color(.white)
-                ]))
-                .byRichSubTitle(JobsRichText.make([
-                    JobsRichRun(.text("副标题 · Attributed  "))
-                        .font(.systemFont(ofSize: 11)).color(.white.withAlphaComponent(0.85)),
-                    JobsRichRun(.text("下划线")).underline(.single, color: .white),
-                    JobsRichRun(.text("  ")),
-                    JobsRichRun(.text("删除线")).strike(.single, color: .white.withAlphaComponent(0.9))
-                ]))
-                .byNormalBgColor(.systemTeal)
-                .byContentEdgeInsets(.init(top: 8, left: 12, bottom: 8, right: 12))
-                .byImagePlacement(.leading, padding: 8)
-                .byImage("Ani".img)
-            ])
-            .byAddTo(view) { [unowned self] make in
-                make.top.equalTo(self.marqueeText.snp.bottom).offset(8)
-                make.left.right.equalToSuperview()
-                make.height.equalTo(64)
-            }
-    }()
+    // MARK: - Layout Metrics
 
-    // ================================== 3) 轮播图（本地图，开启 PageControl：默认灰/白） ==================================
-    private lazy var marqueeLocal: JobsMarqueeView = {
-        JobsMarqueeView()
-            .byItemMainAxisLength(.fillViewport)          // ✅ 轮播：每页=视口
-            .byDirection(.left)                            // ✅ 横向
-            .byMode(.intervalOnce(interval: 2.0, duration: 0.30, step: nil)) // ✅ 间隔模式（PageControl 允许出现）
-            .byContentWrapEnabled(true)
-            .byLoopEnabled(true)
-            .byGestureScrollEnabled(true)
-            .byDirectionalLockEnabled(true)
-            .byHardAxisLock(true)
-            .byDecelerationRate(.fast)
-            .byPauseOnUserDrag(true)
-            .byResumeAfterDragDelay(0.8)
-            .byItemSpacing(0)
-            .byPageControlEnabled(true)                   // ✅ 开启 PageControl
-            // .byPageIndicatorAppearance(.init(            // 如需自定义为“图片”，解注释传图
-            //     currentImage: UIImage(named: "dot_active"),
-            //     inactiveImage: UIImage(named: "dot_inactive")
-            // ))
-            .byOnItemTap { idx, _ in
-                print("LOCAL tap idx=\(idx)")
-            }
-            .setButtons([
-                UIButton(type: .custom)
-                    .byContentEdgeInsets(.zero)
-                    .byClipsToBounds(true)
-                    .byBackgroundImage("唐老鸭".img)
-                    .byNormalBgColor(.tertiarySystemFill)
-                    .byTitle("本地封面①").byTitleFont(.systemFont(ofSize: 12)).byTitleColor(.secondaryLabel)
-                    .byCornerRadius(0),
-                UIButton(type: .custom)
-                    .byContentEdgeInsets(.zero)
-                    .byClipsToBounds(true)
-                    .byBackgroundImage("唐老鸭".img)
-                    .byNormalBgColor(.tertiarySystemFill)
-                    .byTitle("本地封面②").byTitleFont(.systemFont(ofSize: 12)).byTitleColor(.secondaryLabel)
-                    .byCornerRadius(0)
-            ])
-            .byAddTo(view) { [unowned self] make in
-                make.top.equalTo(self.marqueeRich.snp.bottom).offset(8)
-                make.left.right.equalToSuperview()
-                make.height.equalTo(96)
-            }
-    }()
+    private let horizontalInset: CGFloat = 16
+    private let verticalSpacing: CGFloat = 12
+    private let marqueeHeight: CGFloat = 50
 
-    // ================================== 4) 轮播图（网络：SDWebImage，开启 PageControl：自定义颜色） ==================================
-    private lazy var marqueeRemoteSD: JobsMarqueeView = {
-        return JobsMarqueeView()
-            .byItemMainAxisLength(.fillViewport)
-            .byDirection(.left)
-            .byMode(.intervalOnce(interval: 2.5, duration: 0.30, step: nil)) // 改为间隔模式
-            .byContentWrapEnabled(true)
-            .byLoopEnabled(true)
-            .byGestureScrollEnabled(true)
-            .byDirectionalLockEnabled(true)
-            .byHardAxisLock(true)
-            .byDecelerationRate(.fast)
-            .byPauseOnUserDrag(true)
-            .byResumeAfterDragDelay(0.8)
-            .byItemSpacing(0)
-            .byPageControlEnabled(true)
-            .byPageIndicatorAppearance(.init(
-                currentColor: .white,
-                inactiveColor: UIColor.white.withAlphaComponent(0.35)
-            ))
-            .setButtons([
-                UIButton(type: .custom)
-                    .byContentEdgeInsets(.zero)
-                    .byClipsToBounds(true)
-                    .byNormalBgColor(.tertiarySystemFill)
-                    .byBackgroundImageContentMode(.scaleAspectFill)
-                    .byCornerRadius(0)
-                    .byTitle("网络封面 (SD) A").byTitleFont(.systemFont(ofSize: 12)).byTitleColor(.secondaryLabel)
-                    .sd_imageURL("https://picsum.photos/760/320?random=101")
-                    .sd_placeholderImage("唐老鸭".img)
-                    .sd_options([.scaleDownLargeImages, .retryFailed])
-                    .sd_context([.imageScaleFactor: UIScreen.main.scale])
-                    .sd_bgNormalLoad(),
-                UIButton(type: .custom)
-                    .byContentEdgeInsets(.zero)
-                    .byClipsToBounds(true)
-                    .byNormalBgColor(.tertiarySystemFill)
-                    .byBackgroundImageContentMode(.scaleAspectFill)
-                    .byCornerRadius(0)
-                    .byTitle("网络封面 (SD) B").byTitleFont(.systemFont(ofSize: 12)).byTitleColor(.secondaryLabel)
-                    .sd_imageURL("https://picsum.photos/760/320?random=102")
-                    .sd_placeholderImage("唐老鸭".img)
-                    .sd_options([.scaleDownLargeImages, .retryFailed])
-                    .sd_context([.imageScaleFactor: UIScreen.main.scale])
-                    .sd_bgNormalLoad()
-            ])
-            .byAddTo(view) { [unowned self] make in
-                make.top.equalTo(self.marqueeLocal.snp.bottom).offset(8)
-                make.left.right.equalToSuperview()
-                make.height.equalTo(120)
-            }
-    }()
+    // MARK: - UI: ScrollView 容器
 
-    // ================================== 5) 轮播图（网络：Kingfisher，开启 PageControl） ==================================
-    private lazy var marqueeRemoteKF: JobsMarqueeView = {
-        JobsMarqueeView()
-            .byItemMainAxisLength(.fillViewport)
-            .byDirection(.left)
-            .byMode(.intervalOnce(interval: 2.2, duration: 0.30, step: nil)) // 改为间隔模式
-            .byContentWrapEnabled(true)
-            .byLoopEnabled(true)
-            .byGestureScrollEnabled(true)
-            .byDirectionalLockEnabled(true)
-            .byHardAxisLock(true)
-            .byDecelerationRate(.fast)
-            .byPauseOnUserDrag(true)
-            .byResumeAfterDragDelay(0.8)
-            .byItemSpacing(0)
-            .byPageControlEnabled(true)
-            .setButtons([
-                UIButton(type: .system)
-                    .byCornerRadius(12)
-                    .byClipsToBounds(true)
-                    .byTitle("我是主标题@Kingfisher").byTitleColor(.red)
-                    .bySubTitle("我是副标题@Kingfisher").bySubTitleColor(.yellow)
-                    .kf_imageURL("https://picsum.photos/760/320?random=201")
-                    .kf_placeholderImage("唐老鸭".img)
-                    .kf_options([
-                        .processor(DownsamplingImageProcessor(size: CGSize(width: 760, height: 320))),
-                        .scaleFactor(UIScreen.main.scale),
-                        .cacheOriginalImage,
-                        .transition(.fade(0.25)),
-                        .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
-                    ])
-                    .kf_bgNormalLoad(),
-                UIButton(type: .system)
-                    .byCornerRadius(12)
-                    .byClipsToBounds(true)
-                    .byTitle("KF 第二页").byTitleColor(.white)
-                    .bySubTitle("副标题").bySubTitleColor(.white)
-                    .kf_imageURL("https://picsum.photos/760/320?random=202")
-                    .kf_placeholderImage("唐老鸭".img)
-                    .kf_options([
-                        .processor(DownsamplingImageProcessor(size: CGSize(width: 760, height: 320))),
-                        .scaleFactor(UIScreen.main.scale),
-                        .cacheOriginalImage,
-                        .transition(.fade(0.25)),
-                        .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
-                    ])
-                    .kf_bgNormalLoad()
-            ])
-            .byAddTo(view) { [unowned self] make in
-                make.top.equalTo(self.marqueeRemoteSD.snp.bottom).offset(8)
-                make.left.right.equalToSuperview()
-                make.height.equalTo(120)
-            }
-            .refreshAfterConstraints()   // 约束/布局确定后触发重建
-    }()
+    /// 所有 JobsMarqueeView 统一加在这个 scrollView 上
+    private lazy var scrollView: UIScrollView = { [unowned self] in
+        let v = UIScrollView()
+        v.showsVerticalScrollIndicator = true
+        v.alwaysBounceVertical = true
 
-    // ================================== 控制按钮（与原来一致） ==================================
-    private lazy var btnStart: UIButton = {
-        UIButton(type: .system)
-            .byTitle("开始")
-            .byTitleFont(.systemFont(ofSize: 14, weight: .semibold))
-            .byTitleColor(.white)
-            .byNormalBgColor(.systemBlue)
-            .byCornerRadius(0)
-            .onTap { [unowned self] _ in startAll() }
-            .byAddTo(view) { [unowned self] make in
-                make.top.equalTo(self.marqueeRemoteKF.snp.bottom).offset(12)
-                make.left.equalToSuperview().offset(12)
-                make.height.equalTo(36)
-            }
-    }()
-    private lazy var btnPause: UIButton = {
-        UIButton(type: .system)
-            .byTitle("暂停")
-            .byTitleFont(.systemFont(ofSize: 14, weight: .semibold))
-            .byTitleColor(.white)
-            .byNormalBgColor(.systemBlue)
-            .byCornerRadius(0)
-            .onTap { [unowned self] _ in pauseAll() }
-            .byAddTo(view) { [unowned self] make in
-                make.left.equalTo(self.btnStart.snp.right).offset(8)
-                make.centerY.equalTo(self.btnStart)
-                make.height.equalTo(self.btnStart)
-                make.width.equalTo(self.btnStart)
-            }
-    }()
-    private lazy var btnResume: UIButton = {
-        UIButton(type: .system)
-            .byTitle("继续")
-            .byTitleFont(.systemFont(ofSize: 14, weight: .semibold))
-            .byTitleColor(.white)
-            .byNormalBgColor(.systemBlue)
-            .byCornerRadius(0)
-            .onTap { [unowned self] _ in resumeAll() }
-            .byAddTo(view) { [unowned self] make in
-                make.left.equalTo(self.btnPause.snp.right).offset(8)
-                make.centerY.equalTo(self.btnStart)
-                make.height.equalTo(self.btnStart)
-                make.width.equalTo(self.btnStart)
-            }
-    }()
-    private lazy var btnStop: UIButton = {
-        UIButton(type: .system)
-            .byTitle("停止")
-            .byTitleFont(.systemFont(ofSize: 14, weight: .semibold))
-            .byTitleColor(.white)
-            .byNormalBgColor(.systemBlue)
-            .byCornerRadius(0)
-            .onTap { [unowned self] _ in stopAll() }
-            .byAddTo(view) { [unowned self] make in
-                make.left.equalTo(self.btnResume.snp.right).offset(8)
-                make.centerY.equalTo(self.btnStart)
-                make.height.equalTo(self.btnStart)
-                make.width.equalTo(self.btnStart)
-            }
-    }()
-    private lazy var btnFire: UIButton = {
-        UIButton(type: .system)
-            .byTitle("一次")
-            .byTitleFont(.systemFont(ofSize: 14, weight: .semibold))
-            .byTitleColor(.white)
-            .byNormalBgColor(.systemBlue)
-            .byCornerRadius(0)
-            .onTap { [unowned self] _ in fireOnceAll() }
-            .byAddTo(view) { [unowned self] make in
-                make.left.equalTo(self.btnStop.snp.right).offset(8)
-                make.right.equalToSuperview().inset(12)
-                make.centerY.equalTo(self.btnStart)
-                make.height.equalTo(self.btnStart)
-                make.width.equalTo(self.btnStart)
-            }
-    }()
-
-    // 第二排：方向（左/右/上/下）
-    private lazy var btnDirLeft: UIButton = {
-        UIButton(type: .system)
-            .byTitle("← 左").byTitleFont(.systemFont(ofSize: 14, weight: .semibold)).byTitleColor(.white)
-            .byNormalBgColor(.systemIndigo).byCornerRadius(0)
-            .onTap { [unowned self] _ in applyDirection(.left) }
-            .byAddTo(view) { [unowned self] make in
-                make.top.equalTo(self.btnStart.snp.bottom).offset(12)
-                make.left.equalToSuperview().offset(12)
-                make.height.equalTo(36)
-            }
-    }()
-    private lazy var btnDirRight: UIButton = {
-        UIButton(type: .system)
-            .byTitle("→ 右").byTitleFont(.systemFont(ofSize: 14, weight: .semibold)).byTitleColor(.white)
-            .byNormalBgColor(.systemIndigo).byCornerRadius(0)
-            .onTap { [unowned self] _ in applyDirection(.right) }
-            .byAddTo(view) { [unowned self] make in
-                make.left.equalTo(self.btnDirLeft.snp.right).offset(8)
-                make.centerY.equalTo(self.btnDirLeft)
-                make.height.equalTo(self.btnDirLeft)
-                make.width.equalTo(self.btnDirLeft)
-            }
-    }()
-    private lazy var btnDirUp: UIButton = {
-        UIButton(type: .system)
-            .byTitle("↑ 上").byTitleFont(.systemFont(ofSize: 14, weight: .semibold)).byTitleColor(.white)
-            .byNormalBgColor(.systemIndigo).byCornerRadius(0)
-            .onTap { [unowned self] _ in applyDirection(.up) }
-            .byAddTo(view) { [unowned self] make in
-                make.left.equalTo(self.btnDirRight.snp.right).offset(8)
-                make.centerY.equalTo(self.btnDirLeft)
-                make.height.equalTo(self.btnDirLeft)
-                make.width.equalTo(self.btnDirLeft)
-            }
-    }()
-    private lazy var btnDirDown: UIButton = {
-        UIButton(type: .system)
-            .byTitle("↓ 下").byTitleFont(.systemFont(ofSize: 14, weight: .semibold)).byTitleColor(.white)
-            .byNormalBgColor(.systemIndigo).byCornerRadius(0)
-            .onTap { [unowned self] _ in applyDirection(.down) }
-            .byAddTo(view) { [unowned self] make in
-                make.left.equalTo(self.btnDirUp.snp.right).offset(8)
-                make.right.equalToSuperview().inset(12)
-                make.centerY.equalTo(self.btnDirLeft)
-                make.height.equalTo(self.btnDirLeft)
-                make.width.equalTo(self.btnDirLeft)
-            }
-    }()
-
-    // 第三排：模式（连续 / 间隔）
-    private lazy var btnModeContinuous: UIButton = {
-        UIButton(type: .system)
-            .byTitle("连续 continuous").byTitleFont(.systemFont(ofSize: 14, weight: .semibold)).byTitleColor(.white)
-            .byNormalBgColor(.systemPurple).byCornerRadius(0)
-            .onTap { [unowned self] _ in applyMode(.continuous(speed: 40)) }
-            .byAddTo(view) { [unowned self] make in
-                make.top.equalTo(self.btnDirLeft.snp.bottom).offset(12)
-                make.left.equalToSuperview().offset(12)
-                make.height.equalTo(36)
-            }
-    }()
-    private lazy var btnModeInterval: UIButton = {
-        UIButton(type: .system)
-            .byTitle("间隔 interval").byTitleFont(.systemFont(ofSize: 14, weight: .semibold)).byTitleColor(.white)
-            .byNormalBgColor(.systemPurple).byCornerRadius(0)
-            .onTap { [unowned self] _ in applyMode(.intervalOnce(interval: 2.0, duration: 0.30, step: nil)) }
-            .byAddTo(view) { [unowned self] make in
-                make.left.equalTo(self.btnModeContinuous.snp.right).offset(8)
-                make.right.equalToSuperview().inset(12)
-                make.centerY.equalTo(self.btnModeContinuous)
-                make.height.equalTo(self.btnModeContinuous)
-                make.width.equalTo(self.btnModeContinuous)
-            }
-    }()
-
-    // ================================== 控制状态逻辑 ==================================
-    private func updateControlButtonStates() {
-        btnStart.isEnabled  = !started
-        btnPause.isEnabled  = started && !paused
-        btnResume.isEnabled = paused
-        btnStop.isEnabled   = started || paused
-        btnFire.isEnabled   = btnStop.isEnabled
-        let active   = UIColor.systemBlue
-        let inactive = UIColor.systemGray3
-        [btnStart, btnPause, btnResume, btnStop, btnFire].forEach {
-            $0.backgroundColor = $0.isEnabled ? active : inactive
-            $0.alpha = $0.isEnabled ? 1.0 : 0.6
+        v.byAddTo(self.view) { [unowned self] make in
+            make.top.equalTo(self.gk_navigationBar.snp.bottom)
+            make.left.right.bottom.equalToSuperview()
         }
-    }
+        return v
+    }()
 
-    // ================================== 控制状态字段 ==================================
-    private var fireOnceTriggered = false
+    /// scrollView 的内容容器
+    private lazy var contentView: UIView = { [unowned self] in
+        let v = UIView()
+        self.scrollView.addSubview(v)
+        v.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.width.equalTo(self.scrollView.snp.width)
+        }
+        return v
+    }()
 
-    // ================================== 统一控制封装 ==================================
-    private func startAll() {
-        guard !started else { return }
-        marqueeText.start()
-        marqueeRich.start()
-        marqueeLocal.start()
-        marqueeRemoteSD.start()
-        marqueeRemoteKF.start()
-        started = true
-        paused = false
-        fireOnceTriggered = false
-        updateControlButtonStates()
-    }
+    // MARK: - 1. 向上连续滚动
 
-    private func pauseAll() {
-        guard started, !paused else { return }
-        marqueeText.pause()
-        marqueeRich.pause()
-        marqueeLocal.pause()
-        marqueeRemoteSD.pause()
-        marqueeRemoteKF.pause()
-        paused = true
-        updateControlButtonStates()
-    }
+    private lazy var upContinuousMarquee: JobsMarqueeView = { [unowned self] in
+        let v = JobsMarqueeView()
 
-    private func resumeAll() {
-        guard started, paused else { return }
-        marqueeText.resume()
-        marqueeRich.resume()
-        marqueeLocal.resume()
-        marqueeRemoteSD.resume()
-        marqueeRemoteKF.resume()
-        paused = false
-        updateControlButtonStates()
-    }
+        let btn1 = UIButton.sys()
+            .byBackgroundColor(.systemYellow.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向上连续 · 公告 1", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("更多内容 1", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("megaphone.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向上连续 · 公告 1 tapped, selected=\(sender.isSelected)")
+            }
 
-    private func stopAll() {
-        guard started || paused else { return }
-        marqueeText.stop()
-        marqueeRich.stop()
-        marqueeLocal.stop()
-        marqueeRemoteSD.stop()
-        marqueeRemoteKF.stop()
-        started = false
-        paused = false
-        fireOnceTriggered = false
-        updateControlButtonStates()
-    }
+        let btn2 = UIButton.sys()
+            .byBackgroundColor(.systemYellow.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向上连续 · 公告 2", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("更多内容 2", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("megaphone.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向上连续 · 公告 2 tapped, selected=\(sender.isSelected)")
+            }
 
-    private func fireOnceAll() {
-        guard btnFire.isEnabled else { return }
-        marqueeText.fireOnce()
-        marqueeRich.fireOnce()
-        marqueeLocal.fireOnce()
-        marqueeRemoteSD.fireOnce()
-        marqueeRemoteKF.fireOnce()
-        started = false
-        paused = false
-        fireOnceTriggered = true
-        updateControlButtonStates()
-    }
+        let btn3 = UIButton.sys()
+            .byBackgroundColor(.systemYellow.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向上连续 · 公告 3", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("更多内容 3", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("megaphone.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向上连续 · 公告 3 tapped, selected=\(sender.isSelected)")
+            }
 
-    // ================================== 生命周期 ==================================
+        v
+            .byDirection(.up)
+            .byScrollMode(.continuous(speed: 40))
+            .byItemSizeMode(.fitContent)   // 典型公告跑马灯
+            .byDataSourceButtons([btn1, btn2, btn3])
+
+        v.backgroundColor = .secondarySystemBackground
+
+        v.byAddTo(self.contentView) { [unowned self] make in
+            make.top.equalTo(self.contentView.snp.top).offset(10)
+            make.left.equalToSuperview().offset(self.horizontalInset)
+            make.right.equalToSuperview().inset(self.horizontalInset)
+            make.height.equalTo(self.marqueeHeight)
+        }
+
+        return v
+    }()
+
+    // MARK: - 2. 向下连续滚动
+
+    private lazy var downContinuousMarquee: JobsMarqueeView = { [unowned self] in
+        let v = JobsMarqueeView()
+
+        let btn1 = UIButton.sys()
+            .byBackgroundColor(.systemGreen.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向下连续 · 公告 1", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("更多内容 1", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("arrow.down.circle.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向下连续 · 公告 1 tapped, selected=\(sender.isSelected)")
+            }
+
+        let btn2 = UIButton.sys()
+            .byBackgroundColor(.systemGreen.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向下连续 · 公告 2", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("更多内容 2", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("arrow.down.circle.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向下连续 · 公告 2 tapped, selected=\(sender.isSelected)")
+            }
+
+        let btn3 = UIButton.sys()
+            .byBackgroundColor(.systemGreen.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向下连续 · 公告 3", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("更多内容 3", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("arrow.down.circle.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向下连续 · 公告 3 tapped, selected=\(sender.isSelected)")
+            }
+
+        v
+            .byDirection(.down)
+            .byScrollMode(.continuous(speed: 40))
+            .byItemSizeMode(.fitContent)
+            .byDataSourceButtons([btn1, btn2, btn3])
+
+        v.backgroundColor = .secondarySystemBackground
+
+        v.byAddTo(self.contentView) { [unowned self] make in
+            make.top.equalTo(self.upContinuousMarquee.snp.bottom).offset(self.verticalSpacing)
+            make.left.right.height.equalTo(self.upContinuousMarquee)
+        }
+
+        return v
+    }()
+
+    // MARK: - 3. 向左连续滚动（典型横向跑马灯）
+
+    private lazy var leftContinuousMarquee: JobsMarqueeView = { [unowned self] in
+        let v = JobsMarqueeView()
+
+        let btn1 = UIButton.sys()
+            .byBackgroundColor(.systemOrange.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向左连续 · 公告 1", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("更多内容 1", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("arrow.left.circle.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向左连续 · 公告 1 tapped, selected=\(sender.isSelected)")
+            }
+
+        let btn2 = UIButton.sys()
+            .byBackgroundColor(.systemOrange.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向左连续 · 公告 2", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("更多内容 2", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("arrow.left.circle.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向左连续 · 公告 2 tapped, selected=\(sender.isSelected)")
+            }
+
+        let btn3 = UIButton.sys()
+            .byBackgroundColor(.systemOrange.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向左连续 · 公告 3", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("更多内容 3", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("arrow.left.circle.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向左连续 · 公告 3 tapped, selected=\(sender.isSelected)")
+            }
+
+        v
+            .byDirection(.left)
+            .byScrollMode(.continuous(speed: 60))
+            .byItemSizeMode(.fitContent)
+            .byDataSourceButtons([btn1, btn2, btn3])
+
+        v.backgroundColor = .secondarySystemBackground
+
+        v.byAddTo(self.contentView) { [unowned self] make in
+            make.top.equalTo(self.downContinuousMarquee.snp.bottom).offset(self.verticalSpacing)
+            make.left.right.height.equalTo(self.upContinuousMarquee)
+        }
+
+        return v
+    }()
+
+    // MARK: - 4. 向右连续滚动
+
+    private lazy var rightContinuousMarquee: JobsMarqueeView = { [unowned self] in
+        let v = JobsMarqueeView()
+
+        let btn1 = UIButton.sys()
+            .byBackgroundColor(.systemPink.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向右连续 · 公告 1", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("更多内容 1", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("arrow.right.circle.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向右连续 · 公告 1 tapped, selected=\(sender.isSelected)")
+            }
+
+        let btn2 = UIButton.sys()
+            .byBackgroundColor(.systemPink.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向右连续 · 公告 2", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("更多内容 2", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("arrow.right.circle.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向右连续 · 公告 2 tapped, selected=\(sender.isSelected)")
+            }
+
+        let btn3 = UIButton.sys()
+            .byBackgroundColor(.systemPink.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向右连续 · 公告 3", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("更多内容 3", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("arrow.right.circle.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向右连续 · 公告 3 tapped, selected=\(sender.isSelected)")
+            }
+
+        v
+            .byDirection(.right)
+            .byScrollMode(.continuous(speed: 60))
+            .byItemSizeMode(.fitContent)
+            .byDataSourceButtons([btn1, btn2, btn3])
+
+        v.backgroundColor = .secondarySystemBackground
+
+        v.byAddTo(self.contentView) { [unowned self] make in
+            make.top.equalTo(self.leftContinuousMarquee.snp.bottom).offset(self.verticalSpacing)
+            make.left.right.height.equalTo(self.upContinuousMarquee)
+        }
+
+        return v
+    }()
+
+    // MARK: - 5. 向上间隔滚动（公告一条一条翻）
+
+    private lazy var upFrequencyMarquee: JobsMarqueeView = { [unowned self] in
+        let v = JobsMarqueeView()
+
+        let btn1 = UIButton.sys()
+            .byBackgroundColor(.systemBlue.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向上间隔 · 公告 1", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("每 1 秒翻页", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("arrow.up.square.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向上间隔 · 公告 1 tapped, selected=\(sender.isSelected)")
+            }
+
+        let btn2 = UIButton.sys()
+            .byBackgroundColor(.systemBlue.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向上间隔 · 公告 2", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("每 1 秒翻页", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("arrow.up.square.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向上间隔 · 公告 2 tapped, selected=\(sender.isSelected)")
+            }
+
+        let btn3 = UIButton.sys()
+            .byBackgroundColor(.systemBlue.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向上间隔 · 公告 3", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("每 1 秒翻页", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("arrow.up.square.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向上间隔 · 公告 3 tapped, selected=\(sender.isSelected)")
+            }
+
+        v
+            .byDirection(.up)
+            .byScrollMode(.frequency(interval: 1.0))
+            .byItemSizeMode(.fillBounds)   // 每页 1 行
+            .byDataSourceButtons([btn1, btn2, btn3])
+
+        v.backgroundColor = .secondarySystemBackground
+
+        v.byAddTo(self.contentView) { [unowned self] make in
+            make.top.equalTo(self.rightContinuousMarquee.snp.bottom).offset(self.verticalSpacing * 2)
+            make.left.right.height.equalTo(self.upContinuousMarquee)
+        }
+
+        return v
+    }()
+
+    // MARK: - 6. 向下间隔滚动
+
+    private lazy var downFrequencyMarquee: JobsMarqueeView = { [unowned self] in
+        let v = JobsMarqueeView()
+
+        let btn1 = UIButton.sys()
+            .byBackgroundColor(.systemTeal.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向下间隔 · 公告 1", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("每 1 秒翻页", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("arrow.down.square.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向下间隔 · 公告 1 tapped, selected=\(sender.isSelected)")
+            }
+
+        let btn2 = UIButton.sys()
+            .byBackgroundColor(.systemTeal.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向下间隔 · 公告 2", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("每 1 秒翻页", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("arrow.down.square.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向下间隔 · 公告 2 tapped, selected=\(sender.isSelected)")
+            }
+
+        let btn3 = UIButton.sys()
+            .byBackgroundColor(.systemTeal.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向下间隔 · 公告 3", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("每 1 秒翻页", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("arrow.down.square.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向下间隔 · 公告 3 tapped, selected=\(sender.isSelected)")
+            }
+
+        v
+            .byDirection(.down)
+            .byScrollMode(.frequency(interval: 1.0))
+            .byItemSizeMode(.fillBounds)
+            .byDataSourceButtons([btn1, btn2, btn3])
+
+        v.backgroundColor = .secondarySystemBackground
+
+        v.byAddTo(self.contentView) { [unowned self] make in
+            make.top.equalTo(self.upFrequencyMarquee.snp.bottom).offset(self.verticalSpacing)
+            make.left.right.height.equalTo(self.upContinuousMarquee)
+        }
+
+        return v
+    }()
+
+    // MARK: - 7. 向左间隔滚动（轮播图：一屏一页）
+
+    private lazy var leftFrequencyMarquee: JobsMarqueeView = { [unowned self] in
+        let v = JobsMarqueeView()
+
+        let btn1 = UIButton.sys()
+            .byBackgroundColor(.systemPurple.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向左间隔 · Banner 1", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("轮播图左滑", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("rectangle.portrait.on.rectangle.portrait".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向左间隔 · Banner 1 tapped, selected=\(sender.isSelected)")
+            }
+
+        let btn2 = UIButton.sys()
+            .byBackgroundColor(.systemPurple.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向左间隔 · Banner 2", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("轮播图左滑", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("rectangle.portrait.on.rectangle.portrait".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向左间隔 · Banner 2 tapped, selected=\(sender.isSelected)")
+            }
+
+        let btn3 = UIButton.sys()
+            .byBackgroundColor(.systemPurple.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向左间隔 · Banner 3", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("轮播图左滑", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("rectangle.portrait.on.rectangle.portrait".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向左间隔 · Banner 3 tapped, selected=\(sender.isSelected)")
+            }
+
+        v
+            .byDirection(.left)
+            .byScrollMode(.frequency(interval: 1.5))
+            .byItemSizeMode(.fillBounds)   // 轮播图：一页一个按钮
+            .byDataSourceButtons([btn1, btn2, btn3])
+
+        v.backgroundColor = .secondarySystemBackground
+
+        v.byAddTo(self.contentView) { [unowned self] make in
+            make.top.equalTo(self.downFrequencyMarquee.snp.bottom).offset(self.verticalSpacing)
+            make.left.right.height.equalTo(self.upContinuousMarquee)
+        }
+
+        return v
+    }()
+
+    // MARK: - 8. 向右间隔滚动（轮播图）
+
+    private lazy var rightFrequencyMarquee: JobsMarqueeView = { [unowned self] in
+        let v = JobsMarqueeView()
+
+        let btn1 = UIButton.sys()
+            .byBackgroundColor(.systemIndigo.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向右间隔 · Banner 1", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("轮播图右滑", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("rectangle.portrait.on.rectangle.portrait".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向右间隔 · Banner 1 tapped, selected=\(sender.isSelected)")
+            }
+
+        let btn2 = UIButton.sys()
+            .byBackgroundColor(.systemIndigo.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向右间隔 · Banner 2", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("轮播图右滑", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("rectangle.portrait.on.rectangle.portrait".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向右间隔 · Banner 2 tapped, selected=\(sender.isSelected)")
+            }
+
+        let btn3 = UIButton.sys()
+            .byBackgroundColor(.systemIndigo.withAlphaComponent(0.2), for: .normal)
+            .byTitle("向右间隔 · Banner 3", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("轮播图右滑", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("rectangle.portrait.on.rectangle.portrait".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔔 向右间隔 · Banner 3 tapped, selected=\(sender.isSelected)")
+            }
+
+        v
+            .byDirection(.right)
+            .byScrollMode(.frequency(interval: 1.5))
+            .byItemSizeMode(.fillBounds)
+            .byDataSourceButtons([btn1, btn2, btn3])
+
+        v.backgroundColor = .secondarySystemBackground
+
+        v.byAddTo(self.contentView) { [unowned self] make in
+            make.top.equalTo(self.leftFrequencyMarquee.snp.bottom).offset(self.verticalSpacing)
+            make.left.right.height.equalTo(self.upContinuousMarquee)
+        }
+
+        return v
+    }()
+
+    // MARK: - 9. 极端：只有 1 个按钮
+
+    private lazy var oneButtonMarquee: JobsMarqueeView = { [unowned self] in
+        let v = JobsMarqueeView()
+
+        let btn = UIButton.sys()
+            .byBackgroundColor(.systemRed.withAlphaComponent(0.2), for: .normal)
+            .byTitle("极端 · 只有 1 个按钮", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("测试少量数据源", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("1.circle.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔴 极端 1 个按钮 tapped, selected=\(sender.isSelected)")
+            }
+
+        v
+            .byDirection(.left)
+            .byScrollMode(.continuous(speed: 40))
+            .byItemSizeMode(.fillBounds)   // 视图宽度 == 按钮宽度，内部会复制到至少 3 个
+            .byDataSourceButtons([btn])
+
+        v.backgroundColor = .secondarySystemBackground
+
+        v.byAddTo(self.contentView) { [unowned self] make in
+            make.top.equalTo(self.rightFrequencyMarquee.snp.bottom).offset(self.verticalSpacing * 2)
+            make.left.right.height.equalTo(self.upContinuousMarquee)
+        }
+
+        return v
+    }()
+
+    // MARK: - 10. 极端：只有 2 个按钮
+
+    private lazy var twoButtonsMarquee: JobsMarqueeView = { [unowned self] in
+        let v = JobsMarqueeView()
+
+        let btn1 = UIButton.sys()
+            .byBackgroundColor(.systemRed.withAlphaComponent(0.2), for: .normal)
+            .byTitle("极端 · 按钮 1/2", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("测试 2 个按钮", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("2.circle.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔴 极端 2 个按钮 · 1 tapped, selected=\(sender.isSelected)")
+            }
+
+        let btn2 = UIButton.sys()
+            .byBackgroundColor(.systemRed.withAlphaComponent(0.2), for: .normal)
+            .byTitle("极端 · 按钮 2/2", for: .normal)
+            .byTitleColor(.label, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .bySubTitle("测试 2 个按钮", for: .normal)
+            .bySubTitleColor(.secondaryLabel, for: .normal)
+            .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+            .byImage("2.circle.fill".sysImg, for: .normal)
+            .byContentEdgeInsets(UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12))
+            .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8))
+            .byTapSound("Sound.wav")
+            .onTap { sender in
+                print("🔴 极端 2 个按钮 · 2 tapped, selected=\(sender.isSelected)")
+            }
+
+        v
+            .byDirection(.left)
+            .byScrollMode(.continuous(speed: 40))
+            .byItemSizeMode(.fillBounds)
+            .byDataSourceButtons([btn1, btn2])
+
+        v.backgroundColor = .secondarySystemBackground
+
+        v.byAddTo(self.contentView) { [unowned self] make in
+            make.top.equalTo(self.oneButtonMarquee.snp.bottom).offset(self.verticalSpacing)
+            make.left.right.height.equalTo(self.upContinuousMarquee)
+        }
+
+        return v
+    }()
+
+    // MARK: - 11. 极端：没有按钮（空数据源）
+
+    private lazy var zeroButtonsMarquee: JobsMarqueeView = { [unowned self] in
+        let v = JobsMarqueeView()
+
+        v
+            .byDirection(.left)
+            .byScrollMode(.continuous(speed: 40))
+            .byItemSizeMode(.fillBounds)
+            .byDataSourceButtons([])    // 空数组，验证内部对空数据的处理
+
+        v.backgroundColor = .secondarySystemBackground
+
+        v.byAddTo(self.contentView) { [unowned self] make in
+            make.top.equalTo(self.twoButtonsMarquee.snp.bottom).offset(self.verticalSpacing)
+            make.left.right.height.equalTo(self.upContinuousMarquee)
+            make.bottom.equalToSuperview().inset(self.verticalSpacing)
+        }
+
+        return v
+    }()
+
+    // MARK: - 生命周期
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        jobsSetupGKNav(title: "跑马灯/轮播图 + PageControl")
 
-        // 触发懒加载（组件会自动 start）
-        [marqueeText, marqueeRich, marqueeLocal, marqueeRemoteSD, marqueeRemoteKF].forEach { _ = $0.byAlpha(1) }
-        [btnStart, btnPause, btnResume, btnStop, btnFire,
-         btnDirLeft, btnDirRight, btnDirUp, btnDirDown,
-         btnModeContinuous, btnModeInterval].forEach { _ = $0.byAlpha(1) }
+        jobsSetupGKNav(title: "JobsMarqueeView@Demo")
 
-        started = true
-        paused = false
-        fireOnceTriggered = true
-        updateControlButtonStates()
+        // 先确保 scrollView / contentView 创建出来
+        _ = scrollView
+        _ = contentView
+
+        // 触发懒加载 & 使用你封装的 byVisible API
+        upContinuousMarquee.byVisible(true)
+        downContinuousMarquee.byVisible(true)
+        leftContinuousMarquee.byVisible(true)
+        rightContinuousMarquee.byVisible(true)
+        upFrequencyMarquee.byVisible(true)
+        downFrequencyMarquee.byVisible(true)
+        leftFrequencyMarquee.byVisible(true)
+        rightFrequencyMarquee.byVisible(true)
+        oneButtonMarquee.byVisible(true)
+        twoButtonsMarquee.byVisible(true)
+        zeroButtonsMarquee.byVisible(true)
     }
 
-    // ================================== 私有方法：应用方向 & 模式（同时影响 PageControl 是否可见） ==================================
-    private func applyDirection(_ d: MarqueeDirection) {
-        guard currentDirection != d else { return }
-        currentDirection = d
-        [marqueeText, marqueeRich, marqueeLocal, marqueeRemoteSD, marqueeRemoteKF].forEach { _ = $0.byDirection(d) }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        allMarquees.forEach { $0.start() }
     }
 
-    private func applyMode(_ m: MarqueeMode) {
-        switch (currentMode, m) {
-        case (.continuous(let s1), .continuous(let s2)) where s1 == s2: return
-        case (.intervalOnce(let i1, let d1, let st1), .intervalOnce(let i2, let d2, let st2))
-            where i1 == i2 && d1 == d2 && st1 == st2: return
-        default: break
-        }
-        currentMode = m
-        [marqueeText, marqueeRich, marqueeLocal, marqueeRemoteSD, marqueeRemoteKF].forEach { _ = $0.byMode(m) }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        allMarquees.forEach { $0.stop() }
+    }
+
+    // MARK: - 私有
+
+    private var allMarquees: [JobsMarqueeView] {
+        [
+            upContinuousMarquee,
+            downContinuousMarquee,
+            leftContinuousMarquee,
+            rightContinuousMarquee,
+            upFrequencyMarquee,
+            downFrequencyMarquee,
+            leftFrequencyMarquee,
+            rightFrequencyMarquee,
+            oneButtonMarquee,
+            twoButtonsMarquee,
+            zeroButtonsMarquee
+        ]
     }
 }
