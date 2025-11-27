@@ -245,6 +245,10 @@ public final class JobsMarqueeView: UIView {
     public func pause() {
         timer?.pause()
     }
+    /// 恢复计时器
+    public func resume() {
+        timer?.resume()
+    }
     /// 停止并销毁定时器
     public func stop() {
         timer?.stop()

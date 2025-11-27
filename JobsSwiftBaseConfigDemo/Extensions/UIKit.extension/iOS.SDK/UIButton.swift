@@ -83,9 +83,7 @@ public extension UIButton {
         set { objc_setAssociatedObject(self, &_jobsIsCloneKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
 }
-// ======================================================
-// MARK: - 基础链式（保留）
-// ======================================================
+// MARK: - 基础链式
 extension UIButton {
     @discardableResult
     func byTitle(_ title: String?, for state: UIControl.State = .normal) -> Self {
@@ -94,8 +92,7 @@ extension UIButton {
             if state == .normal { cfg.title = title }
             self.configuration = cfg
             byUpdateConfig()
-        }
-        return self
+        };return self
     }
 
     @discardableResult
@@ -116,8 +113,7 @@ extension UIButton {
             }
             self.configuration = cfg
             byUpdateConfig()
-        }
-        return self
+        };return self
     }
 
     @discardableResult
@@ -129,8 +125,7 @@ extension UIButton {
                 self.configuration = cfg
                 byUpdateConfig()
             }
-        }
-        return self
+        };return self
     }
 
     @discardableResult
@@ -170,8 +165,7 @@ extension UIButton {
             byUpdateConfig()
         } else {
             self.setBackgroundImage(image, for: state)
-        }
-        return self
+        };return self
     }
 
     @discardableResult
@@ -181,8 +175,7 @@ extension UIButton {
             bg.imageContentMode = mode         // .scaleAspectFill / .scaleAspectFit
             cfg.background = bg
             self.configuration = cfg
-        }
-        return self
+        };return self
     }
 
 
@@ -201,11 +194,7 @@ extension UIButton {
         return self
     }
 }
-
-// ======================================================
-// MARK: - 进阶：按 state 的链式代理（保留）
-// ======================================================
-
+// MARK: - 进阶：按 state 的链式代理
 extension UIButton {
     final class StateProxy {
         fileprivate let button: UIButton
@@ -262,9 +251,7 @@ extension UIButton {
 
     func `for`(_ state: UIControl.State) -> StateProxy { StateProxy(button: self, state: state) }
 }
-// ======================================================
-// MARK: - 布局 / 外观（保留）
-// ======================================================
+// MARK: - 布局 / 外观
 extension UIButton {
     @discardableResult
     func byBackgroundColor(_ color: UIColor, for state: UIControl.State = .normal) -> Self {
@@ -280,8 +267,7 @@ extension UIButton {
             byUpdateConfig()
         } else {
             self.setBgCor(color, forState: state)
-        }
-        return self
+        };return self
     }
 
     @discardableResult
@@ -305,8 +291,7 @@ extension UIButton {
             byUpdateConfig()
         } else {
             contentEdgeInsets = UIEdgeInsets(top: insets.top, left: insets.leading, bottom: insets.bottom, right: insets.trailing)
-        }
-        return self
+        };return self
     }
 
     @discardableResult
@@ -318,8 +303,7 @@ extension UIButton {
             byUpdateConfig()
         } else {
             self.contentEdgeInsets = insets
-        }
-        return self
+        };return self
     }
 
     @discardableResult
@@ -331,8 +315,7 @@ extension UIButton {
             byUpdateConfig()
         } else {
             self.imageEdgeInsets = insets
-        }
-        return self
+        };return self
     }
 
     @discardableResult
@@ -344,8 +327,7 @@ extension UIButton {
             byUpdateConfig()
         } else {
             self.titleEdgeInsets = insets
-        }
-        return self
+        };return self
     }
 
     @discardableResult
@@ -415,8 +397,7 @@ extension UIButton {
                 contentEdgeInsets = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
             default: break
             }
-        }
-        return self
+        };return self
     }
 
     @available(iOS 15.0, *)
@@ -430,11 +411,7 @@ extension UIButton {
 }
 
 private extension UIControl.State { var raw: UInt { rawValue } }
-
-// ======================================================
-// MARK: - Subtitle（无富文本）（保留）
-// ======================================================
-
+// MARK: - Subtitle（无富文本）
 private struct _JobsSubPackNoAttr {
     var text: String = ""
     var font: UIFont?
@@ -560,31 +537,24 @@ public extension UIButton {
             _applySubtitleToConfigurationNow(targetState: state)
         } else {
             _legacy_applySubtitle_noAttr(text: text, for: state)
-        }
-        return self
+        };return self
     }
     @discardableResult
     func bySubTitleFont(_ font: UIFont, for state: UIControl.State = .normal) -> Self {
         if #available(iOS 15.0, *) {
             var p = _subPack_noAttr(for: state); p.font = font; _setSubPack_noAttr(p, for: state)
             _applySubtitleToConfigurationNow(targetState: state)   // ⬅️
-        }
-        return self
+        };return self
     }
     @discardableResult
     func bySubTitleColor(_ color: UIColor, for state: UIControl.State = .normal) -> Self {
         if #available(iOS 15.0, *) {
             var p = _subPack_noAttr(for: state); p.color = color; _setSubPack_noAttr(p, for: state)
             _applySubtitleToConfigurationNow(targetState: state)   // ⬅️
-        }
-        return self
+        };return self
     }
 }
-
-// ======================================================
-// MARK: - 交互 / 菜单 / 角色 / Pointer / Config 生命周期（保留）
-// ======================================================
-
+// MARK: - 交互 / 菜单 / 角色 / Pointer / Config 生命周期
 extension UIButton {
     @available(iOS 14.0, *)
     @discardableResult
@@ -622,13 +592,14 @@ extension UIButton {
     @discardableResult
     func bySetNeedsUpdateConfiguration() -> Self { self.setNeedsUpdateConfiguration(); return self }
 }
-
-// ======================================================
-// MARK: - 便捷构造 & 背景色兜底（保留）
-// ======================================================
-
+// MARK: - 便捷构造 & 背景色兜底
 extension UIButton {
-    public convenience init(x: CGFloat, y: CGFloat, w: CGFloat, h: CGFloat, target: AnyObject, action: Selector) {
+    public convenience init(x: CGFloat,
+                            y: CGFloat,
+                            w: CGFloat,
+                            h: CGFloat,
+                            target: AnyObject,
+                            action: Selector) {
         self.init(frame: CGRect(x: x, y: y, width: w, height: h))
         addTarget(target, action: action, for: .touchUpInside)
     }
@@ -652,11 +623,7 @@ extension UIButton {
         setBackgroundImage(img, for: state)
     }
 }
-
-// ======================================================
-// MARK: - 旋转动画（保留）
-// ======================================================
-
+// MARK: - 旋转动画
 extension UIButton {
     public static let rotationKey = "jobs.rotation"
     public enum RotationScope { case imageView, wholeButton, layer(CALayer) }
@@ -726,10 +693,7 @@ extension UIButton {
                     key: key, resetTransformOnStop: resetTransformOnStop)
     }
 }
-
-// ======================================================
-// MARK: - 防止快速连点（保留）
-// ======================================================
+// MARK: - 防止快速连点
 extension UIButton {
     func disableAfterClick(interval: TimeInterval = 1.0) {
         self.isUserInteractionEnabled = false
@@ -768,11 +732,7 @@ extension UIButton {
         }
     }
 }
-
-// ======================================================
-// MARK: - 点按事件统一入口（保留）
-// ======================================================
-
+// MARK: - 点按事件统一入口
 extension UIButton {
     @discardableResult
     func onTap(_ handler: @escaping (UIButton) -> Void) -> Self {
@@ -811,10 +771,7 @@ extension UIButton {
         return self
     }
 }
-
-// ======================================================
-// MARK: - 把按钮切到 configuration 模式（保留）
-// ======================================================
+// MARK: - 把按钮切到 configuration 模式
 public extension UIButton {
     @available(iOS 15.0, *)
     @discardableResult
@@ -856,10 +813,7 @@ public extension UIButton {
         return self
     }
 }
-// ======================================================
-// MARK: - Configuration 快速编辑（保留）
-// ======================================================
-
+// MARK: - Configuration 快速编辑
 @available(iOS 15.0, *)
 public extension UIButton {
     @discardableResult
@@ -897,11 +851,7 @@ public extension UIButton {
         }
     }
 }
-
-// ======================================================
-// MARK: - 关联属性：当前倒计时秒数（保留）
-// ======================================================
-
+// MARK: - 关联属性：当前倒计时秒数
 private var _jobsSecKey: Void?
 public extension UIButton {
     var jobs_sec: Int {
@@ -909,11 +859,7 @@ public extension UIButton {
         set { objc_setAssociatedObject(self, &_jobsSecKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
 }
-
-// ======================================================
-// MARK: - UIButton · 富文本（保留）
-// ======================================================
-
+// MARK: - UIButton@富文本
 public extension UIButton {
     @discardableResult
     func byRichTitle(_ rich: NSAttributedString?, for state: UIControl.State = .normal) -> Self {
@@ -924,8 +870,7 @@ public extension UIButton {
             byUpdateConfig()
         } else {
             _setLegacyRichTitle(rich, for: state); _applyLegacyComposite(for: state)
-        }
-        return self
+        };return self
     }
 
     @discardableResult
@@ -937,8 +882,7 @@ public extension UIButton {
             byUpdateConfig()
         } else {
             _setLegacyRichSubTitle(rich, for: state); _applyLegacyComposite(for: state)
-        }
-        return self
+        };return self
     }
 }
 private var _richTitleKey: UInt8 = 0
@@ -989,11 +933,7 @@ private extension UIButton {
         }
     }
 }
-
-// ======================================================
-// MARK: - 统一计时器（保留）
-// ======================================================
-
+// MARK: 统一计时器
 private enum _TimerMode {
     case countUp(elapsed: Int)
     case countdown(remain: Int, total: Int)
@@ -1175,8 +1115,7 @@ public extension UIButton {
         if mode?.isCountdown == true {
             self.isEnabled = true
             self.setTitle("重新获取", for: .normal)
-        }
-        return self
+        };return self
     }
 
     @discardableResult
@@ -1189,8 +1128,7 @@ public extension UIButton {
         if mode?.isCountdown == true {
             self.isEnabled = true
             self.setTitle("重新获取", for: .normal)
-        }
-        return self
+        };return self
     }
 }
 
@@ -1231,8 +1169,7 @@ public extension UIButton {
             if let legacyFin = objc_getAssociatedObject(self, &_legacyCountdownFinishKey) as? () -> Void {
                 legacyFin()
             }
-        }
-        return stopTimer()
+        };return stopTimer()
     }
 
     @discardableResult
@@ -1247,11 +1184,7 @@ public extension UIButton {
         return self
     }
 }
-
-// ======================================================
-// MARK: - 内部：统一写回图片（供远程库复用）
-// ======================================================
-
+// MARK: 统一写回图片
 private extension UIButton {
     @MainActor
     func jobsResetBtnImage(_ image: UIImage?, for state: UIControl.State) {
@@ -1312,7 +1245,6 @@ private extension UIButton {
         self.setNeedsDisplay()
     }
 
-
     @available(iOS 15.0, *)
     private func _applySubtitleToConfigurationNow(targetState: UIControl.State = .normal) {
         // 1) 基于现有 configuration 开始，避免默认值把东西清空
@@ -1362,14 +1294,74 @@ private extension UIButton {
         self.automaticallyUpdatesConfiguration = true
         self.setNeedsUpdateConfiguration()
     }
-
-
 }
+// MARK: 获取@标题、副标题、前景图、背景图
+public extension UIButton {
+    /// 当前业务视角下的主标题：
+    /// 优先 Configuration(.attributedTitle / .title)，再兜底 legacy title(for:)
+    var title: String? {
+        if #available(iOS 15.0, *), let cfg = self.configuration {
+            if let att = cfg.attributedTitle {
+                return String(att.characters)
+            }
+            if let t = cfg.title {
+                return t
+            }
+        }
+        let st = self.state
+        return self.title(for: st)
+            ?? self.attributedTitle(for: st)?.string
+            ?? self.title(for: .normal)
+            ?? self.attributedTitle(for: .normal)?.string
+    }
+    /// 当前业务视角下的副标题：
+    /// 优先 Configuration(.attributedSubtitle / .subtitle)；
+    /// iOS 15 以下只能从你之前组合的 “title\nsubtitle” 里拆。
+    var subTitle: String? {
+        if #available(iOS 15.0, *), let cfg = self.configuration {
+            if let att = cfg.attributedSubtitle {
+                return String(att.characters)
+            }
+            if let t = cfg.subtitle {
+                return t
+            }
+        }
+        // < iOS 15：你 bySubTitle 的旧实现是 title + "\n" + subTitle，这里尽量拆一下
+        let st = self.state
+        let full = self.title(for: st)
+            ?? self.attributedTitle(for: st)?.string
+            ?? self.title(for: .normal)
+            ?? self.attributedTitle(for: .normal)?.string
 
-// ======================================================
+        guard
+            let full,
+            let idx = full.firstIndex(of: "\n"),
+            full.index(after: idx) < full.endIndex
+        else {
+            return nil
+        }
+        let sub = full[full.index(after: idx)...]
+        return String(sub)
+    }
+    /// 当前前景图：优先 Configuration.image，再兜底 image(for:)
+    var foregroundImage: UIImage? {
+        if #available(iOS 15.0, *), let cfg = self.configuration, let img = cfg.image {
+            return img
+        }
+        let st = self.state
+        return self.image(for: st) ?? self.image(for: .normal)
+    }
+    /// 当前背景图：优先 Configuration.background.image，再兜底 backgroundImage(for:)
+    /// （你前面 jobsResetBtnBgImage 已经保证两边是同步的）
+    var backgroundImage: UIImage? {
+        if #available(iOS 15.0, *), let cfg = self.configuration, let img = cfg.background.image {
+            return img
+        }
+        let st = self.state
+        return self.backgroundImage(for: st) ?? self.backgroundImage(for: .normal)
+    }
+}
 // MARK: - SDWebImage
-// ======================================================
-
 #if canImport(SDWebImage)
 import UIKit
 import SDWebImage
@@ -1581,11 +1573,7 @@ public extension UIButton {
     }
 }
 #endif
-
-// ======================================================
 // MARK: - Kingfisher
-// ======================================================
-
 #if canImport(Kingfisher)
 import UIKit
 import Kingfisher
@@ -1670,7 +1658,6 @@ public extension UIButton {
         if #available(iOS 15.0, *) { self.byAdoptConfigurationIfAvailable() }
         return self
     }
-
     // MARK: - 背景图加载
     @discardableResult func kf_bgNormalLoad() -> Self {
         _kf_loadBackgroundImage(for: .normal)
@@ -1726,7 +1713,6 @@ public extension UIButton {
         }
         if #available(iOS 15.0, *) { self.byAdoptConfigurationIfAvailable() }
     }
-
     // ✅ 2) Kingfisher 背景图加载：按原逻辑下载，回写时只走 jobsResetBtnBgImage（= legacy）
     func _kf_loadBackgroundImage(for state: UIControl.State) {
         let cfg = _kf_config
@@ -1790,7 +1776,6 @@ public extension UIButton {
         self.kf.setBackgroundImage(with: u, for: state, placeholder: placeholder, options: options)
         return self
     }
-
     /// 克隆阶段调用：优先现成位图 → 缓存 →（按需）拉网
     // MARK: - 克隆：背景图（Kingfisher）— 可直接替换
     func kf_cloneBackground(to target: UIButton,
@@ -1870,7 +1855,6 @@ public extension UIButton {
             }
         }
     }
-
     /// 克隆“前景图”
     func kf_cloneImage(to target: UIButton, for state: UIControl.State = .normal) {
         guard let url = _kf_config.url else { return }
