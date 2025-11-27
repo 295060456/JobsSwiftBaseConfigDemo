@@ -6,7 +6,6 @@
 //
 
 import UIKit
-
 /// 统一「跑马灯」&「轮播图」的视图组件
 /// 数据源：`[UIButton]`
 /// 滚动载体：内部 `UIScrollView` + 若干个按钮副本
@@ -300,7 +299,6 @@ public final class JobsMarqueeView: UIView {
     /// 按频率滚动（间隔滚动）
     private func tickFrequency() {
         guard !internalButtons.isEmpty, stepLength > 0 else { return }
-        let isHorizontal = direction.isHorizontal
         let current = scrollView.contentOffset
         let maxOffsetX = max(0, scrollView.contentSize.width  - scrollView.bounds.width)
         let maxOffsetY = max(0, scrollView.contentSize.height - scrollView.bounds.height)
