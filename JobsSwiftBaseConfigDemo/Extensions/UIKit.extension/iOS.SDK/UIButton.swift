@@ -743,8 +743,7 @@ extension UIButton {
             }, for: .touchUpInside)
         } else {
             _ = self.jobs_addTapClosure(handler)
-        }
-        return self
+        };return self
     }
 
     @discardableResult
@@ -777,16 +776,13 @@ public extension UIButton {
     @discardableResult
     func byAdoptConfigurationIfAvailable() -> Self {
         var cfg = self.configuration ?? .plain()
-
         // 同步主标题 & 颜色
         if cfg.title == nil, let t = self.title(for: .normal), !t.isEmpty { cfg.title = t }
         if cfg.baseForegroundColor == nil, let tc = self.titleColor(for: .normal) { cfg.baseForegroundColor = tc }
-
         // ✅ 同步“前景图”（legacy → configuration）
         if cfg.image == nil, let fg = self.image(for: .normal) {
             cfg.image = fg
         }
-
         // ✅ 同步“背景图”（legacy → configuration）
         var bg = cfg.background
         if bg.image == nil, let bgi = self.backgroundImage(for: .normal) {
@@ -794,7 +790,6 @@ public extension UIButton {
             if bg.imageContentMode == .scaleToFill { bg.imageContentMode = .scaleAspectFill }
             cfg.background = bg
         }
-
         // 同步副标题（保持你原来的逻辑）
         if let dict = objc_getAssociatedObject(self, &_jobsSubDictKey_noAttr) as? [UInt: _JobsSubPackNoAttr],
            let pack = dict[UIControl.State.normal.rawValue], !pack.text.isEmpty {
@@ -806,7 +801,6 @@ public extension UIButton {
                 return a
             }
         }
-
         self.configuration = cfg
         self.automaticallyUpdatesConfiguration = true
         self.setNeedsUpdateConfiguration()
@@ -1114,7 +1108,7 @@ public extension UIButton {
         self.timerState = .stopped
         if mode?.isCountdown == true {
             self.isEnabled = true
-            self.setTitle("重新获取", for: .normal)
+            self.setTitle("重新获取".tr, for: .normal)
         };return self
     }
 
@@ -1127,7 +1121,7 @@ public extension UIButton {
         self.timerState = .stopped
         if mode?.isCountdown == true {
             self.isEnabled = true
-            self.setTitle("重新获取", for: .normal)
+            self.setTitle("重新获取".tr, for: .normal)
         };return self
     }
 }
@@ -1174,13 +1168,19 @@ public extension UIButton {
 
     @discardableResult
     func onJobsCountdownTick(_ block: @escaping (_ remain: Int, _ total: Int) -> Void) -> Self {
-        objc_setAssociatedObject(self, &_legacyCountdownTickKey, block, .OBJC_ASSOCIATION_COPY_NONATOMIC)
+        objc_setAssociatedObject(self,
+                                 &_legacyCountdownTickKey,
+                                 block,
+            .OBJC_ASSOCIATION_COPY_NONATOMIC)
         return self
     }
 
     @discardableResult
     func onJobsCountdownFinish(_ block: @escaping () -> Void) -> Self {
-        objc_setAssociatedObject(self, &_legacyCountdownFinishKey, block, .OBJC_ASSOCIATION_COPY_NONATOMIC)
+        objc_setAssociatedObject(self,
+                                 &_legacyCountdownFinishKey,
+                                 block,
+            .OBJC_ASSOCIATION_COPY_NONATOMIC)
         return self
     }
 }
@@ -1200,30 +1200,12 @@ private extension UIButton {
             self.setNeedsUpdateConfiguration()
         }
     }
-    // ✅ 1) 彻底走 legacy 背景图写法，关掉自动更新避免被覆盖
-//    @MainActor
-//    / 网络图/兜底图正常，但是没有副标题
-//    func jobsResetBtnBgImage(_ image: UIImage?, for state: UIControl.State) {
-//        // 先关自动更新，避免后续任何 configurationUpdateHandler 把背景图改回占位
-//        if #available(iOS 15.0, *) {
-//            self.automaticallyUpdatesConfiguration = false
-//        }
-//        // 只用 legacy API 写入（这条在 iOS 15+ 仍然有效）
-//        self.setBackgroundImage(image, for: state)
-//        // 保险的 UI 刷新
-//        self.setNeedsLayout()
-//        self.layoutIfNeeded()
-//        self.setNeedsDisplay()
-//    }
-
     @MainActor
     func jobsResetBtnBgImage(_ image: UIImage?, for state: UIControl.State) {
         // 先把最终图粘住，供后续任何 config 重建时回填
         self.jobs_cfgBgImage = image
-
         // ① legacy 背景图：立刻可见，最稳
         self.setBackgroundImage(image, for: state)
-
         // ② iOS 15+：把同一张图同步到 configuration.background，避免被下一次重建抹掉
         if #available(iOS 15.0, *) {
             var cfg = self.configuration ?? .plain()
@@ -1238,7 +1220,6 @@ private extension UIButton {
             self.automaticallyUpdatesConfiguration = true
             // self.setNeedsUpdateConfiguration()  // ← 刻意不在这里触发
         }
-
         // 保险刷新
         self.setNeedsLayout()
         self.layoutIfNeeded()
@@ -1249,7 +1230,6 @@ private extension UIButton {
     private func _applySubtitleToConfigurationNow(targetState: UIControl.State = .normal) {
         // 1) 基于现有 configuration 开始，避免默认值把东西清空
         var cfg = self.configuration ?? .plain()
-
         // 2) 先把当前“有效背景图”抓出来，稍后再回填，防止被覆盖
         let currentBgImage: UIImage? = (
             cfg.background.image                               // 配置里已有背景
@@ -1257,13 +1237,11 @@ private extension UIButton {
             ?? self.backgroundImage(for: targetState)          // legacy 背景（按 state）
             ?? self.backgroundImage(for: .normal)              // legacy 背景（normal）
         )
-
         // 3) 同步主标题（防 title 丢）
         if cfg.title == nil, let t = self.title(for: .normal), !t.isEmpty {
             cfg.title = t
         }
         cfg.titleAlignment = .center
-
         // 4) 应用副标题 + 字体/颜色
         let pack = self._subDict_noAttr[targetState.rawValue]
                 ?? self._subDict_noAttr[UIControl.State.normal.rawValue]
@@ -1278,7 +1256,6 @@ private extension UIButton {
             if let c { a.foregroundColor = c }
             return a
         }
-
         // 5) 关键：把背景图回填回去，并粘到 AO，防止后续 update 时丢失
         if let bgImg = currentBgImage {
             var bg = cfg.background
@@ -1288,7 +1265,6 @@ private extension UIButton {
             cfg.background = bg
             self.jobs_cfgBgImage = bgImg
         }
-
         // 6) 提交配置并触发更新（保持自动更新为开启）
         self.configuration = cfg
         self.automaticallyUpdatesConfiguration = true
@@ -1452,21 +1428,16 @@ public extension UIButton {
     // ✅ SDWebImage：背景图加载（完整替换此方法）
     func _sd_loadBackgroundImage(for state: UIControl.State) {
         let cfg = _sd_config
-
         // 记录元数据（克隆/复用要用）
         self.jobs_bgURL = cfg.url
         self.jobs_bgState = state
-
         // 先显示占位图（用 legacy API，避免与 configuration 竞态）
         if let ph = cfg.placeholder {
             Task { @MainActor in self.jobsResetBtnBgImage(ph, for: state) }
         }
-
         guard let url = cfg.url else { return }
-
         // 取消在途任务（同一 state）
         self.sd_cancelBackgroundImageLoad(for: state)
-
         // 只在回调里写图，避免 SD 自动写回导致的闪白/覆盖
         var opts = cfg.options
         opts.insert(.continueInBackground)
@@ -1476,7 +1447,6 @@ public extension UIButton {
         var ctx = cfg.context ?? [:]
         if ctx[.imageScaleFactor] == nil { ctx[.imageScaleFactor] = UIScreen.main.scale }
         // ❌ SD 没有 .imageTransition 这个 context 键，千万不要写它
-
         self.sd_setBackgroundImage(
             with: url,
             for: state,
@@ -1511,7 +1481,6 @@ public extension UIButton {
                             allowNetworkIfMissing: Bool = false) {
         target.jobs_isClone = true
         target.jobs_bgState = state
-
         // 1) 源按钮已有位图：直接复用（不触网）
         if #available(iOS 15.0, *), let cfgImg = self.configuration?.background.image {
             Task { @MainActor in target.jobsResetBtnBgImage(cfgImg, for: state) }
@@ -1521,28 +1490,23 @@ public extension UIButton {
             Task { @MainActor in target.jobsResetBtnBgImage(img, for: state) }
             return
         }
-
         // 2) 占位图先顶上，克隆按钮立刻有图
         let ph = self._sd_config.placeholder
         if ph != nil {
             Task { @MainActor in target.jobsResetBtnBgImage(ph, for: state) }
         }
-
         // 3) URL 来源：优先用 self.jobs_bgURL（_sd_loadBackgroundImage 已记录），退回 _sd_config.url
         let url = self.jobs_bgURL ?? self._sd_config.url
         target.jobs_bgURL = url
         guard let url else { return }
-
         // 4) 查询缓存（同步返回，不阻塞 UI；Key 用 SD 提供的工具生成以兼容全局 cacheKeyFilter）
         let key = SDWebImageManager.shared.cacheKey(for: url) ?? url.absoluteString
         if let cached = SDImageCache.shared.imageFromCache(forKey: key) {
             Task { @MainActor in target.jobsResetBtnBgImage(cached, for: state) }
             return
         }
-
         // 5) 缓存未命中：按需触网
         guard allowNetworkIfMissing else { return }
-
         // 复制源按钮的加载配置；克隆场景加 avoidAutoSetImage，避免 SD 自动写回导致瞬间闪白
         var opts = self._sd_config.options
         opts.insert(.continueInBackground)
@@ -1555,11 +1519,9 @@ public extension UIButton {
         target._sd_setContext(self._sd_config.context)
         target._sd_setProgress(self._sd_config.progress)
         target._sd_setCompleted(self._sd_config.completed)
-
         // 用你现有的回调淡入版本：_sd_loadBackgroundImage(for:)
         target._sd_loadBackgroundImage(for: state)
     }
-
     /// 克隆“前景图”
     func sd_cloneImage(to target: UIButton, for state: UIControl.State = .normal) {
         guard let url = _sd_config.url else { return }
@@ -1588,13 +1550,10 @@ public struct KFButtonLoadConfig {
 
     public init() {}
 }
-
 // 修正上面行的泛型标注（渲染器转义问题）
 public typealias KFCompleted = (Result<RetrieveImageResult, KingfisherError>) -> Void
-
 private enum _KFButtonAOKey { static var config: UInt8 = 0 }
 private var kfBgURLKey: UInt8 = 0
-
 public extension UIButton {
     var _kf_config: KFButtonLoadConfig {
         get { (objc_getAssociatedObject(self, &_KFButtonAOKey.config) as? KFButtonLoadConfig) ?? KFButtonLoadConfig() }
@@ -1793,18 +1752,15 @@ public extension UIButton {
             Task { @MainActor in target.jobsResetBtnBgImage(img, for: state) }
             return
         }
-
         // 2) 先把占位图顶上，保证克隆按钮立刻有图
         let snapCfg = self._kf_config       // 快照，避免跨 actor 读 AO
         let ph      = snapCfg.placeholder
         if ph != nil {
             Task { @MainActor in target.jobsResetBtnBgImage(ph, for: state) }
         }
-
         // 3) URL：优先用显式记录的 kf_bgURL，其次用配置里的 url
         guard let url = self.kf_bgURL ?? snapCfg.url else { return }
         target.jobs_bgURL = url
-
         // 4) 只从缓存取一次（不会触网，也不用自己算 cacheKey）
         var cacheOnlyOpts = snapCfg.options
         cacheOnlyOpts.append(.onlyFromCache)
@@ -1816,7 +1772,6 @@ public extension UIButton {
                 Task { @MainActor in
                     target.jobsResetBtnBgImage(r.image, for: state)
                 }
-
             case .failure:
                 // 5) 缓存没有：按需走网（可关闭过渡避免闪烁）
                 guard allowNetworkIfMissing else { return }
@@ -1916,13 +1871,11 @@ public extension UIButton {
             objc_setAssociatedObject(self, &_kTapSoundPlayerKey, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             return self
         }
-
         // 固化当前默认配置
         let box = _JobsSoundBox(url: url,
                                 ignoreSilentSwitch: JobsSound.defaults.ignoreSilentSwitch,
                                 mixWithOthers: JobsSound.defaults.mixWithOthers)
         objc_setAssociatedObject(self, &_kTapSoundBoxKey, box, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-
         // 绑定点击：iOS14+ 用 UIAction(闭包)，老系统回退到 target-action
         _jobs_bindTapHandler()
         return self
@@ -2036,8 +1989,7 @@ public extension UIButton {
                     }
                 }.resume()
             }
-        }
-        return self
+        };return self
     }
 }
 #if canImport(SnapKit)

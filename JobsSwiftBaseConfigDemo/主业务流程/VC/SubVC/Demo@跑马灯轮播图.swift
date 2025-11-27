@@ -15,7 +15,7 @@ import Kingfisher
 #if canImport(SDWebImage)
 import SDWebImage
 #endif
-/// Demo：11 组 JobsMarqueeView
+/// Demo：13 组 JobsMarqueeView
 /// 1. 向上连续滚动
 /// 2. 向下连续滚动
 /// 3. 向左连续滚动
@@ -26,6 +26,9 @@ import SDWebImage
 /// 8. 向右间隔滚动
 /// 9. 极端：只有 1 个按钮
 /// 10. 极端：只有 2 个按钮
+/// 11. 本地背景图
+/// 12. SDWebImage@背景图
+/// 13. Kingfisher@背景图
 final class JobsMarqueeDemoVC: BaseVC {
     private let horizontalInset: CGFloat = 16
     private let verticalSpacing: CGFloat = 12
@@ -125,9 +128,15 @@ final class JobsMarqueeDemoVC: BaseVC {
             ])
             .byBgColor(.randomColor)
             .byAddTo(self.scrollView) { [unowned self] make in
-                make.top.equalTo(self.scrollView.snp.top).offset(10)
-                make.left.equalTo(self.scrollView).offset(self.horizontalInset)
-                make.right.equalTo(self.scrollView).inset(self.horizontalInset)
+                if #available(iOS 11.0, *) {
+                    make.top.equalTo(self.scrollView.contentLayoutGuide.snp.top).offset(10)
+                    make.left.equalTo(self.scrollView.frameLayoutGuide.snp.left).offset(self.horizontalInset)
+                    make.right.equalTo(self.scrollView.frameLayoutGuide.snp.right).inset(self.horizontalInset)
+                } else {
+                    make.top.equalTo(self.scrollView.snp.top).offset(10)
+                    make.left.equalTo(self.scrollView).offset(self.horizontalInset)
+                    make.right.equalTo(self.scrollView).inset(self.horizontalInset)
+                }
                 make.height.equalTo(self.marqueeHeight)
             }
     }()
@@ -485,7 +494,7 @@ final class JobsMarqueeDemoVC: BaseVC {
             .byAddTo(self.scrollView) { [unowned self] make in
                 make.top.equalTo(self.rightContinuousMarquee.snp.bottom).offset(self.verticalSpacing * 2)
                 make.left.right.height.equalTo(self.upContinuousMarquee)
-        }
+            }
     }()
     // MARK: - 6. 向下间隔滚动
     private lazy var downFrequencyMarquee: JobsMarqueeView = { [unowned self] in
@@ -578,7 +587,7 @@ final class JobsMarqueeDemoVC: BaseVC {
     }()
     // MARK: - 7. 向左间隔滚动（轮播图：一屏一页）
     private lazy var leftFrequencyMarquee: JobsMarqueeView = { [unowned self] in
-    JobsMarqueeView()
+        JobsMarqueeView()
             .byDirection(.left)
             .byScrollMode(.frequency(interval: 1.5))
             .byItemSizeMode(.fillBounds)   // 轮播图：一页一个按钮
@@ -667,7 +676,8 @@ final class JobsMarqueeDemoVC: BaseVC {
     }()
     // MARK: - 8. 向右间隔滚动（轮播图）
     private lazy var rightFrequencyMarquee: JobsMarqueeView = { [unowned self] in
-        JobsMarqueeView().byDirection(.right)
+        JobsMarqueeView()
+            .byDirection(.right)
             .byScrollMode(.frequency(interval: 1.5))
             .byItemSizeMode(.fillBounds)
             .byDataSourceButtons([
@@ -751,7 +761,7 @@ final class JobsMarqueeDemoVC: BaseVC {
             .byAddTo(self.scrollView) { [unowned self] make in
                 make.top.equalTo(self.leftFrequencyMarquee.snp.bottom).offset(self.verticalSpacing)
                 make.left.right.height.equalTo(self.upContinuousMarquee)
-        }
+            }
     }()
     // MARK: - 9. 极端：只有 1 个按钮
     private lazy var oneButtonMarquee: JobsMarqueeView = { [unowned self] in
@@ -759,31 +769,32 @@ final class JobsMarqueeDemoVC: BaseVC {
             .byDirection(.left)
             .byScrollMode(.continuous(speed: 40))
             .byItemSizeMode(.fillBounds)   // 视图宽度 == 按钮宽度，内部会复制到至少 3 个
-            .byDataSourceButtons([UIButton.sys()
-                .byBackgroundColor(.systemRed.withAlphaComponent(0.2), for: .normal)
-                .byTitle("极端 · 只有 1 个按钮", for: .normal)
-                .byTitleColor(.label, for: .normal)
-                .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
-                .bySubTitle("测试少量数据源", for: .normal)
-                .bySubTitleColor(.secondaryLabel, for: .normal)
-                .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
-                .byImage("1.circle.fill".sysImg, for: .normal)
-                .byContentEdgeInsets(UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12))
-                .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8))
-                .byTapSound("Sound.wav")
-                .onTap { sender in
-                    print("🔴 极端 1 个按钮 tapped, selected=\(sender.isSelected)")
-                    toastBy(sender.title!)
-                }
-                .onLongPress(minimumPressDuration: 0.8) { btn, gr in
-                    if gr.state == .began {
-                        btn.alpha = 0.6
-                        print("长按开始 on \(btn)")
-                    } else if gr.state == .ended || gr.state == .cancelled {
-                        btn.alpha = 1.0
-                        print("长按结束")
+            .byDataSourceButtons([
+                UIButton.sys()
+                    .byBackgroundColor(.systemRed.withAlphaComponent(0.2), for: .normal)
+                    .byTitle("极端 · 只有 1 个按钮", for: .normal)
+                    .byTitleColor(.label, for: .normal)
+                    .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+                    .bySubTitle("测试少量数据源", for: .normal)
+                    .bySubTitleColor(.secondaryLabel, for: .normal)
+                    .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+                    .byImage("1.circle.fill".sysImg, for: .normal)
+                    .byContentEdgeInsets(UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12))
+                    .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8))
+                    .byTapSound("Sound.wav")
+                    .onTap { sender in
+                        print("🔴 极端 1 个按钮 tapped, selected=\(sender.isSelected)")
+                        toastBy(sender.title!)
                     }
-                }
+                    .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+                        if gr.state == .began {
+                            btn.alpha = 0.6
+                            print("长按开始 on \(btn)")
+                        } else if gr.state == .ended || gr.state == .cancelled {
+                            btn.alpha = 1.0
+                            print("长按结束")
+                        }
+                    }
             ])
             .byBgColor(.randomColor)
             .byAddTo(self.scrollView) { [unowned self] make in
@@ -846,7 +857,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                 make.left.right.height.equalTo(self.upContinuousMarquee)
             }
     }()
-    // MARK: - 11. 本地图
+    // MARK: - 11. 本地@背景图
     private lazy var localImageButtonsMarquee: JobsMarqueeView = { [unowned self] in
         JobsMarqueeView()
             .byDirection(.left)
@@ -858,7 +869,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byContentEdgeInsets(UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12))
                     .byTapSound("Sound.wav")
                     .onTap { sender in
-                        print("🔴 极端 2 个按钮 · 1 tapped, selected=\(sender.isSelected)")
+                        print("🔴 极端 本地图 · 唐老鸭 tapped, selected=\(sender.isSelected)")
                         toastBy("点击了唐老鸭")
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
@@ -875,7 +886,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byContentEdgeInsets(UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12))
                     .byTapSound("Sound.wav")
                     .onTap { sender in
-                        print("🔴 极端 2 个按钮 · 1 tapped, selected=\(sender.isSelected)")
+                        print("🔴 极端 本地图 · 米老鼠 tapped, selected=\(sender.isSelected)")
                         toastBy("点击了米老鼠")
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
@@ -892,7 +903,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byContentEdgeInsets(UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12))
                     .byTapSound("Sound.wav")
                     .onTap { sender in
-                        print("🔴 极端 2 个按钮 · 1 tapped, selected=\(sender.isSelected)")
+                        print("🔴 极端 本地图 · 迪斯尼 tapped, selected=\(sender.isSelected)")
                         toastBy("点击了迪斯尼")
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
@@ -915,7 +926,7 @@ final class JobsMarqueeDemoVC: BaseVC {
     private lazy var sdWebImageButtonsMarquee: JobsMarqueeView = { [unowned self] in
         JobsMarqueeView()
             .byDirection(.left)
-            .byScrollMode(.continuous(speed: 40))
+            .byScrollMode(.frequency(interval: 1.0))
             .byItemSizeMode(.fillBounds)
             .byDataSourceButtons([
                 UIButton.sys()
@@ -925,7 +936,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .sd_bgNormalLoad() // 之前是配置项，这里才是真正决定渲染背景图/前景图
                     .byTapSound("Sound.wav")
                     .onTap { sender in
-                        print("🔴 极端 2 个按钮 · 1 tapped, selected=\(sender.isSelected)")
+                        print("🔴 SDWebImage@背景图 1 tapped, selected=\(sender.isSelected)")
                         toastBy("点击了SDWebImage@背景图")
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
@@ -941,10 +952,10 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .sd_imageURL("https://picsum.photos/3000/2000")
                     .sd_placeholderImage(nil)
                     .sd_options([.scaleDownLargeImages, .retryFailed])
-                    .sd_bgNormalLoad() // 之前是配置项，这里才是真正决定渲染背景图/前景图
+                    .sd_bgNormalLoad()
                     .byTapSound("Sound.wav")
                     .onTap { sender in
-                        print("🔴 极端 2 个按钮 · 1 tapped, selected=\(sender.isSelected)")
+                        print("🔴 SDWebImage@背景图 2 tapped, selected=\(sender.isSelected)")
                         toastBy("点击了SDWebImage@背景图")
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
@@ -960,10 +971,10 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .sd_imageURL("https://picsum.photos/3000/2000")
                     .sd_placeholderImage(nil)
                     .sd_options([.scaleDownLargeImages, .retryFailed])
-                    .sd_bgNormalLoad() // 之前是配置项，这里才是真正决定渲染背景图/前景图
+                    .sd_bgNormalLoad()
                     .byTapSound("Sound.wav")
                     .onTap { sender in
-                        print("🔴 极端 2 个按钮 · 1 tapped, selected=\(sender.isSelected)")
+                        print("🔴 SDWebImage@背景图 3 tapped, selected=\(sender.isSelected)")
                         toastBy("点击了SDWebImage@背景图")
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
@@ -986,7 +997,7 @@ final class JobsMarqueeDemoVC: BaseVC {
     private lazy var kingfisherImageButtonsMarquee: JobsMarqueeView = { [unowned self] in
         JobsMarqueeView()
             .byDirection(.left)
-            .byScrollMode(.continuous(speed: 40))
+            .byScrollMode(.frequency(interval: 1.0))
             .byItemSizeMode(.fillBounds)
             .byDataSourceButtons([
                 UIButton.sys()
@@ -999,10 +1010,10 @@ final class JobsMarqueeDemoVC: BaseVC {
                         .transition(.fade(0.25)),
                         .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
                     ])
-                    .kf_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
+                    .kf_bgNormalLoad()
                     .byTapSound("Sound.wav")
                     .onTap { sender in
-                        print("🔴 极端 2 个按钮 · 1 tapped, selected=\(sender.isSelected)")
+                        print("🔴 Kingfisher@背景图 1 tapped, selected=\(sender.isSelected)")
                         toastBy("点击了Kingfisher@背景图")
                     },
                 UIButton.sys()
@@ -1015,10 +1026,10 @@ final class JobsMarqueeDemoVC: BaseVC {
                         .transition(.fade(0.25)),
                         .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
                     ])
-                    .kf_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
+                    .kf_bgNormalLoad()
                     .byTapSound("Sound.wav")
                     .onTap { sender in
-                        print("🔴 极端 2 个按钮 · 1 tapped, selected=\(sender.isSelected)")
+                        print("🔴 Kingfisher@背景图 2 tapped, selected=\(sender.isSelected)")
                         toastBy("点击了Kingfisher@背景图")
                     },
                 UIButton.sys()
@@ -1031,10 +1042,10 @@ final class JobsMarqueeDemoVC: BaseVC {
                         .transition(.fade(0.25)),
                         .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
                     ])
-                    .kf_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
+                    .kf_bgNormalLoad()
                     .byTapSound("Sound.wav")
                     .onTap { sender in
-                        print("🔴 极端 2 个按钮 · 1 tapped, selected=\(sender.isSelected)")
+                        print("🔴 Kingfisher@背景图 3 tapped, selected=\(sender.isSelected)")
                         toastBy("点击了Kingfisher@背景图")
                     }
             ])
@@ -1042,6 +1053,13 @@ final class JobsMarqueeDemoVC: BaseVC {
             .byAddTo(self.scrollView) { [unowned self] make in
                 make.top.equalTo(self.sdWebImageButtonsMarquee.snp.bottom).offset(self.verticalSpacing)
                 make.left.right.height.equalTo(self.upContinuousMarquee)
+
+                // 🔚 最后一条封底，决定 scrollView.contentSize.height
+                if #available(iOS 11.0, *) {
+                    make.bottom.equalTo(self.scrollView.contentLayoutGuide.snp.bottom).inset(20)
+                } else {
+                    make.bottom.equalTo(self.scrollView.snp.bottom).inset(20)
+                }
             }
     }()
 
@@ -1051,20 +1069,20 @@ final class JobsMarqueeDemoVC: BaseVC {
             title: "JobsMarqueeView@Demo",
             rightButtons: [
                 UIButton.sys()
-                    .byImage("moon.circle.fill".sysImg, for: .normal)
-                    .byImage("moon.circle.fill".sysImg, for: .selected)
+                    .byImage("play.circle.fill".sysImg, for: .normal)
+                    .byImage("play.circle.fill".sysImg, for: .selected)
                     .onTap { [weak self] sender in
-                        guard let self else { return }
+                        guard let self = self else { return }
                         sender.isSelected.toggle()
-                        allMarquees.forEach { $0.pause() }
+                        self.allMarquees.forEach { $0.resume() }
                     },
                 UIButton.sys()
-                    .byImage("globe".sysImg, for: .normal)
-                    .byImage("globe".sysImg, for: .selected)
+                    .byImage("pause.circle.fill".sysImg, for: .normal)
+                    .byImage("pause.circle.fill".sysImg, for: .selected)
                     .onTap { [weak self] sender in
-                        guard let self else { return }
+                        guard let self = self else { return }
                         sender.isSelected.toggle()
-                        allMarquees.forEach { $0.resume() }
+                        self.allMarquees.forEach { $0.pause() }
                     }
             ]
         )
@@ -1081,7 +1099,8 @@ final class JobsMarqueeDemoVC: BaseVC {
 
         oneButtonMarquee.byVisible(YES)
         twoButtonsMarquee.byVisible(YES)
-        /// JobsMarqueeView@轮播图
+
+        /// JobsMarqueeView@轮播图 & 图片
         localImageButtonsMarquee.byVisible(YES)
         sdWebImageButtonsMarquee.byVisible(YES)
         kingfisherImageButtonsMarquee.byVisible(YES)
@@ -1099,16 +1118,19 @@ final class JobsMarqueeDemoVC: BaseVC {
 
     private var allMarquees: [JobsMarqueeView] {
         [
-            upContinuousMarquee,
-            downContinuousMarquee,
-            leftContinuousMarquee,
-            rightContinuousMarquee,
-            upFrequencyMarquee,
-            downFrequencyMarquee,
-            leftFrequencyMarquee,
-            rightFrequencyMarquee,
-            oneButtonMarquee,
-            twoButtonsMarquee
+            upContinuousMarquee,          // 向上连续滚动
+            downContinuousMarquee,        // 向下连续滚动
+            leftContinuousMarquee,        // 向左连续滚动（典型横向跑马灯）
+            rightContinuousMarquee,       // 向右连续滚动
+            upFrequencyMarquee,           // 向上间隔滚动（公告@一条一条翻）
+            downFrequencyMarquee,         // 向下间隔滚动（公告@一条一条翻）
+            leftFrequencyMarquee,         // 向左间隔滚动（轮播图@一屏一页）
+            rightFrequencyMarquee,        // 向右间隔滚动（轮播图@一屏一页）
+            oneButtonMarquee,             // 极端：只有 1 个按钮
+            twoButtonsMarquee,            // 极端：只有 2 个按钮
+            localImageButtonsMarquee,     // 本地@背景图
+            sdWebImageButtonsMarquee,     // SDWebImage@背景图
+            kingfisherImageButtonsMarquee // Kingfisher@背景图
         ]
     }
 }
