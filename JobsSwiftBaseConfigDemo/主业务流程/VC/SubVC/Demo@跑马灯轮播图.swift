@@ -861,7 +861,7 @@ final class JobsMarqueeDemoVC: BaseVC {
     private lazy var localImageButtonsMarquee: JobsMarqueeView = { [unowned self] in
         JobsMarqueeView()
             .byDirection(.left)
-            .byScrollMode(.continuous(speed: 40))
+            .byScrollMode(.frequency(interval: 1.0))
             .byItemSizeMode(.fillBounds)
             .byDataSourceButtons([
                 UIButton.sys()
