@@ -663,7 +663,7 @@ public extension String {
         let i = self.index(startIndex, offsetBy: index)
         return self[i]
     }
-    /// "一等奖" -> "一\n等\n奖\n"
+    /// 处理换行："一等奖"->"一\n等\n奖\n"
     var verticalByNewline: String {
         guard !isEmpty else { return "" }
         var result = ""
@@ -672,13 +672,28 @@ public extension String {
             result.append("\n")
         };return result
     }
-    /// "一等奖" -> "一\n等\n奖"（如果你有时候不想要最后那个 `\n` 可以用这个）
+    /// 处理换行："一等奖" -> "一\n等\n奖"（如果你有时候不想要最后那个 `\n` 可以用这个）
     func verticalByNewline(_ trimLastNewline: Bool) -> String {
         // ✅ 共用上面的计算属性
         var result = verticalByNewline
         if trimLastNewline, result.hasSuffix("\n") {
             result.removeLast()
         };return result
+    }
+    /// 处理换行：去掉字符串中的所有换行符（\n / \r / \r\n）
+    var rnl: String {
+        components(separatedBy: .newlines).joined()
+    }
+    // 多语言@仅此一个API：
+    var tr: String {
+        let b = TRLang.bundle()
+        print("📍 strings path =", b.path(forResource: "Localizable", ofType: "strings") ?? "nil")
+        // value: self → 当 key 未翻到时，回退 key 本身，便于你肉眼排查漏翻
+        return NSLocalizedString(self, tableName: nil, bundle: b, value: self, comment: "")
+    }
+    // 多语言@带参数版本
+    func tr(_ args: CVarArg...) -> String {
+        String(format: self.tr, arguments: args)
     }
 }
 // MARK: - 私有工具

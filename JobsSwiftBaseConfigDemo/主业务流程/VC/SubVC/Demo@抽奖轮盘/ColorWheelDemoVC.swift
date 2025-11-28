@@ -12,34 +12,42 @@ final class LuckyWheelDemoVC: BaseVC {
     private lazy var wheelView: LuckyWheelView = {
         LuckyWheelView()
             .bySegments([
-                .init(text: "一等奖",
+                .init(text: "一等奖".tr,
                       textFont: .systemFont(ofSize: 12, weight: .medium),
-                      textColor: .white,
-                      backgroundColor: .systemRed,
+                      textColor: .randomColor,
+                      backgroundColor: .randomColor,
                       placeholderImage: "globe".sysImg,
                       imageURLString:"https://picsum.photos/30"),
-                .init(text: "二等奖",
+                .init(text: "二等奖".tr,
                       textFont: .systemFont(ofSize: 12, weight: .medium),
-                      textColor: .white,
-                      backgroundColor: .systemOrange,
+                      textColor: .randomColor,
+                      backgroundColor: .randomColor,
+                      placeholderImage: "plus".sysImg,
+                      imageURLString:"https://picsum.photos/30"),
+                .init(text: "三等奖".tr,
+                      textFont: .systemFont(ofSize: 12, weight: .medium),
+                      textColor: .randomColor,
+                      backgroundColor: .randomColor,
                       placeholderImage: "message".sysImg,
                       imageURLString:"https://picsum.photos/30"),
-                .init(text: "谢谢参与",
+                .init(text: "谢谢参与".tr,
                       textFont: .systemFont(ofSize: 12, weight: .medium),
-                      textColor: .white,
-                      backgroundColor: .systemGray,
+                      textColor: .randomColor,
+                      backgroundColor: .randomColor,
                       placeholderImage: "tray".sysImg,
                       imageURLString:"https://picsum.photos/30"),
             ])
+            .byPointerDirection(.right) // 停止锚点作为中奖结果
             .bySpinDuration(3.0)
             .byInitialVelocity(25.0)
             .byPanRotationEnabled(true)
-            .onSegmentTap { idx in
-                toastBy("🍀 短按扇形 index = \(idx)")
+            .onSegmentTap { segment in
+                /// 短按和旋转停止后的中奖结果
+                toastBy("🍀 短按扇形 \(String(describing: segment.text?.rnl))")
             }
-            .onSegmentLongPress { idx, gr in
+            .onSegmentLongPress { segment, gr in
                 if gr.state == .began {
-                    toastBy("👆 长按开始 index = \(idx)")
+                    toastBy("👆 长按开始 \(String(describing: segment.text?.rnl))")
                 }
             }
             .byAddTo(view) { make in

@@ -6750,6 +6750,61 @@ struct UserInfoModel: Codable {
   }
   ```
 
+### 48、旋转的抽奖轮盘 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* ```swift
+  private lazy var wheelView: LuckyWheelView = {
+      LuckyWheelView()
+          .bySegments([
+              .init(text: "一等奖".tr,
+                    textFont: .systemFont(ofSize: 12, weight: .medium),
+                    textColor: .randomColor,
+                    backgroundColor: .randomColor,
+                    placeholderImage: "globe".sysImg,
+                    imageURLString:"https://picsum.photos/30"),
+              .init(text: "二等奖".tr,
+                    textFont: .systemFont(ofSize: 12, weight: .medium),
+                    textColor: .randomColor,
+                    backgroundColor: .randomColor,
+                    placeholderImage: "plus".sysImg,
+                    imageURLString:"https://picsum.photos/30"),
+              .init(text: "三等奖".tr,
+                    textFont: .systemFont(ofSize: 12, weight: .medium),
+                    textColor: .randomColor,
+                    backgroundColor: .randomColor,
+                    placeholderImage: "message".sysImg,
+                    imageURLString:"https://picsum.photos/30"),
+              .init(text: "谢谢参与".tr,
+                    textFont: .systemFont(ofSize: 12, weight: .medium),
+                    textColor: .randomColor,
+                    backgroundColor: .randomColor,
+                    placeholderImage: "tray".sysImg,
+                    imageURLString:"https://picsum.photos/30"),
+          ])
+          .byPointerDirection(.right) // 停止锚点作为中奖结果
+          .bySpinDuration(3.0)
+          .byInitialVelocity(25.0)
+          .byPanRotationEnabled(true)
+          .onSegmentTap { segment in
+              /// 短按和旋转停止后的中奖结果
+              toastBy("🍀 短按扇形 \(String(describing: segment.text?.rnl))")
+          }
+          .onSegmentLongPress { segment, gr in
+              if gr.state == .began {
+                  toastBy("👆 长按开始 \(String(describing: segment.text?.rnl))")
+              }
+          }
+          .byAddTo(view) { make in
+              make.center.equalToSuperview()
+              make.width.height.equalTo(300)
+          }
+  }()
+  ```
+
+* ```swift
+   wheelView.stopSpin() // 停止
+  ```
+
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>

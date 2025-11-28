@@ -45,7 +45,6 @@
 		042B67CE2E95085A000A2970 /* NSTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B67CD2E950858000A2970 /* NSTextAttachment.swift */; };
 		042F958E2EB5C478005DE735 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F958D2EB5C477005DE735 /* Bundle.swift */; };
 		042F95932EB5E6C1005DE735 /* TRLang.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F95922EB5E6C0005DE735 /* TRLang.swift */; };
-		042F95952EB5E6DC005DE735 /* TRString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F95942EB5E6D9005DE735 /* TRString.swift */; };
 		042F95972EB5E6EB005DE735 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F95962EB5E6EA005DE735 /* LanguageManager.swift */; };
 		042F95992EB5F124005DE735 /* TRAutoRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F95982EB5F123005DE735 /* TRAutoRefresh.swift */; };
 		042F959C2EB5F733005DE735 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 042F959A2EB5F733005DE735 /* Localizable.strings */; };
@@ -363,7 +362,6 @@
 		042B67CD2E950858000A2970 /* NSTextAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTextAttachment.swift; sourceTree = "<group>"; };
 		042F958D2EB5C477005DE735 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
 		042F95922EB5E6C0005DE735 /* TRLang.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRLang.swift; sourceTree = "<group>"; };
-		042F95942EB5E6D9005DE735 /* TRString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRString.swift; sourceTree = "<group>"; };
 		042F95962EB5E6EA005DE735 /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
 		042F95982EB5F123005DE735 /* TRAutoRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRAutoRefresh.swift; sourceTree = "<group>"; };
 		042F959B2EB5F733005DE735 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -726,7 +724,6 @@
 				042F959A2EB5F733005DE735 /* Localizable.strings */,
 				042F95982EB5F123005DE735 /* TRAutoRefresh.swift */,
 				042F95962EB5E6EA005DE735 /* LanguageManager.swift */,
-				042F95942EB5E6D9005DE735 /* TRString.swift */,
 				042F95922EB5E6C0005DE735 /* TRLang.swift */,
 			);
 			path = "多语言化";
@@ -1984,7 +1981,6 @@
 				047E48E92EB35BAD00881898 /* SphereGeometry.swift in Sources */,
 				047E48EA2EB35BAD00881898 /* VideoTextureManager.swift in Sources */,
 				047E48EB2EB35BAD00881898 /* PlayerControlsView.swift in Sources */,
-				042F95952EB5E6DC005DE735 /* TRString.swift in Sources */,
 				047E48EC2EB35BAD00881898 /* Shaders.metal in Sources */,
 				045920F82E854F91008C8D6A /* Int32.swift in Sources */,
 				04468F8C2E9CFD7700677000 /* Demo@系统弹出框.swift in Sources */,
