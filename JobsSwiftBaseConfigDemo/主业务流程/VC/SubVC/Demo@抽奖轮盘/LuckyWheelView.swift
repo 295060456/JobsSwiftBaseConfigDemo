@@ -16,6 +16,12 @@ import SnapKit
 /// 4. 每个扇形文字整体对准圆心
 /// 5. 每个扇形文字外侧有一个圆形 ImageView（用 placeholderImage 渲染）
 final class LuckyWheelView: UIView {
+    enum PointerDirection {
+        case up
+        case down
+        case left
+        case right
+    }
     /// 完整 Segment 模型（推荐使用）
     var segments: [LuckyWheelSegment] = [] {
         didSet { setNeedsLayout() }
@@ -54,7 +60,7 @@ final class LuckyWheelView: UIView {
             /// 背景色
             .byBackgroundColor(.systemGreen, for: .normal)
             /// 普通标题
-            .byTitle("点击抽奖".verticalByNewline(YES), for: .normal)
+            .byTitle("点我\n抽奖", for: .normal)
             .byTitleColor(.white, for: .normal)
             .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
             .byCornerRadius(30)
@@ -62,8 +68,10 @@ final class LuckyWheelView: UIView {
             /// 点击声音
             .byTapSound("Sound.wav")
             /// 点按事件：走统一的旋转逻辑
-            .onTap { [weak self] _ in
-                self?.startSpinWithScrollLikeDeceleration()
+            .onTap { [weak self] btn in
+                guard let self else { return }
+                self.startSpinWithScrollLikeDeceleration()
+                btn.playTapBounce(haptic: .light)
             }
             /// 长按反馈（按钮自身的视觉反馈）
             .onLongPress(minimumPressDuration: 0.8) { btn, gr in
@@ -136,7 +144,7 @@ final class LuckyWheelView: UIView {
     private var lastTouchTimestamp: CFTimeInterval = 0
     private var angularVelocityFromPan: CGFloat = 0
     // MARK: - Segment 交互（点击 / 长按） ===============
-    /// 短按回调：index = 扇形下标
+    /// 短按（停止）回调：index = 扇形下标
     private var segmentTapHandler: ((Int) -> Void)?
     /// 长按回调：index + 手势（方便你根据 state 做不同处理）
     private var segmentLongPressHandler: ((Int, UILongPressGestureRecognizer) -> Void)?
@@ -304,7 +312,7 @@ final class LuckyWheelView: UIView {
     }
     // MARK: - Segment 命中计算 ===========================
     /// 根据点击点（在 ColorWheelView 自身坐标系）计算命中的扇形 index
-    private func segmentIndex(at point: CGPoint) -> Int? {
+    private func segmentIndex(_ point: CGPoint) -> Int? {
         guard !segments.isEmpty,
               plateView.bounds.width > 0,
               plateView.bounds.height > 0
@@ -351,7 +359,7 @@ final class LuckyWheelView: UIView {
         let point = gr.location(in: self)
         // 点到中心按钮区域 -> 交给按钮自己处理
         if centerButton.frame.contains(point) { return }
-        guard let index = segmentIndex(at: point) else { return }
+        guard let index = segmentIndex(point) else { return }
         segmentTapHandler?(index)
     }
 
@@ -361,7 +369,7 @@ final class LuckyWheelView: UIView {
         let point = gr.location(in: self)
         // 点到中心按钮区域 -> 不算扇形长按
         if centerButton.frame.contains(point) { return }
-        guard let index = segmentIndex(at: point) else { return }
+        guard let index = segmentIndex(point) else { return }
         segmentLongPressHandler?(index, gr)
     }
     // MARK: - 手势拖动旋转 ===============================
@@ -494,7 +502,8 @@ final class LuckyWheelView: UIView {
         if dec.isStopped(threshold: stopThreshold) {
             stopSpin()
             print("✅ 减速结束，最终角度 = \(currentAngle)")
-            // TODO: 在这里根据 currentAngle 算命中的扇形 index
+            /// 在这里根据 currentAngle 算命中的扇形 index
+            segmentTapHandler?(currentSegmentIndex(.up)!)
         }
     }
 
@@ -506,6 +515,32 @@ final class LuckyWheelView: UIView {
         // 旋转结束：按钮恢复可点击 & 状态复位
         centerButton.isSelected = false
         centerButton.isUserInteractionEnabled = true
+    }
+    /// 某个“指针”方向（上/下/左/右）指向的扇形 index
+    private func currentSegmentIndex(_ direction: PointerDirection) -> Int? {
+        guard !segments.isEmpty,
+              bounds.width > 0,
+              bounds.height > 0 else { return nil }
+
+        let center = CGPoint(x: bounds.midX, y: bounds.midY)
+        let radius = min(bounds.width, bounds.height) / 2
+        let inset: CGFloat = 1        // 往里缩一点，保证点在圆内
+
+        let point: CGPoint
+        switch direction {
+        case .up:
+            point = CGPoint(x: center.x,
+                            y: center.y - radius + inset)
+        case .down:
+            point = CGPoint(x: center.x,
+                            y: center.y + radius - inset)
+        case .left:
+            point = CGPoint(x: center.x - radius + inset,
+                            y: center.y)
+        case .right:
+            point = CGPoint(x: center.x + radius - inset,
+                            y: center.y)
+        };return segmentIndex(point)
     }
 }
 // MARK: - ColorWheelView 点语法 DSL ===================
@@ -559,7 +594,7 @@ extension LuckyWheelView {
         self.isPanRotationEnabled = enabled
         return self
     }
-    /// 配置扇形短按回调
+    /// 配置扇形短按（停止）回调
     @discardableResult
     func onSegmentTap(_ handler: @escaping (Int) -> Void) -> Self {
         self.segmentTapHandler = handler
