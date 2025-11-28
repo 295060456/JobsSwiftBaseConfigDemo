@@ -19,17 +19,17 @@ final class WheelDemoVC: BaseVC {
                 .systemBlue,
                 .systemPurple
             ])
-            .bySpinDuration(3.0)
-            .byInitialVelocity(25.0)
+            .bySpinDuration(3.0)              // 大概转 3 秒
+            .byInitialVelocity(25.0)          // 不想用时间推，也可以直接指定初速度
+            .byPanRotationEnabled(YES)        // 允许手势拖动旋转
             .onSegmentTap { idx in
-                toastBy("🍀 短按扇形 index = \(idx)")
+                print("🍀 短按扇形 index = \(idx)")
             }
             .onSegmentLongPress { idx, gr in
                 if gr.state == .began {
-                    toastBy("🍀 长按开始 index = \(idx)")
+                    print("👆 长按开始 index = \(idx)")
                 } else if gr.state == .ended {
                     print("👆 长按结束 index = \(idx)")
-                    toastBy("🍀 长按开始 index = \(idx)")
                 }
             }
             .byAddTo(view) { make in

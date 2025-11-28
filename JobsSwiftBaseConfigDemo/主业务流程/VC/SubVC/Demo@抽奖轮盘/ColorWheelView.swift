@@ -10,6 +10,10 @@ import SnapKit
 
 /// 扇形圆盘 + 中央按钮（按钮用 Jobs 封装 API）
 /// 旋转动画用 JobsTimer（displayLink 内核） + ScrollDecelerator 实现 UIScrollView 式减速
+/// 支持:
+/// 1. 中央按钮点击减速旋转
+/// 2. 扇形短按 / 长按
+/// 3. 手势拖动旋转 + 松手后减速
 final class ColorWheelView: UIView {
 
     // MARK: - 配置 ==============================
@@ -28,6 +32,13 @@ final class ColorWheelView: UIView {
     /// - 数值越大，甩得越猛，转得越久
     var customInitialVelocity: CGFloat?
 
+    /// 是否允许手势拖动旋转（默认 true）
+    var isPanRotationEnabled: Bool = true {
+        didSet {
+            panGesture.isEnabled = isPanRotationEnabled
+        }
+    }
+
     /// 减速率（默认 UIScrollView.normal）
     /// 值越接近 1，减速越慢、转得越久
     private var decelerationRate: CGFloat = UIScrollView.DecelerationRate.normal.rawValue
@@ -41,7 +52,7 @@ final class ColorWheelView: UIView {
     /// 真正画轮盘的盘面 view（我们只旋转它）
     private let plateView = UIView()
 
-    /// 中央按钮（用你自己的 DSL）
+    /// 中央按钮（用你的 UIButton DSL）
     private lazy var centerButton: UIButton = {
         UIButton.sys()
             /// 背景色
@@ -54,17 +65,9 @@ final class ColorWheelView: UIView {
             .byMasksToBounds(true)
             /// 点击声音
             .byTapSound("Sound.wav")
-            /// 点按事件：启动 JobsTimer + 减速旋转
-            .onTap { [weak self] sender in
-                guard let self else { return }
-                // 已经在转了，直接丢弃这次点击（安全兜底）
-                if self.timer != nil { return }
-
-                // 开始旋转：按钮选中 + 禁止再次点击
-                sender.isSelected = true
-                sender.isUserInteractionEnabled = false
-
-                self.startSpinWithScrollLikeDeceleration()
+            /// 点按事件：走统一的旋转逻辑
+            .onTap { [weak self] _ in
+                self?.startSpinWithScrollLikeDeceleration()
             }
             /// 长按反馈（按钮自身的视觉反馈）
             .onLongPress(minimumPressDuration: 0.8) { btn, gr in
@@ -92,20 +95,62 @@ final class ColorWheelView: UIView {
     private var timer: JobsTimerProtocol?
     private let timerInterval: CGFloat = 1.0 / 60.0
 
-    // MARK: - Segment 交互（点击 / 长按） ===============
+    // MARK: - 手势状态 ================================
 
+    /// 使用你的封装创建 Pan 手势
+    private lazy var panGesture: UIPanGestureRecognizer = {
+        let gr = UIPanGestureRecognizer
+            .byConfig { [weak self] gr in
+                guard let self,
+                      let pan = gr as? UIPanGestureRecognizer else { return }
+                self.handlePan(pan)
+            }
+            .byMinTouches(1)
+            .byMaxTouches(2)
+            .byCancelsTouchesInView(true)
+
+        self.jobs_addGesture(gr)
+        return gr
+    }()
+
+    /// 扇形点击（Tap）
     private lazy var tapRecognizer: UITapGestureRecognizer = {
-        let gr = UITapGestureRecognizer(target: self, action: #selector(handleSegmentTap(_:)))
-        gr.cancelsTouchesInView = false        // 不影响中间按钮
+        let gr = UITapGestureRecognizer
+            .byConfig { [weak self] gr in
+                guard let self,
+                      let tap = gr as? UITapGestureRecognizer else { return }
+                self.handleSegmentTap(tap)
+            }
+            .byTaps(1)
+            .byTouches(1)
+            .byCancelsTouchesInView(false)  // 不拦截中心按钮触摸
+
+        self.jobs_addGesture(gr)
         return gr
     }()
 
+    /// 扇形长按（LongPress）
     private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        let gr = UILongPressGestureRecognizer(target: self, action: #selector(handleSegmentLongPress(_:)))
-        gr.minimumPressDuration = 0.5          // 你可以之后也做成 DSL 配置
-        gr.cancelsTouchesInView = false
+        let gr = UILongPressGestureRecognizer
+            .byConfig { [weak self] gr in
+                guard let self,
+                      let lp = gr as? UILongPressGestureRecognizer else { return }
+                self.handleSegmentLongPress(lp)
+            }
+            .byMinDuration(0.5)
+            .byMovement(12)
+            .byTouches(1)
+
+        self.jobs_addGesture(gr)
         return gr
     }()
+
+    /// Pan 拖动计算用
+    private var lastTouchAngle: CGFloat = 0
+    private var lastTouchTimestamp: CFTimeInterval = 0
+    private var angularVelocityFromPan: CGFloat = 0
+
+    // MARK: - Segment 交互（点击 / 长按） ===============
 
     /// 短按回调：index = 扇形下标
     private var segmentTapHandler: ((Int) -> Void)?
@@ -136,9 +181,14 @@ final class ColorWheelView: UIView {
             make.edges.equalToSuperview()
         }
 
-        // Segment 手势：挂在整个 ColorWheelView 上
-        addGestureRecognizer(tapRecognizer)
-        addGestureRecognizer(longPressRecognizer)
+        // 触发 lazy，完成 jobs_addGesture 绑定
+        _ = panGesture
+        _ = tapRecognizer
+        _ = longPressRecognizer
+
+        // Tap / LongPress 与 Pan 冲突时，让 Pan 优先（拖动优先）
+        tapRecognizer.require(toFail: panGesture)
+        longPressRecognizer.require(toFail: panGesture)
 
         // 确保按钮创建并在最上
         _ = centerButton
@@ -214,7 +264,7 @@ final class ColorWheelView: UIView {
               plateView.bounds.height > 0
         else { return nil }
 
-        // 圆心（以 ColorWheelView 自身坐标系）
+        // 圆心，以 ColorWheelView 自身坐标系
         let bounds = self.bounds
         let center = CGPoint(x: bounds.midX, y: bounds.midY)
         let radius = min(bounds.width, bounds.height) / 2
@@ -229,7 +279,7 @@ final class ColorWheelView: UIView {
         // 触点相对圆心的绝对角度（世界坐标），[-π, π]
         let touchAngle = atan2(dy, dx)
 
-        // 盘面已经被 currentAngle 旋转了；我们要把触点角度“反旋转”回静止态
+        // 盘面已经被 currentAngle 旋转了；把触点角度“反旋转”回静止态
         var angle0 = touchAngle - currentAngle
 
         let twoPi = 2 * CGFloat.pi
@@ -256,27 +306,89 @@ final class ColorWheelView: UIView {
 
     // MARK: - Segment 手势回调 ===========================
 
-    @objc private func handleSegmentTap(_ gr: UITapGestureRecognizer) {
+    private func handleSegmentTap(_ gr: UITapGestureRecognizer) {
         guard gr.state == .ended else { return }
         // 旋转中不响应点击
         guard timer == nil else { return }
 
         let point = gr.location(in: self)
 
-        // 注意：中心按钮会优先吃掉事件，这里只管扇形区域
+        // 点到中心按钮区域 -> 交给按钮自己处理
+        if centerButton.frame.contains(point) { return }
+
         guard let index = segmentIndex(at: point) else { return }
 
         segmentTapHandler?(index)
     }
 
-    @objc private func handleSegmentLongPress(_ gr: UILongPressGestureRecognizer) {
+    private func handleSegmentLongPress(_ gr: UILongPressGestureRecognizer) {
         // 旋转中不响应长按
         guard timer == nil else { return }
 
         let point = gr.location(in: self)
+
+        // 点到中心按钮区域 -> 不算扇形长按
+        if centerButton.frame.contains(point) { return }
+
         guard let index = segmentIndex(at: point) else { return }
 
         segmentLongPressHandler?(index, gr)
+    }
+
+    // MARK: - 手势拖动旋转 ===============================
+
+    private func handlePan(_ gesture: UIPanGestureRecognizer) {
+        // 不允许拖动 / 自动减速旋转中都不处理
+        if !isPanRotationEnabled { return }
+        if timer != nil { return }
+
+        let center = CGPoint(x: bounds.midX, y: bounds.midY)
+        let location = gesture.location(in: self)
+
+        // 在中心按钮区域开始的拖动，忽略
+        if gesture.state == .began,
+           centerButton.frame.contains(location) {
+            return
+        }
+
+        let dx = location.x - center.x
+        let dy = location.y - center.y
+        let angle = atan2(dy, dx)
+        let now = CACurrentMediaTime()
+
+        switch gesture.state {
+        case .began:
+            lastTouchAngle = angle
+            lastTouchTimestamp = now
+            angularVelocityFromPan = 0
+
+        case .changed:
+            var step = angle - lastTouchAngle
+            let pi = CGFloat.pi
+            if step > pi { step -= 2 * pi }
+            if step < -pi { step += 2 * pi }
+
+            currentAngle += step
+            plateView.transform = CGAffineTransform(rotationAngle: currentAngle)
+
+            let dt = now - lastTouchTimestamp
+            if dt > 0 {
+                angularVelocityFromPan = step / CGFloat(dt)
+            }
+            lastTouchAngle = angle
+            lastTouchTimestamp = now
+
+        case .ended, .cancelled, .failed:
+            let v = angularVelocityFromPan
+            angularVelocityFromPan = 0
+            // 有明显速度 => 按 UIScrollView 曲线做减速旋转
+            if abs(v) > 0.1 {
+                startSpinWithScrollLikeDeceleration(initialVelocity: v)
+            }
+
+        default:
+            break
+        }
     }
 
     // MARK: - 旋转逻辑（JobsTimer + UIScrollView 减速） ========
@@ -288,7 +400,8 @@ final class ColorWheelView: UIView {
     ///   2. 否则如果 `customInitialVelocity` 不为 nil，使用属性；
     ///   3. 否则根据 `spinDuration` 反推一个初始角速度。
     func startSpinWithScrollLikeDeceleration(initialVelocity: CGFloat? = nil) {
-        guard timer == nil else { return }   // 防重复（双保险）
+        // 已经在自动旋转中，直接丢掉本次请求
+        guard timer == nil else { return }
 
         let v0: CGFloat
         if let v = initialVelocity {
@@ -298,6 +411,10 @@ final class ColorWheelView: UIView {
         } else {
             v0 = velocityForTargetDuration(spinDuration)
         }
+
+        // 开始旋转时统一锁死按钮
+        centerButton.isSelected = true
+        centerButton.isUserInteractionEnabled = false
 
         decelerator = ScrollDecelerator(
             velocity: v0,
@@ -420,15 +537,21 @@ extension ColorWheelView {
         return self
     }
 
-    /// ✅ 配置扇形短按回调
+    /// 配置是否允许手势拖动旋转
+    @discardableResult
+    func byPanRotationEnabled(_ enabled: Bool) -> Self {
+        self.isPanRotationEnabled = enabled
+        return self
+    }
+
+    /// 配置扇形短按回调
     @discardableResult
     func onSegmentTap(_ handler: @escaping (Int) -> Void) -> Self {
         self.segmentTapHandler = handler
         return self
     }
 
-    /// ✅ 配置扇形长按回调
-    /// handler 中可以根据 gr.state 做 began / ended 区分
+    /// 配置扇形长按回调
     @discardableResult
     func onSegmentLongPress(_ handler: @escaping (Int, UILongPressGestureRecognizer) -> Void) -> Self {
         self.segmentLongPressHandler = handler
