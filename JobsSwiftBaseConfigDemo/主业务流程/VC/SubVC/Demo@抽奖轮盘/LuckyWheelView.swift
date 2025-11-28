@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-
 /// 扇形圆盘 + 中央按钮（按钮用 Jobs 封装 API）
 /// 旋转动画用 JobsTimer（displayLink 内核） + ScrollDecelerator 实现 UIScrollView 式减速
 /// 支持:
@@ -17,24 +16,19 @@ import SnapKit
 /// 4. 每个扇形文字整体对准圆心
 /// 5. 每个扇形文字外侧有一个圆形 ImageView（用 placeholderImage 渲染）
 final class LuckyWheelView: UIView {
-
     enum PointerDirection {
         case up
         case down
         case left
         case right
     }
-
     // MARK: - 配置 ==============================
-
     /// “指针”所在方向（默认正上方）
     var pointerDirection: PointerDirection = .up
-
     /// 完整 Segment 模型（推荐使用）
     var segments: [LuckyWheelSegment] = [] {
         didSet { setNeedsLayout() }
     }
-
     /// 仅背景色（向下兼容）：设置 colors 会自动生成 segments
     var colors: [UIColor] {
         get { segments.map { $0.backgroundColor ?? .clear } }
@@ -42,35 +36,27 @@ final class LuckyWheelView: UIView {
             segments = newValue.map { LuckyWheelSegment(backgroundColor: $0) }
         }
     }
-
     /// 旋转持续时间（秒，近似控制）
     var spinDuration: TimeInterval = 3.0
-
     /// 自定义初始角速度（单位：rad/s）
     /// - 如果不为 nil，则优先使用这个值，而不是通过 spinDuration 反推
     /// - 数值越大，甩得越猛，转得越久
     var customInitialVelocity: CGFloat?
-
     /// 是否允许手势拖动旋转（默认 true）
     var isPanRotationEnabled: Bool = true {
         didSet {
             panGesture.isEnabled = isPanRotationEnabled
         }
     }
-
     /// 减速率（默认 UIScrollView.normal）
     /// 值越接近 1，减速越慢、转得越久
     private var decelerationRate: CGFloat = UIScrollView.DecelerationRate.normal.rawValue
-
     /// 认为“停下”的角速度阈值（rad/s）
     /// 越小，最后拖尾越久
     private var stopThreshold: CGFloat = 0.05
-
     // MARK: - 子视图 ==============================
-
     /// 真正画轮盘的盘面 view（我们只旋转它）
     private let plateView = UIView()
-
     /// 中央按钮（用你的 UIButton DSL）
     private lazy var centerButton: UIButton = {
         UIButton.sys()
@@ -104,20 +90,14 @@ final class LuckyWheelView: UIView {
                 make.height.equalTo(60)
             }
     }()
-
     // MARK: - 绘制相关 ==============================
-
     private var sliceLayers: [CAShapeLayer] = []
-
     // MARK: - 旋转状态 / JobsTimer ====================
-
     private var currentAngle: CGFloat = 0              // 当前盘面角度（rad）
     private var decelerator: ScrollDecelerator?
     private var timer: JobsTimerProtocol?
     private let timerInterval: CGFloat = 1.0 / 60.0
-
     // MARK: - 手势状态 ================================
-
     /// 使用你的封装创建 Pan 手势
     private lazy var panGesture: UIPanGestureRecognizer = {
         let gr = UIPanGestureRecognizer
@@ -132,7 +112,6 @@ final class LuckyWheelView: UIView {
         self.jobs_addGesture(gr)
         return gr
     }()
-
     /// 扇形点击（Tap）
     private lazy var tapRecognizer: UITapGestureRecognizer = {
         let gr = UITapGestureRecognizer
@@ -148,7 +127,6 @@ final class LuckyWheelView: UIView {
         self.jobs_addGesture(gr)
         return gr
     }()
-
     /// 扇形长按（LongPress）
     private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         let gr = UILongPressGestureRecognizer
@@ -164,22 +142,16 @@ final class LuckyWheelView: UIView {
         self.jobs_addGesture(gr)
         return gr
     }()
-
     /// Pan 拖动计算用
     private var lastTouchAngle: CGFloat = 0
     private var lastTouchTimestamp: CFTimeInterval = 0
     private var angularVelocityFromPan: CGFloat = 0
-
     // MARK: - Segment 交互（点击 / 长按） ===============
-
     /// 短按（停止）回调：返回命中的扇形模型
     private var segmentTapHandler: ((LuckyWheelSegment) -> Void)?
-
     /// 长按回调：返回命中的扇形模型 + 手势
     private var segmentLongPressHandler: ((LuckyWheelSegment, UILongPressGestureRecognizer) -> Void)?
-
     // MARK: - Init ==============================
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -214,9 +186,7 @@ final class LuckyWheelView: UIView {
         centerButton.byVisible(YES)
         bringSubviewToFront(centerButton)
     }
-
     // MARK: - Layout / Draw ==============================
-
     override func layoutSubviews() {
         super.layoutSubviews()
         rebuildSlices()
@@ -260,7 +230,6 @@ final class LuckyWheelView: UIView {
                 .byFillColor(segment.backgroundColor)
             plateView.layer.addSublayer(layer)
             sliceLayers.append(layer)
-
             // ==== 文本：整体“对准圆心” ===========================
             let midAngle = (startAngle + endAngle) / 2
 
@@ -338,7 +307,6 @@ final class LuckyWheelView: UIView {
         plateView.layer.addSublayer(dotLayer)
         sliceLayers.append(dotLayer)
     }
-
     /// 把 Segment 转成富文本：
     /// - 如果 segment.attributedText 不为 nil：直接用（可自行竖排/换行）
     /// - 否则用 text + font + color，**不做任何自动换行处理**
@@ -357,9 +325,7 @@ final class LuckyWheelView: UIView {
             ]
         )
     }
-
     // MARK: - Segment 命中计算 ===========================
-
     /// 根据点击点（在 LuckyWheelView 自身坐标系）计算命中的扇形 index
     private func segmentIndex(_ point: CGPoint) -> Int? {
         guard !segments.isEmpty,
@@ -406,9 +372,7 @@ final class LuckyWheelView: UIView {
             return nil
         }
     }
-
     // MARK: - Segment 手势回调 ===========================
-
     private func handleSegmentTap(_ gr: UITapGestureRecognizer) {
         guard gr.state == .ended else { return }
         // 旋转中不响应点击
@@ -441,9 +405,7 @@ final class LuckyWheelView: UIView {
         let segment = segments[index]
         segmentLongPressHandler?(segment, gr)
     }
-
     // MARK: - 手势拖动旋转 ===============================
-
     private func handlePan(_ gesture: UIPanGestureRecognizer) {
         // 不允许拖动 / 自动减速旋转中都不处理
         if !isPanRotationEnabled { return }
@@ -497,9 +459,7 @@ final class LuckyWheelView: UIView {
             break
         }
     }
-
     // MARK: - 旋转逻辑（JobsTimer + UIScrollView 减速） ========
-
     /// 外部也可以直接调用这个方法来启动
     ///
     /// - 参数优先级：
@@ -545,7 +505,6 @@ final class LuckyWheelView: UIView {
         timer = t
         t.start()
     }
-
     /// 根据目标时间粗略反推需要的初始角速度
     ///
     /// v(t) = v0 * d^(1000 t)
@@ -627,44 +586,35 @@ final class LuckyWheelView: UIView {
         case .right:
             point = CGPoint(x: center.x + radius - inset,
                             y: center.y)
-        }
-
-        return segmentIndex(point)
+        };return segmentIndex(point)
     }
 }
-
 // MARK: - LuckyWheelView 点语法 DSL ===================
-
 extension LuckyWheelView {
-
     /// 配置“指针”方向（上 / 下 / 左 / 右），默认 .up
     @discardableResult
     func byPointerDirection(_ direction: PointerDirection) -> Self {
         self.pointerDirection = direction
         return self
     }
-
     /// 配置扇形颜色数组（内部会生成 segments）
     @discardableResult
     func byColors(_ colors: [UIColor]) -> Self {
         self.colors = colors
         return self
     }
-
     /// 直接配置完整 segments
     @discardableResult
     func bySegments(_ segments: [LuckyWheelSegment]) -> Self {
         self.segments = segments
         return self
     }
-
     /// 配置旋转持续时间（秒）
     @discardableResult
     func bySpinDuration(_ duration: TimeInterval) -> Self {
         self.spinDuration = duration
         return self
     }
-
     /// 配置自定义初始角速度（rad/s）
     /// 数值越大，开始越猛，转得越久
     @discardableResult
@@ -672,42 +622,36 @@ extension LuckyWheelView {
         self.customInitialVelocity = velocity
         return self
     }
-
     /// 配置减速率（使用 UIScrollView.DecelerationRate）
     @discardableResult
     func byDecelerationRate(_ rate: UIScrollView.DecelerationRate) -> Self {
         self.decelerationRate = rate.rawValue
         return self
     }
-
     /// 配置减速率（直接传 rawValue，0 ~ 1，越接近 1 转得越久）
     @discardableResult
     func byDecelerationRateRaw(_ raw: CGFloat) -> Self {
         self.decelerationRate = raw
         return self
     }
-
     /// 配置认为“停下”的角速度阈值（rad/s）
     @discardableResult
     func byStopThreshold(_ threshold: CGFloat) -> Self {
         self.stopThreshold = threshold
         return self
     }
-
     /// 配置是否允许手势拖动旋转
     @discardableResult
     func byPanRotationEnabled(_ enabled: Bool) -> Self {
         self.isPanRotationEnabled = enabled
         return self
     }
-
     /// 配置扇形短按（停止）回调：返回命中的 LuckyWheelSegment
     @discardableResult
     func onSegmentTap(_ handler: @escaping (LuckyWheelSegment) -> Void) -> Self {
         self.segmentTapHandler = handler
         return self
     }
-
     /// 配置扇形长按回调：返回 LuckyWheelSegment + UILongPressGestureRecognizer
     @discardableResult
     func onSegmentLongPress(_ handler: @escaping (LuckyWheelSegment, UILongPressGestureRecognizer) -> Void) -> Self {
