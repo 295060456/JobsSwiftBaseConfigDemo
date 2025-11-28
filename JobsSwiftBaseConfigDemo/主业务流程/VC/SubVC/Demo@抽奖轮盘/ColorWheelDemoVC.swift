@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class WheelDemoVC: UIViewController {
+final class WheelDemoVC: BaseVC {
     private lazy var wheelView: ColorWheelView = {
         ColorWheelView()
             .byColors([
@@ -19,10 +19,19 @@ final class WheelDemoVC: UIViewController {
                 .systemBlue,
                 .systemPurple
             ])
-            .bySpinDuration(8.0)        // 目标转 3 秒左右
-            .byInitialVelocity(25.0)    // 显式指定初始角速度（rad/s）
-            .byDecelerationRate(.normal)
-            .byStopThreshold(0.05)
+            .bySpinDuration(3.0)
+            .byInitialVelocity(25.0)
+            .onSegmentTap { idx in
+                toastBy("🍀 短按扇形 index = \(idx)")
+            }
+            .onSegmentLongPress { idx, gr in
+                if gr.state == .began {
+                    toastBy("🍀 长按开始 index = \(idx)")
+                } else if gr.state == .ended {
+                    print("👆 长按结束 index = \(idx)")
+                    toastBy("🍀 长按开始 index = \(idx)")
+                }
+            }
             .byAddTo(view) { make in
                 make.center.equalToSuperview()
                 make.width.height.equalTo(260)

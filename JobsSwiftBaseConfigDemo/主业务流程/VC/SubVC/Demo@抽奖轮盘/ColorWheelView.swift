@@ -12,7 +12,7 @@ import SnapKit
 /// 旋转动画用 JobsTimer（displayLink 内核） + ScrollDecelerator 实现 UIScrollView 式减速
 final class ColorWheelView: UIView {
 
-    // MARK: - 配置
+    // MARK: - 配置 ==============================
 
     /// 扇形颜色数组
     var colors: [UIColor] = [] {
@@ -36,7 +36,7 @@ final class ColorWheelView: UIView {
     /// 越小，最后拖尾越久
     private var stopThreshold: CGFloat = 0.05
 
-    // MARK: - 子视图
+    // MARK: - 子视图 ==============================
 
     /// 真正画轮盘的盘面 view（我们只旋转它）
     private let plateView = UIView()
@@ -57,16 +57,16 @@ final class ColorWheelView: UIView {
             /// 点按事件：启动 JobsTimer + 减速旋转
             .onTap { [weak self] sender in
                 guard let self else { return }
-                // ✅ 已经在转了，直接丢弃这次点击（安全兜底）
+                // 已经在转了，直接丢弃这次点击（安全兜底）
                 if self.timer != nil { return }
 
-                // ✅ 开始旋转：按钮选中 + 禁止再次点击
+                // 开始旋转：按钮选中 + 禁止再次点击
                 sender.isSelected = true
                 sender.isUserInteractionEnabled = false
 
                 self.startSpinWithScrollLikeDeceleration()
             }
-            /// 长按反馈
+            /// 长按反馈（按钮自身的视觉反馈）
             .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                 if gr.state == .began {
                     btn.alpha = 0.6
@@ -81,18 +81,39 @@ final class ColorWheelView: UIView {
             }
     }()
 
-    // MARK: - 绘制相关
+    // MARK: - 绘制相关 ==============================
 
     private var sliceLayers: [CAShapeLayer] = []
 
-    // MARK: - 旋转状态 / JobsTimer
+    // MARK: - 旋转状态 / JobsTimer ====================
 
-    private var currentAngle: CGFloat = 0
+    private var currentAngle: CGFloat = 0              // 当前盘面角度（rad）
     private var decelerator: ScrollDecelerator?
     private var timer: JobsTimerProtocol?
     private let timerInterval: CGFloat = 1.0 / 60.0
 
-    // MARK: - Init
+    // MARK: - Segment 交互（点击 / 长按） ===============
+
+    private lazy var tapRecognizer: UITapGestureRecognizer = {
+        let gr = UITapGestureRecognizer(target: self, action: #selector(handleSegmentTap(_:)))
+        gr.cancelsTouchesInView = false        // 不影响中间按钮
+        return gr
+    }()
+
+    private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        let gr = UILongPressGestureRecognizer(target: self, action: #selector(handleSegmentLongPress(_:)))
+        gr.minimumPressDuration = 0.5          // 你可以之后也做成 DSL 配置
+        gr.cancelsTouchesInView = false
+        return gr
+    }()
+
+    /// 短按回调：index = 扇形下标
+    private var segmentTapHandler: ((Int) -> Void)?
+
+    /// 长按回调：index + 手势（方便你根据 state 做不同处理）
+    private var segmentLongPressHandler: ((Int, UILongPressGestureRecognizer) -> Void)?
+
+    // MARK: - Init ==============================
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -115,12 +136,16 @@ final class ColorWheelView: UIView {
             make.edges.equalToSuperview()
         }
 
+        // Segment 手势：挂在整个 ColorWheelView 上
+        addGestureRecognizer(tapRecognizer)
+        addGestureRecognizer(longPressRecognizer)
+
         // 确保按钮创建并在最上
         _ = centerButton
         bringSubviewToFront(centerButton)
     }
 
-    // MARK: - Layout / Draw
+    // MARK: - Layout / Draw ==============================
 
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -180,7 +205,81 @@ final class ColorWheelView: UIView {
         sliceLayers.append(dotLayer)
     }
 
-    // MARK: - 旋转逻辑（JobsTimer + UIScrollView 减速）
+    // MARK: - Segment 命中计算 ===========================
+
+    /// 根据点击点（在 ColorWheelView 自身坐标系）计算命中的扇形 index
+    private func segmentIndex(at point: CGPoint) -> Int? {
+        guard !colors.isEmpty,
+              plateView.bounds.width > 0,
+              plateView.bounds.height > 0
+        else { return nil }
+
+        // 圆心（以 ColorWheelView 自身坐标系）
+        let bounds = self.bounds
+        let center = CGPoint(x: bounds.midX, y: bounds.midY)
+        let radius = min(bounds.width, bounds.height) / 2
+
+        let dx = point.x - center.x
+        let dy = point.y - center.y
+        let distance = hypot(dx, dy)
+
+        // 超出圆半径：不算点击扇形
+        if distance > radius { return nil }
+
+        // 触点相对圆心的绝对角度（世界坐标），[-π, π]
+        let touchAngle = atan2(dy, dx)
+
+        // 盘面已经被 currentAngle 旋转了；我们要把触点角度“反旋转”回静止态
+        var angle0 = touchAngle - currentAngle
+
+        let twoPi = 2 * CGFloat.pi
+        // 归一化到 [0, 2π)
+        while angle0 < 0 { angle0 += twoPi }
+        while angle0 >= twoPi { angle0 -= twoPi }
+
+        // 静止态下，0 对应 -π/2（正上方）
+        let startFromTop: CGFloat = -CGFloat.pi / 2
+        var relative = angle0 - startFromTop
+        while relative < 0 { relative += twoPi }
+        while relative >= twoPi { relative -= twoPi }
+
+        let count = colors.count
+        let anglePerSlice = twoPi / CGFloat(count)
+        let idx = Int(relative / anglePerSlice)
+
+        if idx >= 0 && idx < count {
+            return idx
+        } else {
+            return nil
+        }
+    }
+
+    // MARK: - Segment 手势回调 ===========================
+
+    @objc private func handleSegmentTap(_ gr: UITapGestureRecognizer) {
+        guard gr.state == .ended else { return }
+        // 旋转中不响应点击
+        guard timer == nil else { return }
+
+        let point = gr.location(in: self)
+
+        // 注意：中心按钮会优先吃掉事件，这里只管扇形区域
+        guard let index = segmentIndex(at: point) else { return }
+
+        segmentTapHandler?(index)
+    }
+
+    @objc private func handleSegmentLongPress(_ gr: UILongPressGestureRecognizer) {
+        // 旋转中不响应长按
+        guard timer == nil else { return }
+
+        let point = gr.location(in: self)
+        guard let index = segmentIndex(at: point) else { return }
+
+        segmentLongPressHandler?(index, gr)
+    }
+
+    // MARK: - 旋转逻辑（JobsTimer + UIScrollView 减速） ========
 
     /// 外部也可以直接调用这个方法来启动
     ///
@@ -268,13 +367,13 @@ final class ColorWheelView: UIView {
         timer = nil
         decelerator = nil
 
-        // ✅ 旋转结束：按钮恢复可点击 & 状态复位
+        // 旋转结束：按钮恢复可点击 & 状态复位
         centerButton.isSelected = false
         centerButton.isUserInteractionEnabled = true
     }
 }
 
-// MARK: - ColorWheelView 点语法 DSL
+// MARK: - ColorWheelView 点语法 DSL ===================
 
 extension ColorWheelView {
 
@@ -320,5 +419,19 @@ extension ColorWheelView {
         self.stopThreshold = threshold
         return self
     }
-}
 
+    /// ✅ 配置扇形短按回调
+    @discardableResult
+    func onSegmentTap(_ handler: @escaping (Int) -> Void) -> Self {
+        self.segmentTapHandler = handler
+        return self
+    }
+
+    /// ✅ 配置扇形长按回调
+    /// handler 中可以根据 gr.state 做 began / ended 区分
+    @discardableResult
+    func onSegmentLongPress(_ handler: @escaping (Int, UILongPressGestureRecognizer) -> Void) -> Self {
+        self.segmentLongPressHandler = handler
+        return self
+    }
+}
