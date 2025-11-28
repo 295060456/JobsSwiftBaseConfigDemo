@@ -31,6 +31,7 @@ final class RootListVC: BaseVC {
             ("💥 倒计时按钮", JobsCountdownDemoVC.self),
             ("⏰ Timer", TimerDemoVC.self),
             ("🕖 时钟", ClockDemoVC.self),
+            ("🎲 抽奖轮盘", WheelDemoVC.self),
             ("⌨️ 键盘", KeyboardDemoVC.self),
             ("📷 鉴权后调用相机/相册", PhotoAlbumDemoVC.self),
             ("🐎 跑马灯/🛞 轮播图", JobsMarqueeDemoVC.self),
@@ -140,10 +141,8 @@ final class RootListVC: BaseVC {
             .byBackgroundColor(.systemOrange, for: .normal)
             .byCornerRadius(25)
             .byMasksToBounds(true)
-
             // 正计时：每秒触发一次
             .startTimer(total: nil, interval: 1.0, kind: .gcd)
-
             // 每 tick：更新中心数字
             .onTimerTick { [weak self] btn, elapsed, _, _ in
                 guard let _ = self else { return }

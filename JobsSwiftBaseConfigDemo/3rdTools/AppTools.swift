@@ -290,3 +290,10 @@ struct FibonacciSequence: Sequence {
         }
     }
 }
+/// UIScrollView 的投射距离：减速到 0 速度时走了多少路
+/// v0: 手指离开瞬间的速度（pt/s）
+/// d: UIScrollView.DecelerationRate.normal.rawValue 之类
+func projectDistance(v0: CGFloat,
+                     decelerationRate d: CGFloat) -> CGFloat {
+    return (v0 / 1000.0) * d / (1.0 - d)
+}

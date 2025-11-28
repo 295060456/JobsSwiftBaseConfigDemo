@@ -11191,7 +11191,45 @@ extension UILabel {
 }
 ```
 
-### 5、<font color=red id=内置的HTML代码>**内置的HTML代码**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 5、<font size=5>`UIScrollView`</font> 的减速函数 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 苹果虽然没把 <font size=5>`UIScrollView`</font> 的内部源码开出来，但 [**WWDC**]() + 反推基本已经确定：**本质就是一个按 <font size=5>`decelerationRate`</font> 做指数衰减的速度函数**。
+
+* 设：
+
+  - 初始速度：`v₀`（单位：pt/s，滚动结束时 `withVelocity:` 传进来的那个）
+  - `d = decelerationRate.rawValue`（`.normal ≈ 0.998`，`.fast ≈ 0.99`）[Apple Developer+1](https://developer.apple.com/documentation/uikit/uiscrollview/decelerationrate-swift.property?utm_source=chatgpt.com)
+  - 时间 `t` 单位：秒
+
+* 速度随时间：<font size=5>`UIScrollView`</font> 的约定是：「**每毫秒**把速度乘以一次 `d`」
+
+* 所以：
+
+  - 毫秒记为 `k = 1000·t`
+
+  - 第 `k` 毫秒的速度：`v(k) = v₀ · dᵏ`
+
+  - 换成以秒为自变量的连续形式：
+
+    ![image-20251128142449778](./assets/image-20251128142449778.png)
+    
+  - 位移（相对初始位置）：
+  
+    > 注意：`0 < d < 1`，因此 `ln d < 0`，式子整体是正的（往前滚）
+    
+    ![image-20251128142502649](./assets/image-20251128142502649.png)
+    
+  - 最终停止时的总位移（t → ∞）：
+  
+    ![image-20251128142546842](./assets/image-20251128142546842.png)
+  
+  - WWDC 的投射函数里给的是一个**近似**（为了少算一次 log）：
+  
+    > 当 `d` 很接近 1（0.99 / 0.998 这种）时，这个近似和上面精确公式非常接近
+  
+    ![image-20251128142608360](./assets/image-20251128142608360.png)
+
+### 6、<font color=red id=内置的HTML代码>**内置的HTML代码**</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 static let demoHTML = """

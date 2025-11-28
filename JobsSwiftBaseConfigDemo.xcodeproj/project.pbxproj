@@ -230,6 +230,9 @@
 		04C68D2E2ED94C5500A11F53 /* Demo@钟.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D2D2ED94C4C00A11F53 /* Demo@钟.swift */; };
 		04C68D302ED94D6200A11F53 /* 倒计时按钮.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D2F2ED94D5F00A11F53 /* 倒计时按钮.swift */; };
 		04C68D322ED9587B00A11F53 /* CAShapeLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D312ED9587A00A11F53 /* CAShapeLayer.swift */; };
+		04C68D402ED9818A00A11F53 /* ColorWheelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D3F2ED9818A00A11F53 /* ColorWheelView.swift */; };
+		04C68D462ED981D400A11F53 /* ColorWheelDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D452ED981D100A11F53 /* ColorWheelDemoVC.swift */; };
+		04C68D4A2ED9880800A11F53 /* ScrollDecelerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D492ED9880700A11F53 /* ScrollDecelerator.swift */; };
 		04CF028C2E8808540083ACF0 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028B2E8808500083ACF0 /* UIButton.swift */; };
 		04CF028E2E8A37BB0083ACF0 /* TextInputStrategies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */; };
 		04CF02902E8A3A160083ACF0 /* Demo@输入文本.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */; };
@@ -553,6 +556,9 @@
 		04C68D2D2ED94C4C00A11F53 /* Demo@钟.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@钟.swift"; sourceTree = "<group>"; };
 		04C68D2F2ED94D5F00A11F53 /* 倒计时按钮.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "倒计时按钮.swift"; sourceTree = "<group>"; };
 		04C68D312ED9587A00A11F53 /* CAShapeLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAShapeLayer.swift; sourceTree = "<group>"; };
+		04C68D3F2ED9818A00A11F53 /* ColorWheelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWheelView.swift; sourceTree = "<group>"; };
+		04C68D452ED981D100A11F53 /* ColorWheelDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWheelDemoVC.swift; sourceTree = "<group>"; };
+		04C68D492ED9880700A11F53 /* ScrollDecelerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollDecelerator.swift; sourceTree = "<group>"; };
 		04CF028B2E8808500083ACF0 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputStrategies.swift; sourceTree = "<group>"; };
 		04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@输入文本.swift"; sourceTree = "<group>"; };
@@ -879,7 +885,6 @@
 		045920E22E84EC64008C8D6A /* 3rdTools */ = {
 			isa = PBXGroup;
 			children = (
-				04C68D2B2ED94C3300A11F53 /* 钟.swift */,
 				041174672ECB1E91004D47B7 /* 🛜网络流量监控 */,
 				042F958F2EB5C733005DE735 /* 多语言化 */,
 				043283912EC499E00031CDD6 /* BRPickerViewSwift */,
@@ -889,6 +894,7 @@
 				04CF03182E8A80CA0083ACF0 /* AppTools.swift */,
 				C564FC2D2E0958E80079B5C1 /* HUDHelper.swift */,
 				04C68D2F2ED94D5F00A11F53 /* 倒计时按钮.swift */,
+				04C68D2B2ED94C3300A11F53 /* 钟.swift */,
 				C564FC742E0959620079B5C1 /* Inlines.swift */,
 				04D8422A2E965BA0001E8C90 /* JobsMarqueeView.swift */,
 				0482A5F72EA5F308004176A4 /* JobsNavBar.swift */,
@@ -1101,6 +1107,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				04C68D332ED97BA600A11F53 /* Demo@抽奖轮盘 */,
 				0432838E2EC48DE00031CDD6 /* Demo@中国大陆居民身份证验证 */,
 				0432838B2EC48BD60031CDD6 /* Demo@SkeletonView */,
 				0432837E2EC478C60031CDD6 /* Demo@SwiftEntryKit */,
@@ -1220,6 +1227,16 @@
 				04C442A92EB8BC13008E0F09 /* 9squares_AlBoardman.json */,
 			);
 			path = "Lottie动画";
+			sourceTree = "<group>";
+		};
+		04C68D332ED97BA600A11F53 /* Demo@抽奖轮盘 */ = {
+			isa = PBXGroup;
+			children = (
+				04C68D492ED9880700A11F53 /* ScrollDecelerator.swift */,
+				04C68D3F2ED9818A00A11F53 /* ColorWheelView.swift */,
+				04C68D452ED981D100A11F53 /* ColorWheelDemoVC.swift */,
+			);
+			path = "Demo@抽奖轮盘";
 			sourceTree = "<group>";
 		};
 		04D0C97C2E8D19AB00580020 /* MJRefresh */ = {
@@ -1953,6 +1970,7 @@
 				04F7AF6F2EC3280D00ACB509 /* LiveMsgCell.swift in Sources */,
 				042B67CE2E95085A000A2970 /* NSTextAttachment.swift in Sources */,
 				047E48F32EB36A5B00881898 /* MTLDepthStencilDescriptor.swift in Sources */,
+				04C68D402ED9818A00A11F53 /* ColorWheelView.swift in Sources */,
 				045920EE2E854BE7008C8D6A /* Double.swift in Sources */,
 				C564FC982E0959640079B5C1 /* NSObject.swift in Sources */,
 				C564FCB12E0959990079B5C1 /* CollectionCell.swift in Sources */,
@@ -2002,6 +2020,7 @@
 				C564FC8C2E0959640079B5C1 /* UIAlertController.swift in Sources */,
 				04CF028E2E8A37BB0083ACF0 /* TextInputStrategies.swift in Sources */,
 				04A8C54E2E8AA9F900381701 /* Demo@功能列表根目录.swift in Sources */,
+				04C68D4A2ED9880800A11F53 /* ScrollDecelerator.swift in Sources */,
 				C564FC9B2E0959640079B5C1 /* UIStackView.swift in Sources */,
 				043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */,
 				04124F392EB067F000462BE2 /* APIService.swift in Sources */,
@@ -2017,6 +2036,7 @@
 				0401DD082E91183000D572AD /* Demo@弹出提示.swift in Sources */,
 				04CF03192E8A80CE0083ACF0 /* AppTools.swift in Sources */,
 				04D0C9822E8D1CF400580020 /* Optional.swift in Sources */,
+				04C68D462ED981D400A11F53 /* ColorWheelDemoVC.swift in Sources */,
 				043283AF2EC4A0630031CDD6 /* UIButton+BRPickerAdditions.swift in Sources */,
 				04124F3E2EB075EA00462BE2 /* AFRoute.swift in Sources */,
 				C564FC952E0959640079B5C1 /* UIView.swift in Sources */,

@@ -152,7 +152,7 @@ public extension UINavigationBar {
     @discardableResult
     func byStandardAppearance(_ builder: (UINavigationBarAppearance) -> Void) -> Self {
         if #available(iOS 13.0, *) {
-            var appearance = standardAppearance          // @NSCopying：这里拿到的是 copy
+            let appearance = standardAppearance          // @NSCopying：这里拿到的是 copy
             builder(appearance)
             standardAppearance = appearance
         };return self
@@ -168,7 +168,7 @@ public extension UINavigationBar {
     @discardableResult
     func byCompactAppearance(_ builder: (UINavigationBarAppearance) -> Void) -> Self {
         if #available(iOS 13.0, *) {
-            var appearance = compactAppearance ?? standardAppearance
+            let appearance = compactAppearance ?? standardAppearance
             builder(appearance)
             compactAppearance = appearance
         };return self
@@ -184,7 +184,7 @@ public extension UINavigationBar {
     @discardableResult
     func byScrollEdgeAppearance(_ builder: (UINavigationBarAppearance) -> Void) -> Self {
         if #available(iOS 13.0, *) {
-            var appearance = scrollEdgeAppearance ?? standardAppearance
+            let appearance = scrollEdgeAppearance ?? standardAppearance
             builder(appearance)
             scrollEdgeAppearance = appearance
         };return self
@@ -200,7 +200,7 @@ public extension UINavigationBar {
     @discardableResult
     func byCompactScrollEdgeAppearance(_ builder: (UINavigationBarAppearance) -> Void) -> Self {
         if #available(iOS 15.0, *) {
-            var appearance = compactScrollEdgeAppearance
+            let appearance = compactScrollEdgeAppearance
                 ?? scrollEdgeAppearance
                 ?? compactAppearance
                 ?? standardAppearance
@@ -219,7 +219,7 @@ public extension UINavigationBar {
     @discardableResult
     func byUnifiedAppearance(_ builder: (UINavigationBarAppearance) -> Void) -> Self {
         if #available(iOS 13.0, *) {
-            var appearance = standardAppearance
+            let appearance = standardAppearance
             builder(appearance)
             standardAppearance = appearance
             scrollEdgeAppearance = appearance
