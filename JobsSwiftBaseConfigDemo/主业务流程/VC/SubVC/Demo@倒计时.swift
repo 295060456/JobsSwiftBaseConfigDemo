@@ -9,15 +9,34 @@ import UIKit
 import SnapKit
 
 final class JobsCountdownDemoVC: BaseVC {
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        jobsSetupGKNav(
-            title: "Countdown 按钮 Demo"
-        )
         view.backgroundColor = .systemBackground
-
+        jobsSetupGKNav(
+            title: "倒计时按钮"
+        )
         if #available(iOS 15.0, *) {
-            setupUI_iOS15()
+            title1Label.byVisible(YES)
+            button1Basic.byVisible(YES)
+
+            title2Label.byVisible(YES)
+            button2Flash.byVisible(YES)
+
+            title3Label.byVisible(YES)
+            button3Up.byVisible(YES)
+
+            title4Label.byVisible(YES)
+            button4RenderOnInit.byVisible(YES)
+
+            title5Label.byVisible(YES)
+            button5RichText.byVisible(YES)
+
+            title6Label.byVisible(YES)
+            button6Attachment.byVisible(YES)
+
+            title7Label.byVisible(YES)
+            button7Tappable.byVisible(YES)
         } else {
             UILabel()
                 .byText("需要 iOS 15+ 的 UIButton.Configuration")
@@ -28,218 +47,332 @@ final class JobsCountdownDemoVC: BaseVC {
                 }
         }
     }
-    // MARK: - iOS15+ Demo
+    /// 外层滚动视图
+    private lazy var scrollView: UIScrollView = { [unowned self] in
+        UIScrollView()
+            .byAddTo(view) { [unowned self] make in
+                make.top.equalTo(gk_navigationBar.snp.bottom).offset(10)
+                make.left.right.bottom.equalTo(view.safeAreaLayoutGuide)
+            }
+    }()
+    /// 内容容器，用来放所有标题和按钮
+    private lazy var contentView: UIView = { [unowned self] in
+        UIView()
+            .byAddTo(scrollView) { [unowned self] make in
+                make.edges.equalToSuperview()
+                make.width.equalTo(scrollView.snp.width)
+            }
+    }()
+    // MARK: - 1️⃣ 基础 60s（控制台打印）
     @available(iOS 15.0, *)
-    private func setupUI_iOS15() {
-        // ✅ Scroll 容器（防止内容过多）
-        let scroll = UIScrollView()
-        let content = UIStackView()
-        content.axis = .vertical
-        content.spacing = 14
-        content.alignment = .fill
-
-        view.addSubview(scroll)
-
-        scroll.snp.makeConstraints {
-            $0.top.equalTo(gk_navigationBar.snp.bottom).offset(10.h)
-            $0.left.bottom.right.equalTo(view.safeAreaLayoutGuide)
-        }
-
-        scroll.addSubview(content)
-        content.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(20)
-            $0.width.equalTo(scroll.snp.width).offset(-40)
-        }
-
-        // MARK: - 辅助函数
-        func addTitle(_ text: String) {
-            let lab = UILabel()
-            lab.text = text
-            lab.font = .systemFont(ofSize: 13, weight: .semibold)
-            lab.textColor = .secondaryLabel
-            content.addArrangedSubview(lab)
-        }
-
-        func makeFilled(_ title: String, _ bg: UIColor) -> UIButton {
-            let btn = UIButton(type: .system)
-            var cfg = UIButton.Configuration.filled()
-            cfg.title = title
-            cfg.baseBackgroundColor = bg
-            cfg.baseForegroundColor = .white
-            cfg.cornerStyle = .capsule
-            cfg.contentInsets = .init(top: 10, leading: 16, bottom: 10, trailing: 16)
-            btn.configuration = cfg
-            btn.snp.makeConstraints { $0.height.equalTo(46) }
-            return btn
-        }
-
-        // ========================================
-        // 1️⃣ 基础倒计时（控制台打印）
-        // ========================================
-        addTitle("1️⃣ 基础 60s（控制台打印）")
-        let b1 = makeFilled("获取验证码", .systemBlue)
-        b1.byCountdown { cfg in
-            cfg.mode = .down(from: 60)
-            cfg.renderConfiguration = { sec, base in
-                var c = base
-                c.title = "重新发送(\(sec)s)"
-                return c
+    private lazy var title1Label: UILabel = { [unowned self] in
+        UILabel().byFont(.systemFont(ofSize: 13, weight: .semibold))
+            .byText("1️⃣ 基础 60s（控制台打印）")
+            .byTextColor(.secondaryLabel)
+            .byAddTo(contentView) { [unowned self] make in
+                make.top.equalTo(contentView.snp.top).offset(20)
+                make.left.right.equalToSuperview().inset(24)
             }
-            cfg.onTick = { _, _, sec in
-                print("🕒 倒计时运行中: \(sec)s")
-            }
-        }.byCountdownOnTapAuto()
-        content.addArrangedSubview(b1)
+    }()
 
-        // ========================================
-        // 2️⃣ 每秒闪烁（背景交替颜色）
-        // ========================================
-        addTitle("2️⃣ 每秒换色闪烁")
-        let b2 = makeFilled("开始闪烁倒计时", .systemTeal)
-        b2.byCountdown { cfg in
-            cfg.mode = .down(from: 20)
-            cfg.renderConfiguration = { sec, base in
-                var c = base
-                c.title = "闪烁 \(sec)s"
-                // ✅ 交替颜色
-                c.baseBackgroundColor = (sec % 2 == 0) ? .systemTeal : .systemBlue
-                return c
-            }
-            cfg.onTick = { _, _, sec in
-                print("💡 闪烁中：\(sec)")
-            }
-        }.byCountdownOnTapAuto()
-        content.addArrangedSubview(b2)
-
-        // ========================================
-        // 3️⃣ 0.5s 间隔上数
-        // ========================================
-        addTitle("3️⃣ 上数到 10（0.5s 间隔）")
-        let b3 = makeFilled("0.5s 起步", .systemGreen)
-        b3.byCountdown { cfg in
-            cfg.mode = .up(to: 10)
-            cfg.interval = 0.5
-            cfg.renderConfiguration = { sec, base in
-                var c = base
-                c.title = "进度 \(sec)/10"
-                return c
-            }
-            cfg.onTick = { _, _, sec in
-                print("⚡️ 进度: \(sec)/10")
-            }
-        }.byCountdownOnTapAuto()
-        content.addArrangedSubview(b3)
-
-        // ========================================
-        // 4️⃣ renderOnInit
-        // ========================================
-        addTitle("4️⃣ 进入即渲染（renderOnInit）")
-        let b4 = makeFilled("进入已显示", .systemIndigo)
-        b4.byCountdown { cfg in
-            cfg.mode = .down(from: 10)
-            cfg.renderOnInit = true
-            cfg.renderConfiguration = { sec, base in
-                var c = base
-                c.title = "剩余 \(sec)s"
-                return c
-            }
-        }.byCountdownOnTapAuto()
-        content.addArrangedSubview(b4)
-
-        // ========================================
-        // 5️⃣ 富文本标题（JobsRichText）
-        // ========================================
-        addTitle("5️⃣ 富文本标题（JobsRichText）")
-        let b5 = makeFilled("富文本倒计时", .systemPurple)
-        b5.byCountdown { cfg in
-            cfg.mode = .down(from: 15)
-            cfg.renderConfiguration = { sec, base in
-                var c = base
-
-                // 段落样式
-                let ps = jobsMakeParagraphStyle {
-                    $0.alignment = .center
-                    $0.lineSpacing = 1.5
+    @available(iOS 15.0, *)
+    private lazy var button1Basic: UIButton = { [unowned self] in
+        UIButton.sys()
+            .byBackgroundColor(.systemBlue, for: .normal)
+            .byTitle("获取验证码", for: .normal)
+            .byTitle("获取验证码", for: .selected)
+            .byTitleColor(.white, for: .normal)
+            .byTitleColor(.white, for: .selected)
+            .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+            .byCountdown { cfg in
+                cfg.mode = .down(from: 60)
+                cfg.renderConfiguration = { sec, base in
+                    var c = base
+                    c.title = "重新发送(\(sec)s)"
+                    return c
                 }
-
-                // 富文本片段
-                let runs: [JobsRichRun] = [
-                    JobsRichRun(.text("剩余 "))
-                        .font(.systemFont(ofSize: 16, weight: .semibold))
-                        .color(.systemBlue),
-
-                    JobsRichRun(.text("\(sec)"))
-                        .font(.monospacedDigitSystemFont(ofSize: 16, weight: .bold))
-                        .color(.systemBlue)
-                        .underline(.single, color: .systemBlue),
-
-                    JobsRichRun(.text(" s"))
-                        .font(.systemFont(ofSize: 16))
-                        .color(.systemBlue)
-                ]
-
-                let ns = JobsRichText.make(runs, paragraphStyle: ps)
-                c.title = nil
-                c.attributedTitle = AttributedString(ns)
-                return c
-            }
-        }.byCountdownOnTapAuto()
-        content.addArrangedSubview(b5)
-
-        // ========================================
-        // 6️⃣ 图标附件 + 文本富文本
-        // ========================================
-        addTitle("6️⃣ 附件 + 文本富文本")
-        let b6 = makeFilled("附件说明", .systemPink)
-        b6.byCountdown { cfg in
-            cfg.mode = .down(from: 8)
-            cfg.renderConfiguration = { sec, base in
-                var c = base
-                let config = UIImage.SymbolConfiguration(pointSize: 14, weight: .medium)
-                let image = UIImage(systemName: "paperclip", withConfiguration: config)!
-                let att = jobsMakeTextAttachment { $0.image = image }
-
-                let runs: [JobsRichRun] = [
-                    JobsRichRun(.attachment(att, CGSize(width: 14, height: 14))),
-                    JobsRichRun(.text(" 附件 \(sec)s"))
-                        .font(.systemFont(ofSize: 14))
-                        .color(.white)
-                ]
-
-                let ps = jobsMakeParagraphStyle { $0.alignment = .center }
-                let ns = JobsRichText.make(runs, paragraphStyle: ps)
-
-                c.title = nil
-                c.attributedTitle = AttributedString(ns)
-                return c
-            }
-        }.byCountdownOnTapAuto()
-        content.addArrangedSubview(b6)
-
-        // ========================================
-        // 7️⃣ 运行中允许点击（弹 Toast）
-        // ========================================
-        addTitle("7️⃣ 运行中允许点击（弹 Toast 提示）")
-        let b7 = makeFilled("运行可点", .systemOrange)
-        b7.byCountdown { cfg in
-            cfg.mode = .down(from: 12)
-            cfg.clickableWhileRunning = true // ✅ 允许点击
-            cfg.onTapWhileRunning = { btn, _ in
-                // ✅ 弹 Toast
-                let alert = UIAlertController(title: nil,
-                                              message: "运行中被点击！",
-                                              preferredStyle: .alert)
-                btn.jobsNearestVC()?.present(alert, animated: true)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-                    alert.dismiss(animated: true)
+                cfg.onTick = { _, _, sec in
+                    print("🕒 倒计时运行中: \(sec)s")
                 }
             }
-            cfg.renderConfiguration = { sec, base in
-                var c = base
-                c.title = "可点 \(sec)s"
-                return c
+            .byCountdownOnTapAuto()
+            .byAddTo(contentView) { [unowned self] make in
+                make.top.equalTo(title1Label.snp.bottom).offset(8)
+                make.left.right.equalToSuperview().inset(24)
+                make.height.equalTo(46)
             }
-        }.byCountdownOnTapAuto()
-        content.addArrangedSubview(b7)
-    }
+    }()
+    // MARK: - 2️⃣ 每秒闪烁（背景交替颜色）
+    @available(iOS 15.0, *)
+    private lazy var title2Label: UILabel = { [unowned self] in
+        UILabel()
+            .byFont(.systemFont(ofSize: 13, weight: .semibold))
+            .byText("2️⃣ 每秒换色闪烁")
+            .byTextColor(.secondaryLabel)
+            .byAddTo(contentView) { [unowned self] make in
+                make.top.equalTo(button1Basic.snp.bottom).offset(24)
+                make.left.right.equalToSuperview().inset(24)
+            }
+    }()
+
+    @available(iOS 15.0, *)
+    private lazy var button2Flash: UIButton = { [unowned self] in
+        UIButton.sys()
+            .byBackgroundColor(.systemTeal, for: .normal)
+            .byTitle("开始闪烁倒计时", for: .normal)
+            .byTitle("开始闪烁倒计时", for: .selected)
+            .byTitleColor(.white, for: .normal)
+            .byTitleColor(.white, for: .selected)
+            .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+            .byCountdown { cfg in
+                cfg.mode = .down(from: 20)
+                cfg.renderConfiguration = { sec, base in
+                    var c = base
+                    c.title = "闪烁 \(sec)s"
+                    c.baseBackgroundColor = (sec % 2 == 0) ? .systemTeal : .systemBlue
+                    return c
+                }
+                cfg.onTick = { _, _, sec in
+                    print("💡 闪烁中：\(sec)")
+                }
+            }
+            .byCountdownOnTapAuto()
+            .byAddTo(contentView) { [unowned self] make in
+                make.top.equalTo(title2Label.snp.bottom).offset(8)
+                make.left.right.equalToSuperview().inset(24)
+                make.height.equalTo(46)
+            }
+    }()
+    // MARK: - 3️⃣ 0.5s 间隔上数
+    @available(iOS 15.0, *)
+    private lazy var title3Label: UILabel = { [unowned self] in
+        UILabel()
+            .byFont(.systemFont(ofSize: 13, weight: .semibold))
+            .byText("3️⃣ 上数到 10（0.5s 间隔）")
+            .byTextColor(.secondaryLabel)
+            .byAddTo(contentView) { [unowned self] make in
+                make.top.equalTo(button2Flash.snp.bottom).offset(24)
+                make.left.right.equalToSuperview().inset(24)
+            }
+    }()
+
+    @available(iOS 15.0, *)
+    private lazy var button3Up: UIButton = { [unowned self] in
+        UIButton.sys()
+            .byBackgroundColor(.systemGreen, for: .normal)
+            .byTitle("0.5s 起步", for: .normal)
+            .byTitle("0.5s 起步", for: .selected)
+            .byTitleColor(.white, for: .normal)
+            .byTitleColor(.white, for: .selected)
+            .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+            .byCountdown { cfg in
+                cfg.mode = .up(to: 10)
+                cfg.interval = 0.5
+                cfg.renderConfiguration = { sec, base in
+                    var c = base
+                    c.title = "进度 \(sec)/10"
+                    return c
+                }
+                cfg.onTick = { _, _, sec in
+                    print("⚡️ 进度: \(sec)/10")
+                }
+            }
+            .byCountdownOnTapAuto()
+            .byAddTo(contentView) { [unowned self] make in
+                make.top.equalTo(title3Label.snp.bottom).offset(8)
+                make.left.right.equalToSuperview().inset(24)
+                make.height.equalTo(46)
+            }
+    }()
+    // MARK: - 4️⃣ 进入即渲染（renderOnInit）
+    @available(iOS 15.0, *)
+    private lazy var title4Label: UILabel = { [unowned self] in
+        UILabel().byFont(.systemFont(ofSize: 13, weight: .semibold))
+            .byText("4️⃣ 进入即渲染（renderOnInit）")
+            .byTextColor(.secondaryLabel)
+            .byAddTo(contentView) { [unowned self] make in
+                make.top.equalTo(button3Up.snp.bottom).offset(24)
+                make.left.right.equalToSuperview().inset(24)
+            }
+    }()
+
+    @available(iOS 15.0, *)
+    private lazy var button4RenderOnInit: UIButton = { [unowned self] in
+        UIButton.sys()
+            .byBackgroundColor(.systemIndigo, for: .normal)
+            .byTitle("进入已显示", for: .normal)
+            .byTitle("进入已显示", for: .selected)
+            .byTitleColor(.white, for: .normal)
+            .byTitleColor(.white, for: .selected)
+            .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+            .byCountdown { cfg in
+                cfg.mode = .down(from: 10)
+                cfg.renderOnInit = true
+                cfg.renderConfiguration = { sec, base in
+                    var c = base
+                    c.title = "剩余 \(sec)s"
+                    return c
+                }
+            }
+            .byCountdownOnTapAuto()
+            .byAddTo(contentView) { [unowned self] make in
+                make.top.equalTo(title4Label.snp.bottom).offset(8)
+                make.left.right.equalToSuperview().inset(24)
+                make.height.equalTo(46)
+            }
+    }()
+    // MARK: - 5️⃣ 富文本标题（JobsRichText）
+    @available(iOS 15.0, *)
+    private lazy var title5Label: UILabel = { [unowned self] in
+        UILabel()
+            .byFont(.systemFont(ofSize: 13, weight: .semibold))
+            .byText("5️⃣ 富文本标题（JobsRichText）")
+            .byTextColor(.secondaryLabel)
+            .byAddTo(contentView) { [unowned self] make in
+                make.top.equalTo(button4RenderOnInit.snp.bottom).offset(24)
+                make.left.right.equalToSuperview().inset(24)
+            }
+    }()
+
+    @available(iOS 15.0, *)
+    private lazy var button5RichText: UIButton = { [unowned self] in
+        UIButton.sys()
+            .byBackgroundColor(.systemPurple, for: .normal)
+            .byTitle("富文本倒计时", for: .normal)
+            .byTitle("富文本倒计时", for: .selected)
+            .byTitleColor(.white, for: .normal)
+            .byTitleColor(.white, for: .selected)
+            .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+            .byCountdown { cfg in
+                cfg.mode = .down(from: 15)
+                cfg.renderConfiguration = { sec, base in
+                    var c = base
+
+                    let ps = jobsMakeParagraphStyle {
+                        $0.alignment = .center
+                        $0.lineSpacing = 1.5
+                    }
+
+                    let runs: [JobsRichRun] = [
+                        JobsRichRun(.text("剩余 "))
+                            .font(.systemFont(ofSize: 16, weight: .semibold))
+                            .color(.systemBlue),
+
+                        JobsRichRun(.text("\(sec)"))
+                            .font(.monospacedDigitSystemFont(ofSize: 16, weight: .bold))
+                            .color(.systemBlue)
+                            .underline(.single, color: .systemBlue),
+
+                        JobsRichRun(.text(" s"))
+                            .font(.systemFont(ofSize: 16))
+                            .color(.systemBlue)
+                    ]
+
+                    let ns = JobsRichText.make(runs, paragraphStyle: ps)
+                    c.title = nil
+                    c.attributedTitle = AttributedString(ns)
+                    return c
+                }
+            }
+            .byCountdownOnTapAuto()
+            .byAddTo(contentView) { [unowned self] make in
+                make.top.equalTo(title5Label.snp.bottom).offset(8)
+                make.left.right.equalToSuperview().inset(24)
+                make.height.equalTo(46)
+            }
+    }()
+    // MARK: - 6️⃣ 图标附件 + 文本富文本
+    @available(iOS 15.0, *)
+    private lazy var title6Label: UILabel = { [unowned self] in
+        UILabel()
+            .byFont(.systemFont(ofSize: 13, weight: .semibold))
+            .byText("6️⃣ 附件 + 文本富文本")
+            .byTextColor(.secondaryLabel)
+            .byAddTo(contentView) { [unowned self] make in
+                make.top.equalTo(button5RichText.snp.bottom).offset(24)
+                make.left.right.equalToSuperview().inset(24)
+            }
+    }()
+
+    @available(iOS 15.0, *)
+    private lazy var button6Attachment: UIButton = { [unowned self] in
+        UIButton.sys()
+            .byBackgroundColor(.systemPink, for: .normal)
+            .byTitle("附件说明", for: .normal)
+            .byTitle("附件说明", for: .selected)
+            .byTitleColor(.white, for: .normal)
+            .byTitleColor(.white, for: .selected)
+            .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+            .byCountdown { cfg in
+                cfg.mode = .down(from: 8)
+                cfg.renderConfiguration = { sec, base in
+                    var c = base
+                    let att = jobsMakeTextAttachment {
+                        $0.image = "paperclip".sysImg(UIImage.SymbolConfiguration(pointSize: 14, weight: .medium))
+                    }
+
+                    let runs: [JobsRichRun] = [
+                        JobsRichRun(.attachment(att, CGSize(width: 14, height: 14))),
+                        JobsRichRun(.text(" 附件 \(sec)s"))
+                            .font(.systemFont(ofSize: 14))
+                            .color(.white)
+                    ]
+
+                    let ps = jobsMakeParagraphStyle { $0.alignment = .center }
+                    let ns = JobsRichText.make(runs, paragraphStyle: ps)
+
+                    c.title = nil
+                    c.attributedTitle = AttributedString(ns)
+                    return c
+                }
+            }
+            .byCountdownOnTapAuto()
+            .byAddTo(contentView) { [unowned self] make in
+                make.top.equalTo(title6Label.snp.bottom).offset(8)
+                make.left.right.equalToSuperview().inset(24)
+                make.height.equalTo(46)
+            }
+    }()
+    // MARK: - 7️⃣ 运行中允许点击（弹 Toast 提示）
+    @available(iOS 15.0, *)
+    private lazy var title7Label: UILabel = { [unowned self] in
+        UILabel().byFont(.systemFont(ofSize: 13, weight: .semibold))
+            .byText("7️⃣ 运行中允许点击（弹 Toast 提示）")
+            .byTextColor(.secondaryLabel)
+            .byAddTo(contentView) { [unowned self] make in
+                make.top.equalTo(button6Attachment.snp.bottom).offset(24)
+                make.left.right.equalToSuperview().inset(24)
+            }
+    }()
+
+    @available(iOS 15.0, *)
+    private lazy var button7Tappable: UIButton = { [unowned self] in
+        UIButton.sys()
+            .byBackgroundColor(.systemOrange, for: .normal)
+            .byTitle("运行可点", for: .normal)
+            .byTitle("运行可点", for: .selected)
+            .byTitleColor(.white, for: .normal)
+            .byTitleColor(.white, for: .selected)
+            .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
+            .byCountdown { cfg in
+                cfg.mode = .down(from: 12)
+                cfg.clickableWhileRunning = true
+                cfg.onTapWhileRunning = { btn, _ in
+                    toastBy("运行中被点击！")
+                }
+                cfg.renderConfiguration = { sec, base in
+                    var c = base
+                    c.title = "可点 \(sec)s"
+                    return c
+                }
+            }
+            .byCountdownOnTapAuto()
+            .byAddTo(contentView) { [unowned self] make in
+                make.top.equalTo(title7Label.snp.bottom).offset(8)
+                make.left.right.equalToSuperview().inset(24)
+                make.height.equalTo(46)
+                // 最后一个顺便把 contentView 的 bottom 撑开，保证 Scroll 正常滚动
+                make.bottom.equalTo(contentView.snp.bottom).offset(-24)
+            }
+    }()
 }

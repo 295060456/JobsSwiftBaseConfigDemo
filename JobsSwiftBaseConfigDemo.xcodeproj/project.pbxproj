@@ -152,7 +152,6 @@
 		0477D9752E8B9146002C6427 /* Demo@安全Present.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9742E8B9141002C6427 /* Demo@安全Present.swift */; };
 		0477D9772E8B9381002C6427 /* UIResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9762E8B937A002C6427 /* UIResponder.swift */; };
 		0477D9792E8BADB2002C6427 /* Demo@被Push或者Present的次级页面.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9782E8BADB1002C6427 /* Demo@被Push或者Present的次级页面.swift */; };
-		0477D97D2E8BDB95002C6427 /* JobsCountdownButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D97C2E8BDB94002C6427 /* JobsCountdownButton.swift */; };
 		0477D97F2E8BDBBC002C6427 /* Demo@倒计时.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D97E2E8BDBB7002C6427 /* Demo@倒计时.swift */; };
 		0477D9832E8BE9FC002C6427 /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9822E8BE9FB002C6427 /* KeyboardObserver.swift */; };
 		0477D9852E8BEACB002C6427 /* Reactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9842E8BEACA002C6427 /* Reactive.swift */; };
@@ -225,6 +224,12 @@
 		04C442AC2EB8BC27008E0F09 /* LottieLogo1.json in Resources */ = {isa = PBXBuildFile; fileRef = 04C442AB2EB8BC27008E0F09 /* LottieLogo1.json */; };
 		04C68D242ED850A700A11F53 /* LosslessStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D232ED850A600A11F53 /* LosslessStringConvertible.swift */; };
 		04C68D262ED8510E00A11F53 /* BinaryFloatingPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D252ED8510D00A11F53 /* BinaryFloatingPoint.swift */; };
+		04C68D282ED93FBD00A11F53 /* UINavigationBarAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D272ED93FBC00A11F53 /* UINavigationBarAppearance.swift */; };
+		04C68D2A2ED940AE00A11F53 /* UIBarAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D292ED940AC00A11F53 /* UIBarAppearance.swift */; };
+		04C68D2C2ED94C3900A11F53 /* 钟.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D2B2ED94C3300A11F53 /* 钟.swift */; };
+		04C68D2E2ED94C5500A11F53 /* Demo@钟.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D2D2ED94C4C00A11F53 /* Demo@钟.swift */; };
+		04C68D302ED94D6200A11F53 /* 倒计时按钮.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D2F2ED94D5F00A11F53 /* 倒计时按钮.swift */; };
+		04C68D322ED9587B00A11F53 /* CAShapeLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D312ED9587A00A11F53 /* CAShapeLayer.swift */; };
 		04CF028C2E8808540083ACF0 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028B2E8808500083ACF0 /* UIButton.swift */; };
 		04CF028E2E8A37BB0083ACF0 /* TextInputStrategies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */; };
 		04CF02902E8A3A160083ACF0 /* Demo@输入文本.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */; };
@@ -465,7 +470,6 @@
 		0477D9742E8B9141002C6427 /* Demo@安全Present.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@安全Present.swift"; sourceTree = "<group>"; };
 		0477D9762E8B937A002C6427 /* UIResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIResponder.swift; sourceTree = "<group>"; };
 		0477D9782E8BADB1002C6427 /* Demo@被Push或者Present的次级页面.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@被Push或者Present的次级页面.swift"; sourceTree = "<group>"; };
-		0477D97C2E8BDB94002C6427 /* JobsCountdownButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsCountdownButton.swift; sourceTree = "<group>"; };
 		0477D97E2E8BDBB7002C6427 /* Demo@倒计时.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@倒计时.swift"; sourceTree = "<group>"; };
 		0477D9822E8BE9FB002C6427 /* KeyboardObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardObserver.swift; sourceTree = "<group>"; };
 		0477D9842E8BEACA002C6427 /* Reactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reactive.swift; sourceTree = "<group>"; };
@@ -543,6 +547,12 @@
 		04C442AB2EB8BC27008E0F09 /* LottieLogo1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = LottieLogo1.json; sourceTree = "<group>"; };
 		04C68D232ED850A600A11F53 /* LosslessStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LosslessStringConvertible.swift; sourceTree = "<group>"; };
 		04C68D252ED8510D00A11F53 /* BinaryFloatingPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryFloatingPoint.swift; sourceTree = "<group>"; };
+		04C68D272ED93FBC00A11F53 /* UINavigationBarAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationBarAppearance.swift; sourceTree = "<group>"; };
+		04C68D292ED940AC00A11F53 /* UIBarAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBarAppearance.swift; sourceTree = "<group>"; };
+		04C68D2B2ED94C3300A11F53 /* 钟.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "钟.swift"; sourceTree = "<group>"; };
+		04C68D2D2ED94C4C00A11F53 /* Demo@钟.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@钟.swift"; sourceTree = "<group>"; };
+		04C68D2F2ED94D5F00A11F53 /* 倒计时按钮.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "倒计时按钮.swift"; sourceTree = "<group>"; };
+		04C68D312ED9587A00A11F53 /* CAShapeLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAShapeLayer.swift; sourceTree = "<group>"; };
 		04CF028B2E8808500083ACF0 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputStrategies.swift; sourceTree = "<group>"; };
 		04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@输入文本.swift"; sourceTree = "<group>"; };
@@ -869,6 +879,7 @@
 		045920E22E84EC64008C8D6A /* 3rdTools */ = {
 			isa = PBXGroup;
 			children = (
+				04C68D2B2ED94C3300A11F53 /* 钟.swift */,
 				041174672ECB1E91004D47B7 /* 🛜网络流量监控 */,
 				042F958F2EB5C733005DE735 /* 多语言化 */,
 				043283912EC499E00031CDD6 /* BRPickerViewSwift */,
@@ -877,8 +888,8 @@
 				043283432EC437190031CDD6 /* 软键盘退出.swift */,
 				04CF03182E8A80CA0083ACF0 /* AppTools.swift */,
 				C564FC2D2E0958E80079B5C1 /* HUDHelper.swift */,
+				04C68D2F2ED94D5F00A11F53 /* 倒计时按钮.swift */,
 				C564FC742E0959620079B5C1 /* Inlines.swift */,
-				0477D97C2E8BDB94002C6427 /* JobsCountdownButton.swift */,
 				04D8422A2E965BA0001E8C90 /* JobsMarqueeView.swift */,
 				0482A5F72EA5F308004176A4 /* JobsNavBar.swift */,
 				04CF03142E8A75E70083ACF0 /* JobsRichText.swift */,
@@ -1101,6 +1112,7 @@
 				04124F3A2EB075C500462BE2 /* Demo@Alamofire */,
 				04124F2B2EB0621D00462BE2 /* Demo@Moya */,
 				0424625B2EBB020E00D6BFCC /* Demo@Texture.swift */,
+				04C68D2D2ED94C4C00A11F53 /* Demo@钟.swift */,
 				048313FF2E9A08500009A44B /* Demo@跑马灯轮播图.swift */,
 				04D0C9782E8D066000580020 /* Demo@图片加载.swift */,
 				042462592EBAFCD500D6BFCC /* Demo@ComponentKit.swift */,
@@ -1236,11 +1248,11 @@
 		04D0C9802E8D19FC00580020 /* iOS.SDK */ = {
 			isa = PBXGroup;
 			children = (
-				04A245922ECDA78B009649E8 /* Sequence.swift */,
 				04A245902ECD7373009649E8 /* Array.swift */,
 				042F958D2EB5C477005DE735 /* Bundle.swift */,
 				043283672EC458C10031CDD6 /* CAGradientLayer.swift */,
 				045920E52E84F386008C8D6A /* CALayer.swift */,
+				04C68D312ED9587A00A11F53 /* CAShapeLayer.swift */,
 				048F447D2EB3267000BAA7EE /* CATransform3D.swift */,
 				0401DCFD2E91069E00D572AD /* DateFormatter.swift */,
 				049A65682EA0AAB70006B185 /* Decimal.swift */,
@@ -1252,11 +1264,13 @@
 				04D0C9812E8D1CF300580020 /* Optional.swift */,
 				04C442912EB87F76008E0F09 /* PDFThumbnailView.swift */,
 				04C4428F2EB87ED6008E0F09 /* PDFView.swift */,
+				04A245922ECDA78B009649E8 /* Sequence.swift */,
 				045920E92E84FD77008C8D6A /* String.swift */,
 				C564FC752E0959620079B5C1 /* UIActivityIndicatorView.swift */,
 				04468E0F2E9CB43D00677000 /* UIAlertAction.swift */,
 				C564FC6A2E0959610079B5C1 /* UIAlertController.swift */,
 				0477D96E2E8B8478002C6427 /* UIApplication.swift */,
+				04C68D292ED940AC00A11F53 /* UIBarAppearance.swift */,
 				C564FC6B2E0959610079B5C1 /* UIBarButtonItem.swift */,
 				04E8D6162E8E6E7E00E85CDA /* UIBarButtonItemAppearance.swift */,
 				04D0C96B2E8CCA7200580020 /* UIBarItem.swift */,
@@ -1275,6 +1289,7 @@
 				C564FC6E2E0959610079B5C1 /* UILabel.swift */,
 				0402F0AD2EC2D73E0054A151 /* UIListContentConfiguration.swift */,
 				C564FC842E0959640079B5C1 /* UINavigationBar.swift */,
+				04C68D272ED93FBC00A11F53 /* UINavigationBarAppearance.swift */,
 				C564FC7C2E0959630079B5C1 /* UINavigationController.swift */,
 				C564FC7F2E0959630079B5C1 /* UIPageControl.swift */,
 				C564FC722E0959620079B5C1 /* UIPageViewController.swift */,
@@ -1790,6 +1805,7 @@
 				0402F0AE2EC2D7400054A151 /* UIListContentConfiguration.swift in Sources */,
 				04C4428E2EB86CB5008E0F09 /* Demo@PDF.swift in Sources */,
 				042F958E2EB5C478005DE735 /* Bundle.swift in Sources */,
+				04C68D2A2ED940AE00A11F53 /* UIBarAppearance.swift in Sources */,
 				045920FF2E854FBD008C8D6A /* UInt8.swift in Sources */,
 				0440B5DA2EB2FFB7005DBE91 /* keys.swift in Sources */,
 				04C442902EB87ED8008E0F09 /* PDFView.swift in Sources */,
@@ -1843,8 +1859,8 @@
 				C564FC862E0959640079B5C1 /* WKWebView.swift in Sources */,
 				0448B1842EA3707E00CFC755 /* Demo@生成二维码和条形码.swift in Sources */,
 				045376632EB0B5BF00133F73 /* FeedModel.swift in Sources */,
-				0477D97D2E8BDB95002C6427 /* JobsCountdownButton.swift in Sources */,
 				04AC74C52E86682E004B8305 /* Notification.swift in Sources */,
+				04C68D302ED94D6200A11F53 /* 倒计时按钮.swift in Sources */,
 				0432838A2EC484D80031CDD6 /* SkeletonView.swift in Sources */,
 				04D0C9722E8CD39300580020 /* Demo@控制层回调.swift in Sources */,
 				048B795C2ED5452500A6FEF1 /* Demo@系统导航栏.swift in Sources */,
@@ -1861,6 +1877,7 @@
 				04C68D242ED850A700A11F53 /* LosslessStringConvertible.swift in Sources */,
 				045376652EB0B5D600133F73 /* FeedVideoCell.swift in Sources */,
 				C564FCB32E0959990079B5C1 /* CustomCell.swift in Sources */,
+				04C68D282ED93FBD00A11F53 /* UINavigationBarAppearance.swift in Sources */,
 				047E9A732EB6217900F58923 /* Demo@XLSX.swift in Sources */,
 				045920FA2E854FA5008C8D6A /* Int64.swift in Sources */,
 				0440B5592EB237BE005DBE91 /* Demo@Snowflake.swift in Sources */,
@@ -1899,6 +1916,7 @@
 				04FC77892EB0BE1E00B810BA /* FeedListVC.swift in Sources */,
 				0459210A2E854FFB008C8D6A /* Float16.swift in Sources */,
 				04B5B4932EC5CCB700ED4505 /* BaseTableViewCellByValue2.swift in Sources */,
+				04C68D2C2ED94C3900A11F53 /* 钟.swift in Sources */,
 				048314002E9A08510009A44B /* Demo@跑马灯轮播图.swift in Sources */,
 				0477D9872E8BEF64002C6427 /* Demo@键盘.swift in Sources */,
 				C564FC932E0959640079B5C1 /* UIToolbarAppearance.swift in Sources */,
@@ -1929,6 +1947,7 @@
 				046786E92EB4CEFA003FE82D /* RefreshProxy.swift in Sources */,
 				040E68F92EC704DA00598A5B /* Demo@自定义注解.swift in Sources */,
 				C564FC962E0959640079B5C1 /* Inlines.swift in Sources */,
+				04C68D2E2ED94C5500A11F53 /* Demo@钟.swift in Sources */,
 				045376612EB0B5B100133F73 /* PlayerRemoteVC.swift in Sources */,
 				04468F902E9E4D7000677000 /* PermissionCenter.swift in Sources */,
 				04F7AF6F2EC3280D00ACB509 /* LiveMsgCell.swift in Sources */,
@@ -1991,6 +2010,7 @@
 				047E48DA2EB3562C00881898 /* PNPlayerDemoVC.swift in Sources */,
 				0440B55A2EB23846005DBE91 /* Demo@LiveChat.swift in Sources */,
 				04C2F0312E98C9D000BA05A9 /* Demo@设计模式MVVM.swift in Sources */,
+				04C68D322ED9587B00A11F53 /* CAShapeLayer.swift in Sources */,
 				043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */,
 				04FC77902EB0C89100B810BA /* BMPlayer.swift in Sources */,
 				04FC77872EB0BE0C00B810BA /* FeedListCell.swift in Sources */,

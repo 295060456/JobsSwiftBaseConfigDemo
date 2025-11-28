@@ -212,6 +212,10 @@ public extension String {
     var sysImg: UIImage {
         UIImage(systemName: self) ?? jobsSolidBlue()
     }
+
+    func sysImg(_ config: UIImage.SymbolConfiguration) -> UIImage {
+        UIImage(systemName: self, withConfiguration: config) ?? jobsSolidBlue()
+    }
 #if canImport(Kingfisher)
     /// 远程：通过 KF 异步下载后返回；本地：直接返回
     func kfLoadImage() async throws -> UIImage {

@@ -46,7 +46,7 @@ public extension CAGradientLayer {
     func byType(_ t: CAGradientLayerType) -> Self { self.type = t; return self }
 
     @discardableResult
-    func byFrame(_ f: CGRect) -> Self { self.frame = f; return self }
+    func byLayerFrame(_ f: CGRect) -> Self { self.frame = f; return self }
 
     /// 插入到某个 view 的 layer（默认最底层）
     @discardableResult

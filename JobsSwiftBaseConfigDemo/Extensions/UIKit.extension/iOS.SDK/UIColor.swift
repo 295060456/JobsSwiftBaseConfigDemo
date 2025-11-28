@@ -18,12 +18,10 @@ extension UIColor {
     public convenience init(r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat = 1) {
         self.init(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: a)
     }
-    
     /// init method with RGB values from 0 to 255, instead of 0 to 1. With alpha(default:1)
     public convenience init(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat) {
         self.init(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: 1.0)
     }
-
     /// init method with hex string and alpha(default: 1)
     /// 支持格式：
     /// "#RRGGBB" / "RRGGBB" / "0xRRGGBB"
@@ -32,14 +30,12 @@ extension UIColor {
     convenience init?(hexString: String, alpha: CGFloat = 1) {
         var hex = hexString.trimmingCharacters(in: .whitespacesAndNewlines)
                            .lowercased()
-
         // 去掉前缀
         if hex.hasPrefix("#") {
             hex.removeFirst()
         } else if hex.hasPrefix("0x") {
             hex.removeFirst(2)
         }
-
         // 3 位压缩格式：RGB -> RRGGBB
         if hex.count == 3 {
             let r = hex[hex.startIndex]
@@ -68,9 +64,7 @@ extension UIColor {
             b = CGFloat( value & 0x000000FF)        / 255.0
         default:
             return nil
-        }
-
-        self.init(red: r, green: g, blue: b, alpha: a)
+        };self.init(red: r, green: g, blue: b, alpha: a)
     }
 
     /// init method from Gray value and alpha(default:1)

@@ -15,14 +15,13 @@ final class TipsGrantPermissionView: UIView {
             .byBgColor(.white)
             .byLayer { layer in
                 layer.byCornerRadius(14)
-                    // 有阴影就不要 masksToBounds = true，不然阴影会被裁掉
-                    .byMasksToBounds(NO)
-                    .byShadowCor(color: .black.withAlphaComponent(0.15))
-                    .byShadowOffset(offset: CGSize(width: 0, height: 4))
-                    .byShadowRadius(radius: 12)
-                    .byShadowOpacity(opacity: 1)
+                    .byMasksToBounds(NO) // 有阴影就不要 masksToBounds = true，不然阴影会被裁掉
+                    .byShadowColor(.black.withAlphaComponent(0.15))
+                    .byShadowOffset(CGSize(width: 0, height: 4))
+                    .byShadowRadius(12)
+                    .byShadowOpacity(1)
             }
-            .byAddTo(self) { make in               // ✅ 加到 self 上
+            .byAddTo(self) { make in
                 make.edges.equalToSuperview()
             }
     }()
@@ -33,6 +32,10 @@ final class TipsGrantPermissionView: UIView {
             .byTextColor(.label)
             .byFont(.systemFont(ofSize: 17, weight: .semibold))
             .byTextAlignment(.center)
+            .byAddTo(cardView) { make in
+                make.top.equalToSuperview().inset(18)
+                make.left.right.equalToSuperview().inset(20)
+            }
     }()
     /// 主文案
     private lazy var messageLabel: UILabel = {
@@ -42,6 +45,10 @@ final class TipsGrantPermissionView: UIView {
             .byFont(.systemFont(ofSize: 14))
             .byNumberOfLines(0)
             .byTextAlignment(.center)
+            .byAddTo(cardView) { [unowned self] make in
+                make.top.equalTo(titleLabel.snp.bottom).offset(14)
+                make.left.right.equalToSuperview().inset(20)
+            }
     }()
     /// 灰色小字
     private lazy var hintLabel: UILabel = {
@@ -51,18 +58,15 @@ final class TipsGrantPermissionView: UIView {
             .byFont(.systemFont(ofSize: 12))
             .byNumberOfLines(0)
             .byTextAlignment(.center)
+            .byAddTo(cardView) { [unowned self] make in
+                make.top.equalTo(messageLabel.snp.bottom).offset(14)
+                make.left.right.equalToSuperview().inset(20)
+            }
     }()
     /// 底部绿色按钮：去开启
     private lazy var confirmButton: UIButton = {
         UIButton.sys()
-            .byBackgroundColor(
-                UIColor(
-                    red: 0/255,
-                    green: 199/255,
-                    blue: 140/255,
-                    alpha: 1
-                )
-            )
+            .byBackgroundColor(.init(r: 0/255, g: 199/255, b: 140/25, a: 1))
             .byTitle("去开启", for: .normal)
             .byTitleColor(.white, for: .normal)
             .byTitleFont(.systemFont(ofSize: 16, weight: .semibold))
@@ -71,24 +75,11 @@ final class TipsGrantPermissionView: UIView {
                 self.removeFromSuperview()
                 self.confirmHandler?()
             }
-            .byAddTo(cardView) { make in           // ✅ 加到 cardView 里
+            .byAddTo(cardView) { [unowned self] make in
+                make.top.equalTo(hintLabel.snp.bottom).offset(14)
+                make.left.right.equalToSuperview().inset(20)
                 make.height.equalTo(40)
-            }
-    }()
-
-    private lazy var stack: UIStackView = {
-        UIStackView(arrangedSubviews: [
-            titleLabel,
-            messageLabel,
-            hintLabel,
-            confirmButton
-        ])
-            .byAxis(.vertical)
-            .bySpacing(14)
-            .byAlignment(.fill)
-            .byDistribution(.fill)
-            .byAddTo(cardView) { make in              // ✅ 约束写在 cardView 里
-                 make.edges.equalToSuperview().inset(UIEdgeInsets(top: 18, left: 20, bottom: 16, right: 20))
+                make.bottom.equalToSuperview().inset(16)
             }
     }()
 
@@ -103,12 +94,13 @@ final class TipsGrantPermissionView: UIView {
     }
 
     private func setupUI() {
-        // 半透明黑色遮罩
-//        byBgColor(.black.withAlphaComponent(0.35))
-        // 触发 lazy 创建
+        // 半透明黑色遮罩（按需打开）
+        // byBgColor(.black.withAlphaComponent(0.35))
+
+        // 触发懒加载，顺带确保整个层级建好
         cardView.byVisible(YES)
-        stack.byVisible(YES)
+        confirmButton.byVisible(YES)
+        // 标题下方分割线
         cardView.makeBelowSeparatorBy(below: titleLabel, offset: 12)
     }
 }
-

@@ -1354,6 +1354,12 @@ public extension UIView {
     }
     // MARK: - 添加到父视图
     @discardableResult
+    func byAddTo(_ superview: UIView) -> Self {
+        superview.addSubview(self)
+        return self
+    }
+
+    @discardableResult
     func byAddTo(_ superview: UIView,
                  _ closure: ((_ make: ConstraintMaker) -> Void)? = nil) -> Self {
         superview.addSubview(self)

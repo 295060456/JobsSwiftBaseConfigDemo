@@ -215,7 +215,6 @@ extension UILabel {
         return self
     }
     // ===== 新增：更多 by-DSL 补齐 =====
-
     // 高亮 / 交互 / 启用
     @discardableResult
     func byHighlightedTextColor(_ color: UIColor?) -> Self { self.highlightedTextColor = color; return self }
@@ -321,6 +320,63 @@ extension UILabel {
         return self
     }
 }
+
+extension UILabel {
+    /// 点语法：给 UILabel 加点击事件，返回自己
+    @discardableResult
+    func onTap(
+        taps: Int = 1,
+        touches: Int = 1,
+        cancelsTouchesInView: Bool = true,
+        isEnabled: Bool = true,
+        name: String? = nil,
+        _ handler: @escaping (UILabel) -> Void
+    ) -> Self {
+        isUserInteractionEnabled = true     // UIImageView 默认是 false，必须开
+        let tapGR = UITapGestureRecognizer
+            .byConfig { [weak self] gr in
+                guard let self = self else { return }
+                handler(self)               // 对外只暴露 UIImageView
+            }
+            .byTaps(taps)
+            .byTouches(touches)
+            .byCancelsTouchesInView(cancelsTouchesInView)
+            .byEnabled(isEnabled)
+            .byName(name)
+        self.jobs_addGesture(tapGR)
+        return self
+    }
+    /// 长按手势：返回 self，支持链式调用
+    @discardableResult
+    func onLongPress(
+        minDuration: TimeInterval = 0.8,     // 最小按压时长
+        movement: CGFloat = 12,              // 允许移动距离
+        touches: Int = 1,                    // 手指数量
+        cancelsTouchesInView: Bool = true,
+        isEnabled: Bool = true,
+        name: String? = nil,
+        _ handler: @escaping (UILabel, UILongPressGestureRecognizer) -> Void
+    ) -> Self {
+
+        isUserInteractionEnabled = true
+
+        let lp = UILongPressGestureRecognizer
+            .byConfig { [weak self] gr in
+                guard let self = self,
+                      let lp = gr as? UILongPressGestureRecognizer else { return }
+                handler(self, lp)           // 对外只暴露 UILabel + LongPress
+            }
+            .byMinDuration(minDuration)
+            .byMovement(movement)
+            .byTouches(touches)
+            .byCancelsTouchesInView(cancelsTouchesInView)
+            .byEnabled(isEnabled)
+            .byName(name)
+
+        self.jobs_addGesture(lp)
+        return self
+    }
+}
 /// 一些功能性的
 extension UILabel {
     // MARK: 设置富文本
@@ -374,7 +430,6 @@ extension UILabel {
 // MARK: - 文本内边距（不改类，关联对象 + 方法交换）
 private var _jobsInsetsKey: UInt8 = 0
 private var _jobsInsetsInstalledKey: UInt8 = 0
-
 extension UILabel {
     /// 给 UILabel 增加 contentInsets 能力（无需自定义子类）
     var jobs_contentInsets: UIEdgeInsets {
@@ -439,14 +494,12 @@ private extension UILabel {
                       height: base.height + inset.top + inset.bottom)
     }
 }
-
 // MARK: - 轻量方法交换
 private func _jobs_swizzle(_ cls: AnyClass, _ orig: Selector, _ repl: Selector) {
     guard let m1 = class_getInstanceMethod(cls, orig),
           let m2 = class_getInstanceMethod(cls, repl) else { return }
     method_exchangeImplementations(m1, m2)
 }
-
 // MARK: - 对齐映射（CATextLayerAlignmentMode ← NSTextAlignment）
 private extension CATextLayerAlignmentMode {
     static func _jobs_fromNSTextAlignment(_ a: NSTextAlignment) -> CATextLayerAlignmentMode {

@@ -34,8 +34,7 @@ public extension UIBarButtonItem {
             objc_setAssociatedObject(self, &_barItemActionKey, block, .OBJC_ASSOCIATION_COPY_NONATOMIC)
             self.target = self
             self.action  = #selector(_jobs_handleAction(_:))
-        }
-        return self
+        };return self
     }
 
     @objc private func _jobs_handleAction(_ sender: Any) {

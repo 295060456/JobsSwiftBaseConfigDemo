@@ -178,7 +178,6 @@ extension UIButton {
         };return self
     }
 
-
     @discardableResult
     func byTintColor(_ color: UIColor) -> Self {
         self.tintColor = color
@@ -337,30 +336,6 @@ extension UIButton {
         return self
     }
     // MARK: - 阴影
-    @discardableResult
-    func byShadowCor(color: UIColor) -> Self {
-        layer.shadowColor = color.cgColor
-        return self
-    }
-
-    @discardableResult
-    func byShadowOpacity(opacity: Float = 0.5) -> Self {
-        layer.shadowOpacity = opacity
-        return self
-    }
-
-    @discardableResult
-    func byShadowOffset(offset: CGSize = .zero) -> Self {
-        layer.shadowOffset = offset
-        return self
-    }
-
-    @discardableResult
-    func byShadowRadius(radius: CGFloat = 3) -> Self {
-        layer.shadowRadius = radius
-        return self
-    }
-
     @discardableResult
     func byMasksToBounds(radius: Bool) -> Self {
         layer.masksToBounds = radius
@@ -671,8 +646,7 @@ extension UIButton {
                 case .layer: break
                 }
             }
-        }
-        return self
+        };return self
     }
 
     @discardableResult
