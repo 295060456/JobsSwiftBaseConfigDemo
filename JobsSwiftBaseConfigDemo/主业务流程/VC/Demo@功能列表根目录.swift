@@ -31,7 +31,7 @@ final class RootListVC: BaseVC {
             ("💥 倒计时按钮", JobsCountdownDemoVC.self),
             ("⏰ Timer", TimerDemoVC.self),
             ("🕖 时钟", ClockDemoVC.self),
-            ("🎲 抽奖轮盘", WheelDemoVC.self),
+            ("🎲 抽奖轮盘", LuckyWheelDemoVC.self),
             ("⌨️ 键盘", KeyboardDemoVC.self),
             ("📷 鉴权后调用相机/相册", PhotoAlbumDemoVC.self),
             ("🐎 跑马灯/🛞 轮播图", JobsMarqueeDemoVC.self),

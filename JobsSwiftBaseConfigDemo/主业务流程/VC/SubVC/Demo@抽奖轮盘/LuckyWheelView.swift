@@ -7,58 +7,54 @@
 
 import UIKit
 import SnapKit
-
 /// 扇形圆盘 + 中央按钮（按钮用 Jobs 封装 API）
 /// 旋转动画用 JobsTimer（displayLink 内核） + ScrollDecelerator 实现 UIScrollView 式减速
 /// 支持:
 /// 1. 中央按钮点击减速旋转
 /// 2. 扇形短按 / 长按
 /// 3. 手势拖动旋转 + 松手后减速
-final class ColorWheelView: UIView {
-
-    // MARK: - 配置 ==============================
-
-    /// 扇形颜色数组
-    var colors: [UIColor] = [] {
+/// 4. 每个扇形文字整体对准圆心
+/// 5. 每个扇形文字外侧有一个圆形 ImageView（用 placeholderImage 渲染）
+final class LuckyWheelView: UIView {
+    /// 完整 Segment 模型（推荐使用）
+    var segments: [LuckyWheelSegment] = [] {
         didSet { setNeedsLayout() }
     }
-
+    /// 仅背景色（向下兼容）：设置 colors 会自动生成 segments
+    var colors: [UIColor] {
+        get { segments.map { $0.backgroundColor ?? .clear } }
+        set {
+            segments = newValue.map { LuckyWheelSegment(backgroundColor: $0) }
+        }
+    }
     /// 旋转持续时间（秒，近似控制）
-    /// 例如：2 / 3 / 4 秒，内部根据 decelerationRate + stopThreshold 反推初始角速度
     var spinDuration: TimeInterval = 3.0
-
     /// 自定义初始角速度（单位：rad/s）
     /// - 如果不为 nil，则优先使用这个值，而不是通过 spinDuration 反推
     /// - 数值越大，甩得越猛，转得越久
     var customInitialVelocity: CGFloat?
-
     /// 是否允许手势拖动旋转（默认 true）
     var isPanRotationEnabled: Bool = true {
         didSet {
             panGesture.isEnabled = isPanRotationEnabled
         }
     }
-
     /// 减速率（默认 UIScrollView.normal）
     /// 值越接近 1，减速越慢、转得越久
     private var decelerationRate: CGFloat = UIScrollView.DecelerationRate.normal.rawValue
-
     /// 认为“停下”的角速度阈值（rad/s）
     /// 越小，最后拖尾越久
     private var stopThreshold: CGFloat = 0.05
-
     // MARK: - 子视图 ==============================
-
     /// 真正画轮盘的盘面 view（我们只旋转它）
     private let plateView = UIView()
-
     /// 中央按钮（用你的 UIButton DSL）
     private lazy var centerButton: UIButton = {
         UIButton.sys()
             /// 背景色
             .byBackgroundColor(.systemGreen, for: .normal)
             /// 普通标题
-            .byTitle("点击\n抽奖", for: .normal)
+            .byTitle("点击抽奖".verticalByNewline(YES), for: .normal)
             .byTitleColor(.white, for: .normal)
             .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
             .byCornerRadius(30)
@@ -83,20 +79,14 @@ final class ColorWheelView: UIView {
                 make.height.equalTo(60)
             }
     }()
-
     // MARK: - 绘制相关 ==============================
-
     private var sliceLayers: [CAShapeLayer] = []
-
     // MARK: - 旋转状态 / JobsTimer ====================
-
     private var currentAngle: CGFloat = 0              // 当前盘面角度（rad）
     private var decelerator: ScrollDecelerator?
     private var timer: JobsTimerProtocol?
     private let timerInterval: CGFloat = 1.0 / 60.0
-
     // MARK: - 手势状态 ================================
-
     /// 使用你的封装创建 Pan 手势
     private lazy var panGesture: UIPanGestureRecognizer = {
         let gr = UIPanGestureRecognizer
@@ -108,11 +98,9 @@ final class ColorWheelView: UIView {
             .byMinTouches(1)
             .byMaxTouches(2)
             .byCancelsTouchesInView(true)
-
         self.jobs_addGesture(gr)
         return gr
     }()
-
     /// 扇形点击（Tap）
     private lazy var tapRecognizer: UITapGestureRecognizer = {
         let gr = UITapGestureRecognizer
@@ -128,7 +116,6 @@ final class ColorWheelView: UIView {
         self.jobs_addGesture(gr)
         return gr
     }()
-
     /// 扇形长按（LongPress）
     private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         let gr = UILongPressGestureRecognizer
@@ -144,22 +131,16 @@ final class ColorWheelView: UIView {
         self.jobs_addGesture(gr)
         return gr
     }()
-
     /// Pan 拖动计算用
     private var lastTouchAngle: CGFloat = 0
     private var lastTouchTimestamp: CFTimeInterval = 0
     private var angularVelocityFromPan: CGFloat = 0
-
     // MARK: - Segment 交互（点击 / 长按） ===============
-
     /// 短按回调：index = 扇形下标
     private var segmentTapHandler: ((Int) -> Void)?
-
     /// 长按回调：index + 手势（方便你根据 state 做不同处理）
     private var segmentLongPressHandler: ((Int, UILongPressGestureRecognizer) -> Void)?
-
     // MARK: - Init ==============================
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -173,30 +154,24 @@ final class ColorWheelView: UIView {
     private func commonInit() {
         backgroundColor = .clear
         clipsToBounds = false
-
-        // 盘面铺满整个 ColorWheelView
+        /// 盘面铺满整个 LuckyWheelView
         addSubview(plateView)
         plateView.backgroundColor = .clear
         plateView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-
-        // 触发 lazy，完成 jobs_addGesture 绑定
-        _ = panGesture
-        _ = tapRecognizer
-        _ = longPressRecognizer
-
-        // Tap / LongPress 与 Pan 冲突时，让 Pan 优先（拖动优先）
+        /// 触发 lazy，完成 jobs_addGesture 绑定
+        panGesture.byEnabled(YES)
+        tapRecognizer.byEnabled(YES)
+        longPressRecognizer.byEnabled(YES)
+        /// Tap / LongPress 与 Pan 冲突时，让 Pan 优先（拖动优先）
         tapRecognizer.require(toFail: panGesture)
         longPressRecognizer.require(toFail: panGesture)
-
         // 确保按钮创建并在最上
-        _ = centerButton
+        centerButton.byVisible(YES)
         bringSubviewToFront(centerButton)
     }
-
     // MARK: - Layout / Draw ==============================
-
     override func layoutSubviews() {
         super.layoutSubviews()
         rebuildSlices()
@@ -206,23 +181,24 @@ final class ColorWheelView: UIView {
     private func rebuildSlices() {
         sliceLayers.forEach { $0.removeFromSuperlayer() }
         sliceLayers.removeAll()
+        // 清掉旧的文字 label / 图片
+        plateView.subviews.forEach { $0.removeFromSuperview() }
 
-        guard !colors.isEmpty,
+        guard !segments.isEmpty,
               plateView.bounds.width > 0,
-              plateView.bounds.height > 0
-        else { return }
+              plateView.bounds.height > 0 else { return }
 
         let bounds = plateView.bounds
         let center = CGPoint(x: bounds.midX, y: bounds.midY)
         let radius = min(bounds.width, bounds.height) / 2
 
-        let count = colors.count
+        let count = segments.count
         let anglePerSlice = 2 * CGFloat.pi / CGFloat(count)
 
-        for (index, color) in colors.enumerated() {
+        for (index, segment) in segments.enumerated() {
             let startAngle = -CGFloat.pi / 2 + CGFloat(index) * anglePerSlice
             let endAngle = startAngle + anglePerSlice
-
+            // 扇形路径
             let path = UIBezierPath()
             path.move(to: center)
             path.addArc(withCenter: center,
@@ -232,14 +208,68 @@ final class ColorWheelView: UIView {
                         clockwise: true)
             path.close()
 
-            let layer = CAShapeLayer()
-            layer.path = path.cgPath
-            layer.fillColor = color.cgColor
-
+            let layer = CAShapeLayer().byPath(path.cgPath).byFillColor(segment.backgroundColor)
             plateView.layer.addSublayer(layer)
             sliceLayers.append(layer)
-        }
+            // ==== 文本：整体“对准圆心” ===========================
+            let midAngle = (startAngle + endAngle) / 2
 
+            if let attr = makeSegmentAttributedText(for: segment) {
+                let label = UILabel()
+                    .byNumberOfLines(0)
+                    .byTextAlignment(.center)
+                    .byBgCor(.clear)
+                    .byAttributedString(attr)
+                // 文本中心在扇形中线、偏内一点
+                let textRadius = radius * 0.55
+                let textCenter = CGPoint(
+                    x: center.x + cos(midAngle) * textRadius,
+                    y: center.y + sin(midAngle) * textRadius
+                )
+                // 先算一下所需大小
+                let maxTextWidth: CGFloat = anglePerSlice * radius * 0.5
+                let maxTextHeight: CGFloat = radius * 1.4
+                let maxSize = CGSize(width: maxTextWidth, height: maxTextHeight)
+                let rect = attr.boundingRect(
+                    with: maxSize,
+                    options: [.usesLineFragmentOrigin, .usesFontLeading],
+                    context: nil
+                )
+
+                let w = min(maxTextWidth, ceil(rect.width))
+                let h = min(maxTextHeight, ceil(rect.height))
+
+                label.bounds = CGRect(x: 0, y: 0, width: w, height: h)
+                label.center = textCenter
+
+                // 让 label 的纵向轴沿着圆心连线方向
+                let rotation = midAngle - CGFloat.pi / 2
+                label.transform = CGAffineTransform(rotationAngle: rotation)
+
+                plateView.addSubview(label)
+            }
+
+            // ==== 图片：文字外侧的圆形 ImageView ===================
+            if let placeholder = segment.placeholderImage,let url = segment.imageURLString {
+                // 图片中心比文字更靠外圈一点
+                let imageRadius = radius * 0.8     // 比 textRadius 更靠近外圈
+                let imageCenter = CGPoint(
+                    x: center.x + cos(midAngle) * imageRadius,
+                    y: center.y + sin(midAngle) * imageRadius
+                )
+                // 根据整体半径给一个相对大小
+                let imageSize = radius * 0.22      // 可按视觉再调
+                UIImageView()//
+//                    .byAsyncImageKF(url, fallback: placeholder)
+                    .kf_setImage(from: url, placeholder: placeholder)
+                    .byContentMode(.scaleAspectFill)
+                    .byClipsToBounds(YES)
+                    .byBounds(CGRect(x: 0, y: 0, width: imageSize, height: imageSize))
+                    .byCenter(imageCenter)
+                    .byCornerRadius(imageSize / 2.0)
+                    .byAddTo(plateView)
+            }
+        }
         // 中心点方便观察
         let dotRadius: CGFloat = 3
         let dotPath = UIBezierPath(ovalIn: CGRect(
@@ -249,21 +279,36 @@ final class ColorWheelView: UIView {
             height: dotRadius * 2
         ))
         let dotLayer = CAShapeLayer()
-        dotLayer.path = dotPath.cgPath
-        dotLayer.fillColor = UIColor.white.cgColor
+            .byPath(dotPath.cgPath)
+            .byFillColor(.white)
         plateView.layer.addSublayer(dotLayer)
         sliceLayers.append(dotLayer)
     }
-
+    /// 把 Segment 转成富文本：
+    /// - 如果 segment.attributedText 不为 nil：直接用（可自行竖排/换行）
+    /// - 否则用 text + font + color，**不做任何自动换行处理**
+    private func makeSegmentAttributedText(for segment: LuckyWheelSegment) -> NSAttributedString? {
+        if let attr = segment.attributedText {
+            return attr
+        }
+        guard let text = segment.text, !text.isEmpty else {
+            return nil
+        }
+        return NSAttributedString(
+            string: text,
+            attributes: [
+                .font: segment.textFont ?? .systemFont(ofSize: 12, weight: .medium),
+                .foregroundColor: segment.textColor ?? .black
+            ]
+        )
+    }
     // MARK: - Segment 命中计算 ===========================
-
     /// 根据点击点（在 ColorWheelView 自身坐标系）计算命中的扇形 index
     private func segmentIndex(at point: CGPoint) -> Int? {
-        guard !colors.isEmpty,
+        guard !segments.isEmpty,
               plateView.bounds.width > 0,
               plateView.bounds.height > 0
         else { return nil }
-
         // 圆心，以 ColorWheelView 自身坐标系
         let bounds = self.bounds
         let center = CGPoint(x: bounds.midX, y: bounds.midY)
@@ -272,28 +317,23 @@ final class ColorWheelView: UIView {
         let dx = point.x - center.x
         let dy = point.y - center.y
         let distance = hypot(dx, dy)
-
         // 超出圆半径：不算点击扇形
         if distance > radius { return nil }
-
         // 触点相对圆心的绝对角度（世界坐标），[-π, π]
         let touchAngle = atan2(dy, dx)
-
         // 盘面已经被 currentAngle 旋转了；把触点角度“反旋转”回静止态
         var angle0 = touchAngle - currentAngle
-
         let twoPi = 2 * CGFloat.pi
         // 归一化到 [0, 2π)
         while angle0 < 0 { angle0 += twoPi }
         while angle0 >= twoPi { angle0 -= twoPi }
-
         // 静止态下，0 对应 -π/2（正上方）
         let startFromTop: CGFloat = -CGFloat.pi / 2
         var relative = angle0 - startFromTop
         while relative < 0 { relative += twoPi }
         while relative >= twoPi { relative -= twoPi }
 
-        let count = colors.count
+        let count = segments.count
         let anglePerSlice = twoPi / CGFloat(count)
         let idx = Int(relative / anglePerSlice)
 
@@ -303,40 +343,28 @@ final class ColorWheelView: UIView {
             return nil
         }
     }
-
     // MARK: - Segment 手势回调 ===========================
-
     private func handleSegmentTap(_ gr: UITapGestureRecognizer) {
         guard gr.state == .ended else { return }
         // 旋转中不响应点击
         guard timer == nil else { return }
-
         let point = gr.location(in: self)
-
         // 点到中心按钮区域 -> 交给按钮自己处理
         if centerButton.frame.contains(point) { return }
-
         guard let index = segmentIndex(at: point) else { return }
-
         segmentTapHandler?(index)
     }
 
     private func handleSegmentLongPress(_ gr: UILongPressGestureRecognizer) {
         // 旋转中不响应长按
         guard timer == nil else { return }
-
         let point = gr.location(in: self)
-
         // 点到中心按钮区域 -> 不算扇形长按
         if centerButton.frame.contains(point) { return }
-
         guard let index = segmentIndex(at: point) else { return }
-
         segmentLongPressHandler?(index, gr)
     }
-
     // MARK: - 手势拖动旋转 ===============================
-
     private func handlePan(_ gesture: UIPanGestureRecognizer) {
         // 不允许拖动 / 自动减速旋转中都不处理
         if !isPanRotationEnabled { return }
@@ -344,7 +372,6 @@ final class ColorWheelView: UIView {
 
         let center = CGPoint(x: bounds.midX, y: bounds.midY)
         let location = gesture.location(in: self)
-
         // 在中心按钮区域开始的拖动，忽略
         if gesture.state == .began,
            centerButton.frame.contains(location) {
@@ -385,14 +412,11 @@ final class ColorWheelView: UIView {
             if abs(v) > 0.1 {
                 startSpinWithScrollLikeDeceleration(initialVelocity: v)
             }
-
         default:
             break
         }
     }
-
     // MARK: - 旋转逻辑（JobsTimer + UIScrollView 减速） ========
-
     /// 外部也可以直接调用这个方法来启动
     ///
     /// - 参数优先级：
@@ -402,7 +426,6 @@ final class ColorWheelView: UIView {
     func startSpinWithScrollLikeDeceleration(initialVelocity: CGFloat? = nil) {
         // 已经在自动旋转中，直接丢掉本次请求
         guard timer == nil else { return }
-
         let v0: CGFloat
         if let v = initialVelocity {
             v0 = v
@@ -411,7 +434,6 @@ final class ColorWheelView: UIView {
         } else {
             v0 = velocityForTargetDuration(spinDuration)
         }
-
         // 开始旋转时统一锁死按钮
         centerButton.isSelected = true
         centerButton.isUserInteractionEnabled = false
@@ -438,7 +460,6 @@ final class ColorWheelView: UIView {
         timer = t
         t.start()
     }
-
     /// 根据目标时间粗略反推需要的初始角速度
     ///
     /// v(t) = v0 * d^(1000 t)
@@ -467,11 +488,9 @@ final class ColorWheelView: UIView {
         let dt = timerInterval
         let deltaAngle = dec.step(dt: dt)
         decelerator = dec
-
         currentAngle += deltaAngle
         // 只旋转盘面，不旋转整个 ColorWheelView，这样按钮不会跟着转
         plateView.transform = CGAffineTransform(rotationAngle: currentAngle)
-
         if dec.isStopped(threshold: stopThreshold) {
             stopSpin()
             print("✅ 减速结束，最终角度 = \(currentAngle)")
@@ -479,7 +498,7 @@ final class ColorWheelView: UIView {
         }
     }
 
-    private func stopSpin() {
+    func stopSpin() {
         timer?.stop()
         timer = nil
         decelerator = nil
@@ -489,25 +508,26 @@ final class ColorWheelView: UIView {
         centerButton.isUserInteractionEnabled = true
     }
 }
-
 // MARK: - ColorWheelView 点语法 DSL ===================
-
-extension ColorWheelView {
-
-    /// 配置扇形颜色数组
+extension LuckyWheelView {
+    /// 配置扇形颜色数组（内部会生成 segments）
     @discardableResult
     func byColors(_ colors: [UIColor]) -> Self {
         self.colors = colors
         return self
     }
-
+    /// 直接配置完整 segments
+    @discardableResult
+    func bySegments(_ segments: [LuckyWheelSegment]) -> Self {
+        self.segments = segments
+        return self
+    }
     /// 配置旋转持续时间（秒）
     @discardableResult
     func bySpinDuration(_ duration: TimeInterval) -> Self {
         self.spinDuration = duration
         return self
     }
-
     /// 配置自定义初始角速度（rad/s）
     /// 数值越大，开始越猛，转得越久
     @discardableResult
@@ -515,42 +535,36 @@ extension ColorWheelView {
         self.customInitialVelocity = velocity
         return self
     }
-
     /// 配置减速率（使用 UIScrollView.DecelerationRate）
     @discardableResult
     func byDecelerationRate(_ rate: UIScrollView.DecelerationRate) -> Self {
         self.decelerationRate = rate.rawValue
         return self
     }
-
     /// 配置减速率（直接传 rawValue，0 ~ 1，越接近 1 转得越久）
     @discardableResult
     func byDecelerationRateRaw(_ raw: CGFloat) -> Self {
         self.decelerationRate = raw
         return self
     }
-
     /// 配置认为“停下”的角速度阈值（rad/s）
     @discardableResult
     func byStopThreshold(_ threshold: CGFloat) -> Self {
         self.stopThreshold = threshold
         return self
     }
-
     /// 配置是否允许手势拖动旋转
     @discardableResult
     func byPanRotationEnabled(_ enabled: Bool) -> Self {
         self.isPanRotationEnabled = enabled
         return self
     }
-
     /// 配置扇形短按回调
     @discardableResult
     func onSegmentTap(_ handler: @escaping (Int) -> Void) -> Self {
         self.segmentTapHandler = handler
         return self
     }
-
     /// 配置扇形长按回调
     @discardableResult
     func onSegmentLongPress(_ handler: @escaping (Int, UILongPressGestureRecognizer) -> Void) -> Self {

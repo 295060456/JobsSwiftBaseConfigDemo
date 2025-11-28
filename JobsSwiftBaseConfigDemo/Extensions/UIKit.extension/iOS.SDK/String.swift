@@ -663,6 +663,23 @@ public extension String {
         let i = self.index(startIndex, offsetBy: index)
         return self[i]
     }
+    /// "一等奖" -> "一\n等\n奖\n"
+    var verticalByNewline: String {
+        guard !isEmpty else { return "" }
+        var result = ""
+        for ch in self {
+            result.append(ch)
+            result.append("\n")
+        };return result
+    }
+    /// "一等奖" -> "一\n等\n奖"（如果你有时候不想要最后那个 `\n` 可以用这个）
+    func verticalByNewline(_ trimLastNewline: Bool) -> String {
+        // ✅ 共用上面的计算属性
+        var result = verticalByNewline
+        if trimLastNewline, result.hasSuffix("\n") {
+            result.removeLast()
+        };return result
+    }
 }
 // MARK: - 私有工具
 private extension String {

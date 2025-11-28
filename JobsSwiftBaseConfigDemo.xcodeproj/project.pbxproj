@@ -230,9 +230,9 @@
 		04C68D2E2ED94C5500A11F53 /* Demo@钟.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D2D2ED94C4C00A11F53 /* Demo@钟.swift */; };
 		04C68D302ED94D6200A11F53 /* 倒计时按钮.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D2F2ED94D5F00A11F53 /* 倒计时按钮.swift */; };
 		04C68D322ED9587B00A11F53 /* CAShapeLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D312ED9587A00A11F53 /* CAShapeLayer.swift */; };
-		04C68D402ED9818A00A11F53 /* ColorWheelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D3F2ED9818A00A11F53 /* ColorWheelView.swift */; };
+		04C68D402ED9818A00A11F53 /* LuckyWheelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D3F2ED9818A00A11F53 /* LuckyWheelView.swift */; };
 		04C68D462ED981D400A11F53 /* ColorWheelDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D452ED981D100A11F53 /* ColorWheelDemoVC.swift */; };
-		04C68D4A2ED9880800A11F53 /* ScrollDecelerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D492ED9880700A11F53 /* ScrollDecelerator.swift */; };
+		04C68D4A2ED9880800A11F53 /* LuckyWheelStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D492ED9880700A11F53 /* LuckyWheelStruct.swift */; };
 		04CF028C2E8808540083ACF0 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028B2E8808500083ACF0 /* UIButton.swift */; };
 		04CF028E2E8A37BB0083ACF0 /* TextInputStrategies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */; };
 		04CF02902E8A3A160083ACF0 /* Demo@输入文本.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */; };
@@ -556,9 +556,9 @@
 		04C68D2D2ED94C4C00A11F53 /* Demo@钟.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@钟.swift"; sourceTree = "<group>"; };
 		04C68D2F2ED94D5F00A11F53 /* 倒计时按钮.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "倒计时按钮.swift"; sourceTree = "<group>"; };
 		04C68D312ED9587A00A11F53 /* CAShapeLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAShapeLayer.swift; sourceTree = "<group>"; };
-		04C68D3F2ED9818A00A11F53 /* ColorWheelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWheelView.swift; sourceTree = "<group>"; };
+		04C68D3F2ED9818A00A11F53 /* LuckyWheelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuckyWheelView.swift; sourceTree = "<group>"; };
 		04C68D452ED981D100A11F53 /* ColorWheelDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWheelDemoVC.swift; sourceTree = "<group>"; };
-		04C68D492ED9880700A11F53 /* ScrollDecelerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollDecelerator.swift; sourceTree = "<group>"; };
+		04C68D492ED9880700A11F53 /* LuckyWheelStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuckyWheelStruct.swift; sourceTree = "<group>"; };
 		04CF028B2E8808500083ACF0 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputStrategies.swift; sourceTree = "<group>"; };
 		04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@输入文本.swift"; sourceTree = "<group>"; };
@@ -1232,8 +1232,8 @@
 		04C68D332ED97BA600A11F53 /* Demo@抽奖轮盘 */ = {
 			isa = PBXGroup;
 			children = (
-				04C68D492ED9880700A11F53 /* ScrollDecelerator.swift */,
-				04C68D3F2ED9818A00A11F53 /* ColorWheelView.swift */,
+				04C68D492ED9880700A11F53 /* LuckyWheelStruct.swift */,
+				04C68D3F2ED9818A00A11F53 /* LuckyWheelView.swift */,
 				04C68D452ED981D100A11F53 /* ColorWheelDemoVC.swift */,
 			);
 			path = "Demo@抽奖轮盘";
@@ -1970,7 +1970,7 @@
 				04F7AF6F2EC3280D00ACB509 /* LiveMsgCell.swift in Sources */,
 				042B67CE2E95085A000A2970 /* NSTextAttachment.swift in Sources */,
 				047E48F32EB36A5B00881898 /* MTLDepthStencilDescriptor.swift in Sources */,
-				04C68D402ED9818A00A11F53 /* ColorWheelView.swift in Sources */,
+				04C68D402ED9818A00A11F53 /* LuckyWheelView.swift in Sources */,
 				045920EE2E854BE7008C8D6A /* Double.swift in Sources */,
 				C564FC982E0959640079B5C1 /* NSObject.swift in Sources */,
 				C564FCB12E0959990079B5C1 /* CollectionCell.swift in Sources */,
@@ -2020,7 +2020,7 @@
 				C564FC8C2E0959640079B5C1 /* UIAlertController.swift in Sources */,
 				04CF028E2E8A37BB0083ACF0 /* TextInputStrategies.swift in Sources */,
 				04A8C54E2E8AA9F900381701 /* Demo@功能列表根目录.swift in Sources */,
-				04C68D4A2ED9880800A11F53 /* ScrollDecelerator.swift in Sources */,
+				04C68D4A2ED9880800A11F53 /* LuckyWheelStruct.swift in Sources */,
 				C564FC9B2E0959640079B5C1 /* UIStackView.swift in Sources */,
 				043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */,
 				04124F392EB067F000462BE2 /* APIService.swift in Sources */,
