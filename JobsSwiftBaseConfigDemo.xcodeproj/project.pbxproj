@@ -38,6 +38,8 @@
 		04124F402EB0760D00462BE2 /* AFLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F3F2EB0760D00462BE2 /* AFLogger.swift */; };
 		04124F422EB0762900462BE2 /* AFStubURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F412EB0762900462BE2 /* AFStubURLProtocol.swift */; };
 		04124F442EB0764200462BE2 /* AFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F432EB0764100462BE2 /* AFService.swift */; };
+		041AE5A02EDA85CE00ED03A3 /* Demo@苹果滑动开锁.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041AE59F2EDA85C700ED03A3 /* Demo@苹果滑动开锁.swift */; };
+		041AE5A22EDA85FC00ED03A3 /* 苹果滑动开锁.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041AE5A12EDA85FB00ED03A3 /* 苹果滑动开锁.swift */; };
 		041F5B012E87B51800984EEB /* Demo@输入框.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041F5B002E87B50F00984EEB /* Demo@输入框.swift */; };
 		042405332ECB03A2005B89AA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 042405312ECB03A2005B89AA /* InfoPlist.strings */; };
 		042407072ECB1617005B89AA /* JobsNetWorkTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042407062ECB160E005B89AA /* JobsNetWorkTools.swift */; };
@@ -353,6 +355,8 @@
 		04124F3F2EB0760D00462BE2 /* AFLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFLogger.swift; sourceTree = "<group>"; };
 		04124F412EB0762900462BE2 /* AFStubURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFStubURLProtocol.swift; sourceTree = "<group>"; };
 		04124F432EB0764100462BE2 /* AFService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFService.swift; sourceTree = "<group>"; };
+		041AE59F2EDA85C700ED03A3 /* Demo@苹果滑动开锁.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@苹果滑动开锁.swift"; sourceTree = "<group>"; };
+		041AE5A12EDA85FB00ED03A3 /* 苹果滑动开锁.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "苹果滑动开锁.swift"; sourceTree = "<group>"; };
 		041F5B002E87B50F00984EEB /* Demo@输入框.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@输入框.swift"; sourceTree = "<group>"; };
 		042405322ECB03A2005B89AA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		042405342ECB03A9005B89AA /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -718,6 +722,14 @@
 			path = "Demo@Alamofire";
 			sourceTree = "<group>";
 		};
+		041AE59E2EDA85A800ED03A3 /* Demo@苹果滑动开锁 */ = {
+			isa = PBXGroup;
+			children = (
+				041AE59F2EDA85C700ED03A3 /* Demo@苹果滑动开锁.swift */,
+			);
+			path = "Demo@苹果滑动开锁";
+			sourceTree = "<group>";
+		};
 		042F958F2EB5C733005DE735 /* 多语言化 */ = {
 			isa = PBXGroup;
 			children = (
@@ -888,10 +900,11 @@
 				046786E32EB4CED9003FE82D /* JobsRefresher */,
 				047E48C52EB3554900881898 /* PNPlayer */,
 				043283432EC437190031CDD6 /* 软键盘退出.swift */,
+				04C68D2F2ED94D5F00A11F53 /* 倒计时按钮.swift */,
+				041AE5A12EDA85FB00ED03A3 /* 苹果滑动开锁.swift */,
+				04C68D2B2ED94C3300A11F53 /* 钟.swift */,
 				04CF03182E8A80CA0083ACF0 /* AppTools.swift */,
 				C564FC2D2E0958E80079B5C1 /* HUDHelper.swift */,
-				04C68D2F2ED94D5F00A11F53 /* 倒计时按钮.swift */,
-				04C68D2B2ED94C3300A11F53 /* 钟.swift */,
 				C564FC742E0959620079B5C1 /* Inlines.swift */,
 				04D8422A2E965BA0001E8C90 /* JobsMarqueeView.swift */,
 				0482A5F72EA5F308004176A4 /* JobsNavBar.swift */,
@@ -1104,6 +1117,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				041AE59E2EDA85A800ED03A3 /* Demo@苹果滑动开锁 */,
 				04C68D332ED97BA600A11F53 /* Demo@抽奖轮盘 */,
 				0432838E2EC48DE00031CDD6 /* Demo@中国大陆居民身份证验证 */,
 				0432838B2EC48BD60031CDD6 /* Demo@SkeletonView */,
@@ -1910,6 +1924,7 @@
 				0453765F2EB0B5A200133F73 /* PlayerLocalVC.swift in Sources */,
 				04B5B4972EC5CCF300ED4505 /* BaseTableViewCellBySubtitle.swift in Sources */,
 				04B5B4A02EC5DB0F00ED4505 /* PhotoPermissionAlertView.swift in Sources */,
+				041AE5A02EDA85CE00ED03A3 /* Demo@苹果滑动开锁.swift in Sources */,
 				C564FCA52E0959640079B5C1 /* UIPickerView.swift in Sources */,
 				C564FC882E0959640079B5C1 /* UISlider.swift in Sources */,
 				C564FC912E0959640079B5C1 /* UIScrollView.swift in Sources */,
@@ -1944,6 +1959,7 @@
 				043283802EC478FC0031CDD6 /* SheetContentView.swift in Sources */,
 				045921122E855769008C8D6A /* JobsPaddedLabel.swift in Sources */,
 				04BCDC322EA9EAB000382DE0 /* UICollectionViewFlowLayout.swift in Sources */,
+				041AE5A22EDA85FC00ED03A3 /* 苹果滑动开锁.swift in Sources */,
 				04C442922EB87F77008E0F09 /* PDFThumbnailView.swift in Sources */,
 				0459210C2E855004008C8D6A /* Float80.swift in Sources */,
 				04B5B4952EC5CCCC00ED4505 /* BaseTableViewCellByDefault.swift in Sources */,

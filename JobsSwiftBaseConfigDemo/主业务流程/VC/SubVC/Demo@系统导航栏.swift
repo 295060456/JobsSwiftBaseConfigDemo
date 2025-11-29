@@ -17,7 +17,7 @@ final class JobsNavigationDemoVC: BaseVC {
     private lazy var backButton: UIButton = {
         UIButton.sys()
             .byBackgroundColor(.clear, for: .normal)
-            .byTitle("返回", for: .normal)
+            .byTitle("返回".tr, for: .normal)
             .byTitleColor(.white, for: .normal)
             .byTitleFont(.systemFont(ofSize: 12, weight: .bold))
             .byImage("chevron.backward".sysImg, for: .normal)
@@ -42,7 +42,7 @@ final class JobsNavigationDemoVC: BaseVC {
     private lazy var bellButton: UIButton = {
         UIButton.sys()
             .byBackgroundColor(.clear, for: .normal)
-            .byTitle("铃", for: .normal)
+            .byTitle("铃".tr, for: .normal)
             .byTitleColor(.systemBlue, for: .normal)
             .byTitleFont(.systemFont(ofSize: 12, weight: .bold))
             .byImage("bell".sysImg, for: .normal)
