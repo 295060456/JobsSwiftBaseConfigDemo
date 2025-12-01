@@ -4,8 +4,9 @@ ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 # ⚠️ 与 post_install 保持一致
 platform :ios, '15.6'
 
-source 'https://cdn.cocoapods.org/'
+#source 'https://cdn.cocoapods.org/'
 source 'https://github.com/CocoaPods/Specs.git'
+#pod install --repo-update
 
 # 关键：恢复这段，避免 Assets.car 重复产物冲突
 install! 'cocoapods',
@@ -36,21 +37,21 @@ post_install do |installer|
     user_project = agg.user_project
     user_project.native_targets.each do |t|
       t.build_configurations.each do |config|
-        config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
       end
     end
     user_project.save
   end
-
   # -------- 2、Pods 工程最低系统版本统一 --------
   pods_project = installer.pods_project
   pods_project.targets.each do |t|
     t.build_configurations.each do |config|
+      # MacOS 15 以后，苹果采取了更加严格的权限写入机制。新Swift项目如果要利用Cocoapods来集成第三方,就需要将ENABLE_USER_SCRIPT_SANDBOXING设置为NO
+      config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
+#      config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = '$(inherited)'
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
     end
   end
-
   # -------- 3、在 Pods 分组里展示 Podfile.deps（Ruby 语法高亮） --------
   main_group   = pods_project.main_group
   deps_relpath = '../Podfile.deps'

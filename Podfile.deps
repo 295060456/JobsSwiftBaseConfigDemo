@@ -37,9 +37,10 @@ def swiftAppCommon
   pod 'IQKeyboardManagerSwift'             # https://github.com/hackiftekhar/IQKeyboardManager ❤️
 #  pod 'ComponentKit'                       # https://github.com/facebook/componentkit          ❤️ Facebook出品的一款UI框架
 #  pod 'Texture'                            # https://github.com/texturegroup/texture           ❤️ Facebook出品的一款UI框架
-  pod 'JobsSwiftBaseTools'
-  pod 'JobsSwiftFoundation@Extensions'
-  pod 'JobsSwiftMetalKit@Extensions'
+#  pod 'JobsSwiftBaseTools'                 # https://github.com/JobsKits/JobsSwiftBaseTools
+#  pod 'JobsSwiftBaseDefines'               # https://github.com/JobsKits/JobsSwiftBaseDefines
+#  pod 'JobsSwiftFoundation@Extensions'     # https://github.com/JobsKits/Jobs.Swift.Foundation.Extensions
+#  pod 'JobsSwiftMetalKit@Extensions'       # https://github.com/JobsKits/Jobs.Swift.MetalKit.Extensions
 
 end
 
