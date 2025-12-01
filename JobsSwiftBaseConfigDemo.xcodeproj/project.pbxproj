@@ -42,14 +42,9 @@
 		041AE5A22EDA85FC00ED03A3 /* 苹果滑动开锁.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041AE5A12EDA85FB00ED03A3 /* 苹果滑动开锁.swift */; };
 		041F5B012E87B51800984EEB /* Demo@输入框.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041F5B002E87B50F00984EEB /* Demo@输入框.swift */; };
 		042405332ECB03A2005B89AA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 042405312ECB03A2005B89AA /* InfoPlist.strings */; };
-		042407072ECB1617005B89AA /* JobsNetWorkTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042407062ECB160E005B89AA /* JobsNetWorkTools.swift */; };
 		0424625A2EBAFCD800D6BFCC /* Demo@ComponentKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042462592EBAFCD500D6BFCC /* Demo@ComponentKit.swift */; };
 		042B67CE2E95085A000A2970 /* NSTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042B67CD2E950858000A2970 /* NSTextAttachment.swift */; };
 		042F958E2EB5C478005DE735 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F958D2EB5C477005DE735 /* Bundle.swift */; };
-		042F95932EB5E6C1005DE735 /* TRLang.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F95922EB5E6C0005DE735 /* TRLang.swift */; };
-		042F95972EB5E6EB005DE735 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F95962EB5E6EA005DE735 /* LanguageManager.swift */; };
-		042F95992EB5F124005DE735 /* TRAutoRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F95982EB5F123005DE735 /* TRAutoRefresh.swift */; };
-		042F959C2EB5F733005DE735 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 042F959A2EB5F733005DE735 /* Localizable.strings */; };
 		043283412EC34BB40031CDD6 /* Demo@SwiftEntryKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283402EC34BB00031CDD6 /* Demo@SwiftEntryKit.swift */; };
 		043283442EC437220031CDD6 /* 软键盘退出.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283432EC437190031CDD6 /* 软键盘退出.swift */; };
 		043283602EC4534D0031CDD6 /* CashbackRootVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283592EC444050031CDD6 /* CashbackRootVC.swift */; };
@@ -82,11 +77,9 @@
 		043283B12EC4A08B0031CDD6 /* Demo@BRPickerViewSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283B02EC4A08A0031CDD6 /* Demo@BRPickerViewSwift.swift */; };
 		043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043838A12EAA4BB3007BA552 /* BaseWebVC.swift */; };
 		043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */; };
-		0440B5572EB2370E005DBE91 /* SnowflakeSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */; };
 		0440B5592EB237BE005DBE91 /* Demo@Snowflake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0440B5582EB237B3005DBE91 /* Demo@Snowflake.swift */; };
 		0440B55A2EB23846005DBE91 /* Demo@LiveChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B00E472EB21F0800901B1C /* Demo@LiveChat.swift */; };
 		0440B5DA2EB2FFB7005DBE91 /* keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0440B5D92EB2FFAC005DBE91 /* keys.swift */; };
-		0440B5DC2EB3074C005DBE91 /* weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0440B5DB2EB30749005DBE91 /* weak.swift */; };
 		044272852E8146130084B25C /* JXScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044272842E8146130084B25C /* JXScale.swift */; };
 		04468E102E9CB43E00677000 /* UIAlertAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04468E0F2E9CB43D00677000 /* UIAlertAction.swift */; };
 		04468F8C2E9CFD7700677000 /* Demo@系统弹出框.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04468F8B2E9CFD6800677000 /* Demo@系统弹出框.swift */; };
@@ -147,14 +140,12 @@
 		046786F52EB5AD14003FE82D /* GKNavigationBarSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046786F42EB5AD13003FE82D /* GKNavigationBarSwift.swift */; };
 		046CF9752E9667C9005A88B4 /* UIButtonConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046CF9742E9667C8005A88B4 /* UIButtonConfiguration.swift */; };
 		046CF9772E967E6C005A88B4 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046CF9762E967E6B005A88B4 /* URL.swift */; };
-		0477D96D2E8B83D6002C6427 /* JobsSafeTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D96C2E8B83CA002C6427 /* JobsSafeTransitions.swift */; };
 		0477D96F2E8B8479002C6427 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D96E2E8B8478002C6427 /* UIApplication.swift */; };
 		0477D9712E8B897D002C6427 /* Demo@支持上下左右安全Push和原路返回.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9702E8B896A002C6427 /* Demo@支持上下左右安全Push和原路返回.swift */; };
 		0477D9752E8B9146002C6427 /* Demo@安全Present.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9742E8B9141002C6427 /* Demo@安全Present.swift */; };
 		0477D9772E8B9381002C6427 /* UIResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9762E8B937A002C6427 /* UIResponder.swift */; };
 		0477D9792E8BADB2002C6427 /* Demo@被Push或者Present的次级页面.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9782E8BADB1002C6427 /* Demo@被Push或者Present的次级页面.swift */; };
 		0477D97F2E8BDBBC002C6427 /* Demo@倒计时.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D97E2E8BDBB7002C6427 /* Demo@倒计时.swift */; };
-		0477D9832E8BE9FC002C6427 /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9822E8BE9FB002C6427 /* KeyboardObserver.swift */; };
 		0477D9852E8BEACB002C6427 /* Reactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9842E8BEACA002C6427 /* Reactive.swift */; };
 		0477D9872E8BEF64002C6427 /* Demo@键盘.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9862E8BEF62002C6427 /* Demo@键盘.swift */; };
 		047E48DA2EB3562C00881898 /* PNPlayerDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047E48D92EB3562800881898 /* PNPlayerDemoVC.swift */; };
@@ -185,7 +176,6 @@
 		048E37702E87997A004C3A41 /* UIGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048E376F2E879978004C3A41 /* UIGestureRecognizer.swift */; };
 		048F447C2EB311DE00BAA7EE /* Demo@JobsAppDoor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048F447B2EB311C100BAA7EE /* Demo@JobsAppDoor.swift */; };
 		048F447E2EB3267200BAA7EE /* CATransform3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048F447D2EB3267000BAA7EE /* CATransform3D.swift */; };
-		049A65672EA09C6B0006B185 /* SafeCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049A65662EA09C6A0006B185 /* SafeCodable.swift */; };
 		049A65692EA0AAB80006B185 /* Decimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049A65682EA0AAB70006B185 /* Decimal.swift */; };
 		049A656D2EA0CB7F0006B185 /* Demo@解码.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049A656C2EA0CB790006B185 /* Demo@解码.swift */; };
 		049A656F2EA0D51C0006B185 /* Demo@测试UITraitChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049A656E2EA0D51B0006B185 /* Demo@测试UITraitChange.swift */; };
@@ -199,7 +189,6 @@
 		04A8C54C2E8AA94D00381701 /* Demo@按钮.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A8C54B2E8AA94B00381701 /* Demo@按钮.swift */; };
 		04A8C54E2E8AA9F900381701 /* Demo@功能列表根目录.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A8C54D2E8AA9F800381701 /* Demo@功能列表根目录.swift */; };
 		04AC74C52E86682E004B8305 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AC74C42E86682D004B8305 /* Notification.swift */; };
-		04AD628F2E9120C500E18984 /* JobsTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AD628E2E9120C000E18984 /* JobsTimer.swift */; };
 		04AD62912E91230000E18984 /* Demo@时间.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AD62902E9122FC00E18984 /* Demo@时间.swift */; };
 		04B5B4912EC5CCA900ED4505 /* BaseTableViewCellByValue1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5B4902EC5CC9800ED4505 /* BaseTableViewCellByValue1.swift */; };
 		04B5B4932EC5CCB700ED4505 /* BaseTableViewCellByValue2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5B4922EC5CCB500ED4505 /* BaseTableViewCellByValue2.swift */; };
@@ -207,7 +196,6 @@
 		04B5B4972EC5CCF300ED4505 /* BaseTableViewCellBySubtitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5B4962EC5CCF200ED4505 /* BaseTableViewCellBySubtitle.swift */; };
 		04B5B4A02EC5DB0F00ED4505 /* PhotoPermissionAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B5B49F2EC5DACB00ED4505 /* PhotoPermissionAlertView.swift */; };
 		04BA33D92EC72CB100B9C8D7 /* LGOEditNicknameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BA33D82EC72CAF00B9C8D7 /* LGOEditNicknameVC.swift */; };
-		04BCDC2A2EA9DB0C00382DE0 /* JobsText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BCDC292EA9DB0B00382DE0 /* JobsText.swift */; };
 		04BCDC2C2EA9DB7E00382DE0 /* Demo@JobsText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BCDC2B2EA9DB7D00382DE0 /* Demo@JobsText.swift */; };
 		04BCDC2E2EA9E85800382DE0 /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BCDC2D2EA9E85600382DE0 /* UITableViewCell.swift */; };
 		04BCDC302EA9E86600382DE0 /* UICollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BCDC2F2EA9E86400382DE0 /* UICollectionViewCell.swift */; };
@@ -235,9 +223,7 @@
 		04C68D462ED981D400A11F53 /* ColorWheelDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D452ED981D100A11F53 /* ColorWheelDemoVC.swift */; };
 		04C68D4A2ED9880800A11F53 /* LuckyWheelStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D492ED9880700A11F53 /* LuckyWheelStruct.swift */; };
 		04CF028C2E8808540083ACF0 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028B2E8808500083ACF0 /* UIButton.swift */; };
-		04CF028E2E8A37BB0083ACF0 /* TextInputStrategies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */; };
 		04CF02902E8A3A160083ACF0 /* Demo@输入文本.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */; };
-		04CF03152E8A75E80083ACF0 /* JobsRichText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF03142E8A75E70083ACF0 /* JobsRichText.swift */; };
 		04CF03172E8A76500083ACF0 /* Demo@富文本.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF03162E8A76490083ACF0 /* Demo@富文本.swift */; };
 		04CF03192E8A80CE0083ACF0 /* AppTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF03182E8A80CA0083ACF0 /* AppTools.swift */; };
 		04D0C96C2E8CCA7400580020 /* UIBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D0C96B2E8CCA7200580020 /* UIBarItem.swift */; };
@@ -251,6 +237,21 @@
 		04D842292E96377B001E8C90 /* Demo@打开模块.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D842282E96377A001E8C90 /* Demo@打开模块.swift */; };
 		04D8422B2E965BA1001E8C90 /* JobsMarqueeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D8422A2E965BA0001E8C90 /* JobsMarqueeView.swift */; };
 		04DBEE0B2EA1E305000E52D3 /* Sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 04DBEE0A2EA1E305000E52D3 /* Sound.wav */; };
+		04DC13872EDD3D2600CEDA1C /* SafeCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC13822EDD3D2600CEDA1C /* SafeCodable.swift */; };
+		04DC13882EDD3D2600CEDA1C /* JobsTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC137F2EDD3D2600CEDA1C /* JobsTimer.swift */; };
+		04DC13892EDD3D2600CEDA1C /* JobsRichText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC137B2EDD3D2600CEDA1C /* JobsRichText.swift */; };
+		04DC138A2EDD3D2600CEDA1C /* JobsText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC137E2EDD3D2600CEDA1C /* JobsText.swift */; };
+		04DC138B2EDD3D2600CEDA1C /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC13802EDD3D2600CEDA1C /* KeyboardObserver.swift */; };
+		04DC138C2EDD3D2600CEDA1C /* TRAutoRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC13762EDD3D2600CEDA1C /* TRAutoRefresh.swift */; };
+		04DC138D2EDD3D2600CEDA1C /* SnowflakeSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC13832EDD3D2600CEDA1C /* SnowflakeSwift.swift */; };
+		04DC138E2EDD3D2600CEDA1C /* JobsNetWorkTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC13702EDD3D2600CEDA1C /* JobsNetWorkTools.swift */; };
+		04DC138F2EDD3D2600CEDA1C /* Inlines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC137A2EDD3D2600CEDA1C /* Inlines.swift */; };
+		04DC13902EDD3D2600CEDA1C /* JobsSafeTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC137C2EDD3D2600CEDA1C /* JobsSafeTransitions.swift */; };
+		04DC13912EDD3D2600CEDA1C /* weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC13852EDD3D2600CEDA1C /* weak.swift */; };
+		04DC13922EDD3D2600CEDA1C /* TRLang.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC13772EDD3D2600CEDA1C /* TRLang.swift */; };
+		04DC13932EDD3D2600CEDA1C /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC13722EDD3D2600CEDA1C /* LanguageManager.swift */; };
+		04DC13942EDD3D2600CEDA1C /* TextInputStrategies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC13842EDD3D2600CEDA1C /* TextInputStrategies.swift */; };
+		04DC13952EDD3D2600CEDA1C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04DC13752EDD3D2600CEDA1C /* Localizable.strings */; };
 		04E8D5B92E8E550200E85CDA /* BaseStructDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D5B82E8E54FF00E85CDA /* BaseStructDefs.swift */; };
 		04E8D5BB2E8E5AD000E85CDA /* Demo@中国大陆居民身份证验证.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D5BA2E8E5ACF00E85CDA /* Demo@中国大陆居民身份证验证.swift */; };
 		04E8D6172E8E6E7F00E85CDA /* UIBarButtonItemAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D6162E8E6E7E00E85CDA /* UIBarButtonItemAppearance.swift */; };
@@ -292,7 +293,6 @@
 		C564FC932E0959640079B5C1 /* UIToolbarAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC712E0959620079B5C1 /* UIToolbarAppearance.swift */; };
 		C564FC942E0959640079B5C1 /* UIPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC722E0959620079B5C1 /* UIPageViewController.swift */; };
 		C564FC952E0959640079B5C1 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC732E0959620079B5C1 /* UIView.swift */; };
-		C564FC962E0959640079B5C1 /* Inlines.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC742E0959620079B5C1 /* Inlines.swift */; };
 		C564FC972E0959640079B5C1 /* UIActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC752E0959620079B5C1 /* UIActivityIndicatorView.swift */; };
 		C564FC982E0959640079B5C1 /* NSObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC762E0959620079B5C1 /* NSObject.swift */; };
 		C564FC9A2E0959640079B5C1 /* UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC782E0959620079B5C1 /* UITextView.swift */; };
@@ -360,16 +360,10 @@
 		041F5B002E87B50F00984EEB /* Demo@输入框.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@输入框.swift"; sourceTree = "<group>"; };
 		042405322ECB03A2005B89AA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		042405342ECB03A9005B89AA /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		042407062ECB160E005B89AA /* JobsNetWorkTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsNetWorkTools.swift; sourceTree = "<group>"; };
 		042462592EBAFCD500D6BFCC /* Demo@ComponentKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@ComponentKit.swift"; sourceTree = "<group>"; };
 		0424625B2EBB020E00D6BFCC /* Demo@Texture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@Texture.swift"; sourceTree = "<group>"; };
 		042B67CD2E950858000A2970 /* NSTextAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTextAttachment.swift; sourceTree = "<group>"; };
 		042F958D2EB5C477005DE735 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
-		042F95922EB5E6C0005DE735 /* TRLang.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRLang.swift; sourceTree = "<group>"; };
-		042F95962EB5E6EA005DE735 /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
-		042F95982EB5F123005DE735 /* TRAutoRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRAutoRefresh.swift; sourceTree = "<group>"; };
-		042F959B2EB5F733005DE735 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		042F959D2EB5F74C005DE735 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		043283402EC34BB00031CDD6 /* Demo@SwiftEntryKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@SwiftEntryKit.swift"; sourceTree = "<group>"; };
 		043283432EC437190031CDD6 /* 软键盘退出.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "软键盘退出.swift"; sourceTree = "<group>"; };
 		043283582EC443E50031CDD6 /* Demo@首页联动.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Demo@首页联动.png"; sourceTree = "<group>"; };
@@ -404,10 +398,8 @@
 		043283B02EC4A08A0031CDD6 /* Demo@BRPickerViewSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@BRPickerViewSwift.swift"; sourceTree = "<group>"; };
 		043838A12EAA4BB3007BA552 /* BaseWebVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWebVC.swift; sourceTree = "<group>"; };
 		043B83742E8FF0CC00579AA8 /* BaseProtocolDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProtocolDefs.swift; sourceTree = "<group>"; };
-		0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnowflakeSwift.swift; sourceTree = "<group>"; };
 		0440B5582EB237B3005DBE91 /* Demo@Snowflake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@Snowflake.swift"; sourceTree = "<group>"; };
 		0440B5D92EB2FFAC005DBE91 /* keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = keys.swift; sourceTree = "<group>"; };
-		0440B5DB2EB30749005DBE91 /* weak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = weak.swift; sourceTree = "<group>"; };
 		0442717A2E8139CF0084B25C /* ColorAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ColorAssets.xcassets; sourceTree = "<group>"; };
 		044272842E8146130084B25C /* JXScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXScale.swift; sourceTree = "<group>"; };
 		04468E0F2E9CB43D00677000 /* UIAlertAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertAction.swift; sourceTree = "<group>"; };
@@ -469,14 +461,12 @@
 		046786F42EB5AD13003FE82D /* GKNavigationBarSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GKNavigationBarSwift.swift; sourceTree = "<group>"; };
 		046CF9742E9667C8005A88B4 /* UIButtonConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonConfiguration.swift; sourceTree = "<group>"; };
 		046CF9762E967E6B005A88B4 /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
-		0477D96C2E8B83CA002C6427 /* JobsSafeTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsSafeTransitions.swift; sourceTree = "<group>"; };
 		0477D96E2E8B8478002C6427 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
 		0477D9702E8B896A002C6427 /* Demo@支持上下左右安全Push和原路返回.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@支持上下左右安全Push和原路返回.swift"; sourceTree = "<group>"; };
 		0477D9742E8B9141002C6427 /* Demo@安全Present.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@安全Present.swift"; sourceTree = "<group>"; };
 		0477D9762E8B937A002C6427 /* UIResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIResponder.swift; sourceTree = "<group>"; };
 		0477D9782E8BADB1002C6427 /* Demo@被Push或者Present的次级页面.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@被Push或者Present的次级页面.swift"; sourceTree = "<group>"; };
 		0477D97E2E8BDBB7002C6427 /* Demo@倒计时.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@倒计时.swift"; sourceTree = "<group>"; };
-		0477D9822E8BE9FB002C6427 /* KeyboardObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardObserver.swift; sourceTree = "<group>"; };
 		0477D9842E8BEACA002C6427 /* Reactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reactive.swift; sourceTree = "<group>"; };
 		0477D9862E8BEF62002C6427 /* Demo@键盘.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@键盘.swift"; sourceTree = "<group>"; };
 		047CC3422EA254A200E84122 /* 心愿单.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "心愿单.md"; sourceTree = "<group>"; };
@@ -508,7 +498,6 @@
 		048E376F2E879978004C3A41 /* UIGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIGestureRecognizer.swift; sourceTree = "<group>"; };
 		048F447B2EB311C100BAA7EE /* Demo@JobsAppDoor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@JobsAppDoor.swift"; sourceTree = "<group>"; };
 		048F447D2EB3267000BAA7EE /* CATransform3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CATransform3D.swift; sourceTree = "<group>"; };
-		049A65662EA09C6A0006B185 /* SafeCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafeCodable.swift; sourceTree = "<group>"; };
 		049A65682EA0AAB70006B185 /* Decimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decimal.swift; sourceTree = "<group>"; };
 		049A656C2EA0CB790006B185 /* Demo@解码.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@解码.swift"; sourceTree = "<group>"; };
 		049A656E2EA0D51B0006B185 /* Demo@测试UITraitChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@测试UITraitChange.swift"; sourceTree = "<group>"; };
@@ -522,7 +511,6 @@
 		04A8C54B2E8AA94B00381701 /* Demo@按钮.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@按钮.swift"; sourceTree = "<group>"; };
 		04A8C54D2E8AA9F800381701 /* Demo@功能列表根目录.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@功能列表根目录.swift"; sourceTree = "<group>"; };
 		04AC74C42E86682D004B8305 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
-		04AD628E2E9120C000E18984 /* JobsTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsTimer.swift; sourceTree = "<group>"; };
 		04AD62902E9122FC00E18984 /* Demo@时间.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@时间.swift"; sourceTree = "<group>"; };
 		04B00E472EB21F0800901B1C /* Demo@LiveChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@LiveChat.swift"; sourceTree = "<group>"; };
 		04B5B4902EC5CC9800ED4505 /* BaseTableViewCellByValue1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCellByValue1.swift; sourceTree = "<group>"; };
@@ -534,7 +522,6 @@
 		04B5B49B2EC5D8E000ED4505 /* 改名许可.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "改名许可.png"; sourceTree = "<group>"; };
 		04B5B49F2EC5DACB00ED4505 /* PhotoPermissionAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPermissionAlertView.swift; sourceTree = "<group>"; };
 		04BA33D82EC72CAF00B9C8D7 /* LGOEditNicknameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LGOEditNicknameVC.swift; sourceTree = "<group>"; };
-		04BCDC292EA9DB0B00382DE0 /* JobsText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsText.swift; sourceTree = "<group>"; };
 		04BCDC2B2EA9DB7D00382DE0 /* Demo@JobsText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@JobsText.swift"; sourceTree = "<group>"; };
 		04BCDC2D2EA9E85600382DE0 /* UITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewCell.swift; sourceTree = "<group>"; };
 		04BCDC2F2EA9E86400382DE0 /* UICollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewCell.swift; sourceTree = "<group>"; };
@@ -562,9 +549,7 @@
 		04C68D452ED981D100A11F53 /* ColorWheelDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWheelDemoVC.swift; sourceTree = "<group>"; };
 		04C68D492ED9880700A11F53 /* LuckyWheelStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuckyWheelStruct.swift; sourceTree = "<group>"; };
 		04CF028B2E8808500083ACF0 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
-		04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputStrategies.swift; sourceTree = "<group>"; };
 		04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@输入文本.swift"; sourceTree = "<group>"; };
-		04CF03142E8A75E70083ACF0 /* JobsRichText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsRichText.swift; sourceTree = "<group>"; };
 		04CF03162E8A76490083ACF0 /* Demo@富文本.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@富文本.swift"; sourceTree = "<group>"; };
 		04CF03182E8A80CA0083ACF0 /* AppTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTools.swift; sourceTree = "<group>"; };
 		04D0C96B2E8CCA7200580020 /* UIBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBarItem.swift; sourceTree = "<group>"; };
@@ -580,6 +565,22 @@
 		04D842282E96377A001E8C90 /* Demo@打开模块.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@打开模块.swift"; sourceTree = "<group>"; };
 		04D8422A2E965BA0001E8C90 /* JobsMarqueeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsMarqueeView.swift; sourceTree = "<group>"; };
 		04DBEE0A2EA1E305000E52D3 /* Sound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Sound.wav; sourceTree = "<group>"; };
+		04DC13702EDD3D2600CEDA1C /* JobsNetWorkTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsNetWorkTools.swift; sourceTree = "<group>"; };
+		04DC13722EDD3D2600CEDA1C /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
+		04DC13732EDD3D2600CEDA1C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		04DC13742EDD3D2600CEDA1C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		04DC13762EDD3D2600CEDA1C /* TRAutoRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRAutoRefresh.swift; sourceTree = "<group>"; };
+		04DC13772EDD3D2600CEDA1C /* TRLang.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRLang.swift; sourceTree = "<group>"; };
+		04DC137A2EDD3D2600CEDA1C /* Inlines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inlines.swift; sourceTree = "<group>"; };
+		04DC137B2EDD3D2600CEDA1C /* JobsRichText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsRichText.swift; sourceTree = "<group>"; };
+		04DC137C2EDD3D2600CEDA1C /* JobsSafeTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsSafeTransitions.swift; sourceTree = "<group>"; };
+		04DC137E2EDD3D2600CEDA1C /* JobsText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsText.swift; sourceTree = "<group>"; };
+		04DC137F2EDD3D2600CEDA1C /* JobsTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsTimer.swift; sourceTree = "<group>"; };
+		04DC13802EDD3D2600CEDA1C /* KeyboardObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardObserver.swift; sourceTree = "<group>"; };
+		04DC13822EDD3D2600CEDA1C /* SafeCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafeCodable.swift; sourceTree = "<group>"; };
+		04DC13832EDD3D2600CEDA1C /* SnowflakeSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnowflakeSwift.swift; sourceTree = "<group>"; };
+		04DC13842EDD3D2600CEDA1C /* TextInputStrategies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputStrategies.swift; sourceTree = "<group>"; };
+		04DC13852EDD3D2600CEDA1C /* weak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = weak.swift; sourceTree = "<group>"; };
 		04E8D5B82E8E54FF00E85CDA /* BaseStructDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseStructDefs.swift; sourceTree = "<group>"; };
 		04E8D5BA2E8E5ACF00E85CDA /* Demo@中国大陆居民身份证验证.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@中国大陆居民身份证验证.swift"; sourceTree = "<group>"; };
 		04E8D6162E8E6E7E00E85CDA /* UIBarButtonItemAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBarButtonItemAppearance.swift; sourceTree = "<group>"; };
@@ -629,7 +630,6 @@
 		C564FC712E0959620079B5C1 /* UIToolbarAppearance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIToolbarAppearance.swift; sourceTree = "<group>"; };
 		C564FC722E0959620079B5C1 /* UIPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIPageViewController.swift; sourceTree = "<group>"; };
 		C564FC732E0959620079B5C1 /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
-		C564FC742E0959620079B5C1 /* Inlines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Inlines.swift; sourceTree = "<group>"; };
 		C564FC752E0959620079B5C1 /* UIActivityIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIActivityIndicatorView.swift; sourceTree = "<group>"; };
 		C564FC762E0959620079B5C1 /* NSObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSObject.swift; sourceTree = "<group>"; };
 		C564FC782E0959620079B5C1 /* UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITextView.swift; sourceTree = "<group>"; };
@@ -688,14 +688,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		041174672ECB1E91004D47B7 /* 🛜网络流量监控 */ = {
-			isa = PBXGroup;
-			children = (
-				042407062ECB160E005B89AA /* JobsNetWorkTools.swift */,
-			);
-			path = "🛜网络流量监控";
-			sourceTree = "<group>";
-		};
 		04124F2B2EB0621D00462BE2 /* Demo@Moya */ = {
 			isa = PBXGroup;
 			children = (
@@ -728,17 +720,6 @@
 				041AE59F2EDA85C700ED03A3 /* Demo@苹果滑动开锁.swift */,
 			);
 			path = "Demo@苹果滑动开锁";
-			sourceTree = "<group>";
-		};
-		042F958F2EB5C733005DE735 /* 多语言化 */ = {
-			isa = PBXGroup;
-			children = (
-				042F959A2EB5F733005DE735 /* Localizable.strings */,
-				042F95982EB5F123005DE735 /* TRAutoRefresh.swift */,
-				042F95962EB5E6EA005DE735 /* LanguageManager.swift */,
-				042F95922EB5E6C0005DE735 /* TRLang.swift */,
-			);
-			path = "多语言化";
 			sourceTree = "<group>";
 		};
 		043283452EC4405B0031CDD6 /* Demo@首页联动 */ = {
@@ -902,11 +883,17 @@
 				04C68D2B2ED94C3300A11F53 /* 钟.swift */,
 				04CF03182E8A80CA0083ACF0 /* AppTools.swift */,
 				04D8422A2E965BA0001E8C90 /* JobsMarqueeView.swift */,
+				045920E32E84EC72008C8D6A /* SwiftTools.swift */,
 				0482A5F72EA5F308004176A4 /* JobsNavBar.swift */,
+				043283432EC437190031CDD6 /* 软键盘退出.swift */,
 				049A65702EA0E6BA0006B185 /* JobsTabBarCtrl.swift */,
 				044272842E8146130084B25C /* JXScale.swift */,
+				04468F912E9E5A5700677000 /* MediaPickerService.swift */,
+				04468F8F2E9E4D7000677000 /* PermissionCenter.swift */,
 				0440B5D92EB2FFAC005DBE91 /* keys.swift */,
+				0401DD052E9115CD00D572AD /* JobsToast.swift */,
 				C564FC852E0959640079B5C1 /* UIKitModel.swift */,
+				C564FC2D2E0958E80079B5C1 /* HUDHelper.swift */,
 			);
 			path = 3rdTools;
 			sourceTree = "<group>";
@@ -1354,35 +1341,48 @@
 		04DC136E2EDD310500CEDA1C /* JobsSwiftTools */ = {
 			isa = PBXGroup;
 			children = (
+				04DC13862EDD3D2600CEDA1C /* JobsSwiftBaseTools@Pods */,
 				045920E22E84EC64008C8D6A /* 3rdTools */,
-				04DC136F2EDD337F00CEDA1C /* JobsSwiftBaseTools */,
 			);
 			path = JobsSwiftTools;
 			sourceTree = "<group>";
 		};
-		04DC136F2EDD337F00CEDA1C /* JobsSwiftBaseTools */ = {
+		04DC13712EDD3D2600CEDA1C /* 🛜网络流量监控 */ = {
 			isa = PBXGroup;
 			children = (
-				042F958F2EB5C733005DE735 /* 多语言化 */,
-				041174672ECB1E91004D47B7 /* 🛜网络流量监控 */,
-				04AD628E2E9120C000E18984 /* JobsTimer.swift */,
-				049A65662EA09C6A0006B185 /* SafeCodable.swift */,
-				0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */,
-				04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */,
-				045920E32E84EC72008C8D6A /* SwiftTools.swift */,
-				0477D9822E8BE9FB002C6427 /* KeyboardObserver.swift */,
-				04BCDC292EA9DB0B00382DE0 /* JobsText.swift */,
-				0440B5DB2EB30749005DBE91 /* weak.swift */,
-				0477D96C2E8B83CA002C6427 /* JobsSafeTransitions.swift */,
-				04CF03142E8A75E70083ACF0 /* JobsRichText.swift */,
-				C564FC742E0959620079B5C1 /* Inlines.swift */,
-				043283432EC437190031CDD6 /* 软键盘退出.swift */,
-				0401DD052E9115CD00D572AD /* JobsToast.swift */,
-				C564FC2D2E0958E80079B5C1 /* HUDHelper.swift */,
-				04468F912E9E5A5700677000 /* MediaPickerService.swift */,
-				04468F8F2E9E4D7000677000 /* PermissionCenter.swift */,
+				04DC13702EDD3D2600CEDA1C /* JobsNetWorkTools.swift */,
 			);
-			path = JobsSwiftBaseTools;
+			path = "🛜网络流量监控";
+			sourceTree = "<group>";
+		};
+		04DC13782EDD3D2600CEDA1C /* 多语言化 */ = {
+			isa = PBXGroup;
+			children = (
+				04DC13752EDD3D2600CEDA1C /* Localizable.strings */,
+				04DC13722EDD3D2600CEDA1C /* LanguageManager.swift */,
+				04DC13762EDD3D2600CEDA1C /* TRAutoRefresh.swift */,
+				04DC13772EDD3D2600CEDA1C /* TRLang.swift */,
+			);
+			path = "多语言化";
+			sourceTree = "<group>";
+		};
+		04DC13862EDD3D2600CEDA1C /* JobsSwiftBaseTools@Pods */ = {
+			isa = PBXGroup;
+			children = (
+				04DC13712EDD3D2600CEDA1C /* 🛜网络流量监控 */,
+				04DC13782EDD3D2600CEDA1C /* 多语言化 */,
+				04DC137A2EDD3D2600CEDA1C /* Inlines.swift */,
+				04DC137B2EDD3D2600CEDA1C /* JobsRichText.swift */,
+				04DC137C2EDD3D2600CEDA1C /* JobsSafeTransitions.swift */,
+				04DC137E2EDD3D2600CEDA1C /* JobsText.swift */,
+				04DC137F2EDD3D2600CEDA1C /* JobsTimer.swift */,
+				04DC13802EDD3D2600CEDA1C /* KeyboardObserver.swift */,
+				04DC13822EDD3D2600CEDA1C /* SafeCodable.swift */,
+				04DC13832EDD3D2600CEDA1C /* SnowflakeSwift.swift */,
+				04DC13842EDD3D2600CEDA1C /* TextInputStrategies.swift */,
+				04DC13852EDD3D2600CEDA1C /* weak.swift */,
+			);
+			path = "JobsSwiftBaseTools@Pods";
 			sourceTree = "<group>";
 		};
 		04E8D61D2E8E882000E85CDA /* UIViewController */ = {
@@ -1723,10 +1723,10 @@
 				0459211F2E85588C008C8D6A /* fonteditor.ttf in Resources */,
 				045921202E85588C008C8D6A /* DIN-Black-2.otf in Resources */,
 				047E48DC2EB3577B00881898 /* pano_360.mp4 in Resources */,
-				042F959C2EB5F733005DE735 /* Localizable.strings in Resources */,
 				0453764C2EB0B43F00133F73 /* IncomeSource.json in Resources */,
 				0453764D2EB0B43F00133F73 /* UserData.json in Resources */,
 				043283A22EC49B2E0031CDD6 /* BRCity.json in Resources */,
+				04DC13952EDD3D2600CEDA1C /* Localizable.strings in Resources */,
 				0453764E2EB0B43F00133F73 /* OccupationList.json in Resources */,
 				04C442AA2EB8BC13008E0F09 /* 9squares_AlBoardman.json in Resources */,
 				0453764F2EB0B43F00133F73 /* CommentData.json in Resources */,
@@ -1864,7 +1864,6 @@
 				0477D9752E8B9146002C6427 /* Demo@安全Present.swift in Sources */,
 				045920F42E854F85008C8D6A /* Int8.swift in Sources */,
 				043283832EC4794A0031CDD6 /* ConfirmToastView.swift in Sources */,
-				0477D96D2E8B83D6002C6427 /* JobsSafeTransitions.swift in Sources */,
 				046786F52EB5AD14003FE82D /* GKNavigationBarSwift.swift in Sources */,
 				C564FC9A2E0959640079B5C1 /* UITextView.swift in Sources */,
 				043283712EC45F4D0031CDD6 /* JXSegmentedIndicatorBaseView.swift in Sources */,
@@ -1873,7 +1872,6 @@
 				045920E62E84F389008C8D6A /* CALayer.swift in Sources */,
 				049A65712EA0E6BB0006B185 /* JobsTabBarCtrl.swift in Sources */,
 				0482A5E82EA380EB004176A4 /* BaseWebView.swift in Sources */,
-				042F95932EB5E6C1005DE735 /* TRLang.swift in Sources */,
 				04BCDC302EA9E86600382DE0 /* UICollectionViewCell.swift in Sources */,
 				04FC778B2EB0BE2F00B810BA /* PlayerDetailVC.swift in Sources */,
 				04E8D5B92E8E550200E85CDA /* BaseStructDefs.swift in Sources */,
@@ -1881,16 +1879,13 @@
 				0487AADA2E840CB200B5D307 /* UIColor.swift in Sources */,
 				04E8D6232E8E884500E85CDA /* BaseVC.swift in Sources */,
 				047E48F52EB36AC600881898 /* MTLSamplerDescriptor.swift in Sources */,
-				0477D9832E8BE9FC002C6427 /* KeyboardObserver.swift in Sources */,
 				045921042E854FE1008C8D6A /* UInt32.swift in Sources */,
 				0477D96F2E8B8479002C6427 /* UIApplication.swift in Sources */,
 				C564FC9D2E0959640079B5C1 /* UIDatePicker.swift in Sources */,
-				049A65672EA09C6B0006B185 /* SafeCodable.swift in Sources */,
 				045921062E854FE9008C8D6A /* UInt64.swift in Sources */,
 				04CF03172E8A76500083ACF0 /* Demo@富文本.swift in Sources */,
 				0477D9852E8BEACB002C6427 /* Reactive.swift in Sources */,
 				C564FCA42E0959640079B5C1 /* UITextField.swift in Sources */,
-				04CF03152E8A75E80083ACF0 /* JobsRichText.swift in Sources */,
 				C564FC9C2E0959640079B5C1 /* UIPopoverPresentationController.swift in Sources */,
 				C564FCA32E0959640079B5C1 /* UIStepper.swift in Sources */,
 				049A656F2EA0D51C0006B185 /* Demo@测试UITraitChange.swift in Sources */,
@@ -1899,11 +1894,24 @@
 				04D0C97E2E8D19AB00580020 /* MJRefreshNormalHeader.swift in Sources */,
 				04E8D6172E8E6E7F00E85CDA /* UIBarButtonItemAppearance.swift in Sources */,
 				04AD62912E91230000E18984 /* Demo@时间.swift in Sources */,
-				0440B5572EB2370E005DBE91 /* SnowflakeSwift.swift in Sources */,
 				C564FC862E0959640079B5C1 /* WKWebView.swift in Sources */,
 				0448B1842EA3707E00CFC755 /* Demo@生成二维码和条形码.swift in Sources */,
 				045376632EB0B5BF00133F73 /* FeedModel.swift in Sources */,
 				04AC74C52E86682E004B8305 /* Notification.swift in Sources */,
+				04DC13872EDD3D2600CEDA1C /* SafeCodable.swift in Sources */,
+				04DC13882EDD3D2600CEDA1C /* JobsTimer.swift in Sources */,
+				04DC13892EDD3D2600CEDA1C /* JobsRichText.swift in Sources */,
+				04DC138A2EDD3D2600CEDA1C /* JobsText.swift in Sources */,
+				04DC138B2EDD3D2600CEDA1C /* KeyboardObserver.swift in Sources */,
+				04DC138C2EDD3D2600CEDA1C /* TRAutoRefresh.swift in Sources */,
+				04DC138D2EDD3D2600CEDA1C /* SnowflakeSwift.swift in Sources */,
+				04DC138E2EDD3D2600CEDA1C /* JobsNetWorkTools.swift in Sources */,
+				04DC138F2EDD3D2600CEDA1C /* Inlines.swift in Sources */,
+				04DC13902EDD3D2600CEDA1C /* JobsSafeTransitions.swift in Sources */,
+				04DC13912EDD3D2600CEDA1C /* weak.swift in Sources */,
+				04DC13922EDD3D2600CEDA1C /* TRLang.swift in Sources */,
+				04DC13932EDD3D2600CEDA1C /* LanguageManager.swift in Sources */,
+				04DC13942EDD3D2600CEDA1C /* TextInputStrategies.swift in Sources */,
 				04C68D302ED94D6200A11F53 /* 倒计时按钮.swift in Sources */,
 				0432838A2EC484D80031CDD6 /* SkeletonView.swift in Sources */,
 				04D0C9722E8CD39300580020 /* Demo@控制层回调.swift in Sources */,
@@ -1981,7 +1989,6 @@
 				04B5B4952EC5CCCC00ED4505 /* BaseTableViewCellByDefault.swift in Sources */,
 				045376672EB0B5E100133F73 /* PlayerCenter.swift in Sources */,
 				04D0C96E2E8CD14B00580020 /* UIControl.swift in Sources */,
-				042F95992EB5F124005DE735 /* TRAutoRefresh.swift in Sources */,
 				043283602EC4534D0031CDD6 /* CashbackRootVC.swift in Sources */,
 				04BCDC2C2EA9DB7E00382DE0 /* Demo@JobsText.swift in Sources */,
 				0477D9712E8B897D002C6427 /* Demo@支持上下左右安全Push和原路返回.swift in Sources */,
@@ -1992,7 +1999,6 @@
 				043283A92EC49FA60031CDD6 /* BRTextPickerView.swift in Sources */,
 				046786E92EB4CEFA003FE82D /* RefreshProxy.swift in Sources */,
 				040E68F92EC704DA00598A5B /* Demo@自定义注解.swift in Sources */,
-				C564FC962E0959640079B5C1 /* Inlines.swift in Sources */,
 				04C68D2E2ED94C5500A11F53 /* Demo@钟.swift in Sources */,
 				045376612EB0B5B100133F73 /* PlayerRemoteVC.swift in Sources */,
 				04468F902E9E4D7000677000 /* PermissionCenter.swift in Sources */,
@@ -2031,7 +2037,6 @@
 				0424625A2EBAFCD800D6BFCC /* Demo@ComponentKit.swift in Sources */,
 				048E37702E87997A004C3A41 /* UIGestureRecognizer.swift in Sources */,
 				04BA33D92EC72CB100B9C8D7 /* LGOEditNicknameVC.swift in Sources */,
-				042F95972EB5E6EB005DE735 /* LanguageManager.swift in Sources */,
 				C564FC8E2E0959640079B5C1 /* UITabBarController.swift in Sources */,
 				04468E102E9CB43E00677000 /* UIAlertAction.swift in Sources */,
 				04124F312EB0624300462BE2 /* TokenStore.swift in Sources */,
@@ -2043,10 +2048,7 @@
 				0477D97F2E8BDBBC002C6427 /* Demo@倒计时.swift in Sources */,
 				04124F402EB0760D00462BE2 /* AFLogger.swift in Sources */,
 				04D8422B2E965BA1001E8C90 /* JobsMarqueeView.swift in Sources */,
-				04BCDC2A2EA9DB0C00382DE0 /* JobsText.swift in Sources */,
-				042407072ECB1617005B89AA /* JobsNetWorkTools.swift in Sources */,
 				C564FC8C2E0959640079B5C1 /* UIAlertController.swift in Sources */,
-				04CF028E2E8A37BB0083ACF0 /* TextInputStrategies.swift in Sources */,
 				04A8C54E2E8AA9F900381701 /* Demo@功能列表根目录.swift in Sources */,
 				04C68D4A2ED9880800A11F53 /* LuckyWheelStruct.swift in Sources */,
 				C564FC9B2E0959640079B5C1 /* UIStackView.swift in Sources */,
@@ -2086,11 +2088,9 @@
 				046786EF2EB4CF2C003FE82D /* DefaultSkins.swift in Sources */,
 				04A368142EC59517000FC898 /* LGOEditProfileVC.swift in Sources */,
 				04124F442EB0764200462BE2 /* AFService.swift in Sources */,
-				04AD628F2E9120C500E18984 /* JobsTimer.swift in Sources */,
 				C564FC2C2E0958D50079B5C1 /* SceneDelegate.swift in Sources */,
 				C564FC922E0959640079B5C1 /* UISwitch.swift in Sources */,
 				046786F12EB4CF76003FE82D /* Demo@JobsRefresher.swift in Sources */,
-				0440B5DC2EB3074C005DBE91 /* weak.swift in Sources */,
 				04BCDC2E2EA9E85800382DE0 /* UITableViewCell.swift in Sources */,
 				049A65732EA0E6E40006B185 /* Demo@自定义TabBar.swift in Sources */,
 			);
@@ -2138,11 +2138,11 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		042F959A2EB5F733005DE735 /* Localizable.strings */ = {
+		04DC13752EDD3D2600CEDA1C /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				042F959B2EB5F733005DE735 /* en */,
-				042F959D2EB5F74C005DE735 /* zh-Hans */,
+				04DC13732EDD3D2600CEDA1C /* en */,
+				04DC13742EDD3D2600CEDA1C /* zh-Hans */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
