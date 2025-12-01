@@ -84,7 +84,7 @@ public extension UIButton {
     }
 }
 // MARK: - 基础链式
-extension UIButton {
+public extension UIButton {
     @discardableResult
     func byTitle(_ title: String?, for state: UIControl.State = .normal) -> Self {
         self.setTitle(title, for: state)
@@ -194,7 +194,7 @@ extension UIButton {
     }
 }
 // MARK: - 进阶：按 state 的链式代理
-extension UIButton {
+public extension UIButton {
     final class StateProxy {
         fileprivate let button: UIButton
         let state: UIControl.State
@@ -251,7 +251,7 @@ extension UIButton {
     func `for`(_ state: UIControl.State) -> StateProxy { StateProxy(button: self, state: state) }
 }
 // MARK: - 布局 / 外观
-extension UIButton {
+public extension UIButton {
     @discardableResult
     func byBackgroundColor(_ color: UIColor, for state: UIControl.State = .normal) -> Self {
         if #available(iOS 15.0, *), state == .normal {
@@ -530,7 +530,7 @@ public extension UIButton {
     }
 }
 // MARK: - 交互 / 菜单 / 角色 / Pointer / Config 生命周期
-extension UIButton {
+public extension UIButton {
     @available(iOS 14.0, *)
     @discardableResult
     func byMenu(_ menu: UIMenu?) -> Self { self.menu = menu; return self }
@@ -568,8 +568,8 @@ extension UIButton {
     func bySetNeedsUpdateConfiguration() -> Self { self.setNeedsUpdateConfiguration(); return self }
 }
 // MARK: - 便捷构造 & 背景色兜底
-extension UIButton {
-    public convenience init(x: CGFloat,
+public extension UIButton {
+    convenience init(x: CGFloat,
                             y: CGFloat,
                             w: CGFloat,
                             h: CGFloat,
@@ -579,7 +579,7 @@ extension UIButton {
         addTarget(target, action: action, for: .touchUpInside)
     }
 
-    public func setBgCor(_ color: UIColor, forState: UIControl.State) {
+    func setBgCor(_ color: UIColor, forState: UIControl.State) {
         UIGraphicsBeginImageContext(CGSize(width: 1, height: 1))
         UIGraphicsGetCurrentContext()?.setFillColor(color.cgColor)
         UIGraphicsGetCurrentContext()?.fill(CGRect(x: 0, y: 0, width: 1, height: 1))
@@ -599,9 +599,9 @@ extension UIButton {
     }
 }
 // MARK: - 旋转动画
-extension UIButton {
-    public static let rotationKey = "jobs.rotation"
-    public enum RotationScope { case imageView, wholeButton, layer(CALayer) }
+public extension UIButton {
+    static let rotationKey = "jobs.rotation"
+    enum RotationScope { case imageView, wholeButton, layer(CALayer) }
 
     private func targetLayer(for scope: RotationScope) -> CALayer? {
         switch scope {
@@ -611,14 +611,14 @@ extension UIButton {
         }
     }
 
-    public func isRotating(scope: RotationScope = .imageView,
+    func isRotating(scope: RotationScope = .imageView,
                            key: String = UIButton.rotationKey) -> Bool {
         guard let tl = targetLayer(for: scope) else { return false }
         return tl.animation(forKey: key) != nil
     }
 
     @discardableResult
-    public func setRotating(_ on: Bool,
+    func setRotating(_ on: Bool,
                             scope: RotationScope = .imageView,
                             duration: CFTimeInterval = 1.0,
                             repeatCount: Float = .infinity,
@@ -650,7 +650,7 @@ extension UIButton {
     }
 
     @discardableResult
-    public func startRotating(duration: CFTimeInterval = 1.0,
+    func startRotating(duration: CFTimeInterval = 1.0,
                               scope: RotationScope = .imageView,
                               clockwise: Bool = true,
                               key: String = UIButton.rotationKey) -> Self {
@@ -659,7 +659,7 @@ extension UIButton {
     }
 
     @discardableResult
-    public func stopRotating(scope: RotationScope = .imageView,
+    func stopRotating(scope: RotationScope = .imageView,
                              key: String = UIButton.rotationKey,
                              resetTransformOnStop: Bool = true) -> Self {
         setRotating(false, scope: scope, duration: 0,
@@ -668,7 +668,7 @@ extension UIButton {
     }
 }
 // MARK: - 防止快速连点
-extension UIButton {
+public extension UIButton {
     func disableAfterClick(interval: TimeInterval = 1.0) {
         self.isUserInteractionEnabled = false
         DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
@@ -680,7 +680,7 @@ extension UIButton {
 // MARK: - 闭包回调（低版本兜底）（保留）
 // ======================================================
 private var actionKey: Void?
-extension UIButton {
+public extension UIButton {
     @discardableResult
     private func _bindTapClosure(_ action: @escaping (UIButton) -> Void,
                                  for events: UIControl.Event = .touchUpInside) -> Self {
@@ -708,7 +708,7 @@ extension UIButton {
 }
 // MARK: - 点按事件统一入口
 var kJobsUIButtonLongPressSleeveKey: UInt8 = 0
-extension UIButton {
+public extension UIButton {
     @discardableResult
     func onTap(_ handler: @escaping (UIButton) -> Void) -> Self {
         if #available(iOS 14.0, *) {
@@ -1170,7 +1170,7 @@ public extension UIButton {
     }
 }
 // MARK: 统一写回图片
-private extension UIButton {
+public extension UIButton {
     @MainActor
     func jobsResetBtnImage(_ image: UIImage?, for state: UIControl.State) {
         if #available(iOS 15.0, *) {

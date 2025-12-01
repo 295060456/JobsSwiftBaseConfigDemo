@@ -26,7 +26,6 @@ public final class LanguageManager {
             currentLanguageCode = Locale.preferredLanguages.first ?? "en"
         }
     }
-
     /// 动态 Bundle：每次按当前 code 解析路径
     public var localizedBundle: Bundle {
         guard
@@ -37,7 +36,6 @@ public final class LanguageManager {
         }
         return b
     }
-
     /// 切换语言：更新 code → 持久化 → 发通知
     public func switchTo(_ code: String) {
         guard code != currentLanguageCode else { return }

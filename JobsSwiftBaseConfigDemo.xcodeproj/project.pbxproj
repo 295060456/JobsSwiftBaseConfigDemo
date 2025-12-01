@@ -894,37 +894,19 @@
 		045920E22E84EC64008C8D6A /* 3rdTools */ = {
 			isa = PBXGroup;
 			children = (
-				041174672ECB1E91004D47B7 /* 🛜网络流量监控 */,
-				042F958F2EB5C733005DE735 /* 多语言化 */,
 				043283912EC499E00031CDD6 /* BRPickerViewSwift */,
 				046786E32EB4CED9003FE82D /* JobsRefresher */,
 				047E48C52EB3554900881898 /* PNPlayer */,
-				043283432EC437190031CDD6 /* 软键盘退出.swift */,
 				04C68D2F2ED94D5F00A11F53 /* 倒计时按钮.swift */,
 				041AE5A12EDA85FB00ED03A3 /* 苹果滑动开锁.swift */,
 				04C68D2B2ED94C3300A11F53 /* 钟.swift */,
 				04CF03182E8A80CA0083ACF0 /* AppTools.swift */,
-				C564FC2D2E0958E80079B5C1 /* HUDHelper.swift */,
-				C564FC742E0959620079B5C1 /* Inlines.swift */,
 				04D8422A2E965BA0001E8C90 /* JobsMarqueeView.swift */,
 				0482A5F72EA5F308004176A4 /* JobsNavBar.swift */,
-				04CF03142E8A75E70083ACF0 /* JobsRichText.swift */,
-				0477D96C2E8B83CA002C6427 /* JobsSafeTransitions.swift */,
 				049A65702EA0E6BA0006B185 /* JobsTabBarCtrl.swift */,
-				04BCDC292EA9DB0B00382DE0 /* JobsText.swift */,
-				04AD628E2E9120C000E18984 /* JobsTimer.swift */,
-				0401DD052E9115CD00D572AD /* JobsToast.swift */,
 				044272842E8146130084B25C /* JXScale.swift */,
-				0477D9822E8BE9FB002C6427 /* KeyboardObserver.swift */,
 				0440B5D92EB2FFAC005DBE91 /* keys.swift */,
-				04468F912E9E5A5700677000 /* MediaPickerService.swift */,
-				04468F8F2E9E4D7000677000 /* PermissionCenter.swift */,
-				049A65662EA09C6A0006B185 /* SafeCodable.swift */,
-				0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */,
-				045920E32E84EC72008C8D6A /* SwiftTools.swift */,
-				04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */,
 				C564FC852E0959640079B5C1 /* UIKitModel.swift */,
-				0440B5DB2EB30749005DBE91 /* weak.swift */,
 			);
 			path = 3rdTools;
 			sourceTree = "<group>";
@@ -1369,6 +1351,40 @@
 			path = "声音";
 			sourceTree = "<group>";
 		};
+		04DC136E2EDD310500CEDA1C /* JobsTools */ = {
+			isa = PBXGroup;
+			children = (
+				045920E22E84EC64008C8D6A /* 3rdTools */,
+				04DC136F2EDD337F00CEDA1C /* JobsBaseTools */,
+			);
+			path = JobsTools;
+			sourceTree = "<group>";
+		};
+		04DC136F2EDD337F00CEDA1C /* JobsBaseTools */ = {
+			isa = PBXGroup;
+			children = (
+				042F958F2EB5C733005DE735 /* 多语言化 */,
+				041174672ECB1E91004D47B7 /* 🛜网络流量监控 */,
+				04AD628E2E9120C000E18984 /* JobsTimer.swift */,
+				049A65662EA09C6A0006B185 /* SafeCodable.swift */,
+				0440B5562EB2370E005DBE91 /* SnowflakeSwift.swift */,
+				04CF028D2E8A37B60083ACF0 /* TextInputStrategies.swift */,
+				045920E32E84EC72008C8D6A /* SwiftTools.swift */,
+				0477D9822E8BE9FB002C6427 /* KeyboardObserver.swift */,
+				04BCDC292EA9DB0B00382DE0 /* JobsText.swift */,
+				0440B5DB2EB30749005DBE91 /* weak.swift */,
+				0477D96C2E8B83CA002C6427 /* JobsSafeTransitions.swift */,
+				04CF03142E8A75E70083ACF0 /* JobsRichText.swift */,
+				C564FC742E0959620079B5C1 /* Inlines.swift */,
+				043283432EC437190031CDD6 /* 软键盘退出.swift */,
+				0401DD052E9115CD00D572AD /* JobsToast.swift */,
+				C564FC2D2E0958E80079B5C1 /* HUDHelper.swift */,
+				04468F912E9E5A5700677000 /* MediaPickerService.swift */,
+				04468F8F2E9E4D7000677000 /* PermissionCenter.swift */,
+			);
+			path = JobsBaseTools;
+			sourceTree = "<group>";
+		};
 		04E8D61D2E8E882000E85CDA /* UIViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -1463,7 +1479,7 @@
 				C564FC372E0959120079B5C1 /* Resources */,
 				0459210F2E85572C008C8D6A /* Inheritance */,
 				045920EF2E854C8E008C8D6A /* Extensions */,
-				045920E22E84EC64008C8D6A /* 3rdTools */,
+				04DC136E2EDD310500CEDA1C /* JobsTools */,
 				C564FEEC2E0AAC900079B5C1 /* SwiftDefines */,
 				C564FC282E0958C40079B5C1 /* AppDelegate & SceneDelegate */,
 				C564FEEB2E0AAC5A0079B5C1 /* 主业务流程 */,

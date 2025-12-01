@@ -100,8 +100,7 @@ public extension JobsToast {
             left: config.horizontalPadding,
             bottom: config.verticalPadding,
             right: config.horizontalPadding
-        ))
-        return self
+        ));return self
     }
 }
 // MARK: - 静态 API
@@ -146,8 +145,7 @@ public extension JobsToast {
         DispatchQueue.main.asyncAfter(deadline: .now() + max(0.15, config.duration)) { [weak toast, weak targetWindow] in
             guard let toast, let targetWindow else { return }
             toast.dismiss(from: targetWindow)
-        }
-        return toast
+        };return toast
     }
     // 主动消失 —— 无参便捷版（MainActor 内部安全取 wd）
     func dismiss() {
