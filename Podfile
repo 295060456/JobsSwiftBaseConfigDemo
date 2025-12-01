@@ -5,6 +5,7 @@ ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 platform :ios, '15.6'
 
 source 'https://cdn.cocoapods.org/'
+source 'https://github.com/CocoaPods/Specs.git'
 
 # 关键：恢复这段，避免 Assets.car 重复产物冲突
 install! 'cocoapods',

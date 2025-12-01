@@ -182,7 +182,6 @@
 		049A65712EA0E6BB0006B185 /* JobsTabBarCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049A65702EA0E6BA0006B185 /* JobsTabBarCtrl.swift */; };
 		049A65732EA0E6E40006B185 /* Demo@自定义TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049A65722EA0E6D70006B185 /* Demo@自定义TabBar.swift */; };
 		04A18E4D2E86533B004BB9DC /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A18E4C2E865336004BB9DC /* UIImage.swift */; };
-		04A2458A2ECC818F009649E8 /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A245892ECC818E009649E8 /* JSONDecoder.swift */; };
 		04A245912ECD7373009649E8 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A245902ECD7373009649E8 /* Array.swift */; };
 		04A245932ECDA78D009649E8 /* Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A245922ECDA78B009649E8 /* Sequence.swift */; };
 		04A368142EC59517000FC898 /* LGOEditProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A368132EC59516000FC898 /* LGOEditProfileVC.swift */; };
@@ -211,8 +210,6 @@
 		04C442A62EB8B93A008E0F09 /* Demo@Lottie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C442A52EB8B935008E0F09 /* Demo@Lottie.swift */; };
 		04C442AA2EB8BC13008E0F09 /* 9squares_AlBoardman.json in Resources */ = {isa = PBXBuildFile; fileRef = 04C442A92EB8BC13008E0F09 /* 9squares_AlBoardman.json */; };
 		04C442AC2EB8BC27008E0F09 /* LottieLogo1.json in Resources */ = {isa = PBXBuildFile; fileRef = 04C442AB2EB8BC27008E0F09 /* LottieLogo1.json */; };
-		04C68D242ED850A700A11F53 /* LosslessStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D232ED850A600A11F53 /* LosslessStringConvertible.swift */; };
-		04C68D262ED8510E00A11F53 /* BinaryFloatingPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D252ED8510D00A11F53 /* BinaryFloatingPoint.swift */; };
 		04C68D282ED93FBD00A11F53 /* UINavigationBarAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D272ED93FBC00A11F53 /* UINavigationBarAppearance.swift */; };
 		04C68D2A2ED940AE00A11F53 /* UIBarAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D292ED940AC00A11F53 /* UIBarAppearance.swift */; };
 		04C68D2C2ED94C3900A11F53 /* 钟.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D2B2ED94C3300A11F53 /* 钟.swift */; };
@@ -252,6 +249,9 @@
 		04DC13932EDD3D2600CEDA1C /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC13722EDD3D2600CEDA1C /* LanguageManager.swift */; };
 		04DC13942EDD3D2600CEDA1C /* TextInputStrategies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC13842EDD3D2600CEDA1C /* TextInputStrategies.swift */; };
 		04DC13952EDD3D2600CEDA1C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04DC13752EDD3D2600CEDA1C /* Localizable.strings */; };
+		04DC13A12EDD4A1500CEDA1C /* LosslessStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC139F2EDD4A1500CEDA1C /* LosslessStringConvertible.swift */; };
+		04DC13A22EDD4A1500CEDA1C /* BinaryFloatingPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC139A2EDD4A1500CEDA1C /* BinaryFloatingPoint.swift */; };
+		04DC13A32EDD4A1500CEDA1C /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC139D2EDD4A1500CEDA1C /* JSONDecoder.swift */; };
 		04E8D5B92E8E550200E85CDA /* BaseStructDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D5B82E8E54FF00E85CDA /* BaseStructDefs.swift */; };
 		04E8D5BB2E8E5AD000E85CDA /* Demo@中国大陆居民身份证验证.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D5BA2E8E5ACF00E85CDA /* Demo@中国大陆居民身份证验证.swift */; };
 		04E8D6172E8E6E7F00E85CDA /* UIBarButtonItemAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D6162E8E6E7E00E85CDA /* UIBarButtonItemAppearance.swift */; };
@@ -504,7 +504,6 @@
 		049A65702EA0E6BA0006B185 /* JobsTabBarCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsTabBarCtrl.swift; sourceTree = "<group>"; };
 		049A65722EA0E6D70006B185 /* Demo@自定义TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@自定义TabBar.swift"; sourceTree = "<group>"; };
 		04A18E4C2E865336004BB9DC /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
-		04A245892ECC818E009649E8 /* JSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
 		04A245902ECD7373009649E8 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		04A245922ECDA78B009649E8 /* Sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sequence.swift; sourceTree = "<group>"; };
 		04A368132EC59516000FC898 /* LGOEditProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LGOEditProfileVC.swift; sourceTree = "<group>"; };
@@ -537,8 +536,6 @@
 		04C442A52EB8B935008E0F09 /* Demo@Lottie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@Lottie.swift"; sourceTree = "<group>"; };
 		04C442A92EB8BC13008E0F09 /* 9squares_AlBoardman.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = 9squares_AlBoardman.json; sourceTree = "<group>"; };
 		04C442AB2EB8BC27008E0F09 /* LottieLogo1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = LottieLogo1.json; sourceTree = "<group>"; };
-		04C68D232ED850A600A11F53 /* LosslessStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LosslessStringConvertible.swift; sourceTree = "<group>"; };
-		04C68D252ED8510D00A11F53 /* BinaryFloatingPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryFloatingPoint.swift; sourceTree = "<group>"; };
 		04C68D272ED93FBC00A11F53 /* UINavigationBarAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationBarAppearance.swift; sourceTree = "<group>"; };
 		04C68D292ED940AC00A11F53 /* UIBarAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBarAppearance.swift; sourceTree = "<group>"; };
 		04C68D2B2ED94C3300A11F53 /* 钟.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "钟.swift"; sourceTree = "<group>"; };
@@ -581,6 +578,9 @@
 		04DC13832EDD3D2600CEDA1C /* SnowflakeSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnowflakeSwift.swift; sourceTree = "<group>"; };
 		04DC13842EDD3D2600CEDA1C /* TextInputStrategies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputStrategies.swift; sourceTree = "<group>"; };
 		04DC13852EDD3D2600CEDA1C /* weak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = weak.swift; sourceTree = "<group>"; };
+		04DC139A2EDD4A1500CEDA1C /* BinaryFloatingPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryFloatingPoint.swift; sourceTree = "<group>"; };
+		04DC139D2EDD4A1500CEDA1C /* JSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
+		04DC139F2EDD4A1500CEDA1C /* LosslessStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LosslessStringConvertible.swift; sourceTree = "<group>"; };
 		04E8D5B82E8E54FF00E85CDA /* BaseStructDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseStructDefs.swift; sourceTree = "<group>"; };
 		04E8D5BA2E8E5ACF00E85CDA /* Demo@中国大陆居民身份证验证.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@中国大陆居民身份证验证.swift"; sourceTree = "<group>"; };
 		04E8D6162E8E6E7E00E85CDA /* UIBarButtonItemAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBarButtonItemAppearance.swift; sourceTree = "<group>"; };
@@ -901,9 +901,9 @@
 		045920EF2E854C8E008C8D6A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				04A245882ECC817D009649E8 /* Foundation */,
-				047E48ED2EB35D3700881898 /* MetalKit.extension */,
-				C564FEEA2E0AAC2B0079B5C1 /* UIKit.extension */,
+				04DC13A02EDD4A1500CEDA1C /* Foundation@Pods */,
+				047E48ED2EB35D3700881898 /* MetalKit@Pods */,
+				C564FEEA2E0AAC2B0079B5C1 /* UIKit */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1027,7 +1027,7 @@
 			path = "Demo@PNPlayer";
 			sourceTree = "<group>";
 		};
-		047E48ED2EB35D3700881898 /* MetalKit.extension */ = {
+		047E48ED2EB35D3700881898 /* MetalKit@Pods */ = {
 			isa = PBXGroup;
 			children = (
 				047E48F42EB36AC600881898 /* MTLSamplerDescriptor.swift */,
@@ -1035,7 +1035,7 @@
 				047E48F02EB36A3E00881898 /* MTLRenderPipelineDescriptor.swift */,
 				047E48EE2EB35D4800881898 /* MTKView.swift */,
 			);
-			path = MetalKit.extension;
+			path = "MetalKit@Pods";
 			sourceTree = "<group>";
 		};
 		0482A5E62EA380CE004176A4 /* UIWebView */ = {
@@ -1071,16 +1071,6 @@
 				0453765E2EB0B5A100133F73 /* PlayerLocalVC.swift */,
 			);
 			path = SubVC;
-			sourceTree = "<group>";
-		};
-		04A245882ECC817D009649E8 /* Foundation */ = {
-			isa = PBXGroup;
-			children = (
-				04C68D252ED8510D00A11F53 /* BinaryFloatingPoint.swift */,
-				04A245892ECC818E009649E8 /* JSONDecoder.swift */,
-				04C68D232ED850A600A11F53 /* LosslessStringConvertible.swift */,
-			);
-			path = Foundation;
 			sourceTree = "<group>";
 		};
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
@@ -1385,6 +1375,16 @@
 			path = "JobsSwiftBaseTools@Pods";
 			sourceTree = "<group>";
 		};
+		04DC13A02EDD4A1500CEDA1C /* Foundation@Pods */ = {
+			isa = PBXGroup;
+			children = (
+				04DC139A2EDD4A1500CEDA1C /* BinaryFloatingPoint.swift */,
+				04DC139D2EDD4A1500CEDA1C /* JSONDecoder.swift */,
+				04DC139F2EDD4A1500CEDA1C /* LosslessStringConvertible.swift */,
+			);
+			path = "Foundation@Pods";
+			sourceTree = "<group>";
+		};
 		04E8D61D2E8E882000E85CDA /* UIViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -1554,14 +1554,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		C564FEEA2E0AAC2B0079B5C1 /* UIKit.extension */ = {
+		C564FEEA2E0AAC2B0079B5C1 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
 				04D0C9802E8D19FC00580020 /* iOS.SDK */,
 				04D0C97F2E8D19DE00580020 /* 3rd */,
 				045920F02E854CA0008C8D6A /* SwiftStandardLibrary.extension */,
 			);
-			path = UIKit.extension;
+			path = UIKit;
 			sourceTree = "<group>";
 		};
 		C564FEEB2E0AAC5A0079B5C1 /* 主业务流程 */ = {
@@ -1843,7 +1843,6 @@
 				0432836A2EC45D840031CDD6 /* JXSegmentedTitleDataSource.swift in Sources */,
 				04A245932ECDA78D009649E8 /* Sequence.swift in Sources */,
 				04124F332EB0625300462BE2 /* Plugins.swift in Sources */,
-				04C68D262ED8510E00A11F53 /* BinaryFloatingPoint.swift in Sources */,
 				045920FC2E854FA9008C8D6A /* UInt.swift in Sources */,
 				043283632EC4535B0031CDD6 /* CashbackCardCell.swift in Sources */,
 				0402F0AE2EC2D7400054A151 /* UIListContentConfiguration.swift in Sources */,
@@ -1894,6 +1893,9 @@
 				04D0C97E2E8D19AB00580020 /* MJRefreshNormalHeader.swift in Sources */,
 				04E8D6172E8E6E7F00E85CDA /* UIBarButtonItemAppearance.swift in Sources */,
 				04AD62912E91230000E18984 /* Demo@时间.swift in Sources */,
+				04DC13A12EDD4A1500CEDA1C /* LosslessStringConvertible.swift in Sources */,
+				04DC13A22EDD4A1500CEDA1C /* BinaryFloatingPoint.swift in Sources */,
+				04DC13A32EDD4A1500CEDA1C /* JSONDecoder.swift in Sources */,
 				C564FC862E0959640079B5C1 /* WKWebView.swift in Sources */,
 				0448B1842EA3707E00CFC755 /* Demo@生成二维码和条形码.swift in Sources */,
 				045376632EB0B5BF00133F73 /* FeedModel.swift in Sources */,
@@ -1926,7 +1928,6 @@
 				0482A5EA2EA383B2004176A4 /* Demo@网页加载互动.swift in Sources */,
 				04E8D5BB2E8E5AD000E85CDA /* Demo@中国大陆居民身份证验证.swift in Sources */,
 				C564FC892E0959640079B5C1 /* UICollectionView.swift in Sources */,
-				04C68D242ED850A700A11F53 /* LosslessStringConvertible.swift in Sources */,
 				045376652EB0B5D600133F73 /* FeedVideoCell.swift in Sources */,
 				C564FCB32E0959990079B5C1 /* CustomCell.swift in Sources */,
 				04C68D282ED93FBD00A11F53 /* UINavigationBarAppearance.swift in Sources */,
@@ -1993,7 +1994,6 @@
 				04BCDC2C2EA9DB7E00382DE0 /* Demo@JobsText.swift in Sources */,
 				0477D9712E8B897D002C6427 /* Demo@支持上下左右安全Push和原路返回.swift in Sources */,
 				C564FCAC2E09597C0079B5C1 /* ViewController.swift in Sources */,
-				04A2458A2ECC818F009649E8 /* JSONDecoder.swift in Sources */,
 				04BD5B3F2EA8E5070056DA62 /* Demo@UICollectionView.swift in Sources */,
 				046786ED2EB4CF1B003FE82D /* UIScrollView+RefreshAPI.swift in Sources */,
 				043283A92EC49FA60031CDD6 /* BRTextPickerView.swift in Sources */,
