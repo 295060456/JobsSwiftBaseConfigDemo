@@ -903,7 +903,7 @@
 			children = (
 				04DC13A02EDD4A1500CEDA1C /* Foundation@Pods */,
 				047E48ED2EB35D3700881898 /* MetalKit@Pods */,
-				C564FEEA2E0AAC2B0079B5C1 /* UIKit */,
+				C564FEEA2E0AAC2B0079B5C1 /* UIKit@Pods */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1480,7 +1480,7 @@
 				0459210F2E85572C008C8D6A /* Inheritance */,
 				045920EF2E854C8E008C8D6A /* Extensions */,
 				04DC136E2EDD310500CEDA1C /* JobsSwiftTools */,
-				C564FEEC2E0AAC900079B5C1 /* SwiftDefines */,
+				C564FEEC2E0AAC900079B5C1 /* SwiftDefines@Pods */,
 				C564FC282E0958C40079B5C1 /* AppDelegate & SceneDelegate */,
 				C564FEEB2E0AAC5A0079B5C1 /* 主业务流程 */,
 				0432837A2EC470220031CDD6 /* 临时项目页面 */,
@@ -1554,14 +1554,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		C564FEEA2E0AAC2B0079B5C1 /* UIKit */ = {
+		C564FEEA2E0AAC2B0079B5C1 /* UIKit@Pods */ = {
 			isa = PBXGroup;
 			children = (
 				04D0C9802E8D19FC00580020 /* iOS.SDK */,
 				04D0C97F2E8D19DE00580020 /* 3rd */,
 				045920F02E854CA0008C8D6A /* SwiftStandardLibrary.extension */,
 			);
-			path = UIKit;
+			path = "UIKit@Pods";
 			sourceTree = "<group>";
 		};
 		C564FEEB2E0AAC5A0079B5C1 /* 主业务流程 */ = {
@@ -1574,7 +1574,7 @@
 			path = "主业务流程";
 			sourceTree = "<group>";
 		};
-		C564FEEC2E0AAC900079B5C1 /* SwiftDefines */ = {
+		C564FEEC2E0AAC900079B5C1 /* SwiftDefines@Pods */ = {
 			isa = PBXGroup;
 			children = (
 				0401DCFF2E910B3200D572AD /* BaseLet.swift */,
@@ -1582,7 +1582,7 @@
 				04E8D5B82E8E54FF00E85CDA /* BaseStructDefs.swift */,
 				C564FC612E0959510079B5C1 /* BaseEnumDefs.swift */,
 			);
-			path = SwiftDefines;
+			path = "SwiftDefines@Pods";
 			sourceTree = "<group>";
 		};
 		D245570FB891EF3ED82214C4 /* Frameworks */ = {
