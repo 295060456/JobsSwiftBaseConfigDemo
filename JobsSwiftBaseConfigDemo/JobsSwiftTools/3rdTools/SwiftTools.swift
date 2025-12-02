@@ -461,19 +461,6 @@ func onMainSync<T>(_ work: () -> T) -> T {
     DispatchQueue.main.sync { result = work() }
     return result
 }
-// MARK: - 私有：蓝色占位图（1x1）
-// 统一的纯色占位（1×1）；需要更大就改 size
-func jobsSolidBlue(
-    color: UIColor = .systemBlue,
-    size: CGSize = .init(width: 1, height: 1),
-    scale: CGFloat = 0
-) -> UIImage {
-    let fmt = UIGraphicsImageRendererFormat.default(); fmt.scale = scale
-    return UIGraphicsImageRenderer(size: size, format: fmt).image { ctx in
-        color.setFill()
-        ctx.fill(CGRect(origin: .zero, size: size))
-    }
-}
 // MARK: - NSTextAlignment 映射到 CATextLayerAlignmentMode
 extension CATextLayerAlignmentMode {
     static func fromNSTextAlignment(_ a: NSTextAlignment) -> CATextLayerAlignmentMode {

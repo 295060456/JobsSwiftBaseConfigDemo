@@ -13,7 +13,7 @@ final class HUDHelper {
 
     private init() {}
 
-    func show(message: String, duration: TimeInterval = 2.0) {
+    func show(_ message: String, duration: TimeInterval = 2.0) {
         guard let window = jobsGetMainWindow() else { return }
 
         let label = UILabel()

@@ -8,12 +8,12 @@
 import UIKit
 
 @inline(__always)
-func ScreenWidth(_ rate:CGFloat = 1) -> CGFloat {
+public func ScreenWidth(_ rate:CGFloat = 1) -> CGFloat {
     Screen.width * rate
 }
 
 @inline(__always)
-func ScreenHeight(_ rate:CGFloat = 1) -> CGFloat {
+public func ScreenHeight(_ rate:CGFloat = 1) -> CGFloat {
     Screen.height * rate
 }
 // MARK: - 核心比例器
