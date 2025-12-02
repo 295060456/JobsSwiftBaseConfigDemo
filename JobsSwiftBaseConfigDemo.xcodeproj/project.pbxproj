@@ -905,6 +905,7 @@
 		045920EF2E854C8E008C8D6A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				045920F02E854CA0008C8D6A /* SwiftStandardLibrary.extension */,
 				04DC13A02EDD4A1500CEDA1C /* Foundation@Pods */,
 				047E48ED2EB35D3700881898 /* MetalKit@Pods */,
 				C564FEEA2E0AAC2B0079B5C1 /* UIKit */,
@@ -1225,13 +1226,13 @@
 		04D0C97F2E8D19DE00580020 /* 3rd */ = {
 			isa = PBXGroup;
 			children = (
+				04D0C97C2E8D19AB00580020 /* MJRefresh */,
 				0432837B2EC471920031CDD6 /* EKAttributes */,
 				0432836B2EC45E380031CDD6 /* JXSegmentedView */,
 				046786F42EB5AD13003FE82D /* GKNavigationBarSwift.swift */,
 				04FC778F2EB0C88A00B810BA /* BMPlayer.swift */,
 				043283892EC484D70031CDD6 /* SkeletonView.swift */,
 				0477D9842E8BEACA002C6427 /* Reactive.swift */,
-				04D0C97C2E8D19AB00580020 /* MJRefresh */,
 			);
 			path = 3rd;
 			sourceTree = "<group>";
@@ -1564,7 +1565,6 @@
 			children = (
 				04D0C9802E8D19FC00580020 /* iOS.SDK */,
 				04D0C97F2E8D19DE00580020 /* 3rd */,
-				045920F02E854CA0008C8D6A /* SwiftStandardLibrary.extension */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
