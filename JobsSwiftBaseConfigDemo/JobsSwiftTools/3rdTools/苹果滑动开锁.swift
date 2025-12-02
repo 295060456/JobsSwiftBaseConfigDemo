@@ -12,9 +12,7 @@ final class SlideToUnlockView: UIView {
     // MARK: - 方向
     enum Direction {
         case leftToRight   // 默认：从左往右
-            // 解锁进度 0 -> 1 ：从左到右
         case rightToLeft   // 可选：从右往左
-            // 解锁进度 0 -> 1 ：从右到左
     }
     /// 滑到终点时回调（只在成功解锁时调用）
     var onUnlock: (() -> Void)?
@@ -23,12 +21,20 @@ final class SlideToUnlockView: UIView {
         didSet {
             updateDirectionUI()
             setNeedsLayout()
+            updateShimmerMask()
+        }
+    }
+    /// 是否开启“轨道骨架屏闪动效果”（用 JobsShimmerBarView 模拟）
+    var isSkeletonEnabled: Bool = false {
+        didSet {
+            updateSkeletonState()
         }
     }
     // MARK: - 配置
     private let thumbInset: CGFloat = 4          // 滑块距离左右的内边距
     private let thumbSize = CGSize(width: 52, height: 52)
     private var panStartProgress: CGFloat = 0    // 手势开始时的进度备份
+
     /// 0 ~ 1 的进度，表示从“起点侧”到“终点侧”的完成度
     private var _progress: CGFloat = 0
     private var progress: CGFloat {
@@ -41,7 +47,7 @@ final class SlideToUnlockView: UIView {
         }
     }
     private var thumbLeadingConstraint: Constraint?
-    /// 背景轨道
+    /// 背景轨道（灰色圆角条）
     private lazy var trackView: UIView = {
         UIView()
             .byBgColor(.systemGray5)
@@ -51,10 +57,21 @@ final class SlideToUnlockView: UIView {
                 make.edges.equalToSuperview()
             }
     }()
+    /// 轨道内部的“骨架屏效果”闪动条（覆盖整个父视图）
+    private lazy var shimmerView: UIView = { [unowned self] in
+        UIView()
+            .byShimmerColors(
+                base: UIColor.systemGray5,                 // 与轨道底色一致
+                highlight: UIColor.white.withAlphaComponent(0.9)
+            )
+            .byAddTo(trackView) { make in
+                make.edges.equalToSuperview()   // 全覆盖，无缝隙
+            }
+    }()
     /// 中间文字：“滑动以解锁”
     private lazy var titleLabel: UILabel = {
         UILabel()
-            .byText("滑动以解锁".tr)
+            .byText("滑动以解锁")
             .byTextColor(.darkGray)
             .byFont(.systemFont(ofSize: 16, weight: .medium))
             .byTextAlignment(.center)
@@ -62,7 +79,7 @@ final class SlideToUnlockView: UIView {
                 make.edges.equalToSuperview().inset(16)
             }
     }()
-
+    /// 滑块视图
     private lazy var thumbView: UIView = { [unowned self] in
         UIView()
             .byBgColor(.white)
@@ -88,13 +105,8 @@ final class SlideToUnlockView: UIView {
 
                         switch pan.state {
                         case .began:
-                            // 记录开始时的进度
                             self.panStartProgress = self.progress
-
                         case .changed:
-                            // 根据拖动距离更新进度
-                            // 左->右：translation.x 正；右->左：translation.x 负
-                            // 对于 rightToLeft，我们反向取值，让“向左拖”依然让 progress 增加
                             let rawDelta = translation.x / dragWidth
                             let delta: CGFloat
                             switch self.direction {
@@ -105,11 +117,10 @@ final class SlideToUnlockView: UIView {
                             }
 
                             self.progress = self.panStartProgress + delta
-                            // 让 UI 立即跟手
                             self.layoutIfNeeded()
+                            self.updateShimmerMask()
 
                         case .ended, .cancelled, .failed:
-                            // 超过 85% 认为解锁成功（与方向无关，只看完成度）
                             if self.progress > 0.85 {
                                 self.completeUnlock()
                             } else {
@@ -127,12 +138,12 @@ final class SlideToUnlockView: UIView {
             .byAddTo(self) { [unowned self] make in
                 make.centerY.equalToSuperview()
                 make.size.equalTo(thumbSize)
-                /// 记录 leading 约束，后面根据 progress + 方向 动态更新
                 self.thumbLeadingConstraint = make.leading.equalToSuperview()
                     .offset(self.thumbInset)
                     .constraint
             }
     }()
+
     private lazy var arrow: UIImageView = { [unowned self] in
         UIImageView()
             .byTintColor(.systemBlue)
@@ -140,7 +151,7 @@ final class SlideToUnlockView: UIView {
                 make.center.equalToSuperview()
             }
     }()
-    // MARK: - Init
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -154,19 +165,21 @@ final class SlideToUnlockView: UIView {
     private func setup() {
         backgroundColor = .clear
         trackView.byVisible(YES)
+        shimmerView.byVisible(YES)
         titleLabel.byVisible(YES)
         thumbView.byVisible(YES)
         arrow.byVisible(YES)
+
         updateDirectionUI()
+        updateSkeletonState()
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        // 尺寸变化时，让滑块位置跟 progress + 方向 对齐
         updateLayoutForProgress(animated: false)
+        updateShimmerMask()
     }
-    // MARK: - UI & 布局
-    /// 根据方向更新箭头等视觉
+
     private func updateDirectionUI() {
         let config = UIImage.SymbolConfiguration(pointSize: 18, weight: .bold)
         let symbolName: String
@@ -178,15 +191,12 @@ final class SlideToUnlockView: UIView {
         }
         arrow.byImage(symbolName.sysImg(config))
     }
-    /// 进度 -> 布局
+
     private func updateLayoutForProgress(animated: Bool) {
         guard bounds.width > 0 else { return }
-        /// 滑块可移动的最大距离（leading）
+
         let maxOffset = bounds.width - thumbInset - thumbSize.width
-        // leftToRight:
-        //   progress = 0 -> 左侧；1 -> 右侧
-        // rightToLeft:
-        //   progress = 0 -> 右侧；1 -> 左侧
+
         let positionFactor: CGFloat
         switch direction {
         case .leftToRight:
@@ -197,45 +207,104 @@ final class SlideToUnlockView: UIView {
 
         let offset = thumbInset + maxOffset * positionFactor
         thumbLeadingConstraint?.update(offset: offset)
-        // 文本透明度只和完成度有关，方向无关
+
         titleLabel.alpha = 1 - _progress * 0.8
+
         if animated {
-            UIView.animate(withDuration: 0.2) {
+            UIView.animate(withDuration: 0.2, animations: {
                 self.layoutIfNeeded()
-            }
+                self.updateShimmerMask()
+            })
         }
     }
-    // MARK: - 状态切换
+
+    private func updateSkeletonState() {
+        shimmerView.jobs_isShimmering = isSkeletonEnabled
+        shimmerView.isHidden = !isSkeletonEnabled
+        updateShimmerMask()
+    }
+
+    /// 用遮罩让“滑块经过的区域”不再有呼吸屏效果
+    /// 左->右：从“圆心”开始右侧有呼吸屏
+    /// 右->左：到“圆心”为止左侧有呼吸屏
+    private func updateShimmerMask() {
+        guard isSkeletonEnabled else {
+            shimmerView.layer.mask = nil
+            return
+        }
+
+        layoutIfNeeded()
+
+        let trackBounds = trackView.bounds
+        guard trackBounds.width > 0, trackBounds.height > 0 else {
+            shimmerView.layer.mask = nil
+            return
+        }
+
+        let thumbFrameInTrack = trackView.convert(thumbView.frame, from: self)
+        let maskRect: CGRect
+
+        switch direction {
+        case .leftToRight:
+            // 左->右：分界线在圆心位置，右侧保留呼吸屏
+            var startX = thumbFrameInTrack.midX        // 圆心
+            startX = min(max(startX, 0), trackBounds.width)
+            let width = max(trackBounds.width - startX, 0)
+            guard width > 0 else {
+                shimmerView.layer.mask = nil
+                return
+            };maskRect = CGRect(x: startX, y: 0, width: width, height: trackBounds.height)
+
+        case .rightToLeft:
+            // 右->左：分界线在圆心位置，左侧保留呼吸屏
+            var endX = thumbFrameInTrack.midX          // 圆心
+            endX = min(max(endX, 0), trackBounds.width)
+            let width = max(endX, 0)
+            guard width > 0 else {
+                shimmerView.layer.mask = nil
+                return
+            };maskRect = CGRect(x: 0, y: 0, width: width, height: trackBounds.height)
+        }
+        // 纯矩形遮罩，靠近滑块是笔直的直角边
+        let path = UIBezierPath(rect: maskRect)
+        let maskLayer = CAShapeLayer()
+        maskLayer.frame = shimmerView.bounds
+        maskLayer.path  = path.cgPath
+        shimmerView.layer.mask = maskLayer
+    }
+
     private func completeUnlock() {
-        /// 动画滑到终点（不同方向下终点不一样，但 progress 统一为 1）
         progress = 1
         updateLayoutForProgress(animated: true)
-        /// 只在真正“滑到头”时触发回调
         onUnlock?()
-        /// 如果你希望控件可以重复使用，稍等一下再自动复位
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
             self.reset(animated: true)
         }
     }
-    /// 复位到起点一侧
+
     func reset(animated: Bool) {
         progress = 0
         updateLayoutForProgress(animated: animated)
     }
 }
-// MARK: - DSL
+
 extension SlideToUnlockView {
-    /// DSL：配置解锁回调
+
     @discardableResult
     func byOnUnlock(_ handler: @escaping () -> Void) -> Self {
         self.onUnlock = handler
         return self
     }
 
-    /// DSL：配置方向（默认 .leftToRight）
     @discardableResult
     func byDirection(_ direction: Direction) -> Self {
         self.direction = direction
+        return self
+    }
+
+    @discardableResult
+    func bySkeletonEnabled(_ enabled: Bool) -> Self {
+        self.isSkeletonEnabled = enabled
         return self
     }
 }

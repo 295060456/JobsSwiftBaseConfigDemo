@@ -26,6 +26,13 @@
 		040E68F82EC704C400598A5B /* MyMacrosClient in Frameworks */ = {isa = PBXBuildFile; productRef = 040E68F72EC704C400598A5B /* MyMacrosClient */; };
 		040E68F92EC704DA00598A5B /* Demo@自定义注解.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0402F0A82EC2D59A0054A151 /* Demo@自定义注解.swift */; };
 		040E68FD2EC7118800598A5B /* TipsGrantPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040E68FC2EC7118000598A5B /* TipsGrantPermissionView.swift */; };
+		0411F1802EDEED0000F1552C /* UIView+JobsShimmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F17F2EDEECFA00F1552C /* UIView+JobsShimmer.swift */; };
+		0411F19B2EDEF44000F1552C /* UIViewController+自定义进入方向.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1972EDEF44000F1552C /* UIViewController+自定义进入方向.swift */; };
+		0411F19C2EDEF44000F1552C /* UIViewController+DSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1982EDEF44000F1552C /* UIViewController+DSL.swift */; };
+		0411F19D2EDEF44000F1552C /* UIViewController+GKNavigationBarSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1992EDEF44000F1552C /* UIViewController+GKNavigationBarSwift.swift */; };
+		0411F19E2EDEF44000F1552C /* UIViewController+SnapKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F19A2EDEF44000F1552C /* UIViewController+SnapKit.swift */; };
+		0411F19F2EDEF44000F1552C /* UIViewController+传值回调.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1942EDEF44000F1552C /* UIViewController+传值回调.swift */; };
+		0411F1A12EDEF44000F1552C /* UIViewController+系统导航栏设置.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1962EDEF44000F1552C /* UIViewController+系统导航栏设置.swift */; };
 		04124F2A2EB05E9000462BE2 /* Demo@Moya.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F292EB05E8A00462BE2 /* Demo@Moya.swift */; };
 		04124F2D2EB0622E00462BE2 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F2C2EB0622D00462BE2 /* Models.swift */; };
 		04124F2F2EB0623900462BE2 /* DemoAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F2E2EB0623900462BE2 /* DemoAPI.swift */; };
@@ -303,7 +310,6 @@
 		C564FC9D2E0959640079B5C1 /* UIDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC7B2E0959630079B5C1 /* UIDatePicker.swift */; };
 		C564FC9E2E0959640079B5C1 /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC7C2E0959630079B5C1 /* UINavigationController.swift */; };
 		C564FC9F2E0959640079B5C1 /* UISearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC7D2E0959630079B5C1 /* UISearchBar.swift */; };
-		C564FCA02E0959640079B5C1 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC7E2E0959630079B5C1 /* UIViewController.swift */; };
 		C564FCA12E0959640079B5C1 /* UIPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC7F2E0959630079B5C1 /* UIPageControl.swift */; };
 		C564FCA22E0959640079B5C1 /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC802E0959630079B5C1 /* UITableView.swift */; };
 		C564FCA32E0959640079B5C1 /* UIStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C564FC812E0959640079B5C1 /* UIStepper.swift */; };
@@ -345,6 +351,13 @@
 		0402F0A82EC2D59A0054A151 /* Demo@自定义注解.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@自定义注解.swift"; sourceTree = "<group>"; };
 		0402F0AD2EC2D73E0054A151 /* UIListContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIListContentConfiguration.swift; sourceTree = "<group>"; };
 		040E68FC2EC7118000598A5B /* TipsGrantPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsGrantPermissionView.swift; sourceTree = "<group>"; };
+		0411F17F2EDEECFA00F1552C /* UIView+JobsShimmer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+JobsShimmer.swift"; sourceTree = "<group>"; };
+		0411F1942EDEF44000F1552C /* UIViewController+传值回调.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+传值回调.swift"; sourceTree = "<group>"; };
+		0411F1962EDEF44000F1552C /* UIViewController+系统导航栏设置.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+系统导航栏设置.swift"; sourceTree = "<group>"; };
+		0411F1972EDEF44000F1552C /* UIViewController+自定义进入方向.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+自定义进入方向.swift"; sourceTree = "<group>"; };
+		0411F1982EDEF44000F1552C /* UIViewController+DSL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+DSL.swift"; sourceTree = "<group>"; };
+		0411F1992EDEF44000F1552C /* UIViewController+GKNavigationBarSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+GKNavigationBarSwift.swift"; sourceTree = "<group>"; };
+		0411F19A2EDEF44000F1552C /* UIViewController+SnapKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+SnapKit.swift"; sourceTree = "<group>"; };
 		04124F292EB05E8A00462BE2 /* Demo@Moya.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@Moya.swift"; sourceTree = "<group>"; };
 		04124F2C2EB0622D00462BE2 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		04124F2E2EB0623900462BE2 /* DemoAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoAPI.swift; sourceTree = "<group>"; };
@@ -642,7 +655,6 @@
 		C564FC7B2E0959630079B5C1 /* UIDatePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDatePicker.swift; sourceTree = "<group>"; };
 		C564FC7C2E0959630079B5C1 /* UINavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
 		C564FC7D2E0959630079B5C1 /* UISearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UISearchBar.swift; sourceTree = "<group>"; };
-		C564FC7E2E0959630079B5C1 /* UIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		C564FC7F2E0959630079B5C1 /* UIPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIPageControl.swift; sourceTree = "<group>"; };
 		C564FC802E0959630079B5C1 /* UITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableView.swift; sourceTree = "<group>"; };
 		C564FC812E0959640079B5C1 /* UIStepper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIStepper.swift; sourceTree = "<group>"; };
@@ -692,6 +704,84 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0411F17C2EDEECD000F1552C /* UIView */ = {
+			isa = PBXGroup;
+			children = (
+				C564FC732E0959620079B5C1 /* UIView.swift */,
+				0411F17F2EDEECFA00F1552C /* UIView+JobsShimmer.swift */,
+			);
+			path = UIView;
+			sourceTree = "<group>";
+		};
+		0411F1812EDEED2E00F1552C /* UIButton */ = {
+			isa = PBXGroup;
+			children = (
+				04CF028B2E8808500083ACF0 /* UIButton.swift */,
+			);
+			path = UIButton;
+			sourceTree = "<group>";
+		};
+		0411F1822EDEEECD00F1552C /* UIViewController */ = {
+			isa = PBXGroup;
+			children = (
+				0411F1942EDEF44000F1552C /* UIViewController+传值回调.swift */,
+				0411F1962EDEF44000F1552C /* UIViewController+系统导航栏设置.swift */,
+				0411F1972EDEF44000F1552C /* UIViewController+自定义进入方向.swift */,
+				0411F1982EDEF44000F1552C /* UIViewController+DSL.swift */,
+				0411F1992EDEF44000F1552C /* UIViewController+GKNavigationBarSwift.swift */,
+				0411F19A2EDEF44000F1552C /* UIViewController+SnapKit.swift */,
+			);
+			path = UIViewController;
+			sourceTree = "<group>";
+		};
+		0411F1A22EDEF53800F1552C /* String */ = {
+			isa = PBXGroup;
+			children = (
+				045920E92E84FD77008C8D6A /* String.swift */,
+			);
+			path = String;
+			sourceTree = "<group>";
+		};
+		0411F1A32EDEF58900F1552C /* UICollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				C564FC672E0959600079B5C1 /* UICollectionView.swift */,
+			);
+			path = UICollectionView;
+			sourceTree = "<group>";
+		};
+		0411F1A42EDEF5BF00F1552C /* UITableView */ = {
+			isa = PBXGroup;
+			children = (
+				C564FC802E0959630079B5C1 /* UITableView.swift */,
+			);
+			path = UITableView;
+			sourceTree = "<group>";
+		};
+		0411F1A52EDEF5DC00F1552C /* UITextField */ = {
+			isa = PBXGroup;
+			children = (
+				C564FC822E0959640079B5C1 /* UITextField.swift */,
+			);
+			path = UITextField;
+			sourceTree = "<group>";
+		};
+		0411F1A62EDEF5ED00F1552C /* UITextView */ = {
+			isa = PBXGroup;
+			children = (
+				C564FC782E0959620079B5C1 /* UITextView.swift */,
+			);
+			path = UITextView;
+			sourceTree = "<group>";
+		};
+		0411F1A72EDEF67300F1552C /* UIScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				C564FC6F2E0959610079B5C1 /* UIScrollView.swift */,
+			);
+			path = UIScrollView;
+			sourceTree = "<group>";
+		};
 		04124F2B2EB0621D00462BE2 /* Demo@Moya */ = {
 			isa = PBXGroup;
 			children = (
@@ -1240,6 +1330,15 @@
 		04D0C9802E8D19FC00580020 /* iOS.SDK */ = {
 			isa = PBXGroup;
 			children = (
+				0411F1A72EDEF67300F1552C /* UIScrollView */,
+				0411F1A62EDEF5ED00F1552C /* UITextView */,
+				0411F1A52EDEF5DC00F1552C /* UITextField */,
+				0411F1A42EDEF5BF00F1552C /* UITableView */,
+				0411F1A32EDEF58900F1552C /* UICollectionView */,
+				0411F1A22EDEF53800F1552C /* String */,
+				0411F1822EDEEECD00F1552C /* UIViewController */,
+				0411F1812EDEED2E00F1552C /* UIButton */,
+				0411F17C2EDEECD000F1552C /* UIView */,
 				04A245902ECD7373009649E8 /* Array.swift */,
 				042F958D2EB5C477005DE735 /* Bundle.swift */,
 				043283672EC458C10031CDD6 /* CAGradientLayer.swift */,
@@ -1257,7 +1356,6 @@
 				04C442912EB87F76008E0F09 /* PDFThumbnailView.swift */,
 				04C4428F2EB87ED6008E0F09 /* PDFView.swift */,
 				04A245922ECDA78B009649E8 /* Sequence.swift */,
-				045920E92E84FD77008C8D6A /* String.swift */,
 				C564FC752E0959620079B5C1 /* UIActivityIndicatorView.swift */,
 				04468E0F2E9CB43D00677000 /* UIAlertAction.swift */,
 				C564FC6A2E0959610079B5C1 /* UIAlertController.swift */,
@@ -1266,9 +1364,7 @@
 				C564FC6B2E0959610079B5C1 /* UIBarButtonItem.swift */,
 				04E8D6162E8E6E7E00E85CDA /* UIBarButtonItemAppearance.swift */,
 				04D0C96B2E8CCA7200580020 /* UIBarItem.swift */,
-				04CF028B2E8808500083ACF0 /* UIButton.swift */,
 				046CF9742E9667C8005A88B4 /* UIButtonConfiguration.swift */,
-				C564FC672E0959600079B5C1 /* UICollectionView.swift */,
 				04BCDC2F2EA9E86400382DE0 /* UICollectionViewCell.swift */,
 				04BCDC312EA9EAAF00382DE0 /* UICollectionViewFlowLayout.swift */,
 				0487AAD92E840CB200B5D307 /* UIColor.swift */,
@@ -1289,7 +1385,6 @@
 				C564FC7A2E0959630079B5C1 /* UIPopoverPresentationController.swift */,
 				C564FC6D2E0959610079B5C1 /* UIProgressView.swift */,
 				0477D9762E8B937A002C6427 /* UIResponder.swift */,
-				C564FC6F2E0959610079B5C1 /* UIScrollView.swift */,
 				C564FC7D2E0959630079B5C1 /* UISearchBar.swift */,
 				C564FC682E0959610079B5C1 /* UISegmentedControl.swift */,
 				C564FC662E0959600079B5C1 /* UISlider.swift */,
@@ -1297,14 +1392,9 @@
 				C564FC812E0959640079B5C1 /* UIStepper.swift */,
 				C564FC702E0959620079B5C1 /* UISwitch.swift */,
 				C564FC6C2E0959610079B5C1 /* UITabBarController.swift */,
-				C564FC802E0959630079B5C1 /* UITableView.swift */,
 				04BCDC2D2EA9E85600382DE0 /* UITableViewCell.swift */,
-				C564FC822E0959640079B5C1 /* UITextField.swift */,
-				C564FC782E0959620079B5C1 /* UITextView.swift */,
 				04E8D6182E8E6EBF00E85CDA /* UIToolbar.swift */,
 				C564FC712E0959620079B5C1 /* UIToolbarAppearance.swift */,
-				C564FC732E0959620079B5C1 /* UIView.swift */,
-				C564FC7E2E0959630079B5C1 /* UIViewController.swift */,
 				0401DCF92E90D91700D572AD /* UIWindow.swift */,
 				0401DCF72E90CDF400D572AD /* UIWindowScene.swift */,
 				046CF9762E967E6B005A88B4 /* URL.swift */,
@@ -1364,8 +1454,8 @@
 		04DC13862EDD3D2600CEDA1C /* JobsSwiftBaseTools@Pods */ = {
 			isa = PBXGroup;
 			children = (
-				04DC13712EDD3D2600CEDA1C /* 🛜网络流量监控 */,
 				04DC13782EDD3D2600CEDA1C /* 多语言化 */,
+				04DC13712EDD3D2600CEDA1C /* 🛜网络流量监控 */,
 				04DC137A2EDD3D2600CEDA1C /* Inlines.swift */,
 				04DC137B2EDD3D2600CEDA1C /* JobsRichText.swift */,
 				04DC137C2EDD3D2600CEDA1C /* JobsSafeTransitions.swift */,
@@ -1694,8 +1784,8 @@
 			);
 			mainGroup = C564FBD22E09580A0079B5C1;
 			packageReferences = (
-				040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "swift-syntax" */,
-				040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "MyMacrosClean" */,
+				040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "../../swift-syntax" */,
+				040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "../../MyMacrosClean" */,
 			);
 			productRefGroup = C564FBDC2E09580B0079B5C1 /* Products */;
 			projectDirPath = "";
@@ -1785,7 +1875,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		8ED027F733F47F705EC724B3 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1794,8 +1885,12 @@
 			);
 			inputFileListPaths = (
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1832,7 +1927,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C564FC8B2E0959640079B5C1 /* UIImageView.swift in Sources */,
-				C564FCA02E0959640079B5C1 /* UIViewController.swift in Sources */,
 				045921152E8557FE008C8D6A /* UIFont.swift in Sources */,
 				046786E72EB4CEED003FE82D /* RefreshComponent.swift in Sources */,
 				C564FC2B2E0958D50079B5C1 /* AppDelegate.swift in Sources */,
@@ -1871,6 +1965,7 @@
 				0482A5F82EA5F309004176A4 /* JobsNavBar.swift in Sources */,
 				045920E62E84F389008C8D6A /* CALayer.swift in Sources */,
 				049A65712EA0E6BB0006B185 /* JobsTabBarCtrl.swift in Sources */,
+				0411F1802EDEED0000F1552C /* UIView+JobsShimmer.swift in Sources */,
 				0482A5E82EA380EB004176A4 /* BaseWebView.swift in Sources */,
 				04BCDC302EA9E86600382DE0 /* UICollectionViewCell.swift in Sources */,
 				04FC778B2EB0BE2F00B810BA /* PlayerDetailVC.swift in Sources */,
@@ -2037,6 +2132,12 @@
 				046786E52EB4CEE1003FE82D /* RefreshEnums.swift in Sources */,
 				04F7AF672EC321B700ACB509 /* LiveCommentDemoVC.swift in Sources */,
 				0432836F2EC45F400031CDD6 /* JXSegmentedIndicatorLineView.swift in Sources */,
+				0411F19B2EDEF44000F1552C /* UIViewController+自定义进入方向.swift in Sources */,
+				0411F19C2EDEF44000F1552C /* UIViewController+DSL.swift in Sources */,
+				0411F19D2EDEF44000F1552C /* UIViewController+GKNavigationBarSwift.swift in Sources */,
+				0411F19E2EDEF44000F1552C /* UIViewController+SnapKit.swift in Sources */,
+				0411F19F2EDEF44000F1552C /* UIViewController+传值回调.swift in Sources */,
+				0411F1A12EDEF44000F1552C /* UIViewController+系统导航栏设置.swift in Sources */,
 				0424625A2EBAFCD800D6BFCC /* Demo@ComponentKit.swift in Sources */,
 				048E37702E87997A004C3A41 /* UIGestureRecognizer.swift in Sources */,
 				04BA33D92EC72CB100B9C8D7 /* LGOEditNicknameVC.swift in Sources */,
@@ -2481,11 +2582,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "swift-syntax" */ = {
+		040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "../../swift-syntax" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../../swift-syntax";
 		};
-		040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "MyMacrosClean" */ = {
+		040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "../../MyMacrosClean" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../MyMacrosClean;
 		};

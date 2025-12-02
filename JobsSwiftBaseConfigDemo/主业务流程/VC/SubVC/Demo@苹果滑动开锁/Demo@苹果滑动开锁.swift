@@ -12,6 +12,8 @@ final class SlideToUnlockDemoVC: BaseVC {
     private lazy var slideView: SlideToUnlockView = {
         SlideToUnlockView()
             .byBgColor(.clear)
+//            .byDirection(.rightToLeft)      // 从右往左滑动解锁
+            .bySkeletonEnabled(true)          // 开启骨架屏闪动
             .byOnUnlock {[weak self] in
                 guard let self else { return }
                 print("✅ 已滑到最右侧，执行解锁 block")
