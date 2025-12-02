@@ -108,7 +108,6 @@ public extension UILabel {
         self.linesCornerRadius = radius
         return self
     }
-
     /// 末行填充百分比（0~100）
     @discardableResult
     func bySkeletonLastLineFillPercent(_ percent: Int) -> Self {
