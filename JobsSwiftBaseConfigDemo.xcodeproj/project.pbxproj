@@ -43,6 +43,64 @@
 		0411F1B72EDEFA9500F1552C /* UITextView+监控输入.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1B62EDEFA8F00F1552C /* UITextView+监控输入.swift */; };
 		0411F1B92EDEFD0A00F1552C /* UITextField+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1B82EDEFD0600F1552C /* UITextField+Rx.swift */; };
 		0411F1BB2EDEFD5800F1552C /* UIView+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1BA2EDEFD5600F1552C /* UIView+Rx.swift */; };
+		0411F1BD2EDFCB0100F1552C /* UITextField+DSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1BC2EDFCAFE00F1552C /* UITextField+DSL.swift */; };
+		0411F1BF2EDFCB4F00F1552C /* UITextField+监控删除键.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1BE2EDFCB4800F1552C /* UITextField+监控删除键.swift */; };
+		0411F1C12EDFCBD900F1552C /* UITextField+富文本.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1C02EDFCBCD00F1552C /* UITextField+富文本.swift */; };
+		0411F1C32EDFCC0000F1552C /* UITextField+监控输入.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1C22EDFCBFB00F1552C /* UITextField+监控输入.swift */; };
+		0411F1C52EDFCCC200F1552C /* UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1C42EDFCCC100F1552C /* UITextView.swift */; };
+		0411F1C72EDFCFF500F1552C /* UITableView+DSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1C62EDFCFF300F1552C /* UITableView+DSL.swift */; };
+		0411F1C92EDFCFFB00F1552C /* UITableView+Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1C82EDFCFF900F1552C /* UITableView+Register.swift */; };
+		0411F1CB2EDFD09000F1552C /* UITableView+DequeueReusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1CA2EDFD08E00F1552C /* UITableView+DequeueReusable.swift */; };
+		0411F1CD2EDFD10800F1552C /* UITableView+空态数据占位按钮.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1CC2EDFD10800F1552C /* UITableView+空态数据占位按钮.swift */; };
+		0411F1CF2EDFD13500F1552C /* UITableView+校验.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1CE2EDFD13000F1552C /* UITableView+校验.swift */; };
+		0411F1D12EDFD19B00F1552C /* UICollectionView+DSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1D02EDFD19800F1552C /* UICollectionView+DSL.swift */; };
+		0411F1D32EDFD1B900F1552C /* UICollectionView+空态数据占位按钮.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1D22EDFD1B800F1552C /* UICollectionView+空态数据占位按钮.swift */; };
+		0411F1D52EDFD1DF00F1552C /* UICollectionView+校验.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1D42EDFD1DB00F1552C /* UICollectionView+校验.swift */; };
+		0411F1D72EDFD42C00F1552C /* UICollectionView+Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1D62EDFD42B00F1552C /* UICollectionView+Register.swift */; };
+		0411F1D92EDFD46100F1552C /* UICollectionView+DequeueReusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1D82EDFD45F00F1552C /* UICollectionView+DequeueReusable.swift */; };
+		0411F1DB2EDFD5B800F1552C /* String+格式转换.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1DA2EDFD5AD00F1552C /* String+格式转换.swift */; };
+		0411F1DD2EDFD5E700F1552C /* String+获取资源.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1DC2EDFD5E000F1552C /* String+获取资源.swift */; };
+		0411F1DF2EDFD61200F1552C /* String+二维码.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1DE2EDFD60D00F1552C /* String+二维码.swift */; };
+		0411F1E12EDFD62F00F1552C /* String+条形码.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1E02EDFD62800F1552C /* String+条形码.swift */; };
+		0411F1E32EDFD66000F1552C /* String+校验.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1E22EDFD65D00F1552C /* String+校验.swift */; };
+		0411F1E52EDFD6AC00F1552C /* String+系统功能调用.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1E42EDFD6A300F1552C /* String+系统功能调用.swift */; };
+		0411F1E72EDFD6EC00F1552C /* String+裁剪.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1E62EDFD6E900F1552C /* String+裁剪.swift */; };
+		0411F1E92EDFD72200F1552C /* String+通用工具.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1E82EDFD71C00F1552C /* String+通用工具.swift */; };
+		0411F1EB2EDFD8D900F1552C /* UIButton+DSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1EA2EDFD8D700F1552C /* UIButton+DSL.swift */; };
+		0411F1ED2EDFD94100F1552C /* UIButton+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1EC2EDFD93400F1552C /* UIButton+Init.swift */; };
+		0411F1EF2EDFD98900F1552C /* UIButton+旋转动画.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1EE2EDFD98300F1552C /* UIButton+旋转动画.swift */; };
+		0411F1F12EDFD9B100F1552C /* UIButton+防止快速连点.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1F02EDFD9B000F1552C /* UIButton+防止快速连点.swift */; };
+		0411F1F32EDFD9EE00F1552C /* UIButton+倒计时.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1F22EDFD9E900F1552C /* UIButton+倒计时.swift */; };
+		0411F1F52EDFD9F700F1552C /* UIButton+富文本.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1F42EDFD9F300F1552C /* UIButton+富文本.swift */; };
+		0411F1F72EDFDA7600F1552C /* UIButton+获取UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1F62EDFDA7200F1552C /* UIButton+获取UI.swift */; };
+		0411F1F92EDFDA9500F1552C /* UIButton+SDWebImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1F82EDFDA9100F1552C /* UIButton+SDWebImage.swift */; };
+		0411F1FB2EDFDB0F00F1552C /* UIButton+Kingfisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1FA2EDFDB0E00F1552C /* UIButton+Kingfisher.swift */; };
+		0411F1FD2EDFDB4200F1552C /* UIButton+声音.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1FC2EDFDB3F00F1552C /* UIButton+声音.swift */; };
+		0411F1FF2EDFDC9D00F1552C /* UIButton+点按事件.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F1FE2EDFDC9500F1552C /* UIButton+点按事件.swift */; };
+		0411F2012EDFDD1F00F1552C /* UIButton+按钮（背景）图.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F2002EDFDD1900F1552C /* UIButton+按钮（背景）图.swift */; };
+		0411F2032EDFDD5D00F1552C /* UIButton+空态图.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F2022EDFDD5A00F1552C /* UIButton+空态图.swift */; };
+		0411F2052EDFE29200F1552C /* UIButton+Subtitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F2042EDFE29100F1552C /* UIButton+Subtitle.swift */; };
+		0411F2072EDFE32F00F1552C /* UIButton+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F2062EDFE32E00F1552C /* UIButton+Configuration.swift */; };
+		0411F2092EDFE37A00F1552C /* UIButton+背景色兜底.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F2082EDFE37900F1552C /* UIButton+背景色兜底.swift */; };
+		0411F20B2EDFE51000F1552C /* UIView+DSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F20A2EDFE50E00F1552C /* UIView+DSL.swift */; };
+		0411F20D2EDFE52F00F1552C /* UIView+手势.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F20C2EDFE52900F1552C /* UIView+手势.swift */; };
+		0411F20F2EDFE59600F1552C /* UIView+keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F20E2EDFE59100F1552C /* UIView+keyboard.swift */; };
+		0411F2112EDFE5D700F1552C /* UIView+SnapKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F2102EDFE5D600F1552C /* UIView+SnapKit.swift */; };
+		0411F2132EDFE5F600F1552C /* UIView+悬浮.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F2122EDFE5F100F1552C /* UIView+悬浮.swift */; };
+		0411F2152EDFE63800F1552C /* UIView+右上角角标.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F2142EDFE63300F1552C /* UIView+右上角角标.swift */; };
+		0411F2172EDFE6B200F1552C /* UIView+JobsNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F2162EDFE6AB00F1552C /* UIView+JobsNavBar.swift */; };
+		0411F2192EDFE70400F1552C /* UIView+GKNavigationBarSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F2182EDFE6FD00F1552C /* UIView+GKNavigationBarSwift.swift */; };
+		0411F21F2EDFE78A00F1552C /* UIView+动画.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F21E2EDFE78600F1552C /* UIView+动画.swift */; };
+		0411F2212EDFE7DB00F1552C /* UIView+Lottie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F2202EDFE7D100F1552C /* UIView+Lottie.swift */; };
+		0411F2232EDFE81E00F1552C /* UIView+确认和取消@回调.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F2222EDFE80F00F1552C /* UIView+确认和取消@回调.swift */; };
+		0411F2252EDFE8E100F1552C /* UIView+Subview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F2242EDFE8E100F1552C /* UIView+Subview.swift */; };
+		0411F2272EDFE9FF00F1552C /* UIView+SkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F2262EDFE9FA00F1552C /* UIView+SkeletonView.swift */; };
+		0411F22A2EDFEA9400F1552C /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F2292EDFEA9200F1552C /* UIViewController.swift */; };
+		0411F22D2EDFEACB00F1552C /* UIScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F22C2EDFEACA00F1552C /* UIScrollView.swift */; };
+		0411F2322EDFEB5300F1552C /* UIControl+DSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F2312EDFEB5000F1552C /* UIControl+DSL.swift */; };
+		0411F2342EDFEB9100F1552C /* UIControl+统一点击事件.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F2332EDFEB8900F1552C /* UIControl+统一点击事件.swift */; };
+		0411F2372EDFEC2D00F1552C /* DateFormatter+预置.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F2362EDFEC1E00F1552C /* DateFormatter+预置.swift */; };
+		0411F2392EDFEC6100F1552C /* DateFormatter+DSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0411F2382EDFEC5E00F1552C /* DateFormatter+DSL.swift */; };
 		04124F2A2EB05E9000462BE2 /* Demo@Moya.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F292EB05E8A00462BE2 /* Demo@Moya.swift */; };
 		04124F2D2EB0622E00462BE2 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F2C2EB0622D00462BE2 /* Models.swift */; };
 		04124F2F2EB0623900462BE2 /* DemoAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04124F2E2EB0623900462BE2 /* DemoAPI.swift */; };
@@ -82,7 +140,6 @@
 		043283832EC4794A0031CDD6 /* ConfirmToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283822EC4794A0031CDD6 /* ConfirmToastView.swift */; };
 		043283862EC47F200031CDD6 /* Demo@FSPopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283852EC47F1B0031CDD6 /* Demo@FSPopoverView.swift */; };
 		043283882EC4804D0031CDD6 /* Demo@SkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283872EC4804A0031CDD6 /* Demo@SkeletonView.swift */; };
-		0432838A2EC484D80031CDD6 /* SkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283892EC484D70031CDD6 /* SkeletonView.swift */; };
 		0432838D2EC48BE70031CDD6 /* SkeletonUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0432838C2EC48BE50031CDD6 /* SkeletonUserCell.swift */; };
 		043283A22EC49B2E0031CDD6 /* BRCity.json in Resources */ = {isa = PBXBuildFile; fileRef = 043283A12EC49B2E0031CDD6 /* BRCity.json */; };
 		043283A52EC49F830031CDD6 /* BRPickerStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043283A42EC49F820031CDD6 /* BRPickerStyle.swift */; };
@@ -270,6 +327,16 @@
 		04DC13A12EDD4A1500CEDA1C /* LosslessStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC139F2EDD4A1500CEDA1C /* LosslessStringConvertible.swift */; };
 		04DC13A22EDD4A1500CEDA1C /* BinaryFloatingPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC139A2EDD4A1500CEDA1C /* BinaryFloatingPoint.swift */; };
 		04DC13A32EDD4A1500CEDA1C /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC139D2EDD4A1500CEDA1C /* JSONDecoder.swift */; };
+		04E821CD2EDFED3300570A4C /* UIGestureRecognizer+DSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821CC2EDFED3000570A4C /* UIGestureRecognizer+DSL.swift */; };
+		04E821CF2EDFEF9500570A4C /* UIGestureRecognizer+Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821CE2EDFEF8E00570A4C /* UIGestureRecognizer+Block.swift */; };
+		04E821D22EDFEFDC00570A4C /* NSObject+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821D12EDFEFD900570A4C /* NSObject+Rx.swift */; };
+		04E821D42EDFF14D00570A4C /* NSObject+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821D32EDFF14A00570A4C /* NSObject+UI.swift */; };
+		04E821D72EDFF1DF00570A4C /* UILabel+DSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821D62EDFF1DD00570A4C /* UILabel+DSL.swift */; };
+		04E821D92EDFF21E00570A4C /* UILabel+点击事件.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821D82EDFF21700570A4C /* UILabel+点击事件.swift */; };
+		04E821DB2EDFF23E00570A4C /* UILabel+富文本.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821DA2EDFF23500570A4C /* UILabel+富文本.swift */; };
+		04E821DD2EDFF2B200570A4C /* UILabel+方向变换.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821DC2EDFF2AE00570A4C /* UILabel+方向变换.swift */; };
+		04E821E02EDFF32400570A4C /* UILabel+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821DF2EDFF32000570A4C /* UILabel+Tools.swift */; };
+		04E821E22EDFF3D000570A4C /* UILabel+内边距.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821E12EDFF3CB00570A4C /* UILabel+内边距.swift */; };
 		04E8D5B92E8E550200E85CDA /* BaseStructDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D5B82E8E54FF00E85CDA /* BaseStructDefs.swift */; };
 		04E8D5BB2E8E5AD000E85CDA /* Demo@中国大陆居民身份证验证.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D5BA2E8E5ACF00E85CDA /* Demo@中国大陆居民身份证验证.swift */; };
 		04E8D6172E8E6E7F00E85CDA /* UIBarButtonItemAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D6162E8E6E7E00E85CDA /* UIBarButtonItemAppearance.swift */; };
@@ -375,6 +442,64 @@
 		0411F1B62EDEFA8F00F1552C /* UITextView+监控输入.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+监控输入.swift"; sourceTree = "<group>"; };
 		0411F1B82EDEFD0600F1552C /* UITextField+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Rx.swift"; sourceTree = "<group>"; };
 		0411F1BA2EDEFD5600F1552C /* UIView+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Rx.swift"; sourceTree = "<group>"; };
+		0411F1BC2EDFCAFE00F1552C /* UITextField+DSL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+DSL.swift"; sourceTree = "<group>"; };
+		0411F1BE2EDFCB4800F1552C /* UITextField+监控删除键.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+监控删除键.swift"; sourceTree = "<group>"; };
+		0411F1C02EDFCBCD00F1552C /* UITextField+富文本.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+富文本.swift"; sourceTree = "<group>"; };
+		0411F1C22EDFCBFB00F1552C /* UITextField+监控输入.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+监控输入.swift"; sourceTree = "<group>"; };
+		0411F1C42EDFCCC100F1552C /* UITextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextView.swift; sourceTree = "<group>"; };
+		0411F1C62EDFCFF300F1552C /* UITableView+DSL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+DSL.swift"; sourceTree = "<group>"; };
+		0411F1C82EDFCFF900F1552C /* UITableView+Register.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Register.swift"; sourceTree = "<group>"; };
+		0411F1CA2EDFD08E00F1552C /* UITableView+DequeueReusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+DequeueReusable.swift"; sourceTree = "<group>"; };
+		0411F1CC2EDFD10800F1552C /* UITableView+空态数据占位按钮.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+空态数据占位按钮.swift"; sourceTree = "<group>"; };
+		0411F1CE2EDFD13000F1552C /* UITableView+校验.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+校验.swift"; sourceTree = "<group>"; };
+		0411F1D02EDFD19800F1552C /* UICollectionView+DSL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+DSL.swift"; sourceTree = "<group>"; };
+		0411F1D22EDFD1B800F1552C /* UICollectionView+空态数据占位按钮.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+空态数据占位按钮.swift"; sourceTree = "<group>"; };
+		0411F1D42EDFD1DB00F1552C /* UICollectionView+校验.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+校验.swift"; sourceTree = "<group>"; };
+		0411F1D62EDFD42B00F1552C /* UICollectionView+Register.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Register.swift"; sourceTree = "<group>"; };
+		0411F1D82EDFD45F00F1552C /* UICollectionView+DequeueReusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+DequeueReusable.swift"; sourceTree = "<group>"; };
+		0411F1DA2EDFD5AD00F1552C /* String+格式转换.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+格式转换.swift"; sourceTree = "<group>"; };
+		0411F1DC2EDFD5E000F1552C /* String+获取资源.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+获取资源.swift"; sourceTree = "<group>"; };
+		0411F1DE2EDFD60D00F1552C /* String+二维码.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+二维码.swift"; sourceTree = "<group>"; };
+		0411F1E02EDFD62800F1552C /* String+条形码.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+条形码.swift"; sourceTree = "<group>"; };
+		0411F1E22EDFD65D00F1552C /* String+校验.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+校验.swift"; sourceTree = "<group>"; };
+		0411F1E42EDFD6A300F1552C /* String+系统功能调用.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+系统功能调用.swift"; sourceTree = "<group>"; };
+		0411F1E62EDFD6E900F1552C /* String+裁剪.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+裁剪.swift"; sourceTree = "<group>"; };
+		0411F1E82EDFD71C00F1552C /* String+通用工具.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+通用工具.swift"; sourceTree = "<group>"; };
+		0411F1EA2EDFD8D700F1552C /* UIButton+DSL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+DSL.swift"; sourceTree = "<group>"; };
+		0411F1EC2EDFD93400F1552C /* UIButton+Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Init.swift"; sourceTree = "<group>"; };
+		0411F1EE2EDFD98300F1552C /* UIButton+旋转动画.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+旋转动画.swift"; sourceTree = "<group>"; };
+		0411F1F02EDFD9B000F1552C /* UIButton+防止快速连点.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+防止快速连点.swift"; sourceTree = "<group>"; };
+		0411F1F22EDFD9E900F1552C /* UIButton+倒计时.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+倒计时.swift"; sourceTree = "<group>"; };
+		0411F1F42EDFD9F300F1552C /* UIButton+富文本.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+富文本.swift"; sourceTree = "<group>"; };
+		0411F1F62EDFDA7200F1552C /* UIButton+获取UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+获取UI.swift"; sourceTree = "<group>"; };
+		0411F1F82EDFDA9100F1552C /* UIButton+SDWebImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+SDWebImage.swift"; sourceTree = "<group>"; };
+		0411F1FA2EDFDB0E00F1552C /* UIButton+Kingfisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Kingfisher.swift"; sourceTree = "<group>"; };
+		0411F1FC2EDFDB3F00F1552C /* UIButton+声音.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+声音.swift"; sourceTree = "<group>"; };
+		0411F1FE2EDFDC9500F1552C /* UIButton+点按事件.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+点按事件.swift"; sourceTree = "<group>"; };
+		0411F2002EDFDD1900F1552C /* UIButton+按钮（背景）图.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+按钮（背景）图.swift"; sourceTree = "<group>"; };
+		0411F2022EDFDD5A00F1552C /* UIButton+空态图.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+空态图.swift"; sourceTree = "<group>"; };
+		0411F2042EDFE29100F1552C /* UIButton+Subtitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Subtitle.swift"; sourceTree = "<group>"; };
+		0411F2062EDFE32E00F1552C /* UIButton+Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Configuration.swift"; sourceTree = "<group>"; };
+		0411F2082EDFE37900F1552C /* UIButton+背景色兜底.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+背景色兜底.swift"; sourceTree = "<group>"; };
+		0411F20A2EDFE50E00F1552C /* UIView+DSL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+DSL.swift"; sourceTree = "<group>"; };
+		0411F20C2EDFE52900F1552C /* UIView+手势.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+手势.swift"; sourceTree = "<group>"; };
+		0411F20E2EDFE59100F1552C /* UIView+keyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+keyboard.swift"; sourceTree = "<group>"; };
+		0411F2102EDFE5D600F1552C /* UIView+SnapKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+SnapKit.swift"; sourceTree = "<group>"; };
+		0411F2122EDFE5F100F1552C /* UIView+悬浮.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+悬浮.swift"; sourceTree = "<group>"; };
+		0411F2142EDFE63300F1552C /* UIView+右上角角标.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+右上角角标.swift"; sourceTree = "<group>"; };
+		0411F2162EDFE6AB00F1552C /* UIView+JobsNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+JobsNavBar.swift"; sourceTree = "<group>"; };
+		0411F2182EDFE6FD00F1552C /* UIView+GKNavigationBarSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+GKNavigationBarSwift.swift"; sourceTree = "<group>"; };
+		0411F21E2EDFE78600F1552C /* UIView+动画.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+动画.swift"; sourceTree = "<group>"; };
+		0411F2202EDFE7D100F1552C /* UIView+Lottie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Lottie.swift"; sourceTree = "<group>"; };
+		0411F2222EDFE80F00F1552C /* UIView+确认和取消@回调.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+确认和取消@回调.swift"; sourceTree = "<group>"; };
+		0411F2242EDFE8E100F1552C /* UIView+Subview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Subview.swift"; sourceTree = "<group>"; };
+		0411F2262EDFE9FA00F1552C /* UIView+SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+SkeletonView.swift"; sourceTree = "<group>"; };
+		0411F2292EDFEA9200F1552C /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
+		0411F22C2EDFEACA00F1552C /* UIScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollView.swift; sourceTree = "<group>"; };
+		0411F2312EDFEB5000F1552C /* UIControl+DSL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+DSL.swift"; sourceTree = "<group>"; };
+		0411F2332EDFEB8900F1552C /* UIControl+统一点击事件.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+统一点击事件.swift"; sourceTree = "<group>"; };
+		0411F2362EDFEC1E00F1552C /* DateFormatter+预置.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+预置.swift"; sourceTree = "<group>"; };
+		0411F2382EDFEC5E00F1552C /* DateFormatter+DSL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+DSL.swift"; sourceTree = "<group>"; };
 		04124F292EB05E8A00462BE2 /* Demo@Moya.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@Moya.swift"; sourceTree = "<group>"; };
 		04124F2C2EB0622D00462BE2 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		04124F2E2EB0623900462BE2 /* DemoAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoAPI.swift; sourceTree = "<group>"; };
@@ -417,7 +542,6 @@
 		043283822EC4794A0031CDD6 /* ConfirmToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmToastView.swift; sourceTree = "<group>"; };
 		043283852EC47F1B0031CDD6 /* Demo@FSPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@FSPopoverView.swift"; sourceTree = "<group>"; };
 		043283872EC4804A0031CDD6 /* Demo@SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@SkeletonView.swift"; sourceTree = "<group>"; };
-		043283892EC484D70031CDD6 /* SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonView.swift; sourceTree = "<group>"; };
 		0432838C2EC48BE50031CDD6 /* SkeletonUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonUserCell.swift; sourceTree = "<group>"; };
 		0432838F2EC48E030031CDD6 /* 中国大陆公民身份证校验规则.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "中国大陆公民身份证校验规则.jpg"; sourceTree = "<group>"; };
 		043283A12EC49B2E0031CDD6 /* BRCity.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = BRCity.json; sourceTree = "<group>"; };
@@ -614,6 +738,16 @@
 		04DC139A2EDD4A1500CEDA1C /* BinaryFloatingPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryFloatingPoint.swift; sourceTree = "<group>"; };
 		04DC139D2EDD4A1500CEDA1C /* JSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
 		04DC139F2EDD4A1500CEDA1C /* LosslessStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LosslessStringConvertible.swift; sourceTree = "<group>"; };
+		04E821CC2EDFED3000570A4C /* UIGestureRecognizer+DSL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIGestureRecognizer+DSL.swift"; sourceTree = "<group>"; };
+		04E821CE2EDFEF8E00570A4C /* UIGestureRecognizer+Block.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIGestureRecognizer+Block.swift"; sourceTree = "<group>"; };
+		04E821D12EDFEFD900570A4C /* NSObject+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Rx.swift"; sourceTree = "<group>"; };
+		04E821D32EDFF14A00570A4C /* NSObject+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+UI.swift"; sourceTree = "<group>"; };
+		04E821D62EDFF1DD00570A4C /* UILabel+DSL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+DSL.swift"; sourceTree = "<group>"; };
+		04E821D82EDFF21700570A4C /* UILabel+点击事件.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+点击事件.swift"; sourceTree = "<group>"; };
+		04E821DA2EDFF23500570A4C /* UILabel+富文本.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+富文本.swift"; sourceTree = "<group>"; };
+		04E821DC2EDFF2AE00570A4C /* UILabel+方向变换.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+方向变换.swift"; sourceTree = "<group>"; };
+		04E821DF2EDFF32000570A4C /* UILabel+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Tools.swift"; sourceTree = "<group>"; };
+		04E821E12EDFF3CB00570A4C /* UILabel+内边距.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+内边距.swift"; sourceTree = "<group>"; };
 		04E8D5B82E8E54FF00E85CDA /* BaseStructDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseStructDefs.swift; sourceTree = "<group>"; };
 		04E8D5BA2E8E5ACF00E85CDA /* Demo@中国大陆居民身份证验证.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@中国大陆居民身份证验证.swift"; sourceTree = "<group>"; };
 		04E8D6162E8E6E7E00E85CDA /* UIBarButtonItemAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBarButtonItemAppearance.swift; sourceTree = "<group>"; };
@@ -722,9 +856,21 @@
 			isa = PBXGroup;
 			children = (
 				C564FC732E0959620079B5C1 /* UIView.swift */,
-				043283892EC484D70031CDD6 /* SkeletonView.swift */,
-				0411F1BA2EDEFD5600F1552C /* UIView+Rx.swift */,
+				0411F21E2EDFE78600F1552C /* UIView+动画.swift */,
+				0411F2222EDFE80F00F1552C /* UIView+确认和取消@回调.swift */,
+				0411F20C2EDFE52900F1552C /* UIView+手势.swift */,
+				0411F2122EDFE5F100F1552C /* UIView+悬浮.swift */,
+				0411F2142EDFE63300F1552C /* UIView+右上角角标.swift */,
+				0411F20A2EDFE50E00F1552C /* UIView+DSL.swift */,
+				0411F2182EDFE6FD00F1552C /* UIView+GKNavigationBarSwift.swift */,
+				0411F2162EDFE6AB00F1552C /* UIView+JobsNavBar.swift */,
 				0411F17F2EDEECFA00F1552C /* UIView+JobsShimmer.swift */,
+				0411F20E2EDFE59100F1552C /* UIView+keyboard.swift */,
+				0411F2202EDFE7D100F1552C /* UIView+Lottie.swift */,
+				0411F1BA2EDEFD5600F1552C /* UIView+Rx.swift */,
+				0411F2262EDFE9FA00F1552C /* UIView+SkeletonView.swift */,
+				0411F2102EDFE5D600F1552C /* UIView+SnapKit.swift */,
+				0411F2242EDFE8E100F1552C /* UIView+Subview.swift */,
 			);
 			path = UIView;
 			sourceTree = "<group>";
@@ -733,6 +879,22 @@
 			isa = PBXGroup;
 			children = (
 				04CF028B2E8808500083ACF0 /* UIButton.swift */,
+				0411F2002EDFDD1900F1552C /* UIButton+按钮（背景）图.swift */,
+				0411F2082EDFE37900F1552C /* UIButton+背景色兜底.swift */,
+				0411F1F22EDFD9E900F1552C /* UIButton+倒计时.swift */,
+				0411F1FE2EDFDC9500F1552C /* UIButton+点按事件.swift */,
+				0411F1F02EDFD9B000F1552C /* UIButton+防止快速连点.swift */,
+				0411F1F42EDFD9F300F1552C /* UIButton+富文本.swift */,
+				0411F1F62EDFDA7200F1552C /* UIButton+获取UI.swift */,
+				0411F2022EDFDD5A00F1552C /* UIButton+空态图.swift */,
+				0411F1FC2EDFDB3F00F1552C /* UIButton+声音.swift */,
+				0411F1EE2EDFD98300F1552C /* UIButton+旋转动画.swift */,
+				0411F2062EDFE32E00F1552C /* UIButton+Configuration.swift */,
+				0411F1EA2EDFD8D700F1552C /* UIButton+DSL.swift */,
+				0411F1EC2EDFD93400F1552C /* UIButton+Init.swift */,
+				0411F1FA2EDFDB0E00F1552C /* UIButton+Kingfisher.swift */,
+				0411F1F82EDFDA9100F1552C /* UIButton+SDWebImage.swift */,
+				0411F2042EDFE29100F1552C /* UIButton+Subtitle.swift */,
 			);
 			path = UIButton;
 			sourceTree = "<group>";
@@ -740,6 +902,7 @@
 		0411F1822EDEEECD00F1552C /* UIViewController */ = {
 			isa = PBXGroup;
 			children = (
+				0411F2292EDFEA9200F1552C /* UIViewController.swift */,
 				0411F1942EDEF44000F1552C /* UIViewController+传值回调.swift */,
 				0411F1962EDEF44000F1552C /* UIViewController+系统导航栏设置.swift */,
 				0411F1972EDEF44000F1552C /* UIViewController+自定义进入方向.swift */,
@@ -754,6 +917,14 @@
 			isa = PBXGroup;
 			children = (
 				045920E92E84FD77008C8D6A /* String.swift */,
+				0411F1E62EDFD6E900F1552C /* String+裁剪.swift */,
+				0411F1DE2EDFD60D00F1552C /* String+二维码.swift */,
+				0411F1DA2EDFD5AD00F1552C /* String+格式转换.swift */,
+				0411F1DC2EDFD5E000F1552C /* String+获取资源.swift */,
+				0411F1E02EDFD62800F1552C /* String+条形码.swift */,
+				0411F1E82EDFD71C00F1552C /* String+通用工具.swift */,
+				0411F1E42EDFD6A300F1552C /* String+系统功能调用.swift */,
+				0411F1E22EDFD65D00F1552C /* String+校验.swift */,
 			);
 			path = String;
 			sourceTree = "<group>";
@@ -762,6 +933,11 @@
 			isa = PBXGroup;
 			children = (
 				C564FC672E0959600079B5C1 /* UICollectionView.swift */,
+				0411F1D22EDFD1B800F1552C /* UICollectionView+空态数据占位按钮.swift */,
+				0411F1D42EDFD1DB00F1552C /* UICollectionView+校验.swift */,
+				0411F1D82EDFD45F00F1552C /* UICollectionView+DequeueReusable.swift */,
+				0411F1D02EDFD19800F1552C /* UICollectionView+DSL.swift */,
+				0411F1D62EDFD42B00F1552C /* UICollectionView+Register.swift */,
 			);
 			path = UICollectionView;
 			sourceTree = "<group>";
@@ -770,6 +946,11 @@
 			isa = PBXGroup;
 			children = (
 				C564FC802E0959630079B5C1 /* UITableView.swift */,
+				0411F1CC2EDFD10800F1552C /* UITableView+空态数据占位按钮.swift */,
+				0411F1CE2EDFD13000F1552C /* UITableView+校验.swift */,
+				0411F1CA2EDFD08E00F1552C /* UITableView+DequeueReusable.swift */,
+				0411F1C62EDFCFF300F1552C /* UITableView+DSL.swift */,
+				0411F1C82EDFCFF900F1552C /* UITableView+Register.swift */,
 			);
 			path = UITableView;
 			sourceTree = "<group>";
@@ -777,8 +958,12 @@
 		0411F1A52EDEF5DC00F1552C /* UITextField */ = {
 			isa = PBXGroup;
 			children = (
-				0411F1B82EDEFD0600F1552C /* UITextField+Rx.swift */,
 				C564FC822E0959640079B5C1 /* UITextField.swift */,
+				0411F1C02EDFCBCD00F1552C /* UITextField+富文本.swift */,
+				0411F1BE2EDFCB4800F1552C /* UITextField+监控删除键.swift */,
+				0411F1C22EDFCBFB00F1552C /* UITextField+监控输入.swift */,
+				0411F1BC2EDFCAFE00F1552C /* UITextField+DSL.swift */,
+				0411F1B82EDEFD0600F1552C /* UITextField+Rx.swift */,
 			);
 			path = UITextField;
 			sourceTree = "<group>";
@@ -786,12 +971,13 @@
 		0411F1A62EDEF5ED00F1552C /* UITextView */ = {
 			isa = PBXGroup;
 			children = (
-				0411F1B62EDEFA8F00F1552C /* UITextView+监控输入.swift */,
+				0411F1C42EDFCCC100F1552C /* UITextView.swift */,
 				0411F1B42EDEFA5E00F1552C /* UITextView+富文本.swift */,
-				0411F1B22EDEFA3300F1552C /* UITextView+校验.swift */,
 				0411F1B02EDEFA0A00F1552C /* UITextView+监控删除键.swift */,
-				0411F1AE2EDEF9A200F1552C /* UITextView+Rx.swift */,
+				0411F1B62EDEFA8F00F1552C /* UITextView+监控输入.swift */,
+				0411F1B22EDEFA3300F1552C /* UITextView+校验.swift */,
 				0411F1AC2EDEF96D00F1552C /* UITextView+DSL.swift */,
+				0411F1AE2EDEF9A200F1552C /* UITextView+Rx.swift */,
 			);
 			path = UITextView;
 			sourceTree = "<group>";
@@ -799,10 +985,31 @@
 		0411F1A72EDEF67300F1552C /* UIScrollView */ = {
 			isa = PBXGroup;
 			children = (
+				0411F22C2EDFEACA00F1552C /* UIScrollView.swift */,
 				0411F1AA2EDEF91500F1552C /* UIScrollView+空态数据占位按钮.swift */,
 				0411F1A82EDEF8DA00F1552C /* UIScrollView+DSL.swift */,
 			);
 			path = UIScrollView;
+			sourceTree = "<group>";
+		};
+		0411F22E2EDFEB3500F1552C /* UIControl */ = {
+			isa = PBXGroup;
+			children = (
+				04D0C96D2E8CD14900580020 /* UIControl.swift */,
+				0411F2332EDFEB8900F1552C /* UIControl+统一点击事件.swift */,
+				0411F2312EDFEB5000F1552C /* UIControl+DSL.swift */,
+			);
+			path = UIControl;
+			sourceTree = "<group>";
+		};
+		0411F2352EDFEC0E00F1552C /* DateFormatter */ = {
+			isa = PBXGroup;
+			children = (
+				0411F2382EDFEC5E00F1552C /* DateFormatter+DSL.swift */,
+				0411F2362EDFEC1E00F1552C /* DateFormatter+预置.swift */,
+				0401DCFD2E91069E00D572AD /* DateFormatter.swift */,
+			);
+			path = DateFormatter;
 			sourceTree = "<group>";
 		};
 		04124F2B2EB0621D00462BE2 /* Demo@Moya */ = {
@@ -1351,6 +1558,11 @@
 		04D0C9802E8D19FC00580020 /* iOS.SDK */ = {
 			isa = PBXGroup;
 			children = (
+				04E821D52EDFF1CD00570A4C /* UILabel */,
+				04E821D02EDFEFD100570A4C /* NSObject */,
+				04E821CB2EDFED1F00570A4C /* UIGestureRecognizer */,
+				0411F2352EDFEC0E00F1552C /* DateFormatter */,
+				0411F22E2EDFEB3500F1552C /* UIControl */,
 				0411F1A72EDEF67300F1552C /* UIScrollView */,
 				0411F1A62EDEF5ED00F1552C /* UITextView */,
 				0411F1A52EDEF5DC00F1552C /* UITextField */,
@@ -1366,12 +1578,10 @@
 				045920E52E84F386008C8D6A /* CALayer.swift */,
 				04C68D312ED9587A00A11F53 /* CAShapeLayer.swift */,
 				048F447D2EB3267000BAA7EE /* CATransform3D.swift */,
-				0401DCFD2E91069E00D572AD /* DateFormatter.swift */,
 				049A65682EA0AAB70006B185 /* Decimal.swift */,
 				0482A67B2EA7883E004176A4 /* Dictionary.swift */,
 				04AC74C42E86682D004B8305 /* Notification.swift */,
 				04E8D61A2E8E837C00E85CDA /* NSMutableAttributedString.swift */,
-				C564FC762E0959620079B5C1 /* NSObject.swift */,
 				042B67CD2E950858000A2970 /* NSTextAttachment.swift */,
 				04D0C9812E8D1CF300580020 /* Optional.swift */,
 				04C442912EB87F76008E0F09 /* PDFThumbnailView.swift */,
@@ -1389,13 +1599,10 @@
 				04BCDC2F2EA9E86400382DE0 /* UICollectionViewCell.swift */,
 				04BCDC312EA9EAAF00382DE0 /* UICollectionViewFlowLayout.swift */,
 				0487AAD92E840CB200B5D307 /* UIColor.swift */,
-				04D0C96D2E8CD14900580020 /* UIControl.swift */,
 				C564FC7B2E0959630079B5C1 /* UIDatePicker.swift */,
 				045921142E8557FB008C8D6A /* UIFont.swift */,
-				048E376F2E879978004C3A41 /* UIGestureRecognizer.swift */,
 				04A18E4C2E865336004BB9DC /* UIImage.swift */,
 				C564FC692E0959610079B5C1 /* UIImageView.swift */,
-				C564FC6E2E0959610079B5C1 /* UILabel.swift */,
 				0402F0AD2EC2D73E0054A151 /* UIListContentConfiguration.swift */,
 				C564FC842E0959640079B5C1 /* UINavigationBar.swift */,
 				04C68D272ED93FBC00A11F53 /* UINavigationBarAppearance.swift */,
@@ -1500,6 +1707,40 @@
 				04DC139F2EDD4A1500CEDA1C /* LosslessStringConvertible.swift */,
 			);
 			path = "Foundation@Pods";
+			sourceTree = "<group>";
+		};
+		04E821CB2EDFED1F00570A4C /* UIGestureRecognizer */ = {
+			isa = PBXGroup;
+			children = (
+				04E821CE2EDFEF8E00570A4C /* UIGestureRecognizer+Block.swift */,
+				04E821CC2EDFED3000570A4C /* UIGestureRecognizer+DSL.swift */,
+				048E376F2E879978004C3A41 /* UIGestureRecognizer.swift */,
+			);
+			path = UIGestureRecognizer;
+			sourceTree = "<group>";
+		};
+		04E821D02EDFEFD100570A4C /* NSObject */ = {
+			isa = PBXGroup;
+			children = (
+				C564FC762E0959620079B5C1 /* NSObject.swift */,
+				04E821D32EDFF14A00570A4C /* NSObject+UI.swift */,
+				04E821D12EDFEFD900570A4C /* NSObject+Rx.swift */,
+			);
+			path = NSObject;
+			sourceTree = "<group>";
+		};
+		04E821D52EDFF1CD00570A4C /* UILabel */ = {
+			isa = PBXGroup;
+			children = (
+				04E821E12EDFF3CB00570A4C /* UILabel+内边距.swift */,
+				04E821DF2EDFF32000570A4C /* UILabel+Tools.swift */,
+				04E821DC2EDFF2AE00570A4C /* UILabel+方向变换.swift */,
+				04E821DA2EDFF23500570A4C /* UILabel+富文本.swift */,
+				04E821D82EDFF21700570A4C /* UILabel+点击事件.swift */,
+				04E821D62EDFF1DD00570A4C /* UILabel+DSL.swift */,
+				C564FC6E2E0959610079B5C1 /* UILabel.swift */,
+			);
+			path = UILabel;
 			sourceTree = "<group>";
 		};
 		04E8D61D2E8E882000E85CDA /* UIViewController */ = {
@@ -1951,23 +2192,31 @@
 				045921152E8557FE008C8D6A /* UIFont.swift in Sources */,
 				046786E72EB4CEED003FE82D /* RefreshComponent.swift in Sources */,
 				C564FC2B2E0958D50079B5C1 /* AppDelegate.swift in Sources */,
+				04E821D72EDFF1DF00570A4C /* UILabel+DSL.swift in Sources */,
 				043283AD2EC4A0540031CDD6 /* BRPicker+DSL.swift in Sources */,
 				043283442EC437220031CDD6 /* 软键盘退出.swift in Sources */,
+				0411F1BF2EDFCB4F00F1552C /* UITextField+监控删除键.swift in Sources */,
 				04D49C252EBE055000BCD6F1 /* OCCls.m in Sources */,
+				0411F1CF2EDFD13500F1552C /* UITableView+校验.swift in Sources */,
 				044272852E8146130084B25C /* JXScale.swift in Sources */,
 				C564FCB22E0959990079B5C1 /* EmptyView.swift in Sources */,
+				0411F1CD2EDFD10800F1552C /* UITableView+空态数据占位按钮.swift in Sources */,
 				0432836A2EC45D840031CDD6 /* JXSegmentedTitleDataSource.swift in Sources */,
 				04A245932ECDA78D009649E8 /* Sequence.swift in Sources */,
+				0411F22A2EDFEA9400F1552C /* UIViewController.swift in Sources */,
+				0411F1FD2EDFDB4200F1552C /* UIButton+声音.swift in Sources */,
 				04124F332EB0625300462BE2 /* Plugins.swift in Sources */,
 				045920FC2E854FA9008C8D6A /* UInt.swift in Sources */,
 				043283632EC4535B0031CDD6 /* CashbackCardCell.swift in Sources */,
 				0402F0AE2EC2D7400054A151 /* UIListContentConfiguration.swift in Sources */,
+				0411F1F72EDFDA7600F1552C /* UIButton+获取UI.swift in Sources */,
 				04C4428E2EB86CB5008E0F09 /* Demo@PDF.swift in Sources */,
 				042F958E2EB5C478005DE735 /* Bundle.swift in Sources */,
 				04C68D2A2ED940AE00A11F53 /* UIBarAppearance.swift in Sources */,
 				045920FF2E854FBD008C8D6A /* UInt8.swift in Sources */,
 				0440B5DA2EB2FFB7005DBE91 /* keys.swift in Sources */,
 				04C442902EB87ED8008E0F09 /* PDFView.swift in Sources */,
+				0411F2322EDFEB5300F1552C /* UIControl+DSL.swift in Sources */,
 				04D0C96C2E8CCA7400580020 /* UIBarItem.swift in Sources */,
 				0411F1AB2EDEF91E00F1552C /* UIScrollView+空态数据占位按钮.swift in Sources */,
 				C564FC8D2E0959640079B5C1 /* UIBarButtonItem.swift in Sources */,
@@ -1975,12 +2224,15 @@
 				C564FC2E2E0958E80079B5C1 /* HUDHelper.swift in Sources */,
 				045920F22E854F79008C8D6A /* Int.swift in Sources */,
 				046786EB2EB4CF0A003FE82D /* UIScrollView+Proxy.swift in Sources */,
+				0411F1F52EDFD9F700F1552C /* UIButton+富文本.swift in Sources */,
 				043283752EC461260031CDD6 /* JXSegmentedListContainerView.swift in Sources */,
 				043283652EC453640031CDD6 /* LeftMenuView.swift in Sources */,
 				0477D9752E8B9146002C6427 /* Demo@安全Present.swift in Sources */,
 				045920F42E854F85008C8D6A /* Int8.swift in Sources */,
+				0411F1C92EDFCFFB00F1552C /* UITableView+Register.swift in Sources */,
 				043283832EC4794A0031CDD6 /* ConfirmToastView.swift in Sources */,
 				046786F52EB5AD14003FE82D /* GKNavigationBarSwift.swift in Sources */,
+				04E821CD2EDFED3300570A4C /* UIGestureRecognizer+DSL.swift in Sources */,
 				043283712EC45F4D0031CDD6 /* JXSegmentedIndicatorBaseView.swift in Sources */,
 				C564FC942E0959640079B5C1 /* UIPageViewController.swift in Sources */,
 				0482A5F82EA5F309004176A4 /* JobsNavBar.swift in Sources */,
@@ -1992,19 +2244,24 @@
 				04FC778B2EB0BE2F00B810BA /* PlayerDetailVC.swift in Sources */,
 				04E8D5B92E8E550200E85CDA /* BaseStructDefs.swift in Sources */,
 				043283732EC4601D0031CDD6 /* JXSegmentedView.swift in Sources */,
+				0411F1E12EDFD62F00F1552C /* String+条形码.swift in Sources */,
 				0487AADA2E840CB200B5D307 /* UIColor.swift in Sources */,
 				04E8D6232E8E884500E85CDA /* BaseVC.swift in Sources */,
 				047E48F52EB36AC600881898 /* MTLSamplerDescriptor.swift in Sources */,
+				0411F2152EDFE63800F1552C /* UIView+右上角角标.swift in Sources */,
 				045921042E854FE1008C8D6A /* UInt32.swift in Sources */,
 				0477D96F2E8B8479002C6427 /* UIApplication.swift in Sources */,
 				C564FC9D2E0959640079B5C1 /* UIDatePicker.swift in Sources */,
 				045921062E854FE9008C8D6A /* UInt64.swift in Sources */,
 				04CF03172E8A76500083ACF0 /* Demo@富文本.swift in Sources */,
 				C564FCA42E0959640079B5C1 /* UITextField.swift in Sources */,
+				04E821D42EDFF14D00570A4C /* NSObject+UI.swift in Sources */,
 				C564FC9C2E0959640079B5C1 /* UIPopoverPresentationController.swift in Sources */,
 				C564FCA32E0959640079B5C1 /* UIStepper.swift in Sources */,
+				0411F1C32EDFCC0000F1552C /* UITextField+监控输入.swift in Sources */,
 				049A656F2EA0D51C0006B185 /* Demo@测试UITraitChange.swift in Sources */,
 				049A65692EA0AAB80006B185 /* Decimal.swift in Sources */,
+				0411F1D72EDFD42C00F1552C /* UICollectionView+Register.swift in Sources */,
 				04D0C97D2E8D19AB00580020 /* MJRefreshAutoNormalFooter.swift in Sources */,
 				04D0C97E2E8D19AB00580020 /* MJRefreshNormalHeader.swift in Sources */,
 				04E8D6172E8E6E7F00E85CDA /* UIBarButtonItemAppearance.swift in Sources */,
@@ -2017,6 +2274,7 @@
 				04BA92FE2EDD999A00EB2B12 /* BaseDebug.swift in Sources */,
 				045376632EB0B5BF00133F73 /* FeedModel.swift in Sources */,
 				04AC74C52E86682E004B8305 /* Notification.swift in Sources */,
+				0411F2192EDFE70400F1552C /* UIView+GKNavigationBarSwift.swift in Sources */,
 				04DC13872EDD3D2600CEDA1C /* SafeCodable.swift in Sources */,
 				04DC13882EDD3D2600CEDA1C /* JobsTimer.swift in Sources */,
 				04DC13892EDD3D2600CEDA1C /* JobsRichText.swift in Sources */,
@@ -2031,9 +2289,10 @@
 				04DC13922EDD3D2600CEDA1C /* TRLang.swift in Sources */,
 				04DC13932EDD3D2600CEDA1C /* LanguageManager.swift in Sources */,
 				0411F1B72EDEFA9500F1552C /* UITextView+监控输入.swift in Sources */,
+				0411F1C52EDFCCC200F1552C /* UITextView.swift in Sources */,
+				0411F1F12EDFD9B100F1552C /* UIButton+防止快速连点.swift in Sources */,
 				04DC13942EDD3D2600CEDA1C /* TextInputStrategies.swift in Sources */,
 				04C68D302ED94D6200A11F53 /* 倒计时按钮.swift in Sources */,
-				0432838A2EC484D80031CDD6 /* SkeletonView.swift in Sources */,
 				04D0C9722E8CD39300580020 /* Demo@控制层回调.swift in Sources */,
 				048B795C2ED5452500A6FEF1 /* Demo@系统导航栏.swift in Sources */,
 				C564FC8A2E0959640079B5C1 /* UISegmentedControl.swift in Sources */,
@@ -2041,6 +2300,7 @@
 				04D842292E96377B001E8C90 /* Demo@打开模块.swift in Sources */,
 				04468F8E2E9E4B6300677000 /* Demo@相册选择.swift in Sources */,
 				0477D9772E8B9381002C6427 /* UIResponder.swift in Sources */,
+				04E821CF2EDFEF9500570A4C /* UIGestureRecognizer+Block.swift in Sources */,
 				0401DCFA2E90D91900D572AD /* UIWindow.swift in Sources */,
 				04468F922E9E5A5900677000 /* MediaPickerService.swift in Sources */,
 				0482A5EA2EA383B2004176A4 /* Demo@网页加载互动.swift in Sources */,
@@ -2051,6 +2311,7 @@
 				04C68D282ED93FBD00A11F53 /* UINavigationBarAppearance.swift in Sources */,
 				047E9A732EB6217900F58923 /* Demo@XLSX.swift in Sources */,
 				045920FA2E854FA5008C8D6A /* Int64.swift in Sources */,
+				0411F2092EDFE37A00F1552C /* UIButton+背景色兜底.swift in Sources */,
 				0440B5592EB237BE005DBE91 /* Demo@Snowflake.swift in Sources */,
 				043283612EC453530031CDD6 /* RebatePageVC.swift in Sources */,
 				04B5B4912EC5CCA900ED4505 /* BaseTableViewCellByValue1.swift in Sources */,
@@ -2059,9 +2320,11 @@
 				041F5B012E87B51800984EEB /* Demo@输入框.swift in Sources */,
 				04124F3C2EB075D400462BE2 /* Demo@Alamofire.swift in Sources */,
 				C564FC902E0959640079B5C1 /* UILabel.swift in Sources */,
+				04E821DB2EDFF23E00570A4C /* UILabel+富文本.swift in Sources */,
 				04BD5B412EA8E51C0056DA62 /* Demo@UITableView.swift in Sources */,
 				C564FC9E2E0959640079B5C1 /* UINavigationController.swift in Sources */,
 				0401DD062E9115CE00D572AD /* JobsToast.swift in Sources */,
+				0411F1D12EDFD19B00F1552C /* UICollectionView+DSL.swift in Sources */,
 				0477D9792E8BADB2002C6427 /* Demo@被Push或者Present的次级页面.swift in Sources */,
 				04F7AF712EC3282300ACB509 /* LiveInputBar.swift in Sources */,
 				0453765F2EB0B5A200133F73 /* PlayerLocalVC.swift in Sources */,
@@ -2079,9 +2342,13 @@
 				04BA930E2EDDAA7700EB2B12 /* JobsStructTools.swift in Sources */,
 				043283862EC47F200031CDD6 /* Demo@FSPopoverView.swift in Sources */,
 				0411F1B32EDEFA3800F1552C /* UITextView+校验.swift in Sources */,
+				0411F20D2EDFE52F00F1552C /* UIView+手势.swift in Sources */,
 				C564FC9F2E0959640079B5C1 /* UISearchBar.swift in Sources */,
+				0411F2342EDFEB9100F1552C /* UIControl+统一点击事件.swift in Sources */,
+				0411F1F32EDFD9EE00F1552C /* UIButton+倒计时.swift in Sources */,
 				04FC77852EB0BDF100B810BA /* ImageLoader.swift in Sources */,
 				048F447C2EB311DE00BAA7EE /* Demo@JobsAppDoor.swift in Sources */,
+				04E821E02EDFF32400570A4C /* UILabel+Tools.swift in Sources */,
 				0453765B2EB0B57B00133F73 /* Demo@BMPlayer.swift in Sources */,
 				047E48EF2EB35D4900881898 /* MTKView.swift in Sources */,
 				0401DCFC2E9102BC00D572AD /* UserDefaults.swift in Sources */,
@@ -2092,7 +2359,9 @@
 				0411F1B92EDEFD0A00F1552C /* UITextField+Rx.swift in Sources */,
 				04B5B4932EC5CCB700ED4505 /* BaseTableViewCellByValue2.swift in Sources */,
 				04C68D2C2ED94C3900A11F53 /* 钟.swift in Sources */,
+				0411F22D2EDFEACB00F1552C /* UIScrollView.swift in Sources */,
 				048314002E9A08510009A44B /* Demo@跑马灯轮播图.swift in Sources */,
+				0411F1C12EDFCBD900F1552C /* UITextField+富文本.swift in Sources */,
 				0477D9872E8BEF64002C6427 /* Demo@键盘.swift in Sources */,
 				C564FC932E0959640079B5C1 /* UIToolbarAppearance.swift in Sources */,
 				04CF028C2E8808540083ACF0 /* UIButton.swift in Sources */,
@@ -2100,13 +2369,16 @@
 				04124F2D2EB0622E00462BE2 /* Models.swift in Sources */,
 				04A18E4D2E86533B004BB9DC /* UIImage.swift in Sources */,
 				043283882EC4804D0031CDD6 /* Demo@SkeletonView.swift in Sources */,
+				0411F2072EDFE32F00F1552C /* UIButton+Configuration.swift in Sources */,
 				0411F1A92EDEF8DD00F1552C /* UIScrollView+DSL.swift in Sources */,
 				043283622EC453570031CDD6 /* PlaceholderListVC.swift in Sources */,
 				04124F2A2EB05E9000462BE2 /* Demo@Moya.swift in Sources */,
 				043283802EC478FC0031CDD6 /* SheetContentView.swift in Sources */,
 				045921122E855769008C8D6A /* JobsPaddedLabel.swift in Sources */,
 				04BCDC322EA9EAB000382DE0 /* UICollectionViewFlowLayout.swift in Sources */,
+				0411F20B2EDFE51000F1552C /* UIView+DSL.swift in Sources */,
 				041AE5A22EDA85FC00ED03A3 /* 苹果滑动开锁.swift in Sources */,
+				0411F2372EDFEC2D00F1552C /* DateFormatter+预置.swift in Sources */,
 				04C442922EB87F77008E0F09 /* PDFThumbnailView.swift in Sources */,
 				0459210C2E855004008C8D6A /* Float80.swift in Sources */,
 				04B5B4952EC5CCCC00ED4505 /* BaseTableViewCellByDefault.swift in Sources */,
@@ -2118,6 +2390,7 @@
 				C564FCAC2E09597C0079B5C1 /* ViewController.swift in Sources */,
 				04BD5B3F2EA8E5070056DA62 /* Demo@UICollectionView.swift in Sources */,
 				046786ED2EB4CF1B003FE82D /* UIScrollView+RefreshAPI.swift in Sources */,
+				0411F1FB2EDFDB0F00F1552C /* UIButton+Kingfisher.swift in Sources */,
 				043283A92EC49FA60031CDD6 /* BRTextPickerView.swift in Sources */,
 				046786E92EB4CEFA003FE82D /* RefreshProxy.swift in Sources */,
 				040E68F92EC704DA00598A5B /* Demo@自定义注解.swift in Sources */,
@@ -2125,8 +2398,10 @@
 				04C68D2E2ED94C5500A11F53 /* Demo@钟.swift in Sources */,
 				045376612EB0B5B100133F73 /* PlayerRemoteVC.swift in Sources */,
 				04468F902E9E4D7000677000 /* PermissionCenter.swift in Sources */,
+				0411F1CB2EDFD09000F1552C /* UITableView+DequeueReusable.swift in Sources */,
 				04F7AF6F2EC3280D00ACB509 /* LiveMsgCell.swift in Sources */,
 				042B67CE2E95085A000A2970 /* NSTextAttachment.swift in Sources */,
+				0411F1DD2EDFD5E700F1552C /* String+获取资源.swift in Sources */,
 				047E48F32EB36A5B00881898 /* MTLDepthStencilDescriptor.swift in Sources */,
 				04C68D402ED9818A00A11F53 /* LuckyWheelView.swift in Sources */,
 				045920EE2E854BE7008C8D6A /* Double.swift in Sources */,
@@ -2135,20 +2410,32 @@
 				04124F2F2EB0623900462BE2 /* DemoAPI.swift in Sources */,
 				043283412EC34BB40031CDD6 /* Demo@SwiftEntryKit.swift in Sources */,
 				045920E42E84EC73008C8D6A /* SwiftTools.swift in Sources */,
+				0411F2392EDFEC6100F1552C /* DateFormatter+DSL.swift in Sources */,
 				045920EA2E84FD82008C8D6A /* String.swift in Sources */,
+				0411F1D52EDFD1DF00F1552C /* UICollectionView+校验.swift in Sources */,
 				047E48E72EB35BAD00881898 /* MetalRenderer.swift in Sources */,
+				0411F1D92EDFD46100F1552C /* UICollectionView+DequeueReusable.swift in Sources */,
+				0411F2112EDFE5D700F1552C /* UIView+SnapKit.swift in Sources */,
 				047E48E82EB35BAD00881898 /* CameraController.swift in Sources */,
 				04A245912ECD7373009649E8 /* Array.swift in Sources */,
 				047E48E92EB35BAD00881898 /* SphereGeometry.swift in Sources */,
+				0411F2132EDFE5F600F1552C /* UIView+悬浮.swift in Sources */,
 				047E48EA2EB35BAD00881898 /* VideoTextureManager.swift in Sources */,
 				047E48EB2EB35BAD00881898 /* PlayerControlsView.swift in Sources */,
 				047E48EC2EB35BAD00881898 /* Shaders.metal in Sources */,
+				0411F1F92EDFDA9500F1552C /* UIButton+SDWebImage.swift in Sources */,
+				0411F1BD2EDFCB0100F1552C /* UITextField+DSL.swift in Sources */,
 				045920F82E854F91008C8D6A /* Int32.swift in Sources */,
+				0411F2032EDFDD5D00F1552C /* UIButton+空态图.swift in Sources */,
 				04468F8C2E9CFD7700677000 /* Demo@系统弹出框.swift in Sources */,
 				C564FC622E0959510079B5C1 /* BaseEnumDefs.swift in Sources */,
 				C564FC972E0959640079B5C1 /* UIActivityIndicatorView.swift in Sources */,
+				0411F1FF2EDFDC9D00F1552C /* UIButton+点按事件.swift in Sources */,
+				0411F21F2EDFE78A00F1552C /* UIView+动画.swift in Sources */,
 				C564FCA22E0959640079B5C1 /* UITableView.swift in Sources */,
+				0411F1E52EDFD6AC00F1552C /* String+系统功能调用.swift in Sources */,
 				0432837D2EC471980031CDD6 /* EKAttributes.swift in Sources */,
+				04E821E22EDFF3D000570A4C /* UILabel+内边距.swift in Sources */,
 				043283AB2EC49FED0031CDD6 /* BRDatePickerView.swift in Sources */,
 				0432836D2EC45E7A0031CDD6 /* JXSegmentedBaseDataSource.swift in Sources */,
 				043283A72EC49F910031CDD6 /* BRPickerPanel.swift in Sources */,
@@ -2163,15 +2450,21 @@
 				0411F19E2EDEF44000F1552C /* UIViewController+SnapKit.swift in Sources */,
 				0411F19F2EDEF44000F1552C /* UIViewController+传值回调.swift in Sources */,
 				0411F1A12EDEF44000F1552C /* UIViewController+系统导航栏设置.swift in Sources */,
+				0411F1E32EDFD66000F1552C /* String+校验.swift in Sources */,
 				0424625A2EBAFCD800D6BFCC /* Demo@ComponentKit.swift in Sources */,
 				048E37702E87997A004C3A41 /* UIGestureRecognizer.swift in Sources */,
 				04BA33D92EC72CB100B9C8D7 /* LGOEditNicknameVC.swift in Sources */,
+				0411F2012EDFDD1F00F1552C /* UIButton+按钮（背景）图.swift in Sources */,
 				C564FC8E2E0959640079B5C1 /* UITabBarController.swift in Sources */,
 				04468E102E9CB43E00677000 /* UIAlertAction.swift in Sources */,
+				0411F2232EDFE81E00F1552C /* UIView+确认和取消@回调.swift in Sources */,
 				04124F312EB0624300462BE2 /* TokenStore.swift in Sources */,
 				04CF02902E8A3A160083ACF0 /* Demo@输入文本.swift in Sources */,
+				0411F2272EDFE9FF00F1552C /* UIView+SkeletonView.swift in Sources */,
 				0411F1BB2EDEFD5800F1552C /* UIView+Rx.swift in Sources */,
+				0411F2172EDFE6B200F1552C /* UIView+JobsNavBar.swift in Sources */,
 				045921022E854FDA008C8D6A /* UInt16.swift in Sources */,
+				0411F1D32EDFD1B900F1552C /* UICollectionView+空态数据占位按钮.swift in Sources */,
 				043283682EC458C20031CDD6 /* CAGradientLayer.swift in Sources */,
 				043283642EC4535F0031CDD6 /* LeftMenuCell.swift in Sources */,
 				C564FCAB2E09597C0079B5C1 /* VC2.swift in Sources */,
@@ -2186,27 +2479,36 @@
 				043B83752E8FF0D600579AA8 /* BaseProtocolDefs.swift in Sources */,
 				04124F392EB067F000462BE2 /* APIService.swift in Sources */,
 				04124F422EB0762900462BE2 /* AFStubURLProtocol.swift in Sources */,
+				0411F1DF2EDFD61200F1552C /* String+二维码.swift in Sources */,
 				048F447E2EB3267200BAA7EE /* CATransform3D.swift in Sources */,
 				047E48DA2EB3562C00881898 /* PNPlayerDemoVC.swift in Sources */,
+				0411F2052EDFE29200F1552C /* UIButton+Subtitle.swift in Sources */,
 				0440B55A2EB23846005DBE91 /* Demo@LiveChat.swift in Sources */,
+				0411F1EB2EDFD8D900F1552C /* UIButton+DSL.swift in Sources */,
 				04C2F0312E98C9D000BA05A9 /* Demo@设计模式MVVM.swift in Sources */,
 				04C68D322ED9587B00A11F53 /* CAShapeLayer.swift in Sources */,
 				043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */,
 				04FC77902EB0C89100B810BA /* BMPlayer.swift in Sources */,
+				0411F1C72EDFCFF500F1552C /* UITableView+DSL.swift in Sources */,
 				04FC77872EB0BE0C00B810BA /* FeedListCell.swift in Sources */,
 				0401DD082E91183000D572AD /* Demo@弹出提示.swift in Sources */,
 				04CF03192E8A80CE0083ACF0 /* AppTools.swift in Sources */,
 				04D0C9822E8D1CF400580020 /* Optional.swift in Sources */,
 				04C68D462ED981D400A11F53 /* ColorWheelDemoVC.swift in Sources */,
 				043283AF2EC4A0630031CDD6 /* UIButton+BRPickerAdditions.swift in Sources */,
+				0411F2212EDFE7DB00F1552C /* UIView+Lottie.swift in Sources */,
 				04124F3E2EB075EA00462BE2 /* AFRoute.swift in Sources */,
 				C564FC952E0959640079B5C1 /* UIView.swift in Sources */,
 				04A8C54C2E8AA94D00381701 /* Demo@按钮.swift in Sources */,
 				046CF9772E967E6C005A88B4 /* URL.swift in Sources */,
 				047E9A712EB618B300F58923 /* Demo@Lunar.swift in Sources */,
+				0411F20F2EDFE59600F1552C /* UIView+keyboard.swift in Sources */,
+				0411F2252EDFE8E100F1552C /* UIView+Subview.swift in Sources */,
+				0411F1ED2EDFD94100F1552C /* UIButton+Init.swift in Sources */,
 				04D0C9792E8D066900580020 /* Demo@图片加载.swift in Sources */,
 				043283B12EC4A08B0031CDD6 /* Demo@BRPickerViewSwift.swift in Sources */,
 				047E48F12EB36A3F00881898 /* MTLRenderPipelineDescriptor.swift in Sources */,
+				0411F1DB2EDFD5B800F1552C /* String+格式转换.swift in Sources */,
 				043283A52EC49F830031CDD6 /* BRPickerStyle.swift in Sources */,
 				045920F62E854F8C008C8D6A /* Int16.swift in Sources */,
 				0401DD002E910B3500D572AD /* BaseLet.swift in Sources */,
@@ -2216,15 +2518,21 @@
 				046CF9752E9667C9005A88B4 /* UIButtonConfiguration.swift in Sources */,
 				045921082E854FF3008C8D6A /* Float.swift in Sources */,
 				C564FCA62E0959640079B5C1 /* UINavigationBar.swift in Sources */,
+				04E821D22EDFEFDC00570A4C /* NSObject+Rx.swift in Sources */,
 				046786EF2EB4CF2C003FE82D /* DefaultSkins.swift in Sources */,
 				04A368142EC59517000FC898 /* LGOEditProfileVC.swift in Sources */,
 				04124F442EB0764200462BE2 /* AFService.swift in Sources */,
 				C564FC2C2E0958D50079B5C1 /* SceneDelegate.swift in Sources */,
 				C564FC922E0959640079B5C1 /* UISwitch.swift in Sources */,
+				0411F1E72EDFD6EC00F1552C /* String+裁剪.swift in Sources */,
+				0411F1E92EDFD72200F1552C /* String+通用工具.swift in Sources */,
 				046786F12EB4CF76003FE82D /* Demo@JobsRefresher.swift in Sources */,
 				04BCDC2E2EA9E85800382DE0 /* UITableViewCell.swift in Sources */,
+				0411F1EF2EDFD98900F1552C /* UIButton+旋转动画.swift in Sources */,
 				049A65732EA0E6E40006B185 /* Demo@自定义TabBar.swift in Sources */,
 				0411F1AD2EDEF96F00F1552C /* UITextView+DSL.swift in Sources */,
+				04E821D92EDFF21E00570A4C /* UILabel+点击事件.swift in Sources */,
+				04E821DD2EDFF2B200570A4C /* UILabel+方向变换.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
