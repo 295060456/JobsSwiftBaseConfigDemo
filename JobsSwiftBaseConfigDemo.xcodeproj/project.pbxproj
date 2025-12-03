@@ -337,6 +337,15 @@
 		04E821DD2EDFF2B200570A4C /* UILabel+方向变换.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821DC2EDFF2AE00570A4C /* UILabel+方向变换.swift */; };
 		04E821E02EDFF32400570A4C /* UILabel+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821DF2EDFF32000570A4C /* UILabel+Tools.swift */; };
 		04E821E22EDFF3D000570A4C /* UILabel+内边距.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821E12EDFF3CB00570A4C /* UILabel+内边距.swift */; };
+		04E821E52EE00A9000570A4C /* UIImageView+DSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821E42EE00A8E00570A4C /* UIImageView+DSL.swift */; };
+		04E821E72EE00AB600570A4C /* UIImageView+SDWebImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821E62EE00AB500570A4C /* UIImageView+SDWebImage.swift */; };
+		04E821E92EE00AD400570A4C /* UIImageView+Kingfisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821E82EE00AD300570A4C /* UIImageView+Kingfisher.swift */; };
+		04E821EB2EE00AEC00570A4C /* UIImageView+手势.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821EA2EE00AE700570A4C /* UIImageView+手势.swift */; };
+		04E821EE2EE00C1B00570A4C /* UIKit+Kingfisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821ED2EE00C1B00570A4C /* UIKit+Kingfisher.swift */; };
+		04E821F02EE00C3900570A4C /* URL+SDWebImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821EF2EE00C3900570A4C /* URL+SDWebImage.swift */; };
+		04E821F32EE00CE800570A4C /* UITableViewCell+JobsConfigCellProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821F22EE00CE700570A4C /* UITableViewCell+JobsConfigCellProtocol.swift */; };
+		04E821F52EE00D0A00570A4C /* UITableViewCell+DSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821F42EE00D0800570A4C /* UITableViewCell+DSL.swift */; };
+		04E821F82EE00DD900570A4C /* UIWindow+DSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E821F72EE00DD700570A4C /* UIWindow+DSL.swift */; };
 		04E8D5B92E8E550200E85CDA /* BaseStructDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D5B82E8E54FF00E85CDA /* BaseStructDefs.swift */; };
 		04E8D5BB2E8E5AD000E85CDA /* Demo@中国大陆居民身份证验证.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D5BA2E8E5ACF00E85CDA /* Demo@中国大陆居民身份证验证.swift */; };
 		04E8D6172E8E6E7F00E85CDA /* UIBarButtonItemAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D6162E8E6E7E00E85CDA /* UIBarButtonItemAppearance.swift */; };
@@ -748,6 +757,15 @@
 		04E821DC2EDFF2AE00570A4C /* UILabel+方向变换.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+方向变换.swift"; sourceTree = "<group>"; };
 		04E821DF2EDFF32000570A4C /* UILabel+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Tools.swift"; sourceTree = "<group>"; };
 		04E821E12EDFF3CB00570A4C /* UILabel+内边距.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+内边距.swift"; sourceTree = "<group>"; };
+		04E821E42EE00A8E00570A4C /* UIImageView+DSL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+DSL.swift"; sourceTree = "<group>"; };
+		04E821E62EE00AB500570A4C /* UIImageView+SDWebImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+SDWebImage.swift"; sourceTree = "<group>"; };
+		04E821E82EE00AD300570A4C /* UIImageView+Kingfisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Kingfisher.swift"; sourceTree = "<group>"; };
+		04E821EA2EE00AE700570A4C /* UIImageView+手势.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+手势.swift"; sourceTree = "<group>"; };
+		04E821ED2EE00C1B00570A4C /* UIKit+Kingfisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIKit+Kingfisher.swift"; sourceTree = "<group>"; };
+		04E821EF2EE00C3900570A4C /* URL+SDWebImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+SDWebImage.swift"; sourceTree = "<group>"; };
+		04E821F22EE00CE700570A4C /* UITableViewCell+JobsConfigCellProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+JobsConfigCellProtocol.swift"; sourceTree = "<group>"; };
+		04E821F42EE00D0800570A4C /* UITableViewCell+DSL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+DSL.swift"; sourceTree = "<group>"; };
+		04E821F72EE00DD700570A4C /* UIWindow+DSL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+DSL.swift"; sourceTree = "<group>"; };
 		04E8D5B82E8E54FF00E85CDA /* BaseStructDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseStructDefs.swift; sourceTree = "<group>"; };
 		04E8D5BA2E8E5ACF00E85CDA /* Demo@中国大陆居民身份证验证.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@中国大陆居民身份证验证.swift"; sourceTree = "<group>"; };
 		04E8D6162E8E6E7E00E85CDA /* UIBarButtonItemAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBarButtonItemAppearance.swift; sourceTree = "<group>"; };
@@ -1558,20 +1576,24 @@
 		04D0C9802E8D19FC00580020 /* iOS.SDK */ = {
 			isa = PBXGroup;
 			children = (
-				04E821D52EDFF1CD00570A4C /* UILabel */,
-				04E821D02EDFEFD100570A4C /* NSObject */,
-				04E821CB2EDFED1F00570A4C /* UIGestureRecognizer */,
 				0411F2352EDFEC0E00F1552C /* DateFormatter */,
-				0411F22E2EDFEB3500F1552C /* UIControl */,
-				0411F1A72EDEF67300F1552C /* UIScrollView */,
-				0411F1A62EDEF5ED00F1552C /* UITextView */,
-				0411F1A52EDEF5DC00F1552C /* UITextField */,
-				0411F1A42EDEF5BF00F1552C /* UITableView */,
-				0411F1A32EDEF58900F1552C /* UICollectionView */,
+				04E821D02EDFEFD100570A4C /* NSObject */,
 				0411F1A22EDEF53800F1552C /* String */,
-				0411F1822EDEEECD00F1552C /* UIViewController */,
 				0411F1812EDEED2E00F1552C /* UIButton */,
+				0411F1A32EDEF58900F1552C /* UICollectionView */,
+				0411F22E2EDFEB3500F1552C /* UIControl */,
+				04E821CB2EDFED1F00570A4C /* UIGestureRecognizer */,
+				04E821E32EE00A8800570A4C /* UIImageView */,
+				04E821D52EDFF1CD00570A4C /* UILabel */,
+				0411F1A72EDEF67300F1552C /* UIScrollView */,
+				0411F1A42EDEF5BF00F1552C /* UITableView */,
+				04E821F12EE00CD300570A4C /* UITableViewCell */,
+				0411F1A52EDEF5DC00F1552C /* UITextField */,
+				0411F1A62EDEF5ED00F1552C /* UITextView */,
 				0411F17C2EDEECD000F1552C /* UIView */,
+				0411F1822EDEEECD00F1552C /* UIViewController */,
+				04E821F62EE00DD300570A4C /* UIWindow */,
+				04E821EC2EE00C0300570A4C /* URL */,
 				04A245902ECD7373009649E8 /* Array.swift */,
 				042F958D2EB5C477005DE735 /* Bundle.swift */,
 				043283672EC458C10031CDD6 /* CAGradientLayer.swift */,
@@ -1602,7 +1624,6 @@
 				C564FC7B2E0959630079B5C1 /* UIDatePicker.swift */,
 				045921142E8557FB008C8D6A /* UIFont.swift */,
 				04A18E4C2E865336004BB9DC /* UIImage.swift */,
-				C564FC692E0959610079B5C1 /* UIImageView.swift */,
 				0402F0AD2EC2D73E0054A151 /* UIListContentConfiguration.swift */,
 				C564FC842E0959640079B5C1 /* UINavigationBar.swift */,
 				04C68D272ED93FBC00A11F53 /* UINavigationBarAppearance.swift */,
@@ -1620,12 +1641,9 @@
 				C564FC812E0959640079B5C1 /* UIStepper.swift */,
 				C564FC702E0959620079B5C1 /* UISwitch.swift */,
 				C564FC6C2E0959610079B5C1 /* UITabBarController.swift */,
-				04BCDC2D2EA9E85600382DE0 /* UITableViewCell.swift */,
 				04E8D6182E8E6EBF00E85CDA /* UIToolbar.swift */,
 				C564FC712E0959620079B5C1 /* UIToolbarAppearance.swift */,
-				0401DCF92E90D91700D572AD /* UIWindow.swift */,
 				0401DCF72E90CDF400D572AD /* UIWindowScene.swift */,
-				046CF9762E967E6B005A88B4 /* URL.swift */,
 				0401DCFB2E9102BB00D572AD /* UserDefaults.swift */,
 				0482A5FB2EA63526004176A4 /* WKUserContentController.swift */,
 				C564FC642E0959600079B5C1 /* WKWebView.swift */,
@@ -1741,6 +1759,47 @@
 				C564FC6E2E0959610079B5C1 /* UILabel.swift */,
 			);
 			path = UILabel;
+			sourceTree = "<group>";
+		};
+		04E821E32EE00A8800570A4C /* UIImageView */ = {
+			isa = PBXGroup;
+			children = (
+				04E821EA2EE00AE700570A4C /* UIImageView+手势.swift */,
+				04E821E82EE00AD300570A4C /* UIImageView+Kingfisher.swift */,
+				04E821E62EE00AB500570A4C /* UIImageView+SDWebImage.swift */,
+				04E821E42EE00A8E00570A4C /* UIImageView+DSL.swift */,
+				C564FC692E0959610079B5C1 /* UIImageView.swift */,
+			);
+			path = UIImageView;
+			sourceTree = "<group>";
+		};
+		04E821EC2EE00C0300570A4C /* URL */ = {
+			isa = PBXGroup;
+			children = (
+				046CF9762E967E6B005A88B4 /* URL.swift */,
+				04E821EF2EE00C3900570A4C /* URL+SDWebImage.swift */,
+				04E821ED2EE00C1B00570A4C /* UIKit+Kingfisher.swift */,
+			);
+			path = URL;
+			sourceTree = "<group>";
+		};
+		04E821F12EE00CD300570A4C /* UITableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				04E821F22EE00CE700570A4C /* UITableViewCell+JobsConfigCellProtocol.swift */,
+				04E821F42EE00D0800570A4C /* UITableViewCell+DSL.swift */,
+				04BCDC2D2EA9E85600382DE0 /* UITableViewCell.swift */,
+			);
+			path = UITableViewCell;
+			sourceTree = "<group>";
+		};
+		04E821F62EE00DD300570A4C /* UIWindow */ = {
+			isa = PBXGroup;
+			children = (
+				04E821F72EE00DD700570A4C /* UIWindow+DSL.swift */,
+				0401DCF92E90D91700D572AD /* UIWindow.swift */,
+			);
+			path = UIWindow;
 			sourceTree = "<group>";
 		};
 		04E8D61D2E8E882000E85CDA /* UIViewController */ = {
@@ -2256,8 +2315,10 @@
 				04CF03172E8A76500083ACF0 /* Demo@富文本.swift in Sources */,
 				C564FCA42E0959640079B5C1 /* UITextField.swift in Sources */,
 				04E821D42EDFF14D00570A4C /* NSObject+UI.swift in Sources */,
+				04E821E72EE00AB600570A4C /* UIImageView+SDWebImage.swift in Sources */,
 				C564FC9C2E0959640079B5C1 /* UIPopoverPresentationController.swift in Sources */,
 				C564FCA32E0959640079B5C1 /* UIStepper.swift in Sources */,
+				04E821E52EE00A9000570A4C /* UIImageView+DSL.swift in Sources */,
 				0411F1C32EDFCC0000F1552C /* UITextField+监控输入.swift in Sources */,
 				049A656F2EA0D51C0006B185 /* Demo@测试UITraitChange.swift in Sources */,
 				049A65692EA0AAB80006B185 /* Decimal.swift in Sources */,
@@ -2291,9 +2352,11 @@
 				0411F1B72EDEFA9500F1552C /* UITextView+监控输入.swift in Sources */,
 				0411F1C52EDFCCC200F1552C /* UITextView.swift in Sources */,
 				0411F1F12EDFD9B100F1552C /* UIButton+防止快速连点.swift in Sources */,
+				04E821F32EE00CE800570A4C /* UITableViewCell+JobsConfigCellProtocol.swift in Sources */,
 				04DC13942EDD3D2600CEDA1C /* TextInputStrategies.swift in Sources */,
 				04C68D302ED94D6200A11F53 /* 倒计时按钮.swift in Sources */,
 				04D0C9722E8CD39300580020 /* Demo@控制层回调.swift in Sources */,
+				04E821E92EE00AD400570A4C /* UIImageView+Kingfisher.swift in Sources */,
 				048B795C2ED5452500A6FEF1 /* Demo@系统导航栏.swift in Sources */,
 				C564FC8A2E0959640079B5C1 /* UISegmentedControl.swift in Sources */,
 				04124F372EB0626900462BE2 /* MoyaProvider+Async.swift in Sources */,
@@ -2308,6 +2371,7 @@
 				C564FC892E0959640079B5C1 /* UICollectionView.swift in Sources */,
 				045376652EB0B5D600133F73 /* FeedVideoCell.swift in Sources */,
 				C564FCB32E0959990079B5C1 /* CustomCell.swift in Sources */,
+				04E821F52EE00D0A00570A4C /* UITableViewCell+DSL.swift in Sources */,
 				04C68D282ED93FBD00A11F53 /* UINavigationBarAppearance.swift in Sources */,
 				047E9A732EB6217900F58923 /* Demo@XLSX.swift in Sources */,
 				045920FA2E854FA5008C8D6A /* Int64.swift in Sources */,
@@ -2317,6 +2381,7 @@
 				04B5B4912EC5CCA900ED4505 /* BaseTableViewCellByValue1.swift in Sources */,
 				04E8D61B2E8E837D00E85CDA /* NSMutableAttributedString.swift in Sources */,
 				0482A5FC2EA63527004176A4 /* WKUserContentController.swift in Sources */,
+				04E821EE2EE00C1B00570A4C /* UIKit+Kingfisher.swift in Sources */,
 				041F5B012E87B51800984EEB /* Demo@输入框.swift in Sources */,
 				04124F3C2EB075D400462BE2 /* Demo@Alamofire.swift in Sources */,
 				C564FC902E0959640079B5C1 /* UILabel.swift in Sources */,
@@ -2486,6 +2551,7 @@
 				0440B55A2EB23846005DBE91 /* Demo@LiveChat.swift in Sources */,
 				0411F1EB2EDFD8D900F1552C /* UIButton+DSL.swift in Sources */,
 				04C2F0312E98C9D000BA05A9 /* Demo@设计模式MVVM.swift in Sources */,
+				04E821EB2EE00AEC00570A4C /* UIImageView+手势.swift in Sources */,
 				04C68D322ED9587B00A11F53 /* CAShapeLayer.swift in Sources */,
 				043838A22EAA4BB6007BA552 /* BaseWebVC.swift in Sources */,
 				04FC77902EB0C89100B810BA /* BMPlayer.swift in Sources */,
@@ -2509,6 +2575,7 @@
 				043283B12EC4A08B0031CDD6 /* Demo@BRPickerViewSwift.swift in Sources */,
 				047E48F12EB36A3F00881898 /* MTLRenderPipelineDescriptor.swift in Sources */,
 				0411F1DB2EDFD5B800F1552C /* String+格式转换.swift in Sources */,
+				04E821F02EE00C3900570A4C /* URL+SDWebImage.swift in Sources */,
 				043283A52EC49F830031CDD6 /* BRPickerStyle.swift in Sources */,
 				045920F62E854F8C008C8D6A /* Int16.swift in Sources */,
 				0401DD002E910B3500D572AD /* BaseLet.swift in Sources */,
@@ -2525,6 +2592,7 @@
 				C564FC2C2E0958D50079B5C1 /* SceneDelegate.swift in Sources */,
 				C564FC922E0959640079B5C1 /* UISwitch.swift in Sources */,
 				0411F1E72EDFD6EC00F1552C /* String+裁剪.swift in Sources */,
+				04E821F82EE00DD900570A4C /* UIWindow+DSL.swift in Sources */,
 				0411F1E92EDFD72200F1552C /* String+通用工具.swift in Sources */,
 				046786F12EB4CF76003FE82D /* Demo@JobsRefresher.swift in Sources */,
 				04BCDC2E2EA9E85800382DE0 /* UITableViewCell.swift in Sources */,
