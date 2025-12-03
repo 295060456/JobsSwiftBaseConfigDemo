@@ -355,6 +355,8 @@
 		04E8223C2EE01F6100570A4C /* YTKBaseRequest+DSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8223B2EE01F5C00570A4C /* YTKBaseRequest+DSL.swift */; };
 		04E8223E2EE01FC900570A4C /* YTKBatchRequest+DSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8223D2EE01FC700570A4C /* YTKBatchRequest+DSL.swift */; };
 		04E822402EE0214D00570A4C /* YTKChainRequest+DSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8223F2EE0214B00570A4C /* YTKChainRequest+DSL.swift */; };
+		04E822422EE02E6000570A4C /* person.json in Resources */ = {isa = PBXBuildFile; fileRef = 04E822412EE02E5700570A4C /* person.json */; };
+		04E822502EE03CFC00570A4C /* person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8224F2EE03CFC00570A4C /* person.swift */; };
 		04E8D5B92E8E550200E85CDA /* BaseStructDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D5B82E8E54FF00E85CDA /* BaseStructDefs.swift */; };
 		04E8D5BB2E8E5AD000E85CDA /* Demo@中国大陆居民身份证验证.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D5BA2E8E5ACF00E85CDA /* Demo@中国大陆居民身份证验证.swift */; };
 		04E8D6172E8E6E7F00E85CDA /* UIBarButtonItemAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E8D6162E8E6E7E00E85CDA /* UIBarButtonItemAppearance.swift */; };
@@ -784,6 +786,8 @@
 		04E8223B2EE01F5C00570A4C /* YTKBaseRequest+DSL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "YTKBaseRequest+DSL.swift"; sourceTree = "<group>"; };
 		04E8223D2EE01FC700570A4C /* YTKBatchRequest+DSL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "YTKBatchRequest+DSL.swift"; sourceTree = "<group>"; };
 		04E8223F2EE0214B00570A4C /* YTKChainRequest+DSL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "YTKChainRequest+DSL.swift"; sourceTree = "<group>"; };
+		04E822412EE02E5700570A4C /* person.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = person.json; sourceTree = "<group>"; };
+		04E8224F2EE03CFC00570A4C /* person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = person.swift; sourceTree = "<group>"; };
 		04E8D5B82E8E54FF00E85CDA /* BaseStructDefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseStructDefs.swift; sourceTree = "<group>"; };
 		04E8D5BA2E8E5ACF00E85CDA /* Demo@中国大陆居民身份证验证.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@中国大陆居民身份证验证.swift"; sourceTree = "<group>"; };
 		04E8D6162E8E6E7E00E85CDA /* UIBarButtonItemAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBarButtonItemAppearance.swift; sourceTree = "<group>"; };
@@ -1825,6 +1829,7 @@
 		04E8222A2EE013C600570A4C /* Demo@YTKNetwork */ = {
 			isa = PBXGroup;
 			children = (
+				04E822432EE02EA700570A4C /* VM */,
 				04E822372EE01B2900570A4C /* YTKRequest */,
 				04E8222D2EE014D500570A4C /* YTKNetworkConfig.swift */,
 				04E8222B2EE013D000570A4C /* Demo@YTKNetwork.swift */,
@@ -1851,6 +1856,15 @@
 				04E8223D2EE01FC700570A4C /* YTKBatchRequest+DSL.swift */,
 			);
 			path = YTKNetwork;
+			sourceTree = "<group>";
+		};
+		04E822432EE02EA700570A4C /* VM */ = {
+			isa = PBXGroup;
+			children = (
+				04E8224F2EE03CFC00570A4C /* person.swift */,
+				04E822412EE02E5700570A4C /* person.json */,
+			);
+			path = VM;
 			sourceTree = "<group>";
 		};
 		04E8D61D2E8E882000E85CDA /* UIViewController */ = {
@@ -2191,6 +2205,7 @@
 				0459211F2E85588C008C8D6A /* fonteditor.ttf in Resources */,
 				045921202E85588C008C8D6A /* DIN-Black-2.otf in Resources */,
 				047E48DC2EB3577B00881898 /* pano_360.mp4 in Resources */,
+				04E822422EE02E6000570A4C /* person.json in Resources */,
 				0453764C2EB0B43F00133F73 /* IncomeSource.json in Resources */,
 				0453764D2EB0B43F00133F73 /* UserData.json in Resources */,
 				043283A22EC49B2E0031CDD6 /* BRCity.json in Resources */,
@@ -2464,6 +2479,7 @@
 				0411F1B32EDEFA3800F1552C /* UITextView+校验.swift in Sources */,
 				0411F20D2EDFE52F00F1552C /* UIView+手势.swift in Sources */,
 				C564FC9F2E0959640079B5C1 /* UISearchBar.swift in Sources */,
+				04E822502EE03CFC00570A4C /* person.swift in Sources */,
 				0411F2342EDFEB9100F1552C /* UIControl+统一点击事件.swift in Sources */,
 				0411F1F32EDFD9EE00F1552C /* UIButton+倒计时.swift in Sources */,
 				04FC77852EB0BDF100B810BA /* ImageLoader.swift in Sources */,

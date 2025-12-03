@@ -210,7 +210,31 @@ final class YTKNetworkDemoVC: BaseVC, YTKChainRequestDelegate {
         guard let last = chainRequest.requestArray().last as? GetHeadersRequest else {
             appendLog("⚠️ 链式成功但取不到最后一个请求")
             return
-        };appendLog("✅ 链式成功，最终 Headers = \(last.headers ?? [:])")
+        };
+        // po last.responseString!
+        // quicktype person.json --lang swift -o Person.swift
+        appendLog("✅ 链式成功，最终 Headers = \(last.headers ?? [:])")
+        guard let jsonStr = last.responseString else {
+            appendLog("⚠️ last.responseString 为空")
+            return
+        }
+
+        guard let data = jsonStr.data(using: .utf8) else {
+            appendLog("⚠️ responseString 不能转成 UTF-8 Data")
+            return
+        }
+
+        do {
+            let person = try JSONDecoder().decode(Person.self, from: data)
+            let h = person.headers
+
+            appendLog("✅ JSON 解析成功")
+            appendLog("Accept = \(h.accept)")
+            appendLog("User-Agent = \(h.userAgent)")
+            appendLog("X-Amzn-Trace-Id = \(h.xAmznTraceID)")
+        } catch {
+            appendLog("❌ JSON 解析失败：\(error)")
+        }
     }
 
     func chainRequestFailed(_ chainRequest: YTKChainRequest,
@@ -218,3 +242,4 @@ final class YTKNetworkDemoVC: BaseVC, YTKChainRequestDelegate {
         appendLog("❌ 链式失败：\(String(describing: request.error))")
     }
 }
+

@@ -1,0 +1,11 @@
+{
+  "headers": {
+    "Accept": "*/*",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Accept-Language": "zh-Hans-US;q=1, en-US;q=0.9",
+    "Host": "httpbin.org",
+    "Priority": "u=3, i",
+    "User-Agent": "JobsSwiftBaseConfigDemo/1.0 (iPhone; iOS 26.1; Scale/3.00)",
+    "X-Amzn-Trace-Id": "Root=1-692ff174-40f7c0301b54b9f24e3db5de"
+  }
+}

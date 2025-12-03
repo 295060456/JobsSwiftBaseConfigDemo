@@ -203,19 +203,7 @@
 
 * [**代码块**](https://github.com/295060456/JobsCodeSnippets)
 
-* [**quicktype**](https://app.quicktype.io/)：从 **JSON** / **GraphQL** /其它数据格式 自动生成对应语言的类型定义👉[**Github@quicktype**](https://github.com/glideapps/quicktype?utm_source=chatgpt.com)
-
-  * ```shell
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    ```
-
-  * ```shell
-    brew install npm
-    ```
-
-  * ```shell
-    npm install -g quicktype
-    ```
+* [**利用quicktype自动建立数据模型**](https://github.com/JobsKits/JobsDocs/blob/main/利用quicktype自动建立数据模型.md/利用quicktype自动建立数据模型.md)
 
 * [**图片占位符**](https://picsum.photos/)
 
