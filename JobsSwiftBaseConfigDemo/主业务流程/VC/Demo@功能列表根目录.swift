@@ -19,6 +19,7 @@ final class RootListVC: BaseVC {
     private func makeDemos() -> [(title: String, vcType: UIViewController.Type)] {
         return [
             ("🧭 系统导航栏", JobsNavigationDemoVC.self),
+            ("🐒 猿题库网络请求框架", YTKNetworkDemoVC.self),
             ("🧭 苹果滑动开锁", SlideToUnlockDemoVC.self),
             ("✍️ UITextField", UITextFieldDemoVC.self),
             ("✍️ UITextView", UITextViewDemoVC.self),
@@ -92,7 +93,7 @@ final class RootListVC: BaseVC {
 
     private lazy var suspendBtn: UIButton = {
         UIButton(type: .system)
-            .byTitle("开始", for: .normal)
+            .byTitle("开始".tr, for: .normal)
             .byTitleFont(.systemFont(ofSize: 22, weight: .bold))
             .byTitleColor(.white, for: .normal)
             .byBackgroundColor(.systemBlue, for: .normal)

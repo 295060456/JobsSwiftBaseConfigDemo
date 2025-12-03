@@ -5,7 +5,7 @@ def swiftAppCommon
   pod 'SDWebImage'                         # https://github.com/SDWebImage/SDWebImage          ❤️
   pod 'MJRefresh'                          # https://github.com/CoderMJLee/MJRefresh           ❤️
   pod 'HTMLReader'                         # https://github.com/nolanw/HTMLReader              ❤️
-
+  pod 'YTKNetwork'                         # https://github.com/kanyun-inc/YTKNetwork ❤️ 猿题库出品的网络请求框架@Objc
   # --- Swift ---
   pod 'Alamofire', '~> 5.9'                # https://github.com/Alamofire/Alamofire            ❤️
   pod 'SwiftMessages'                      # https://github.com/SwiftKickMobile/SwiftMessages  ❤️ 非常灵活的 UIKit 和 SwiftUI 视图和视图控制器展示库
