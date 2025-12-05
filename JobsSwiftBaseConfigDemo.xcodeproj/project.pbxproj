@@ -298,6 +298,7 @@
 		04CF02902E8A3A160083ACF0 /* Demo@输入文本.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */; };
 		04CF03172E8A76500083ACF0 /* Demo@富文本.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF03162E8A76490083ACF0 /* Demo@富文本.swift */; };
 		04CF03192E8A80CE0083ACF0 /* AppTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF03182E8A80CA0083ACF0 /* AppTools.swift */; };
+		04CF9AEE2EE2B45B00E630E0 /* JobsBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF9AED2EE2B45700E630E0 /* JobsBlock.swift */; };
 		04D0C96C2E8CCA7400580020 /* UIBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D0C96B2E8CCA7200580020 /* UIBarItem.swift */; };
 		04D0C96E2E8CD14B00580020 /* UIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D0C96D2E8CD14900580020 /* UIControl.swift */; };
 		04D0C9722E8CD39300580020 /* Demo@控制层回调.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D0C9712E8CD39200580020 /* Demo@控制层回调.swift */; };
@@ -726,6 +727,7 @@
 		04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@输入文本.swift"; sourceTree = "<group>"; };
 		04CF03162E8A76490083ACF0 /* Demo@富文本.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@富文本.swift"; sourceTree = "<group>"; };
 		04CF03182E8A80CA0083ACF0 /* AppTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTools.swift; sourceTree = "<group>"; };
+		04CF9AED2EE2B45700E630E0 /* JobsBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsBlock.swift; sourceTree = "<group>"; };
 		04D0C96B2E8CCA7200580020 /* UIBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBarItem.swift; sourceTree = "<group>"; };
 		04D0C96D2E8CD14900580020 /* UIControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIControl.swift; sourceTree = "<group>"; };
 		04D0C9712E8CD39200580020 /* Demo@控制层回调.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@控制层回调.swift"; sourceTree = "<group>"; };
@@ -1696,6 +1698,7 @@
 		04DC136E2EDD310500CEDA1C /* JobsSwiftTools */ = {
 			isa = PBXGroup;
 			children = (
+				04CF9AED2EE2B45700E630E0 /* JobsBlock.swift */,
 				04DC13862EDD3D2600CEDA1C /* JobsSwiftBaseTools@Pods */,
 				045920E22E84EC64008C8D6A /* 3rdTools */,
 			);
@@ -2325,6 +2328,7 @@
 				0411F1CF2EDFD13500F1552C /* UITableView+校验.swift in Sources */,
 				044272852E8146130084B25C /* JXScale.swift in Sources */,
 				C564FCB22E0959990079B5C1 /* EmptyView.swift in Sources */,
+				04CF9AEE2EE2B45B00E630E0 /* JobsBlock.swift in Sources */,
 				0411F1CD2EDFD10800F1552C /* UITableView+空态数据占位按钮.swift in Sources */,
 				0432836A2EC45D840031CDD6 /* JXSegmentedTitleDataSource.swift in Sources */,
 				04A245932ECDA78D009649E8 /* Sequence.swift in Sources */,

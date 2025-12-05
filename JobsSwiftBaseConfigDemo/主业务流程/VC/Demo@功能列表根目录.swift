@@ -16,62 +16,61 @@ final class RootListVC: BaseVC {
         suspendBtn.stopTimer()
         suspendSpinBtn.stopTimer()
     }
-    private func makeDemos() -> [(title: String, vcType: UIViewController.Type)] {
-        return [
-            ("🧭 系统导航栏", JobsNavigationDemoVC.self),
-            ("🐒 猿题库网络请求框架", YTKNetworkDemoVC.self),
-            ("🧭 苹果滑动开锁", SlideToUnlockDemoVC.self),
-            ("✍️ UITextField", UITextFieldDemoVC.self),
-            ("✍️ UITextView", UITextViewDemoVC.self),
-            ("🗄️ UITableView", EmptyTableViewDemoVC.self),
-            ("🗄️ UICollectionView", EmptyCollectionViewDemoVC.self),
-            ("🌞 BaseWebView", BaseWebViewDemoVC.self),
-            ("🌍 JobsTabBarCtrl", TabBarDemoVC.self),
-            ("🏞️ 图片加载", PicLoadDemoVC.self),
-            ("🕹️ ControlEvents", JobsControlEventsDemoVC.self),
-            ("🔘 按钮", UIButtonDemoVC.self),
-            ("💥 倒计时按钮", JobsCountdownDemoVC.self),
-            ("⏰ Timer", TimerDemoVC.self),
-            ("🕖 时钟", ClockDemoVC.self),
-            ("🎲 抽奖轮盘", LuckyWheelDemoVC.self),
-            ("⌨️ 键盘", KeyboardDemoVC.self),
-            ("📷 鉴权后调用相机/相册", PhotoAlbumDemoVC.self),
-            ("🐎 跑马灯 / 🛞 轮播图", JobsMarqueeDemoVC.self),
-            ("⛑️ 支持上下左右安全Push和原路返回", SafetyPushDemoVC.self),
-            ("⛑️ 安全Present", SafetyPresentDemoVC.self),
-            ("📹 播放器@BMPlayer(🛜 网络流量监控)", BMPlayerDemoVC.self),
-            ("📹 播放器@PNPlayer", PNPlayerDemoVC.self),
-            ("🏷️ Toast", ToastDemoVC.self),
-            ("⚠️ 系统的弹出框", UIAlertDemoVC.self),
-            ("📌 自定义注解", 自定义注解Demo.self),
-            ("🚀 JobsOpen", JobsOpenDemoVC.self),
-            ("🍚 选择器", BRPickerDemoVC.self),
-            ("📅 日历", LunarDemoVC.self),
-            ("📊 Excel", XLSXDemoVC.self),
-            ("🌘 滚动留言", LiveCommentDemoVC.self),
-            ("🌹 弹出方式", SwiftEntryKitDemoVC.self),
-            ("🔽 下拉三角小菜单", FSPopoverDemoVC.self),
-            ("☠️ 骨架屏", SkeletonViewDemoVC.self),
-            ("🌛 PDF", PDFDemoVC.self),
-            ("🧒 Lottie动画", LottieDemoVC.self),
-            ("🛢️ 解码", SafeCodableDemoVC.self),
-            ("🔑 注册登录".tr, JobsAppDoorDemoVC.self), // 👈 这里需要 .tr
-            ("🛜 Moya网络请求框架", MoyaDemoVC.self),
-            ("🛜 Alamofire网络请求框架", AFDemoVC.self),
-            ("🧹 支持左右上下刷新", JobsRefresherDemoVC.self),
-            ("🧧 TraitChange", TraitChangeDemoVC.self),
-            ("❄️ 雪花算法", SnowflakeDemoVC.self),
-            ("💬 LiveChat", LiveChatDemoVC.self),
-            ("🐎 二维码/条形码", QRCodeDemoVC.self),
-            ("👮 中国大陆公民身份证号码校验", CNIDDemoVC.self),
-            ("🏠 首页联动", CashbackRootVC.self),
-            ("🌋 富文本", RichTextDemoVC.self),
-            ("🌋 普通文本和富文本的融合数据类型", JobsTextDemoVC.self),
-            ("🔥 编辑个人资料", LGOEditProfileVC.self),
-            ("ViewController", ViewController.self),
-        ]
-    }
-    private lazy var demos: [(title: String, vcType: UIViewController.Type)] = makeDemos()
+
+    private lazy var demos: [(title: String, vcType: UIViewController.Type)] = [
+        ("🧭 系统导航栏", JobsNavigationDemoVC.self),
+        ("🐒 猿题库网络请求框架", YTKNetworkDemoVC.self),
+        ("🧭 苹果滑动开锁", SlideToUnlockDemoVC.self),
+        ("✍️ UITextField", UITextFieldDemoVC.self),
+        ("✍️ UITextView", UITextViewDemoVC.self),
+        ("🗄️ UITableView", EmptyTableViewDemoVC.self),
+        ("🗄️ UICollectionView", EmptyCollectionViewDemoVC.self),
+        ("🌞 BaseWebView", BaseWebViewDemoVC.self),
+        ("🌍 JobsTabBarCtrl", TabBarDemoVC.self),
+        ("🏞️ 图片加载", PicLoadDemoVC.self),
+        ("🕹️ ControlEvents", JobsControlEventsDemoVC.self),
+        ("🔘 按钮", UIButtonDemoVC.self),
+        ("💥 倒计时按钮", JobsCountdownDemoVC.self),
+        ("⏰ Timer", TimerDemoVC.self),
+        ("🕖 时钟", ClockDemoVC.self),
+        ("🎲 抽奖轮盘", LuckyWheelDemoVC.self),
+        ("⌨️ 键盘", KeyboardDemoVC.self),
+        ("📷 鉴权后调用相机/相册", PhotoAlbumDemoVC.self),
+        ("🐎 跑马灯 / 🛞 轮播图", JobsMarqueeDemoVC.self),
+        ("⛑️ 支持上下左右安全Push和原路返回", SafetyPushDemoVC.self),
+        ("⛑️ 安全Present", SafetyPresentDemoVC.self),
+        ("📹 播放器@BMPlayer(🛜 网络流量监控)", BMPlayerDemoVC.self),
+        ("📹 播放器@PNPlayer", PNPlayerDemoVC.self),
+        ("🏷️ Toast", ToastDemoVC.self),
+        ("⚠️ 系统的弹出框", UIAlertDemoVC.self),
+        ("📌 自定义注解", 自定义注解Demo.self),
+        ("🚀 JobsOpen", JobsOpenDemoVC.self),
+        ("🍚 选择器", BRPickerDemoVC.self),
+        ("📅 日历", LunarDemoVC.self),
+        ("📊 Excel", XLSXDemoVC.self),
+        ("🌘 滚动留言", LiveCommentDemoVC.self),
+        ("🌹 弹出方式", SwiftEntryKitDemoVC.self),
+        ("🔽 下拉三角小菜单", FSPopoverDemoVC.self),
+        ("☠️ 骨架屏", SkeletonViewDemoVC.self),
+        ("🌛 PDF", PDFDemoVC.self),
+        ("🧒 Lottie动画", LottieDemoVC.self),
+        ("🛢️ 解码", SafeCodableDemoVC.self),
+        ("🔑 注册登录".tr, JobsAppDoorDemoVC.self), // 👈 这里需要 .tr
+        ("🛜 Moya网络请求框架", MoyaDemoVC.self),
+        ("🛜 Alamofire网络请求框架", AFDemoVC.self),
+        ("🧹 支持左右上下刷新", JobsRefresherDemoVC.self),
+        ("🧧 TraitChange", TraitChangeDemoVC.self),
+        ("❄️ 雪花算法", SnowflakeDemoVC.self),
+        ("💬 LiveChat", LiveChatDemoVC.self),
+        ("🐎 二维码/条形码", QRCodeDemoVC.self),
+        ("👮 中国大陆公民身份证号码校验", CNIDDemoVC.self),
+        ("🏠 首页联动", CashbackRootVC.self),
+        ("🌋 富文本", RichTextDemoVC.self),
+        ("🌋 普通文本和富文本的融合数据类型", JobsTextDemoVC.self),
+        ("🔥 编辑个人资料", LGOEditProfileVC.self),
+        ("ViewController", ViewController.self),
+    ]
+
     private lazy var suspendLab: UILabel = {
         UILabel()
             .byText("VIP")
@@ -238,7 +237,7 @@ final class RootListVC: BaseVC {
                 /// 按钮图片@图文关系
                 .byImage("list.bullet".sysImg, for: .normal)
                 .byImage("list.bullet".sysImg, for: .selected)
-                /// 事件触发@点按
+                /// 普通@点按事件触发
                 .onTap {[weak self] sender in
                     guard let self else { return }
                     sender.isSelected.toggle()
@@ -249,7 +248,11 @@ final class RootListVC: BaseVC {
                     let cell1 = tableView[section: 12, row: 3]
                     print("")
                 }
-                /// 事件触发@长按
+                /// 追加@点按事件触发
+                .onTapAppend{ sender in
+                    print("追加的点按事件")
+                }
+                /// 普通@长按事件触发
                 .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                      if gr.state == .began {
                          btn.alpha = 0.6
@@ -258,6 +261,10 @@ final class RootListVC: BaseVC {
                          btn.alpha = 1.0
                          print("长按结束")
                      }
+                }
+                /// 追加@长按事件触发
+                .onLongPressAppend(minimumPressDuration: 0.8) { btn, gr in
+                    print("追加的长按事件")
                 },
             rightButtons: [
                 UIButton.sys()
@@ -284,7 +291,6 @@ final class RootListVC: BaseVC {
                         let to = (LanguageManager.shared.currentLanguageCode == "zh-Hans") ? "en" : "zh-Hans"
                         LanguageManager.shared.switchTo(to)
 //                        var s = "🔑 注册登录".tr
-                        demos = makeDemos()
                         tableView.reloadData()
                         print("🌐 切换语言 tapped（占位）")
                     },
@@ -343,7 +349,7 @@ final class RootListVC: BaseVC {
         }
     }
 }
-// MARK: - DataSource & Delegate
+// MARK: —— DataSource & Delegate
 extension RootListVC: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView,numberOfRowsInSection section: Int) -> Int {

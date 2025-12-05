@@ -2092,7 +2092,7 @@ INFOPLIST_KEY_CFBundleName = $(PRODUCT_NAME)
 >   ```
 >
 
-##### 2.2.1、🔘普通按钮
+##### 2.2.1、🔘普通按钮（事件追加） <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
 private lazy var exampleButton: UIButton = {
@@ -2126,7 +2126,7 @@ private lazy var exampleButton: UIButton = {
         .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6)) // 图标与文字间距
         /// 点击@播放声音
         .byTapSound("Sounddd.wav")    
-        /// 事件触发@点按
+        /// 普通@点按事件触发
         .onTap { [weak self] sender in
             guard let self else { return }
             sender.isSelected.toggle()
@@ -2135,6 +2135,10 @@ private lazy var exampleButton: UIButton = {
             self.passwordTF.togglePasswordVisibility()
             print("👁 当前状态：\(sender.isSelected ? "隐藏密码" : "显示密码")")
         }
+			  /// 追加@点按事件触发
+				.onTapAppend{ sender in
+						print("追加的点按事件")
+				}
         /// 右上角提示文案@小红点
         .byCornerDot(diameter: 10, offset: .init(horizontal: -4, vertical: 4))// 红点
         /// 右上角提示文案@文字
@@ -2148,7 +2152,7 @@ private lazy var exampleButton: UIButton = {
                           opacity: 0.6,
                           offset: .init(width: 0, height: 1))
         }
-        /// 事件触发@长按
+        /// 普通@长按事件触发
         .onLongPress(minimumPressDuration: 0.8) { btn, gr in
              if gr.state == .began {
                  btn.alpha = 0.6
@@ -2158,6 +2162,10 @@ private lazy var exampleButton: UIButton = {
                  print("长按结束")
              }
          }
+  			/// 追加@长按事件触发
+        .onLongPressAppend(minimumPressDuration: 0.8) { btn, gr in
+             print("追加的长按事件")
+				}
         .byAddTo(view) { [unowned self] make in
             make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(40)
             make.left.right.equalToSuperview().inset(24)

@@ -44,9 +44,7 @@ final class UploadAvatarRequest: YTKRequest {
         return { [weak self] formData in
             guard let self = self else { return }
             guard let data = self.image.jpegData(compressionQuality: 0.9) else { return }
-
             let fileName = "avatar_\(Int(Date().timeIntervalSince1970)).jpg"
-
             formData.appendPart(
                 withFileData: data,
                 name: "avatar",                // 这里换成你后端给的字段名
@@ -55,6 +53,7 @@ final class UploadAvatarRequest: YTKRequest {
             )
         }
     }
+
     func uploadProgressBlock() -> AFURLSessionTaskProgressBlock! {
         return { progress in
             print("upload progress:", progress.fractionCompleted)
