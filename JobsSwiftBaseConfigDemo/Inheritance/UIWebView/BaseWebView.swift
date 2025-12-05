@@ -18,7 +18,6 @@ import SnapKit
        <key>NSAllowsArbitraryLoadsInWebContent</key><true/>
      </dict>
  */
-public typealias NativeHandler = (_ payload: Any?, _ reply: @escaping (Any?) -> Void) -> Void
 /// 任意 JSON 解码容器（备用）
 public struct AnyDecodable: Decodable {
     public let value: Any
@@ -79,8 +78,6 @@ public final class BaseWebView: UIView {
     public var disableSelectionAndCallout: Bool = false
     public var injectDarkStylePatch: Bool = false
     public var isInspectableEnabled: Bool = true
-    /// 单页 UA 后缀提供器（返回 nil 表示使用系统默认 UA；非空则作为 applicationNameForUserAgent 追加）
-    public typealias UASuffixProvider = (URLRequest) -> String?
     private var uaSuffixProvider: UASuffixProvider?
     private var lastAppliedUASuffix: String?
     private func normalizeSuffix(_ s: String?) -> String? {
@@ -113,8 +110,6 @@ public final class BaseWebView: UIView {
         public static func defaults() -> Self { .init() }
     }
     private let mobileBridgeName = "iOSBridge"
-    /// 公开给外部使用的 Handler 类型（避免可见性冲突）
-    public typealias MobileActionHandler = (_ body: [String: Any], _ reply: (Any?) -> Void) -> Void
     private var mobileActionHandlers: [String: MobileActionHandler] = [:]
     private var mobileConfig: MobileBridgeConfig = .defaults()
     /// 宿主 VC（弱引用）+ 统一取用口，避免 VC↔view 闭环

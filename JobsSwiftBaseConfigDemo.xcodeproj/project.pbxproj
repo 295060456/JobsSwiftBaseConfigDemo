@@ -298,7 +298,7 @@
 		04CF02902E8A3A160083ACF0 /* Demo@输入文本.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */; };
 		04CF03172E8A76500083ACF0 /* Demo@富文本.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF03162E8A76490083ACF0 /* Demo@富文本.swift */; };
 		04CF03192E8A80CE0083ACF0 /* AppTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF03182E8A80CA0083ACF0 /* AppTools.swift */; };
-		04CF9AEE2EE2B45B00E630E0 /* JobsBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF9AED2EE2B45700E630E0 /* JobsBlock.swift */; };
+		04CF9AEE2EE2B45B00E630E0 /* JobsSwiftBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF9AED2EE2B45700E630E0 /* JobsSwiftBlock.swift */; };
 		04CF9AF32EE2C88E00E630E0 /* JobsWalletDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF9AF22EE2C88D00E630E0 /* JobsWalletDemoVC.swift */; };
 		04CF9AF52EE2CAB400E630E0 /* WalletLayoutDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF9AF42EE2CAB300E630E0 /* WalletLayoutDelegate.swift */; };
 		04CF9AF72EE2CAE700E630E0 /* WalletLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF9AF62EE2CAE600E630E0 /* WalletLayout.swift */; };
@@ -732,7 +732,7 @@
 		04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@输入文本.swift"; sourceTree = "<group>"; };
 		04CF03162E8A76490083ACF0 /* Demo@富文本.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@富文本.swift"; sourceTree = "<group>"; };
 		04CF03182E8A80CA0083ACF0 /* AppTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTools.swift; sourceTree = "<group>"; };
-		04CF9AED2EE2B45700E630E0 /* JobsBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsBlock.swift; sourceTree = "<group>"; };
+		04CF9AED2EE2B45700E630E0 /* JobsSwiftBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsSwiftBlock.swift; sourceTree = "<group>"; };
 		04CF9AF22EE2C88D00E630E0 /* JobsWalletDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsWalletDemoVC.swift; sourceTree = "<group>"; };
 		04CF9AF42EE2CAB300E630E0 /* WalletLayoutDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletLayoutDelegate.swift; sourceTree = "<group>"; };
 		04CF9AF62EE2CAE600E630E0 /* WalletLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletLayout.swift; sourceTree = "<group>"; };
@@ -1721,7 +1721,7 @@
 		04DC136E2EDD310500CEDA1C /* JobsSwiftTools */ = {
 			isa = PBXGroup;
 			children = (
-				04CF9AED2EE2B45700E630E0 /* JobsBlock.swift */,
+				04CF9AED2EE2B45700E630E0 /* JobsSwiftBlock.swift */,
 				04DC13862EDD3D2600CEDA1C /* JobsSwiftBaseTools@Pods */,
 				045920E22E84EC64008C8D6A /* 3rdTools */,
 			);
@@ -2351,7 +2351,7 @@
 				0411F1CF2EDFD13500F1552C /* UITableView+校验.swift in Sources */,
 				044272852E8146130084B25C /* JXScale.swift in Sources */,
 				C564FCB22E0959990079B5C1 /* EmptyView.swift in Sources */,
-				04CF9AEE2EE2B45B00E630E0 /* JobsBlock.swift in Sources */,
+				04CF9AEE2EE2B45B00E630E0 /* JobsSwiftBlock.swift in Sources */,
 				0411F1CD2EDFD10800F1552C /* UITableView+空态数据占位按钮.swift in Sources */,
 				0432836A2EC45D840031CDD6 /* JXSegmentedTitleDataSource.swift in Sources */,
 				04A245932ECDA78D009649E8 /* Sequence.swift in Sources */,

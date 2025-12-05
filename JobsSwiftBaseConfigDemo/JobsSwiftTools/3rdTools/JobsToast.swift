@@ -10,7 +10,6 @@ import SnapKit
 // ================================== Toast ==================================
 @MainActor
 public final class JobsToast: UIView {
-    public typealias Completion = () -> Void
     // ✅ 用 UInt8 做关联 key，避免字符串
     private static var currentToastKey: UInt8 = 0
     // 供懒加载按钮的点按回调占位（由 show(...) 注入）

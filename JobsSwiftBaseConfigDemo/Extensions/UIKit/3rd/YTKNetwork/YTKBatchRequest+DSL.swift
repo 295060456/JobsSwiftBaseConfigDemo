@@ -7,7 +7,7 @@
 #if canImport(YTKNetwork) && canImport(AFNetworking)
 import YTKNetwork
 import AFNetworking
-public typealias JobsYTKBatchCompletion = (_ batch: YTKBatchRequest) -> Void
+
 public extension YTKBatchRequest {
     // MARK: - 基本配置
     /// tag 标记

@@ -26,11 +26,6 @@ public class JobsNavBar: UIView {
         public var titleAlignmentCenter: Bool = true
         public init() {}
     }
-    // MARK: - Public API
-    public typealias TitleProvider = () -> NSAttributedString?    // 返回 nil 隐藏
-    public typealias BackButtonProvider = () -> UIButton?         // 返回 nil 隐藏
-    public typealias BackHandler = () -> Void                     // 未配置 -> Debug Toast
-    public typealias BackButtonLayout = (JobsNavBar, UIButton, ConstraintMaker) -> Void
     /// 占位标题（默认“加载中…”）
     private var placeholderTitleAttr: NSAttributedString = JobsNavBar._jobsMakeTitleAttr(JobsNavBar.loadingTitle)
     /// 外部可自定义返回键布局

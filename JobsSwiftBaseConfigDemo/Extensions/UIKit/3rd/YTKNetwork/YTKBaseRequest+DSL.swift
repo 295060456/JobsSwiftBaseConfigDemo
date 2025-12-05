@@ -7,9 +7,7 @@
 #if canImport(YTKNetwork) && canImport(AFNetworking)
 import YTKNetwork
 import AFNetworking
-/// 统一别名，方便在项目里用
-public typealias JobsYTKCompletion = (_ request: YTKBaseRequest) -> Void
-public typealias JobsYTKProgress   = (_ progress: Progress) -> Void
+
 public extension YTKBaseRequest {
     // MARK: - 基本配置
     @discardableResult

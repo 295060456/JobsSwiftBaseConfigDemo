@@ -10,11 +10,6 @@ import ObjectiveC
 import YTKNetwork
 import AFNetworking
 
-public typealias JobsYTKChainSuccess      = (_ chain: YTKChainRequest) -> Void
-public typealias JobsYTKChainFailure      = (_ chain: YTKChainRequest,
-                                             _ failedRequest: YTKBaseRequest) -> Void
-public typealias JobsYTKChainStepCallback = (_ chain: YTKChainRequest,
-                                             _ finishedRequest: YTKBaseRequest) -> Void
 /// 内部代理：把 delegate 回调转成闭包
 private final class JobsChainDelegateProxy: NSObject, YTKChainRequestDelegate {
     weak var realDelegate: YTKChainRequestDelegate?
