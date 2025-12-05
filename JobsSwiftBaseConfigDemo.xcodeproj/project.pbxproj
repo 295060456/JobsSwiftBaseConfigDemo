@@ -299,6 +299,11 @@
 		04CF03172E8A76500083ACF0 /* Demo@富文本.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF03162E8A76490083ACF0 /* Demo@富文本.swift */; };
 		04CF03192E8A80CE0083ACF0 /* AppTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF03182E8A80CA0083ACF0 /* AppTools.swift */; };
 		04CF9AEE2EE2B45B00E630E0 /* JobsBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF9AED2EE2B45700E630E0 /* JobsBlock.swift */; };
+		04CF9AF32EE2C88E00E630E0 /* JobsWalletDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF9AF22EE2C88D00E630E0 /* JobsWalletDemoVC.swift */; };
+		04CF9AF52EE2CAB400E630E0 /* WalletLayoutDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF9AF42EE2CAB300E630E0 /* WalletLayoutDelegate.swift */; };
+		04CF9AF72EE2CAE700E630E0 /* WalletLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF9AF62EE2CAE600E630E0 /* WalletLayout.swift */; };
+		04CF9AF92EE2CAFA00E630E0 /* WalletSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF9AF82EE2CAF900E630E0 /* WalletSectionHeaderView.swift */; };
+		04CF9AFB2EE2CB0900E630E0 /* WalletCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF9AFA2EE2CB0800E630E0 /* WalletCardCell.swift */; };
 		04D0C96C2E8CCA7400580020 /* UIBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D0C96B2E8CCA7200580020 /* UIBarItem.swift */; };
 		04D0C96E2E8CD14B00580020 /* UIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D0C96D2E8CD14900580020 /* UIControl.swift */; };
 		04D0C9722E8CD39300580020 /* Demo@控制层回调.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D0C9712E8CD39200580020 /* Demo@控制层回调.swift */; };
@@ -728,6 +733,11 @@
 		04CF03162E8A76490083ACF0 /* Demo@富文本.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@富文本.swift"; sourceTree = "<group>"; };
 		04CF03182E8A80CA0083ACF0 /* AppTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTools.swift; sourceTree = "<group>"; };
 		04CF9AED2EE2B45700E630E0 /* JobsBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsBlock.swift; sourceTree = "<group>"; };
+		04CF9AF22EE2C88D00E630E0 /* JobsWalletDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsWalletDemoVC.swift; sourceTree = "<group>"; };
+		04CF9AF42EE2CAB300E630E0 /* WalletLayoutDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletLayoutDelegate.swift; sourceTree = "<group>"; };
+		04CF9AF62EE2CAE600E630E0 /* WalletLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletLayout.swift; sourceTree = "<group>"; };
+		04CF9AF82EE2CAF900E630E0 /* WalletSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSectionHeaderView.swift; sourceTree = "<group>"; };
+		04CF9AFA2EE2CB0800E630E0 /* WalletCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletCardCell.swift; sourceTree = "<group>"; };
 		04D0C96B2E8CCA7200580020 /* UIBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBarItem.swift; sourceTree = "<group>"; };
 		04D0C96D2E8CD14900580020 /* UIControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIControl.swift; sourceTree = "<group>"; };
 		04D0C9712E8CD39200580020 /* Demo@控制层回调.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@控制层回调.swift"; sourceTree = "<group>"; };
@@ -1444,6 +1454,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				04CF9AF12EE2C86800E630E0 /* Demo@钱包卡片效果 */,
 				04E8222A2EE013C600570A4C /* Demo@YTKNetwork */,
 				041AE59E2EDA85A800ED03A3 /* Demo@苹果滑动开锁 */,
 				04C68D332ED97BA600A11F53 /* Demo@抽奖轮盘 */,
@@ -1576,6 +1587,18 @@
 				04C68D452ED981D100A11F53 /* ColorWheelDemoVC.swift */,
 			);
 			path = "Demo@抽奖轮盘";
+			sourceTree = "<group>";
+		};
+		04CF9AF12EE2C86800E630E0 /* Demo@钱包卡片效果 */ = {
+			isa = PBXGroup;
+			children = (
+				04CF9AFA2EE2CB0800E630E0 /* WalletCardCell.swift */,
+				04CF9AF82EE2CAF900E630E0 /* WalletSectionHeaderView.swift */,
+				04CF9AF62EE2CAE600E630E0 /* WalletLayout.swift */,
+				04CF9AF42EE2CAB300E630E0 /* WalletLayoutDelegate.swift */,
+				04CF9AF22EE2C88D00E630E0 /* JobsWalletDemoVC.swift */,
+			);
+			path = "Demo@钱包卡片效果";
 			sourceTree = "<group>";
 		};
 		04D0C97C2E8D19AB00580020 /* MJRefresh */ = {
@@ -2344,6 +2367,7 @@
 				04C68D2A2ED940AE00A11F53 /* UIBarAppearance.swift in Sources */,
 				04E822402EE0214D00570A4C /* YTKChainRequest+DSL.swift in Sources */,
 				045920FF2E854FBD008C8D6A /* UInt8.swift in Sources */,
+				04CF9AF32EE2C88E00E630E0 /* JobsWalletDemoVC.swift in Sources */,
 				0440B5DA2EB2FFB7005DBE91 /* keys.swift in Sources */,
 				04C442902EB87ED8008E0F09 /* PDFView.swift in Sources */,
 				0411F2322EDFEB5300F1552C /* UIControl+DSL.swift in Sources */,
@@ -2465,6 +2489,7 @@
 				0401DD062E9115CE00D572AD /* JobsToast.swift in Sources */,
 				0411F1D12EDFD19B00F1552C /* UICollectionView+DSL.swift in Sources */,
 				0477D9792E8BADB2002C6427 /* Demo@被Push或者Present的次级页面.swift in Sources */,
+				04CF9AF52EE2CAB400E630E0 /* WalletLayoutDelegate.swift in Sources */,
 				04F7AF712EC3282300ACB509 /* LiveInputBar.swift in Sources */,
 				0453765F2EB0B5A200133F73 /* PlayerLocalVC.swift in Sources */,
 				04B5B4972EC5CCF300ED4505 /* BaseTableViewCellBySubtitle.swift in Sources */,
@@ -2484,6 +2509,7 @@
 				0411F20D2EDFE52F00F1552C /* UIView+手势.swift in Sources */,
 				C564FC9F2E0959640079B5C1 /* UISearchBar.swift in Sources */,
 				04E822502EE03CFC00570A4C /* person.swift in Sources */,
+				04CF9AFB2EE2CB0900E630E0 /* WalletCardCell.swift in Sources */,
 				0411F2342EDFEB9100F1552C /* UIControl+统一点击事件.swift in Sources */,
 				0411F1F32EDFD9EE00F1552C /* UIButton+倒计时.swift in Sources */,
 				04FC77852EB0BDF100B810BA /* ImageLoader.swift in Sources */,
@@ -2560,6 +2586,7 @@
 				047E48E82EB35BAD00881898 /* CameraController.swift in Sources */,
 				04A245912ECD7373009649E8 /* Array.swift in Sources */,
 				047E48E92EB35BAD00881898 /* SphereGeometry.swift in Sources */,
+				04CF9AF92EE2CAFA00E630E0 /* WalletSectionHeaderView.swift in Sources */,
 				0411F2132EDFE5F600F1552C /* UIView+悬浮.swift in Sources */,
 				047E48EA2EB35BAD00881898 /* VideoTextureManager.swift in Sources */,
 				04E822342EE0150900570A4C /* PostJsonRequest.swift in Sources */,
@@ -2670,6 +2697,7 @@
 				04A368142EC59517000FC898 /* LGOEditProfileVC.swift in Sources */,
 				04124F442EB0764200462BE2 /* AFService.swift in Sources */,
 				C564FC2C2E0958D50079B5C1 /* SceneDelegate.swift in Sources */,
+				04CF9AF72EE2CAE700E630E0 /* WalletLayout.swift in Sources */,
 				C564FC922E0959640079B5C1 /* UISwitch.swift in Sources */,
 				0411F1E72EDFD6EC00F1552C /* String+裁剪.swift in Sources */,
 				04E821F82EE00DD900570A4C /* UIWindow+DSL.swift in Sources */,

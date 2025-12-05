@@ -9,9 +9,7 @@ import UIKit
 import GKNavigationBarSwift
 
 final class RootListVC: BaseVC {
-
     private var langToken: NSObjectProtocol?
-
     deinit {
         suspendBtn.stopTimer()
         suspendSpinBtn.stopTimer()
@@ -19,6 +17,7 @@ final class RootListVC: BaseVC {
 
     private lazy var demos: [(title: String, vcType: UIViewController.Type)] = [
         ("🧭 系统导航栏", JobsNavigationDemoVC.self),
+        ("🧭 钱包卡片效果", JobsWalletDemoVC.self),
         ("🐒 猿题库网络请求框架", YTKNetworkDemoVC.self),
         ("🧭 苹果滑动开锁", SlideToUnlockDemoVC.self),
         ("✍️ UITextField", UITextFieldDemoVC.self),
