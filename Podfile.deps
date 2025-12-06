@@ -5,13 +5,13 @@ def swiftAppCommon
   pod 'SDWebImage'                         # https://github.com/SDWebImage/SDWebImage          ❤️
   pod 'MJRefresh'                          # https://github.com/CoderMJLee/MJRefresh           ❤️
   pod 'HTMLReader'                         # https://github.com/nolanw/HTMLReader              ❤️
-  pod 'YTKNetwork'                         # https://github.com/kanyun-inc/YTKNetwork ❤️ 猿题库出品的网络请求框架@Objc
+  pod 'YTKNetwork'                         # https://github.com/kanyun-inc/YTKNetwork          ❤️ 猿题库出品的网络请求框架@Objc
   # --- Swift ---
   pod 'Alamofire', '~> 5.9'                # https://github.com/Alamofire/Alamofire            ❤️
   pod 'SwiftMessages'                      # https://github.com/SwiftKickMobile/SwiftMessages  ❤️ 非常灵活的 UIKit 和 SwiftUI 视图和视图控制器展示库
   pod 'SwiftProtobuf'                      # https://github.com/apple/swift-protobuf           ❤️ 多端统一协议（iOS + Android + 后端一个 .proto）。数据量比较大、性能敏感（IM、实时流、离线缓存等）。
   pod 'ScreenProtectorKit'                 # https://github.com/prongbang/ScreenProtectorKit   ❤️ 防止屏幕截图并保护后台应用程序快照
-  pod 'PhoneNumberKit'                     # https://github.com/marmelroy/PhoneNumberKit       ❤️ 电话号码工具包：用于解析、格式化和验证国际电话号码.灵感来源:Google.libphonenumber
+  pod 'PhoneNumberKit'                     # https://github.com/marmelroy/PhoneNumberKit       ❤️ 电话号码工具包：用于解析、格式化和验证国际电话号码。灵感来源:Google.libphonenumber
   pod 'Moya', :modular_headers => true     # https://github.com/Moya/Moya                      ❤️
   pod 'Kingfisher'                         # https://github.com/onevcat/Kingfisher             ❤️ Swift 平台上的 SDWebImage 平替
   pod 'GKNavigationBarSwift'               # https://github.com/QuintGao/GKNavigationBarSwift  ❤️

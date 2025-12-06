@@ -5229,9 +5229,213 @@ JobsTimerFactory.make(kind: .displayLink,
 
 ### 23、跑马灯+轮播图 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-```swift
-/// TODO
-```
+* 跑马灯
+
+  ```swift
+  // MARK: - 1. 向上连续滚动
+  private lazy var upContinuousMarquee: JobsMarqueeView = { [unowned self] in
+      JobsMarqueeView()
+          .byDirection(.up)
+          .byScrollMode(.continuous(speed: 40))
+          .byItemSizeMode(.fitContent)   // 典型公告跑马灯
+          .byDataSourceButtons([
+              UIButton.sys()
+                  .byBackgroundColor(.systemYellow.withAlphaComponent(0.2), for: .normal)
+                  .byTitle("向上连续 · 公告 1", for: .normal)
+                  .byTitleColor(.label, for: .normal)
+                  .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+                  .bySubTitle("更多内容 1", for: .normal)
+                  .bySubTitleColor(.secondaryLabel, for: .normal)
+                  .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+                  .byImage("megaphone.fill".sysImg, for: .normal)
+                  .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+                  .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+                  .byTapSound("Sound.wav")
+                  .onTap { sender in
+                      print("🔔 向上连续 · 公告 1 tapped, selected=\(sender.isSelected)")
+                      toastBy(sender.title!)
+                  }
+                  .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+                      if gr.state == .began {
+                          btn.alpha = 0.6
+                          print("长按开始 on \(btn)")
+                      } else if gr.state == .ended || gr.state == .cancelled {
+                          btn.alpha = 1.0
+                          print("长按结束")
+                      }
+                  },
+              UIButton.sys()
+                  .byBackgroundColor(.systemYellow.withAlphaComponent(0.2), for: .normal)
+                  .byTitle("向上连续 · 公告 2", for: .normal)
+                  .byTitleColor(.label, for: .normal)
+                  .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+                  .bySubTitle("更多内容 2", for: .normal)
+                  .bySubTitleColor(.secondaryLabel, for: .normal)
+                  .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+                  .byImage("megaphone.fill".sysImg, for: .normal)
+                  .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+                  .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+                  .byTapSound("Sound.wav")
+                  .onTap { sender in
+                      print("🔔 向上连续 · 公告 2 tapped, selected=\(sender.isSelected)")
+                      toastBy(sender.title!)
+                  }
+                  .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+                      if gr.state == .began {
+                          btn.alpha = 0.6
+                          print("长按开始 on \(btn)")
+                      } else if gr.state == .ended || gr.state == .cancelled {
+                          btn.alpha = 1.0
+                          print("长按结束")
+                      }
+                  },
+              UIButton.sys()
+                  .byBackgroundColor(.systemYellow.withAlphaComponent(0.2), for: .normal)
+                  .byTitle("向上连续 · 公告 3", for: .normal)
+                  .byTitleColor(.label, for: .normal)
+                  .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+                  .bySubTitle("更多内容 3", for: .normal)
+                  .bySubTitleColor(.secondaryLabel, for: .normal)
+                  .bySubTitleFont(.systemFont(ofSize: 11, weight: .regular))
+                  .byImage("megaphone.fill".sysImg, for: .normal)
+                  .byContentEdgeInsets(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+                  .byTitleEdgeInsets(UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6))
+                  .byTapSound("Sound.wav")
+                  .onTap { sender in
+                      print("🔔 向上连续 · 公告 3 tapped, selected=\(sender.isSelected)")
+                      toastBy(sender.title!)
+                  }
+                  .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+                      if gr.state == .began {
+                          btn.alpha = 0.6
+                          print("长按开始 on \(btn)")
+                      } else if gr.state == .ended || gr.state == .cancelled {
+                          btn.alpha = 1.0
+                          print("长按结束")
+                      }
+                  }
+          ])
+          .byBgColor(.randomColor)
+          .byAddTo(self.scrollView) { [unowned self] make in
+              if #available(iOS 11.0, *) {
+                  make.top.equalTo(self.scrollView.contentLayoutGuide.snp.top).offset(10)
+                  make.left.equalTo(self.scrollView.frameLayoutGuide.snp.left).offset(self.horizontalInset)
+                  make.right.equalTo(self.scrollView.frameLayoutGuide.snp.right).inset(self.horizontalInset)
+              } else {
+                  make.top.equalTo(self.scrollView.snp.top).offset(10)
+                  make.left.equalTo(self.scrollView).offset(self.horizontalInset)
+                  make.right.equalTo(self.scrollView).inset(self.horizontalInset)
+              }
+              make.height.equalTo(self.marqueeHeight)
+          }
+  }()
+  ```
+
+* 轮播图
+
+  ```swift
+  // MARK: - 13. Kingfisher@背景图
+  private lazy var kingfisherImageButtonsMarquee: JobsMarqueeView = { [unowned self] in
+      JobsMarqueeView()
+          .byDirection(.left)
+          .byScrollMode(.frequency(interval: 1.0))
+          .byItemSizeMode(.fillBounds)
+          .byDataSourceButtons ([
+              UIButton.sys()
+                  .byTitle("我是UIButton主标题@Kingfisher").byTitleColor(.red)
+                  .bySubTitle("我是UIButton副标题@Kingfisher").bySubTitleColor(.yellow)
+                  .kf_imageURL("https://picsum.photos/" + ScreenWidth().toString(0) + "/" + self.marqueeHeight.toString(0))
+                  .kf_placeholderImage("唐老鸭".img)
+                  .kf_options([
+                      .processor(DownsamplingImageProcessor(size: CGSize(width: 500, height: 200))),
+                      .scaleFactor(UIScreen.main.scale),
+                      .cacheOriginalImage,
+                      .transition(.fade(0.25)),
+                      .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
+                  ])
+                  .kf_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
+                  .byTapSound("Sound.wav")
+                  .onTap { sender in
+                      print("🔴 Kingfisher@背景图 1 tapped, selected=\(sender.isSelected)")
+                      toastBy("点击了Kingfisher@背景图")
+                  }
+                  .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+                      if gr.state == .began {
+                          btn.alpha = 0.6
+                          print("长按开始 on \(btn)")
+                      } else if gr.state == .ended || gr.state == .cancelled {
+                          btn.alpha = 1.0
+                          print("长按结束")
+                      }
+                  },
+              UIButton.sys()
+                  .byTitle("我是UIButton主标题@Kingfisher").byTitleColor(.red)
+                  .bySubTitle("我是UIButton副标题@Kingfisher").bySubTitleColor(.yellow)
+                  .kf_imageURL("https://picsum.photos/" + ScreenWidth().toString(0) + "/" + self.marqueeHeight.toString(0))
+                  .kf_placeholderImage("唐老鸭".img)
+                  .kf_options([
+                      .processor(DownsamplingImageProcessor(size: CGSize(width: 500, height: 200))),
+                      .scaleFactor(UIScreen.main.scale),
+                      .cacheOriginalImage,
+                      .transition(.fade(0.25)),
+                      .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
+                  ])
+                  .kf_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
+                  .byTapSound("Sound.wav")
+                  .onTap { sender in
+                      print("🔴 Kingfisher@背景图 2 tapped, selected=\(sender.isSelected)")
+                      toastBy("点击了Kingfisher@背景图")
+                  }
+                  .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+                      if gr.state == .began {
+                          btn.alpha = 0.6
+                          print("长按开始 on \(btn)")
+                      } else if gr.state == .ended || gr.state == .cancelled {
+                          btn.alpha = 1.0
+                          print("长按结束")
+                      }
+                  },
+              UIButton.sys()
+                  .byTitle("我是UIButton主标题@Kingfisher").byTitleColor(.red)
+                  .bySubTitle("我是UIButton副标题@Kingfisher").bySubTitleColor(.yellow)
+                  .kf_imageURL("https://picsum.photos/" + ScreenWidth().toString(0) + "/" + self.marqueeHeight.toString(0))
+                  .kf_placeholderImage("唐老鸭".img)
+                  .kf_options([
+                      .processor(DownsamplingImageProcessor(size: CGSize(width: 500, height: 200))),
+                      .scaleFactor(UIScreen.main.scale),
+                      .cacheOriginalImage,
+                      .transition(.fade(0.25)),
+                      .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
+                  ])
+                  .kf_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
+                  .byTapSound("Sound.wav")
+                  .onTap { sender in
+                      print("🔴 Kingfisher@背景图 3 tapped, selected=\(sender.isSelected)")
+                      toastBy("点击了Kingfisher@背景图")
+                  }
+                  .onLongPress(minimumPressDuration: 0.8) { btn, gr in
+                      if gr.state == .began {
+                          btn.alpha = 0.6
+                          print("长按开始 on \(btn)")
+                      } else if gr.state == .ended || gr.state == .cancelled {
+                          btn.alpha = 1.0
+                          print("长按结束")
+                      }
+                  },
+          ])
+          .byBgColor(.randomColor)
+          .byAddTo(self.scrollView) { [unowned self] make in
+              make.top.equalTo(self.sdWebImageButtonsMarquee.snp.bottom).offset(self.verticalSpacing)
+              make.left.right.height.equalTo(self.upContinuousMarquee)
+              // 🔚 最后一条封底，决定 scrollView.contentSize.height
+              if #available(iOS 11.0, *) {
+                  make.bottom.equalTo(self.scrollView.contentLayoutGuide.snp.bottom).inset(20)
+              } else {
+                  make.bottom.equalTo(self.scrollView.snp.bottom).inset(20)
+              }
+          }
+  }()
+  ```
 
 ### 24、控制器添加背景图 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
