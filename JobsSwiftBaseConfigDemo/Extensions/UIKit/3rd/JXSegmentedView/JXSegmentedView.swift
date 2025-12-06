@@ -5,9 +5,15 @@
 //  Created by Mac on 11/12/25.
 //
 
-import UIKit
-import JXSegmentedView
+#if os(OSX)
+    import AppKit
+#endif
 
+#if os(iOS) || os(tvOS)
+    import UIKit
+#endif
+#if canImport(JXSegmentedView)
+import JXSegmentedView
 public extension JXSegmentedView {
     // MARK: 绑定对象
     @discardableResult
@@ -76,3 +82,4 @@ public extension JXSegmentedView {
         return self
     }
 }
+#endif

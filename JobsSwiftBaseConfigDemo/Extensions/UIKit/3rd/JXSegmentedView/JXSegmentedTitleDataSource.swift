@@ -5,9 +5,16 @@
 //  Created by Mac on 11/12/25.
 //
 
-import UIKit
-import JXSegmentedView
+#if os(OSX)
+    import AppKit
+#endif
+
+#if os(iOS) || os(tvOS)
+    import UIKit
+#endif
 import ObjectiveC
+#if canImport(JXSegmentedView)
+import JXSegmentedView
 // MARK: - 动态配置适配器（必须继承 NSObject）
 public final class JobsSegmentedTitleClosureConfiguration: NSObject, JXSegmentedTitleDynamicConfiguration {
     public var numberOfLines: ((Int) -> Int)?
@@ -76,3 +83,6 @@ public extension JXSegmentedTitleDataSource {
         return self
     }
 }
+
+#endif
+

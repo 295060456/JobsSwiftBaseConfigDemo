@@ -5,9 +5,16 @@
 //  Created by Mac on 11/12/25.
 //
 
-import UIKit
-import JXSegmentedView
+#if os(OSX)
+    import AppKit
+#endif
 
+#if os(iOS) || os(tvOS)
+    import UIKit
+#endif
+
+#if canImport(JXSegmentedView)
+import JXSegmentedView
 public extension JXSegmentedListContainerView {
     // MARK: 行为&外观
     /// 初始化阈值（0~1，默认 0.01）
@@ -78,3 +85,5 @@ public extension JXSegmentedListContainerView {
         JXSegmentedListContainerView(dataSource: dataSource, type: type)
     }
 }
+
+#endif

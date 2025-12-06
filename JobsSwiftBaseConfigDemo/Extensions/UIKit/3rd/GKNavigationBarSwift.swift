@@ -15,8 +15,6 @@ import Foundation
 
 #if canImport(SDWebImage)
 import GKNavigationBarSwift
-#endif
-
 public extension GKNavigationBarConfigure {
     // MARK: - 顶层 DSL 入口（全局一次性配置 & 后续增量更新）
     /// 外部入口：应用启动时调用一次
@@ -249,3 +247,6 @@ public extension GKNavigationBarConfigure {
         return self
     }
 }
+#endif
+
+

@@ -5,9 +5,15 @@
 //  Created by Mac on 11/12/25.
 //
 
-import UIKit
-import JXSegmentedView
+#if os(OSX)
+    import AppKit
+#endif
 
+#if os(iOS) || os(tvOS)
+    import UIKit
+#endif
+#if canImport(JXSegmentedView)
+import JXSegmentedView
 public extension JXSegmentedBaseDataSource {
     @discardableResult func byItemWidth(_ v: CGFloat) -> Self { itemWidth = v; return self }
     @discardableResult func byItemWidthIncrement(_ v: CGFloat) -> Self { itemWidthIncrement = v; return self }
@@ -47,3 +53,5 @@ public extension JXSegmentedBaseDataSource {
         reloadData(selectedIndex: selectedIndex); return self
     }
 }
+
+#endif

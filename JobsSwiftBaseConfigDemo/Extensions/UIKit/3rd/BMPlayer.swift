@@ -17,6 +17,8 @@
 #endif
 import AVFoundation
 import MediaPlayer
+
+#if canImport(SnapKit) && canImport(BMPlayer)
 import SnapKit
 import BMPlayer
 // MARK: - 链式配置（byX）
@@ -156,3 +158,4 @@ public extension BMPlayer {
     /// 当前 AVPlayer（若你需要向下扩展）
     var av: AVPlayer? { self.avPlayer }
 }
+#endif

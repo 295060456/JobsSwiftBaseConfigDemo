@@ -5,12 +5,20 @@
 //  Created by mac on 14/12/24.
 //
 
-import MJRefresh
+#if os(OSX)
+    import AppKit
+#endif
 
+#if os(iOS) || os(tvOS)
+    import UIKit
+#endif
+
+#if canImport(MJRefresh)
+import MJRefresh
 extension MJRefreshAutoNormalFooter {
     static func customFooter(refreshingTarget target: Any?, refreshingAction action: Selector?) -> MJRefreshAutoNormalFooter {
         let footer = MJRefreshAutoNormalFooter(refreshingTarget: target as Any, refreshingAction: action!)
-        
+
         // 自定义刷新状态文本
         footer.setTitle("MJRefreshAutoFooterIdleText".tr, for: .idle)          // 普通状态
         footer.setTitle("MJRefreshBackFooterPullingText".tr, for: .pulling)            // 松开加载状态
@@ -28,3 +36,4 @@ extension MJRefreshAutoNormalFooter {
         return footer
     }
 }
+#endif

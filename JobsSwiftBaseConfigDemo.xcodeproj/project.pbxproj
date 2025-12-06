@@ -294,6 +294,7 @@
 		04C68D402ED9818A00A11F53 /* LuckyWheelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D3F2ED9818A00A11F53 /* LuckyWheelView.swift */; };
 		04C68D462ED981D400A11F53 /* ColorWheelDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D452ED981D100A11F53 /* ColorWheelDemoVC.swift */; };
 		04C68D4A2ED9880800A11F53 /* LuckyWheelStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C68D492ED9880700A11F53 /* LuckyWheelStruct.swift */; };
+		04CA63602EE43EB90070F339 /* UIScrollView+ESPullToRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CA635F2EE43EB80070F339 /* UIScrollView+ESPullToRefresh.swift */; };
 		04CF028C2E8808540083ACF0 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028B2E8808500083ACF0 /* UIButton.swift */; };
 		04CF02902E8A3A160083ACF0 /* Demo@输入文本.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */; };
 		04CF03172E8A76500083ACF0 /* Demo@富文本.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF03162E8A76490083ACF0 /* Demo@富文本.swift */; };
@@ -728,6 +729,7 @@
 		04C68D3F2ED9818A00A11F53 /* LuckyWheelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuckyWheelView.swift; sourceTree = "<group>"; };
 		04C68D452ED981D100A11F53 /* ColorWheelDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWheelDemoVC.swift; sourceTree = "<group>"; };
 		04C68D492ED9880700A11F53 /* LuckyWheelStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuckyWheelStruct.swift; sourceTree = "<group>"; };
+		04CA635F2EE43EB80070F339 /* UIScrollView+ESPullToRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+ESPullToRefresh.swift"; sourceTree = "<group>"; };
 		04CF028B2E8808500083ACF0 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		04CF028F2E8A3A0F0083ACF0 /* Demo@输入文本.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@输入文本.swift"; sourceTree = "<group>"; };
 		04CF03162E8A76490083ACF0 /* Demo@富文本.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@富文本.swift"; sourceTree = "<group>"; };
@@ -1038,6 +1040,7 @@
 		0411F1A72EDEF67300F1552C /* UIScrollView */ = {
 			isa = PBXGroup;
 			children = (
+				04CA635F2EE43EB80070F339 /* UIScrollView+ESPullToRefresh.swift */,
 				0411F22C2EDFEACA00F1552C /* UIScrollView.swift */,
 				0411F1AA2EDEF91500F1552C /* UIScrollView+空态数据占位按钮.swift */,
 				0411F1A82EDEF8DA00F1552C /* UIScrollView+DSL.swift */,
@@ -2196,8 +2199,8 @@
 			);
 			mainGroup = C564FBD22E09580A0079B5C1;
 			packageReferences = (
-				040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "swift-syntax" */,
-				040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "MyMacrosClean" */,
+				040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "../../swift-syntax" */,
+				040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "../../MyMacrosClean" */,
 			);
 			productRefGroup = C564FBDC2E09580B0079B5C1 /* Products */;
 			projectDirPath = "";
@@ -2288,7 +2291,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		BDB45CFED13B7279234D7A99 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2297,8 +2301,12 @@
 			);
 			inputFileListPaths = (
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2634,6 +2642,7 @@
 				043283682EC458C20031CDD6 /* CAGradientLayer.swift in Sources */,
 				043283642EC4535F0031CDD6 /* LeftMenuCell.swift in Sources */,
 				C564FCAB2E09597C0079B5C1 /* VC2.swift in Sources */,
+				04CA63602EE43EB90070F339 /* UIScrollView+ESPullToRefresh.swift in Sources */,
 				0477D97F2E8BDBBC002C6427 /* Demo@倒计时.swift in Sources */,
 				04124F402EB0760D00462BE2 /* AFLogger.swift in Sources */,
 				04D8422B2E965BA1001E8C90 /* JobsMarqueeView.swift in Sources */,
@@ -3089,11 +3098,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "swift-syntax" */ = {
+		040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "../../swift-syntax" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../../swift-syntax";
 		};
-		040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "MyMacrosClean" */ = {
+		040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "../../MyMacrosClean" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../MyMacrosClean;
 		};
