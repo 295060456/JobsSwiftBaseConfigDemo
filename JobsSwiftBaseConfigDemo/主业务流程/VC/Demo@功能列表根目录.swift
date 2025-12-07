@@ -18,6 +18,8 @@ final class RootListVC: BaseVC {
     private lazy var demos: [(title: String, vcType: UIViewController.Type)] = [
         ("🧭 系统导航栏", JobsNavigationDemoVC.self),
         ("👛 钱包卡片效果", JobsWalletDemoVC.self),
+        ("📹 播放器@BMPlayer(🛜 网络流量监控)", BMPlayerDemoVC.self),
+        ("📹 播放器@PNPlayer", PNPlayerDemoVC.self),
         ("🐒 猿题库网络请求框架", YTKNetworkDemoVC.self),
         ("🧭 苹果滑动开锁", SlideToUnlockDemoVC.self),
         ("✍️ UITextField", UITextFieldDemoVC.self),
@@ -38,8 +40,6 @@ final class RootListVC: BaseVC {
         ("🐎 跑马灯 / 🛞 轮播图", JobsMarqueeDemoVC.self),
         ("⛑️ 支持上下左右安全Push和原路返回", SafetyPushDemoVC.self),
         ("⛑️ 安全Present", SafetyPresentDemoVC.self),
-        ("📹 播放器@BMPlayer(🛜 网络流量监控)", BMPlayerDemoVC.self),
-        ("📹 播放器@PNPlayer", PNPlayerDemoVC.self),
         ("🏷️ Toast", ToastDemoVC.self),
         ("⚠️ 系统的弹出框", UIAlertDemoVC.self),
         ("📌 自定义注解", 自定义注解Demo.self),
