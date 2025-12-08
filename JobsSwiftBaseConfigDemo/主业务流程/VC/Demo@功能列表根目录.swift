@@ -18,6 +18,7 @@ final class RootListVC: BaseVC {
     private lazy var demos: [(title: String, vcType: UIViewController.Type)] = [
         ("🧭 系统导航栏", JobsNavigationDemoVC.self),
         ("👛 钱包卡片效果", JobsWalletDemoVC.self),
+        ("⏺️ 本地录制到系统相册", HKLocalRecordVC.self),
         ("📹 播放器@BMPlayer(🛜 网络流量监控)", BMPlayerDemoVC.self),
         ("📹 播放器@PNPlayer", PNPlayerDemoVC.self),
         ("🐒 猿题库网络请求框架", YTKNetworkDemoVC.self),

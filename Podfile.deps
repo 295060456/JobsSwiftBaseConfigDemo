@@ -36,6 +36,7 @@ def swiftAppCommon
   pod 'SkeletonView'                       # https://github.com/Juanpe/SkeletonView            ❤️ 骨架屏/闪动占位
   pod 'swift-collections'                  # https://github.com/apple/swift-collections#       ❤️ 有序字典
   pod 'IQKeyboardManagerSwift'             # https://github.com/hackiftekhar/IQKeyboardManager ❤️
+  pod 'HaishinKit'                         # https://github.com/HaishinKit/HaishinKit.swift    ❤️ 音视频采集编码
 #  pod 'ComponentKit'                       # https://github.com/facebook/componentkit          ❤️ Facebook出品的一款UI框架
 #  pod 'Texture'                            # https://github.com/texturegroup/texture           ❤️ Facebook出品的一款UI框架
 
