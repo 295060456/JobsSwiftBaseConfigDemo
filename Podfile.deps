@@ -6,6 +6,7 @@ def swiftAppCommon
   pod 'MJRefresh'                          # https://github.com/CoderMJLee/MJRefresh           ❤️
   pod 'HTMLReader'                         # https://github.com/nolanw/HTMLReader              ❤️
   pod 'YTKNetwork'                         # https://github.com/kanyun-inc/YTKNetwork          ❤️ 猿题库出品的网络请求框架@Objc
+#  pod 'SVGAPlayer'                         # https://github.com/svga/SVGAPlayer-iOS            ❤️ 直播礼物动画播放器
   # --- Swift ---
   pod 'Alamofire', '~> 5.9'                # https://github.com/Alamofire/Alamofire            ❤️
   pod 'SwiftMessages'                      # https://github.com/SwiftKickMobile/SwiftMessages  ❤️ 非常灵活的 UIKit 和 SwiftUI 视图和视图控制器展示库
@@ -37,6 +38,7 @@ def swiftAppCommon
   pod 'swift-collections'                  # https://github.com/apple/swift-collections#       ❤️ 有序字典
   pod 'IQKeyboardManagerSwift'             # https://github.com/hackiftekhar/IQKeyboardManager ❤️
   pod 'HaishinKit'                         # https://github.com/HaishinKit/HaishinKit.swift    ❤️ 音视频采集编码
+  pod 'SwiftySVGAPlayer'                   # https://github.com/janlionly/SwiftySVGAPlayer     ❤️ SVGAPlayer的社区封装@framework
 #  pod 'ComponentKit'                       # https://github.com/facebook/componentkit          ❤️ Facebook出品的一款UI框架
 #  pod 'Texture'                            # https://github.com/texturegroup/texture           ❤️ Facebook出品的一款UI框架
 
