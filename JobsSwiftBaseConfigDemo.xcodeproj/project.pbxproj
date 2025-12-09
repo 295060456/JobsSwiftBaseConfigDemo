@@ -217,6 +217,7 @@
 		046D85BD2EE6759E0084C5F5 /* WalletSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046D85BB2EE6759E0084C5F5 /* WalletSectionHeaderView.swift */; };
 		046D85BE2EE6759E0084C5F5 /* WalletCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046D85BA2EE6759E0084C5F5 /* WalletCardCell.swift */; };
 		046D85C12EE6766C0084C5F5 /* HaishinKit@本地录制到系统相册.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046D85C02EE6766C0084C5F5 /* HaishinKit@本地录制到系统相册.swift */; };
+		046D85CC2EE6E3340084C5F5 /* HaishinKit@直播推流.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046D85CB2EE6E3250084C5F5 /* HaishinKit@直播推流.swift */; };
 		0477D96F2E8B8479002C6427 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D96E2E8B8478002C6427 /* UIApplication.swift */; };
 		0477D9712E8B897D002C6427 /* Demo@支持上下左右安全Push和原路返回.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9702E8B896A002C6427 /* Demo@支持上下左右安全Push和原路返回.swift */; };
 		0477D9752E8B9146002C6427 /* Demo@安全Present.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9742E8B9141002C6427 /* Demo@安全Present.swift */; };
@@ -648,6 +649,7 @@
 		046D85BA2EE6759E0084C5F5 /* WalletCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletCardCell.swift; sourceTree = "<group>"; };
 		046D85BB2EE6759E0084C5F5 /* WalletSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSectionHeaderView.swift; sourceTree = "<group>"; };
 		046D85C02EE6766C0084C5F5 /* HaishinKit@本地录制到系统相册.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HaishinKit@本地录制到系统相册.swift"; sourceTree = "<group>"; };
+		046D85CB2EE6E3250084C5F5 /* HaishinKit@直播推流.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HaishinKit@直播推流.swift"; sourceTree = "<group>"; };
 		0477D96E2E8B8478002C6427 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
 		0477D9702E8B896A002C6427 /* Demo@支持上下左右安全Push和原路返回.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@支持上下左右安全Push和原路返回.swift"; sourceTree = "<group>"; };
 		0477D9742E8B9141002C6427 /* Demo@安全Present.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@安全Present.swift"; sourceTree = "<group>"; };
@@ -1393,6 +1395,7 @@
 			isa = PBXGroup;
 			children = (
 				046D85C02EE6766C0084C5F5 /* HaishinKit@本地录制到系统相册.swift */,
+				046D85CB2EE6E3250084C5F5 /* HaishinKit@直播推流.swift */,
 			);
 			path = "Demo@HaishinKit";
 			sourceTree = "<group>";
@@ -1486,6 +1489,8 @@
 			isa = PBXGroup;
 			children = (
 				046D85B42EE671240084C5F5 /* Demo@HaishinKit */,
+				047E48D82EB3561200881898 /* Demo@PNPlayer */,
+				045376572EB0B56500133F73 /* Demo@BMPlayer */,
 				04CF9AF12EE2C86800E630E0 /* Demo@钱包卡片效果 */,
 				04E8222A2EE013C600570A4C /* Demo@YTKNetwork */,
 				041AE59E2EDA85A800ED03A3 /* Demo@苹果滑动开锁 */,
@@ -1496,8 +1501,6 @@
 				043283452EC4405B0031CDD6 /* Demo@首页联动 */,
 				04F7AF6B2EC327DC00ACB509 /* Demo@直播间滚动留言模块 */,
 				048F447A2EB311B100BAA7EE /* Demo@注册登陆 */,
-				047E48D82EB3561200881898 /* Demo@PNPlayer */,
-				045376572EB0B56500133F73 /* Demo@BMPlayer */,
 				04124F3A2EB075C500462BE2 /* Demo@Alamofire */,
 				04124F2B2EB0621D00462BE2 /* Demo@Moya */,
 				0424625B2EBB020E00D6BFCC /* Demo@Texture.swift */,
@@ -2145,7 +2148,6 @@
 				C564FBD92E09580B0079B5C1 /* Resources */,
 				04CF02912E8A3DE40083ACF0 /* ShellScript */,
 				BDB45CFED13B7279234D7A99 /* [CP] Copy Pods Resources */,
-				AB9C8838D81D59E090A5BA51 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2320,21 +2322,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\n";
-		};
-		AB9C8838D81D59E090A5BA51 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-JobsSwiftBaseConfigDemo/Pods-JobsSwiftBaseConfigDemo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		BDB45CFED13B7279234D7A99 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2649,6 +2636,7 @@
 				04E821E22EDFF3D000570A4C /* UILabel+内边距.swift in Sources */,
 				04E8223E2EE01FC900570A4C /* YTKBatchRequest+DSL.swift in Sources */,
 				043283AB2EC49FED0031CDD6 /* BRDatePickerView.swift in Sources */,
+				046D85CC2EE6E3340084C5F5 /* HaishinKit@直播推流.swift in Sources */,
 				0432836D2EC45E7A0031CDD6 /* JXSegmentedBaseDataSource.swift in Sources */,
 				043283A72EC49F910031CDD6 /* BRPickerPanel.swift in Sources */,
 				04C2F0332E98C9E000BA05A9 /* Demo@设计模式VIPER.swift in Sources */,

@@ -22,7 +22,8 @@ final class PlayerRemoteVC: BaseVC {
                 definitions: [
                     BMPlayerResourceDefinition(
 //                        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4".url!,
-                        url: "http://cdn3.toronto360.tv:8081/toronto360/hd/playlist.m3u8".url!,
+//                        url: "http://cdn3.toronto360.tv:8081/toronto360/hd/playlist.m3u8".url!,
+                        url: "http://192.168.65.91:8000/live/jobs_test/index.m3u8".url!,
                         definition: "默认"
                     )
                 ],

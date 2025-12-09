@@ -1,5 +1,5 @@
 //
-//  HaishinKit@本地录制到系统相册.swift
+//  HaishinKit@直播推流.swift
 //  JobsSwiftBaseConfigDemo
 //
 //  Created by Jobs on 12/8/25.
@@ -7,23 +7,32 @@
 
 import UIKit
 import AVFoundation
-import Photos
 import SnapKit
 import HaishinKit      // HaishinKit / RTMPHaishinKit
 
-final class HKLocalRecordVC: BaseVC {
+final class HKLiveVC: BaseVC {
+    deinit {
+        JobsNetworkTrafficMonitorStop()  /// 停止网络实时监听
+        JobsCancelWaitNetworkDataReady() /// 停止网络数据源监听
+    }
+    // MARK: - 推流配置（根据你的服务器改掉即可）
+    /// RTMP 服务器地址，例如：
+    /// - 本机 NMS/SRS: rtmp://192.168.65.91:1935/live
+    /// - 云端:        rtmp://example.com/live
+    private let rtmpURI = "rtmp://192.168.65.91:1935/live"      // TODO: 换成你的 RTMP 地址
+    private let streamName = "jobs_test"                        // TODO: 换成你的 streamName / 推流 key
+    // 实际完整推流 URL = rtmp://192.168.65.91:1935/live/jobs_test
     // MARK: - HaishinKit 管线（2.x 写法）
     /// 采集（摄像头 + 麦克风）都挂在这里
     private let mixer = MediaMixer()
-    /// RTMPStream 即使不推流，也可以用来承载采样数据
+    /// RTMP 连接（长链接）
     private let connection = RTMPConnection()
+    /// RTMP 推流流对象
     private lazy var stream = RTMPStream(connection: connection)
-    /// 新版本地录制器，替代以前的 AVRecorder / IOStreamRecorder
-    private let recorder = HKStreamRecorder()
     /// 当前摄像头朝向
     private var currentPosition: AVCaptureDevice.Position = .back
-    /// 是否正在录制
-    private var isRecording = false
+    /// 是否正在推流
+    private var isStreaming = false
     // MARK: - UI（懒加载 + 你的链式 API + SnapKit）
     /// 预览视图：HaishinKit 提供的 Metal 预览
     private lazy var previewView: MTHKView = {
@@ -41,25 +50,25 @@ final class HKLocalRecordVC: BaseVC {
             .byNumberOfLines(0)
             .byFont(.systemFont(ofSize: 14))
             .byTextAlignment(.center)
-            .byText("准备就绪".tr)
+            .byText("准备就绪")
             .byAddTo(view) { [unowned self] make in
                 make.left.right.equalToSuperview().inset(16)
                 make.bottom.equalTo(recordButton.snp.top).offset(-12)
             }
     }()
-    /// 开始/停止录制按钮（形态对齐你给的 exampleButton）
+    /// 开始/停止推流按钮（沿用原来的样式）
     private lazy var recordButton: UIButton = {
         UIButton.sys()
             .byBackgroundColor(.systemRed, for: .normal)
             .byBackgroundColor(.systemGray, for: .disabled)
-            .byTitle("开始录制".tr, for: .normal)
-            .byTitle("停止录制".tr, for: .selected)
+            .byTitle("开始推流", for: .normal)
+            .byTitle("停止推流", for: .selected)
             .byTitleColor(.white, for: .normal)
             .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
             .byContentEdgeInsets(.init(top: 10, left: 20, bottom: 10, right: 20))
             .byCornerDot(diameter: 10, offset: .init(horizontal: -6, vertical: 6)) // 红点提示
             .onTap { [weak self] btn in
-                self?.toggleRecord(btn)
+                self?.toggleStreaming(btn)
             }
             .byAddTo(view) { [unowned self] make in
                 make.left.right.equalToSuperview().inset(24)
@@ -89,7 +98,8 @@ final class HKLocalRecordVC: BaseVC {
 
                     do {
                         try await self.mixer.attachVideo(device)
-                        self.statusLabel.byText("📷 已切换到 \(self.currentPosition == .back ? "后置" : "前置") 摄像头")
+                        let posText = (self.currentPosition == .back) ? "后置" : "前置"
+                        self.statusLabel.byText("📷 已切换到 \(posText) 摄像头")
                     } catch {
                         print("⚠️ 切换摄像头失败：\(error)")
                         self.statusLabel.byText("❌ 切换摄像头失败：\(error.localizedDescription)")
@@ -106,13 +116,16 @@ final class HKLocalRecordVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        networkRichListenerBy(view)
         // 触发懒加载
         previewView.byVisible(YES)
         recordButton.byVisible(YES)
         switchCameraButton.byVisible(YES)
         statusLabel.byVisible(YES)
+
         requestCameraAndMicrophoneAuthorization()
         setupAudioSession()
+
         // 初始化 HaishinKit 采集管线
         Task { @MainActor in
             await setupCapturePipeline()
@@ -130,8 +143,8 @@ final class HKLocalRecordVC: BaseVC {
     /// 申请摄像头 + 麦克风权限（简单版）
     private func requestCameraAndMicrophoneAuthorization() {
         Task {
-            let _ = await AVCaptureDevice.requestAccess(for: .video)
-            let _ = await AVCaptureDevice.requestAccess(for: .audio)
+            _ = await AVCaptureDevice.requestAccess(for: .video)
+            _ = await AVCaptureDevice.requestAccess(for: .audio)
         }
     }
     // MARK: - AVAudioSession
@@ -150,7 +163,7 @@ final class HKLocalRecordVC: BaseVC {
         }
     }
     // MARK: - HaishinKit 采集管线（2.x 正确写法）
-    /// 初始化采集（绑定摄像头 + 麦克风，串起来 mixer -> stream -> previewView + recorder）
+    /// 初始化采集（绑定摄像头 + 麦克风，串起来 mixer -> stream -> previewView）
     @MainActor
     private func setupCapturePipeline() async {
         // 1. 准备采集设备
@@ -179,86 +192,69 @@ final class HKLocalRecordVC: BaseVC {
         }
         // 3. mixer 输出到 RTMPStream
         await mixer.addOutput(stream)
-        // 4. RTMPStream 再输出到预览视图 + 录制器
+        // 4. RTMPStream 再输出到预览视图
         await stream.addOutput(previewView) // 预览
-        await stream.addOutput(recorder)    // 本地录制 ✅
-        statusLabel.byText("✅ 采集已就绪，点击“开始录制”".tr)
+        statusLabel.byText("✅ 采集已就绪，点击“开始推流”")
     }
     /// 释放资源
     private func cleanup() async {
-        if isRecording {
-            do {
-                _ = try await recorder.stopRecording()
-            } catch {
-                print("⚠️ 停止录制失败 (cleanup)：\(error)")
-            }
+        if isStreaming {
+            await stopStreaming()
         }
         await mixer.stopRunning()
+    }
+    // MARK: - 推流控制
+    private func toggleStreaming(_ sender: UIButton) {
+        Task { @MainActor in
+            if isStreaming {
+                await stopStreaming()
+            } else {
+                await startStreaming()
+            }
+        }
+    }
+    /// 开始推流：连接 RTMP 服务器 + publish
+    @MainActor
+    private func startStreaming() async {
+        guard !isStreaming else { return }
+        statusLabel.byText("🔌 正在连接服务器...")
+        do {
+            // 1. 建立 RTMP 连接（长链接）
+            let connectResponse = try await connection.connect(rtmpURI)
+            print("✅ RTMP connect: \(connectResponse)")
+            statusLabel.byText("🚀 正在发起推流请求...")
+            // 2. 开始推流
+            let publishResponse = try await stream.publish(streamName)
+            print("✅ RTMP publish: \(publishResponse)")
+
+            isStreaming = true
+            recordButton.isSelected = true
+            statusLabel.byText("🟢 已开始推流")
+        } catch RTMPConnection.Error.requestFailed(let response) {
+            statusLabel.byText("❌ 连接失败：\(String(describing: response.status))")
+            print("⚠️ RTMPConnection.Error.requestFailed: \(response)")
+        } catch RTMPStream.Error.requestFailed(let response) {
+            statusLabel.byText("❌ 推流失败：\(String(describing: response.status))")
+            print("⚠️ RTMPStream.Error.requestFailed: \(response)")
+        } catch {
+            statusLabel.byText("❌ 推流异常：\(error.localizedDescription)")
+            print("⚠️ startStreaming 失败：\(error)")
+        }
+    }
+    /// 停止推流：关闭 RTMP 连接（服务器侧会自动 unpublish）
+    @MainActor
+    private func stopStreaming() async {
+        guard isStreaming else { return }
+        statusLabel.byText("⏹ 正在停止推流...")
         do {
             try await connection.close()
-        } catch {
-            print("⚠️ 关闭 RTMPConnection 失败：\(error)")
-        }
-    }
-    // MARK: - 录制控制
-    private func toggleRecord(_ sender: UIButton) {
-        Task { @MainActor in
-            if isRecording {
-                await stopRecording()
-            } else {
-                await startRecording()
-            }
-        }
-    }
-    /// 开始录制：调用 HKStreamRecorder.startRecording()
-    @MainActor
-    private func startRecording() async {
-        do {
-            try await recorder.startRecording()
-            isRecording = true
-            recordButton.isSelected = true
-            statusLabel.byText("⏺ 正在录制中...".tr)
-        } catch {
-            statusLabel.byText("❌ 开始录制失败：\(error.localizedDescription)")
-            print("⚠️ startRecording 失败：\(error)")
-        }
-    }
-    /// 停止录制：stopRecording() 返回生成的文件 URL，写入相册
-    @MainActor
-    private func stopRecording() async {
-        do {
-            statusLabel.byText("⏹ 正在停止录制...".tr)
-            let outputURL = try await recorder.stopRecording()
-            isRecording = false
+            isStreaming = false
             recordButton.isSelected = false
-            statusLabel.byText("✅ 已停止录制，正在保存到相册...".tr)
-
-            saveToPhotoLibrary(outputURL)
+            statusLabel.byText("✅ 已停止推流")
         } catch {
-            statusLabel.byText("❌ 停止录制失败：\(error.localizedDescription)")
-            print("⚠️ stopRecording 失败：\(error)")
-        }
-    }
-    /// 把 HKStreamRecorder 生成的 mp4 写入系统相册
-    private func saveToPhotoLibrary(_ fileURL: URL) {
-        PHPhotoLibrary.requestAuthorization { status in
-            guard status == .authorized || status == .limited else {
-                print("⚠️ 没有照片权限，无法保存：\(status.rawValue)")
-                return
-            }
-
-            PHPhotoLibrary.shared().performChanges({
-                PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: fileURL)
-            }, completionHandler: { saved, error in
-                if let error {
-                    print("⚠️ 保存到相册失败：\(error)")
-                } else if saved {
-                    print("✅ 已保存到相册：\(fileURL.lastPathComponent)")
-                    try? FileManager.default.removeItem(at: fileURL)
-                } else {
-                    print("⚠️ 未知原因保存失败")
-                }
-            })
+            // close 失败一般问题不大，但还是打印一下
+            statusLabel.byText("⚠️ 停止推流异常：\(error.localizedDescription)")
+            print("⚠️ stopStreaming 失败：\(error)")
         }
     }
 }
