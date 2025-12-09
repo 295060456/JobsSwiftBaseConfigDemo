@@ -116,17 +116,20 @@ final class HKLiveVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        /// 开启屏幕常亮
+        keepScreenOn()
+        /// 流量监控@上行下载
         networkRichListenerBy(view)
-        // 触发懒加载
+        /// UI
         previewView.byVisible(YES)
         recordButton.byVisible(YES)
         switchCameraButton.byVisible(YES)
         statusLabel.byVisible(YES)
-
+        /// 申请摄像头 + 麦克风权限（简单版）
         requestCameraAndMicrophoneAuthorization()
+        /// 配置音频 Session（来自官方 README 的写法，2.x 推荐）
         setupAudioSession()
-
-        // 初始化 HaishinKit 采集管线
+        /// 初始化 HaishinKit 采集管线
         Task { @MainActor in
             await setupCapturePipeline()
         }
@@ -138,6 +141,12 @@ final class HKLiveVC: BaseVC {
             guard let self else { return }
             await self.cleanup()
         }
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        /// 关闭屏幕常亮
+        endScreenOn()
     }
     // MARK: - 权限
     /// 申请摄像头 + 麦克风权限（简单版）

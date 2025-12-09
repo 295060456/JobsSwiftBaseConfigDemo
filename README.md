@@ -7036,6 +7036,27 @@ struct UserInfoModel: Codable {
    wheelView.stopSpin() // 停止
   ```
 
+### 49、屏幕常亮 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+// MARK: - 屏幕常亮
+public extension NSObject {
+    /// 屏幕是否保持常亮
+    var isScreenAlwaysOn: Bool {
+        get { UIApplication.shared.isIdleTimerDisabled }
+        set { UIApplication.shared.isIdleTimerDisabled = newValue }
+    }
+    /// 开启常亮
+    func keepScreenOn() {
+        UIApplication.shared.isIdleTimerDisabled = true
+    }
+    /// 关闭常亮
+    func endScreenOn() {
+        UIApplication.shared.isIdleTimerDisabled = false
+    }
+}
+```
+
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>

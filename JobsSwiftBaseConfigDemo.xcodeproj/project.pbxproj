@@ -250,6 +250,8 @@
 		0487AADA2E840CB200B5D307 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0487AAD92E840CB200B5D307 /* UIColor.swift */; };
 		0487AADC2E840EE300B5D307 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0487AADB2E840EE300B5D307 /* libc++.tbd */; };
 		048B795C2ED5452500A6FEF1 /* Demo@系统导航栏.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048B795B2ED5451A00A6FEF1 /* Demo@系统导航栏.swift */; };
+		048C73442EE7DAFF003C0844 /* JobsLiveFloatPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048C73432EE7DAFD003C0844 /* JobsLiveFloatPlayer.swift */; };
+		048C73462EE7F894003C0844 /* NSObject+屏幕常亮.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048C73452EE7F884003C0844 /* NSObject+屏幕常亮.swift */; };
 		048E37702E87997A004C3A41 /* UIGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048E376F2E879978004C3A41 /* UIGestureRecognizer.swift */; };
 		048F447C2EB311DE00BAA7EE /* Demo@JobsAppDoor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048F447B2EB311C100BAA7EE /* Demo@JobsAppDoor.swift */; };
 		048F447E2EB3267200BAA7EE /* CATransform3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048F447D2EB3267000BAA7EE /* CATransform3D.swift */; };
@@ -683,6 +685,8 @@
 		0487AAD92E840CB200B5D307 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		0487AADB2E840EE300B5D307 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		048B795B2ED5451A00A6FEF1 /* Demo@系统导航栏.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@系统导航栏.swift"; sourceTree = "<group>"; };
+		048C73432EE7DAFD003C0844 /* JobsLiveFloatPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsLiveFloatPlayer.swift; sourceTree = "<group>"; };
+		048C73452EE7F884003C0844 /* NSObject+屏幕常亮.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+屏幕常亮.swift"; sourceTree = "<group>"; };
 		048E376F2E879978004C3A41 /* UIGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIGestureRecognizer.swift; sourceTree = "<group>"; };
 		048F447B2EB311C100BAA7EE /* Demo@JobsAppDoor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@JobsAppDoor.swift"; sourceTree = "<group>"; };
 		048F447D2EB3267000BAA7EE /* CATransform3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CATransform3D.swift; sourceTree = "<group>"; };
@@ -1271,6 +1275,7 @@
 				044272842E8146130084B25C /* JXScale.swift */,
 				0482A5F72EA5F308004176A4 /* JobsNavBar.swift */,
 				043283432EC437190031CDD6 /* 软键盘退出.swift */,
+				048C73432EE7DAFD003C0844 /* JobsLiveFloatPlayer.swift */,
 				049A65702EA0E6BA0006B185 /* JobsTabBarCtrl.swift */,
 				04468F912E9E5A5700677000 /* MediaPickerService.swift */,
 				04468F8F2E9E4D7000677000 /* PermissionCenter.swift */,
@@ -1824,6 +1829,7 @@
 			isa = PBXGroup;
 			children = (
 				C564FC762E0959620079B5C1 /* NSObject.swift */,
+				048C73452EE7F884003C0844 /* NSObject+屏幕常亮.swift */,
 				04E821D32EDFF14A00570A4C /* NSObject+UI.swift */,
 				04E821D12EDFEFD900570A4C /* NSObject+Rx.swift */,
 			);
@@ -2229,8 +2235,8 @@
 			);
 			mainGroup = C564FBD22E09580A0079B5C1;
 			packageReferences = (
-				040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "swift-syntax" */,
-				040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "MyMacrosClean" */,
+				040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "../../swift-syntax" */,
+				040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "../../MyMacrosClean" */,
 			);
 			productRefGroup = C564FBDC2E09580B0079B5C1 /* Products */;
 			projectDirPath = "";
@@ -2321,7 +2327,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		BDB45CFED13B7279234D7A99 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2330,8 +2337,12 @@
 			);
 			inputFileListPaths = (
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2448,6 +2459,7 @@
 				0411F1D72EDFD42C00F1552C /* UICollectionView+Register.swift in Sources */,
 				04D0C97D2E8D19AB00580020 /* MJRefreshAutoNormalFooter.swift in Sources */,
 				04D0C97E2E8D19AB00580020 /* MJRefreshNormalHeader.swift in Sources */,
+				048C73442EE7DAFF003C0844 /* JobsLiveFloatPlayer.swift in Sources */,
 				04E8D6172E8E6E7F00E85CDA /* UIBarButtonItemAppearance.swift in Sources */,
 				04AD62912E91230000E18984 /* Demo@时间.swift in Sources */,
 				04E8223C2EE01F6100570A4C /* YTKBaseRequest+DSL.swift in Sources */,
@@ -2530,6 +2542,7 @@
 				04C442A62EB8B93A008E0F09 /* Demo@Lottie.swift in Sources */,
 				049A656D2EA0CB7F0006B185 /* Demo@解码.swift in Sources */,
 				C564FC8F2E0959640079B5C1 /* UIProgressView.swift in Sources */,
+				048C73462EE7F894003C0844 /* NSObject+屏幕常亮.swift in Sources */,
 				04F7AF6D2EC327FE00ACB509 /* LiveMsg.swift in Sources */,
 				0482A67C2EA7883F004176A4 /* Dictionary.swift in Sources */,
 				0401DCFE2E91069F00D572AD /* DateFormatter.swift in Sources */,
@@ -3125,11 +3138,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "swift-syntax" */ = {
+		040E68E92EC704AD00598A5B /* XCLocalSwiftPackageReference "../../swift-syntax" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../../swift-syntax";
 		};
-		040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "MyMacrosClean" */ = {
+		040E68F42EC704C400598A5B /* XCLocalSwiftPackageReference "../../MyMacrosClean" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../MyMacrosClean;
 		};

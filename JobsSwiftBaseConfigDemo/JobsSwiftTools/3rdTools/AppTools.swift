@@ -306,7 +306,7 @@ public extension UIView {
         // 2️⃣ 第一次创建
         let container = containerView ?? self
         let label = UILabel()
-            .byText("网络初始化中...")
+            .byText("网络初始化中...".tr)
             .byFont(.systemFont(ofSize: 11, weight: .medium))
             .byTextColor(.white)
             .byNumberOfLines(2)
@@ -318,8 +318,8 @@ public extension UIView {
             .bySuspend { cfg in
                 cfg
                     .byContainer(container)
-                    .byStart(.point(CGPoint(x: Screen.width - 160,
-                                            y: Screen.height - 200))) // 起始点（可用区域坐标）
+                    .byStart(.point(CGPoint(x: Screen.width - 140,
+                                            y: Screen.height - 250))) // 起始点（可用区域坐标）
                     .byFallbackSize(CGSize(width: 140, height: 48))
                     .byDocking(.nearestEdge)
                     .byHapticOnDock(true)

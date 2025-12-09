@@ -14,7 +14,7 @@ final class PlayerRemoteVC: BaseVC {
         JobsNetworkTrafficMonitorStop()  /// 停止网络实时监听
         JobsCancelWaitNetworkDataReady() /// 停止网络数据源监听
     }
-    // MARK: - 懒加载：播放器
+    /// 播放器
     private lazy var player: BMPlayer = { [unowned self] in
         BMPlayer()
             .byResource(BMPlayerResource(
@@ -22,8 +22,7 @@ final class PlayerRemoteVC: BaseVC {
                 definitions: [
                     BMPlayerResourceDefinition(
 //                        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4".url!,
-//                        url: "http://cdn3.toronto360.tv:8081/toronto360/hd/playlist.m3u8".url!,
-                        url: "http://192.168.65.91:8000/live/jobs_test/index.m3u8".url!,
+                        url: "http://cdn3.toronto360.tv:8081/toronto360/hd/playlist.m3u8".url!, // 信号源📶：巴基斯坦电视台
                         definition: "默认"
                     )
                 ],
@@ -59,7 +58,7 @@ final class PlayerRemoteVC: BaseVC {
             }
         )
     }
-    // MARK: - 生命周期
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground

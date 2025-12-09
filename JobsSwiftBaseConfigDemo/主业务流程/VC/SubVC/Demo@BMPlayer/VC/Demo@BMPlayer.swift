@@ -8,17 +8,16 @@
 import UIKit
 import SnapKit
 
-final class BMPlayerDemoVC: BaseVC,
-                            UITableViewDataSource,
-                            UITableViewDelegate {
+final class BMPlayerDemoVC: BaseVC {
 
     private enum Row: Int, CaseIterable {
-        case local, remote, feed
+        case local, remote, feed, float
         var title: String {
             switch self {
-            case .local:  return "本地视频：welcome_video.mp4（单独播放）"
-            case .remote: return "网络视频：BigBuckBunny（单独播放）"
-            case .feed:   return "抖音风：列表预览 → 详情页独立播放"
+            case .local:  return "本地视频：welcome_video.mp4（单独播放）".tr
+            case .remote: return "网络视频：BigBuckBunny（单独播放）".tr
+            case .feed:   return "抖音风：列表预览 → 详情页独立播放".tr
+            case .float:  return "悬浮窗口播放（直播）".tr
             }
         }
     }
@@ -49,22 +48,22 @@ final class BMPlayerDemoVC: BaseVC,
         )
         tableView.byVisible(YES)
     }
+}
 
+extension BMPlayerDemoVC : UITableViewDataSource,UITableViewDelegate{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { Row.allCases.count }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.py_dequeueReusableCell(withType: UITableViewCell.self, for: indexPath)
-        var cfg = cell.defaultContentConfiguration()
-        cfg.text = Row(rawValue: indexPath.row)!.title
-        cell.contentConfiguration = cfg
-        cell.accessoryType = .disclosureIndicator
-        return cell
+        tableView.py_dequeueReusableCell(withType: UITableViewCell.self, for: indexPath)
+            .byText(Row(rawValue: indexPath.row)?.title)
+            .byAccessoryType(.disclosureIndicator)
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         switch Row(rawValue: indexPath.row)! {
-        case .local:  PlayerLocalVC().byPush(self)     // 你项目里已有 .byPush
+        case .local:  PlayerLocalVC().byPush(self)
         case .remote: PlayerRemoteVC().byPush(self)
         case .feed:   FeedListVC().byPush(self)
+        case .float:  JobsLiveFloatPlayer.shared.showRemoteLive()
         }
     }
 }
