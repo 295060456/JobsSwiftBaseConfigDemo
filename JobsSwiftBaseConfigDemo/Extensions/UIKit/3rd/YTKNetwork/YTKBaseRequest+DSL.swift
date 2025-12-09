@@ -65,22 +65,22 @@ public extension YTKBaseRequest {
     // MARK: - 回调配置（不带类型）
     /// 成功回调（request 类型是 YTKBaseRequest）
     @discardableResult
-    func bySuccess(_ block: @escaping JobsYTKCompletion) -> Self {
+    func bySuccess(_ block: @escaping JobsYTKJobsVoidBlock) -> Self {
         self.successCompletionBlock = { req in
             block(req)
         };return self
     }
     /// 失败回调（request 类型是 YTKBaseRequest）
     @discardableResult
-    func byFailure(_ block: @escaping JobsYTKCompletion) -> Self {
+    func byFailure(_ block: @escaping JobsYTKJobsVoidBlock) -> Self {
         self.failureCompletionBlock = { req in
             block(req)
         };return self
     }
     /// 一次性同时配成功 & 失败
     @discardableResult
-    func byCompletion(success: JobsYTKCompletion? = nil,
-                      failure: JobsYTKCompletion? = nil) -> Self {
+    func byCompletion(success: JobsYTKJobsVoidBlock? = nil,
+                      failure: JobsYTKJobsVoidBlock? = nil) -> Self {
         if let s = success {
             self.successCompletionBlock = { req in s(req) }
         }
@@ -92,7 +92,7 @@ public extension YTKBaseRequest {
     /// 成功回调，自动 cast 成指定子类
     @discardableResult
     func bySuccess<T: YTKBaseRequest>(_ type: T.Type,
-                                      _ block: @escaping (T) -> Void) -> Self {
+                                      _ block: @escaping jobsByTypeBlock<T>) -> Self {
         self.successCompletionBlock = { req in
             guard let casted = req as? T else { return }
             block(casted)

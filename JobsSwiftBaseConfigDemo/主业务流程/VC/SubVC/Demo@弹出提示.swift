@@ -29,7 +29,7 @@ final class ToastDemoVC: BaseVC {
         var last: UIView?
 
         @discardableResult
-        func addButton(_ title: String, action: @escaping () -> Void) -> UIButton {
+        func addButton(_ title: String, action: @escaping jobsByVoidBlock) -> UIButton {
             let btn = UIButton(type: .system)
                 .byTitle(title, for: .normal)
                 .byTitleFont(.systemFont(ofSize: 16, weight: .medium))

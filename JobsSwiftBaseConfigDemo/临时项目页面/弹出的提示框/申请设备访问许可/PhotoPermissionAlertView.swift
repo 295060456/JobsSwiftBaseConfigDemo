@@ -9,25 +9,25 @@ import SnapKit
 
 final class PhotoPermissionAlertView: UIView {
     // MARK: - Callbacks Storage
-    private var limitedHandler: (() -> Void)?
-    private var fullHandler: (() -> Void)?
-    private var denyHandler: (() -> Void)?
+    private var limitedHandler: (jobsByVoidBlock)?
+    private var fullHandler: (jobsByVoidBlock)?
+    private var denyHandler: (jobsByVoidBlock)?
 
     // MARK: - 链式配置回调（点语法）
     @discardableResult
-    func onLimited(_ handler: @escaping () -> Void) -> Self {
+    func onLimited(_ handler: @escaping jobsByVoidBlock) -> Self {
         limitedHandler = handler
         return self
     }
 
     @discardableResult
-    func onFull(_ handler: @escaping () -> Void) -> Self {
+    func onFull(_ handler: @escaping jobsByVoidBlock) -> Self {
         fullHandler = handler
         return self
     }
 
     @discardableResult
-    func onDeny(_ handler: @escaping () -> Void) -> Self {
+    func onDeny(_ handler: @escaping jobsByVoidBlock) -> Self {
         denyHandler = handler
         return self
     }

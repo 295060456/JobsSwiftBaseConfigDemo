@@ -37,22 +37,22 @@ public extension YTKBatchRequest {
     // MARK: - 回调配置
     /// 成功回调
     @discardableResult
-    func bySuccess(_ block: @escaping JobsYTKBatchCompletion) -> Self {
+    func bySuccess(_ block: @escaping JobsYTKBatchJobsVoidBlock) -> Self {
         self.successCompletionBlock = { batch in
             block(batch)
         };return self
     }
     /// 失败回调
     @discardableResult
-    func byFailure(_ block: @escaping JobsYTKBatchCompletion) -> Self {
+    func byFailure(_ block: @escaping JobsYTKBatchJobsVoidBlock) -> Self {
         self.failureCompletionBlock = { batch in
             block(batch)
         };return self
     }
     /// 同时设置成功 + 失败
     @discardableResult
-    func byCompletion(success: JobsYTKBatchCompletion? = nil,
-                      failure: JobsYTKBatchCompletion? = nil) -> Self {
+    func byCompletion(success: JobsYTKBatchJobsVoidBlock? = nil,
+                      failure: JobsYTKBatchJobsVoidBlock? = nil) -> Self {
         if let s = success {
             self.successCompletionBlock = { batch in s(batch) }
         }
@@ -61,7 +61,7 @@ public extension YTKBatchRequest {
         };return self
     }
     // MARK: - 启动
-    /// 启动批量请求，按需自动 clearCompletionBlock，避免循环引用
+    /// 启动批量请求，按需自动 clearJobsVoidBlockBlock，避免循环引用
     @discardableResult
     func byStart(autoClearCompletion: Bool = true) -> Self {
         if autoClearCompletion {

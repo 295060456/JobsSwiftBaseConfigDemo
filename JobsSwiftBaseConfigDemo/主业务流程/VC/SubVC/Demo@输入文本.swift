@@ -5,7 +5,11 @@
 //  Created by Mac on 9/29/25.
 //
 
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
 import SnapKit
 import RxSwift
 import RxCocoa
@@ -340,10 +344,9 @@ final class UITextViewDemoVC: BaseVC, HasDisposeBag {
     }
     // MARK: - 工具
     private func addSectionTitle(_ text: String) {
-        let label = UILabel()
+        stack.addArrangedSubview(UILabel()
             .byText(text)
             .byFont(.boldSystemFont(ofSize: 15))
-            .byTextColor(.secondaryLabel)
-        stack.addArrangedSubview(label)
+            .byTextColor(.secondaryLabel))
     }
 }

@@ -50,7 +50,7 @@ final class CardNode: ASDisplayNode {
     // 主题色
     private let theme: UIColor
     // Button 的回调示例
-    var onButtonTap: (() -> Void)?
+    var onButtonTap: (jobsByVoidBlock)?
 
     init(item: DemoItem, theme: UIColor) {
         self.theme = theme
@@ -279,7 +279,7 @@ final class KitchenSinkNode: ASDisplayNode {
         self.items = items
         buildsCards()
         if animated {
-            transitionLayout(withAnimation: true, shouldMeasureAsync: true, measurementCompletion: nil)
+            transitionLayout(withAnimation: true, shouldMeasureAsync: true, measurementJobsVoidBlock: nil)
         } else {
             setNeedsLayout()
         }

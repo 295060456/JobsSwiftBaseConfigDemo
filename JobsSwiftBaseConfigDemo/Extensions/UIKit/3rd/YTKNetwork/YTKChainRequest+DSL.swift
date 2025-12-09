@@ -107,7 +107,7 @@ public extension YTKChainRequest {
     }
     /// 同时设置成功 / 失败
     @discardableResult
-    func byCompletion(success: JobsYTKChainSuccess? = nil,
+    func byJobsVoidBlock(success: JobsYTKChainSuccess? = nil,
                       failure: JobsYTKChainFailure? = nil) -> Self {
         let proxy = jobs_proxy
         proxy.successBlock = success

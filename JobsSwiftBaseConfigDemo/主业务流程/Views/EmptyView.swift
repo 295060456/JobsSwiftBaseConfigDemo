@@ -32,7 +32,7 @@ class EmptyView: UIView {
 
     required init?(coder: NSCoder) { fatalError() }
 
-    var onTapRetry: (() -> Void)?
+    var onTapRetry: (jobsByVoidBlock)?
 
     @objc private func onTap() {
         onTapRetry?()

@@ -5,7 +5,11 @@
 //  Created by Jobs on 12/9/25.
 //
 
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
 import BMPlayer
 /// 全局悬浮直播播放器：不进新 VC，直接在当前界面/窗口浮出一个小窗直播
 @MainActor

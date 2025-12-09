@@ -19,7 +19,7 @@ public extension UIScrollView {
     func configRefreshHeader(component: (UIView & JobsAnimatable)? = nil,
                              container: AnyObject? = nil,
                              trigger: CGFloat = 60,
-                             action: @escaping () -> Void) -> Self{
+                             action: @escaping jobsByVoidBlock) -> Self{
         let c = component ?? JobsDefaultIndicatorView()
         let slot = JobsSlot(position: .header, view: c, trigger: trigger, container: container, action: action)
         mrk_proxy.header = slot
@@ -47,7 +47,7 @@ public extension UIScrollView {
     func configRefreshFooter(component: (UIView & JobsAnimatable)? = nil,
                              container: AnyObject? = nil,
                              trigger: CGFloat = 60,
-                             action: @escaping () -> Void) -> Self{
+                             action: @escaping jobsByVoidBlock) -> Self{
         let c = component ?? JobsDefaultIndicatorView()
         let slot = JobsSlot(position: .footer, view: c, trigger: trigger, container: container, action: action)
         mrk_proxy.footer = slot
@@ -75,7 +75,7 @@ public extension UIScrollView {
                            container: AnyObject? = nil,
                            at position: JobsPosition,
                            trigger: CGFloat = 60,
-                           action: @escaping () -> Void) -> Self {
+                           action: @escaping jobsByVoidBlock) -> Self {
         precondition(position == .left || position == .right, "SideRefresh 仅支持 .left / .right")
         let slot = JobsSlot(position: position, view: component, trigger: trigger, container: container, action: action)
         if position == .left {

@@ -5,7 +5,11 @@
 //  Created by Jobs on 11/28/25.
 //
 
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
 import QuartzCore
 // 如果 JobsTimer.swift 是在同一个 module 里，这里不用再 import；否则按你工程结构 import
 /// 带时分秒针 + 刻度数字 1～12 的模拟时钟，定时器用 JobsTimer

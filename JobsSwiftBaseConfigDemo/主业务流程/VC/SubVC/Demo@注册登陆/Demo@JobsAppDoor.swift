@@ -12,7 +12,6 @@ import UIKit
 import SnapKit
 import BMPlayer
 import AVFoundation
-
 // MARK: - 小工具
 private extension CATransform3D {
     static func m34(_ v: CGFloat) -> CATransform3D { var t = CATransform3DIdentity; t.m34 = v; return t }
@@ -21,20 +20,19 @@ private extension UIView {
     /// 给容器加一点透视（越小越夸张，-1/800 ~ -1/500 之间比较自然）
     func enablePerspective(_ m34: CGFloat = -1/800) { layer.sublayerTransform = .m34(m34) }
 }
-
 // MARK: - Demo
 final class JobsAppDoorDemoVC: BaseVC {
-
+    deinit {
+        if let o = loopObserver { NotificationCenter.default.removeObserver(o) }
+    }
     // MARK: 模型
     private enum PanelKind { case login, register }
     private enum EntranceStyle {
         case circularReveal(from: CGPoint, startRadius: CGFloat)   // 从一个小点炸开
         case springPop                                              // 弹性放大
     }
-
     // 当前展示的面板
     private var current: PanelKind = .login
-
     // MARK: UI
     private lazy var player: BMPlayer = {
         // 注意：把 "welcome_video.mp4" 放到主 bundle
@@ -57,45 +55,38 @@ final class JobsAppDoorDemoVC: BaseVC {
                 make.edges.equalToSuperview()
             }
     }()
-
     /// 居中承载面板的容器（加圆角/毛玻璃都可以放这层）
     private lazy var panelHost: UIView = {
-        let v = UIView()
-        v.backgroundColor = UIColor(white: 1, alpha: 0.08)
-        v.layer.cornerRadius = 14
-        v.layer.masksToBounds = true
-        v.alpha = 0
-        v.transform = CGAffineTransform(scaleX: 0.001, y: 0.001) // 进场起态（春
-        view.addSubview(v)
-        v.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.width.equalTo(view.snp.width).offset(-100)   // 屏宽-100
-            make.height.equalTo(view.snp.height).multipliedBy(0.48)
-        }
-        return v
+        UIView()
+            .byBgColor(UIColor(white: 1, alpha: 0.08))
+            .byCornerRadius(14)
+            .byAlpha(0)
+            .byTransform(CGAffineTransform(scaleX: 0.001, y: 0.001)) // 进场起态（春
+            .byAddTo(view) { [unowned self] make in
+                make.center.equalToSuperview()
+                make.width.equalTo(view.snp.width).offset(-100)      // 屏宽-100
+                make.height.equalTo(view.snp.height).multipliedBy(0.48)
+            }
     }()
-
     /// 登录面板（把你真实的登录表单塞进来即可）
     private lazy var loginPanel: UIView = {
-        let v = UIView()
-        v.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.75)
-        v.layer.cornerRadius = 14
-        panelHost.addSubview(v)
-        v.snp.makeConstraints { $0.edges.equalToSuperview() }
-        return v
+        UIView()
+            .byBgColor(.systemBackground.withAlphaComponent(0.75))
+            .byCornerRadius(14)
+            .byAddTo(panelHost) { [unowned self] make in
+                make.edges.equalToSuperview()
+            }
     }()
-
     /// 注册面板（同理，塞你自己的注册表单）
     private lazy var registerPanel: UIView = {
-        let v = UIView()
-        v.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.75)
-        v.layer.cornerRadius = 14
-        v.isHidden = true
-        panelHost.addSubview(v)
-        v.snp.makeConstraints { $0.edges.equalToSuperview() }
-        return v
+        UIView()
+            .byBgColor(.systemBackground.withAlphaComponent(0.75))
+            .byCornerRadius(14)
+            .byHidden(YES)
+            .byAddTo(panelHost) { [unowned self] make in
+                make.edges.equalToSuperview()
+            }
     }()
-
     /// 右下角客服按钮（与 OC 的 alpha 动画保持“平行”）
 //    private lazy var customerServiceBtn: UIButton = {
 //        UIButton(type: .system)
@@ -112,17 +103,14 @@ final class JobsAppDoorDemoVC: BaseVC {
 
     private var loopObserver: NSObjectProtocol?
 
-    // MARK: 生命周期
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
-
-        _ = player
-        _ = panelHost
-        _ = loginPanel
-        _ = registerPanel
-//        _ = customerServiceBtn
-
+        player.byVisible(YES)
+        panelHost.byVisible(YES)
+        loginPanel.byVisible(YES)
+        registerPanel.byVisible(YES)
+//        customerServiceBtn.byVisible(YES)
         setupLoopPlayback()
         buildDemoSwitchButtons()   // Demo：顶部切换按钮（替换为你的真实跳转入口即可）
     }
@@ -139,16 +127,10 @@ final class JobsAppDoorDemoVC: BaseVC {
         // 如果你更想保守/平行 OC 的 spring:
         // runEntranceAnimation(style: .springPop)
     }
-
-    deinit {
-        if let o = loopObserver { NotificationCenter.default.removeObserver(o) }
-    }
-
     // MARK: 进场动画
     private func runEntranceAnimation(style: EntranceStyle) {
         // 轻透视（后面切换面板也会用到）
         panelHost.enablePerspective(-1/800)
-
         switch style {
         case let .circularReveal(from, startRadius):
             view.layoutIfNeeded()
@@ -191,7 +173,6 @@ final class JobsAppDoorDemoVC: BaseVC {
 //                           options: [.curveEaseOut]) {
 //                self.customerServiceBtn.alpha = 1
 //            }
-
         case .springPop:
             panelHost.alpha = 0
             panelHost.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
@@ -208,21 +189,17 @@ final class JobsAppDoorDemoVC: BaseVC {
 //            }
         }
     }
-
     /// 计算到四角最远距离（为圆形揭示提供终点半径）
     private func maxDistanceToCorner(from p: CGPoint, in size: CGSize) -> CGFloat {
-        let corners = [
+        [
             CGPoint(x: 0, y: 0),
             CGPoint(x: size.width, y: 0),
             CGPoint(x: 0, y: size.height),
             CGPoint(x: size.width, y: size.height)
-        ]
-        return corners.map { hypot($0.x - p.x, $0.y - p.y) }.max() ?? 0
+        ].map { hypot($0.x - p.x, $0.y - p.y) }.max() ?? 0
     }
-
     // MARK: 面板切换（与 OC 路数平行：轻 3D + 位移缩放 + 淡入淡出）
     private enum SwitchDirection { case toLeft, toRight }
-
     private func switchPanel(to target: PanelKind, direction: SwitchDirection) {
         guard target != current else { return }
 
@@ -274,7 +251,6 @@ final class JobsAppDoorDemoVC: BaseVC {
     private func make2DTransform(translateX: CGFloat, scale: CGFloat) -> CGAffineTransform {
         CGAffineTransform.identity.translatedBy(x: translateX, y: 0).scaledBy(x: scale, y: scale)
     }
-
     // MARK: 视频循环
     private func setupLoopPlayback() {
         loopObserver = NotificationCenter.default.addObserver(
@@ -285,7 +261,6 @@ final class JobsAppDoorDemoVC: BaseVC {
             av.play()
         }
     }
-
     // MARK: Demo 触发（把它换成你现有按钮/手势）
     private func buildDemoSwitchButtons() {
         let seg = UISegmentedControl(items: ["登录", "注册"])

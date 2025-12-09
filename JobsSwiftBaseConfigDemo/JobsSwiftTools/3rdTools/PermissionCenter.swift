@@ -3,7 +3,11 @@
 //  Drop-in utility for iOS system permissions
 //
 
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
 import Photos
 import AVFoundation
 import AVFAudio
@@ -29,13 +33,13 @@ public enum PermissionState {
 public final class PermissionCenter: NSObject {
     // 私有：主线程保障
     @inline(__always)
-    private static func onMain(_ block: @escaping () -> Void) {
+    private static func onMain(_ block: @escaping jobsByVoidBlock) {
         if Thread.isMainThread { block() } else { DispatchQueue.main.async { block() } }
     }
     // 统一对外入口
     public static func ensure(_ permission: SystemPermission,
                               from presenter: UIViewController?,
-                              onAuthorized: @escaping () -> Void) {
+                              onAuthorized: @escaping jobsByVoidBlock) {
         switch permission {
         case .camera:               ensureCamera(from: presenter, onAuthorized: onAuthorized)
         case .photoLibraryReadWrite:ensurePhotoLibrary(from: presenter, onAuthorized: onAuthorized)
@@ -45,7 +49,7 @@ public final class PermissionCenter: NSObject {
         }
     }
     // MARK: Camera
-    private static func ensureCamera(from presenter: UIViewController?, onAuthorized: @escaping () -> Void) {
+    private static func ensureCamera(from presenter: UIViewController?, onAuthorized: @escaping jobsByVoidBlock) {
         let status = AVCaptureDevice.authorizationStatus(for: .video)
         switch status {
         case .authorized:
@@ -61,7 +65,7 @@ public final class PermissionCenter: NSObject {
         }
     }
     // MARK: Photo Library (readWrite)
-    private static func ensurePhotoLibrary(from presenter: UIViewController?, onAuthorized: @escaping () -> Void) {
+    private static func ensurePhotoLibrary(from presenter: UIViewController?, onAuthorized: @escaping jobsByVoidBlock) {
         if #available(iOS 14, *) {
             let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
             switch status {
@@ -94,7 +98,7 @@ public final class PermissionCenter: NSObject {
         }
     }
     // MARK: Microphone  ✅ iOS 17+
-    private static func ensureMicrophone(from presenter: UIViewController?, onAuthorized: @escaping () -> Void) {
+    private static func ensureMicrophone(from presenter: UIViewController?, onAuthorized: @escaping jobsByVoidBlock) {
         if #available(iOS 17.0, *) {
             let p = AVAudioApplication.shared.recordPermission
             switch p {
@@ -127,7 +131,7 @@ public final class PermissionCenter: NSObject {
     }
     // MARK: Location (WhenInUse)  ✅ iOS 14+
     private static var locProxy = LocationProxy()
-    private static func ensureLocationWhenInUse(from presenter: UIViewController?, onAuthorized: @escaping () -> Void) {
+    private static func ensureLocationWhenInUse(from presenter: UIViewController?, onAuthorized: @escaping jobsByVoidBlock) {
         let status: CLAuthorizationStatus
         if #available(iOS 14.0, *) {
             status = CLLocationManager().authorizationStatus
@@ -150,7 +154,7 @@ public final class PermissionCenter: NSObject {
     }
     // MARK: Bluetooth
     private static var btProxy = BluetoothProxy()
-    private static func ensureBluetooth(from presenter: UIViewController?, onAuthorized: @escaping () -> Void) {
+    private static func ensureBluetooth(from presenter: UIViewController?, onAuthorized: @escaping jobsByVoidBlock) {
         if #available(iOS 13.1, *) {
             let auth = CBCentralManager.authorization
             switch auth {
@@ -181,10 +185,10 @@ public final class PermissionCenter: NSObject {
 // ================================== 私有代理：定位 & 蓝牙 ==================================
 private final class LocationProxy: NSObject, CLLocationManagerDelegate {
     private var manager: CLLocationManager?
-    private var completion: ((Bool) -> Void)?
+    private var jobsByVoidBlock: ((Bool) -> Void)?
 
-    func requestWhenInUse(_ completion: @escaping (Bool)->Void) {
-        self.completion = completion
+    func requestWhenInUse(_ jobsByVoidBlock: @escaping (Bool)->Void) {
+        self.jobsByVoidBlock = jobsByVoidBlock
         let m = CLLocationManager()
         self.manager = m
         m.delegate = self
@@ -203,12 +207,12 @@ private final class LocationProxy: NSObject, CLLocationManagerDelegate {
 
     private func handle(_ status: CLAuthorizationStatus) {
         switch status {
-        case .authorizedAlways, .authorizedWhenInUse: completion?(true)
-        case .denied, .restricted:                   completion?(false)
+        case .authorizedAlways, .authorizedWhenInUse: jobsByVoidBlock?(true)
+        case .denied, .restricted:                   jobsByVoidBlock?(false)
         case .notDetermined:                          return
-        @unknown default:                             completion?(false)
+        @unknown default:                             jobsByVoidBlock?(false)
         }
-        completion = nil
+        jobsByVoidBlock = nil
         manager?.delegate = nil
         manager = nil
     }
@@ -216,10 +220,10 @@ private final class LocationProxy: NSObject, CLLocationManagerDelegate {
 
 private final class BluetoothProxy: NSObject, CBCentralManagerDelegate {
     private var central: CBCentralManager?
-    private var completion: ((Bool)->Void)?
+    private var jobsByVoidBlock: ((Bool)->Void)?
 
-    func request(_ completion: @escaping (Bool)->Void) {
-        self.completion = completion
+    func request(_ jobsByVoidBlock: @escaping (Bool)->Void) {
+        self.jobsByVoidBlock = jobsByVoidBlock
         self.central = CBCentralManager(delegate: self, queue: nil,
                                         options: [CBCentralManagerOptionShowPowerAlertKey: false])
     }
@@ -231,8 +235,8 @@ private final class BluetoothProxy: NSObject, CBCentralManagerDelegate {
         } else {
             granted = (central.state != .unauthorized && central.state != .unsupported)
         }
-        completion?(granted)
-        completion = nil
+        jobsByVoidBlock?(granted)
+        jobsByVoidBlock = nil
         self.central?.delegate = nil
         self.central = nil
     }

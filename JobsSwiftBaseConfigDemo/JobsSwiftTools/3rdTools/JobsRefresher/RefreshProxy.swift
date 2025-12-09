@@ -1,4 +1,8 @@
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
 
 @MainActor
 final class JobsProxy: NSObject {
@@ -43,9 +47,8 @@ final class JobsSlot {
     let position: JobsPosition
     let view: (UIView & JobsAnimatable)
     let trigger: CGFloat
-    var action: (() -> Void)?
+    var action: (jobsByVoidBlock)?
     weak var container: AnyObject?
-
     // —— 行为开关 —— //
     /// 结束刷新：指示视图先退场，再让内容区回位
     var retreatAhead: Bool = true
@@ -67,7 +70,7 @@ final class JobsSlot {
          view: (UIView & JobsAnimatable),
          trigger: CGFloat,
          container: AnyObject?,
-         action: @escaping () -> Void) {
+         action: @escaping jobsByVoidBlock) {
         self.position = position
         self.view = view
         self.trigger = trigger
@@ -215,7 +218,6 @@ final class JobsSlot {
             case .right:  return CGAffineTransform(translationX:  h, y: 0)
             }
         }()
-
         // A 段：指示视图先退场（不动 contentInset）
         UIView.animate(withDuration: retreatAnimDuration,
                        delay: 0,
@@ -260,7 +262,6 @@ final class JobsSlot {
         case .footer: inset.bottom -= view.heightOrWidth
         case .left:   inset.left   -= view.heightOrWidth
         case .right:  inset.right  -= view.heightOrWidth
-        }
-        return inset
+        };return inset
     }
 }

@@ -148,7 +148,7 @@ final class AFDemoVC: UIViewController {
                 let fake = Data(repeating: 0xFF, count: 200_000)
                 api.uploadAvatar(.uploadAvatar(fake), imageData: fake, progress: { [weak self] p in
                     self?.show(title: "⬆️ 上传进度", body: String(format: "%.1f%%", p * 100))
-                }, completion: { [weak self] r in
+                }, jobsByVoidBlock: { [weak self] r in
                     guard let self else { return }
                     switch r {
                     case .success(let data):
@@ -177,7 +177,7 @@ final class AFDemoVC: UIViewController {
                 show(title: "DOWNLOAD /image/png → 下载中…")
                 api.download(.downloadPNG, progress: { [weak self] p in
                     self?.show(title: "⬇️ PNG 进度", body: String(format: "%.1f%%", p * 100))
-                }, completion: { [weak self] r in
+                }, jobsByVoidBlock: { [weak self] r in
                     guard let self else { return }
                     switch r {
                     case .success(let url):
@@ -206,7 +206,7 @@ final class AFDemoVC: UIViewController {
                 show(title: "DOWNLOAD /bytes/524288 → 下载中…")
                 api.download(.downloadBytes(size: 524_288), progress: { [weak self] p in
                     self?.show(title: "⬇️ BYTES 进度", body: String(format: "%.1f%%", p * 100))
-                }, completion: { [weak self] r in
+                }, jobsByVoidBlock: { [weak self] r in
                     guard let self else { return }
                     switch r {
                     case .success(let url):

@@ -31,7 +31,7 @@ final class SafetyPushDemoVC: BaseVC {
                     .byData("https://www.baidu.com")
                     .byDirection(.fromTop)      // 👈 上
                     .byPush(self)
-                    .byCompletion { print("❤️结束❤️ fromTop") }
+                    .byJobsVoidBlock { print("❤️结束❤️ fromTop") }
             }
             .byCornerDot(diameter: 8, offset: .init(horizontal: -4, vertical: 4))
             .byCornerBadgeText("TOP") { cfg in
@@ -69,7 +69,7 @@ final class SafetyPushDemoVC: BaseVC {
                     .byData("https://www.baidu.com")
                     .byDirection(.fromBottom)   // 👈 下
                     .byPush(self)
-                    .byCompletion { print("❤️结束❤️ fromBottom") }
+                    .byJobsVoidBlock { print("❤️结束❤️ fromBottom") }
             }
             .byCornerDot(diameter: 8, offset: .init(horizontal: -4, vertical: 4))
             .byCornerBadgeText("BOTTOM") { cfg in
@@ -107,7 +107,7 @@ final class SafetyPushDemoVC: BaseVC {
                     .byData("https://www.baidu.com")
                     .byDirection(.fromLeft)     // 👈 左
                     .byPush(self)
-                    .byCompletion { print("❤️结束❤️ fromLeft") }
+                    .byJobsVoidBlock { print("❤️结束❤️ fromLeft") }
             }
             .byCornerDot(diameter: 8, offset: .init(horizontal: -4, vertical: 4))
             .byCornerBadgeText("LEFT") { cfg in
@@ -145,7 +145,7 @@ final class SafetyPushDemoVC: BaseVC {
                     .byData("https://www.baidu.com")
                     .byDirection(.fromRight)    // 👈 右（等同系统默认）
                     .byPush(self)
-                    .byCompletion { print("❤️结束❤️ fromRight") }
+                    .byJobsVoidBlock { print("❤️结束❤️ fromRight") }
             }
             .byCornerDot(diameter: 8, offset: .init(horizontal: -4, vertical: 4))
             .byCornerBadgeText("RIGHT") { cfg in

@@ -249,7 +249,7 @@ final class FriendsVC: BaseVC {
                         print("回来了 id=\(id)")
                     }
                     .byPush(self)           // 自带防重入，连点不重复
-                    .byCompletion{
+                    .byJobsVoidBlock{
                         print("❤️结束❤️")
                     }
             }

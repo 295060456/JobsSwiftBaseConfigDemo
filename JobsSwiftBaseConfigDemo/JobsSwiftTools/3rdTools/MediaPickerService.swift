@@ -3,7 +3,11 @@
 //  Camera / Photos / Video record
 //
 
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
 import Photos
 import PhotosUI
 import AVFoundation
@@ -22,7 +26,7 @@ public final class MediaPickerService: NSObject {
                 };return
             }
             onMain {
-                let proxy = CameraProxy(allowsEditing: allowsEditing, completion: onImage)
+                let proxy = CameraProxy(allowsEditing: allowsEditing, jobsByVoidBlock: onImage)
                 let picker = UIImagePickerController()
                 picker.sourceType = .camera
                 picker.allowsEditing = allowsEditing
@@ -43,7 +47,7 @@ public final class MediaPickerService: NSObject {
                     var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
                     config.selectionLimit = maxSelection <= 0 ? 0 : maxSelection // 0=不限制
                     config.filter = imagesOnly ? .images : .any(of: [.images, .livePhotos, .videos])
-                    let proxy = PHPickerProxy(completion: onImages)
+                    let proxy = PHPickerProxy(jobsByVoidBlock: onImages)
                     let picker = PHPickerViewController(configuration: config)
                     picker.delegate = proxy
                     attachProxy(proxy, to: presenter)
@@ -136,17 +140,17 @@ public final class MediaPickerService: NSObject {
 // 相机拍照
 private final class CameraProxy: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     let allowsEditing: Bool
-    let completion: (UIImage) -> Void
+    let jobsByVoidBlock: (UIImage) -> Void
 
-    init(allowsEditing: Bool, completion: @escaping (UIImage)->Void) {
+    init(allowsEditing: Bool, jobsByVoidBlock: @escaping (UIImage)->Void) {
         self.allowsEditing = allowsEditing
-        self.completion = completion
+        self.jobsByVoidBlock = jobsByVoidBlock
     }
 
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let key: UIImagePickerController.InfoKey = allowsEditing ? .editedImage : .originalImage
-        if let img = info[key] as? UIImage { completion(img) }
+        if let img = info[key] as? UIImage { jobsByVoidBlock(img) }
         picker.dismiss(animated: true)
     }
 
@@ -157,13 +161,13 @@ private final class CameraProxy: NSObject, UIImagePickerControllerDelegate, UINa
 // iOS 14+ 相册多选
 @available(iOS 14, *)
 private final class PHPickerProxy: NSObject, PHPickerViewControllerDelegate {
-    let completion: ([UIImage]) -> Void
-    init(completion: @escaping ([UIImage])->Void) { self.completion = completion }
+    let jobsByVoidBlock: ([UIImage]) -> Void
+    init(jobsByVoidBlock: @escaping ([UIImage])->Void) { self.jobsByVoidBlock = jobsByVoidBlock }
 
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
 
-        guard !results.isEmpty else { completion([]); return }
+        guard !results.isEmpty else { jobsByVoidBlock([]); return }
 
         var images = [UIImage]()
         let group = DispatchGroup()
@@ -179,39 +183,39 @@ private final class PHPickerProxy: NSObject, PHPickerViewControllerDelegate {
             }
         }
 
-        group.notify(queue: .main) { [completion] in completion(images) }
+        group.notify(queue: .main) { [jobsByVoidBlock] in jobsByVoidBlock(images) }
     }
 }
 // 老系统相册（单选）
 private final class LegacyLibraryProxy: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     let acceptsImagesOnly: Bool
-    let completion: (UIImage?) -> Void
+    let jobsByVoidBlock: (UIImage?) -> Void
 
-    init(acceptsImagesOnly: Bool, completion: @escaping (UIImage?) -> Void) {
+    init(acceptsImagesOnly: Bool, jobsByVoidBlock: @escaping (UIImage?) -> Void) {
         self.acceptsImagesOnly = acceptsImagesOnly
-        self.completion = completion
+        self.jobsByVoidBlock = jobsByVoidBlock
     }
 
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let img = info[.originalImage] as? UIImage
-        completion(img)
+        jobsByVoidBlock(img)
         picker.dismiss(animated: true)
     }
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        completion(nil)
+        jobsByVoidBlock(nil)
         picker.dismiss(animated: true)
     }
 }
 // 录像
 private final class VideoCameraProxy: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    let completion: (URL) -> Void
-    init(completion: @escaping (URL) -> Void) { self.completion = completion }
+    let jobsByVoidBlock: (URL) -> Void
+    init(jobsByVoidBlock: @escaping (URL) -> Void) { self.jobsByVoidBlock = jobsByVoidBlock }
 
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let url = info[.mediaURL] as? URL { completion(url) }
+        if let url = info[.mediaURL] as? URL { jobsByVoidBlock(url) }
         picker.dismiss(animated: true)
     }
 

@@ -5,7 +5,11 @@
 //  Created by Jobs on 11/28/25.
 //
 
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
 import ObjectiveC
 // MARK: - 公共配置体
 @available(iOS 15.0, *)

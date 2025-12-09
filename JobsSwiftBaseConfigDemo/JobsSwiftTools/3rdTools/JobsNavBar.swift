@@ -6,12 +6,11 @@
 //
 
 #if os(OSX)
-    import AppKit
+import AppKit
+#elseif os(iOS) || os(tvOS)
+import UIKit
 #endif
 
-#if os(iOS) || os(tvOS)
-    import UIKit
-#endif
 import SnapKit
 import WebKit
 
@@ -60,11 +59,11 @@ public class JobsNavBar: UIView {
         }
     }
 
-    public var titleProvider: TitleProvider? {
+    public var titleProvider: JobsRetAttributedString? {
         didSet { refreshTitle() }
     }
 
-    public var onBack: BackHandler?
+    public var onBack: jobsByVoidBlock?
     // ===== 懒加载子视图（外部可直接链式修改，比如 navBar.hairline.byVisible(true））=====
     public private(set) lazy var backgroundView: UIView = {
         UIView()

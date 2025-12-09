@@ -5,7 +5,11 @@
 //  Created by Jobs on 11/29/25.
 //
 
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
 import SnapKit
 
 final class SlideToUnlockView: UIView {
@@ -15,7 +19,7 @@ final class SlideToUnlockView: UIView {
         case rightToLeft   // 可选：从右往左
     }
     /// 滑到终点时回调（只在成功解锁时调用）
-    var onUnlock: (() -> Void)?
+    var onUnlock: (jobsByVoidBlock)?
     /// 解锁方向（默认从左往右）
     var direction: Direction = .leftToRight {
         didSet {
@@ -291,7 +295,7 @@ final class SlideToUnlockView: UIView {
 extension SlideToUnlockView {
 
     @discardableResult
-    func byOnUnlock(_ handler: @escaping () -> Void) -> Self {
+    func byOnUnlock(_ handler: @escaping jobsByVoidBlock) -> Self {
         self.onUnlock = handler
         return self
     }

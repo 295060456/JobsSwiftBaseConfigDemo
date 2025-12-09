@@ -181,6 +181,14 @@
 		045376632EB0B5BF00133F73 /* FeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045376622EB0B5BE00133F73 /* FeedModel.swift */; };
 		045376652EB0B5D600133F73 /* FeedVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045376642EB0B5D500133F73 /* FeedVideoCell.swift */; };
 		045376672EB0B5E100133F73 /* PlayerCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045376662EB0B5E100133F73 /* PlayerCenter.swift */; };
+		04544E7C2EE8202600E7C02B /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E7B2EE8202400E7C02B /* NumberFormatter.swift */; };
+		04544E7F2EE820BD00E7C02B /* NumberFormatter+DSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E7E2EE820BA00E7C02B /* NumberFormatter+DSL.swift */; };
+		04544E812EE825EF00E7C02B /* CATransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E802EE825EE00E7C02B /* CATransition.swift */; };
+		04544E832EE8272100E7C02B /* CAAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E822EE8272000E7C02B /* CAAnimation.swift */; };
+		04544E852EE8281B00E7C02B /* CAMediaTiming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E842EE8281A00E7C02B /* CAMediaTiming.swift */; };
+		04544E872EE82A4F00E7C02B /* CABasicAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E862EE82A4E00E7C02B /* CABasicAnimation.swift */; };
+		04544E892EE82A9500E7C02B /* CAPropertyAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E882EE82A9400E7C02B /* CAPropertyAnimation.swift */; };
+		04544E8B2EE82B1000E7C02B /* CAKeyframeAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E8A2EE82B0F00E7C02B /* CAKeyframeAnimation.swift */; };
 		045920E42E84EC73008C8D6A /* SwiftTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E32E84EC72008C8D6A /* SwiftTools.swift */; };
 		045920E62E84F389008C8D6A /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E52E84F386008C8D6A /* CALayer.swift */; };
 		045920EA2E84FD82008C8D6A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E92E84FD77008C8D6A /* String.swift */; };
@@ -615,6 +623,14 @@
 		045376622EB0B5BE00133F73 /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
 		045376642EB0B5D500133F73 /* FeedVideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedVideoCell.swift; sourceTree = "<group>"; };
 		045376662EB0B5E100133F73 /* PlayerCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCenter.swift; sourceTree = "<group>"; };
+		04544E7B2EE8202400E7C02B /* NumberFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormatter.swift; sourceTree = "<group>"; };
+		04544E7E2EE820BA00E7C02B /* NumberFormatter+DSL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+DSL.swift"; sourceTree = "<group>"; };
+		04544E802EE825EE00E7C02B /* CATransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CATransition.swift; sourceTree = "<group>"; };
+		04544E822EE8272000E7C02B /* CAAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAAnimation.swift; sourceTree = "<group>"; };
+		04544E842EE8281A00E7C02B /* CAMediaTiming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAMediaTiming.swift; sourceTree = "<group>"; };
+		04544E862EE82A4E00E7C02B /* CABasicAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CABasicAnimation.swift; sourceTree = "<group>"; };
+		04544E882EE82A9400E7C02B /* CAPropertyAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAPropertyAnimation.swift; sourceTree = "<group>"; };
+		04544E8A2EE82B0F00E7C02B /* CAKeyframeAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAKeyframeAnimation.swift; sourceTree = "<group>"; };
 		045920E32E84EC72008C8D6A /* SwiftTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTools.swift; sourceTree = "<group>"; };
 		045920E52E84F386008C8D6A /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
 		045920E92E84FD77008C8D6A /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -871,7 +887,6 @@
 		C564FC822E0959640079B5C1 /* UITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
 		C564FC832E0959640079B5C1 /* UIPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIPickerView.swift; sourceTree = "<group>"; };
 		C564FC842E0959640079B5C1 /* UINavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationBar.swift; sourceTree = "<group>"; };
-		C564FC852E0959640079B5C1 /* UIKitModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIKitModel.swift; sourceTree = "<group>"; };
 		C564FCA92E09597C0079B5C1 /* VC2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VC2.swift; sourceTree = "<group>"; };
 		C564FCAA2E09597C0079B5C1 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C564FCAE2E0959990079B5C1 /* CollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionCell.swift; sourceTree = "<group>"; };
@@ -1260,6 +1275,15 @@
 			path = "Demo@BMPlayer";
 			sourceTree = "<group>";
 		};
+		04544E7D2EE820B500E7C02B /* NumberFormatter */ = {
+			isa = PBXGroup;
+			children = (
+				04544E7B2EE8202400E7C02B /* NumberFormatter.swift */,
+				04544E7E2EE820BA00E7C02B /* NumberFormatter+DSL.swift */,
+			);
+			path = NumberFormatter;
+			sourceTree = "<group>";
+		};
 		045920E22E84EC64008C8D6A /* 3rdTools */ = {
 			isa = PBXGroup;
 			children = (
@@ -1281,7 +1305,6 @@
 				04468F8F2E9E4D7000677000 /* PermissionCenter.swift */,
 				0440B5D92EB2FFAC005DBE91 /* keys.swift */,
 				0401DD052E9115CD00D572AD /* JobsToast.swift */,
-				C564FC852E0959640079B5C1 /* UIKitModel.swift */,
 				C564FC2D2E0958E80079B5C1 /* HUDHelper.swift */,
 			);
 			path = 3rdTools;
@@ -1664,6 +1687,7 @@
 		04D0C9802E8D19FC00580020 /* iOS.SDK */ = {
 			isa = PBXGroup;
 			children = (
+				04544E7D2EE820B500E7C02B /* NumberFormatter */,
 				0411F2352EDFEC0E00F1552C /* DateFormatter */,
 				04E821D02EDFEFD100570A4C /* NSObject */,
 				0411F1A22EDEF53800F1552C /* String */,
@@ -1681,6 +1705,12 @@
 				0411F1822EDEEECD00F1552C /* UIViewController */,
 				04E821F62EE00DD300570A4C /* UIWindow */,
 				04E821EC2EE00C0300570A4C /* URL */,
+				04544E8A2EE82B0F00E7C02B /* CAKeyframeAnimation.swift */,
+				04544E882EE82A9400E7C02B /* CAPropertyAnimation.swift */,
+				04544E862EE82A4E00E7C02B /* CABasicAnimation.swift */,
+				04544E842EE8281A00E7C02B /* CAMediaTiming.swift */,
+				04544E822EE8272000E7C02B /* CAAnimation.swift */,
+				04544E802EE825EE00E7C02B /* CATransition.swift */,
 				04A245902ECD7373009649E8 /* Array.swift */,
 				042F958D2EB5C477005DE735 /* Bundle.swift */,
 				043283672EC458C10031CDD6 /* CAGradientLayer.swift */,
@@ -2153,7 +2183,7 @@
 				C564FBD82E09580B0079B5C1 /* Frameworks */,
 				C564FBD92E09580B0079B5C1 /* Resources */,
 				04CF02912E8A3DE40083ACF0 /* ShellScript */,
-				BDB45CFED13B7279234D7A99 /* [CP] Copy Pods Resources */,
+				7896F94D2A156DB61DAEA4B1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2330,7 +2360,7 @@
 			shellScript = "
 ";
 		};
-		BDB45CFED13B7279234D7A99 /* [CP] Copy Pods Resources */ = {
+		7896F94D2A156DB61DAEA4B1 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2441,6 +2471,7 @@
 				0487AADA2E840CB200B5D307 /* UIColor.swift in Sources */,
 				04E8D6232E8E884500E85CDA /* BaseVC.swift in Sources */,
 				047E48F52EB36AC600881898 /* MTLSamplerDescriptor.swift in Sources */,
+				04544E892EE82A9500E7C02B /* CAPropertyAnimation.swift in Sources */,
 				0411F2152EDFE63800F1552C /* UIView+右上角角标.swift in Sources */,
 				045921042E854FE1008C8D6A /* UInt32.swift in Sources */,
 				0477D96F2E8B8479002C6427 /* UIApplication.swift in Sources */,
@@ -2503,6 +2534,7 @@
 				04468F8E2E9E4B6300677000 /* Demo@相册选择.swift in Sources */,
 				0477D9772E8B9381002C6427 /* UIResponder.swift in Sources */,
 				04E821CF2EDFEF9500570A4C /* UIGestureRecognizer+Block.swift in Sources */,
+				04544E7C2EE8202600E7C02B /* NumberFormatter.swift in Sources */,
 				0401DCFA2E90D91900D572AD /* UIWindow.swift in Sources */,
 				04468F922E9E5A5900677000 /* MediaPickerService.swift in Sources */,
 				0482A5EA2EA383B2004176A4 /* Demo@网页加载互动.swift in Sources */,
@@ -2594,6 +2626,7 @@
 				04B5B4952EC5CCCC00ED4505 /* BaseTableViewCellByDefault.swift in Sources */,
 				045376672EB0B5E100133F73 /* PlayerCenter.swift in Sources */,
 				04D0C96E2E8CD14B00580020 /* UIControl.swift in Sources */,
+				04544E8B2EE82B1000E7C02B /* CAKeyframeAnimation.swift in Sources */,
 				043283602EC4534D0031CDD6 /* CashbackRootVC.swift in Sources */,
 				04BCDC2C2EA9DB7E00382DE0 /* Demo@JobsText.swift in Sources */,
 				0477D9712E8B897D002C6427 /* Demo@支持上下左右安全Push和原路返回.swift in Sources */,
@@ -2603,6 +2636,7 @@
 				0411F1FB2EDFDB0F00F1552C /* UIButton+Kingfisher.swift in Sources */,
 				043283A92EC49FA60031CDD6 /* BRTextPickerView.swift in Sources */,
 				046786E92EB4CEFA003FE82D /* RefreshProxy.swift in Sources */,
+				04544E832EE8272100E7C02B /* CAAnimation.swift in Sources */,
 				040E68F92EC704DA00598A5B /* Demo@自定义注解.swift in Sources */,
 				0411F1B12EDEFA1100F1552C /* UITextView+监控删除键.swift in Sources */,
 				04C68D2E2ED94C5500A11F53 /* Demo@钟.swift in Sources */,
@@ -2678,10 +2712,12 @@
 				0411F1BB2EDEFD5800F1552C /* UIView+Rx.swift in Sources */,
 				0411F2172EDFE6B200F1552C /* UIView+JobsNavBar.swift in Sources */,
 				045921022E854FDA008C8D6A /* UInt16.swift in Sources */,
+				04544E852EE8281B00E7C02B /* CAMediaTiming.swift in Sources */,
 				0411F1D32EDFD1B900F1552C /* UICollectionView+空态数据占位按钮.swift in Sources */,
 				043283682EC458C20031CDD6 /* CAGradientLayer.swift in Sources */,
 				043283642EC4535F0031CDD6 /* LeftMenuCell.swift in Sources */,
 				C564FCAB2E09597C0079B5C1 /* VC2.swift in Sources */,
+				04544E7F2EE820BD00E7C02B /* NumberFormatter+DSL.swift in Sources */,
 				04CA63602EE43EB90070F339 /* UIScrollView+ESPullToRefresh.swift in Sources */,
 				0477D97F2E8BDBBC002C6427 /* Demo@倒计时.swift in Sources */,
 				04124F402EB0760D00462BE2 /* AFLogger.swift in Sources */,
@@ -2696,6 +2732,7 @@
 				04124F422EB0762900462BE2 /* AFStubURLProtocol.swift in Sources */,
 				0411F1DF2EDFD61200F1552C /* String+二维码.swift in Sources */,
 				048F447E2EB3267200BAA7EE /* CATransform3D.swift in Sources */,
+				04544E872EE82A4F00E7C02B /* CABasicAnimation.swift in Sources */,
 				047E48DA2EB3562C00881898 /* PNPlayerDemoVC.swift in Sources */,
 				0411F2052EDFE29200F1552C /* UIButton+Subtitle.swift in Sources */,
 				0440B55A2EB23846005DBE91 /* Demo@LiveChat.swift in Sources */,
@@ -2716,6 +2753,7 @@
 				0411F2212EDFE7DB00F1552C /* UIView+Lottie.swift in Sources */,
 				04124F3E2EB075EA00462BE2 /* AFRoute.swift in Sources */,
 				C564FC952E0959640079B5C1 /* UIView.swift in Sources */,
+				04544E812EE825EF00E7C02B /* CATransition.swift in Sources */,
 				04A8C54C2E8AA94D00381701 /* Demo@按钮.swift in Sources */,
 				046CF9772E967E6C005A88B4 /* URL.swift in Sources */,
 				047E9A712EB618B300F58923 /* Demo@Lunar.swift in Sources */,

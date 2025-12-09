@@ -128,10 +128,8 @@ final class LiveCommentDemoVC: BaseVC {
         let new = LiveMsg(text: text)
         let newRow = data.count
         data.append(new)
-
         // 插入前：先算一次底部 inset，避免插入瞬间被遮
         updateBottomInsetForAccessory()
-
         tableView.performBatchUpdates({
             tableView.insertRows(at: [IndexPath(row: newRow, section: 0)], with: .none)
         }, completion: { [weak self] _ in

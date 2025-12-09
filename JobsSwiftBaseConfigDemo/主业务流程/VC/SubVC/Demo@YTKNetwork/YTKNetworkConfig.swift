@@ -6,11 +6,9 @@
 //
 
 #if os(OSX)
-    import AppKit
-#endif
-
-#if os(iOS) || os(tvOS)
-    import UIKit
+import AppKit
+#elseif os(iOS) || os(tvOS)
+import UIKit
 #endif
 import YTKNetwork
 /// Demo 用：如果你项目里已经在 AppDelegate 配过，就不用这个

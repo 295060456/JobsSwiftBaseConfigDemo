@@ -4,6 +4,11 @@
 //
 //  Created by Mac on 10/30/25.
 //
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
+import UIKit
+#endif
 
 public enum AppKeys {
     /// 网易易盾KEY（原：#ifndef 网易易盾KEY / #define 网易易盾KEY @""）

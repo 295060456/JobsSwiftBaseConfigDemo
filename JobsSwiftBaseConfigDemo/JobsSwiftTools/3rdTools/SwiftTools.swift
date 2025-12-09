@@ -12,6 +12,8 @@ import AppKit
 #elseif os(iOS) || os(tvOS)
 import UIKit
 #endif
+
+import CoreText
 // MARK: - 扩展 Int 与 JXAuthCode 的比较
 public func ==(lhs: Int?, rhs: JXAuthCode) -> Bool {
     guard let lhs = lhs else { return false }
@@ -80,8 +82,7 @@ enum JobsFormatters {
                 let trimmed = str.drop(while: { $0 == "0" })
                 if trimmed.first == "." { return "0" + trimmed }
                 return trimmed.isEmpty ? "0" : String(trimmed)
-            }
-            return str.isEmpty ? "" : str
+            };return str.isEmpty ? "" : str
         }
     }
     /// 中国大陆手机号 3-4-4 分组（仅清洗与分组，不做合法号段校验）
@@ -101,8 +102,7 @@ enum JobsFormatters {
                 let p2 = String(digits.dropFirst(3).prefix(4))
                 let p3 = String(digits.dropFirst(7).prefix(4))
                 parts = [p1, p2, p3].filter { !$0.isEmpty }
-            }
-            return parts.joined(separator: " ")
+            };return parts.joined(separator: " ")
         }
     }
 }
@@ -251,8 +251,7 @@ public enum JobsLog {
                 }
             }.joined(separator: ", ")
             return "{\(body)}"
-        }
-        return decodeUnicodeEscapes(String(describing: x))
+        };return decodeUnicodeEscapes(String(describing: x))
     }
     // 更稳的 Unicode 反转义：支持 \uXXXX / \UXXXXXXXX，且能处理整段文本
     private static func decodeUnicodeEscapes(_ s: String) -> String {
@@ -265,8 +264,7 @@ public enum JobsLog {
         // "Any-Hex/Java" 会把 \uXXXX / \UXXXXXXXX 都转为真实字符
         if CFStringTransform(ms, nil, "Any-Hex/Java" as CFString, true) {
             return ms as String
-        }
-        return s
+        };return s
     }
     // ---------- JSON Utilities ----------
     private static func toJSONString(_ any: Any, pretty: Bool, decodeUnicode: Bool) -> String? {
@@ -288,10 +286,8 @@ public enum JobsLog {
                    let js = String(data: out, encoding: .utf8) {
                     return decodeUnicode ? decodeUnicodeEscapes(js) : js
                 }
-            }
-            return nil
-        }
-        return nil
+            };return nil
+        };return nil
     }
 
     private static func tryJSONFromContainers(_ any: Any, pretty: Bool) -> String? {
@@ -309,8 +305,7 @@ public enum JobsLog {
            let d = try? JSONSerialization.data(withJSONObject: arr, options: options),
            let s = String(data: d, encoding: .utf8) {
             return decodeUnicodeEscapes(s)
-        }
-        return nil
+        };return nil
     }
     // ---------- Object → JSON-ready（反射，防循环） ----------
     private static func toJSONStringFromObject(_ any: Any, pretty: Bool, maxDepth: Int) -> String? {
@@ -321,8 +316,7 @@ public enum JobsLog {
         if let d = try? JSONSerialization.data(withJSONObject: jsonReady, options: opts),
            let s = String(data: d, encoding: .utf8) {
             return decodeUnicodeEscapes(s)
-        }
-        return nil
+        };return nil
     }
     // ✅ 用 Mirror 正确解 Optional
     private static func unwrapOptional(_ value: Any) -> (isNil: Bool, unwrapped: Any?) {
@@ -388,8 +382,7 @@ public enum JobsLog {
                 let k = kv.indices.contains(0) ? kv[0] : "<key>"
                 let v = kv.indices.contains(1) ? kv[1] : NSNull()
                 dict[String(describing: k)] = toJSONReady(v, depth: depth - 1, visited: &visited)
-            }
-            return dict
+            };return dict
         }
         // 5) Enum（记录类型、case、关联值）
         if mirror.displayStyle == .enum {
@@ -399,8 +392,7 @@ public enum JobsLog {
                 out["_value"] = toJSONReady(first.value, depth: depth - 1, visited: &visited)
             } else {
                 out["_case"] = "<empty>"
-            }
-            return out
+            };return out
         }
         // 6) Class/Struct：采集属性；Class 做循环检测
         var props: [String: Any] = [:]
@@ -420,8 +412,7 @@ public enum JobsLog {
             }
             cur = m.superclassMirror
             depthNext = depthNext - 1     // 防止超深的继承链
-        }
-        return ["_type": String(describing: type(of: value)), "_props": props]
+        };return ["_type": String(describing: type(of: value)), "_props": props]
     }
 }
 // MARK: - 全局函数（免前缀）
@@ -441,21 +432,21 @@ public func log(_ items: Any?...,
 }
 // MARK: - DEBUG 模式下才允许做的事
 @inline(__always)
-func debugOnly(_ work: @escaping @MainActor () -> Void) {
+func debugOnly(_ work: @escaping JobsByMAVoidBlock) {
     #if DEBUG
     Task { @MainActor in work() }
     #endif
 }
 // MARK: - 主线程
 @inline(__always)
-func onMain(_ block: @escaping @MainActor () -> Void) {
+func onMain(_ block: @escaping JobsByMAVoidBlock) {
     Task { @MainActor in
         block()
     }
 }
 // MARK: - 同步拿返回值
 @discardableResult
-func onMainSync<T>(_ work: () -> T) -> T {
+func onMainSync<T>(_ work: JobsRetTByVoidBlock<T>) -> T {
     if Thread.isMainThread { return work() }
     var result: T!
     DispatchQueue.main.sync { result = work() }
@@ -474,7 +465,6 @@ extension CATextLayerAlignmentMode {
         }
     }
 }
-import CoreText
 
 @inline(__always)
 func jobsCTTextWidth(_ text: String, font: UIFont) -> CGFloat {

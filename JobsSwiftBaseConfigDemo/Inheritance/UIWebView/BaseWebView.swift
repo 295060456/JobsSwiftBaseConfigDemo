@@ -5,7 +5,11 @@
 //  Created by Mac on 10/20/25.
 //
 
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
 import WebKit
 import UniformTypeIdentifiers
 import SafariServices
@@ -51,7 +55,7 @@ private final class WeakScriptMessageHandlerWithReply: NSObject, WKScriptMessage
     }
     func userContentController(_ userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage,
-                               replyHandler: @escaping (Any?, String?) -> Void) {
+                               replyHandler: @escaping jobsByAnyStringBlock) {
         target?.userContentController(userContentController, didReceive: message, replyHandler: replyHandler)
     }
 }
@@ -78,7 +82,7 @@ public final class BaseWebView: UIView {
     public var disableSelectionAndCallout: Bool = false
     public var injectDarkStylePatch: Bool = false
     public var isInspectableEnabled: Bool = true
-    private var uaSuffixProvider: UASuffixProvider?
+    private var uaSuffixProvider: JobsRetStringByURLRequestBlock?
     private var lastAppliedUASuffix: String?
     private func normalizeSuffix(_ s: String?) -> String? {
         guard let t = s?.trimmingCharacters(in: .whitespacesAndNewlines), !t.isEmpty else { return nil }
@@ -100,17 +104,17 @@ public final class BaseWebView: UIView {
     public struct MobileBridgeConfig {
         public var injectShim: Bool = true                             // 无前端桥时的兜底
         public var tokenProvider: (@Sendable () async -> String?)?     // 异步 token
-        public var onNavigateHome:    (() -> Void)? = nil
-        public var onNavigateLogin:   (() -> Void)? = nil
-        public var onNavigateDeposit: (() -> Void)? = nil
-        public var onCloseWebView:    (() -> Void)? = nil
+        public var onNavigateHome:    (jobsByVoidBlock)? = nil
+        public var onNavigateLogin:   (jobsByVoidBlock)? = nil
+        public var onNavigateDeposit: (jobsByVoidBlock)? = nil
+        public var onCloseWebView:    (jobsByVoidBlock)? = nil
         public var onShowToast:       ((String) -> Void)? = nil
         public var onUnknownAction: ((String, [String: Any]) -> Void)? = nil
         public init() {}
         public static func defaults() -> Self { .init() }
     }
     private let mobileBridgeName = "iOSBridge"
-    private var mobileActionHandlers: [String: MobileActionHandler] = [:]
+    private var mobileActionHandlers: [String: MobileActionBlock] = [:]
     private var mobileConfig: MobileBridgeConfig = .defaults()
     /// 宿主 VC（弱引用）+ 统一取用口，避免 VC↔view 闭环
     public weak var presenter: UIViewController?
@@ -135,7 +139,7 @@ public final class BaseWebView: UIView {
         return w
     }()
     public private(set) var progressView = UIProgressView(progressViewStyle: .default)
-    private var handlers: [String: NativeHandler] = [:]
+    private var handlers: [String: NativeBlock] = [:]
     private let bridgeName = "bridge"
     private let consoleName = "console"
     private var kvoEstimatedProgress: NSKeyValueObservation?
@@ -256,8 +260,7 @@ public final class BaseWebView: UIView {
         while let n = r?.next {
             if let vc = n as? UIViewController { return vc }
             r = n
-        }
-        return nil
+        };return nil
     }
     // ===== Public API =====
     @discardableResult @MainActor
@@ -268,16 +271,14 @@ public final class BaseWebView: UIView {
         } else {
             let req = URLRequest(url: url)
             webView.load(makeNoCache(req))
-        }
-        return self
+        };return self
     }
     @discardableResult @MainActor
     public func loadBy(_ urlString: String) -> Self {
         if let url = URL(string: urlString) {
             let req = URLRequest(url: url)
             webView.load(makeNoCache(req))
-        }
-        return self
+        };return self
     }
     @discardableResult @MainActor
     public func loadBy(_ url: URL,
@@ -315,7 +316,7 @@ public final class BaseWebView: UIView {
         return self
     }
 
-    public func on(_ name: String, handler: @escaping NativeHandler) { handlers[name] = handler }
+    public func on(_ name: String, handler: @escaping NativeBlock) { handlers[name] = handler }
     public func off(_ name: String) { handlers.removeValue(forKey: name) }
     @MainActor
     public func emitEvent(_ name: String, payload: Any?) {
@@ -325,7 +326,7 @@ public final class BaseWebView: UIView {
     @MainActor
     public func callJS(function: String,
                        args: [Any] = [],
-                       completion: (@Sendable (Any?, Error?) -> Void)? = nil) {
+                       completion: JobsByAnyErrMASendableBlock? = nil) {
         let jsArgs = args.map(Self.toJSONLiteral).joined(separator: ",")
         webView.jobsEval("\(function)(\(jsArgs));", completion: completion)
     }
@@ -376,7 +377,7 @@ public final class BaseWebView: UIView {
         return try Self.decodeJSResult(raw, as: T.self, decoder: decoder)
     }
     @MainActor
-    public func setCookies(_ cookies: [HTTPCookie], completion: (() -> Void)? = nil) {
+    public func setCookies(_ cookies: [HTTPCookie], completion: (jobsByVoidBlock)? = nil) {
         let store = webView.configuration.websiteDataStore.httpCookieStore
         let group = DispatchGroup()
         cookies.forEach { c in group.enter(); store.setCookie(c) { group.leave() } }
@@ -402,7 +403,7 @@ public final class BaseWebView: UIView {
         return self
     }
     @discardableResult
-    public func registerMobileAction(_ name: String, _ handler: @escaping MobileActionHandler) -> Self {
+    public func registerMobileAction(_ name: String, _ handler: @escaping MobileActionBlock) -> Self {
         mobileActionHandlers[name] = handler
         return self
     }
@@ -427,19 +428,19 @@ public extension BaseWebView.MobileBridgeConfig {
         var c = self; c.onShowToast = f; return c
     }
     @discardableResult
-    func byNavigateHome(_ f: @escaping () -> Void) -> Self {
+    func byNavigateHome(_ f: @escaping jobsByVoidBlock) -> Self {
         var c = self; c.onNavigateHome = f; return c
     }
     @discardableResult
-    func byNavigateLogin(_ f: @escaping () -> Void) -> Self {
+    func byNavigateLogin(_ f: @escaping jobsByVoidBlock) -> Self {
         var c = self; c.onNavigateLogin = f; return c
     }
     @discardableResult
-    func byNavigateDeposit(_ f: @escaping () -> Void) -> Self {
+    func byNavigateDeposit(_ f: @escaping jobsByVoidBlock) -> Self {
         var c = self; c.onNavigateDeposit = f; return c
     }
     @discardableResult
-    func byCloseWebView(_ f: @escaping () -> Void) -> Self {
+    func byCloseWebView(_ f: @escaping jobsByVoidBlock) -> Self {
         var c = self; c.onCloseWebView = f; return c
     }
     @discardableResult
@@ -650,7 +651,7 @@ extension BaseWebView: WKScriptMessageHandlerWithReply {
     @MainActor
     public func userContentController(_ userContentController: WKUserContentController,
                                       didReceive message: WKScriptMessage,
-                                      replyHandler: @escaping (Any?, String?) -> Void) {
+                                      replyHandler: @escaping jobsByAnyStringBlock) {
         let channel = message.jobsChannel
         handleScriptMessage(channel: channel, body: message.body, reply: { value, err in
             replyHandler(value, err)
@@ -662,7 +663,7 @@ private extension BaseWebView {
     @MainActor
     func handleScriptMessage(channel: String,
                              body: Any,
-                             reply: @escaping (Any?, String?) -> Void) {
+                             reply: @escaping jobsByAnyStringBlock) {
         // 1) 先拦截 H5 的 iOSBridge（{action,message?,callback?}）
         if channel == mobileBridgeName {
             handleIOSBridgeMessage(body)
@@ -674,8 +675,7 @@ private extension BaseWebView {
                let level = dict["level"] as? String,
                let args  = dict["args"] {
                 print("[JS:\(level)] \(args)")
-            }
-            return
+            };return
         }
         // 3) 原有的 bridge
         guard channel == bridgeName else { return }
@@ -696,8 +696,7 @@ private extension BaseWebView {
                 reply(["error":"unhandled:\(api)"], nil)
             } else if let reqId {
                 jsReturn(id: reqId, value: ["error":"unhandled:\(api)"])
-            }
-            return
+            };return
         }
 
         handler(payload) { [weak self] value in
@@ -732,8 +731,7 @@ private extension BaseWebView {
                 } catch(e) { console && console.error(e); }
                 """
                 self.webView.jobsEval(js)
-            }
-            return
+            };return
         }
         // 没有注册时，给默认行为（可选）：比如支持 config.tokenProvider
         if action == "getToken", let f = mobileConfig.tokenProvider {
@@ -742,8 +740,7 @@ private extension BaseWebView {
                 guard let self, !callback.isEmpty else { return }
                 let js = "(window[\(Self.quote(callback))]||function(){})(\(Self.toJSONLiteral(token)));"
                 self.webView.jobsEval(js)
-            }
-            return
+            };return
         }
         mobileConfig.onUnknownAction?(action, dict)
     }
@@ -776,9 +773,14 @@ private extension BaseWebView {
         """
         let script: WKUserScript
         if #available(iOS 14.0, *) {
-            script = WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: false, in: .page)
+            script = WKUserScript(source: js,
+                                  injectionTime: .atDocumentStart,
+                                  forMainFrameOnly: false,
+                                  in: .page)
         } else {
-            script = WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: false)
+            script = WKUserScript(source: js,
+                                  injectionTime: .atDocumentStart,
+                                  forMainFrameOnly: false)
         }
         webView.configuration.userContentController.addUserScript(script)
     }
@@ -810,7 +812,7 @@ extension BaseWebView: WKNavigationDelegate {
     @MainActor
     public func webView(_ webView: WKWebView,
                         decidePolicyFor action: WKNavigationAction,
-                        decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+                        decisionHandler: @escaping jobsByNavigationPolicyBlock) {
 
         guard let url = action.request.url else { decisionHandler(.cancel); return }
         let scheme = (url.scheme ?? "").lowercased()
@@ -892,7 +894,7 @@ extension BaseWebView: WKNavigationDelegate {
             .byData(3.14)
             .onResult { name in print("回来了 \(name)") }
             .byPresent(presentingVC)
-            .byCompletion{ print("结束") }
+            .byJobsVoidBlock{ print("结束") }
     }
 }
 // ===== WKUIDelegate =====
@@ -901,9 +903,9 @@ extension BaseWebView: WKUIDelegate {
     public func webView(_ webView: WKWebView,
                         runJavaScriptAlertPanelWithMessage message: String,
                         initiatedByFrame frame: WKFrameInfo,
-                        completionHandler: @escaping () -> Void) {
+                        completionHandler: @escaping jobsByVoidBlock) {
         UIAlertController
-            .makeAlert("提示", message)
+            .makeAlert("提示".tr, message)
             .byAddOK { _ in completionHandler() }
             .byData("Jobs")
             .onResult { name in print("回来了 \(name)") }
@@ -913,9 +915,9 @@ extension BaseWebView: WKUIDelegate {
     public func webView(_ webView: WKWebView,
                         runJavaScriptConfirmPanelWithMessage message: String,
                         initiatedByFrame frame: WKFrameInfo,
-                        completionHandler: @escaping (Bool) -> Void) {
+                        completionHandler: @escaping jobsByBOOLBlock) {
         UIAlertController
-            .makeAlert("确认", message)
+            .makeAlert("确认".tr, message)
             .byAddCancel { _ in completionHandler(false) }
             .byAddOK     { _ in completionHandler(true)  }
             .byData("Jobs")
@@ -927,9 +929,9 @@ extension BaseWebView: WKUIDelegate {
                         runJavaScriptTextInputPanelWithPrompt prompt: String,
                         defaultText: String?,
                         initiatedByFrame frame: WKFrameInfo,
-                        completionHandler: @escaping (String?) -> Void) {
+                        completionHandler: @escaping jobsByStringBlock) {
         UIAlertController
-            .makeAlert("确认", prompt).byAddTextField { tf in
+            .makeAlert("确认".tr, prompt).byAddTextField { tf in
                 tf.text = defaultText
             }
             .byAddCancel { _ in completionHandler(nil) }
@@ -944,7 +946,7 @@ extension BaseWebView: WKUIDelegate {
     public func webView(_ webView: WKWebView,
                         runOpenPanelWith parameters: WKOpenPanelParameters,
                         initiatedByFrame frame: WKFrameInfo,
-                        completionHandler: @escaping ([URL]?) -> Void) {
+                        completionHandler: @escaping jobsByURLsBlock) {
         var types: [UTType] = [.item]
         if parameters.allowsDirectories { types = [.folder] }
 
@@ -968,7 +970,7 @@ extension BaseWebView: WKDownloadDelegate {
     public func download(_ download: WKDownload,
                          decideDestinationUsing response: URLResponse,
                          suggestedFilename: String,
-                         completionHandler: @escaping (URL?) -> Void) {
+                         completionHandler: @escaping jobsByURLBlock) {
         let url = FileManager.default.temporaryDirectory.appendingPathComponent(suggestedFilename)
         completionHandler(url)
     }
@@ -977,7 +979,9 @@ extension BaseWebView: WKDownloadDelegate {
         emitEvent("downloadFinish", payload: ["ok": true])
     }
     @MainActor
-    public func download(_ download: WKDownload, didFailWithError error: Error, resumeData: Data?) {
+    public func download(_ download: WKDownload,
+                         didFailWithError error: Error,
+                         resumeData: Data?) {
         emitEvent("downloadError", payload: ["message": error.localizedDescription])
     }
 }
@@ -1017,7 +1021,7 @@ public extension BaseWebView {
     }
     /// ✅ 按请求动态提供 UA 后缀；返回 nil = 系统默认 UA；非空 = 通过 applicationNameForUserAgent 追加
     @discardableResult
-    func byUserAgentSuffixProvider(_ provider: @escaping UASuffixProvider) -> Self {
+    func byUserAgentSuffixProvider(_ provider: @escaping JobsRetStringByURLRequestBlock) -> Self {
         self.uaSuffixProvider = provider
         return self
     }

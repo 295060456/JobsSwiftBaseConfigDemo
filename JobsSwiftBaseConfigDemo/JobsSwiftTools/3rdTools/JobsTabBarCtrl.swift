@@ -5,7 +5,11 @@
 //  Created by Jobs on 10/16/25.
 //
 
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
 import SnapKit
 // MARK: - 自定义滚动 TabBar（继承 BaseVC）
 final class JobsTabBarCtrl: BaseVC, UIScrollViewDelegate {

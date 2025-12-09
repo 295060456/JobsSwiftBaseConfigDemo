@@ -35,9 +35,9 @@ public func presentAlert(for urlString: String, on textView: UITextView) {
 public enum AppLaunchManager {
     @discardableResult
     public static func handleLaunch(
-        firstInstall: (() -> Void)? = nil,
-        firstToday: (() -> Void)? = nil,
-        normal: (() -> Void)? = nil
+        firstInstall: (jobsByVoidBlock)? = nil,
+        firstToday: (jobsByVoidBlock)? = nil,
+        normal: (jobsByVoidBlock)? = nil
     ) -> LaunchKind {
         let kind = LaunchChecker.markAndClassifyThisLaunch()
         switch kind {

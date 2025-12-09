@@ -13,11 +13,10 @@ public final class APIService {
     public let provider: MoyaProvider<DemoAPI>
     public init(provider: MoyaProvider<DemoAPI>) { self.provider = provider }
 }
-
 // MARK: - 工厂：live / stubbed 都支持把日志回灌到 UI
 public extension APIService {
     /// live：真实网络
-    static func live(uiLog: ((String) -> Void)? = nil) -> APIService {
+    static func live(uiLog: (jobsByStringBlock)? = nil) -> APIService {
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest = 20
         let session = Alamofire.Session(configuration: config)
@@ -58,12 +57,11 @@ public extension APIService {
             stubClosure: { _ in .never },
             session: session,
             plugins: [logger, curl, token, TimeoutPlugin()]
-        )
-        return APIService(provider: provider)
+        );return APIService(provider: provider)
     }
 
     /// stubbed：本地桩
-    static func stubbed(uiLog: ((String) -> Void)? = nil) -> APIService {
+    static func stubbed(uiLog: (jobsByStringBlock)? = nil) -> APIService {
         let output: NetworkLoggerPlugin.Configuration.OutputType = { _, items in
             uiLog?(items.joined(separator: "\n"))
         }
@@ -77,16 +75,14 @@ public extension APIService {
         let provider = MoyaProvider<DemoAPI>(
             stubClosure: { _ in .delayed(seconds: 0.3) },
             plugins: [logger, curl, TimeoutPlugin()]
-        )
-        return APIService(provider: provider)
+        );return APIService(provider: provider)
     }
 }
-
 // MARK: - 401 -> 刷新 Token -> 重放一次
 public extension APIService {
     func requestWithAutoRefresh(_ target: DemoAPI,
                                 retryOnce: Bool = true,
-                                completion: @escaping (Result<Response, MoyaError>) -> Void) {
+                                completion: @escaping jobsByMoyaResultBlock) {
         provider.request(target) { [weak self] result in
             guard let self else { return }
             switch result {

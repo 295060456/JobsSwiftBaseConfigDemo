@@ -5,7 +5,11 @@
 //  Created by Jobs on 2025/6/16.
 //
 
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
 
 final class HUDHelper {
     static let shared = HUDHelper()
@@ -22,11 +26,9 @@ final class HUDHelper {
             .byFont(.systemFont(ofSize: 15))
             .byTextAlignment(.center)
             .byBgColor(UIColor(white: 0, alpha: 0.8))
-
-        label.layer.cornerRadius = 10
-        label.clipsToBounds = true
-        label.numberOfLines = 0
-        label.alpha = 0
+            .byCornerRadius(10)
+            .byNumberOfLines(0)
+            .byAlpha(0)
 
         let padding: CGFloat = 20
         let maxSize = CGSize(width: window.frame.width - 2 * padding, height: window.frame.height)

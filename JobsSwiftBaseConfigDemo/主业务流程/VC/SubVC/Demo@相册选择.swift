@@ -547,7 +547,7 @@ private final class VideoThumbCell: UICollectionViewCell {
 // 放在 VC 内，复用 PermissionCenter；也可抽到 MediaPickerService
 //////////////////////////////////////////////////////////////
 private extension PhotoAlbumDemoVC {
-    func pickVideosFromLibrary(maxSelection: Int, completion: @escaping ([URL]) -> Void) {
+    func pickVideosFromLibrary(maxSelection: Int, jobsByVoidBlock: @escaping ([URL]) -> Void) {
         PermissionCenter.ensure(.photoLibraryReadWrite, from: self) { [weak self] in
             guard let self else { return }
             if #available(iOS 14, *) {
@@ -555,7 +555,7 @@ private extension PhotoAlbumDemoVC {
                 config.selectionLimit = maxSelection <= 0 ? 0 : maxSelection  // 0 = 不限制
                 config.filter = .videos
                 let proxy = PHPickerVideoProxy { [weak self] urls in
-                    completion(urls); self?.pickerHold = nil
+                    jobsByVoidBlock(urls); self?.pickerHold = nil
                 }
                 let picker = PHPickerViewController(configuration: config)
                 picker.delegate = proxy
@@ -568,7 +568,7 @@ private extension PhotoAlbumDemoVC {
                 }
                 guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else { return }
                 let proxy = LegacyVideoLibraryProxy { [weak self] url in
-                    completion(url.map { [$0] } ?? []); self?.pickerHold = nil
+                    jobsByVoidBlock(url.map { [$0] } ?? []); self?.pickerHold = nil
                 }
                 let picker = UIImagePickerController()
                 picker.sourceType = .photoLibrary
@@ -583,13 +583,13 @@ private extension PhotoAlbumDemoVC {
 
 @available(iOS 14, *)
 private final class PHPickerVideoProxy: NSObject, PHPickerViewControllerDelegate {
-    let completion: ([URL]) -> Void
-    init(completion: @escaping ([URL]) -> Void) { self.completion = completion }
+    let jobsByVoidBlock: ([URL]) -> Void
+    init(jobsByVoidBlock: @escaping ([URL]) -> Void) { self.jobsByVoidBlock = jobsByVoidBlock }
 
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
 
-        guard !results.isEmpty else { completion([]); return }
+        guard !results.isEmpty else { jobsByVoidBlock([]); return }
         let group = DispatchGroup()
         var urls: [URL] = []
 
@@ -614,22 +614,22 @@ private final class PHPickerVideoProxy: NSObject, PHPickerViewControllerDelegate
             }
         }
 
-        group.notify(queue: .main) { [completion] in completion(urls) }
+        group.notify(queue: .main) { [jobsByVoidBlock] in jobsByVoidBlock(urls) }
     }
 }
 
 private final class LegacyVideoLibraryProxy: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    let completion: (URL?) -> Void
-    init(completion: @escaping (URL?) -> Void) { self.completion = completion }
+    let jobsByVoidBlock: (URL?) -> Void
+    init(jobsByVoidBlock: @escaping (URL?) -> Void) { self.jobsByVoidBlock = jobsByVoidBlock }
 
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let url = info[.mediaURL] as? URL
-        completion(url)
+        jobsByVoidBlock(url)
         picker.dismiss(animated: true)
     }
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        completion(nil)
+        jobsByVoidBlock(nil)
         picker.dismiss(animated: true)
     }
 }

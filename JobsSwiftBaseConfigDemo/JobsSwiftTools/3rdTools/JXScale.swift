@@ -5,7 +5,11 @@
 //  Created by Mac on 9/22/25.
 //
 
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
 
 @inline(__always)
 public func ScreenWidth(_ rate:CGFloat = 1) -> CGFloat {

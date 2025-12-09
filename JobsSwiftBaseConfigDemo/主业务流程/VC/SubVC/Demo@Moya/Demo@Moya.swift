@@ -17,7 +17,7 @@ final class MoyaDemoVC: BaseVC {
     // ✅ 改为 lazy，并把 Moya 日志重定向到 UI
     private lazy var api: APIService = {
         APIService.live { [weak self] text in
-            self?.appendRawLog(text)
+            self?.appendRawLog(text ?? "")
         }
     }()
 
@@ -245,9 +245,9 @@ final class MoyaDemoVC: BaseVC {
                         }
                         return String(data: response.data, encoding: .utf8) ?? ""
                     }
-                    .sink { [weak self] completion in
+                    .sink { [weak self] jobsByVoidBlock in
                         guard let self else { return }
-                        if case let .failure(err) = completion {
+                        if case let .failure(err) = jobsByVoidBlock {
                             show(title: "Combine /zen ❌", body: "\(err)")
                         }
                     } receiveValue: { [weak self] text in
@@ -276,7 +276,7 @@ final class MoyaDemoVC: BaseVC {
                 clear()
                 show(title: "Stub 示例 → 使用 sampleData")
                 let stubAPI = APIService.stubbed { [weak self] text in
-                    self?.appendRawLog(text)
+                    self?.appendRawLog(text ?? "")
                 }
                 stubAPI.provider.request(.ghZen) { [weak self] r in
                     switch r {

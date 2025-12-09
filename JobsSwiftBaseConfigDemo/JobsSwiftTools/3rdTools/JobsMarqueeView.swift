@@ -5,7 +5,11 @@
 //  Created by Jobs on 2025/10/12.
 //
 
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
 /// 统一「跑马灯」&「轮播图」的视图组件
 /// 数据源：`[UIButton]`
 /// 滚动载体：内部 `UIScrollView` + 若干个按钮副本
@@ -603,11 +607,8 @@ public final class JobsMarqueeView: UIView {
 
                 button.addGestureRecognizer(cloneGR)
             }
-        }
-
-        return button
+        };return button
     }
-
 }
 
 extension JobsMarqueeView {

@@ -11,8 +11,8 @@ import SnapKit
 public final class BRPickerPanel: UIView {
 
     public var style: BRPickerStyle
-    public var onConfirm: (() -> Void)?
-    public var onCancel: (() -> Void)?
+    public var onConfirm: (jobsByVoidBlock)?
+    public var onCancel: (jobsByVoidBlock)?
 
     public let contentContainer = UIView()
 

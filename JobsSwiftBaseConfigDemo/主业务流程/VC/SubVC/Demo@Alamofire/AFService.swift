@@ -56,16 +56,16 @@ final class AFService {
     }
 
     // MARK: - Data Request (闭包风格)
-    func request(_ route: AFRoute, completion: @escaping (Result<Data, AFError>) -> Void) {
+    func request(_ route: AFRoute, jobsByVoidBlock: @escaping (Result<Data, AFError>) -> Void) {
         session.request(route)
             .validate()
-            .responseData { resp in completion(resp.result) }
+            .responseData { resp in jobsByVoidBlock(resp.result) }
     }
 
     // MARK: - Upload (multipart) + Progress
     func uploadAvatar(_ route: AFRoute, imageData: Data,
                       progress: ((Double) -> Void)?,
-                      completion: @escaping (Result<Data, AFError>) -> Void) {
+                      jobsByVoidBlock: @escaping (Result<Data, AFError>) -> Void) {
         session.upload(multipartFormData: { mfd in
             mfd.append(imageData, withName: "file",
                        fileName: "avatar.jpg",
@@ -73,20 +73,20 @@ final class AFService {
         }, with: route)
         .uploadProgress { p in progress?(p.fractionCompleted) }
         .validate()
-        .responseData { resp in completion(resp.result) }
+        .responseData { resp in jobsByVoidBlock(resp.result) }
     }
 
     // MARK: - Download + Progress
     func download(_ route: AFRoute,
                   progress: ((Double) -> Void)?,
-                  completion: @escaping (Result<URL, AFError>) -> Void) {
+                  jobsByVoidBlock: @escaping (Result<URL, AFError>) -> Void) {
         session.download(route, to: route.destination)
             .downloadProgress { p in progress?(p.fractionCompleted) }
             .validate()
             .responseURL { resp in
                 switch resp.result {
-                case .success(let url): completion(.success(url))
-                case .failure(let err): completion(.failure(err))
+                case .success(let url): jobsByVoidBlock(.success(url))
+                case .failure(let err): jobsByVoidBlock(.failure(err))
                 }
             }
     }
@@ -110,26 +110,26 @@ final class TokenRetryInterceptor: RequestInterceptor {
     private var waiters: [(Bool) -> Void] = []
 
     // 注入 Authorization
-    func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
+    func adapt(_ urlRequest: URLRequest, for session: Session, jobsByVoidBlock: @escaping (Result<URLRequest, Error>) -> Void) {
         var req = urlRequest
         if let token = TokenStore.shared.accessToken, !token.isEmpty {
             req.headers.add(.authorization(bearerToken: token))
         }
-        completion(.success(req))
+        jobsByVoidBlock(.success(req))
     }
 
     // 401 -> 刷新一次 -> 重放
     func retry(_ request: Request, for session: Session, dueTo error: Error,
-               completion: @escaping (RetryResult) -> Void) {
+               jobsByVoidBlock: @escaping (RetryResult) -> Void) {
         guard
             let response = request.task?.response as? HTTPURLResponse,
             response.statusCode == 401
-        else { completion(.doNotRetry); return }
+        else { jobsByVoidBlock(.doNotRetry); return }
 
         lock.lock()
         defer { lock.unlock() }
 
-        waiters.append { ok in completion(ok ? .retry : .doNotRetry) }
+        waiters.append { ok in jobsByVoidBlock(ok ? .retry : .doNotRetry) }
         guard !isRefreshing else { return }
 
         isRefreshing = true

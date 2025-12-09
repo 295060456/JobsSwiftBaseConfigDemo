@@ -5,7 +5,11 @@
 //  Created by Mac on 10/4/25.
 //
 
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
 import SnapKit
 // ================================== Toast ==================================
 @MainActor
@@ -31,7 +35,7 @@ public final class JobsToast: UIView {
             }
     }()
 
-    private var completion: Completion?
+    private var completion: jobsByVoidBlock?
     // MARK: - 配置：支持时长、边距、偏移、圆角、背景色等链式
     public struct Config {
         public var duration: TimeInterval = 1.0
@@ -67,7 +71,7 @@ public final class JobsToast: UIView {
 public extension JobsToast {
     /// 链式：设置完成回调
     @discardableResult
-    func byCompletion(_ block: Completion?) -> Self {
+    func byCompletion(_ block: jobsByVoidBlock?) -> Self {
         self.completion = block
         return self
     }
@@ -110,7 +114,7 @@ public extension JobsToast {
         in window: UIWindow? = nil,            // ⚠️ 不用默认取 .wd，避免 actor 警告
         config: Config = .init(),
         tap: ((UIButton) -> Void)? = nil,
-        completion: Completion? = nil,
+        completion: jobsByVoidBlock? = nil,
         showDuration: TimeInterval = 0.18,     // ⬅️ 入场动画时长（默认 0.18）
         showDelay: TimeInterval = 0,
         showOptions: UIView.AnimationOptions = [.curveEaseOut]

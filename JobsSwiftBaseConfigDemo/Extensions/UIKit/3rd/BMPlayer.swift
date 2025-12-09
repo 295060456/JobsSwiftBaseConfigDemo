@@ -9,11 +9,9 @@
 //
 
 #if os(OSX)
-    import AppKit
-#endif
-
-#if os(iOS) || os(tvOS)
-    import UIKit
+import AppKit
+#elseif os(iOS) || os(tvOS)
+import UIKit
 #endif
 import AVFoundation
 import MediaPlayer
@@ -112,7 +110,7 @@ public extension BMPlayer {
     // Seek
     @discardableResult
     func bySeek(to seconds: TimeInterval,
-                completion: (() -> Void)? = nil) -> Self {
+                completion: (jobsByVoidBlock)? = nil) -> Self {
         self.seek(seconds, completion: completion)
         return self
     }

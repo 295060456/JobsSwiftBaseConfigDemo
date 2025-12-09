@@ -231,7 +231,7 @@ extension LGOEditProfileVC: UITableViewDelegate {
             LGOEditNicknameVC()
                 .byData("https://www.baidu.com")
                 .byPush(self)
-                .byCompletion { print("❤️结束❤️ fromBottom") }
+                .byJobsVoidBlock { print("❤️结束❤️ fromBottom") }
         case .gender:
             self.eduPicker.brPresent(in: self.view)
         case .sign:

@@ -37,14 +37,14 @@ final class SafetyPresentDemoVC: BaseVC {
             .byTitle("系统 present (连点不会重复)")
             .onTap { _ in
 //                let vc = DemoDetailVC()
-//                present(vc, animated: true, completion: nil)
+//                present(vc, animated: true, jobsByVoidBlock: nil)
                 DemoDetailVC()
                     .byData(3.14)// 基本数据类型
                     .onResult { name in
                         print("回来了 \(name)")
                     }
                     .byPresent(self)
-                    .byCompletion{
+                    .byJobsVoidBlock{
                         print("结束")
                     }
             })
@@ -78,7 +78,7 @@ final class SafetyPresentDemoVC: BaseVC {
                         print("回来了 \(id)")
                     }
                     .byPresent(self)           // 自带防重入，连点不重复
-                    .byCompletion{
+                    .byJobsVoidBlock{
                         print("结束")
                     }
             })
