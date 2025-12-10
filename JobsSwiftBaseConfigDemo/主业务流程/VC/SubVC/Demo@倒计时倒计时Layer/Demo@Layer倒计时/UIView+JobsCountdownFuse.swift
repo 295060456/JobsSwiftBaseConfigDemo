@@ -35,11 +35,12 @@ public struct JobsFuseConfig {
 public extension UIView {
     // MARK: - Associated Keys
     private struct JobsFuseKeys {
-        static var processKey: UInt8 = 0
+        static var processKey: UInt8 = 0   // 先保留，外部类型不改
         static var layerKey: UInt8 = 0
         static var configKey: UInt8 = 0
+        static var completionKey: UInt8 = 0
     }
-
+    /// 旧的倒计时 Process（现在基本不用了，只是为了兼容）
     private var jobs_fuseProcess: JobsCountdownProcess? {
         get {
             objc_getAssociatedObject(self, &JobsFuseKeys.processKey) as? JobsCountdownProcess
@@ -75,6 +76,18 @@ public extension UIView {
                                      .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
+
+    private var jobs_fuseCompletion: (() -> Void)? {
+        get {
+            objc_getAssociatedObject(self, &JobsFuseKeys.completionKey) as? (() -> Void)
+        }
+        set {
+            objc_setAssociatedObject(self,
+                                     &JobsFuseKeys.completionKey,
+                                     newValue,
+                                     .OBJC_ASSOCIATION_COPY_NONATOMIC)
+        }
+    }
     // MARK: - 公共 API
     /// DSL 写法：在当前视图上挂一个导火索倒计时
     @discardableResult
@@ -86,7 +99,7 @@ public extension UIView {
                                 finished: finished)
         return self
     }
-    /// 显式启动导火索倒计时
+    /// 显式启动导火索倒计时（现在用 CABasicAnimation 驱动 strokeEnd）
     ///
     /// - Parameters:
     ///   - duration: 总时长（秒）
@@ -96,21 +109,17 @@ public extension UIView {
     func jobs_startFuseCountdown(duration: TimeInterval,
                                  config: JobsFuseConfig = JobsFuseConfig(),
                                  finished: (() -> Void)? = nil) -> JobsCountdownProcess? {
-
-        // 布局先稳定一下，避免 bounds 为 0
         layoutIfNeeded()
-
-        guard bounds.width > 0, bounds.height > 0 else {
-            // 尺寸为 0，直接不给你画，省心
+        guard bounds.width > 0, bounds.height > 0, duration > 0 else {
+            // 没尺寸或者 duration <= 0，直接清掉
+            jobs_cancelFuseCountdown()
+            finished?()
             return nil
         }
-
-        // 先停掉旧的
-        jobs_fuseProcess?.cancel()
-        jobs_fuseProcess = nil
-
-        // 记录配置
+        // 先停掉旧的 Process & 动画（保留 layer）
+        jobs_cancelFuseCountdown(removeLayer: false)
         jobs_fuseConfig = config
+        jobs_fuseCompletion = finished
 
         // 拿到 / 创建 Layer
         let fuseLayer: CAShapeLayer
@@ -123,7 +132,6 @@ public extension UIView {
             layer.addSublayer(fuseLayer)
             jobs_fuseLayer = fuseLayer
         }
-
         // 配置 Layer 几何与样式
         fuseLayer.frame = bounds
 
@@ -135,29 +143,20 @@ public extension UIView {
         fuseLayer.path = path.cgPath
         fuseLayer.lineWidth = config.lineWidth
         fuseLayer.strokeColor = config.color.cgColor
+
+        // 重置到“满格”状态（禁用隐式动画）
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
         fuseLayer.strokeStart = 0
-        fuseLayer.strokeEnd = 1       // 一开始满格
+        fuseLayer.strokeEnd = 1
+        CATransaction.commit()
 
-        // 创建内部倒计时过程（沿用你现在的 JobsCountdownProcess 语义）
-        let process = JobsCountdownProcess(
-            duration: duration,
-            kind: .displayLink,
-            tickInterval: 1.0 / 60.0,
-            tolerance: 0,
-            queue: .main
-        )
+        // 用 CABasicAnimation 从 1 → 0
+        let animKey = "jobsFuseStroke"
 
-        // 进度更新：strokeEnd 从 1 → 0，导火索被“烧掉”
-        process.onProgress = { [weak self] snap in
-            guard let self = self,
-                  let fuseLayer = self.jobs_fuseLayer else { return }
-            let remainRatio = CGFloat(1.0 - snap.progress)
-            fuseLayer.strokeEnd = max(0, min(1, remainRatio))
-        }
-
-        // 结束：视图恢复干净 / 保留最后状态
-        process.onFinished = { [weak self] _ in
-            guard let self = self else { return }
+        CATransaction.begin()
+        CATransaction.setCompletionBlock { [weak self] in
+            guard let self else { return }
 
             if config.removeOnFinish {
                 self.jobs_removeFuseLayer()
@@ -165,19 +164,33 @@ public extension UIView {
                 self.jobs_fuseLayer?.strokeEnd = 0
             }
 
-            self.jobs_fuseProcess = nil
-            finished?()
+            self.jobs_fuseCompletion?()
+            self.jobs_fuseCompletion = nil
         }
 
-        jobs_fuseProcess = process
-        process.start()
+        let anim = CABasicAnimation(keyPath: "strokeEnd")
+        anim.fromValue = 1.0
+        anim.toValue = 0.0
+        anim.duration = duration
+        anim.timingFunction = CAMediaTimingFunction(name: .linear)
+        anim.fillMode = .forwards
+        anim.isRemovedOnCompletion = false
 
-        return process
+        fuseLayer.add(anim, forKey: animKey)
+        CATransaction.commit()
+
+        // 现在不再依赖 JobsCountdownProcess，直接返回 nil 即可
+        jobs_fuseProcess = nil
+        return nil
     }
     /// 取消导火索倒计时
     func jobs_cancelFuseCountdown(removeLayer: Bool = true) {
+        // 兼容旧的 Process
         jobs_fuseProcess?.cancel()
         jobs_fuseProcess = nil
+
+        // 移除动画
+        jobs_fuseLayer?.removeAnimation(forKey: "jobsFuseStroke")
 
         if removeLayer {
             jobs_removeFuseLayer()
@@ -191,7 +204,7 @@ public extension UIView {
 
         layoutIfNeeded()
         fuseLayer.frame = bounds
-        
+
         let inset = config.inset + config.lineWidth / 2.0
         let rect = bounds.insetBy(dx: inset, dy: inset)
         let cornerRadius = self.layer.cornerRadius

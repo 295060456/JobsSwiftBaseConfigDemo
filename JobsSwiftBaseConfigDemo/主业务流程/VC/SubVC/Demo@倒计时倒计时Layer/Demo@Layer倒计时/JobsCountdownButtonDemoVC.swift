@@ -51,7 +51,9 @@ final class JobsCountdownButtonDemoVC: BaseVC {
                 self.remainingSeconds = remain
                 print("⏱️ [\(kind.jobs_displayName)] remain=\(remain)s / total=\(total)s")
                 let text = "\(remain)s"
-                btn.byTitle(text, for: .normal)
+                DispatchQueue.main.async {
+                    btn.byTitle(text, for: .normal)
+                }
             }
             // 完成回调：标题改成“重新开始”，提示文案刷新
             .onCountdownFinish { [weak self] btn, kind in
@@ -87,28 +89,44 @@ final class JobsCountdownButtonDemoVC: BaseVC {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        // 离开页面时把倒计时停掉
         countdownButton.stopTimer()
+        countdownButton.jobs_cancelFuseCountdown()
     }
     // MARK: - 业务逻辑
     /// 统一处理按钮点击：根据当前状态切换行为
     private func handleCountdownButtonTap(_ btn: UIButton) {
         switch btn.timerState {
+        // 开始 / 重新开始
         case .idle, .stopped:
-            // 处于空闲 / 完成状态：重新开始一轮
             let total = defaultTotalSeconds
             remainingSeconds = total
             hintLabel.byText("倒计时进行中，点击可以暂停".tr)
+            // 1）按钮自己的倒计时
             btn.startTimer(
                 total: total,
                 interval: 1.0,
                 kind: .gcd
-            ).byFuseCountdown(duration: TimeInterval(total))
+            )
+            // 2）导火索：一整圈总时长 = total
+            DispatchQueue.main.async {
+                btn.byFuseCountdown(
+                    duration: TimeInterval(total),
+                    config: JobsFuseConfig(
+                        lineWidth: 4,
+                        color: .systemRed,
+                        inset: 0,
+                        removeOnFinish: true
+                    )
+                )
+            }
         case .running:
             // 正在倒计时：暂停
             btn.pauseTimer()
             let remain = remainingSeconds > 0 ? remainingSeconds : defaultTotalSeconds
             hintLabel.byText("已暂停，点击继续（还剩 \(remain)s）".tr)
+
+            // 这里看你需求：目前导火索是独立连贯动画，不跟随暂停
+            // 如果要同步暂停，就需要给 UIView+JobsCountdownFuse 再加 pause/resume API
         case .paused:
             // 暂停中：继续
             btn.resumeTimer()
