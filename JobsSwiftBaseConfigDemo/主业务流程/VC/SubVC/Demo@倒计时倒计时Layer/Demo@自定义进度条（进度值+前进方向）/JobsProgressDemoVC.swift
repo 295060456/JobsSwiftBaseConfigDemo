@@ -20,6 +20,7 @@ final class JobsProgressDemoVC: BaseVC {
     // MARK: - 状态
     /// 使用 JobsTimerProtocol 替代原生 Timer
     private var timer: JobsTimerProtocol?
+    /// 当前标准进度 [0, 1]
     private var currentProgress: CGFloat = 0
     // MARK: - UI 懒加载
     /// 方向切换 SegmentedControl
@@ -46,7 +47,7 @@ final class JobsProgressDemoVC: BaseVC {
                 default:
                     break
                 }
-                // 换方向时重置进度 & 停掉当前 JobsTimer
+                // 换方向时：停掉当前 JobsTimer & 进度归零
                 timer?.stop()
                 currentProgress = 0
                 progressView.setProgress(0, animated: false)
@@ -60,15 +61,57 @@ final class JobsProgressDemoVC: BaseVC {
                 }
             }
     }()
+    /// 模式切换按钮：在 0→100 / 100→0 之间切换
+    private lazy var modeToggleButton: UIButton = {
+        UIButton.sys()
+            .byBackgroundColor(.systemOrange, for: .normal)
+            .byTitle("模式：100→0", for: .normal)   // 初始和 progressView.byValueMode(.countDown) 对齐
+            .byTitleColor(.white, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .byCornerRadius(16)
+            .onTap { [weak self] sender in
+                guard let self else { return }
+
+                let newMode: JobsProgressView.ValueMode
+                let newTitle: String
+
+                switch self.progressView.valueMode {
+                case .countUp:
+                    // 切到 100→0
+                    newMode = .countDown
+                    newTitle = "模式：100→0"
+                case .countDown:
+                    // 切到 0→100
+                    newMode = .countUp
+                    newTitle = "模式：0→100"
+                }
+
+                // 切换数值模式
+                self.progressView.byValueMode(newMode)
+                sender.byTitle(newTitle, for: .normal)
+
+                // 切模式时：停掉定时器 & 进度归零
+                self.timer?.stop()
+                self.currentProgress = 0
+                self.progressView.setProgress(0, animated: false)
+            }
+            .byAddTo(view) { [unowned self] make in
+                make.top.equalTo(directionSegment.snp.bottom).offset(16)
+                make.centerX.equalToSuperview()
+                make.height.equalTo(32)
+                make.width.greaterThanOrEqualTo(140)
+            }
+    }()
     /// 自定义进度条
     private lazy var progressView: JobsProgressView = {
         JobsProgressView()
             .byDirection(.leftToRight)
+            .byValueMode(.countDown)   // 初始：显示为 100→0
             .byTrackColor(.systemGray5)
             .byLabelBackgroundColor(.secondarySystemBackground)
             .byLabelFont(.monospacedDigitSystemFont(ofSize: 12, weight: .medium))
             .byAddTo(view) { [unowned self] make in
-                make.top.equalTo(directionSegment.snp.bottom).offset(40.h)
+                make.top.equalTo(modeToggleButton.snp.bottom).offset(24.h)
                 make.left.equalToSuperview().offset(40.w)
                 make.right.equalToSuperview().inset(40.w)
                 make.height.equalTo(80.h) /// 给点高度让上方 label 有空间移动
@@ -132,7 +175,9 @@ final class JobsProgressDemoVC: BaseVC {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         jobsSetupGKNav(title: "自定义（进度值+前进方向）进度条")
+
         directionSegment.byVisible(YES)
+        modeToggleButton.byVisible(YES)
         progressView.byVisible(YES)
         startButton.byVisible(YES)
     }

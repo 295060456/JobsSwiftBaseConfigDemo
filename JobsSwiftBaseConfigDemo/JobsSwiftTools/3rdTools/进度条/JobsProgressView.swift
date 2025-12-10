@@ -12,18 +12,34 @@ import UIKit
 #endif
 /// 自定义进度条@进度值和前进方向
 final class JobsProgressView: UIView {
+    /// 几何方向：决定填充从哪边往哪边走
     enum Direction {
         case leftToRight
         case rightToLeft
         case bottomToTop
         case topToBottom
     }
+    /// 数值模式：决定“0~1”是显示为 0→100 还是 100→0
+    enum ValueMode {
+        /// 0 → 1 显示为 0% → 100%
+        case countUp
+        /// 0 → 1 显示为 100% → 0%
+        case countDown
+    }
     // MARK: - Public API
-    /// 进度方向
+    /// 进度方向（几何）
     var direction: Direction = .leftToRight {
         didSet { setNeedsLayout() }
     }
-    /// 当前进度 [0, 1]
+    /// 数值模式（0→100 / 100→0）
+    var valueMode: ValueMode = .countUp {
+        didSet { setNeedsLayout() }
+    }
+    /// 当前进度 [0, 1] —— 始终是“标准进度”：0 = 起点，1 = 终点
+    ///
+    /// 显示时会根据 `valueMode` 做一次映射：
+    /// - .countUp   : 直接用 0~1
+    /// - .countDown : 用 1 - progress
     var progress: CGFloat {
         get { _progress }
         set { setProgress(newValue, animated: false) }
@@ -54,6 +70,7 @@ final class JobsProgressView: UIView {
             .byAddTo(self)
     }()
     // MARK: - Private
+    /// 标准进度（0~1），不带模式
     private var _progress: CGFloat = 0
     // MARK: - Init
     override init(frame: CGRect) {
@@ -85,7 +102,23 @@ final class JobsProgressView: UIView {
     }
 
     private func layoutForCurrentState() {
-        let p = max(0, min(_progress, 1)) // clamp 到 [0, 1]
+        // 标准进度 0~1
+        let raw = max(0, min(_progress, 1))
+
+        // 根据数值模式得到“显示用进度”
+        // .countUp   : 0 → 1
+        // .countDown : 1 → 0
+        let p: CGFloat
+        switch valueMode {
+        case .countUp:
+            p = raw
+        case .countDown:
+            p = 1 - raw
+        }
+
+        // 先根据 p 更新文案（很关键，要在 sizeToFit 之前）
+        let percent = Int(round(p * 100))
+        progressLabel.text = "\(percent)%"
 
         let horizontalInset: CGFloat = 8
         let verticalInset: CGFloat = 8
@@ -120,7 +153,7 @@ final class JobsProgressView: UIView {
                                         height: trackHeight)
             }
 
-            // 更新 Label 尺寸
+            // 更新 Label 尺寸（这时候 text 已经是“xx%”）
             progressLabel.sizeToFit()
             let labelSize = CGSize(width: progressLabel.bounds.width + 8,
                                    height: progressLabel.bounds.height + 4)
@@ -173,7 +206,7 @@ final class JobsProgressView: UIView {
                                         height: fillHeight)
             }
 
-            // 更新 Label 尺寸
+            // 更新 Label 尺寸（同样在 text 更新之后）
             progressLabel.sizeToFit()
             let labelSize = CGSize(width: progressLabel.bounds.width + 8,
                                    height: progressLabel.bounds.height + 4)
@@ -201,10 +234,9 @@ final class JobsProgressView: UIView {
                 y: centerY
             )
         }
-        // 更新文案
-        progressLabel.text = "\(Int(round(p * 100)))%"
     }
     // MARK: - Progress API
+    /// 设置标准进度 [0, 1]，内部会结合 valueMode 显示为 0→100 或 100→0
     func setProgress(_ progress: CGFloat,
                      animated: Bool = true,
                      duration: TimeInterval = 0.25) {
@@ -223,14 +255,21 @@ final class JobsProgressView: UIView {
 // MARK: - DSL
 extension JobsProgressView {
     // MARK: - Direction
-    /// 配置进度方向
+    /// 配置进度方向（几何）
     @discardableResult
     func byDirection(_ direction: Direction) -> Self {
         self.direction = direction
         return self
     }
+    // MARK: - ValueMode
+    /// 配置数值模式：0→100 / 100→0
+    @discardableResult
+    func byValueMode(_ mode: ValueMode) -> Self {
+        self.valueMode = mode
+        return self
+    }
     // MARK: - Progress
-    /// 配置当前进度 [0, 1]
+    /// 配置当前标准进度 [0, 1]
     @discardableResult
     func byProgress(_ value: CGFloat,
                     animated: Bool = false,
