@@ -87,8 +87,8 @@ final class JobsCountdownButtonDemoVC: BaseVC {
                         btn.byFuseCountdown(
                             duration: TimeInterval(total),
                             config: JobsFuseConfig(
-                                lineWidth: 4,
-                                color: .systemRed,
+                                lineWidth: 2,
+                                color: .systemYellow,
                                 inset: 0,
                                 removeOnFinish: true,
                                 direction: .counterClockwise

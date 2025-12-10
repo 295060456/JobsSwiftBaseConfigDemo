@@ -212,10 +212,8 @@ public extension UIView {
         // 兼容旧的 Process
         jobs_fuseProcess?.cancel()
         jobs_fuseProcess = nil
-
         // 移除动画
         jobs_fuseLayer?.removeAnimation(forKey: "jobsFuseStroke")
-
         if removeLayer {
             jobs_removeFuseLayer()
         }
@@ -225,10 +223,8 @@ public extension UIView {
     func jobs_layoutFuseIfNeeded() {
         guard let fuseLayer = jobs_fuseLayer,
               let config = jobs_fuseConfig else { return }
-
         layoutIfNeeded()
         fuseLayer.frame = bounds
-
         let inset = config.inset + config.lineWidth / 2.0
         let rect = bounds.insetBy(dx: inset, dy: inset)
         let cornerRadius = self.layer.cornerRadius
