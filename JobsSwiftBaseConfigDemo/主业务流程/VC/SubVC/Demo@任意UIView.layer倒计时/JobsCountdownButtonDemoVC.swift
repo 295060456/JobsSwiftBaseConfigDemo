@@ -12,7 +12,7 @@ import UIKit
 #endif
 
 import SnapKit
-/// 演示：按钮中间显示倒计时秒数，点击 = 开始 / 暂停 / 继续 / 完成后重新开始
+/// Demo@任意UIView
 final class JobsCountdownLayerDemoVC: BaseVC {
     private let horizontalInset: CGFloat = 40
     private let defaultTotalSeconds: Int = 10

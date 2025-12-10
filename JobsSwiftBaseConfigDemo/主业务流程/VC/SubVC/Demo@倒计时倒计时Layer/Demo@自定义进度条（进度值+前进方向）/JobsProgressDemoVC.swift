@@ -12,7 +12,7 @@ import UIKit
 #endif
 
 import SnapKit
-
+/// Demo@自定义进度条（进度值+前进方向）
 final class JobsProgressDemoVC: BaseVC {
     deinit {
         timer?.stop()

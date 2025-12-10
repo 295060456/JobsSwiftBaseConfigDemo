@@ -195,6 +195,10 @@
 		04544EA42EE92DFB00E7C02B /* JobsProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EA32EE92DF900E7C02B /* JobsProgressView.swift */; };
 		04544EA72EE92E4200E7C02B /* JobsProgressDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EA62EE92E4100E7C02B /* JobsProgressDemoVC.swift */; };
 		04544EA92EE9453F00E7C02B /* JobsCountdownButtonDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EA82EE9453D00E7C02B /* JobsCountdownButtonDemoVC.swift */; };
+		04544EAF2EE976D100E7C02B /* RedPacketRainDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EAE2EE976CF00E7C02B /* RedPacketRainDemoVC.swift */; };
+		04544EB22EE97AB900E7C02B /* 红包雨配置.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EB12EE97AB800E7C02B /* 红包雨配置.swift */; };
+		04544EB42EE97AC600E7C02B /* 红包雨视图.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EB32EE97AC500E7C02B /* 红包雨视图.swift */; };
+		04544EB62EE97ADA00E7C02B /* 单个红包视图.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EB52EE97AD900E7C02B /* 单个红包视图.swift */; };
 		045920E42E84EC73008C8D6A /* SwiftTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E32E84EC72008C8D6A /* SwiftTools.swift */; };
 		045920E62E84F389008C8D6A /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E52E84F386008C8D6A /* CALayer.swift */; };
 		045920EA2E84FD82008C8D6A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E92E84FD77008C8D6A /* String.swift */; };
@@ -643,6 +647,10 @@
 		04544EA32EE92DF900E7C02B /* JobsProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsProgressView.swift; sourceTree = "<group>"; };
 		04544EA62EE92E4100E7C02B /* JobsProgressDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsProgressDemoVC.swift; sourceTree = "<group>"; };
 		04544EA82EE9453D00E7C02B /* JobsCountdownButtonDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsCountdownButtonDemoVC.swift; sourceTree = "<group>"; };
+		04544EAE2EE976CF00E7C02B /* RedPacketRainDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedPacketRainDemoVC.swift; sourceTree = "<group>"; };
+		04544EB12EE97AB800E7C02B /* 红包雨配置.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "红包雨配置.swift"; sourceTree = "<group>"; };
+		04544EB32EE97AC500E7C02B /* 红包雨视图.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "红包雨视图.swift"; sourceTree = "<group>"; };
+		04544EB52EE97AD900E7C02B /* 单个红包视图.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "单个红包视图.swift"; sourceTree = "<group>"; };
 		045920E32E84EC72008C8D6A /* SwiftTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTools.swift; sourceTree = "<group>"; };
 		045920E52E84F386008C8D6A /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
 		045920E92E84FD77008C8D6A /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -1356,9 +1364,28 @@
 			path = "进度条";
 			sourceTree = "<group>";
 		};
+		04544EAD2EE976C200E7C02B /* Demo@红包雨 */ = {
+			isa = PBXGroup;
+			children = (
+				04544EAE2EE976CF00E7C02B /* RedPacketRainDemoVC.swift */,
+			);
+			path = "Demo@红包雨";
+			sourceTree = "<group>";
+		};
+		04544EB02EE97AAF00E7C02B /* 红包雨 */ = {
+			isa = PBXGroup;
+			children = (
+				04544EB52EE97AD900E7C02B /* 单个红包视图.swift */,
+				04544EB32EE97AC500E7C02B /* 红包雨视图.swift */,
+				04544EB12EE97AB800E7C02B /* 红包雨配置.swift */,
+			);
+			path = "红包雨";
+			sourceTree = "<group>";
+		};
 		045920E22E84EC64008C8D6A /* 3rdTools */ = {
 			isa = PBXGroup;
 			children = (
+				04544EB02EE97AAF00E7C02B /* 红包雨 */,
 				04544EAA2EE967C600E7C02B /* 进度条 */,
 				043283912EC499E00031CDD6 /* BRPickerViewSwift */,
 				046786E32EB4CED9003FE82D /* JobsRefresher */,
@@ -1589,6 +1616,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				04544EAD2EE976C200E7C02B /* Demo@红包雨 */,
 				04544E9F2EE9201800E7C02B /* Demo@任意UIView.layer倒计时 */,
 				04544E912EE916B800E7C02B /* Demo@倒计时倒计时Layer */,
 				046D85B42EE671240084C5F5 /* Demo@HaishinKit */,
@@ -2666,6 +2694,7 @@
 				0411F2342EDFEB9100F1552C /* UIControl+统一点击事件.swift in Sources */,
 				0411F1F32EDFD9EE00F1552C /* UIButton+倒计时.swift in Sources */,
 				04FC77852EB0BDF100B810BA /* ImageLoader.swift in Sources */,
+				04544EB62EE97ADA00E7C02B /* 单个红包视图.swift in Sources */,
 				048F447C2EB311DE00BAA7EE /* Demo@JobsAppDoor.swift in Sources */,
 				04E821E02EDFF32400570A4C /* UILabel+Tools.swift in Sources */,
 				0453765B2EB0B57B00133F73 /* Demo@BMPlayer.swift in Sources */,
@@ -2680,6 +2709,7 @@
 				04B5B4932EC5CCB700ED4505 /* BaseTableViewCellByValue2.swift in Sources */,
 				04C68D2C2ED94C3900A11F53 /* 钟.swift in Sources */,
 				0411F22D2EDFEACB00F1552C /* UIScrollView.swift in Sources */,
+				04544EB22EE97AB900E7C02B /* 红包雨配置.swift in Sources */,
 				048314002E9A08510009A44B /* Demo@跑马灯轮播图.swift in Sources */,
 				0411F1C12EDFCBD900F1552C /* UITextField+富文本.swift in Sources */,
 				04E8222C2EE013D700570A4C /* Demo@YTKNetwork.swift in Sources */,
@@ -2741,6 +2771,7 @@
 				0411F2112EDFE5D700F1552C /* UIView+SnapKit.swift in Sources */,
 				047E48E82EB35BAD00881898 /* CameraController.swift in Sources */,
 				04A245912ECD7373009649E8 /* Array.swift in Sources */,
+				04544EB42EE97AC600E7C02B /* 红包雨视图.swift in Sources */,
 				047E48E92EB35BAD00881898 /* SphereGeometry.swift in Sources */,
 				0411F2132EDFE5F600F1552C /* UIView+悬浮.swift in Sources */,
 				047E48EA2EB35BAD00881898 /* VideoTextureManager.swift in Sources */,
@@ -2801,6 +2832,7 @@
 				0477D97F2E8BDBBC002C6427 /* Demo@倒计时.swift in Sources */,
 				04124F402EB0760D00462BE2 /* AFLogger.swift in Sources */,
 				04D8422B2E965BA1001E8C90 /* JobsMarqueeView.swift in Sources */,
+				04544EAF2EE976D100E7C02B /* RedPacketRainDemoVC.swift in Sources */,
 				C564FC8C2E0959640079B5C1 /* UIAlertController.swift in Sources */,
 				04A8C54E2E8AA9F900381701 /* Demo@功能列表根目录.swift in Sources */,
 				04C68D4A2ED9880800A11F53 /* LuckyWheelStruct.swift in Sources */,
