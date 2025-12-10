@@ -165,7 +165,6 @@ final class JobsCountdownProgressDemoVC: BaseVC {
         jobsSetupGKNav(
             title: "JobsTimer 倒计时 Demo"
         )
-
         timeLabel.byVisible(YES)
         progressView.byVisible(YES)
         durationSegment.byVisible(YES)
