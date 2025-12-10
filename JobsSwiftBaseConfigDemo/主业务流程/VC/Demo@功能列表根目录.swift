@@ -19,6 +19,7 @@ final class RootListVC: BaseVC {
         ("🧭 系统导航栏", JobsNavigationDemoVC.self),
         ("👛 钱包卡片效果", JobsWalletDemoVC.self),
         ("⏺️ 本地录制到系统相册", HKLocalRecordVC.self),
+        ("🌘 滚动留言", LiveCommentDemoVC.self),
         ("📺 直播推流", HKLiveVC.self),
         ("📹 播放器@BMPlayer(🛜 网络流量监控)", BMPlayerDemoVC.self),
         ("📹 播放器@PNPlayer", PNPlayerDemoVC.self),
@@ -49,7 +50,6 @@ final class RootListVC: BaseVC {
         ("🍚 选择器", BRPickerDemoVC.self),
         ("📅 日历", LunarDemoVC.self),
         ("📊 Excel", XLSXDemoVC.self),
-        ("🌘 滚动留言", LiveCommentDemoVC.self),
         ("🌹 弹出方式", SwiftEntryKitDemoVC.self),
         ("🔽 下拉三角小菜单", FSPopoverDemoVC.self),
         ("☠️ 骨架屏", SkeletonViewDemoVC.self),
@@ -129,7 +129,7 @@ final class RootListVC: BaseVC {
                     .byContainer(view)
 //                    .byStart(.topLeft)
                     .byStart(.point(CGPoint(x: 0, y: 200))) // 起始点（可用区域坐标）
-                    .byFallbackSize(CGSize(width: 90, height: 50))
+                    .byFallbackSize(CGSize(width: 95, height: 50))
                     .byDocking(.nearestEdge)
                     .byHapticOnDock(true)
             }
@@ -350,9 +350,9 @@ final class RootListVC: BaseVC {
         }
     }
 }
-// MARK: —— DataSource & Delegate
-extension RootListVC: UITableViewDataSource {
-
+// MARK: —— UITableViewDataSource & UITableViewDelegate & UIScrollViewDelegate
+extension RootListVC: UITableViewDataSource ,UITableViewDelegate{
+    /// UITableViewDataSource
     func tableView(_ tableView: UITableView,numberOfRowsInSection section: Int) -> Int {
         demos.count
     }
@@ -363,9 +363,7 @@ extension RootListVC: UITableViewDataSource {
             .byText(demos[indexPath.row].title)
             .byAccessoryType(.disclosureIndicator)
     }
-}
-
-extension RootListVC: UITableViewDelegate {
+    /// UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         demos[indexPath.row].vcType.init().byPush(self)

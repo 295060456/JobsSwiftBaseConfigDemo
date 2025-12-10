@@ -195,7 +195,7 @@ extension RichTextDemoVC: UITextViewDelegate {
             ac.addAction(UIAlertAction(title: "确定", style: .default))
             present(ac, animated: true)
             #else
-            UIApplication.shared.open(url, options: [:], JobsVoidBlockHandler: nil)
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
             #endif
         }
     }
@@ -413,7 +413,7 @@ final class LinkCell: UITableViewCell, HasDisposeBag {
             ac.addAction(UIAlertAction(title: "确定", style: .default))
             vc.present(ac, animated: true)
             #else
-            UIApplication.shared.open(url, options: [:], JobsVoidBlockHandler: nil)
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
             #endif
         }
     }
