@@ -16,19 +16,29 @@ import ObjectiveC
 /// 导火索倒计时配置（按需可以继续扩）
 /// 这里先做最小配置：线宽、颜色、内边距、结束后是否移除
 public struct JobsFuseConfig {
+    /// 动画方向：顺时针 / 逆时针
+    public enum Direction {
+        /// 逆时针：当前行为（strokeEnd: 1 → 0）
+        case counterClockwise
+        /// 顺时针：改为动 strokeStart: 0 → 1
+        case clockwise
+    }
     public var lineWidth: CGFloat
     public var color: UIColor
     public var inset: CGFloat
     public var removeOnFinish: Bool
+    public var direction: Direction
 
     public init(lineWidth: CGFloat = 4,
                 color: UIColor = .systemRed,
                 inset: CGFloat = 0,
-                removeOnFinish: Bool = true) {
+                removeOnFinish: Bool = true,
+                direction: Direction = .counterClockwise) {
         self.lineWidth = lineWidth
         self.color = color
         self.inset = inset
         self.removeOnFinish = removeOnFinish
+        self.direction = direction
     }
 }
 
@@ -99,11 +109,11 @@ public extension UIView {
                                 finished: finished)
         return self
     }
-    /// 显式启动导火索倒计时（现在用 CABasicAnimation 驱动 strokeEnd）
+    /// 显式启动导火索倒计时（现在用 CABasicAnimation 驱动 strokeEnd / strokeStart）
     ///
     /// - Parameters:
     ///   - duration: 总时长（秒）
-    ///   - config: 外观配置（线宽、颜色、inset）
+    ///   - config: 外观配置（线宽、颜色、inset、方向）
     ///   - finished: 结束时回调
     @discardableResult
     func jobs_startFuseCountdown(duration: TimeInterval,
@@ -150,8 +160,7 @@ public extension UIView {
         fuseLayer.strokeStart = 0
         fuseLayer.strokeEnd = 1
         CATransaction.commit()
-
-        // 用 CABasicAnimation 从 1 → 0
+        // 用 CABasicAnimation 按方向动 strokeStart / strokeEnd
         let animKey = "jobsFuseStroke"
 
         CATransaction.begin()
@@ -161,16 +170,31 @@ public extension UIView {
             if config.removeOnFinish {
                 self.jobs_removeFuseLayer()
             } else {
-                self.jobs_fuseLayer?.strokeEnd = 0
+                // 不移除时，保持最终状态
+                switch config.direction {
+                case .counterClockwise:
+                    self.jobs_fuseLayer?.strokeEnd = 0
+                case .clockwise:
+                    self.jobs_fuseLayer?.strokeStart = 1
+                }
             }
-
             self.jobs_fuseCompletion?()
             self.jobs_fuseCompletion = nil
         }
+        let anim: CABasicAnimation
+        switch config.direction {
+        case .counterClockwise:
+            // 旧行为：尾巴往回缩，视觉上逆时针烧
+            anim = CABasicAnimation(keyPath: "strokeEnd")
+            anim.fromValue = 1.0
+            anim.toValue = 0.0
+        case .clockwise:
+            // 固定 end = 1，头往前推，视觉上顺时针烧
+            anim = CABasicAnimation(keyPath: "strokeStart")
+            anim.fromValue = 0.0
+            anim.toValue = 1.0
+        }
 
-        let anim = CABasicAnimation(keyPath: "strokeEnd")
-        anim.fromValue = 1.0
-        anim.toValue = 0.0
         anim.duration = duration
         anim.timingFunction = CAMediaTimingFunction(name: .linear)
         anim.fillMode = .forwards
