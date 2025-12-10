@@ -7057,6 +7057,37 @@ public extension NSObject {
 }
 ```
 
+### 50、自定义进度条 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 解决痛点：系统进度条（不能定义前进方向以及实时进度值）
+
+* 快捷创建
+
+  ```swift
+  /// 自定义进度条：实时进度值、前进方向
+  private lazy var progressView: JobsProgressView = {
+      JobsProgressView()
+          .byDirection(.leftToRight)
+          .byValueMode(.countDown)   // 初始：显示为 100→0
+          .byTrackColor(.systemGray5)
+          .byLabelBackgroundColor(.secondarySystemBackground)
+          .byLabelFont(.monospacedDigitSystemFont(ofSize: 12, weight: .medium))
+          .byAddTo(view) { [unowned self] make in
+              make.top.equalTo(modeToggleButton.snp.bottom).offset(24.h)
+              make.left.equalToSuperview().offset(40.w)
+              make.right.equalToSuperview().inset(40.w)
+              make.height.equalTo(80.h) /// 给点高度让上方 label 有空间移动
+          }
+  }()
+  ```
+
+* 手动设置进度（动画呈现）
+
+  ```swift
+  private var currentProgress: CGFloat = 0
+  progressView.setProgress(currentProgress, animated: true)
+  ```
+
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ### 1、注解 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>

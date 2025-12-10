@@ -117,7 +117,62 @@ final class JobsProgressDemoVC: BaseVC {
                 make.height.equalTo(80.h) /// 给点高度让上方 label 有空间移动
             }
     }()
-    /// 开始按钮
+    /// 输入百分比的文本框（0~100）
+    private lazy var percentTextField: UITextField = {
+        UITextField()
+            .byBorderStyle(.roundedRect)
+            .byKeyboardType(.numberPad)
+            .byPlaceholder("输入 0~100")
+            .byTextAlignment(.center)
+            .byAddTo(view) { [unowned self] make in
+                make.top.equalTo(progressView.snp.bottom).offset(16)
+                make.left.equalToSuperview().offset(40.w)
+                make.height.equalTo(36)
+        }
+    }()
+    /// 点击“确定”后，动画到输入的百分比
+    private lazy var applyButton: UIButton = {
+        UIButton.sys()
+            .byBackgroundColor(.systemBlue, for: .normal)
+            .byTitle("设置进度", for: .normal)
+            .byTitleColor(.white, for: .normal)
+            .byTitleFont(.systemFont(ofSize: 14, weight: .medium))
+            .byCornerRadius(8)
+            .onTap { [weak self] _ in
+                guard let self else { return }
+                // 读取输入值
+                let text = self.percentTextField.text?
+                    .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                guard let value = Double(text) else {
+                    // 非数字就直接忽略，也可以在这里加个 toast
+                    return
+                }
+                // clamp 到 0~100
+                let clamped = max(0, min(value, 100))
+                self.percentTextField.text = String(format: "%.0f", clamped)
+                let ratio = CGFloat(clamped / 100.0)
+                // 根据当前数值模式反推出“标准进度（raw）”
+                let raw: CGFloat
+                switch self.progressView.valueMode {
+                case .countUp:
+                    raw = ratio          // 显示 = raw
+                case .countDown:
+                    raw = 1 - ratio      // 显示 = 1 - raw
+                }
+                // 停掉动画，直接跳到目标百分比
+                self.timer?.stop()
+                self.currentProgress = raw
+                self.progressView.setProgress(raw, animated: true)
+            }
+            .byAddTo(view) { [unowned self] make in
+                make.left.equalTo(percentTextField.snp.right).offset(12)
+                make.right.equalToSuperview().inset(40.w)
+                make.centerY.equalTo(percentTextField.snp.centerY)
+                make.height.equalTo(36)
+                make.width.greaterThanOrEqualTo(80)
+            }
+    }()
+    /// 开始按钮（自动从 0 → 100% 播放一遍）
     private lazy var startButton: UIButton = {
         UIButton.sys()
             /// 背景色
@@ -166,7 +221,7 @@ final class JobsProgressDemoVC: BaseVC {
                 t.start()
             }
             .byAddTo(view) { [unowned self] make in
-                make.top.equalTo(progressView.snp.bottom).offset(32)
+                make.top.equalTo(percentTextField.snp.bottom).offset(24)
                 make.centerX.equalToSuperview()
             }
     }()
@@ -179,6 +234,8 @@ final class JobsProgressDemoVC: BaseVC {
         directionSegment.byVisible(YES)
         modeToggleButton.byVisible(YES)
         progressView.byVisible(YES)
+        percentTextField.byVisible(YES)
+        applyButton.byVisible(YES)
         startButton.byVisible(YES)
     }
 }

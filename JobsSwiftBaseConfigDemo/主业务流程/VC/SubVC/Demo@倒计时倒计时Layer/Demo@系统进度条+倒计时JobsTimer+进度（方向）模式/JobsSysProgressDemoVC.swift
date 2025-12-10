@@ -264,4 +264,20 @@ final class JobsSysProgressDemoVC: BaseVC {
             return "模式：100% → 0%".tr
         }
     }
+    /// 手动设置当前进度到指定百分比 [0, 100]
+    ///
+    /// - percent: 0~100 的数值，会自动 clamp 到合法区间
+    /// - animated: 是否带系统 UIProgressView 的动画
+    ///
+    /// 语义：
+    /// - .countUp   下表示“已完成 percent%”
+    /// - .countDown 下表示“剩余 percent%”
+    ///
+    /// UIProgressView 的 progress 还是 0~1，这里自动换算。
+    private func setProgressPercent(_ percent: CGFloat,
+                                    animated: Bool = true) {
+        let clamped = max(0, min(percent, 100))
+        let ratio = Float(clamped / 100.0)
+        progressView.setProgress(ratio, animated: animated)
+    }
 }

@@ -251,6 +251,29 @@ final class JobsProgressView: UIView {
             setNeedsLayout()
         }
     }
+    /// 按“显示百分比”设置进度 [0, 100]
+    ///
+    /// - parameter percent: 期望显示的百分比（会自动 clamp 到 0~100）
+    ///
+    /// - 注意：
+    ///   - 在 `.countUp` 模式下：0 → 100 = 0 → 1
+    ///   - 在 `.countDown` 模式下：100 → 0 = 0 → 1
+    ///   - 所以这里是“显示值”，会根据 `valueMode` 反推内部标准进度。
+    func setPercent(_ percent: CGFloat,
+                    animated: Bool = true,
+                    duration: TimeInterval = 0.25) {
+        let clampedPercent = max(0, min(percent, 100))
+        let displayRatio = clampedPercent / 100.0
+
+        let raw: CGFloat
+        switch valueMode {
+        case .countUp:
+            raw = displayRatio          // 显示 = raw
+        case .countDown:
+            raw = 1 - displayRatio      // 显示 = 1 - raw
+        }
+        setProgress(raw, animated: animated, duration: duration)
+    }
 }
 // MARK: - DSL
 extension JobsProgressView {
@@ -314,6 +337,14 @@ extension JobsProgressView {
     func byLabelCornerRadius(_ radius: CGFloat) -> Self {
         self.progressLabel.layer.cornerRadius = radius
         self.progressLabel.layer.masksToBounds = true
+        return self
+    }
+    /// 配置当前显示百分比 [0, 100]
+    @discardableResult
+    func byPercent(_ percent: CGFloat,
+                   animated: Bool = false,
+                   duration: TimeInterval = 0.25) -> Self {
+        self.setPercent(percent, animated: animated, duration: duration)
         return self
     }
 }
