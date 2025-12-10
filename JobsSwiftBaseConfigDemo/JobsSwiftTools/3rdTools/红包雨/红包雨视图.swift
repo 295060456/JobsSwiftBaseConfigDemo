@@ -29,7 +29,8 @@ public final class RedPacketRainView: UIView {
     private let timerKind: JobsTimerKind
     // 内部状态
     private var spawnTimer: JobsTimerProtocol?
-    private var activePackets: [RedPacketView] = []
+    /// 当前屏幕上的红包按钮
+    private var activePackets: [UIButton] = []
     // MARK: - Init
     public init(
         frame: CGRect = .zero,
@@ -105,7 +106,7 @@ public final class RedPacketRainView: UIView {
             self?.spawnPacketIfNeeded()
         }
     }
-    // MARK: - 红包生成逻辑
+    // MARK: - 红包生成逻辑（UIButton 版本）
     private func spawnPacketIfNeeded() {
         guard isRunning else { return }
         guard bounds.width > 0, bounds.height > 0 else { return }
@@ -114,10 +115,8 @@ public final class RedPacketRainView: UIView {
         if activePackets.count >= config.maxConcurrentCount {
             return
         }
-
         let width = bounds.width - config.spawnInsets.left - config.spawnInsets.right
         guard width > 0 else { return }
-
         // 随机 X
         let maxX = max(0, width - config.packetSize.width)
         let randomX = config.spawnInsets.left + CGFloat.random(in: 0...maxX)
@@ -127,35 +126,34 @@ public final class RedPacketRainView: UIView {
             width: config.packetSize.width,
             height: config.packetSize.height
         )
-
-        let packet = RedPacketView(frame: startFrame)
+        // 用 UIButton + DSL 创建单个红包
+        let packet = UIButton.sys()
+        packet.frame = startFrame
         packet.isUserInteractionEnabled = config.tapEnabled
+        packet.clipsToBounds = true
 
         if let img = config.packetImage {
-            packet.imageView.image = img
-            packet.imageView.contentMode = .scaleAspectFit
+            // 有配置图片：直接用图片做背景
+            packet.setBackgroundImage(img, for: .normal)
+            packet.imageView?.contentMode = .scaleAspectFit
         } else {
-            // 简单占位：红底 + 黄金边框
+            // 简单占位：红底 + 黄金边框 + 中间 ¥ 图标
             packet.backgroundColor = .systemRed
             packet.layer.cornerRadius = 6
             packet.layer.borderColor = UIColor.yellow.cgColor
             packet.layer.borderWidth = 1.5
             packet.layer.masksToBounds = true
-
-            UIImageView(image: makeDefaultIconImage()).byTintColor(.yellow)
-                .byAddTo(packet) {  make in
-                    make.center.equalToSuperview()
-                    make.width.height.equalTo(18)
-                }
+            packet.byBackgroundImage(makeDefaultIconImage())
         }
 
         if config.tapEnabled {
-            // MARK: - 点击红包
-            packet.onJobsTap { [weak self] (sender: RedPacketView) in
+            // MARK: - 点击红包（用你的 onTap DSL）
+            packet.onTap { [weak self] sender in
                 guard let self = self else { return }
-                removePacket(sender)
-                tappedCount += 1
-                tapCallback?(self, tappedCount)
+                self.removePacket(sender)
+                self.tappedCount += 1
+                self.tapCallback?(self, self.tappedCount)
+
                 // 点击后的简单反馈：轻微震动
                 let feedback = UIImpactFeedbackGenerator(style: .light)
                 feedback.impactOccurred()
@@ -164,6 +162,7 @@ public final class RedPacketRainView: UIView {
 
         addSubview(packet)
         activePackets.append(packet)
+
         // 随机下落时间
         let duration = Double.random(
             in: min(config.minFallDuration, config.maxFallDuration)
@@ -202,10 +201,11 @@ public final class RedPacketRainView: UIView {
         activePackets.removeAll()
     }
 
-    private func removePacket(_ packet: RedPacketView) {
+    private func removePacket(_ packet: UIButton) {
         if let idx = activePackets.firstIndex(where: { $0 === packet }) {
             activePackets.remove(at: idx)
-        };packet.removeFromSuperview()
+        }
+        packet.removeFromSuperview()
     }
     // MARK: - 简单生成一个默认图标（¥）
     private func makeDefaultIconImage() -> UIImage? {

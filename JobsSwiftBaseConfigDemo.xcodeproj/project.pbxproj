@@ -198,7 +198,6 @@
 		04544EAF2EE976D100E7C02B /* RedPacketRainDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EAE2EE976CF00E7C02B /* RedPacketRainDemoVC.swift */; };
 		04544EB22EE97AB900E7C02B /* 红包雨配置.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EB12EE97AB800E7C02B /* 红包雨配置.swift */; };
 		04544EB42EE97AC600E7C02B /* 红包雨视图.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EB32EE97AC500E7C02B /* 红包雨视图.swift */; };
-		04544EB62EE97ADA00E7C02B /* 单个红包视图.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EB52EE97AD900E7C02B /* 单个红包视图.swift */; };
 		045920E42E84EC73008C8D6A /* SwiftTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E32E84EC72008C8D6A /* SwiftTools.swift */; };
 		045920E62E84F389008C8D6A /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E52E84F386008C8D6A /* CALayer.swift */; };
 		045920EA2E84FD82008C8D6A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E92E84FD77008C8D6A /* String.swift */; };
@@ -650,7 +649,6 @@
 		04544EAE2EE976CF00E7C02B /* RedPacketRainDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedPacketRainDemoVC.swift; sourceTree = "<group>"; };
 		04544EB12EE97AB800E7C02B /* 红包雨配置.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "红包雨配置.swift"; sourceTree = "<group>"; };
 		04544EB32EE97AC500E7C02B /* 红包雨视图.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "红包雨视图.swift"; sourceTree = "<group>"; };
-		04544EB52EE97AD900E7C02B /* 单个红包视图.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "单个红包视图.swift"; sourceTree = "<group>"; };
 		045920E32E84EC72008C8D6A /* SwiftTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTools.swift; sourceTree = "<group>"; };
 		045920E52E84F386008C8D6A /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
 		045920E92E84FD77008C8D6A /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -1375,9 +1373,8 @@
 		04544EB02EE97AAF00E7C02B /* 红包雨 */ = {
 			isa = PBXGroup;
 			children = (
-				04544EB52EE97AD900E7C02B /* 单个红包视图.swift */,
-				04544EB32EE97AC500E7C02B /* 红包雨视图.swift */,
 				04544EB12EE97AB800E7C02B /* 红包雨配置.swift */,
+				04544EB32EE97AC500E7C02B /* 红包雨视图.swift */,
 			);
 			path = "红包雨";
 			sourceTree = "<group>";
@@ -2694,7 +2691,6 @@
 				0411F2342EDFEB9100F1552C /* UIControl+统一点击事件.swift in Sources */,
 				0411F1F32EDFD9EE00F1552C /* UIButton+倒计时.swift in Sources */,
 				04FC77852EB0BDF100B810BA /* ImageLoader.swift in Sources */,
-				04544EB62EE97ADA00E7C02B /* 单个红包视图.swift in Sources */,
 				048F447C2EB311DE00BAA7EE /* Demo@JobsAppDoor.swift in Sources */,
 				04E821E02EDFF32400570A4C /* UILabel+Tools.swift in Sources */,
 				0453765B2EB0B57B00133F73 /* Demo@BMPlayer.swift in Sources */,

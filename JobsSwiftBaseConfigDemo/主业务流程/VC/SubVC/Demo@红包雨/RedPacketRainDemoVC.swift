@@ -14,13 +14,14 @@ import SnapKit
 
 final class RedPacketRainDemoVC: BaseVC {
     private var isRaining = false
+    private var count : Int = 0;
     private lazy var rainView: RedPacketRainView = {
         RedPacketRainView
             .dsl(
                 config: RedPacketRainConfig(
                     spawnInterval: 0.2,
-                    minFallDuration: 2.5,
-                    maxFallDuration: 4.0,
+                    minFallDuration: 5.5,
+                    maxFallDuration: 8.0,
                     packetSize: CGSize(width: 44, height: 54),
                     maxConcurrentCount: 80,
                     spawnInsets: .init(top: 0, left: 10, bottom: 0, right: 10),
@@ -32,28 +33,27 @@ final class RedPacketRainDemoVC: BaseVC {
                 self?.countLabel.byText("已抢到：\(count) 个")
             }
             .byAddTo(view) { [unowned self] make in
-                make.left.right.bottom.equalToSuperview()
-                if view.jobs_hasVisibleTopBar() {
-                    make.top.equalTo(self.gk_navigationBar.snp.bottom).offset(10)
-                } else {
-                    make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-                }
+                make.edges.equalToSuperview()
             }
     }()
-    var count : Int = 0;
+
     private lazy var countLabel: UILabel = {
         UILabel()
-            .byTextColor(.white)
+            .byTextColor(.black)
             .byFont(.boldSystemFont(ofSize: 18))
             .byTextAlignment(.center)
             .byText("已抢到".tr + ":" + String(count) + "个".tr)
             .byBgCor(.black.withAlphaComponent(0.4))
             .byCornerRadius(8)
             .byAddTo(view) { [unowned self] make in
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(12)
                 make.centerX.equalToSuperview()
-                make.height.equalTo(32)
-                make.width.greaterThanOrEqualTo(160)
+                make.height.equalTo(32.h)
+                make.width.greaterThanOrEqualTo(160.w)
+                if view.jobs_hasVisibleTopBar() {
+                    make.top.equalTo(self.gk_navigationBar.snp.bottom).offset(12.h)
+                } else {
+                    make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+                }
             }
     }()
 
@@ -76,13 +76,6 @@ final class RedPacketRainDemoVC: BaseVC {
                     // 停止但不立即清屏，保留已经在下落的红包
                     rainView.stop(clear: false)
                     toggleButton.setTitle("开始红包雨".tr, for: .normal)
-                }
-            }
-            .onLongPress(minimumPressDuration: 0.8) { btn, gr in
-                if gr.state == .began {
-                    btn.alpha = 0.7
-                } else if gr.state == .ended || gr.state == .cancelled {
-                    btn.alpha = 1.0
                 }
             }
             .byCornerRadius(22)
