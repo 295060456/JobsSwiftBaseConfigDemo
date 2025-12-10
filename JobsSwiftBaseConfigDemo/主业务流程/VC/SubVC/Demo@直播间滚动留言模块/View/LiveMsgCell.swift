@@ -4,7 +4,12 @@
 //
 //  Created by Mac on 11/11/25.
 //
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
+
 import SnapKit
 
 final class LiveMsgCell: UITableViewCell {

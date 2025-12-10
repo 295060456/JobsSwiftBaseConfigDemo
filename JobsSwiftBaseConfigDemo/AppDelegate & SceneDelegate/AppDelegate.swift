@@ -5,9 +5,16 @@
 //  Created by Jobs on 2025/6/4.
 //
 
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
+
 import GKNavigationBarSwift
 import LiveChat
+import IQKeyboardManagerSwift
+import IQKeyboardToolbarManager
 /// https://github.com/apple/swift-collections#
 #if canImport(Collections)
 import Collections          // ✅ Pod 或 SPM 直接接 apple/swift-collections
@@ -58,6 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         启动检测()
         日志打印()
         LiveChat配置()
+        智能键盘配置()
         多语言化()
         return true
     }
@@ -383,6 +391,14 @@ extension AppDelegate {
         LiveChat.groupId = "77"
         // 可选：自定义变量（用于上下文）
         LiveChat.setVariable(withKey: "userId", value: "123456")
+    }
+
+    func 智能键盘配置() {
+        IQKeyboardManager.shared.isEnabled = true
+        IQKeyboardManager.shared.resignOnTouchOutside = true
+        IQKeyboardManager.shared.keyboardDistance = 0                 
+
+        IQKeyboardToolbarManager.shared.isEnabled = false
     }
 
     func 多语言化(){

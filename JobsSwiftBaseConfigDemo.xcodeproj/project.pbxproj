@@ -189,6 +189,8 @@
 		04544E872EE82A4F00E7C02B /* CABasicAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E862EE82A4E00E7C02B /* CABasicAnimation.swift */; };
 		04544E892EE82A9500E7C02B /* CAPropertyAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E882EE82A9400E7C02B /* CAPropertyAnimation.swift */; };
 		04544E8B2EE82B1000E7C02B /* CAKeyframeAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E8A2EE82B0F00E7C02B /* CAKeyframeAnimation.swift */; };
+		04544E9B2EE91D9000E7C02B /* JobsCountdownProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E9A2EE91D9000E7C02B /* JobsCountdownProcess.swift */; };
+		04544E9D2EE91ED500E7C02B /* JobsCountdownProgressDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E9C2EE91ED400E7C02B /* JobsCountdownProgressDemoVC.swift */; };
 		045920E42E84EC73008C8D6A /* SwiftTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E32E84EC72008C8D6A /* SwiftTools.swift */; };
 		045920E62E84F389008C8D6A /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E52E84F386008C8D6A /* CALayer.swift */; };
 		045920EA2E84FD82008C8D6A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E92E84FD77008C8D6A /* String.swift */; };
@@ -631,6 +633,8 @@
 		04544E862EE82A4E00E7C02B /* CABasicAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CABasicAnimation.swift; sourceTree = "<group>"; };
 		04544E882EE82A9400E7C02B /* CAPropertyAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAPropertyAnimation.swift; sourceTree = "<group>"; };
 		04544E8A2EE82B0F00E7C02B /* CAKeyframeAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAKeyframeAnimation.swift; sourceTree = "<group>"; };
+		04544E9A2EE91D9000E7C02B /* JobsCountdownProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsCountdownProcess.swift; sourceTree = "<group>"; };
+		04544E9C2EE91ED400E7C02B /* JobsCountdownProgressDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsCountdownProgressDemoVC.swift; sourceTree = "<group>"; };
 		045920E32E84EC72008C8D6A /* SwiftTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTools.swift; sourceTree = "<group>"; };
 		045920E52E84F386008C8D6A /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
 		045920E92E84FD77008C8D6A /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -1284,6 +1288,48 @@
 			path = NumberFormatter;
 			sourceTree = "<group>";
 		};
+		04544E8F2EE9129600E7C02B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				04F7AF702EC3282200ACB509 /* LiveInputBar.swift */,
+				04F7AF6E2EC3280B00ACB509 /* LiveMsgCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		04544E902EE912A400E7C02B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				04F7AF6C2EC327FC00ACB509 /* LiveMsg.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		04544E912EE916B800E7C02B /* Demo@倒计时倒计时Layer */ = {
+			isa = PBXGroup;
+			children = (
+				04544E9F2EE9201800E7C02B /* Demo@Layer倒计时 */,
+				04544E9E2EE9200400E7C02B /* Demo@Progress倒计时 */,
+			);
+			path = "Demo@倒计时倒计时Layer";
+			sourceTree = "<group>";
+		};
+		04544E9E2EE9200400E7C02B /* Demo@Progress倒计时 */ = {
+			isa = PBXGroup;
+			children = (
+				04544E9A2EE91D9000E7C02B /* JobsCountdownProcess.swift */,
+				04544E9C2EE91ED400E7C02B /* JobsCountdownProgressDemoVC.swift */,
+			);
+			path = "Demo@Progress倒计时";
+			sourceTree = "<group>";
+		};
+		04544E9F2EE9201800E7C02B /* Demo@Layer倒计时 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Demo@Layer倒计时";
+			sourceTree = "<group>";
+		};
 		045920E22E84EC64008C8D6A /* 3rdTools */ = {
 			isa = PBXGroup;
 			children = (
@@ -1516,6 +1562,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				04544E912EE916B800E7C02B /* Demo@倒计时倒计时Layer */,
 				046D85B42EE671240084C5F5 /* Demo@HaishinKit */,
 				047E48D82EB3561200881898 /* Demo@PNPlayer */,
 				045376572EB0B56500133F73 /* Demo@BMPlayer */,
@@ -1981,9 +2028,8 @@
 		04F7AF6B2EC327DC00ACB509 /* Demo@直播间滚动留言模块 */ = {
 			isa = PBXGroup;
 			children = (
-				04F7AF702EC3282200ACB509 /* LiveInputBar.swift */,
-				04F7AF6E2EC3280B00ACB509 /* LiveMsgCell.swift */,
-				04F7AF6C2EC327FC00ACB509 /* LiveMsg.swift */,
+				04544E902EE912A400E7C02B /* Model */,
+				04544E8F2EE9129600E7C02B /* View */,
 				04F7AF662EC321B500ACB509 /* LiveCommentDemoVC.swift */,
 			);
 			path = "Demo@直播间滚动留言模块";
@@ -2534,10 +2580,12 @@
 				04468F8E2E9E4B6300677000 /* Demo@相册选择.swift in Sources */,
 				0477D9772E8B9381002C6427 /* UIResponder.swift in Sources */,
 				04E821CF2EDFEF9500570A4C /* UIGestureRecognizer+Block.swift in Sources */,
+				04544E9D2EE91ED500E7C02B /* JobsCountdownProgressDemoVC.swift in Sources */,
 				04544E7C2EE8202600E7C02B /* NumberFormatter.swift in Sources */,
 				0401DCFA2E90D91900D572AD /* UIWindow.swift in Sources */,
 				04468F922E9E5A5900677000 /* MediaPickerService.swift in Sources */,
 				0482A5EA2EA383B2004176A4 /* Demo@网页加载互动.swift in Sources */,
+				04544E9B2EE91D9000E7C02B /* JobsCountdownProcess.swift in Sources */,
 				04E8D5BB2E8E5AD000E85CDA /* Demo@中国大陆居民身份证验证.swift in Sources */,
 				C564FC892E0959640079B5C1 /* UICollectionView.swift in Sources */,
 				045376652EB0B5D600133F73 /* FeedVideoCell.swift in Sources */,

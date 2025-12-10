@@ -5,7 +5,12 @@
 //  Created by Mac on 11/11/25.
 //
 
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
+
 import SnapKit
 import IQKeyboardManagerSwift
 
@@ -15,8 +20,7 @@ final class LiveCommentDemoVC: BaseVC {
         .init(text: "欢迎来到直播间～"),
         .init(text: "礼貌发言，气氛更好 😄")
     ]
-
-    // 直接作为普通子视图，交给 IQKeyboardManager 顶起
+    // 底部输入条：普通子视图（不是 inputAccessoryView）
     private lazy var accessory: LiveInputBar = {
         LiveInputBar()
             .onSend { [weak self] text in
@@ -24,10 +28,14 @@ final class LiveCommentDemoVC: BaseVC {
                 self.appendMessage(text)
             }
             .byAutoClearAfterSend(true)
-            .byAutoResignAfterSend(false)   // 想发完继续输入就保持 false
+            .byAutoResignAfterSend(false)
+            .byAddTo(view) { [unowned self] make in
+                make.left.right.equalToSuperview()
+                // 🔑 关键：约束到 view 底部（不是 safeArea），这样整个 view 被 IQKeyboardManager 往上挪时，输入条跟着挪
+                make.bottom.equalToSuperview().offset(-8)
+            }
     }()
-
-    // Table（添加与约束都在懒加载里）
+    
     private lazy var tableView: UITableView = {
         UITableView(frame: .zero, style: .plain)
             .byDataSource(self)
@@ -44,36 +52,24 @@ final class LiveCommentDemoVC: BaseVC {
                     make.top.equalToSuperview()
                 }
                 make.left.right.equalToSuperview()
-                // ✅ 关键：列表底部贴输入条顶部，完全不用再算 inset
+                // ✅ 列表底部贴输入条顶部
                 make.bottom.equalTo(self.accessory.snp.top)
             }
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        view.byBgColor(.systemBackground)
         jobsSetupGKNav(
             title: "直播间留言"
         )
-        view.byBgColor(.systemBackground)
-
-        setupAccessory()
+        accessory.byVisible(YES)
         tableView.byVisible(YES)
 
         DispatchQueue.main.async { [weak self] in
             self?.scrollToBottom(false)
         }
     }
-
-    // MARK: - UI
-    private func setupAccessory() {
-        view.addSubview(accessory)
-        accessory.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-        }
-    }
-
     // MARK: - 发送逻辑
     private func sendFromInput() {
         let raw = accessory.tf.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
@@ -115,7 +111,7 @@ final class LiveCommentDemoVC: BaseVC {
         tableView.scrollToRow(at: ip, at: .bottom, animated: animated)
     }
 }
-// MARK: —— UITableViewDataSource & UITableViewDelegate & UITextFieldDelegate
+// MARK: —— UITableViewDataSource & UITableViewDelegate
 extension LiveCommentDemoVC: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int { 1 }
 
@@ -137,7 +133,7 @@ extension LiveCommentDemoVC: UITableViewDataSource, UITableViewDelegate {
         view.endEditing(true)
     }
 }
-
+// MARK: —— UITextFieldDelegate
 extension LiveCommentDemoVC: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         sendFromInput()

@@ -4,7 +4,12 @@
 //
 //  Created by Mac on 11/11/25.
 //
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
+
 import SnapKit
 // ============================== InputBar（inputAccessoryView） ==============================
 final class LiveInputBar: UIView {
@@ -29,27 +34,9 @@ final class LiveInputBar: UIView {
             }
             .byAddTo(self) { make in
                 make.leading.equalToSuperview().offset(22.w)
+                make.trailing.equalToSuperview().offset(-22.w)
                 make.centerY.equalToSuperview()
-                make.height.equalTo(36.w)
-                make.width.equalTo(ScreenWidth(2 / 3))
-            }
-    }()
-
-    lazy var sendBtn: UIButton = {
-        UIButton.sys()
-            .byBackgroundColor(.systemBlue, for: .normal)
-            .byTitle("取消", for: .normal)
-            .byTitleColor(.white, for: .normal)
-            .byTitleFont(.boldSystemFont(ofSize: 16))
-            .onTap { [weak self] _ in                        // 🔘 按钮“取消”
-                guard let self else { return }
-                jobsDismissKeyboard()
-            }
-            .byAddTo(self) { [unowned self] make in
-                make.leading.equalTo(tf.snp.trailing).offset(8)
-                make.trailing.equalToSuperview().inset(12)
-                make.centerY.equalToSuperview()
-                make.width.greaterThanOrEqualTo(56)
+                make.height.equalTo(38.h)
             }
     }()
 
@@ -73,7 +60,6 @@ final class LiveInputBar: UIView {
         autoresizingMask = [.flexibleWidth, .flexibleHeight]
         topLine.byVisible(YES)
         tf.byVisible(YES)
-        sendBtn.byVisible(YES)
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     /// 统一出口：采集文本 -> 回调给外部 -> 按配置清空/收键盘
