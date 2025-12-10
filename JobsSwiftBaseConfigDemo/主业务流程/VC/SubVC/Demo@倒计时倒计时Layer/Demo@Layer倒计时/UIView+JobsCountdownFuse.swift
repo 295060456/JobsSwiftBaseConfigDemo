@@ -5,10 +5,13 @@
 //  Created by Jobs on 12/10/25.
 //
 
-#if os(iOS) || os(tvOS)
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
-import ObjectiveC
 #endif
+
+import ObjectiveC
 /// 导火索式倒计时：在任意 UIView 最外层画一圈可消耗的边框，随着时间递减
 /// 导火索倒计时配置（按需可以继续扩）
 /// 这里先做最小配置：线宽、颜色、内边距、结束后是否移除

@@ -5,7 +5,12 @@
 //  Created by Mac on 9/29/25.
 //
 
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
+
 import GKNavigationBarSwift
 
 final class RootListVC: BaseVC {
@@ -19,7 +24,7 @@ final class RootListVC: BaseVC {
         ("🧭 系统导航栏", JobsNavigationDemoVC.self),
         ("💣 导火索倒计时效果@Layer", JobsCountdownProgressDemoVC.self),
         ("💣 导火索倒计时效果@Button", JobsCountdownButtonDemoVC.self),
-        ("🟩🟩⬜⬜ 自定义进度条", JobsDirectionalProgressDemoVC.self),
+        ("🟩🟩⬜⬜ 自定义进度条", JobsProgressDemoVC.self),
         ("👛 钱包卡片效果", JobsWalletDemoVC.self),
         ("⏺️ 本地录制到系统相册", HKLocalRecordVC.self),
         ("🌘 滚动留言", LiveCommentDemoVC.self),

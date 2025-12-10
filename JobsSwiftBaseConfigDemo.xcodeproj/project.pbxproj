@@ -192,8 +192,8 @@
 		04544E9B2EE91D9000E7C02B /* JobsCountdownProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E9A2EE91D9000E7C02B /* JobsCountdownProcess.swift */; };
 		04544E9D2EE91ED500E7C02B /* JobsCountdownProgressDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E9C2EE91ED400E7C02B /* JobsCountdownProgressDemoVC.swift */; };
 		04544EA22EE92D0C00E7C02B /* UIView+JobsCountdownFuse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EA12EE92D0B00E7C02B /* UIView+JobsCountdownFuse.swift */; };
-		04544EA42EE92DFB00E7C02B /* JobsDirectionalProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EA32EE92DF900E7C02B /* JobsDirectionalProgressView.swift */; };
-		04544EA72EE92E4200E7C02B /* JobsDirectionalProgressDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EA62EE92E4100E7C02B /* JobsDirectionalProgressDemoVC.swift */; };
+		04544EA42EE92DFB00E7C02B /* JobsProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EA32EE92DF900E7C02B /* JobsProgressView.swift */; };
+		04544EA72EE92E4200E7C02B /* JobsProgressDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EA62EE92E4100E7C02B /* JobsProgressDemoVC.swift */; };
 		04544EA92EE9453F00E7C02B /* JobsCountdownButtonDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EA82EE9453D00E7C02B /* JobsCountdownButtonDemoVC.swift */; };
 		045920E42E84EC73008C8D6A /* SwiftTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E32E84EC72008C8D6A /* SwiftTools.swift */; };
 		045920E62E84F389008C8D6A /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045920E52E84F386008C8D6A /* CALayer.swift */; };
@@ -640,8 +640,8 @@
 		04544E9A2EE91D9000E7C02B /* JobsCountdownProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsCountdownProcess.swift; sourceTree = "<group>"; };
 		04544E9C2EE91ED400E7C02B /* JobsCountdownProgressDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsCountdownProgressDemoVC.swift; sourceTree = "<group>"; };
 		04544EA12EE92D0B00E7C02B /* UIView+JobsCountdownFuse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+JobsCountdownFuse.swift"; sourceTree = "<group>"; };
-		04544EA32EE92DF900E7C02B /* JobsDirectionalProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsDirectionalProgressView.swift; sourceTree = "<group>"; };
-		04544EA62EE92E4100E7C02B /* JobsDirectionalProgressDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsDirectionalProgressDemoVC.swift; sourceTree = "<group>"; };
+		04544EA32EE92DF900E7C02B /* JobsProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsProgressView.swift; sourceTree = "<group>"; };
+		04544EA62EE92E4100E7C02B /* JobsProgressDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsProgressDemoVC.swift; sourceTree = "<group>"; };
 		04544EA82EE9453D00E7C02B /* JobsCountdownButtonDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsCountdownButtonDemoVC.swift; sourceTree = "<group>"; };
 		045920E32E84EC72008C8D6A /* SwiftTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTools.swift; sourceTree = "<group>"; };
 		045920E52E84F386008C8D6A /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
@@ -1343,8 +1343,8 @@
 		04544EA52EE92E2900E7C02B /* Demo@自定义进度条 */ = {
 			isa = PBXGroup;
 			children = (
-				04544EA62EE92E4100E7C02B /* JobsDirectionalProgressDemoVC.swift */,
-				04544EA32EE92DF900E7C02B /* JobsDirectionalProgressView.swift */,
+				04544EA62EE92E4100E7C02B /* JobsProgressDemoVC.swift */,
+				04544EA32EE92DF900E7C02B /* JobsProgressView.swift */,
 			);
 			path = "Demo@自定义进度条";
 			sourceTree = "<group>";
@@ -2524,7 +2524,7 @@
 				046786F52EB5AD14003FE82D /* GKNavigationBarSwift.swift in Sources */,
 				04E821CD2EDFED3300570A4C /* UIGestureRecognizer+DSL.swift in Sources */,
 				043283712EC45F4D0031CDD6 /* JXSegmentedIndicatorBaseView.swift in Sources */,
-				04544EA72EE92E4200E7C02B /* JobsDirectionalProgressDemoVC.swift in Sources */,
+				04544EA72EE92E4200E7C02B /* JobsProgressDemoVC.swift in Sources */,
 				C564FC942E0959640079B5C1 /* UIPageViewController.swift in Sources */,
 				0482A5F82EA5F309004176A4 /* JobsNavBar.swift in Sources */,
 				045920E62E84F389008C8D6A /* CALayer.swift in Sources */,
@@ -2803,7 +2803,7 @@
 				04124F422EB0762900462BE2 /* AFStubURLProtocol.swift in Sources */,
 				0411F1DF2EDFD61200F1552C /* String+二维码.swift in Sources */,
 				048F447E2EB3267200BAA7EE /* CATransform3D.swift in Sources */,
-				04544EA42EE92DFB00E7C02B /* JobsDirectionalProgressView.swift in Sources */,
+				04544EA42EE92DFB00E7C02B /* JobsProgressView.swift in Sources */,
 				04544E872EE82A4F00E7C02B /* CABasicAnimation.swift in Sources */,
 				047E48DA2EB3562C00881898 /* PNPlayerDemoVC.swift in Sources */,
 				0411F2052EDFE29200F1552C /* UIButton+Subtitle.swift in Sources */,

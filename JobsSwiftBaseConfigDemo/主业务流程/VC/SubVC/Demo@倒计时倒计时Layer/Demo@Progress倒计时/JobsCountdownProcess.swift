@@ -6,10 +6,8 @@
 //
 
 import Foundation
-
 /// 纯逻辑倒计时过程，内部用 JobsTimer 驱动
 public final class JobsCountdownProcess {
-
     /// 进度快照
     public struct Snapshot {
         /// 总倒计时（秒）
@@ -24,7 +22,6 @@ public final class JobsCountdownProcess {
             return min(1, max(0, elapsed / total))
         }
     }
-
     /// 状态
     public enum State {
         case idle       // 初始

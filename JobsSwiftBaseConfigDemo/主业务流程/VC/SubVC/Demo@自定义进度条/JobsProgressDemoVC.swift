@@ -1,14 +1,19 @@
 //
-//  JobsDirectionalProgressDemoVC.swift
+//  JobsProgressDemoVC.swift
 //  JobsSwiftBaseConfigDemo
 //
 //  Created by Jobs on 12/10/25.
 //
 
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
+
 import SnapKit
 
-final class JobsDirectionalProgressDemoVC: BaseVC {
+final class JobsProgressDemoVC: BaseVC {
     deinit {
         timer?.stop()
     }
@@ -67,8 +72,8 @@ final class JobsDirectionalProgressDemoVC: BaseVC {
             }
     }()
     /// 自定义进度条
-    private lazy var progressView: JobsDirectionalProgressView = {
-        JobsDirectionalProgressView()
+    private lazy var progressView: JobsProgressView = {
+        JobsProgressView()
             .byDirection(.leftToRight)
             .byTrackColor(.systemGray5)
             .byLabelBackgroundColor(.secondarySystemBackground)

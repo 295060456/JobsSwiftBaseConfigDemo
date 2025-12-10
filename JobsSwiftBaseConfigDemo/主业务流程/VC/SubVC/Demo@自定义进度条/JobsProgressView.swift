@@ -1,13 +1,17 @@
 //
-//  JobsDirectionalProgressView.swift
+//  JobsProgressView.swift
 //  JobsSwiftBaseConfigDemo
 //
 //  Created by Jobs on 12/10/25.
 //
 
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
 
-final class JobsDirectionalProgressView: UIView {
+final class JobsProgressView: UIView {
     enum Direction {
         case leftToRight
         case rightToLeft
@@ -217,7 +221,7 @@ final class JobsDirectionalProgressView: UIView {
     }
 }
 // MARK: - DSL
-extension JobsDirectionalProgressView {
+extension JobsProgressView {
     // MARK: - Direction
     /// 配置进度方向
     @discardableResult
