@@ -189,9 +189,9 @@
 		04544E872EE82A4F00E7C02B /* CABasicAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E862EE82A4E00E7C02B /* CABasicAnimation.swift */; };
 		04544E892EE82A9500E7C02B /* CAPropertyAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E882EE82A9400E7C02B /* CAPropertyAnimation.swift */; };
 		04544E8B2EE82B1000E7C02B /* CAKeyframeAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E8A2EE82B0F00E7C02B /* CAKeyframeAnimation.swift */; };
-		04544E9B2EE91D9000E7C02B /* JobsCountdownProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E9A2EE91D9000E7C02B /* JobsCountdownProcess.swift */; };
-		04544E9D2EE91ED500E7C02B /* JobsCountdownProgressDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E9C2EE91ED400E7C02B /* JobsCountdownProgressDemoVC.swift */; };
-		04544EA22EE92D0C00E7C02B /* UIView+JobsCountdownFuse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EA12EE92D0B00E7C02B /* UIView+JobsCountdownFuse.swift */; };
+		04544E9B2EE91D9000E7C02B /* JobsTimerBySysProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E9A2EE91D9000E7C02B /* JobsTimerBySysProcess.swift */; };
+		04544E9D2EE91ED500E7C02B /* JobsSysProgressDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544E9C2EE91ED400E7C02B /* JobsSysProgressDemoVC.swift */; };
+		04544EA22EE92D0C00E7C02B /* UIView+外圈Layer导火索倒计时效果.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EA12EE92D0B00E7C02B /* UIView+外圈Layer导火索倒计时效果.swift */; };
 		04544EA42EE92DFB00E7C02B /* JobsProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EA32EE92DF900E7C02B /* JobsProgressView.swift */; };
 		04544EA72EE92E4200E7C02B /* JobsProgressDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EA62EE92E4100E7C02B /* JobsProgressDemoVC.swift */; };
 		04544EA92EE9453F00E7C02B /* JobsCountdownButtonDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04544EA82EE9453D00E7C02B /* JobsCountdownButtonDemoVC.swift */; };
@@ -637,9 +637,9 @@
 		04544E862EE82A4E00E7C02B /* CABasicAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CABasicAnimation.swift; sourceTree = "<group>"; };
 		04544E882EE82A9400E7C02B /* CAPropertyAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAPropertyAnimation.swift; sourceTree = "<group>"; };
 		04544E8A2EE82B0F00E7C02B /* CAKeyframeAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CAKeyframeAnimation.swift; sourceTree = "<group>"; };
-		04544E9A2EE91D9000E7C02B /* JobsCountdownProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsCountdownProcess.swift; sourceTree = "<group>"; };
-		04544E9C2EE91ED400E7C02B /* JobsCountdownProgressDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsCountdownProgressDemoVC.swift; sourceTree = "<group>"; };
-		04544EA12EE92D0B00E7C02B /* UIView+JobsCountdownFuse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+JobsCountdownFuse.swift"; sourceTree = "<group>"; };
+		04544E9A2EE91D9000E7C02B /* JobsTimerBySysProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsTimerBySysProcess.swift; sourceTree = "<group>"; };
+		04544E9C2EE91ED400E7C02B /* JobsSysProgressDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsSysProgressDemoVC.swift; sourceTree = "<group>"; };
+		04544EA12EE92D0B00E7C02B /* UIView+外圈Layer导火索倒计时效果.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+外圈Layer导火索倒计时效果.swift"; sourceTree = "<group>"; };
 		04544EA32EE92DF900E7C02B /* JobsProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsProgressView.swift; sourceTree = "<group>"; };
 		04544EA62EE92E4100E7C02B /* JobsProgressDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsProgressDemoVC.swift; sourceTree = "<group>"; };
 		04544EA82EE9453D00E7C02B /* JobsCountdownButtonDemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsCountdownButtonDemoVC.swift; sourceTree = "<group>"; };
@@ -960,6 +960,7 @@
 				0411F2262EDFE9FA00F1552C /* UIView+SkeletonView.swift */,
 				0411F2102EDFE5D600F1552C /* UIView+SnapKit.swift */,
 				0411F2242EDFE8E100F1552C /* UIView+Subview.swift */,
+				04544EA12EE92D0B00E7C02B /* UIView+外圈Layer导火索倒计时效果.swift */,
 			);
 			path = UIView;
 			sourceTree = "<group>";
@@ -1316,42 +1317,49 @@
 		04544E912EE916B800E7C02B /* Demo@倒计时倒计时Layer */ = {
 			isa = PBXGroup;
 			children = (
-				04544E9F2EE9201800E7C02B /* Demo@Layer倒计时 */,
-				04544E9E2EE9200400E7C02B /* Demo@Progress倒计时 */,
+				04544EA52EE92E2900E7C02B /* Demo@自定义进度条（进度值+前进方向） */,
+				04544E9E2EE9200400E7C02B /* Demo@系统进度条+倒计时JobsTimer+进度（方向）模式 */,
 			);
 			path = "Demo@倒计时倒计时Layer";
 			sourceTree = "<group>";
 		};
-		04544E9E2EE9200400E7C02B /* Demo@Progress倒计时 */ = {
+		04544E9E2EE9200400E7C02B /* Demo@系统进度条+倒计时JobsTimer+进度（方向）模式 */ = {
 			isa = PBXGroup;
 			children = (
-				04544E9A2EE91D9000E7C02B /* JobsCountdownProcess.swift */,
-				04544E9C2EE91ED400E7C02B /* JobsCountdownProgressDemoVC.swift */,
+				04544E9C2EE91ED400E7C02B /* JobsSysProgressDemoVC.swift */,
 			);
-			path = "Demo@Progress倒计时";
+			path = "Demo@系统进度条+倒计时JobsTimer+进度（方向）模式";
 			sourceTree = "<group>";
 		};
-		04544E9F2EE9201800E7C02B /* Demo@Layer倒计时 */ = {
+		04544E9F2EE9201800E7C02B /* Demo@任意UIView.layer倒计时 */ = {
 			isa = PBXGroup;
 			children = (
 				04544EA82EE9453D00E7C02B /* JobsCountdownButtonDemoVC.swift */,
-				04544EA12EE92D0B00E7C02B /* UIView+JobsCountdownFuse.swift */,
 			);
-			path = "Demo@Layer倒计时";
+			path = "Demo@任意UIView.layer倒计时";
 			sourceTree = "<group>";
 		};
-		04544EA52EE92E2900E7C02B /* Demo@自定义进度条 */ = {
+		04544EA52EE92E2900E7C02B /* Demo@自定义进度条（进度值+前进方向） */ = {
 			isa = PBXGroup;
 			children = (
 				04544EA62EE92E4100E7C02B /* JobsProgressDemoVC.swift */,
-				04544EA32EE92DF900E7C02B /* JobsProgressView.swift */,
 			);
-			path = "Demo@自定义进度条";
+			path = "Demo@自定义进度条（进度值+前进方向）";
+			sourceTree = "<group>";
+		};
+		04544EAA2EE967C600E7C02B /* 进度条 */ = {
+			isa = PBXGroup;
+			children = (
+				04544EA32EE92DF900E7C02B /* JobsProgressView.swift */,
+				04544E9A2EE91D9000E7C02B /* JobsTimerBySysProcess.swift */,
+			);
+			path = "进度条";
 			sourceTree = "<group>";
 		};
 		045920E22E84EC64008C8D6A /* 3rdTools */ = {
 			isa = PBXGroup;
 			children = (
+				04544EAA2EE967C600E7C02B /* 进度条 */,
 				043283912EC499E00031CDD6 /* BRPickerViewSwift */,
 				046786E32EB4CED9003FE82D /* JobsRefresher */,
 				047E48C52EB3554900881898 /* PNPlayer */,
@@ -1581,7 +1589,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
-				04544EA52EE92E2900E7C02B /* Demo@自定义进度条 */,
+				04544E9F2EE9201800E7C02B /* Demo@任意UIView.layer倒计时 */,
 				04544E912EE916B800E7C02B /* Demo@倒计时倒计时Layer */,
 				046D85B42EE671240084C5F5 /* Demo@HaishinKit */,
 				047E48D82EB3561200881898 /* Demo@PNPlayer */,
@@ -2573,7 +2581,7 @@
 				046D85BD2EE6759E0084C5F5 /* WalletSectionHeaderView.swift in Sources */,
 				046D85BE2EE6759E0084C5F5 /* WalletCardCell.swift in Sources */,
 				0411F2192EDFE70400F1552C /* UIView+GKNavigationBarSwift.swift in Sources */,
-				04544EA22EE92D0C00E7C02B /* UIView+JobsCountdownFuse.swift in Sources */,
+				04544EA22EE92D0C00E7C02B /* UIView+外圈Layer导火索倒计时效果.swift in Sources */,
 				04DC13872EDD3D2600CEDA1C /* SafeCodable.swift in Sources */,
 				04DC13882EDD3D2600CEDA1C /* JobsTimer.swift in Sources */,
 				04DC13892EDD3D2600CEDA1C /* JobsRichText.swift in Sources */,
@@ -2603,12 +2611,12 @@
 				04468F8E2E9E4B6300677000 /* Demo@相册选择.swift in Sources */,
 				0477D9772E8B9381002C6427 /* UIResponder.swift in Sources */,
 				04E821CF2EDFEF9500570A4C /* UIGestureRecognizer+Block.swift in Sources */,
-				04544E9D2EE91ED500E7C02B /* JobsCountdownProgressDemoVC.swift in Sources */,
+				04544E9D2EE91ED500E7C02B /* JobsSysProgressDemoVC.swift in Sources */,
 				04544E7C2EE8202600E7C02B /* NumberFormatter.swift in Sources */,
 				0401DCFA2E90D91900D572AD /* UIWindow.swift in Sources */,
 				04468F922E9E5A5900677000 /* MediaPickerService.swift in Sources */,
 				0482A5EA2EA383B2004176A4 /* Demo@网页加载互动.swift in Sources */,
-				04544E9B2EE91D9000E7C02B /* JobsCountdownProcess.swift in Sources */,
+				04544E9B2EE91D9000E7C02B /* JobsTimerBySysProcess.swift in Sources */,
 				04E8D5BB2E8E5AD000E85CDA /* Demo@中国大陆居民身份证验证.swift in Sources */,
 				C564FC892E0959640079B5C1 /* UICollectionView.swift in Sources */,
 				045376652EB0B5D600133F73 /* FeedVideoCell.swift in Sources */,

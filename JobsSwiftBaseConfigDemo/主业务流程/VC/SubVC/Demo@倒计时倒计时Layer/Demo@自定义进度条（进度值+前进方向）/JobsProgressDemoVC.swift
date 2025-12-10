@@ -22,21 +22,6 @@ final class JobsProgressDemoVC: BaseVC {
     private var timer: JobsTimerProtocol?
     private var currentProgress: CGFloat = 0
     // MARK: - UI 懒加载
-    /// 标题
-    private lazy var titleLabel: UILabel = {
-        UILabel()
-            .byText("Directional Progress Demo")
-            .byFont(.boldSystemFont(ofSize: 20))
-            .byTextAlignment(.center)
-            .byAddTo(view) { [unowned self] make in
-                make.centerX.equalToSuperview()
-                if view.jobs_hasVisibleTopBar() {
-                    make.top.equalTo(self.gk_navigationBar.snp.bottom).offset(10)
-                } else {
-                    make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(32)
-                }
-            }
-    }()
     /// 方向切换 SegmentedControl
     ///
     /// 0: 左 -> 右
@@ -67,8 +52,12 @@ final class JobsProgressDemoVC: BaseVC {
                 progressView.setProgress(0, animated: false)
             }
             .byAddTo(view) { [unowned self] make in
-                make.top.equalTo(titleLabel.snp.bottom).offset(24)
                 make.centerX.equalToSuperview()
+                if view.jobs_hasVisibleTopBar() {
+                    make.top.equalTo(self.gk_navigationBar.snp.bottom).offset(30)
+                } else {
+                    make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(56)
+                }
             }
     }()
     /// 自定义进度条
@@ -142,8 +131,7 @@ final class JobsProgressDemoVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        jobsSetupGKNav(title: "自定义进度条")
-        titleLabel.byVisible(YES)
+        jobsSetupGKNav(title: "自定义（进度值+前进方向）进度条")
         directionSegment.byVisible(YES)
         progressView.byVisible(YES)
         startButton.byVisible(YES)

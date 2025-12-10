@@ -10,7 +10,7 @@ import AppKit
 #elseif os(iOS) || os(tvOS)
 import UIKit
 #endif
-
+/// 自定义进度条@进度值和前进方向
 final class JobsProgressView: UIView {
     enum Direction {
         case leftToRight

@@ -1,5 +1,5 @@
 //
-//  JobsCountdownButtonDemoVC.swift
+//  JobsCountdownLayerDemoVC.swift
 //  JobsSwiftBaseConfigDemo
 //
 //  Created by Jobs on 2025/12/10.
@@ -13,7 +13,7 @@ import UIKit
 
 import SnapKit
 /// 演示：按钮中间显示倒计时秒数，点击 = 开始 / 暂停 / 继续 / 完成后重新开始
-final class JobsCountdownButtonDemoVC: BaseVC {
+final class JobsCountdownLayerDemoVC: BaseVC {
     private let horizontalInset: CGFloat = 40
     private let defaultTotalSeconds: Int = 10
     /// 记录当前剩余秒数（用于暂停提示）
@@ -88,7 +88,7 @@ final class JobsCountdownButtonDemoVC: BaseVC {
                             duration: TimeInterval(total),
                             config: JobsFuseConfig(
                                 lineWidth: 2,
-                                color: .systemYellow,
+                                color: .white,
                                 inset: 0,
                                 removeOnFinish: true,
                                 direction: .counterClockwise
