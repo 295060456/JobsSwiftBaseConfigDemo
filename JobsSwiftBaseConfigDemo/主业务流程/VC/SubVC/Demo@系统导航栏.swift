@@ -52,17 +52,17 @@ final class JobsNavigationDemoVC: BaseVC {
             .onTap { [weak self] _ in
                 guard let self else { return }
                 print("👉 点击了右侧『铃铛』按钮")
-                toastBy("点击了右侧『铃铛』按钮")
+                "点击了右侧『铃铛』按钮".toast
             }
             .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                 if gr.state == .began {
                     btn.alpha = 0.6
                     print("铃铛长按开始")
-                    toastBy("铃铛长按开始")
+                    "铃铛长按开始".toast
                 } else if gr.state == .ended || gr.state == .cancelled {
                     btn.alpha = 1.0
                     print("铃铛长按结束")
-                    toastBy("铃铛长按结束")
+                    "铃铛长按结束".toast
                 }
             }
     }()
@@ -104,7 +104,7 @@ final class JobsNavigationDemoVC: BaseVC {
                 .onTap { [weak self] (item:UIBarButtonItem) in
                     guard let self else { return }
                     print("👉 点击了右侧『hi』按钮")
-                    toastBy("点击了右侧\(item.title!)按钮")
+                    "点击了右侧\(item.title!)按钮".toast
                 },
             UIBarButtonItem(customView: bellButton)]
     }

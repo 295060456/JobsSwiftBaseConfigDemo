@@ -36,14 +36,14 @@ final class PicLoadDemoVC: BaseVC {
             .byContentMode(.scaleAspectFill)
             .byClipsToBounds()
             .onTap { iv in
-                toastBy("单击图片：\(iv)")
+                "单击图片：\(iv)".toast
              }
             .onLongPress(minDuration: 0.8, movement: 12, touches: 1, name: "customLongPress") { iv, gr in
                 switch gr.state {
                 case .began:
-                    toastBy("长按开始 on \(iv)")
+                    "长按开始 on \(iv)".toast
                 case .ended, .cancelled, .failed:
-                    toastBy("长按结束 on \(iv)")
+                    "长按结束 on \(iv)".toast
                 default:
                     break
                 }
@@ -62,14 +62,14 @@ final class PicLoadDemoVC: BaseVC {
             .byContentMode(.scaleAspectFill)
             .byClipsToBounds()
             .onTap { iv in
-                toastBy("单击图片：\(iv)")
+                "单击图片：\(iv)".toast
              }
             .onLongPress(minDuration: 0.8, movement: 12, touches: 1, name: "customLongPress") { iv, gr in
                 switch gr.state {
                 case .began:
-                    toastBy("长按开始 on \(iv)")
+                    "长按开始 on \(iv)".toast
                 case .ended, .cancelled, .failed:
-                    toastBy("长按结束 on \(iv)")
+                    "长按结束 on \(iv)".toast
                 default:
                     break
                 }
@@ -88,14 +88,14 @@ final class PicLoadDemoVC: BaseVC {
             .byContentMode(.scaleAspectFill)
             .byClipsToBounds()
             .onTap { iv in
-                toastBy("单击图片：\(iv)")
+                "单击图片：\(iv)".toast
              }
             .onLongPress(minDuration: 0.8, movement: 12, touches: 1, name: "customLongPress") { iv, gr in
                 switch gr.state {
                 case .began:
-                    toastBy("长按开始 on \(iv)")
+                    "长按开始 on \(iv)".toast
                 case .ended, .cancelled, .failed:
-                    toastBy("长按结束 on \(iv)")
+                    "长按结束 on \(iv)".toast
                 default:
                     break
                 }
@@ -114,14 +114,14 @@ final class PicLoadDemoVC: BaseVC {
             .byClipsToBounds()
             .kf_setImage(from: "https://picsum.photos/200", placeholder: "Ani".img)
             .onTap { iv in
-                toastBy("单击图片：\(iv)")
+                "单击图片：\(iv)".toast
              }
             .onLongPress(minDuration: 0.8, movement: 12, touches: 1, name: "customLongPress") { iv, gr in
                 switch gr.state {
                 case .began:
-                    toastBy("长按开始 on \(iv)")
+                    "长按开始 on \(iv)".toast
                 case .ended, .cancelled, .failed:
-                    toastBy("长按结束 on \(iv)")
+                    "长按结束 on \(iv)".toast
                 default:
                     break
                 }
@@ -140,14 +140,14 @@ final class PicLoadDemoVC: BaseVC {
             .byClipsToBounds()
             .sd_setImage(from: "https://picsum.photos/200", placeholder: "Ani".img)
             .onTap { iv in
-                toastBy("单击图片：\(iv)")
+                "单击图片：\(iv)".toast
              }
             .onLongPress(minDuration: 0.8, movement: 12, touches: 1, name: "customLongPress") { iv, gr in
                 switch gr.state {
                 case .began:
-                    toastBy("长按开始 on \(iv)")
+                    "长按开始 on \(iv)".toast
                 case .ended, .cancelled, .failed:
-                    toastBy("长按结束 on \(iv)")
+                    "长按结束 on \(iv)".toast
                 default:
                     break
                 }
@@ -173,7 +173,7 @@ final class PicLoadDemoVC: BaseVC {
             .sd_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
             .onTap { sender in
                 print("🔴 Kingfisher@背景图 2 tapped, selected=\(sender.isSelected)")
-                toastBy("点击了UIButton网络背景图@SDWebImage")
+                "点击了UIButton网络背景图@SDWebImage".toast
             }
             .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                 if gr.state == .began {
@@ -206,7 +206,7 @@ final class PicLoadDemoVC: BaseVC {
             .sd_normalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
             .onTap { sender in
                 print("🔴 Kingfisher@背景图 2 tapped, selected=\(sender.isSelected)")
-                toastBy("UIButton网络前景图@SDWebImage")
+                "UIButton网络前景图@SDWebImage".toast
             }
             .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                 if gr.state == .began {
@@ -243,7 +243,7 @@ final class PicLoadDemoVC: BaseVC {
             .kf_bgNormalLoad()// 之前是配置项，这里才是真正决定渲染背景图/前景图
             .onTap { sender in
                 print("🔴 Kingfisher@背景图 2 tapped, selected=\(sender.isSelected)")
-                toastBy("UIButton网络背景图@Kingfisher")
+                "UIButton网络背景图@Kingfisher".toast
             }
             .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                 if gr.state == .began {
@@ -282,7 +282,7 @@ final class PicLoadDemoVC: BaseVC {
             .kf_normalLoad() // 之前是配置项，这里才是真正决定渲染背景图/前景图
             .onTap { sender in
                 print("🔴 Kingfisher@背景图 2 tapped, selected=\(sender.isSelected)")
-                toastBy("UIButton网络前景图@Kingfisher")
+                "UIButton网络前景图@Kingfisher".toast
             }
             .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                 if gr.state == .began {
@@ -306,18 +306,18 @@ final class PicLoadDemoVC: BaseVC {
         view.backgroundColor = .systemBackground
         jobsSetupGKNav(title: "图片加载 UIImageView/UIButton")
 
-        scrollView.byAlpha(1)
+        scrollView.byVisible(YES)
 
-        localImgView.byAlpha(1)      // UIImageView@字符串本地图
-        asyncImgView.byAlpha(1)      // UIImageView字符串网络图@Kingfisher
-        asyncImgViewSD.byAlpha(1)    // UIImageView字符串网络图@SDWebImage
-        wrapperImgView.byAlpha(1)    // UIImageView网络图（失败兜底图）@Kingfisher
-        wrapperImgViewSD.byAlpha(1)  // UIImageView网络图（失败兜底图）@SDWebImage
+        localImgView.byVisible(YES)     // UIImageView@字符串本地图
+        asyncImgView.byVisible(YES)     // UIImageView字符串网络图@Kingfisher
+        asyncImgViewSD.byVisible(YES)   // UIImageView字符串网络图@SDWebImage
+        wrapperImgView.byVisible(YES)   // UIImageView网络图（失败兜底图）@Kingfisher
+        wrapperImgViewSD.byVisible(YES) // UIImageView网络图（失败兜底图）@SDWebImage
 
-        btnBG.byAlpha(1)             // UIButton网络背景图@SDWebImage
-        btnImage.byAlpha(1)          // UIButton网络前景图@SDWebImage
-        btnBG_KF.byAlpha(1)          // UIButton网络背景图@Kingfisher
-        btnImage_KF.byAlpha(1)       // UIButton网络前景图@Kingfisher
+        btnBG.byVisible(YES)            // UIButton网络背景图@SDWebImage
+        btnImage.byVisible(YES)         // UIButton网络前景图@SDWebImage
+        btnBG_KF.byVisible(YES)         // UIButton网络背景图@Kingfisher
+        btnImage_KF.byVisible(YES)      // UIButton网络前景图@Kingfisher
         // 结束滚动内容
         scrollView.contentLayoutGuide.snp.makeConstraints { make in
             make.bottom.equalTo(btnImage_KF.snp.bottom).offset(24)

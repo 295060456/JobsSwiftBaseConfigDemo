@@ -235,6 +235,7 @@
 		046D85BE2EE6759E0084C5F5 /* WalletCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046D85BA2EE6759E0084C5F5 /* WalletCardCell.swift */; };
 		046D85C12EE6766C0084C5F5 /* HaishinKit@本地录制到系统相册.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046D85C02EE6766C0084C5F5 /* HaishinKit@本地录制到系统相册.swift */; };
 		046D85CC2EE6E3340084C5F5 /* HaishinKit@直播推流.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046D85CB2EE6E3250084C5F5 /* HaishinKit@直播推流.swift */; };
+		046EB4BA2EEA75B4001B7334 /* String+toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046EB4B92EEA75AA001B7334 /* String+toast.swift */; };
 		0477D96F2E8B8479002C6427 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D96E2E8B8478002C6427 /* UIApplication.swift */; };
 		0477D9712E8B897D002C6427 /* Demo@支持上下左右安全Push和原路返回.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9702E8B896A002C6427 /* Demo@支持上下左右安全Push和原路返回.swift */; };
 		0477D9752E8B9146002C6427 /* Demo@安全Present.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9742E8B9141002C6427 /* Demo@安全Present.swift */; };
@@ -686,6 +687,7 @@
 		046D85BB2EE6759E0084C5F5 /* WalletSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSectionHeaderView.swift; sourceTree = "<group>"; };
 		046D85C02EE6766C0084C5F5 /* HaishinKit@本地录制到系统相册.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HaishinKit@本地录制到系统相册.swift"; sourceTree = "<group>"; };
 		046D85CB2EE6E3250084C5F5 /* HaishinKit@直播推流.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HaishinKit@直播推流.swift"; sourceTree = "<group>"; };
+		046EB4B92EEA75AA001B7334 /* String+toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+toast.swift"; sourceTree = "<group>"; };
 		0477D96E2E8B8478002C6427 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
 		0477D9702E8B896A002C6427 /* Demo@支持上下左右安全Push和原路返回.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@支持上下左右安全Push和原路返回.swift"; sourceTree = "<group>"; };
 		0477D9742E8B9141002C6427 /* Demo@安全Present.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@安全Present.swift"; sourceTree = "<group>"; };
@@ -1013,11 +1015,12 @@
 			isa = PBXGroup;
 			children = (
 				045920E92E84FD77008C8D6A /* String.swift */,
+				046EB4B92EEA75AA001B7334 /* String+toast.swift */,
 				0411F1E62EDFD6E900F1552C /* String+裁剪.swift */,
 				0411F1DE2EDFD60D00F1552C /* String+二维码.swift */,
+				0411F1E02EDFD62800F1552C /* String+条形码.swift */,
 				0411F1DA2EDFD5AD00F1552C /* String+格式转换.swift */,
 				0411F1DC2EDFD5E000F1552C /* String+获取资源.swift */,
-				0411F1E02EDFD62800F1552C /* String+条形码.swift */,
 				0411F1E82EDFD71C00F1552C /* String+通用工具.swift */,
 				0411F1E42EDFD6A300F1552C /* String+系统功能调用.swift */,
 				0411F1E22EDFD65D00F1552C /* String+校验.swift */,
@@ -2514,6 +2517,7 @@
 				04E821D72EDFF1DF00570A4C /* UILabel+DSL.swift in Sources */,
 				043283AD2EC4A0540031CDD6 /* BRPicker+DSL.swift in Sources */,
 				043283442EC437220031CDD6 /* 软键盘退出.swift in Sources */,
+				046EB4BA2EEA75B4001B7334 /* String+toast.swift in Sources */,
 				0411F1BF2EDFCB4F00F1552C /* UITextField+监控删除键.swift in Sources */,
 				04D49C252EBE055000BCD6F1 /* OCCls.m in Sources */,
 				0411F1CF2EDFD13500F1552C /* UITableView+校验.swift in Sources */,

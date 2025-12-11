@@ -185,10 +185,10 @@ final class JobsTextDemoVC: BaseVC {
 
     private func onExportRTF() {
         guard let data = current.rtfData() else {
-            toastBy("RTF 导出失败")
+            "RTF 导出失败".toast
             return
         }
-        toastBy("RTF 导出成功（\(data.count) bytes）")
+        "RTF 导出成功（\(data.count) bytes）".toast
         history.append(current) // 简单留存，供“导入”演示
     }
 
@@ -209,10 +209,10 @@ final class JobsTextDemoVC: BaseVC {
                    .characterEncoding: String.Encoding.utf8.rawValue
                ]) {
                 current = restored
-                toastBy("已从 HTML 恢复")
+                "已从 HTML 恢复".toast
                 refresh()
             } else {
-                toastBy("RTF/HTML 导入失败")
+                "RTF/HTML 导入失败".toast
             }
         }
     }

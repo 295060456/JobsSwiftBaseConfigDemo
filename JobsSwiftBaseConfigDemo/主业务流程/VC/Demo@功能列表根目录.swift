@@ -123,12 +123,12 @@ final class RootListVC: BaseVC {
             .onLongPress(minimumPressDuration: 0.8) { btn, gr in
 //                if gr.state == .began { btn.alpha = 0.6 }
 //                else if gr.state == .ended || gr.state == .cancelled { btn.alpha = 1.0 }
-                toastBy("长按了悬浮按钮")
+                "长按了悬浮按钮".toast
             }
             // 点击开始：不传 total => 正计时
             .onTap { [weak self] btn in
                 guard let self else { return }
-                toastBy("点击了悬浮按钮")
+                "点击了悬浮按钮".toast
 //                btn.startTimer(total: nil,
 //                               interval: 1.0,
 //                               kind: .gcd)
@@ -166,7 +166,7 @@ final class RootListVC: BaseVC {
             }
             // 长按：原逻辑
             .onLongPress(minimumPressDuration: 0.8) { btn, _ in
-                toastBy("长按了悬浮按钮")
+                "长按了悬浮按钮".toast
             }
             // 点击：保持原来的 Toast（不改动计时逻辑）
             .onTap { [weak self] btn in
@@ -178,14 +178,14 @@ final class RootListVC: BaseVC {
                     // 暂停计时（保留已累计秒，不重置）
                     btn.timer?.pause()        // ✅ 推荐：你的统一内核挂在 button.timer 上
                     // 如果你有封装方法，则用：btn.pauseTimer()
-                    toastBy("已暂停旋转 & 计时")
+                    "已暂停旋转 & 计时".toast
                 } else {
                     // 恢复旋转
                     btn.bySpinStart()
                     // 恢复计时（从暂停处继续累加）
                     btn.timer?.resume()       // ✅ 推荐
                     // 如果你有封装方法，则用：btn.resumeTimer()
-                    toastBy("继续旋转 & 计时")
+                    "继续旋转 & 计时".toast
                 }
             }
             // 悬浮配置
@@ -252,7 +252,7 @@ final class RootListVC: BaseVC {
                     guard let self else { return }
                     sender.isSelected.toggle()
                     debugOnly {  // 仅 Debug 执行
-                        toastBy("点按了列表按钮")
+                        "点按了列表按钮".toast
                     }
                     let cell = tableView[section: 0, row: 3]
                     let cell1 = tableView[section: 12, row: 3]

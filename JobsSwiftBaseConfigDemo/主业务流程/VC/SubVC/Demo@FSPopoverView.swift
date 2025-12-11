@@ -148,7 +148,7 @@ final class FSPopoverDemoVC: BaseVC {
             it.isSeparatorHidden = false
             it.selectedHandler = { item in
                 guard let i = item as? FSPopoverListTextItem else { return }
-                toastBy("点击：\(i.title ?? "")")
+                ("点击：\(i.title ?? "")").toast
             }
             it.updateLayout()
             return it

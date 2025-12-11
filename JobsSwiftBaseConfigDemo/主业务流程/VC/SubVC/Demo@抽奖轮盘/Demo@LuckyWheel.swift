@@ -43,11 +43,11 @@ final class LuckyWheelDemoVC: BaseVC {
             .byPanRotationEnabled(true)
             .onSegmentTap { segment in
                 /// 短按和旋转停止后的中奖结果
-                toastBy("🍀 短按扇形 \(String(describing: segment.text?.rnl))")
+                "🍀 短按扇形 \(String(describing: segment.text?.rnl))".toast
             }
             .onSegmentLongPress { segment, gr in
                 if gr.state == .began {
-                    toastBy("👆 长按开始 \(String(describing: segment.text?.rnl))")
+                    "👆 长按开始 \(String(describing: segment.text?.rnl))".toast
                 }
             }
             .byAddTo(view) { make in

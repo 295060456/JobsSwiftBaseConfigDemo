@@ -21,7 +21,7 @@ class ViewController: UIViewController {
         // 清理资源
         print("deinit")
 //        debugOnly {  // 仅 Debug 执行
-//            toastBy("当前控制器销毁成功")
+//            "当前控制器销毁成功".toast
 //        }
     }
 

@@ -14,6 +14,7 @@ import SnapKit
 public final class RedPacketRainView: UIView {
     deinit {
         spawnTimer?.stop()
+        fallTimer?.stop()
     }
     // 对外配置 & 回调
     public var config: RedPacketRainConfig {
@@ -29,8 +30,18 @@ public final class RedPacketRainView: UIView {
     private let timerKind: JobsTimerKind
     // 内部状态
     private var spawnTimer: JobsTimerProtocol?
+    /// 负责驱动红包下落的计时器
+    private var fallTimer: JobsTimerProtocol?
     /// 当前屏幕上的红包按钮
     private var activePackets: [UIButton] = []
+    /// 每个红包的运动参数
+    private struct PacketMotion {
+        let spawnTime: TimeInterval
+        let duration: TimeInterval
+        let startCenter: CGPoint
+        let endCenter: CGPoint
+    }
+    private var packetMotions: [ObjectIdentifier: PacketMotion] = [:]
     // MARK: - Init
     public init(
         frame: CGRect = .zero,
@@ -58,20 +69,23 @@ public final class RedPacketRainView: UIView {
     public func start() {
         guard !isRunning else { return }
         buildTimerIfNeeded()
-        spawnTimer?.start()
         isRunning = true
+        spawnTimer?.start()
+        fallTimer?.start()
     }
 
     public func pause() {
         guard isRunning else { return }
-        spawnTimer?.pause()
         isRunning = false
+        spawnTimer?.pause()
+        fallTimer?.pause()
     }
 
     public func resume() {
         guard !isRunning else { return }
-        spawnTimer?.resume()
         isRunning = true
+        spawnTimer?.resume()
+        fallTimer?.resume()
     }
     /// 停止红包雨
     /// - Parameter clear: 是否把屏幕上现有红包也移除
@@ -79,8 +93,17 @@ public final class RedPacketRainView: UIView {
         isRunning = false
         spawnTimer?.stop()
         spawnTimer = nil
+
         if clear {
+            fallTimer?.stop()
+            fallTimer = nil
             clearAllPackets()
+        } else {
+            // 不再生成新的红包，但允许现有红包继续落完
+            if activePackets.isEmpty {
+                fallTimer?.stop()
+                fallTimer = nil
+            }
         }
     }
     /// 完全重置（停止 + 清空 + 计数清零）
@@ -90,36 +113,53 @@ public final class RedPacketRainView: UIView {
     }
     // MARK: - Timer
     private func buildTimerIfNeeded() {
-        guard spawnTimer == nil else { return }
+        if spawnTimer == nil {
+            let cfg = JobsTimerConfig(
+                interval: max(0.05, config.spawnInterval),
+                repeats: true,
+                tolerance: 0.01,
+                queue: .main
+            )
 
-        let cfg = JobsTimerConfig(
-            interval: max(0.05, config.spawnInterval),
-            repeats: true,
-            tolerance: 0.01,
-            queue: .main
-        )
+            spawnTimer = JobsTimerFactory.make(
+                kind: timerKind,
+                config: cfg
+            ) { [weak self] in
+                self?.spawnPacketIfNeeded()
+            }
+        }
 
-        spawnTimer = JobsTimerFactory.make(
-            kind: timerKind,
-            config: cfg
-        ) { [weak self] in
-            self?.spawnPacketIfNeeded()
+        if fallTimer == nil {
+            let fallCfg = JobsTimerConfig(
+                interval: 1.0 / 60.0,
+                repeats: true,
+                tolerance: 0.0,
+                queue: .main
+            )
+
+            fallTimer = JobsTimerFactory.make(
+                kind: timerKind,
+                config: fallCfg
+            ) { [weak self] in
+                self?.updatePackets()
+            }
         }
     }
     // MARK: - 红包生成逻辑（UIButton 版本）
     private func spawnPacketIfNeeded() {
         guard isRunning else { return }
         guard bounds.width > 0, bounds.height > 0 else { return }
-
         // 控制并发上限
         if activePackets.count >= config.maxConcurrentCount {
             return
         }
+
         let width = bounds.width - config.spawnInsets.left - config.spawnInsets.right
         guard width > 0 else { return }
         // 随机 X
         let maxX = max(0, width - config.packetSize.width)
         let randomX = config.spawnInsets.left + CGFloat.random(in: 0...maxX)
+
         let startFrame = CGRect(
             x: randomX,
             y: -config.packetSize.height,
@@ -147,101 +187,118 @@ public final class RedPacketRainView: UIView {
         }
 
         if config.tapEnabled {
-            // MARK: - 点击红包（用你的 onTap DSL）
+            // 直接用按钮事件作为入口（onTap 最终是 addTarget + touchUpInside）
             packet.onTap { [weak self] sender in
                 guard let self = self else { return }
+                sender.playTapBounce(haptic: .light)  // 👈 临时放大→回弹（不注册任何手势/事件）
                 self.removePacket(sender)
                 self.tappedCount += 1
                 self.tapCallback?(self, self.tappedCount)
 
-                // 点击后的简单反馈：轻微震动
                 let feedback = UIImpactFeedbackGenerator(style: .light)
                 feedback.impactOccurred()
             }
         }
-
-        addSubview(packet)
-        activePackets.append(packet)
-
         // 随机下落时间
         let duration = Double.random(
             in: min(config.minFallDuration, config.maxFallDuration)
-            ... max(config.minFallDuration, config.maxFallDuration)
+                ... max(config.minFallDuration, config.maxFallDuration)
         )
-
-        var endFrame = packet.frame
+        // 计算终点 frame（含水平漂移）
+        var endFrame = startFrame
         endFrame.origin.y = bounds.height + config.packetSize.height
 
-        // 稍微加一点水平漂移，视觉更自然一点
         let drift = CGFloat.random(in: -40...40)
         endFrame.origin.x = min(
             max(config.spawnInsets.left, endFrame.origin.x + drift),
             bounds.width - config.spawnInsets.right - config.packetSize.width
         )
+        // 固定一个轻微旋转角度
+        let angle = CGFloat.random(in: -0.25...0.25)
+        packet.transform = CGAffineTransform(rotationAngle: angle)
 
-        UIView.animate(
-            withDuration: duration,
-            delay: 0,
-            options: [.curveLinear, .allowUserInteraction],
-            animations: {
-                packet.frame = endFrame
-                // 轻微旋转
-                let angle = CGFloat.random(in: -0.25...0.25)
-                packet.transform = CGAffineTransform(rotationAngle: angle)
-            },
-            completion: { [weak self] _ in
-                guard let self = self else { return }
-                self.removePacket(packet)
-            }
+        addSubview(packet)
+        activePackets.append(packet)
+        // 保存运动参数，后续由定时器驱动更新
+        let startCenter = packet.center
+        let endCenter = CGPoint(x: endFrame.midX, y: endFrame.midY)
+        let motion = PacketMotion(
+            spawnTime: Date().timeIntervalSinceReferenceDate,
+            duration: duration,
+            startCenter: startCenter,
+            endCenter: endCenter
         )
+        packetMotions[ObjectIdentifier(packet)] = motion
+    }
+    // MARK: - 下落刷新逻辑
+    private func updatePackets() {
+        guard !activePackets.isEmpty else {
+            if !isRunning {
+                fallTimer?.stop()
+                fallTimer = nil
+            };return
+        }
+
+        let now = Date().timeIntervalSinceReferenceDate
+        var finished: [UIButton] = []
+
+        for packet in activePackets {
+            let key = ObjectIdentifier(packet)
+            guard let motion = packetMotions[key] else { continue }
+
+            let elapsed = now - motion.spawnTime
+            if elapsed <= 0 { continue }
+
+            let progress = min(1.0, elapsed / motion.duration)
+            let sx = motion.startCenter.x
+            let sy = motion.startCenter.y
+            let ex = motion.endCenter.x
+            let ey = motion.endCenter.y
+
+            let newCenter = CGPoint(
+                x: sx + (ex - sx) * CGFloat(progress),
+                y: sy + (ey - sy) * CGFloat(progress)
+            )
+            packet.center = newCenter
+
+            if progress >= 1.0 {
+                finished.append(packet)
+            }
+        }
+
+        if !finished.isEmpty {
+            finished.forEach { removePacket($0) }
+        }
+
+        if activePackets.isEmpty && !isRunning {
+            fallTimer?.stop()
+            fallTimer = nil
+        }
     }
 
     private func clearAllPackets() {
         activePackets.forEach { $0.removeFromSuperview() }
         activePackets.removeAll()
+        packetMotions.removeAll()
     }
 
     private func removePacket(_ packet: UIButton) {
         if let idx = activePackets.firstIndex(where: { $0 === packet }) {
             activePackets.remove(at: idx)
         }
+        packetMotions.removeValue(forKey: ObjectIdentifier(packet))
         packet.removeFromSuperview()
     }
-    // MARK: - 简单生成一个默认图标（¥）
-    private func makeDefaultIconImage() -> UIImage? {
-        let size = CGSize(width: 24, height: 24)
-        UIGraphicsBeginImageContextWithOptions(size, false, 0)
-        defer { UIGraphicsEndImageContext() }
-
-        let rect = CGRect(origin: .zero, size: size)
-        let path = UIBezierPath(ovalIn: rect)
-        UIColor.red.setFill()
-        path.fill()
-
-        let attr: [NSAttributedString.Key: Any] = [
-            .font: UIFont.boldSystemFont(ofSize: 16),
-            .foregroundColor: UIColor.yellow
-        ]
-        let text = "$" as NSString
-        let textSize = text.size(withAttributes: attr)
-        let textRect = CGRect(
-            x: (size.width - textSize.width) / 2,
-            y: (size.height - textSize.height) / 2,
-            width: textSize.width,
-            height: textSize.height
-        )
-        text.draw(in: textRect, withAttributes: attr)
-        return UIGraphicsGetImageFromCurrentImageContext()
-    }
 }
-// MARK: - DSL 扩展
+// MARK: - DS
 public extension RedPacketRainView {
     /// 类似 UIButton.sys()：默认 config + 默认 timerKind
     static func dsl(
         config: RedPacketRainConfig = .default,
         timerKind: JobsTimerKind = .gcd
     ) -> RedPacketRainView {
-        RedPacketRainView(config: config, timerKind: timerKind)
+        // 注意这里调用的是你现在的 init(frame:config:timerKind:)
+        RedPacketRainView(frame: .zero, config: config, timerKind: timerKind)
     }
     /// 链式配置整体 config
     @discardableResult

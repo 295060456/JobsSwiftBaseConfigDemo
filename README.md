@@ -4240,9 +4240,7 @@ required init?(coder: NSCoder) {
   {/*TODO*/}
   ```
 
-
-
-### 8、富文本的封装使用 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 8、<font id=富文本>富文本的封装使用</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 #### 8.1、设置富文本 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -5055,7 +5053,7 @@ AppLaunchManager.handleLaunch(
 )
 ```
 
-### 21、🍡 字符串 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 21、🍡 （普通）字符串 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 #### 21.1、🍡 通用格式的转换  <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -5178,6 +5176,121 @@ AppLaunchManager.handleLaunch(
   ) { result in
       print("mail result = \(result)")
   }
+  ```
+
+#### 21.4、🍡 字符串取色🎨（校验规定格式）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+```swift
+/// 支持格式：
+/// "#RRGGBB" / "RRGGBB" / "0xRRGGBB"
+/// "#RGB"   / "RGB"
+/// "#AARRGGBB" / "AARRGGBB"
+
+"#353a3e".cor          // OK → 正常色
+"353a3e".cor           // OK
+"0x353a3e".cor         // OK
+"#FFF".cor             // OK → 展开成 #FFFFFF
+"80FF0000".cor         // OK → alpha=0x80, red
+"乱七八糟".cor         // ❌ → 直接红色
+
+"80FF0000".cor(alpha: 1) // alpha 走字符串里的 0x80，而不是你传的 1
+"垃圾".cor(.black)        // 非法 → black
+```
+
+#### 21.5、[**对全局普通的字符串进行多语言国际化的处理**](#国际化) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+#### 21.6、[**富文本**](#富文本) <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 把普通字符串**升格**为富文本字符串
+
+  ```swift
+  NSAttributedString(string: s)
+  ```
+
+* 把富文本字符串**降格**为普通字符串
+
+  ```swift
+  a.string
+  ```
+
+#### 21.7、条形码 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* `Code128 条形码`（可指定目标尺寸；自动无插值放大）
+
+  ```swift
+  UIImageView().byImage(barContent.code128BarcodeImage(size: CGSize(width: 260, height: 100)))
+  ```
+
+* 生成带底部文字的人类可读 `Code128 条形码`
+
+  ```swift
+  UIImageView().byImage(barContent.code128ByText(width: 260, barHeight: 100))
+  ```
+
+#### 21.8、二维码 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 纯二维码（中间无Logo）
+
+  ```swift
+  UIImageView().byImage(qrContent.qrcodeImage(260))
+  ```
+
+* 生成带中心 Logo 的二维码
+
+  ```swift
+  UIImageView().byImage(
+      "https://www.google.com".qrcodeImage(
+          260,
+          correction: "H",
+          centerLogo: "Ani".img,
+          logoRatio: 0.22,
+          logoCornerRadius: 10,
+          borderWidth: 6,
+          borderColor: .white
+      )
+  )
+  ```
+
+#### 21.9、裁剪 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+* 去掉首尾空白 / 换行
+
+  ```swift
+  let raw = "  Hello World \n"
+  let cleaned = raw.byTrimmed
+  print(cleaned)  // "Hello World"
+  ```
+
+* 裁剪后非空才要这个字符串（否则用 nil）
+
+  ```swift
+  let input = "   \n  "              // 用户乱输入的东西
+  let value = input.byTrimmedOrNil  // -> nil
+  
+  let input2 = "  Jobs  "
+  let value2 = input2.byTrimmedOrNil // -> "Jobs"
+  ```
+
+* 判断一个字符串是不是非空的 http/https URL
+
+  ```swift
+  let urlString = "  https://example.com/path  "
+  
+  if urlString.isNonEmptyHttpURL {
+      print("这是一个 http(s) URL")
+  } else {
+      print("不是合法的 http(s) URL 字符串")
+  }
+  ```
+
+* 只要 http(s) 字符串，其他一律当 nil
+
+  ```swift
+  let input = "  www.example.com  "
+  let httpString = input.asHttpURLOrNil   // -> nil
+  
+  let input2 = "  https://example.com  "
+  let httpString2 = input2.asHttpURLOrNil // -> "https://example.com"
   ```
 
 ### 22、⏰ 计时器（按钮）的封装 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -6418,7 +6531,7 @@ override func viewWillDisappear(_ animated: Bool) {
   ```
 
 
-#### 38.2、对全局普通的字符串进行多语言国际化的处理 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+#### 38.2、<font id=国际化>对全局普通的字符串进行多语言国际化的处理</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * 新建语言映射文件`*.strings`
  ![image-20251101165105182](./assets/image-20251101165105182.png)
@@ -6634,23 +6747,33 @@ jobsDismissKeyboard()
   }
   ```
 
-### 42、🎨 字符串取色（校验规定格式）<a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 42、红包雨 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ```swift
-/// 支持格式：
-/// "#RRGGBB" / "RRGGBB" / "0xRRGGBB"
-/// "#RGB"   / "RGB"
-/// "#AARRGGBB" / "AARRGGBB"
-
-"#353a3e".cor          // OK → 正常色
-"353a3e".cor           // OK
-"0x353a3e".cor         // OK
-"#FFF".cor             // OK → 展开成 #FFFFFF
-"80FF0000".cor         // OK → alpha=0x80, red
-"乱七八糟".cor         // ❌ → 直接红色
-
-"80FF0000".cor(alpha: 1) // alpha 走字符串里的 0x80，而不是你传的 1
-"垃圾".cor(.black)        // 非法 → black
+private lazy var rainView: RedPacketRainView = {
+      RedPacketRainView
+          .dsl(
+              config: RedPacketRainConfig(
+                  // 你可以改成 .default，或者继续用这套 Demo 配置
+                  spawnInterval: 0.2,
+                  minFallDuration: 5.5,
+                  maxFallDuration: 8.0,
+                  packetSize: CGSize(width: 44, height: 54),
+                  maxConcurrentCount: 80,
+                  spawnInsets: .init(top: 0, left: 10, bottom: 0, right: 10),
+                  tapEnabled: true,
+                  packetImage: nil
+              ),
+              timerKind: .gcd
+          )
+          .onPacketTap { [weak self] _, count in
+              guard let self else { return }
+              self.countLabel.byText("已抢到：\(count) 个")
+          }
+          .byAddTo(view) { [unowned self] make in
+              make.edges.equalToSuperview()
+          }
+  }()
 ```
 
 ### 43、网络数据的监听 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
@@ -7087,8 +7210,6 @@ public extension NSObject {
   private var currentProgress: CGFloat = 0
   progressView.setProgress(currentProgress, animated: true)
   ```
-
-### 51、红包雨 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
@@ -9420,7 +9541,7 @@ func badExample() {
 }
 ```
 
-### 24、<font color=red>typealias</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+### 24、<font color=red>`typealias`</font> <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
 * ```swift
   func example() {

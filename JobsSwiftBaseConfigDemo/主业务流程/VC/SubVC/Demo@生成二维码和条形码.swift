@@ -9,14 +9,13 @@ import UIKit
 import SnapKit
 
 final class QRCodeDemoVC: BaseVC {
-
     // 编码的内容（可自行替换）
     private let qrContent  = "https://jobs.dev/hello"
     private let barContent = "JOBS-2025-10-18"
 
     private lazy var imageViewQR: UIImageView = {
         UIImageView()
-//            .byImage(qrContent.qrcodeImage(260))
+//            .byImage(qrContent.qrcodeImage(260))/* 由当前字符串生成二维码 UIImage（无插值放大，清晰）*/
             .byImage(
                 "https://www.google.com".qrcodeImage(
                     260,
@@ -27,7 +26,7 @@ final class QRCodeDemoVC: BaseVC {
                     borderWidth: 6,
                     borderColor: .white
                 )
-            )
+            )/* 生成带中心 Logo 的二维码 */
             .byContentMode(.scaleAspectFit)
             .byClipsToBounds(true)
             .byBgColor(UIColor.secondarySystemBackground)

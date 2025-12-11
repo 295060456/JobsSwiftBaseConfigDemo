@@ -150,7 +150,7 @@ final class JobsTabBarCtrl: BaseVC, UIScrollViewDelegate {
     public func select(index: Int, animated: Bool = true) {
         guard index >= 0, index < buttons.count else { return }
         guard index < min(buttons.count, controllers.count) else {
-            toastBy("请配置子控制器")
+            "请配置子控制器".toast
             return
         }
         selectedIndex = index
@@ -274,7 +274,7 @@ final class JobsTabBarCtrl: BaseVC, UIScrollViewDelegate {
     // MARK: - 交互
     private func handleTap(at index: Int) {
         if index >= min(buttons.count, controllers.count) {
-            toastBy("请配置子控制器")
+            "请配置子控制器".toast
             return
         }
         select(index: index, animated: true)

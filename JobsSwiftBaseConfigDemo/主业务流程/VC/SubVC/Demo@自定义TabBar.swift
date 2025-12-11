@@ -80,14 +80,14 @@ final class TabBarDemoVC: BaseVC {
                             } else {
                                 sender.removeCornerBadge()
                             }
-                            toastBy("优惠@点按事件")
+                            "优惠@点按事件".toast
                         }
                         /// 事件触发@长按
                         .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                              if gr.state == .began {
                                  btn.alpha = 0.6
                                  print("长按开始 on \(btn)")
-                                 toastBy("优惠@长按事件")
+                                 "优惠@长按事件".toast
                              } else if gr.state == .ended || gr.state == .cancelled {
                                  btn.alpha = 1.0
                                  print("长按结束")

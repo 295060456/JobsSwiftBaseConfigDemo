@@ -64,7 +64,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向上连续 · 公告 1 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -89,7 +89,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向上连续 · 公告 2 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -114,7 +114,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向上连续 · 公告 3 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -161,7 +161,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向下连续 · 公告 1 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -186,7 +186,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向下连续 · 公告 2 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -211,7 +211,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向下连续 · 公告 3 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -250,7 +250,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向左连续 · 公告 1 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -275,7 +275,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向左连续 · 公告 2 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -300,7 +300,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向左连续 · 公告 3 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -339,7 +339,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向右连续 · 公告 1 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -364,7 +364,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向右连续 · 公告 2 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -389,7 +389,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向右连续 · 公告 3 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -428,7 +428,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向上间隔 · 公告 1 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -453,7 +453,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向上间隔 · 公告 2 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -478,7 +478,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向上间隔 · 公告 3 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -517,7 +517,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向下间隔 · 公告 1 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -542,7 +542,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向下间隔 · 公告 2 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -567,7 +567,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向下间隔 · 公告 3 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -606,7 +606,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向左间隔 · Banner 1 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -631,7 +631,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向左间隔 · Banner 2 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -656,7 +656,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向左间隔 · Banner 3 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -695,7 +695,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向右间隔 · Banner 1 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -720,7 +720,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向右间隔 · Banner 2 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -745,7 +745,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔔 向右间隔 · Banner 3 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -784,7 +784,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 极端 1 个按钮 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -823,7 +823,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 极端 2 个按钮 · 1 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     },
                 UIButton.sys()
                     .byBackgroundColor(.systemRed.withAlphaComponent(0.2), for: .normal)
@@ -839,7 +839,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 极端 2 个按钮 · 2 tapped, selected=\(sender.isSelected)")
-                        toastBy(sender.title!)
+                        sender.title?.toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -870,7 +870,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 极端 本地图 · 唐老鸭 tapped, selected=\(sender.isSelected)")
-                        toastBy("点击了唐老鸭")
+                        "点击了唐老鸭".toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -887,7 +887,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 极端 本地图 · 米老鼠 tapped, selected=\(sender.isSelected)")
-                        toastBy("点击了米老鼠")
+                        "点击了米老鼠".toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -904,7 +904,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 极端 本地图 · 迪斯尼 tapped, selected=\(sender.isSelected)")
-                        toastBy("点击了迪斯尼")
+                        "点击了迪斯尼".toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -940,7 +940,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 SDWebImage@背景图 1 tapped, selected=\(sender.isSelected)")
-                        toastBy("点击了SDWebImage@背景图")
+                        "点击了SDWebImage@背景图".toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -962,7 +962,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 SDWebImage@背景图 2 tapped, selected=\(sender.isSelected)")
-                        toastBy("点击了SDWebImage@背景图")
+                        "点击了SDWebImage@背景图".toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -984,7 +984,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 SDWebImage@背景图 3 tapped, selected=\(sender.isSelected)")
-                        toastBy("点击了SDWebImage@背景图")
+                        "点击了SDWebImage@背景图".toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -1025,7 +1025,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 Kingfisher@背景图 1 tapped, selected=\(sender.isSelected)")
-                        toastBy("点击了Kingfisher@背景图")
+                        "点击了Kingfisher@背景图".toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -1052,7 +1052,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 Kingfisher@背景图 2 tapped, selected=\(sender.isSelected)")
-                        toastBy("点击了Kingfisher@背景图")
+                        "点击了Kingfisher@背景图".toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {
@@ -1079,7 +1079,7 @@ final class JobsMarqueeDemoVC: BaseVC {
                     .byTapSound("Sound.wav")
                     .onTap { sender in
                         print("🔴 Kingfisher@背景图 3 tapped, selected=\(sender.isSelected)")
-                        toastBy("点击了Kingfisher@背景图")
+                        "点击了Kingfisher@背景图".toast
                     }
                     .onLongPress(minimumPressDuration: 0.8) { btn, gr in
                         if gr.state == .began {

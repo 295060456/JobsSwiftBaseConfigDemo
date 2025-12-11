@@ -349,8 +349,8 @@ final class JobsCountdownDemoVC: BaseVC {
     private lazy var button7Tappable: UIButton = { [unowned self] in
         UIButton.sys()
             .byBackgroundColor(.systemOrange, for: .normal)
-            .byTitle("运行可点", for: .normal)
-            .byTitle("运行可点", for: .selected)
+            .byTitle("运行可点".tr, for: .normal)
+            .byTitle("运行可点".tr, for: .selected)
             .byTitleColor(.white, for: .normal)
             .byTitleColor(.white, for: .selected)
             .byTitleFont(.systemFont(ofSize: 16, weight: .medium))
@@ -358,7 +358,7 @@ final class JobsCountdownDemoVC: BaseVC {
                 cfg.mode = .down(from: 12)
                 cfg.clickableWhileRunning = true
                 cfg.onTapWhileRunning = { btn, _ in
-                    toastBy("运行中被点击！")
+                    "运行中被点击！".toast
                 }
                 cfg.renderConfiguration = { sec, base in
                     var c = base

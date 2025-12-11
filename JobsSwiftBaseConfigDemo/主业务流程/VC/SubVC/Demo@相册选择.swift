@@ -46,14 +46,14 @@ final class PhotoAlbumDemoVC: BaseVC, UICollectionViewDataSource, UICollectionVi
             .onTap { [weak self] _ in
                 guard let self else { return }
                 #if targetEnvironment(simulator)
-                toastBy("模拟器无法使用相机"); return
+                "模拟器无法使用相机".toast; return
                 #else
                 guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-                    toastBy("此设备不支持相机"); return
+                    "此设备不支持相机".toast; return
                 }
                 pickFromCamera(allowsEditing: false) { [weak self] img in
                     guard let self else { return }
-                    toastBy("已拍照 1 张")
+                    "已拍照 1 张".toast
                     self.showCameraImage(img)
                 }
                 #endif
@@ -90,7 +90,7 @@ final class PhotoAlbumDemoVC: BaseVC, UICollectionViewDataSource, UICollectionVi
                 guard let self else { return }
                 pickFromPhotoLibrary(maxSelection: imageMaxSelection, imagesOnly: true) { [weak self] imgs in
                     guard let self else { return }
-                    toastBy(imgs.isEmpty ? "未选择图片" : "已选择 \(imgs.count) 张")
+                    (imgs.isEmpty ? "未选择图片" : "已选择 \(imgs.count) 张").toast
                     self.showAlbumImages(imgs)
                 }
             }
@@ -124,11 +124,11 @@ final class PhotoAlbumDemoVC: BaseVC, UICollectionViewDataSource, UICollectionVi
             .onTap { [weak self] _ in
                 guard let self else { return }
                 #if targetEnvironment(simulator)
-                toastBy("模拟器无法录制视频"); return
+                "模拟器无法录制视频".toast; return
                 #else
                 MediaPickerService.recordVideo(from: self, maxDuration: 30, quality: .typeHigh) { [weak self] url in
                     guard let self else { return }
-                    toastBy("已录制 1 段视频")
+                    "已录制 1 段视频".toast
                     self.showCameraVideo(url)
                 }
                 #endif
@@ -164,7 +164,7 @@ final class PhotoAlbumDemoVC: BaseVC, UICollectionViewDataSource, UICollectionVi
                 guard let self else { return }
                 pickVideosFromLibrary(maxSelection: 1) { [weak self] urls in
                     guard let self, let u = urls.first else { return }
-                    toastBy("已选择 1 个视频")
+                    "已选择 1 个视频".toast
                     self.showCameraVideo(u)
                 }
             }
@@ -199,8 +199,8 @@ final class PhotoAlbumDemoVC: BaseVC, UICollectionViewDataSource, UICollectionVi
                 guard let self else { return }
                 self.pickVideosFromLibrary(maxSelection: self.videoMaxSelection) { [weak self] urls in
                     guard let self else { return }
-                    if urls.isEmpty { toastBy("未选择视频"); return }
-                    toastBy("已选择 \(urls.count) 个视频")
+                    if urls.isEmpty { "未选择视频".toast; return }
+                    "已选择 \(urls.count) 个视频".toast
                     self.showAlbumVideos(urls)
                 }
             }
@@ -564,7 +564,7 @@ private extension PhotoAlbumDemoVC {
             } else {
                 // iOS 13 及以下仅支持单选
                 if maxSelection != 1 {
-                    Task { @MainActor in toastBy("多选视频仅支持 iOS 14 及以上") }
+                    Task { @MainActor in "多选视频仅支持 iOS 14 及以上".toast }
                 }
                 guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else { return }
                 let proxy = LegacyVideoLibraryProxy { [weak self] url in

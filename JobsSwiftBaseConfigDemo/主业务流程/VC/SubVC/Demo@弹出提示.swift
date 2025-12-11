@@ -50,27 +50,27 @@ final class ToastDemoVC: BaseVC {
 
         // 1) 默认：1s、底部偏移120
         addButton("默认 Toast（“谢谢光临”）") {
-            toastBy("谢谢光临")
+            "谢谢光临".toast
         }
 
         // 2) 自定义时长/位置（链式 Config）
         addButton("时长2.5s / 底部偏移80") {
-            toastBy("操作成功")
+            "操作成功".toast
         }
 
         // 3) 自定义样式：绿色背景 + 圆角12
         addButton("绿色圆角 Toast") {
-            toastBy("保存成功")
+            "保存成功".toast
         }
 
         // 4) 可点击（按钮作为内容，tap 回调）
         addButton("可点击 Toast（撤销）") {
-            toastBy("点我撤销")
+            "点我撤销".toast
         }
 
         // 5) 大内边距（更宽的背景气泡）
         addButton("大 padding Toast") {
-            toastBy("大 padding")
+            "大 padding".toast
         }
 
         // 6) 手动提前关闭（先弹再 1s 后主动 dismiss）

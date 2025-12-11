@@ -104,11 +104,11 @@ final class PDFDemoVC: BaseVC {
         }
 
         guard let url = bundleURL ?? docsURL else {
-            toastBy("未找到 \(resourceName).\(fileExtension)\n请将文件放入 Bundle 或 Documents 目录。")
+            "未找到 \(resourceName).\(fileExtension)\n请将文件放入 Bundle 或 Documents 目录。".toast
             return
         }
         guard let doc = PDFDocument(url: url) else {
-            toastBy("无法打开 PDF：\(url.lastPathComponent)")
+            "无法打开 PDF：\(url.lastPathComponent)".toast
             return
         }
 

@@ -48,3 +48,29 @@ public struct RedPacketRainConfig {
         RedPacketRainConfig()
     }
 }
+
+public func makeDefaultIconImage() -> UIImage? {
+    let size = CGSize(width: 24, height: 24)
+    UIGraphicsBeginImageContextWithOptions(size, false, 0)
+    defer { UIGraphicsEndImageContext() }
+
+    let rect = CGRect(origin: .zero, size: size)
+    let path = UIBezierPath(ovalIn: rect)
+    UIColor.red.setFill()
+    path.fill()
+
+    let attr: [NSAttributedString.Key: Any] = [
+        .font: UIFont.boldSystemFont(ofSize: 16),
+        .foregroundColor: UIColor.yellow
+    ]
+    let text = "$" as NSString
+    let textSize = text.size(withAttributes: attr)
+    let textRect = CGRect(
+        x: (size.width - textSize.width) / 2,
+        y: (size.height - textSize.height) / 2,
+        width: textSize.width,
+        height: textSize.height
+    )
+    text.draw(in: textRect, withAttributes: attr)
+    return UIGraphicsGetImageFromCurrentImageContext()
+}

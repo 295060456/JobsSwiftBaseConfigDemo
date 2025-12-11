@@ -96,7 +96,7 @@ final class LGOEditProfileVC: BaseVC {
             .brDataSource(["女", "男", "不想透露"])
             .brSelectIndex(2)
             .brOnSingle { m, idx in
-                toastBy("单列：\(m?.text ?? "-")（index=\(idx)）")
+                ("单列：\(m?.text ?? "-")（index=\(idx)）").toast
             }
     }()
     /// 文本：单列（情感状态）
@@ -108,7 +108,7 @@ final class LGOEditProfileVC: BaseVC {
             .brDataSource(["已婚", "单身", "不想透露"])
             .brSelectIndex(2)
             .brOnSingle { m, idx in
-                toastBy("单列：\(m?.text ?? "-")（index=\(idx)）")
+                ("单列：\(m?.text ?? "-")（index=\(idx)）").toast
             }
     }()
     /// 日期：系统 Date（年月日）
@@ -122,7 +122,7 @@ final class LGOEditProfileVC: BaseVC {
             .brStyle { $0.minuteInterval = 1 }
             .brOnResult { [weak self] dt in
                 guard let self else { return }
-                toastBy("系统 Date：\(dt.map { fmt($0, "yyyy-MM-dd") } ?? "-")")
+                ("系统 Date：\(dt.map { fmt($0, "yyyy-MM-dd") } ?? "-")").toast
             }
     }()        
 
@@ -256,7 +256,7 @@ extension LGOEditProfileVC: UITableViewDelegate {
         case .emotion:
             self.eduPicker.brPresent(in: self.view)
         case .hometown:
-            toastBy("可能这个最后要被取消")
+            "可能这个最后要被取消".toast
         case .profession:
             SwiftEntryKit.display(
                 entry: PhotoPermissionAlertView()

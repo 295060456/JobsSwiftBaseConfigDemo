@@ -263,7 +263,7 @@ public class JobsNavBar: UIView {
             onBack()
         } else {
             debugOnly {  // 仅 Debug 执行
-                toastBy("Hello")
+                "Hello".toast
             }
         }
     }

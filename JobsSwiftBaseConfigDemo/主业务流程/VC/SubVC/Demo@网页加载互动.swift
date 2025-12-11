@@ -90,7 +90,7 @@ final class BaseWebViewDemoVC: BaseVC {
             }
             .registerMobileAction("showToast") {  [weak self] body, reply in
                 /// 显示Toast
-                toastBy(body.stringValue(for: "message") ?? "")
+                (body.stringValue(for: "message") ?? "").toast
                 reply(nil)
             }
     }()
