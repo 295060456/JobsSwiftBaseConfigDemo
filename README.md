@@ -180,11 +180,11 @@
 
 * [**JobsDocs**](https://github.com/JobsKits/JobsDocs)
 
-  * [**中国公民身份证校验规则**](https://github.com/295060456/JobsDocs/blob/main/中国公民身份证校验规则.md/中国公民身份证校验规则.md)
+  * [**中国公民身份证校验规则**](https://github.com/JobsKits/JobsDocs/blob/main/中国大陆公民身份证校验规则.md/中国大陆公民身份证校验规则.md)
   * [**iOS项目多环境配置**](https://github.com/295060456/JobsDocs/blob/main/iOS相关的文档和资料.md/iOS项目多环境配置.md/iOS项目多环境配置.md)
   * [**制作(发布)Pods组件**](https://github.com/JobsKits/JobsDocs/blob/main/制作(发布)Pods组件.md/制作(发布)Pods组件.md)
-  * [**MacOS配置个人热点🛜**](https://github.com/295060456/JobsDocs/blob/main/MacOS配置个人热点🛜.md/MacOS配置个人热点🛜.md)
-  * [**Swift Package Dependence使用指南🧭**](https://github.com/295060456/JobsDocs/tree/main/Swift Package Dependence使用指南/Swift Package Dependence使用指南.md)
+  * [**MacOS配置个人热点🛜**](https://github.com/JobsKits/JobsDocs/blob/main/MacOS配置个人热点🛜.md/MacOS配置个人热点🛜.md)
+  * [**Swift Package Dependence使用指南🧭**](https://github.com/JobsKits/JobsDocs/blob/main/iOS相关的文档和资料.md/Swift Package Dependence使用指南.md/Swift Package Dependence使用指南.md)
   * [**利用quicktype自动建立数据模型**](https://github.com/JobsKits/JobsDocs/blob/main/利用quicktype自动建立数据模型.md/利用quicktype自动建立数据模型.md)
   * [**【MacOS】配置本地的直播服务器**](https://github.com/JobsKits/JobsDocs/tree/main/直播推流:拉流@Swift5x)
   * [**iOS多语言环境设置**](https://github.com/JobsKits/JobsDocs/blob/main/iOS相关的文档和资料.md/iOS多语言环境设置.md/iOS多语言环境设置.md)
@@ -192,6 +192,11 @@
   * [**iOS项目集成Unity**](https://github.com/JobsKits/JobsDocs/blob/main/iOS相关的文档和资料.md/iOS项目集成Unity.md/iOS项目集成Unity.md)
   * [**YYKit调研**](https://github.com/JobsKits/JobsDocs/blob/main/iOS相关的文档和资料.md/YYKit调研.md/YYKit调研.md)
   * [**Apple生成 `*.p12`文件**](https://github.com/JobsKits/JobsDocs/blob/main/iOS相关的文档和资料.md/Apple生成 *.p12文件.md/Apple生成 *.p12文件.md)
+  * [**Git的使用**](https://github.com/JobsKits/JobsDocs/tree/main/Git的使用.md)
+    * [**Github.workflow（工作流）的使用**](https://github.com/JobsKits/JobsDocs/blob/main/Git的使用.md/Github.workflow.md/Github.workflow.md)
+    * [**Git 子模块使用**](https://github.com/JobsKits/JobsDocs/blob/main/Git的使用.md/Git子模块使用.md/Git子模块使用.md)
+    * [**Git的一些使用说明**](https://github.com/JobsKits/JobsDocs/blob/main/Git的使用.md/Git的一些使用说明.md/Git的一些使用说明.md)
+    * [**通过SSH连接到GitHub**](https://github.com/JobsKits/JobsDocs/blob/main/Git的使用.md/通过SSH连接到GitHub/通过SSH连接到GitHub.md)
 
 * [**JobsGenesis**](https://github.com/JobsKits/JobsGenesis)
 
@@ -204,13 +209,15 @@
 
 * [**CocoaPods**](https://cocoapods.org/)
 
-* [**过期的模拟器配件**](https://github.com/295060456/Xcode_Sys_lib)
+* [**过期的模拟器配件**](https://github.com/JobsKits/Xcode_Sys_lib)
 
-* [**Xcode文件模版的配置和使用**](https://github.com/295060456/xctemplate)
+* [**Xcode资料下载**](https://developer.apple.com/download/more/)
+
+* [**Xcode文件模版的配置和使用**](https://github.com/JobsKits/xctemplate)
 
 * [**苹果开发者账户续费**](https://account.apple.com/account/manage/section/payment)
 
-* [**在线演示**](https://appetize.io) 👉 上传你的（支持iOS/Android）包，就能在线运行、演示、调试、自动化测试，还能嵌到网页或内部系统里给客服/销售/培训/QA 用
+* [**在线演示**](https://appetize.io) 👉 上传你的（支持**iOS**/**Android**）包，就能在线运行、演示、调试、自动化测试，还能嵌到网页或内部系统里给客服/销售/培训/QA 用
 
 * [**代码块**](https://github.com/295060456/JobsCodeSnippets)
 
