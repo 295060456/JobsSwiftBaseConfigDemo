@@ -34,7 +34,7 @@ final class UnityDemoVC: BaseVC {
     private lazy var tipLabel: UILabel = {
         UILabel()
             .byText("要看这个功能演示，必须先执行 ./Unity/xcode_effectTest/Libraries 下的合并脚本")
-            .byTextColor(.secondaryLabel)
+            .byTextColor(.systemRed)
             .byFont(.systemFont(ofSize: 13))
             .byNumberOfLines(0)
             .byTextAlignment(.center)
@@ -111,9 +111,7 @@ private extension UnityDemoVC {
     func scheduleUnityAutoClose() {
         unityAutoCloseTimer?.stop()
         unityAutoCloseTimer = nil
-
         guard unityAutoCloseSeconds > 0 else { return }
-
         let config = JobsTimerConfig(
             interval: unityAutoCloseSeconds,
             repeats: false,          // 一次性定时器
@@ -135,7 +133,6 @@ private extension UnityDemoVC {
     func closeUnity() {
         unityAutoCloseTimer?.stop()
         unityAutoCloseTimer = nil
-
         // 把 Unity 从窗口里移除 / 卸载
         UnityManager.shared.detachUnity(from: self)
         // 或者：
