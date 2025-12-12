@@ -178,20 +178,33 @@
 
 ### 2、开发周边支持 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
 
-* [**JobsDocs**](https://github.com/295060456/JobsDocs)
+* [**JobsDocs**](https://github.com/JobsKits/JobsDocs)
 
   * [**中国公民身份证校验规则**](https://github.com/295060456/JobsDocs/blob/main/中国公民身份证校验规则.md/中国公民身份证校验规则.md)
   * [**iOS项目多环境配置**](https://github.com/295060456/JobsDocs/blob/main/iOS相关的文档和资料.md/iOS项目多环境配置.md/iOS项目多环境配置.md)
+  * [**制作(发布)Pods组件**](https://github.com/JobsKits/JobsDocs/blob/main/制作(发布)Pods组件.md/制作(发布)Pods组件.md)
+  * [**MacOS配置个人热点🛜**](https://github.com/295060456/JobsDocs/blob/main/MacOS配置个人热点🛜.md/MacOS配置个人热点🛜.md)
+  * [**Swift Package Dependence使用指南🧭**](https://github.com/295060456/JobsDocs/tree/main/Swift Package Dependence使用指南/Swift Package Dependence使用指南.md)
+  * [**利用quicktype自动建立数据模型**](https://github.com/JobsKits/JobsDocs/blob/main/利用quicktype自动建立数据模型.md/利用quicktype自动建立数据模型.md)
+  * [**【MacOS】配置本地的直播服务器**](https://github.com/JobsKits/JobsDocs/tree/main/直播推流:拉流@Swift5x)
+  * [**iOS多语言环境设置**](https://github.com/JobsKits/JobsDocs/blob/main/iOS相关的文档和资料.md/iOS多语言环境设置.md/iOS多语言环境设置.md)
+  * [**iOS音视频**](https://github.com/JobsKits/JobsDocs/blob/main/iOS相关的文档和资料.md/iOS音视频.md/iOS音视频.md)
+  * [**iOS项目集成Unity**](https://github.com/JobsKits/JobsDocs/blob/main/iOS相关的文档和资料.md/iOS项目集成Unity.md/iOS项目集成Unity.md)
+  * [**YYKit调研**](https://github.com/JobsKits/JobsDocs/blob/main/iOS相关的文档和资料.md/YYKit调研.md/YYKit调研.md)
+  * [**Apple生成 `*.p12`文件**](https://github.com/JobsKits/JobsDocs/blob/main/iOS相关的文档和资料.md/Apple生成 *.p12文件.md/Apple生成 *.p12文件.md)
 
-* [**过期的模拟器配件**](https://github.com/295060456/Xcode_Sys_lib)
+* [**JobsGenesis**](https://github.com/JobsKits/JobsGenesis)
 
-* [**制作(发布)Pods组件**](https://github.com/JobsKits/JobsDocs/blob/main/制作(发布)Pods组件.md/制作(发布)Pods组件.md)
+  * [**配置SourceTree脚本**](https://github.com/JobsKits/SourceTree.sh)
+  * [**配置Flutter脚本**](https://github.com/JobsKits/JobsCommand-Flutter)
+  * [**配置iOS脚本**](https://github.com/JobsKits/JobsCommand-iOS)
+  * [**配置Git脚本**](https://github.com/JobsKits/JobsCommand-Gits)
+  * [**其他配置脚本**](https://github.com/JobsKits/JobsCommand-Others)
+    * [**文件分拆（合并）测试**](https://github.com/JobsKits/JobsCommand-Others/tree/main/【MacOS】文件分拆（合并）测试)
 
 * [**CocoaPods**](https://cocoapods.org/)
 
-* [**MacOS配置个人热点🛜**](https://github.com/295060456/JobsDocs/blob/main/MacOS配置个人热点🛜.md/MacOS配置个人热点🛜.md)
-
-* [**Swift Package Dependence使用指南🧭**](https://github.com/295060456/JobsDocs/tree/main/Swift Package Dependence使用指南/Swift Package Dependence使用指南.md)
+* [**过期的模拟器配件**](https://github.com/295060456/Xcode_Sys_lib)
 
 * [**Xcode文件模版的配置和使用**](https://github.com/295060456/xctemplate)
 
@@ -199,11 +212,7 @@
 
 * [**在线演示**](https://appetize.io) 👉 上传你的（支持iOS/Android）包，就能在线运行、演示、调试、自动化测试，还能嵌到网页或内部系统里给客服/销售/培训/QA 用
 
-* [**配置SourceTree脚本**](https://github.com/295060456/SourceTree.sh)
-
 * [**代码块**](https://github.com/295060456/JobsCodeSnippets)
-
-* [**利用quicktype自动建立数据模型**](https://github.com/JobsKits/JobsDocs/blob/main/利用quicktype自动建立数据模型.md/利用quicktype自动建立数据模型.md)
 
 * [**图片占位符**](https://picsum.photos/)
 
@@ -7209,6 +7218,34 @@ public extension NSObject {
   ```swift
   private var currentProgress: CGFloat = 0
   progressView.setProgress(currentProgress, animated: true)
+  ```
+
+### 51、真机/模拟器区分 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
+
+> 只能按照CPU架构来进行区分，具体设备要在真机代码部分，再进行详细区分
+
+* ```swift
+  #if targetEnvironment(simulator) 
+  /// 模拟器专用代码
+  #else
+  /// 真机（iPhone / iPad 设备）代码
+  #endif
+  ```
+
+* ```swift
+  #if os(iOS) && !targetEnvironment(simulator)
+  // 只有 iOS 真机（iPhone / iPad）代码
+  #endif
+  
+  #if !targetEnvironment(simulator)
+  // 只有真机（iPhone / iPad）会编译到这里
+  #endif
+  ```
+
+* ```swift
+  #if targetEnvironment(simulator) 
+  /// 模拟器专用代码
+  #endif
   ```
 
 ## 四、[**Swift**](https://developer.apple.com/swift/) 语言特性 <a href="#前言" style="font-size:17px; color:green;"><b>🔼</b></a> <a href="#🔚" style="font-size:17px; color:green;"><b>🔽</b></a>
