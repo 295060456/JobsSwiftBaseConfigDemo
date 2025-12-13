@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 # ✅ 全局变量
-REPO_URL="https://github.com/295060456/JobsCommand.iOS.git"
+REPO_URL="https://github.com/JobsKits/JobsCommand.iOS.git"
 CLONE_DIR="$(dirname "${BASH_SOURCE[0]:-${(%):-%x}}")/将此文件夹管理的脚本拖到此iOS项目的根目录运行.command"
 
 # ✅ 彩色输出
