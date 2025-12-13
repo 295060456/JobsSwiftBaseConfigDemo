@@ -270,6 +270,8 @@
 		048314002E9A08510009A44B /* Demo@跑马灯轮播图.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048313FF2E9A08500009A44B /* Demo@跑马灯轮播图.swift */; };
 		0487AADA2E840CB200B5D307 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0487AAD92E840CB200B5D307 /* UIColor.swift */; };
 		0487AADC2E840EE300B5D307 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0487AADB2E840EE300B5D307 /* libc++.tbd */; };
+		0488587A2EED651A00854965 /* JobsTimerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048858792EED651900854965 /* JobsTimerManager.swift */; };
+		0488587D2EED6C3200854965 /* Demo@JobsTimerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0488587C2EED6C3100854965 /* Demo@JobsTimerManager.swift */; };
 		048B795C2ED5452500A6FEF1 /* Demo@系统导航栏.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048B795B2ED5451A00A6FEF1 /* Demo@系统导航栏.swift */; };
 		048C73442EE7DAFF003C0844 /* JobsLiveFloatPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048C73432EE7DAFD003C0844 /* JobsLiveFloatPlayer.swift */; };
 		048C73462EE7F894003C0844 /* NSObject+屏幕常亮.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048C73452EE7F884003C0844 /* NSObject+屏幕常亮.swift */; };
@@ -3404,6 +3406,8 @@
 		048313FF2E9A08500009A44B /* Demo@跑马灯轮播图.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@跑马灯轮播图.swift"; sourceTree = "<group>"; };
 		0487AAD92E840CB200B5D307 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		0487AADB2E840EE300B5D307 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		048858792EED651900854965 /* JobsTimerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsTimerManager.swift; sourceTree = "<group>"; };
+		0488587C2EED6C3100854965 /* Demo@JobsTimerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@JobsTimerManager.swift"; sourceTree = "<group>"; };
 		048B795B2ED5451A00A6FEF1 /* Demo@系统导航栏.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Demo@系统导航栏.swift"; sourceTree = "<group>"; };
 		048C73432EE7DAFD003C0844 /* JobsLiveFloatPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsLiveFloatPlayer.swift; sourceTree = "<group>"; };
 		048C73452EE7F884003C0844 /* NSObject+屏幕常亮.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+屏幕常亮.swift"; sourceTree = "<group>"; };
@@ -8565,6 +8569,23 @@
 			path = "网页";
 			sourceTree = "<group>";
 		};
+		048858702EED650C00854965 /* JobsTimer */ = {
+			isa = PBXGroup;
+			children = (
+				048858792EED651900854965 /* JobsTimerManager.swift */,
+				04DC137F2EDD3D2600CEDA1C /* JobsTimer.swift */,
+			);
+			path = JobsTimer;
+			sourceTree = "<group>";
+		};
+		0488587B2EED6C1E00854965 /* Demo@JobsTimerManager */ = {
+			isa = PBXGroup;
+			children = (
+				0488587C2EED6C3100854965 /* Demo@JobsTimerManager.swift */,
+			);
+			path = "Demo@JobsTimerManager";
+			sourceTree = "<group>";
+		};
 		048F447A2EB311B100BAA7EE /* Demo@注册登陆 */ = {
 			isa = PBXGroup;
 			children = (
@@ -8587,6 +8608,7 @@
 		04A8C54F2E8AA9FF00381701 /* SubVC */ = {
 			isa = PBXGroup;
 			children = (
+				0488587B2EED6C1E00854965 /* Demo@JobsTimerManager */,
 				046ED7102EEAA0F0001B7334 /* Demo@Unity */,
 				04544EAD2EE976C200E7C02B /* Demo@红包雨 */,
 				04544E9F2EE9201800E7C02B /* Demo@任意UIView.layer倒计时 */,
@@ -8893,6 +8915,7 @@
 		04DC13862EDD3D2600CEDA1C /* JobsSwiftBaseTools@Pods */ = {
 			isa = PBXGroup;
 			children = (
+				048858702EED650C00854965 /* JobsTimer */,
 				04DC13782EDD3D2600CEDA1C /* 多语言化 */,
 				04DC13712EDD3D2600CEDA1C /* 🛜网络流量监控 */,
 				04DC137A2EDD3D2600CEDA1C /* Inlines.swift */,
@@ -8900,7 +8923,6 @@
 				04DC137C2EDD3D2600CEDA1C /* JobsSafeTransitions.swift */,
 				04DC137E2EDD3D2600CEDA1C /* JobsText.swift */,
 				04BA930D2EDDAA6C00EB2B12 /* JobsStructTools.swift */,
-				04DC137F2EDD3D2600CEDA1C /* JobsTimer.swift */,
 				04DC13802EDD3D2600CEDA1C /* KeyboardObserver.swift */,
 				04DC13822EDD3D2600CEDA1C /* SafeCodable.swift */,
 				04DC13832EDD3D2600CEDA1C /* SnowflakeSwift.swift */,
@@ -9823,6 +9845,7 @@
 				04544E832EE8272100E7C02B /* CAAnimation.swift in Sources */,
 				040E68F92EC704DA00598A5B /* Demo@自定义注解.swift in Sources */,
 				0411F1B12EDEFA1100F1552C /* UITextView+监控删除键.swift in Sources */,
+				0488587A2EED651A00854965 /* JobsTimerManager.swift in Sources */,
 				04C68D2E2ED94C5500A11F53 /* Demo@钟.swift in Sources */,
 				045376612EB0B5B100133F73 /* PlayerRemoteVC.swift in Sources */,
 				04468F902E9E4D7000677000 /* PermissionCenter.swift in Sources */,
@@ -9899,6 +9922,7 @@
 				045921022E854FDA008C8D6A /* UInt16.swift in Sources */,
 				04544E852EE8281B00E7C02B /* CAMediaTiming.swift in Sources */,
 				0411F1D32EDFD1B900F1552C /* UICollectionView+空态数据占位按钮.swift in Sources */,
+				0488587D2EED6C3200854965 /* Demo@JobsTimerManager.swift in Sources */,
 				043283682EC458C20031CDD6 /* CAGradientLayer.swift in Sources */,
 				043283642EC4535F0031CDD6 /* LeftMenuCell.swift in Sources */,
 				C564FCAB2E09597C0079B5C1 /* VC2.swift in Sources */,

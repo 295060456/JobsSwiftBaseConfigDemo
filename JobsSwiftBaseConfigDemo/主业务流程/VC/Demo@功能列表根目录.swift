@@ -24,6 +24,7 @@ final class RootListVC: BaseVC {
         var list: [(title: String, vcType: UIViewController.Type)] = [
             ("🧭 系统导航栏", JobsNavigationDemoVC.self),
             ("🧧 红包雨", RedPacketRainDemoVC.self),
+            ("🛠️ JobsTimerManager", JobsTimerManagerDemoVC.self),
             ("🟩🟩⬜⬜ 系统的进度条", JobsSysProgressDemoVC.self),
             ("🟩🟩🟩⬜ 自定义（进度值+前进方向）进度条", JobsProgressDemoVC.self),
             ("💣 任意UIView.layer@导火索倒计时效果", JobsCountdownLayerDemoVC.self),
