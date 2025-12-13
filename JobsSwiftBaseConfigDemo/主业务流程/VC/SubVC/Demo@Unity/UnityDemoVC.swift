@@ -81,12 +81,14 @@ final class UnityDemoVC: BaseVC {
                     self.unityAutoCloseSeconds = 3
                     self.closeTimeTextField.text = "3"
                 }
+#if canImport(UnityFramework)
                 // 打开 Unity，按输入的时间自动关闭并卸载
                 UnityManager.shared.showUnity(
                     from: self,
                     autoCloseAfter: self.unityAutoCloseSeconds,
                     unloadOnClose: true
                 )
+#endif
             }
             .byAddTo(view) { [unowned self] make in
                 make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-32)
@@ -133,9 +135,11 @@ private extension UnityDemoVC {
     func closeUnity() {
         unityAutoCloseTimer?.stop()
         unityAutoCloseTimer = nil
+#if canImport(UnityFramework)
         // 把 Unity 从窗口里移除 / 卸载
         UnityManager.shared.detachUnity(from: self)
         // 或者：
         // UnityManager.shared.unloadUnity()
+#endif
     }
 }

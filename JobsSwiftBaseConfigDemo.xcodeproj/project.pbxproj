@@ -487,6 +487,34 @@
 			remoteGlobalIDString = 7F4E05A02717216D00A2CBE4;
 			remoteInfo = GameAssembly;
 		};
+		04FD79E82EEC293000317EC4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 046EE21A2EEAA40D001B7334 /* Unity-iPhone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1D6058910D05DD3D006BFB54;
+			remoteInfo = "Unity-iPhone";
+		};
+		04FD79EA2EEC293000317EC4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 046EE21A2EEAA40D001B7334 /* Unity-iPhone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5623C57317FDCB0800090B9E;
+			remoteInfo = "Unity-iPhone Tests";
+		};
+		04FD79EC2EEC293000317EC4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 046EE21A2EEAA40D001B7334 /* Unity-iPhone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9D25AB9D213FB47800354C27;
+			remoteInfo = UnityFramework;
+		};
+		04FD79EE2EEC293000317EC4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 046EE21A2EEAA40D001B7334 /* Unity-iPhone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7F4E05A02717216D00A2CBE4;
+			remoteInfo = GameAssembly;
+		};
 		C564FBF52E09580D0079B5C1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C564FBD32E09580A0079B5C1 /* Project object */;
@@ -9080,6 +9108,22 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		04FD79DD2EEC293000317EC4 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
+		04FD79E22EEC293000317EC4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				04FD79E92EEC293000317EC4 /* effectTest.app */,
+				04FD79EB2EEC293000317EC4 /* Unity-iPhone Tests.xctest */,
+				04FD79ED2EEC293000317EC4 /* UnityFramework.framework */,
+				04FD79EF2EEC293000317EC4 /* libGameAssembly.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		B8CEBE2669D72254F6970521 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -9341,6 +9385,14 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 04FD79DD2EEC293000317EC4 /* Products */;
+					ProjectRef = 04F7AF682EC321DE00ACB509 /* JobsSwiftBaseConfigDemo.xcodeproj */;
+				},
+				{
+					ProductGroup = 04FD79E22EEC293000317EC4 /* Products */;
+					ProjectRef = 046EE21A2EEAA40D001B7334 /* Unity-iPhone.xcodeproj */;
+				},
+				{
 					ProductGroup = 046EE32A2EEAC9B9001B7334 /* Products */;
 					ProjectRef = 046EE3292EEAC9B9001B7334 /* Unity-iPhone.xcodeproj */;
 				},
@@ -9381,6 +9433,34 @@
 			fileType = archive.ar;
 			path = libGameAssembly.a;
 			remoteRef = 046EE3382EEAC9B9001B7334 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		04FD79E92EEC293000317EC4 /* effectTest.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = effectTest.app;
+			remoteRef = 04FD79E82EEC293000317EC4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		04FD79EB2EEC293000317EC4 /* Unity-iPhone Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Unity-iPhone Tests.xctest";
+			remoteRef = 04FD79EA2EEC293000317EC4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		04FD79ED2EEC293000317EC4 /* UnityFramework.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = UnityFramework.framework;
+			remoteRef = 04FD79EC2EEC293000317EC4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		04FD79EF2EEC293000317EC4 /* libGameAssembly.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libGameAssembly.a;
+			remoteRef = 04FD79EE2EEC293000317EC4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

@@ -5,7 +5,13 @@
 //  Created by Jobs on 12/11/25.
 //
 
+#if os(OSX)
+import AppKit
+#elseif os(iOS) || os(tvOS)
 import UIKit
+#endif
+
+#if !targetEnvironment(simulator)
 // ⚠️ UnityFramework 的头文件请放在 Bridging-Header 里：
 // #import "UnityFramework/UnityFramework.h"
 // 这里就不用 `import UnityFramework` 了
@@ -200,3 +206,27 @@ extension UnityManager: UnityFrameworkListener {
         print("✅ Unity did quit")
     }
 }
+#else
+/// 模拟器空壳：保证编译通过（不依赖 UnityFramework）
+final class UnityManager: NSObject {
+    static let shared = UnityManager()
+    private override init() { super.init() }
+
+    private(set) var isRunning = false
+
+    func showUnity(autoCloseAfter _: TimeInterval? = nil, unloadOnClose _: Bool = true) {
+        print("⚠️ Unity 不支持模拟器，已跳过。")
+    }
+
+    func showUnity(from _: UIViewController, autoCloseAfter _: TimeInterval? = nil, unloadOnClose _: Bool = true) {
+        print("⚠️ Unity 不支持模拟器，已跳过。")
+    }
+
+    func hideUnity() {}
+    func unloadUnity() {}
+
+    func attachUnity(into _: UIView, from _: UIViewController, autoCloseAfter _: TimeInterval? = nil, unloadOnClose _: Bool = true) {}
+    func detachUnity(from _: UIViewController, unload _: Bool = true) {}
+}
+
+#endif

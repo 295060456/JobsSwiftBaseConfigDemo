@@ -19,68 +19,76 @@ final class RootListVC: BaseVC {
         suspendBtn.stopTimer()
         suspendSpinBtn.stopTimer()
     }
+    private lazy var demos: [(title: String, vcType: UIViewController.Type)] = makeDemos()
+    private func makeDemos() -> [(title: String, vcType: UIViewController.Type)] {
+        var list: [(title: String, vcType: UIViewController.Type)] = [
+            ("🧭 系统导航栏", JobsNavigationDemoVC.self),
+            ("🧧 红包雨", RedPacketRainDemoVC.self),
+            ("🟩🟩⬜⬜ 系统的进度条", JobsSysProgressDemoVC.self),
+            ("🟩🟩🟩⬜ 自定义（进度值+前进方向）进度条", JobsProgressDemoVC.self),
+            ("💣 任意UIView.layer@导火索倒计时效果", JobsCountdownLayerDemoVC.self),
+            ("👛 钱包卡片效果", JobsWalletDemoVC.self),
+            ("⏺️ 本地录制到系统相册", HKLocalRecordVC.self),
+            ("🌘 直播间@滚动留言", LiveCommentDemoVC.self),
+            ("📺 直播推流", HKLiveVC.self),
+            ("📹 播放器@BMPlayer(🛜 网络流量监控)", BMPlayerDemoVC.self),
+            ("📹 播放器@PNPlayer", PNPlayerDemoVC.self),
+            ("🐒 猿题库网络请求框架@Objc", YTKNetworkDemoVC.self),
+            ("🧭 苹果滑动开锁", SlideToUnlockDemoVC.self),
+            ("✍️ UITextField", UITextFieldDemoVC.self),
+            ("✍️ UITextView", UITextViewDemoVC.self),
+            ("🗄️ UITableView", EmptyTableViewDemoVC.self),
+            ("🗄️ UICollectionView", EmptyCollectionViewDemoVC.self),
+            ("🌞 BaseWebView", BaseWebViewDemoVC.self),
+            ("🌍 JobsTabBarCtrl", TabBarDemoVC.self),
+            ("🏞️ 图片加载", PicLoadDemoVC.self),
+            ("🕹️ ControlEvents", JobsControlEventsDemoVC.self),
+            ("🔘 按钮", UIButtonDemoVC.self),
+            ("💥 倒计时按钮", JobsCountdownDemoVC.self),
+            ("⏰ Timer", TimerDemoVC.self),
+            ("🕖 时钟", ClockDemoVC.self),
+            ("🎲 抽奖轮盘", LuckyWheelDemoVC.self),
+            ("⌨️ 键盘", KeyboardDemoVC.self),
+            ("📷 鉴权后调用相机/相册", PhotoAlbumDemoVC.self),
+            ("🐎 跑马灯 / 🛞 轮播图", JobsMarqueeDemoVC.self),
+            ("⛑️ 支持上下左右安全Push和原路返回", SafetyPushDemoVC.self),
+            ("⛑️ 安全Present", SafetyPresentDemoVC.self),
+            ("🏷️ Toast", ToastDemoVC.self),
+            ("⚠️ 系统的弹出框", UIAlertDemoVC.self),
+            ("📌 自定义注解", 自定义注解Demo.self),
+            ("🚀 JobsOpen", JobsOpenDemoVC.self),
+            ("🍚 选择器", BRPickerDemoVC.self),
+            ("📅 日历", LunarDemoVC.self),
+            ("📊 Excel", XLSXDemoVC.self),
+            ("🌹 弹出方式", SwiftEntryKitDemoVC.self),
+            ("🔽 下拉三角小菜单", FSPopoverDemoVC.self),
+            ("☠️ 骨架屏", SkeletonViewDemoVC.self),
+            ("🌛 PDF", PDFDemoVC.self),
+            ("🧒 Lottie动画", LottieDemoVC.self),
+            ("🛢️ 解码", SafeCodableDemoVC.self),
+            ("🔑 注册登录".tr, JobsAppDoorDemoVC.self), // 👈 这里需要 .tr
+            ("🛜 Moya网络请求框架", MoyaDemoVC.self),
+            ("🛜 Alamofire网络请求框架", AFDemoVC.self),
+            ("🧹 支持左右上下刷新", JobsRefresherDemoVC.self),
+            ("🧧 TraitChange", TraitChangeDemoVC.self),
+            ("❄️ 雪花算法", SnowflakeDemoVC.self),
+            ("💬 LiveChat", LiveChatDemoVC.self),
+            ("🐎 二维码/条形码", QRCodeDemoVC.self),
+            ("👮 中国大陆公民身份证号码校验", CNIDDemoVC.self),
+            ("🏠 首页联动", CashbackRootVC.self),
+            ("🌋 富文本", RichTextDemoVC.self),
+            ("🌋 普通文本和富文本的融合数据类型", JobsTextDemoVC.self),
+            ("🔥 编辑个人资料", LGOEditProfileVC.self),
+            ("ViewController", ViewController.self),
+        ]
 
-    private lazy var demos: [(title: String, vcType: UIViewController.Type)] = [
-        ("🧭 系统导航栏", JobsNavigationDemoVC.self),
-        ("🧧 红包雨", RedPacketRainDemoVC.self),
-        ("🚀 Unity", UnityDemoVC.self),
-        ("🟩🟩⬜⬜ 系统的进度条", JobsSysProgressDemoVC.self),
-        ("🟩🟩🟩⬜ 自定义（进度值+前进方向）进度条", JobsProgressDemoVC.self),
-        ("💣 任意UIView.layer@导火索倒计时效果", JobsCountdownLayerDemoVC.self),
-        ("👛 钱包卡片效果", JobsWalletDemoVC.self),
-        ("⏺️ 本地录制到系统相册", HKLocalRecordVC.self),
-        ("🌘 直播间@滚动留言", LiveCommentDemoVC.self),
-        ("📺 直播推流", HKLiveVC.self),
-        ("📹 播放器@BMPlayer(🛜 网络流量监控)", BMPlayerDemoVC.self),
-        ("📹 播放器@PNPlayer", PNPlayerDemoVC.self),
-        ("🐒 猿题库网络请求框架@Objc", YTKNetworkDemoVC.self),
-        ("🧭 苹果滑动开锁", SlideToUnlockDemoVC.self),
-        ("✍️ UITextField", UITextFieldDemoVC.self),
-        ("✍️ UITextView", UITextViewDemoVC.self),
-        ("🗄️ UITableView", EmptyTableViewDemoVC.self),
-        ("🗄️ UICollectionView", EmptyCollectionViewDemoVC.self),
-        ("🌞 BaseWebView", BaseWebViewDemoVC.self),
-        ("🌍 JobsTabBarCtrl", TabBarDemoVC.self),
-        ("🏞️ 图片加载", PicLoadDemoVC.self),
-        ("🕹️ ControlEvents", JobsControlEventsDemoVC.self),
-        ("🔘 按钮", UIButtonDemoVC.self),
-        ("💥 倒计时按钮", JobsCountdownDemoVC.self),
-        ("⏰ Timer", TimerDemoVC.self),
-        ("🕖 时钟", ClockDemoVC.self),
-        ("🎲 抽奖轮盘", LuckyWheelDemoVC.self),
-        ("⌨️ 键盘", KeyboardDemoVC.self),
-        ("📷 鉴权后调用相机/相册", PhotoAlbumDemoVC.self),
-        ("🐎 跑马灯 / 🛞 轮播图", JobsMarqueeDemoVC.self),
-        ("⛑️ 支持上下左右安全Push和原路返回", SafetyPushDemoVC.self),
-        ("⛑️ 安全Present", SafetyPresentDemoVC.self),
-        ("🏷️ Toast", ToastDemoVC.self),
-        ("⚠️ 系统的弹出框", UIAlertDemoVC.self),
-        ("📌 自定义注解", 自定义注解Demo.self),
-        ("🚀 JobsOpen", JobsOpenDemoVC.self),
-        ("🍚 选择器", BRPickerDemoVC.self),
-        ("📅 日历", LunarDemoVC.self),
-        ("📊 Excel", XLSXDemoVC.self),
-        ("🌹 弹出方式", SwiftEntryKitDemoVC.self),
-        ("🔽 下拉三角小菜单", FSPopoverDemoVC.self),
-        ("☠️ 骨架屏", SkeletonViewDemoVC.self),
-        ("🌛 PDF", PDFDemoVC.self),
-        ("🧒 Lottie动画", LottieDemoVC.self),
-        ("🛢️ 解码", SafeCodableDemoVC.self),
-        ("🔑 注册登录".tr, JobsAppDoorDemoVC.self), // 👈 这里需要 .tr
-        ("🛜 Moya网络请求框架", MoyaDemoVC.self),
-        ("🛜 Alamofire网络请求框架", AFDemoVC.self),
-        ("🧹 支持左右上下刷新", JobsRefresherDemoVC.self),
-        ("🧧 TraitChange", TraitChangeDemoVC.self),
-        ("❄️ 雪花算法", SnowflakeDemoVC.self),
-        ("💬 LiveChat", LiveChatDemoVC.self),
-        ("🐎 二维码/条形码", QRCodeDemoVC.self),
-        ("👮 中国大陆公民身份证号码校验", CNIDDemoVC.self),
-        ("🏠 首页联动", CashbackRootVC.self),
-        ("🌋 富文本", RichTextDemoVC.self),
-        ("🌋 普通文本和富文本的融合数据类型", JobsTextDemoVC.self),
-        ("🔥 编辑个人资料", LGOEditProfileVC.self),
-        ("ViewController", ViewController.self),
-    ]
+        #if !targetEnvironment(simulator)
+        // 只有真机（iPhone / iPad）才加入 Unity
+        list.insert(("🚀 Unity", UnityDemoVC.self), at: 2)
+        #endif
+
+        return list
+    }
 
     private lazy var suspendLab: UILabel = {
         UILabel()
@@ -329,7 +337,7 @@ final class RootListVC: BaseVC {
     private func updateFooterAvailability() {
         tableView.layoutIfNeeded()
         let contentH = tableView.contentSize.height
-        let visibleH = tableView.bounds.height 
+        let visibleH = tableView.bounds.height
             - tableView.adjustedContentInset.top
             - tableView.adjustedContentInset.bottom
         let enableLoadMore = contentH > visibleH + 20
