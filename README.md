@@ -192,6 +192,7 @@
   * [**iOS项目集成Unity**](https://github.com/JobsKits/JobsDocs/blob/main/iOS相关的文档和资料.md/iOS项目集成Unity.md/iOS项目集成Unity.md)
   * [**YYKit调研**](https://github.com/JobsKits/JobsDocs/blob/main/iOS相关的文档和资料.md/YYKit调研.md/YYKit调研.md)
   * [**Apple生成 `*.p12`文件**](https://github.com/JobsKits/JobsDocs/blob/main/iOS相关的文档和资料.md/Apple生成 *.p12文件.md/Apple生成 *.p12文件.md)
+  * [**iOS项目集成Unity**](https://github.com/JobsKits/JobsDocs/blob/main/iOS相关的文档和资料.md/iOS项目集成Unity.md/iOS项目集成Unity.md)
   * [**Git的使用**](https://github.com/JobsKits/JobsDocs/tree/main/Git的使用.md)
     * [**Github.workflow（工作流）的使用**](https://github.com/JobsKits/JobsDocs/blob/main/Git的使用.md/Github.workflow.md/Github.workflow.md)
     * [**Git 子模块使用**](https://github.com/JobsKits/JobsDocs/blob/main/Git的使用.md/Git子模块使用.md/Git子模块使用.md)
@@ -208,6 +209,8 @@
     * [**文件分拆（合并）测试**](https://github.com/JobsKits/JobsCommand-Others/tree/main/【MacOS】文件分拆（合并）测试)
 
 * [**CocoaPods**](https://cocoapods.org/)
+
+* [**配置`info.plist`文件**](https://github.com/JobsKits/JobsOCBaseConfigDemo/blob/main/JobsOCBaseConfigDemo/配置info.plist/配置info.plist.md)
 
 * [**过期的模拟器配件**](https://github.com/JobsKits/Xcode_Sys_lib)
 

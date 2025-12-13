@@ -15,35 +15,25 @@ APP_DISPLAY_NAME = SwiftDemo
 INFOPLIST_KEY_CFBundleDisplayName = $(APP_DISPLAY_NAME)
 INFOPLIST_KEY_CFBundleName = $(PRODUCT_NAME)
 
-
 // ================================== Unity iOS 真机专用：模拟器禁用 ==================================
-
 // ObjC/C 宏：#if JOBS_UNITY_ENABLED ...
 JOBS_UNITY_ENABLED[sdk=iphoneos*]        = 1
 JOBS_UNITY_ENABLED[sdk=iphonesimulator*] = 0
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) JOBS_UNITY_ENABLED=$(JOBS_UNITY_ENABLED)
-
 // Swift 条件：#if JOBS_UNITY_ENABLED ...
 SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited)
 SWIFT_ACTIVE_COMPILATION_CONDITIONS[sdk=iphoneos*]        = $(inherited) JOBS_UNITY_ENABLED
 SWIFT_ACTIVE_COMPILATION_CONDITIONS[sdk=iphonesimulator*] = $(inherited)
-
-
 // ================================== Unity：只给真机的搜索路径 + 链接参数 ==================================
-
 // 让 linker 在真机时能从 Run Script A 拷贝进来的 BUILT_PRODUCTS_DIR 找到 UnityFramework.framework
 JOBS_UNITY_FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]        = $(inherited) $(BUILT_PRODUCTS_DIR) $(SRCROOT)/Unity
 JOBS_UNITY_FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*] =
 FRAMEWORK_SEARCH_PATHS = $(inherited) $(JOBS_UNITY_FRAMEWORK_SEARCH_PATHS)
-
 // 真机链接 UnityFramework，模拟器清空（不再去找 framework）
 JOBS_UNITY_OTHER_LDFLAGS[sdk=iphoneos*]        = -framework UnityFramework
 JOBS_UNITY_OTHER_LDFLAGS[sdk=iphonesimulator*] =
 OTHER_LDFLAGS = $(inherited) $(JOBS_UNITY_OTHER_LDFLAGS)
-
-
 // ================================== 其他：保持 inherited ==================================
-
 // bridging header 已经做了条件 import，一般不需要额外 Header Search Paths / CFlags
 HEADER_SEARCH_PATHS    = $(inherited)
 OTHER_CFLAGS           = $(inherited)
