@@ -239,8 +239,6 @@
 		046ED70F2EEAA0AB001B7334 /* UnityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046ED70E2EEAA0AB001B7334 /* UnityManager.swift */; };
 		046ED7122EEAA116001B7334 /* UnityDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046ED7112EEAA10F001B7334 /* UnityDemoVC.swift */; };
 		046EE3242EEAC0F9001B7334 /* Data in Resources */ = {isa = PBXBuildFile; fileRef = 046EE3232EEAC0F9001B7334 /* Data */; };
-		046EE3272EEAC98C001B7334 /* UnityFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 046EE3252EEAC96A001B7334 /* UnityFramework.framework */; };
-		046EE3282EEAC98C001B7334 /* UnityFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 046EE3252EEAC96A001B7334 /* UnityFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0477D96F2E8B8479002C6427 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D96E2E8B8478002C6427 /* UIApplication.swift */; };
 		0477D9712E8B897D002C6427 /* Demo@支持上下左右安全Push和原路返回.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9702E8B896A002C6427 /* Demo@支持上下左右安全Push和原路返回.swift */; };
 		0477D9752E8B9146002C6427 /* Demo@安全Present.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0477D9742E8B9141002C6427 /* Demo@安全Present.swift */; };
@@ -452,13 +450,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		046EE32C2EEAC9B9001B7334 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 046EE3292EEAC9B9001B7334 /* Unity-iPhone.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 9D25AB9C213FB47800354C27;
-			remoteInfo = UnityFramework;
-		};
 		046EE3322EEAC9B9001B7334 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 046EE3292EEAC9B9001B7334 /* Unity-iPhone.xcodeproj */;
@@ -530,20 +521,6 @@
 			remoteInfo = JobsSwiftBaseConfigDemo;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		046ED70D2EEA9DDB001B7334 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				046EE3282EEAC98C001B7334 /* UnityFramework.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0401DCF72E90CDF400D572AD /* UIWindowScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindowScene.swift; sourceTree = "<group>"; };
@@ -3636,7 +3613,6 @@
 				040E68EF2EC704AD00598A5B /* SwiftDiagnostics in Frameworks */,
 				040E68F82EC704C400598A5B /* MyMacrosClient in Frameworks */,
 				1E7E539AFEE3F28FBE3B8CC7 /* Pods_JobsSwiftBaseConfigDemo.framework in Frameworks */,
-				046EE3272EEAC98C001B7334 /* UnityFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9171,10 +9147,10 @@
 				C564FC282E0958C40079B5C1 /* AppDelegate & SceneDelegate */,
 				C564FEEB2E0AAC5A0079B5C1 /* 主业务流程 */,
 				0432837A2EC470220031CDD6 /* 临时项目页面 */,
-				04FD2AAA2EB5B9AB00CDB5D5 /* JobsConfig.xcconfig */,
-				C564FBEF2E09580D0079B5C1 /* Info.plist */,
 				042405312ECB03A2005B89AA /* InfoPlist.strings */,
+				C564FBEF2E09580D0079B5C1 /* Info.plist */,
 				04D49C222EBE055000BCD6F1 /* JobsSwiftBaseConfigDemo-Bridging-Header.h */,
+				04FD2AAA2EB5B9AB00CDB5D5 /* JobsConfig.xcconfig */,
 			);
 			path = JobsSwiftBaseConfigDemo;
 			sourceTree = "<group>";
@@ -9290,17 +9266,16 @@
 			buildConfigurationList = C564FC082E09580E0079B5C1 /* Build configuration list for PBXNativeTarget "JobsSwiftBaseConfigDemo" */;
 			buildPhases = (
 				CA00CFD08168FA6B03F23851 /* [CP] Check Pods Manifest.lock */,
+				048858692EED0E6A00854965 /* Run Script */,
 				C564FBD72E09580B0079B5C1 /* Sources */,
 				C564FBD82E09580B0079B5C1 /* Frameworks */,
+				04CF02912E8A3DE40083ACF0 /* Run Script */,
 				C564FBD92E09580B0079B5C1 /* Resources */,
-				04CF02912E8A3DE40083ACF0 /* ShellScript */,
 				7896F94D2A156DB61DAEA4B1 /* [CP] Copy Pods Resources */,
-				046ED70D2EEA9DDB001B7334 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				046EE32D2EEAC9B9001B7334 /* PBXTargetDependency */,
 			);
 			name = JobsSwiftBaseConfigDemo;
 			productName = JobsSwiftBaseConfigDemo;
@@ -9523,8 +9498,9 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		04CF02912E8A3DE40083ACF0 /* ShellScript */ = {
+		048858692EED0E6A00854965 /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -9532,14 +9508,33 @@
 			);
 			inputPaths = (
 			);
+			name = "Run Script";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "
-";
+			shellScript = "set -euo pipefail\n\n# 只在真机执行\ncase \"${SDKROOT}\" in\n  *iphonesimulator*)\n    echo \"▶︎ A: simulator build -> skip Unity build\"\n    exit 0\n    ;;\nesac\n\nUNITY_PROJ=\"${SRCROOT}/Unity/xcode_effectTest/Unity-iPhone.xcodeproj\"\n\n# 主工程 Debug 时，让 Unity 用 Release（更稳；你也可以强制一直 Release）\nUNITY_CONF=\"${CONFIGURATION}\"\nif [ \"${UNITY_CONF}\" = \"Debug\" ]; then\n  UNITY_CONF=\"Release\"\nfi\n\nDD_ROOT=\"${SRCROOT}/.DerivedDataUnity\"\nSYMROOT=\"${DD_ROOT}/Build/Products\"\nOBJROOT=\"${DD_ROOT}/Build/Intermediates\"\nmkdir -p \"${SYMROOT}\" \"${OBJROOT}\"\n\nDEV_DIR=\"${DEVELOPER_DIR:-$(/usr/bin/xcode-select -p)}\"\n\necho \"▶︎ A: UNITY_PROJ = ${UNITY_PROJ}\"\necho \"▶︎ A: host CONFIGURATION = ${CONFIGURATION}\"\necho \"▶︎ A: Unity CONFIGURATION = ${UNITY_CONF}\"\necho \"▶︎ A: SYMROOT = ${SYMROOT}\"\necho \"▶︎ A: OBJROOT = ${OBJROOT}\"\necho \"▶︎ A: DEVELOPER_DIR = ${DEV_DIR}\"\n\n# 关键：不用 -derivedDataPath（否则会要求 -scheme）\n# 同时用干净环境避免主工程 WRAPPER_NAME/PRODUCT_NAME 污染 Unity build\n/usr/bin/env -i \\\n  PATH=\"${PATH}\" \\\n  HOME=\"${HOME}\" \\\n  USER=\"${USER}\" \\\n  LANG=\"${LANG:-en_US.UTF-8}\" \\\n  TMPDIR=\"${TMPDIR:-/tmp}\" \\\n  DEVELOPER_DIR=\"${DEV_DIR}\" \\\n  /usr/bin/xcodebuild \\\n    -project \"${UNITY_PROJ}\" \\\n    -target \"UnityFramework\" \\\n    -configuration \"${UNITY_CONF}\" \\\n    -sdk iphoneos \\\n    -destination \"generic/platform=iOS\" \\\n    CODE_SIGNING_ALLOWED=NO \\\n    CODE_SIGNING_REQUIRED=NO \\\n    CODE_SIGN_IDENTITY=\"\" \\\n    ENABLE_DEBUG_DYLIB=NO \\\n    SYMROOT=\"${SYMROOT}\" \\\n    OBJROOT=\"${OBJROOT}\" \\\n    build\n\nSRC_FW=\"${SYMROOT}/${UNITY_CONF}-iphoneos/UnityFramework.framework\"\nDST_FW=\"${BUILT_PRODUCTS_DIR}/UnityFramework.framework\"\n\necho \"▶︎ A: SRC_FW = ${SRC_FW}\"\necho \"▶︎ A: DST_FW = ${DST_FW}\"\n\nif [ ! -d \"${SRC_FW}\" ]; then\n  echo \"✖︎ A: UnityFramework.framework not produced: ${SRC_FW}\"\n  exit 1\nfi\n\nrm -rf \"${DST_FW}\"\n/usr/bin/ditto \"${SRC_FW}\" \"${DST_FW}\"\n\necho \"✅ A: staged UnityFramework.framework into BUILT_PRODUCTS_DIR\"\n";
+		};
+		04CF02912E8A3DE40083ACF0 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -euo pipefail\n\n# 只在真机编译\nif [[ \"${SDKROOT}\" == *\"iphonesimulator\"* ]]; then\n  echo \"▶︎ B: simulator build -> skip embed\"\n  exit 0\nfi\n\nSRC_FW=\"${BUILT_PRODUCTS_DIR}/UnityFramework.framework\"\nDST_FW=\"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UnityFramework.framework\"\n\nif [[ ! -d \"${SRC_FW}\" ]]; then\n  echo \"✖︎ B: missing ${SRC_FW} (did Run Script A run successfully?)\"\n  exit 1\nfi\n\nrm -rf \"${DST_FW}\"\nmkdir -p \"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}\"\nditto \"${SRC_FW}\" \"${DST_FW}\"\necho \"▶︎ B: embedded -> ${DST_FW}\"\n\n# 手动 codesign（因为你已经从 Embed Frameworks/UI 里删掉了 UnityFramework.framework）\nif [[ -n \"${EXPANDED_CODE_SIGN_IDENTITY:-}\" && \"${CODE_SIGNING_ALLOWED:-YES}\" != \"NO\" ]]; then\n  /usr/bin/codesign --force --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \\\n    --preserve-metadata=identifier,entitlements \\\n    \"${DST_FW}\"\n  echo \"▶︎ B: codesigned\"\nelse\n  echo \"▶︎ B: codesign skipped (no identity or signing not allowed)\"\nfi\n\n";
 		};
 		7896F94D2A156DB61DAEA4B1 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -10007,11 +10002,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		046EE32D2EEAC9B9001B7334 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = UnityFramework;
-			targetProxy = 046EE32C2EEAC9B9001B7334 /* PBXContainerItemProxy */;
-		};
 		C564FBF62E09580D0079B5C1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = C564FBDA2E09580B0079B5C1 /* JobsSwiftBaseConfigDemo */;

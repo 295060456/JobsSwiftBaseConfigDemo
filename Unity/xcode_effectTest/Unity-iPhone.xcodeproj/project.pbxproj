@@ -1070,6 +1070,7 @@
 					"$(inherited)",
 					"$(OTHER_CFLAGS)",
 				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.DefaultCompany.effectTest;
 				PRODUCT_NAME = "$(PRODUCT_NAME_APP)";
 				PROVISIONING_PROFILE = "$(PROVISIONING_PROFILE_APP)";
@@ -1109,6 +1110,7 @@
 					"$(inherited)",
 					"$(OTHER_CFLAGS)",
 				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.DefaultCompany.effectTest;
 				PRODUCT_NAME = "$(PRODUCT_NAME_APP)";
 				PROVISIONING_PROFILE = "$(PROVISIONING_PROFILE_APP)";
@@ -1282,6 +1284,7 @@
 					"$(inherited)",
 					"$(OTHER_CFLAGS)",
 				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.DefaultCompany.effectTest;
 				PRODUCT_NAME = "$(PRODUCT_NAME_APP)";
 				PROVISIONING_PROFILE = "$(PROVISIONING_PROFILE_APP)";
@@ -1404,6 +1407,7 @@
 					"$(inherited)",
 					"$(OTHER_CFLAGS)",
 				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.DefaultCompany.effectTest;
 				PRODUCT_NAME = "$(PRODUCT_NAME_APP)";
 				PROVISIONING_PROFILE = "$(PROVISIONING_PROFILE_APP)";
